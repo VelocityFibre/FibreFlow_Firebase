@@ -1,0 +1,99 @@
+// FibreFlow Spacing Functions
+// These work with SCSS compile-time variables
+
+@use 'sass:map';
+
+// Spacing scale
+$ff-spacing: (
+  0: 0,
+  xs: 4px,    // 0.5 * 8px
+  sm: 8px,    // 1 * 8px
+  md: 16px,   // 2 * 8px
+  lg: 24px,   // 3 * 8px
+  xl: 32px,   // 4 * 8px
+  2xl: 48px,  // 6 * 8px
+  3xl: 64px,  // 8 * 8px
+  4xl: 80px,  // 10 * 8px
+  5xl: 96px   // 12 * 8px
+);
+
+// Typography scale
+$ff-font-sizes: (
+  xs: 0.75rem,    // 12px
+  sm: 0.875rem,   // 14px
+  base: 1rem,     // 16px
+  lg: 1.125rem,   // 18px
+  xl: 1.25rem,    // 20px
+  2xl: 1.5rem,    // 24px
+  3xl: 1.875rem,  // 30px
+  4xl: 2.25rem,   // 36px
+  5xl: 3rem,      // 48px
+  6xl: 3.75rem,   // 60px
+  7xl: 4.5rem     // 72px
+);
+
+// Font weights
+$ff-font-weights: (
+  thin: 100,
+  extralight: 200,
+  light: 300,
+  normal: 400,
+  medium: 500,
+  semibold: 600,
+  bold: 700,
+  extrabold: 800,
+  black: 900
+);
+
+// Z-index scale
+$ff-z-index: (
+  deep: -999,
+  default: 1,
+  dropdown: 1000,
+  sticky: 1020,
+  fixed: 1030,
+  modal-backdrop: 1040,
+  modal: 1050,
+  popover: 1060,
+  tooltip: 1070
+);
+
+// Breakpoints
+$ff-breakpoints: (
+  xs: 0,
+  sm: 640px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1280px,
+  2xl: 1536px
+);
+
+// Get spacing value from scale
+// Usage: padding: ff-spacing(xl);
+@function ff-spacing($size) {
+  @return map.get($ff-spacing, $size);
+}
+
+// Get font size from scale
+// Usage: font-size: ff-font-size(2xl);
+@function ff-font-size($size) {
+  @return map.get($ff-font-sizes, $size);
+}
+
+// Get font weight
+// Usage: font-weight: ff-font-weight(light);
+@function ff-font-weight($weight) {
+  @return map.get($ff-font-weights, $weight);
+}
+
+// Get z-index value
+// Usage: z-index: ff-z(modal);
+@function ff-z($layer) {
+  @return map.get($ff-z-index, $layer);
+}
+
+// Responsive breakpoint function
+// Usage: @media #{ff-breakpoint(md)} { ... }
+@function ff-breakpoint($breakpoint) {
+  @return "(min-width: #{map.get($ff-breakpoints, $breakpoint)})";
+}

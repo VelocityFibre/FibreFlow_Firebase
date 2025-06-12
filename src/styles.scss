@@ -1,0 +1,457 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+@use 'sass:map';
+@use './styles/spacing' as *;
+@use './styles/theme-functions' as *;
+
+// Import FibreFlow theme system
+@import './styles/variables';
+@import './styles/utilities';
+
+// Define custom FibreFlow palette for Material
+$fibreflow-primary-palette: (
+  0: #000000,
+  10: #1a1c1e,
+  20: #2f3033,
+  25: #3a3b3f,
+  30: #46474a,
+  35: #525256,
+  40: #5e5e62,
+  50: #77777a,
+  60: #919094,
+  70: #acabaf,
+  80: #c7c6ca,
+  90: #e3e2e6,
+  95: #f2f1f4,
+  98: #faf9fc,
+  99: #fdfcff,
+  100: #ffffff,
+);
+
+$fibreflow-secondary-palette: (
+  0: #000000,
+  10: #001f24,
+  20: #00363d,
+  25: #00424a,
+  30: #004f58,
+  35: #005b66,
+  40: #006874,
+  50: #008391,
+  60: #00a0b0,
+  70: #22bccf,
+  80: #4fd8eb,
+  90: #97f0ff,
+  95: #d0f8ff,
+  98: #edfcff,
+  99: #f6feff,
+  100: #ffffff,
+);
+
+$fibreflow-tertiary-palette: (
+  0: #000000,
+  10: #31111d,
+  20: #492532,
+  25: #56293d,
+  30: #633b48,
+  35: #714653,
+  40: #7e5260,
+  50: #996379,
+  60: #b58392,
+  70: #d29dac,
+  80: #efb8c8,
+  90: #ffd8e4,
+  95: #ffecf1,
+  98: #fff8f9,
+  99: #fffbff,
+  100: #ffffff,
+);
+
+$fibreflow-neutral-palette: (
+  0: #000000,
+  10: #1c1b1f,
+  20: #313033,
+  25: #3c3b3f,
+  30: #48464a,
+  35: #545256,
+  40: #605d62,
+  50: #79767a,
+  60: #938f94,
+  70: #aeaaae,
+  80: #c9c5ca,
+  90: #e6e1e5,
+  95: #f4eff4,
+  98: #fdf8fd,
+  99: #fffbfe,
+  100: #ffffff,
+  4: #0d0e11,
+  6: #121316,
+  12: #201f24,
+  17: #2b2930,
+  22: #36343b,
+  24: #3b393f,
+  87: #ddd8dd,
+  92: #ebe6eb,
+  94: #f3eef3,
+  96: #f7f2f7,
+);
+
+$fibreflow-error-palette: (
+  0: #000000,
+  10: #410002,
+  20: #690005,
+  25: #7e0007,
+  30: #93000a,
+  35: #a80710,
+  40: #ba1a1a,
+  50: #de3730,
+  60: #ff5449,
+  70: #ff897d,
+  80: #ffb4ab,
+  90: #ffdad6,
+  95: #ffedea,
+  98: #fff8f7,
+  99: #fffbff,
+  100: #ffffff,
+);
+
+// Include only the core styles once
+@include mat.core();
+
+// Define the theme using Material 3 with custom palettes
+$fibreflow-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: $fibreflow-neutral-palette,
+    tertiary: $fibreflow-tertiary-palette,
+  ),
+  typography: (
+    plain-family: #{-apple-system\, BlinkMacSystemFont\, "Segoe UI"\, Roboto\, "Helvetica Neue"\, sans-serif},
+    brand-family: #{-apple-system\, BlinkMacSystemFont\, "Segoe UI"\, Roboto\, "Helvetica Neue"\, sans-serif},
+  ),
+  density: (
+    scale: 0,
+  ),
+));
+
+// Apply the theme to the body element
+body {
+  @include mat.all-component-themes($fibreflow-theme);
+}
+
+// Apple-inspired global styles
+html, body { 
+  height: 100%;
+  background-color: ff-rgb(background);
+  color: ff-rgb(foreground);
+}
+
+body { 
+  margin: 0; 
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Typography scale
+h1 {
+  font-size: ff-font-size(5xl);
+  font-weight: ff-font-weight(light);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+h2 {
+  font-size: ff-font-size(3xl);
+  font-weight: ff-font-weight(light);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  margin: 0;
+}
+
+h3 {
+  font-size: ff-font-size(xl);
+  font-weight: ff-font-weight(medium);
+  line-height: 1.4;
+  margin: 0;
+}
+
+// Custom utility classes following design system
+.ff-page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  
+  @media (max-width: 768px) {
+    padding: 24px 16px;
+  }
+}
+
+.ff-page-header {
+  margin-bottom: 48px;
+}
+
+.ff-page-title {
+  font-size: ff-font-size(5xl);
+  font-weight: ff-font-weight(light);
+  color: ff-rgb(foreground);
+  margin-bottom: ff-spacing(sm);
+  letter-spacing: -0.02em;
+}
+
+.ff-page-subtitle {
+  font-size: ff-font-size(lg);
+  color: ff-rgb(muted-foreground);
+  font-weight: ff-font-weight(normal);
+}
+
+.ff-section {
+  margin-bottom: 64px;
+}
+
+.ff-section-title {
+  font-size: ff-font-size(3xl);
+  font-weight: ff-font-weight(light);
+  color: ff-rgb(foreground);
+  margin-bottom: ff-spacing(xl);
+}
+
+// Card styling
+.ff-card {
+  background: ff-rgb(card);
+  border: 1px solid ff-rgb(border);
+  border-radius: var(--ff-radius);
+  padding: ff-spacing(xl);
+  transition: all ff-transition(slow) cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &:hover {
+    box-shadow: ff-shadow(lg);
+    transform: translateY(-2px);
+    border-color: ff-rgba(border, 0.8);
+  }
+}
+
+// Material Design overrides for Apple-inspired look
+.mat-mdc-card {
+  border-radius: var(--ff-radius) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid ff-rgb(border) !important;
+  transition: all ff-transition(slow) cubic-bezier(0.4, 0, 0.2, 1) !important;
+  overflow: hidden;
+  background-color: ff-rgb(card) !important;
+  
+  &:hover {
+    box-shadow: ff-shadow(lg) !important;
+    transform: translateY(-4px);
+    border-color: ff-rgba(border, 0.8) !important;
+  }
+}
+
+.mat-mdc-card-header {
+  padding: 24px 24px 16px !important;
+}
+
+.mat-mdc-card-content {
+  padding: 0 24px 24px !important;
+}
+
+.mat-mdc-card-title {
+  font-size: 24px !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.mat-mdc-card-subtitle {
+  font-size: ff-font-size(base) !important;
+  color: ff-rgb(muted-foreground) !important;
+  margin-top: ff-spacing(xs) !important;
+}
+
+// Button styling
+.mat-mdc-button,
+.mat-mdc-raised-button {
+  border-radius: calc(var(--ff-radius) * 0.66) !important;
+  text-transform: none !important;
+  font-weight: ff-font-weight(medium) !important;
+  letter-spacing: 0 !important;
+  padding: 0 ff-spacing(lg) !important;
+  height: 40px !important;
+  transition: all ff-transition(base) ease !important;
+}
+
+.mat-mdc-raised-button {
+  box-shadow: ff-shadow(sm) !important;
+  
+  &:hover:not([disabled]) {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(-1px);
+  }
+  
+  &.mat-primary {
+    background-color: ff-rgb(primary) !important;
+    color: ff-rgb(primary-foreground) !important;
+    
+    &:hover:not([disabled]) {
+      opacity: 0.9;
+    }
+  }
+  
+  &.mat-accent {
+    background-color: ff-rgb(info) !important;
+    color: ff-rgb(info-foreground) !important;
+    
+    &:hover:not([disabled]) {
+      opacity: 0.9;
+    }
+  }
+  
+  &.mat-warn {
+    background-color: ff-rgb(destructive) !important;
+    color: ff-rgb(destructive-foreground) !important;
+    
+    &:hover:not([disabled]) {
+      opacity: 0.9;
+    }
+  }
+}
+
+// Progress bar styling
+.mat-mdc-progress-bar {
+  height: 6px !important;
+  border-radius: 3px !important;
+  overflow: hidden !important;
+  
+  .mdc-linear-progress__buffer {
+    background-color: #f3f4f6 !important;
+  }
+  
+  .mdc-linear-progress__bar-inner {
+    border-radius: 3px !important;
+  }
+}
+
+// Chip styling
+.mat-mdc-chip {
+  border-radius: calc(var(--ff-radius) * 0.5) !important;
+  font-weight: ff-font-weight(medium) !important;
+  font-size: ff-font-size(sm) !important;
+  padding: 0 ff-spacing(sm) !important;
+  height: 28px !important;
+  
+  .mdc-evolution-chip__text-label {
+    font-size: ff-font-size(sm) !important;
+  }
+}
+
+// Icon styling
+.mat-icon {
+  width: 20px !important;
+  height: 20px !important;
+  font-size: 20px !important;
+  line-height: 20px !important;
+  
+  &.small-icon {
+    width: 16px !important;
+    height: 16px !important;
+    font-size: 16px !important;
+    line-height: 16px !important;
+  }
+  
+  &.large-icon {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 24px !important;
+    line-height: 24px !important;
+  }
+}
+
+// Tooltip styling
+.mat-mdc-tooltip {
+  background-color: ff-rgb(foreground) !important;
+  color: ff-rgb(background) !important;
+  font-size: ff-font-size(xs) !important;
+  padding: ff-spacing(xs) ff-spacing(sm) !important;
+  border-radius: calc(var(--ff-radius) * 0.5) !important;
+}
+
+// Status color classes
+.status-planning {
+  background-color: ff-rgb(muted-foreground) !important;
+  color: ff-rgb(background) !important;
+}
+
+.status-active {
+  background-color: ff-rgb(success) !important;
+  color: ff-rgb(success-foreground) !important;
+}
+
+.status-on_hold {
+  background-color: ff-rgb(warning) !important;
+  color: ff-rgb(warning-foreground) !important;
+}
+
+.status-completed {
+  background-color: ff-rgb(info) !important;
+  color: ff-rgb(info-foreground) !important;
+}
+
+.status-cancelled {
+  background-color: ff-rgb(destructive) !important;
+  color: ff-rgb(destructive-foreground) !important;
+}
+
+// Priority colors
+.priority-low {
+  color: ff-rgb(muted-foreground);
+}
+
+.priority-medium {
+  color: ff-rgb(info);
+}
+
+.priority-high {
+  color: ff-rgb(warning);
+}
+
+.priority-critical {
+  color: ff-rgb(destructive);
+}
+
+// Loading states
+.loading-skeleton {
+  background: linear-gradient(90deg, ff-rgb(muted) 25%, ff-rgb(border) 50%, ff-rgb(muted) 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Scrollbar styling
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: ff-rgb(muted);
+  border-radius: calc(var(--ff-radius) * 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: ff-rgb(border);
+  border-radius: calc(var(--ff-radius) * 0.5);
+  border: 2px solid ff-rgb(muted);
+  
+  &:hover {
+    background: ff-rgb(muted-foreground);
+  }
+}

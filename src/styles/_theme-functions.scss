@@ -1,0 +1,62 @@
+// FibreFlow Theme Functions
+// These functions work with CSS custom properties, not SCSS variables
+
+@use 'sass:map';
+@use 'sass:string';
+
+// Convert CSS custom property to RGB value
+// Usage: background: ff-rgb(background);
+@function ff-rgb($color-name) {
+  @return rgb(var(--ff-#{$color-name}));
+}
+
+// Convert CSS custom property to RGBA value with opacity
+// Usage: background: ff-rgba(background, 0.5);
+@function ff-rgba($color-name, $opacity) {
+  @return rgb(var(--ff-#{$color-name}) / #{$opacity});
+}
+
+// Create CSS variable reference
+// Usage: color: ff-var(primary);
+@function ff-var($property) {
+  @return var(--ff-#{$property});
+}
+
+// Calculate rem from px
+// Usage: font-size: ff-rem(24);
+@function ff-rem($pixels, $base: 16) {
+  @return #{$pixels / $base}rem;
+}
+
+// Clamp value between min and max (responsive sizing)
+// Usage: font-size: ff-clamp(16, 20, 24);
+@function ff-clamp($min, $preferred, $max) {
+  @return clamp(#{ff-rem($min)}, #{$preferred}vw, #{ff-rem($max)});
+}
+
+// Create consistent box shadow using theme colors
+// Usage: box-shadow: ff-shadow(lg);
+@function ff-shadow($size: base) {
+  @if $size == sm {
+    @return var(--ff-shadow-sm);
+  } @else if $size == base {
+    @return var(--ff-shadow);
+  } @else if $size == lg {
+    @return var(--ff-shadow-lg);
+  } @else {
+    @error "Unknown shadow size: #{$size}";
+  }
+}
+
+// Get transition duration
+// Usage: transition: all ff-transition(base) ease;
+@function ff-transition($speed: base) {
+  $transitions: (
+    fast: 150ms,
+    base: 200ms,
+    slow: 300ms,
+    slower: 500ms
+  );
+  
+  @return map.get($transitions, $speed);
+}
