@@ -16,9 +16,11 @@ import {
   serverTimestamp,
   writeBatch
 } from '@angular/fire/firestore';
-import { Observable, from, map, switchMap, combineLatest, of } from 'rxjs';
+import { Observable, from, map, switchMap, combineLatest, of, firstValueFrom } from 'rxjs';
 import { Phase, PhaseStatus, PhaseTemplate, PhaseNotification, DEFAULT_PHASES, DependencyType } from '../models/phase.model';
 import { Auth } from '@angular/fire/auth';
+import { StaffService } from '../../features/staff/services/staff.service';
+import { TaskService } from './task.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +28,8 @@ import { Auth } from '@angular/fire/auth';
 export class PhaseService {
   private firestore = inject(Firestore);
   private auth = inject(Auth);
+  private staffService = inject(StaffService);
+  private taskService = inject(TaskService);
 
   // Get all phases for a project
   getProjectPhases(projectId: string): Observable<Phase[]> {
@@ -40,11 +44,22 @@ export class PhaseService {
         }
         
         const phaseObservables = phases.map(phase => {
+          // If phase already has assignedToDetails from the database, use that
+          if (phase.assignedToDetails) {
+            return of(phase);
+          }
+          // Otherwise, fetch staff details if assigned
           if (phase.assignedTo) {
-            return this.getUserDetails(phase.assignedTo).pipe(
-              map(userDetails => ({
+            return this.staffService.getStaffById(phase.assignedTo).pipe(
+              map(staffMember => ({
                 ...phase,
-                assignedToDetails: userDetails
+                assignedToDetails: staffMember ? {
+                  id: staffMember.id!,
+                  name: staffMember.name,
+                  email: staffMember.email,
+                  avatar: staffMember.photoUrl || undefined,
+                  role: staffMember.primaryGroup
+                } : undefined
               }))
             );
           }
@@ -56,6 +71,11 @@ export class PhaseService {
     );
   }
 
+  // Alias for getProjectPhases for consistency with other services
+  getByProject(projectId: string): Observable<Phase[]> {
+    return this.getProjectPhases(projectId);
+  }
+
   // Get single phase
   getPhase(projectId: string, phaseId: string): Observable<Phase | undefined> {
     const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${phaseId}`);
@@ -63,12 +83,18 @@ export class PhaseService {
   }
 
   // Create phases for a new project
-  async createProjectPhases(projectId: string): Promise<void> {
+  async createProjectPhases(projectId: string, createTasks: boolean = true): Promise<void> {
     const batch = writeBatch(this.firestore);
+    const phaseIds: string[] = [];
+    const phasesData: Phase[] = [];
     
     DEFAULT_PHASES.forEach((template, index) => {
       const phaseRef = doc(collection(this.firestore, `projects/${projectId}/phases`));
+      const phaseId = phaseRef.id;
+      phaseIds.push(phaseId);
+      
       const phase: Phase = {
+        id: phaseId,
         name: template.name,
         description: template.description,
         orderNo: template.orderNo,
@@ -78,10 +104,23 @@ export class PhaseService {
         updatedAt: serverTimestamp() as Timestamp
       };
       
+      phasesData.push(phase);
       batch.set(phaseRef, phase);
     });
     
     await batch.commit();
+    
+    // Create tasks for each phase if requested
+    if (createTasks) {
+      console.log('Creating tasks for new project phases...');
+      try {
+        await this.taskService.createTasksForProject(projectId, phasesData);
+        console.log('Tasks created successfully');
+      } catch (error) {
+        console.error('Error creating tasks:', error);
+        // Don't throw - phases are already created
+      }
+    }
   }
 
   // Map template dependencies to actual phase IDs
@@ -109,7 +148,7 @@ export class PhaseService {
   }
 
   // Update phase status
-  async updatePhaseStatus(projectId: string, phaseId: string, status: PhaseStatus): Promise<void> {
+  async updatePhaseStatus(projectId: string, phaseId: string, status: PhaseStatus, blockedReason?: string): Promise<void> {
     const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${phaseId}`);
     const updateData: any = {
       status,
@@ -122,7 +161,55 @@ export class PhaseService {
       await this.checkAndUpdateDependentPhases(projectId, phaseId);
     }
     
+    if (status === PhaseStatus.BLOCKED && blockedReason) {
+      updateData.blockedReason = blockedReason;
+    } else if (status !== PhaseStatus.BLOCKED) {
+      updateData.blockedReason = null;
+    }
+    
     await updateDoc(phaseRef, updateData);
+  }
+
+  // Assign phase to a staff member
+  async assignPhase(projectId: string, phaseId: string, staffId: string | null): Promise<void> {
+    try {
+      const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${phaseId}`);
+      const updateData: any = {
+        assignedTo: staffId,
+        updatedAt: serverTimestamp()
+      };
+      
+      if (staffId) {
+        // Get staff details using firstValueFrom for better async handling
+        try {
+          const staffMember = await firstValueFrom(this.staffService.getStaffById(staffId));
+          if (staffMember) {
+            updateData.assignedToDetails = {
+              id: staffMember.id!,
+              name: staffMember.name,
+              email: staffMember.email,
+              role: staffMember.primaryGroup
+            };
+            // Add avatar only if it exists
+            if (staffMember.photoUrl) {
+              updateData.assignedToDetails.avatar = staffMember.photoUrl;
+            }
+          }
+        } catch (staffError) {
+          console.error('Error fetching staff member:', staffError);
+          // Continue with assignment even if staff details fetch fails
+        }
+      } else {
+        // Unassigning - remove staff details
+        updateData.assignedToDetails = null;
+      }
+      
+      await updateDoc(phaseRef, updateData);
+      console.log('Phase assigned successfully:', { projectId, phaseId, staffId });
+    } catch (error) {
+      console.error('Error assigning phase:', error);
+      throw error;
+    }
   }
 
   // Check and update phases that depend on this phase
@@ -160,25 +247,6 @@ export class PhaseService {
     await batch.commit();
   }
 
-  // Assign phase to user
-  async assignPhase(projectId: string, phaseId: string, userId: string): Promise<void> {
-    const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${phaseId}`);
-    await updateDoc(phaseRef, {
-      assignedTo: userId,
-      updatedAt: serverTimestamp()
-    });
-    
-    // Create notification
-    await this.createPhaseNotification({
-      type: 'phase_assigned',
-      phaseId,
-      projectId,
-      userId,
-      message: 'You have been assigned to a new phase',
-      read: false,
-      createdAt: serverTimestamp() as Timestamp
-    });
-  }
 
   // Unassign phase
   async unassignPhase(projectId: string, phaseId: string): Promise<void> {
@@ -215,17 +283,6 @@ export class PhaseService {
     await setDoc(doc(notificationsRef), notification);
   }
 
-  // Get user details (mock for now - replace with actual user service)
-  private getUserDetails(userId: string): Observable<any> {
-    // This should connect to your actual user service
-    return of({
-      id: userId,
-      name: 'John Doe',
-      email: 'john@example.com',
-      avatar: '/placeholder-user.jpg',
-      role: 'Project Manager'
-    });
-  }
 
   // Check if phase can be started based on dependencies
   canStartPhase(phase: Phase, allPhases: Phase[]): boolean {
@@ -258,5 +315,168 @@ export class PhaseService {
     
     const completedPhases = phases.filter(p => p.status === PhaseStatus.COMPLETED).length;
     return Math.round((completedPhases / phases.length) * 100);
+  }
+
+  // Update all project phases (used by phase management dialog)
+  async updateProjectPhases(projectId: string, phases: any[]): Promise<void> {
+    const batch = writeBatch(this.firestore);
+    
+    // Get existing phases to delete any that were removed
+    const existingPhasesSnapshot = await this.getProjectPhases(projectId).pipe(
+      map(phases => phases)
+    ).toPromise();
+    
+    const existingPhaseIds = existingPhasesSnapshot?.map(p => p.id) || [];
+    const updatedPhaseIds = phases.filter(p => p.id).map(p => p.id);
+    
+    // Delete removed phases
+    existingPhaseIds.forEach(id => {
+      if (!updatedPhaseIds.includes(id)) {
+        const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${id}`);
+        batch.delete(phaseRef);
+      }
+    });
+    
+    // Create temporary ID mapping for new phases
+    const tempIdMap = new Map<string, string>();
+    
+    // First pass: create/update phases without dependencies
+    phases.forEach((phase, index) => {
+      if (!phase.id || phase.id.startsWith('temp-')) {
+        // New phase
+        const phaseRef = doc(collection(this.firestore, `projects/${projectId}/phases`));
+        const newId = phaseRef.id;
+        
+        if (phase.id) {
+          tempIdMap.set(phase.id, newId);
+        }
+        
+        batch.set(phaseRef, {
+          name: phase.name,
+          description: phase.description,
+          orderNo: phase.orderNo,
+          status: phase.status,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+      } else {
+        // Existing phase
+        const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${phase.id}`);
+        batch.update(phaseRef, {
+          name: phase.name,
+          description: phase.description,
+          orderNo: phase.orderNo,
+          status: phase.status,
+          updatedAt: serverTimestamp()
+        });
+      }
+    });
+    
+    // Commit first batch
+    await batch.commit();
+    
+    // Second pass: update dependencies with correct IDs
+    const depBatch = writeBatch(this.firestore);
+    
+    for (let i = 0; i < phases.length; i++) {
+      const phase = phases[i];
+      const phaseId = phase.id?.startsWith('temp-') ? tempIdMap.get(phase.id) : phase.id;
+      
+      if (phaseId && phase.dependencies && phase.dependencies.length > 0) {
+        const dependencies = phase.dependencies.map((dep: any) => {
+          let depPhaseId = dep.phaseId;
+          
+          // Map temporary IDs to real IDs
+          if (dep.phaseId.startsWith('temp-')) {
+            const tempIndex = parseInt(dep.phaseId.split('-')[1]);
+            const targetPhase = phases[tempIndex];
+            depPhaseId = targetPhase.id?.startsWith('temp-') 
+              ? tempIdMap.get(targetPhase.id) 
+              : targetPhase.id;
+          }
+          
+          return {
+            phaseId: depPhaseId,
+            type: dep.type
+          };
+        }).filter((dep: any) => dep.phaseId); // Filter out any invalid dependencies
+        
+        const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${phaseId}`);
+        depBatch.update(phaseRef, {
+          dependencies,
+          updatedAt: serverTimestamp()
+        });
+      }
+    }
+    
+    await depBatch.commit();
+  }
+
+  // Phase Template Management
+  getPhaseTemplates(): Observable<PhaseTemplate[]> {
+    const templatesRef = collection(this.firestore, 'phaseTemplates') as CollectionReference<PhaseTemplate>;
+    const templatesQuery = query(templatesRef, orderBy('orderNo'));
+    
+    return collectionData(templatesRef, { idField: 'id' }).pipe(
+      map(templates => {
+        // If no templates exist, return DEFAULT_PHASES
+        if (templates.length === 0) {
+          return DEFAULT_PHASES.map((template, index) => ({
+            ...template,
+            id: `default-${index}`
+          }));
+        }
+        return templates;
+      })
+    );
+  }
+
+  // Create phase template
+  createPhaseTemplate(template: Omit<PhaseTemplate, 'id'>): Observable<void> {
+    const templatesRef = collection(this.firestore, 'phaseTemplates');
+    const newTemplate = {
+      ...template,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    };
+    
+    return from(setDoc(doc(templatesRef), newTemplate));
+  }
+
+  // Update phase template
+  updatePhaseTemplate(templateId: string, updates: Partial<PhaseTemplate>): Observable<void> {
+    const templateRef = doc(this.firestore, 'phaseTemplates', templateId);
+    const updateData = {
+      ...updates,
+      updatedAt: serverTimestamp()
+    };
+    
+    return from(updateDoc(templateRef, updateData));
+  }
+
+  // Delete phase template
+  deletePhaseTemplate(templateId: string): Observable<void> {
+    const templateRef = doc(this.firestore, 'phaseTemplates', templateId);
+    return from(deleteDoc(templateRef));
+  }
+
+  // Initialize default phase templates (run once on first app load)
+  async initializeDefaultTemplates(): Promise<void> {
+    const templates = await firstValueFrom(this.getPhaseTemplates());
+    
+    if (templates.length === 0 || templates.every(t => t.id?.startsWith('default-'))) {
+      const batch = writeBatch(this.firestore);
+      
+      DEFAULT_PHASES.forEach(template => {
+        const templateRef = doc(collection(this.firestore, 'phaseTemplates'));
+        batch.set(templateRef, {
+          ...template,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        });
+      });
+      
+      await batch.commit();
+    }
   }
 }

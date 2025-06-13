@@ -112,7 +112,7 @@ export class SupplierListComponent implements OnInit {
     }
   }
 
-  async deleteSupplier(supplier: Supplier): void {
+  async deleteSupplier(supplier: Supplier): Promise<void> {
     if (confirm(`Are you sure you want to delete ${supplier.companyName}?`)) {
       try {
         await this.supplierService.deleteSupplier(supplier.id!);

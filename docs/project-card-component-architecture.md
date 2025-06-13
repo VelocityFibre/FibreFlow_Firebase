@@ -236,7 +236,7 @@ export class PhaseProgressComponent {
       
       <div class="stat-item">
         <svg class="stat-item__icon stat-item__icon--budget">
-          <!-- Dollar icon -->
+          <!-- Currency icon -->
         </svg>
         <div class="stat-item__content">
           <span class="stat-item__value">{{ stats.budgetUsed }}%</span>

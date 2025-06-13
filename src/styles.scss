@@ -2,12 +2,11 @@
 // For more information: https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 @use 'sass:map';
-@use './styles/spacing' as *;
-@use './styles/theme-functions' as *;
-
-// Import FibreFlow theme system
-@import './styles/variables';
-@import './styles/utilities';
+@use './styles/spacing' as spacing;
+@use './styles/theme-functions' as theme;
+@use './styles/variables' as *; // CSS custom properties need to be available globally
+@use './styles/utilities' as *; // Utility classes need to be available globally
+@use './styles/card-borders' as *; // Card border colors
 
 // Define custom FibreFlow palette for Material
 $fibreflow-primary-palette: (
@@ -118,32 +117,28 @@ $fibreflow-error-palette: (
 // Include only the core styles once
 @include mat.core();
 
-// Define the theme using Material 3 with custom palettes
-$fibreflow-theme: mat.define-theme((
+// Define the light theme using Material 3
+$fibreflow-light-theme: mat.define-theme((
   color: (
     theme-type: light,
-    primary: $fibreflow-neutral-palette,
-    tertiary: $fibreflow-tertiary-palette,
-  ),
-  typography: (
-    plain-family: #{-apple-system\, BlinkMacSystemFont\, "Segoe UI"\, Roboto\, "Helvetica Neue"\, sans-serif},
-    brand-family: #{-apple-system\, BlinkMacSystemFont\, "Segoe UI"\, Roboto\, "Helvetica Neue"\, sans-serif},
+    primary: mat.$azure-palette,
+    tertiary: mat.$blue-palette,
   ),
   density: (
     scale: 0,
   ),
 ));
 
-// Apply the theme to the body element
-body {
-  @include mat.all-component-themes($fibreflow-theme);
+// Apply the theme to all components
+html {
+  @include mat.all-component-themes($fibreflow-light-theme);
 }
 
 // Apple-inspired global styles
 html, body { 
   height: 100%;
-  background-color: ff-rgb(background);
-  color: ff-rgb(foreground);
+  background-color: var(--mat-sys-background);
+  color: var(--mat-sys-on-background);
 }
 
 body { 
@@ -156,24 +151,24 @@ body {
 
 // Typography scale
 h1 {
-  font-size: ff-font-size(5xl);
-  font-weight: ff-font-weight(light);
+  font-size: spacing.ff-font-size(5xl);
+  font-weight: spacing.ff-font-weight(light);
   letter-spacing: -0.02em;
   line-height: 1.2;
   margin: 0;
 }
 
 h2 {
-  font-size: ff-font-size(3xl);
-  font-weight: ff-font-weight(light);
+  font-size: spacing.ff-font-size(3xl);
+  font-weight: spacing.ff-font-weight(light);
   letter-spacing: -0.01em;
   line-height: 1.3;
   margin: 0;
 }
 
 h3 {
-  font-size: ff-font-size(xl);
-  font-weight: ff-font-weight(medium);
+  font-size: spacing.ff-font-size(xl);
+  font-weight: spacing.ff-font-weight(medium);
   line-height: 1.4;
   margin: 0;
 }
@@ -194,17 +189,17 @@ h3 {
 }
 
 .ff-page-title {
-  font-size: ff-font-size(5xl);
-  font-weight: ff-font-weight(light);
-  color: ff-rgb(foreground);
-  margin-bottom: ff-spacing(sm);
+  font-size: spacing.ff-font-size(5xl);
+  font-weight: spacing.ff-font-weight(light);
+  color: theme.ff-rgb(foreground);
+  margin-bottom: spacing.ff-spacing(sm);
   letter-spacing: -0.02em;
 }
 
 .ff-page-subtitle {
-  font-size: ff-font-size(lg);
-  color: ff-rgb(muted-foreground);
-  font-weight: ff-font-weight(normal);
+  font-size: spacing.ff-font-size(lg);
+  color: theme.ff-rgb(muted-foreground);
+  font-weight: spacing.ff-font-weight(normal);
 }
 
 .ff-section {
@@ -453,5 +448,65 @@ h3 {
   
   &:hover {
     background: ff-rgb(muted-foreground);
+  }
+}
+
+// Accessibility Support
+// Reduced motion for users who prefer it
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  :root {
+    // Increase contrast for borders
+    --ff-border: 0 0 0; // Pure black
+    --ff-muted: 245 245 245; // Lighter gray
+    
+    // Ensure text has maximum contrast
+    --ff-foreground: 0 0 0; // Pure black
+    --ff-muted-foreground: 64 64 64; // Darker gray
+  }
+  
+  // Stronger shadows for better definition
+  .mat-mdc-card,
+  .ff-card {
+    box-shadow: 0 0 0 2px black !important;
+  }
+  
+  // More visible focus states
+  :focus-visible {
+    outline: 3px solid black !important;
+    outline-offset: 2px !important;
+  }
+}
+
+// Dark mode preference support
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    // Auto-apply dark theme if no theme is set
+    --ff-background: 17 24 39;
+    --ff-foreground: 243 244 246;
+    --ff-card: 31 41 55;
+    --ff-card-foreground: 243 244 246;
+    --ff-primary: 59 130 246;
+    --ff-primary-foreground: 255 255 255;
+    --ff-secondary: 55 65 81;
+    --ff-secondary-foreground: 243 244 246;
+    --ff-muted: 55 65 81;
+    --ff-muted-foreground: 156 163 175;
+    --ff-accent: 55 65 81;
+    --ff-accent-foreground: 243 244 246;
+    --ff-border: 55 65 81;
+    --ff-input: 55 65 81;
+    --ff-ring: 59 130 246;
   }
 }

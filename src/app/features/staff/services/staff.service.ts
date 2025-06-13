@@ -18,7 +18,7 @@ import {
   DocumentReference,
   CollectionReference
 } from '@angular/fire/firestore';
-import { Observable, from, map, catchError, throwError } from 'rxjs';
+import { Observable, from, map, catchError, throwError, shareReplay, startWith } from 'rxjs';
 import { StaffMember, StaffFilter, StaffGroup, AvailabilityStatus } from '../models';
 
 @Injectable({
@@ -27,6 +27,9 @@ import { StaffMember, StaffFilter, StaffGroup, AvailabilityStatus } from '../mod
 export class StaffService {
   private firestore = inject(Firestore);
   private staffCollection = collection(this.firestore, 'staff') as CollectionReference<StaffMember>;
+  
+  // Cache for staff list
+  private staffCache$?: Observable<StaffMember[]>;
 
   getStaff(filter?: StaffFilter): Observable<StaffMember[]> {
     const constraints: QueryConstraint[] = [];
@@ -47,6 +50,22 @@ export class StaffService {
 
     const q = query(this.staffCollection, ...constraints);
     
+    // If no filter, use cached version
+    if (!filter || (!filter.groups && filter.isActive === undefined && !filter.availabilityStatus && !filter.searchTerm)) {
+      if (!this.staffCache$) {
+        this.staffCache$ = collectionData(q, { idField: 'id' }).pipe(
+          shareReplay(1),
+          catchError(error => {
+            console.error('Error fetching staff:', error);
+            this.staffCache$ = undefined; // Clear cache on error
+            return throwError(() => new Error('Failed to fetch staff members'));
+          })
+        );
+      }
+      return this.staffCache$;
+    }
+    
+    // For filtered queries, don't cache
     return collectionData(q, { idField: 'id' }).pipe(
       map(staff => {
         if (filter?.searchTerm) {
@@ -59,11 +78,16 @@ export class StaffService {
         }
         return staff;
       }),
+      startWith([]), // Return empty array while loading
       catchError(error => {
         console.error('Error fetching staff:', error);
         return throwError(() => new Error('Failed to fetch staff members'));
       })
     );
+  }
+  
+  clearCache() {
+    this.staffCache$ = undefined;
   }
 
   getStaffById(id: string): Observable<StaffMember | undefined> {
@@ -140,6 +164,10 @@ export class StaffService {
     };
 
     return from(addDoc(this.staffCollection, newStaff as any)).pipe(
+      map(result => {
+        this.clearCache(); // Clear cache after successful creation
+        return result;
+      }),
       catchError(error => {
         console.error('Error creating staff member:', error);
         return throwError(() => new Error('Failed to create staff member'));
@@ -155,6 +183,9 @@ export class StaffService {
     };
 
     return from(updateDoc(staffDoc, updateData)).pipe(
+      map(() => {
+        this.clearCache(); // Clear cache after successful update
+      }),
       catchError(error => {
         console.error('Error updating staff member:', error);
         return throwError(() => new Error('Failed to update staff member'));

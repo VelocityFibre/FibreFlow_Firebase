@@ -1,4 +1,10 @@
-import { Priority } from '@app/core/models/project.model';
+// Priority will be imported when project model is available
+export enum Priority {
+  LOW = 'low',
+  MEDIUM = 'medium',
+  HIGH = 'high',
+  CRITICAL = 'critical'
+}
 
 // Main dashboard overview metrics
 export interface DashboardMetrics {

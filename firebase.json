@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "fibreflow-73daf",
     "public": "dist/fibreflow/browser",
     "ignore": [
       "firebase.json",

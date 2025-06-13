@@ -13,7 +13,6 @@ import { Observable } from 'rxjs';
 import { Project, ProjectStatus, ProjectType, Priority, PhaseType } from '../../../../core/models/project.model';
 import { ProjectService } from '../../../../core/services/project.service';
 import { DateFormatService } from '../../../../core/services/date-format.service';
-import { ProjectCleanupService } from '../../../../core/services/project-cleanup.service';
 
 @Component({
   selector: 'app-project-list',
@@ -40,10 +39,6 @@ import { ProjectCleanupService } from '../../../../core/services/project-cleanup
 
       <!-- Actions Bar -->
       <div class="actions-bar">
-        <button mat-raised-button class="ff-button-warn" (click)="cleanupAndReset()">
-          <mat-icon>cleaning_services</mat-icon>
-          Clean & Create LouisTest
-        </button>
         <button mat-raised-button class="ff-button-primary" (click)="createNewProject()">
           <mat-icon>add</mat-icon>
           New Project
@@ -55,7 +50,7 @@ import { ProjectCleanupService } from '../../../../core/services/project-cleanup
         <div class="project-grid" *ngIf="projects$ | async as projects">
           <mat-card 
             *ngFor="let project of projects" 
-            class="project-card"
+            class="project-card ff-card-projects"
             [routerLink]="['/projects', project.id]"
             matRipple>
             
@@ -183,22 +178,36 @@ import { ProjectCleanupService } from '../../../../core/services/project-cleanup
     </div>
   `,
   styles: [`
-    @use '../../../../../styles/theme-functions' as *;
-    @use '../../../../../styles/spacing' as *;
-    
-    // Custom button styles for FibreFlow theme
-    .ff-button-primary {
-      background-color: ff-rgb(primary) !important;
-      color: ff-rgb(primary-foreground) !important;
-      
-      &:hover:not(:disabled) {
-        opacity: 0.9;
-      }
+    .ff-page-container {
+      padding: 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+      background-color: var(--mat-sys-background);
+    }
+
+    .ff-page-header {
+      margin-bottom: 32px;
+    }
+
+    .ff-page-title {
+      font-size: 32px;
+      font-weight: 500;
+      margin: 0;
+      color: var(--mat-sys-on-surface);
+    }
+
+    .ff-page-subtitle {
+      color: var(--mat-sys-on-surface-variant);
+      margin-top: 4px;
+    }
+
+    .ff-section {
+      margin-bottom: 32px;
     }
     
-    .ff-button-warn {
-      background-color: ff-rgb(destructive) !important;
-      color: ff-rgb(destructive-foreground) !important;
+    .ff-button-primary {
+      background-color: var(--mat-sys-primary) !important;
+      color: var(--mat-sys-on-primary) !important;
       
       &:hover:not(:disabled) {
         opacity: 0.9;
@@ -206,10 +215,10 @@ import { ProjectCleanupService } from '../../../../core/services/project-cleanup
     }
     
     .actions-bar {
-      margin-bottom: ff-spacing(xl);
+      margin-bottom: 32px;
       display: flex;
       justify-content: flex-end;
-      gap: ff-spacing(md);
+      gap: 16px;
     }
 
     .project-grid {
@@ -221,13 +230,11 @@ import { ProjectCleanupService } from '../../../../core/services/project-cleanup
     .project-card {
       position: relative;
       cursor: pointer;
-      background: ff-rgb(card) !important;
-      padding: 0 !important;
-      transition: all ff-transition(slow) ease;
+      transition: all 0.2s ease;
       
       &:hover {
         transform: translateY(-4px);
-        box-shadow: ff-shadow(lg) !important;
+        box-shadow: var(--mat-sys-elevation-4);
       }
     }
 
@@ -245,19 +252,19 @@ import { ProjectCleanupService } from '../../../../core/services/project-cleanup
     }
 
     .priority-ribbon.priority-high {
-      background-color: ff-rgba(warning, 0.15);
-      color: ff-rgb(warning);
+      background-color: rgba(255, 152, 0, 0.15);
+      color: #ff9800;
     }
 
     .priority-ribbon.priority-critical {
-      background-color: ff-rgba(destructive, 0.15);
-      color: ff-rgb(destructive);
+      background-color: rgba(var(--mat-sys-error-rgb), 0.15);
+      color: var(--mat-sys-error);
     }
 
     mat-card-header {
-      background-color: ff-rgba(muted, 0.5);
-      border-bottom: 1px solid ff-rgb(border);
-      padding: ff-spacing(lg) ff-spacing(xl) !important;
+      background-color: var(--mat-sys-surface-variant);
+      border-bottom: 1px solid var(--mat-sys-outline-variant);
+      padding: 16px 24px !important;
     }
 
     .header-content {
@@ -273,20 +280,45 @@ import { ProjectCleanupService } from '../../../../core/services/project-cleanup
     }
 
     mat-card-title {
-      font-size: ff-font-size(xl) !important;
+      font-size: 20px !important;
       line-height: 1.3 !important;
-      margin-bottom: ff-spacing(xs) !important;
-      color: ff-rgb(card-foreground);
+      margin-bottom: 4px !important;
+      color: var(--mat-sys-on-surface);
     }
 
     mat-card-subtitle {
-      font-size: ff-font-size(base) !important;
-      color: ff-rgb(muted-foreground);
+      font-size: 14px !important;
+      color: var(--mat-sys-on-surface-variant);
     }
 
     .status-chip {
       flex-shrink: 0;
       margin-left: 16px;
+    }
+
+    .status-chip.status-active {
+      background-color: rgba(34, 197, 94, 0.1);
+      color: #22c55e;
+    }
+
+    .status-chip.status-planning {
+      background-color: rgba(59, 130, 246, 0.1);
+      color: #3b82f6;
+    }
+
+    .status-chip.status-on_hold {
+      background-color: rgba(245, 158, 11, 0.1);
+      color: #f59e0b;
+    }
+
+    .status-chip.status-completed {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+    }
+
+    .status-chip.status-cancelled {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
     }
 
     mat-card-content {
@@ -303,25 +335,28 @@ import { ProjectCleanupService } from '../../../../core/services/project-cleanup
     .meta-item {
       display: flex;
       align-items: center;
-      gap: ff-spacing(sm);
-      color: ff-rgb(muted-foreground);
-      font-size: ff-font-size(sm);
+      gap: 8px;
+      color: var(--mat-sys-on-surface-variant);
+      font-size: 14px;
     }
 
     .meta-item mat-icon {
-      color: ff-rgba(muted-foreground, 0.7);
+      color: var(--mat-sys-on-surface-variant);
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
     }
 
     .project-type {
-      font-weight: ff-font-weight(medium);
-      color: ff-rgb(foreground);
+      font-weight: 500;
+      color: var(--mat-sys-on-surface);
     }
 
     .phase-card {
-      background: ff-rgb(muted);
-      border-radius: var(--ff-radius);
-      padding: ff-spacing(md);
-      margin-bottom: ff-spacing(lg);
+      background: var(--mat-sys-surface-variant);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
     }
 
     .phase-header {
@@ -332,24 +367,24 @@ import { ProjectCleanupService } from '../../../../core/services/project-cleanup
     }
 
     .phase-label {
-      font-size: ff-font-size(xs);
+      font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: ff-rgb(muted-foreground);
-      font-weight: ff-font-weight(medium);
+      color: var(--mat-sys-on-surface-variant);
+      font-weight: 500;
     }
 
     .phase-progress {
-      font-size: ff-font-size(sm);
-      font-weight: ff-font-weight(semibold);
-      color: ff-rgb(foreground);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--mat-sys-on-surface);
     }
 
     .phase-name {
-      font-size: ff-font-size(base);
-      font-weight: ff-font-weight(medium);
-      color: ff-rgb(card-foreground);
-      margin-bottom: ff-spacing(sm);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--mat-sys-on-surface);
+      margin-bottom: 8px;
     }
 
     .progress-section {
@@ -364,15 +399,15 @@ import { ProjectCleanupService } from '../../../../core/services/project-cleanup
     }
 
     .progress-label {
-      font-size: ff-font-size(sm);
-      color: ff-rgb(foreground);
-      font-weight: ff-font-weight(medium);
+      font-size: 14px;
+      color: var(--mat-sys-on-surface);
+      font-weight: 500;
     }
 
     .progress-value {
-      font-size: ff-font-size(base);
-      font-weight: ff-font-weight(semibold);
-      color: ff-rgb(foreground);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--mat-sys-on-surface);
     }
 
     .stats-grid {
@@ -382,12 +417,12 @@ import { ProjectCleanupService } from '../../../../core/services/project-cleanup
     }
 
     .stat-card {
-      background: ff-rgb(muted);
-      border-radius: calc(var(--ff-radius) * 0.66);
-      padding: ff-spacing(md);
+      background: var(--mat-sys-surface-variant);
+      border-radius: 8px;
+      padding: 12px;
       display: flex;
       align-items: center;
-      gap: ff-spacing(sm);
+      gap: 8px;
     }
 
     .stat-card mat-icon {
@@ -397,11 +432,11 @@ import { ProjectCleanupService } from '../../../../core/services/project-cleanup
     }
 
     .completed-icon {
-      color: ff-rgb(success);
+      color: #22c55e;
     }
 
     .budget-icon {
-      color: ff-rgb(info);
+      color: #3b82f6;
     }
 
     .stat-content {
@@ -409,32 +444,32 @@ import { ProjectCleanupService } from '../../../../core/services/project-cleanup
     }
 
     .stat-value {
-      font-size: ff-font-size(lg);
-      font-weight: ff-font-weight(semibold);
-      color: ff-rgb(foreground);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--mat-sys-on-surface);
       line-height: 1;
     }
 
     .stat-label {
-      font-size: ff-font-size(xs);
-      color: ff-rgb(muted-foreground);
-      margin-top: ff-spacing(0);
+      font-size: 12px;
+      color: var(--mat-sys-on-surface-variant);
+      margin-top: 2px;
     }
 
     /* Empty State */
     .empty-state {
       text-align: center;
-      padding: ff-spacing(5xl) ff-spacing(2xl);
-      background: ff-rgb(muted);
-      border-radius: var(--ff-radius);
-      border: 2px dashed ff-rgb(border);
+      padding: 80px 32px;
+      background: var(--mat-sys-surface-variant);
+      border-radius: 12px;
+      border: 2px dashed var(--mat-sys-outline-variant);
     }
 
     .empty-state-icon {
-      width: ff-spacing(5xl);
-      height: ff-spacing(5xl);
-      margin: 0 auto ff-spacing(xl);
-      background: ff-rgb(secondary);
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 24px;
+      background: var(--mat-sys-surface);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -445,23 +480,41 @@ import { ProjectCleanupService } from '../../../../core/services/project-cleanup
       font-size: 40px !important;
       width: 40px !important;
       height: 40px !important;
-      color: ff-rgb(muted-foreground);
+      color: var(--mat-sys-on-surface-variant);
     }
 
     .empty-state h2 {
-      font-size: ff-font-size(2xl);
-      font-weight: ff-font-weight(medium);
-      color: ff-rgb(foreground);
-      margin: 0 0 ff-spacing(sm) 0;
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--mat-sys-on-surface);
+      margin: 0 0 8px 0;
     }
 
     .empty-state p {
-      font-size: ff-font-size(base);
-      color: ff-rgb(muted-foreground);
-      margin: 0 0 ff-spacing(xl) 0;
+      font-size: 16px;
+      color: var(--mat-sys-on-surface-variant);
+      margin: 0 0 24px 0;
     }
 
     /* Loading State */
+    .loading-skeleton {
+      background: linear-gradient(90deg, 
+        var(--mat-sys-surface-variant) 25%, 
+        var(--mat-sys-surface) 50%, 
+        var(--mat-sys-surface-variant) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
+    }
+
     .loading-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
@@ -469,28 +522,41 @@ import { ProjectCleanupService } from '../../../../core/services/project-cleanup
     }
 
     .loading-card {
-      background: ff-rgb(card);
-      border: 1px solid ff-rgb(border);
-      border-radius: var(--ff-radius);
-      padding: ff-spacing(xl);
+      background: var(--mat-sys-surface);
+      border: 1px solid var(--mat-sys-outline-variant);
+      border-radius: 12px;
+      padding: 24px;
       height: 400px;
     }
 
     .loading-header {
       height: 60px;
-      border-radius: calc(var(--ff-radius) * 0.66);
-      margin-bottom: ff-spacing(lg);
+      border-radius: 8px;
+      margin-bottom: 16px;
     }
 
     .loading-content {
       height: 200px;
-      border-radius: calc(var(--ff-radius) * 0.66);
-      margin-bottom: ff-spacing(lg);
+      border-radius: 8px;
+      margin-bottom: 16px;
     }
 
     .loading-progress {
       height: 40px;
-      border-radius: calc(var(--ff-radius) * 0.66);
+      border-radius: 8px;
+    }
+
+    /* Small icon helper */
+    .small-icon {
+      font-size: 18px !important;
+      width: 18px !important;
+      height: 18px !important;
+    }
+
+    .large-icon {
+      font-size: 40px !important;
+      width: 40px !important;
+      height: 40px !important;
     }
 
     /* Responsive */
@@ -501,6 +567,10 @@ import { ProjectCleanupService } from '../../../../core/services/project-cleanup
     }
 
     @media (max-width: 768px) {
+      .ff-page-container {
+        padding: 16px;
+      }
+
       .project-grid {
         grid-template-columns: 1fr;
       }
@@ -527,7 +597,6 @@ import { ProjectCleanupService } from '../../../../core/services/project-cleanup
 export class ProjectListComponent implements OnInit {
   private projectService = inject(ProjectService);
   private dateFormat = inject(DateFormatService);
-  private cleanupService = inject(ProjectCleanupService);
   private router = inject(Router);
   projects$!: Observable<Project[]>;
 
@@ -539,19 +608,6 @@ export class ProjectListComponent implements OnInit {
     await this.router.navigate(['/projects/new']);
   }
 
-  async cleanupAndReset() {
-    if (confirm('This will delete ALL existing projects and create only LouisTest. Are you sure?')) {
-      try {
-        const result = await this.cleanupService.cleanupAndCreateLouisTest();
-        console.log(`Cleanup complete: Deleted ${result.deleted} projects, Created ${result.created} project`);
-        // Force refresh the project list
-        this.projects$ = this.projectService.getProjects();
-      } catch (error) {
-        console.error('Cleanup failed:', error);
-        alert('Cleanup failed. Check console for details.');
-      }
-    }
-  }
 
   getStatusLabel(status: ProjectStatus): string {
     const labels: Record<ProjectStatus, string> = {

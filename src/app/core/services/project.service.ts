@@ -14,7 +14,8 @@ import {
   limit,
   CollectionReference,
   DocumentReference,
-  Timestamp
+  Timestamp,
+  getDoc
 } from '@angular/fire/firestore';
 import { Observable, from, map, combineLatest, switchMap } from 'rxjs';
 import { 
@@ -81,6 +82,16 @@ export class ProjectService {
     return docData(projectDoc, { idField: 'id' });
   }
 
+  // Get a single project (for non-observable use)
+  async getProjectOnce(id: string): Promise<Project | undefined> {
+    const projectDoc = doc(this.projectsCollection, id);
+    const snapshot = await getDoc(projectDoc);
+    if (snapshot.exists()) {
+      return { ...snapshot.data(), id: snapshot.id } as Project;
+    }
+    return undefined;
+  }
+
   getProjectHierarchy(projectId: string): Observable<ProjectHierarchy | undefined> {
     return this.getProjectById(projectId).pipe(
       switchMap(project => {
@@ -126,8 +137,14 @@ export class ProjectService {
     
     const docRef = await addDoc(this.projectsCollection, newProject);
     
-    // Create default phases from template
-    await this.createDefaultPhases(docRef.id);
+    // Create default phases and tasks from template
+    try {
+      await this.phaseService.createProjectPhases(docRef.id, true);
+      console.log(`Created phases and tasks for project ${docRef.id}`);
+    } catch (error) {
+      console.error('Error creating phases and tasks:', error);
+      // Don't throw - project is already created
+    }
     
     return docRef.id;
   }

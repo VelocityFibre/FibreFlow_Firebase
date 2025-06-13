@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { StaffService } from './staff.service';
-import { StaffMember, StaffFilter, StaffGroup } from '../models';
+import { StaffMember, StaffFilter, StaffGroup, AvailabilityStatus } from '../models';
 
 /**
  * Facade service that provides the public API for the Staff module.
@@ -40,8 +40,8 @@ export class StaffFacadeService {
   /**
    * Update staff availability status
    */
-  updateAvailability(staffId: string, status: string): Observable<void> {
-    return this.staffService.updateStaffAvailability(staffId, status as any);
+  updateAvailability(staffId: string, status: AvailabilityStatus): Observable<void> {
+    return this.staffService.updateStaffAvailability(staffId, status);
   }
 
   /**

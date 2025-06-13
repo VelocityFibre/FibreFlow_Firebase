@@ -44,7 +44,7 @@
       <mat-spinner></mat-spinner>
     </div>
 
-    <table mat-table [dataSource]="suppliers$ | async" class="suppliers-table" *ngIf="!loading">
+    <table mat-table [dataSource]="(suppliers$ | async) || []" class="suppliers-table" *ngIf="!loading">
       <ng-container matColumnDef="companyName">
         <th mat-header-cell *matHeaderCellDef>Company Name</th>
         <td mat-cell *matCellDef="let supplier">

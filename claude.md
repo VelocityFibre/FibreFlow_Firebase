@@ -3,6 +3,14 @@ markdown# FibreFlow V2 - Project Context for Claude
 ## Project Overview
 FibreFlow V2 is an enterprise fiber optic project management system built with Angular and Firebase. This is a complete rebuild focusing on performance, offline capability, and real-time collaboration.
 
+## 🌍 Localization Settings
+- **Location**: South Africa
+- **Timezone**: Africa/Johannesburg (UTC+2)
+- **Currency**: South African Rand (ZAR)
+- **Currency Symbol**: R
+- **Date Format**: DD/MM/YYYY
+- **Number Format**: Space as thousands separator (e.g., 1 000 000)
+
 ## 🎨 Theme System & Design Guidelines
 - **Design Philosophy**: Apple-inspired minimalism with function-first approach
 - **Theme System**: CSS variables with runtime switching (light, dark, vf, fibreflow)
@@ -14,7 +22,8 @@ FibreFlow V2 is an enterprise fiber optic project management system built with A
   - `docs/ai-theme-collaboration-guide.md` - AI prompting guidelines
 - **Key Files**:
   - `src/styles/_variables.scss` - Theme CSS variables
-  - `src/styles/_functions.scss` - SCSS utility functions
+  - `src/styles/_theme-functions.scss` - Theme/color functions (ff-rgb, ff-rgba, ff-shadow)
+  - `src/styles/_spacing.scss` - Spacing/typography functions (ff-spacing, ff-font-size, ff-font-weight)
   - `src/styles/_utilities.scss` - Pre-built utility classes
 
 ## Tech Stack
@@ -77,19 +86,42 @@ fibreflow-v2/
 ├── firestore.rules           # Security rules
 └── storage.rules             # Storage rules
 
+## 🎨 CRITICAL THEME SYSTEM UPDATE (2025-01-12)
+
+**IMPORTANT**: The theme system has been refactored. Key changes:
+1. `_functions.scss` has been REMOVED and split into:
+   - `_theme-functions.scss` - For color/theme functions (ff-rgb, ff-rgba, ff-shadow)
+   - `_spacing.scss` - For spacing/typography functions (ff-spacing, ff-font-size, ff-font-weight)
+
+2. ALL function calls MUST use namespace prefixes:
+   ```scss
+   @use 'path/to/theme-functions' as theme;
+   @use 'path/to/spacing' as spacing;
+   
+   // Then use:
+   color: theme.ff-rgb(foreground);  // NOT ff-rgb(foreground)
+   padding: spacing.ff-spacing(xl);  // NOT ff-spacing(xl)
+   ```
+
+3. Material theme configuration uses custom palettes, NOT mat.$azure-palette
+
 ## Critical Rules (NEVER VIOLATE)
 
 ### Theme Implementation Rules
 ```scss
-// ✅ CORRECT - Use theme functions and variables
-background: ff-rgb(background);
-padding: ff-spacing(xl);
-font-size: ff-font-size(2xl);
+// ✅ CORRECT - Use theme functions with proper namespaces
+@use '../path/to/styles/theme-functions' as theme;
+@use '../path/to/styles/spacing' as spacing;
 
-// ❌ WRONG - Hardcoded values
-background: #FFFFFF;
-padding: 32px;
-font-size: 24px;
+background: theme.ff-rgb(background);
+padding: spacing.ff-spacing(xl);
+font-size: spacing.ff-font-size(2xl);
+
+// ❌ WRONG - Missing namespaces or hardcoded values
+background: ff-rgb(background);  // NO! Missing namespace
+background: #FFFFFF;             // NO! Hardcoded color
+padding: 32px;                   // NO! Hardcoded spacing
+font-size: 24px;                 // NO! Hardcoded size
 ```
 
 ### Component Architecture Rules
@@ -211,6 +243,24 @@ Secure Headers middleware
 
 Implementation Guidelines
 
+### Currency Formatting Pattern
+```typescript
+// Currency formatting for South African Rand
+formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('en-ZA', {
+    style: 'currency',
+    currency: 'ZAR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(amount);
+}
+
+// Date formatting for South Africa
+formatDate(date: Date): string {
+  return new Intl.DateTimeFormat('en-ZA').format(date);
+}
+```
+
 ### Theme Service Pattern
 ```typescript
 // Theme service for runtime switching
@@ -227,17 +277,18 @@ export class ThemeService {
 
 ### Component Styling Pattern
 ```scss
-// Component SCSS using theme system
-@import '../../../styles/functions';
+// Component SCSS using theme system with proper @use
+@use '../../../styles/theme-functions' as theme;
+@use '../../../styles/spacing' as spacing;
 
 .my-component {
-  padding: ff-spacing(xl);
-  background: ff-rgb(card);
+  padding: spacing.ff-spacing(xl);
+  background: theme.ff-rgb(card);
   border-radius: var(--ff-radius);
   
   &__title {
-    font-size: ff-font-size(2xl);
-    color: ff-rgb(foreground);
+    font-size: spacing.ff-font-size(2xl);
+    color: theme.ff-rgb(foreground);
   }
 }
 ```
@@ -406,6 +457,9 @@ Common Pitfalls to Avoid
 ❌ Hardcoding colors/spacing (use theme functions)
 ❌ Monolithic components (use modular architecture)
 ❌ Ignoring theme compatibility (test all 4 themes)
+❌ Using @import instead of @use for SCSS files
+❌ Missing namespace prefixes when calling functions
+❌ Using old _functions.scss (now split into _theme-functions.scss and _spacing.scss)
 Performance Optimization Checklist
 ✅ Lazy load all feature modules
 ✅ Use OnPush change detection

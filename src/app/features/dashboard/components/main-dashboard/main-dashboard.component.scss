@@ -1,0 +1,310 @@
+@use '../../../../../styles/spacing' as *;
+
+.dashboard-container {
+  padding: ff-spacing(2xl);
+  background-color: var(--mat-app-background-color);
+  min-height: 100vh;
+}
+
+.dashboard-header {
+  margin-bottom: ff-spacing(3xl);
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--mat-app-on-background);
+  }
+
+  .welcome-text {
+    color: var(--mat-app-on-surface-variant);
+    margin-top: ff-spacing(sm);
+    font-size: 1.1rem;
+  }
+}
+
+// Main Dashboard Grid
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: ff-spacing(xl);
+  margin-bottom: ff-spacing(3xl);
+
+  .dashboard-card {
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid var(--mat-app-outline-variant);
+    background: var(--mat-app-surface-container);
+    padding: ff-spacing(xl);
+    border-radius: 16px;
+    position: relative;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      border-color: var(--mat-app-primary);
+    }
+
+    .card-icon {
+      position: absolute;
+      top: ff-spacing(lg);
+      right: ff-spacing(lg);
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      mat-icon {
+        font-size: 28px;
+        color: white;
+      }
+
+      &.projects-icon {
+        background: #3b82f6;
+      }
+
+      &.suppliers-icon {
+        background: #10b981;
+      }
+
+      &.stock-icon {
+        background: #8b5cf6;
+      }
+
+      &.clients-icon {
+        background: #f59e0b;
+      }
+
+      &.issues-icon {
+        background: #ef4444;
+      }
+
+      &.analytics-icon {
+        background: #6366f1;
+      }
+    }
+
+    mat-card-header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding-bottom: ff-spacing(lg);
+      padding-right: 80px; // Make room for the icon
+
+      mat-card-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin: 0;
+        letter-spacing: -0.02em;
+      }
+
+      mat-card-subtitle {
+        font-size: 0.9rem;
+        color: var(--mat-app-on-surface-variant);
+        margin: ff-spacing(xs) 0 0 0;
+        line-height: 1.4;
+      }
+    }
+
+    mat-card-content {
+      padding-top: ff-spacing(lg);
+
+      .card-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .stat-item {
+          .stat-number {
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: block;
+            color: var(--mat-app-primary);
+            letter-spacing: -0.03em;
+            margin-bottom: ff-spacing(xs);
+          }
+
+          .stat-label {
+            font-size: 0.9rem;
+            color: var(--mat-app-on-surface-variant);
+            font-weight: 500;
+          }
+        }
+
+        .action-link {
+          color: var(--mat-app-primary);
+          font-weight: 500;
+          display: flex;
+          align-items: center;
+          gap: ff-spacing(xs);
+        }
+      }
+    }
+  }
+}
+
+// Quick Summary Section
+.summary-section {
+  margin-bottom: ff-spacing(3xl);
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: ff-spacing(xl);
+    color: var(--mat-app-on-background);
+    letter-spacing: -0.02em;
+  }
+
+  .summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: ff-spacing(lg);
+
+    .summary-card {
+      background: var(--mat-app-surface-container);
+      border: 1px solid var(--mat-app-outline-variant);
+      border-radius: 12px;
+      padding: ff-spacing(lg);
+      transition: all 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      mat-card-content {
+        display: flex;
+        align-items: center;
+        gap: ff-spacing(lg);
+
+        .summary-icon {
+          width: 48px;
+          height: 48px;
+          border-radius: 12px;
+          background: var(--mat-app-primary-container);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          mat-icon {
+            color: var(--mat-app-on-primary-container);
+            font-size: 24px;
+          }
+        }
+
+        .summary-content {
+          flex: 1;
+
+          h3 {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin: 0;
+            color: var(--mat-app-on-surface-variant);
+            margin-bottom: ff-spacing(xs);
+          }
+
+          .summary-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--mat-app-on-surface);
+            margin: ff-spacing(xs) 0;
+            letter-spacing: -0.03em;
+          }
+
+          .summary-detail {
+            font-size: 0.8rem;
+            color: var(--mat-app-on-surface-variant);
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Recent Activity Section
+.activity-section {
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: ff-spacing(xl);
+    color: var(--mat-app-on-background);
+    letter-spacing: -0.02em;
+  }
+
+  mat-card {
+    background: var(--mat-app-surface-container);
+    border: 1px solid var(--mat-app-outline-variant);
+    border-radius: 12px;
+    padding: ff-spacing(lg);
+  }
+
+  .activity-list {
+    .activity-item {
+      display: flex;
+      gap: ff-spacing(lg);
+      padding: ff-spacing(lg) 0;
+      
+      &:not(:last-child) {
+        border-bottom: 1px solid var(--mat-app-outline-variant);
+      }
+
+      .activity-icon {
+        color: var(--mat-app-primary);
+        font-size: 24px;
+        background: var(--mat-app-primary-container);
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .activity-content {
+        flex: 1;
+
+        p {
+          margin: 0;
+          color: var(--mat-app-on-surface);
+          font-size: 0.95rem;
+          line-height: 1.5;
+        }
+
+        .activity-time {
+          font-size: 0.8rem;
+          color: var(--mat-app-on-surface-variant);
+          margin-top: ff-spacing(xs);
+          display: inline-block;
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: ff-spacing(lg);
+  }
+
+  .dashboard-header {
+    margin-bottom: ff-spacing(xl);
+
+    h1 {
+      font-size: 2rem;
+    }
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: ff-spacing(lg);
+  }
+
+  .summary-cards {
+    grid-template-columns: 1fr;
+    gap: ff-spacing(md);
+  }
+}

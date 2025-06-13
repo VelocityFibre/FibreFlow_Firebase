@@ -25,7 +25,7 @@ import {
   DateRange,
   StaffRecommendation
 } from '../../shared/interfaces/staff-project.interface';
-import { StaffMember } from '../../features/staff/models';
+import { StaffMember } from '../../features/staff/public-api';
 
 @Injectable({
   providedIn: 'root'

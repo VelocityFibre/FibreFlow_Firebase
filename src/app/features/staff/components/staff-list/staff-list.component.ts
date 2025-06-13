@@ -14,9 +14,11 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { StaffService } from '../../services/staff.service';
 import { StaffMember, StaffGroup, AvailabilityStatus, StaffFilter } from '../../models';
+import { LoadingSkeletonComponent } from '../../../../shared/components/loading-skeleton/loading-skeleton.component';
 
 @Component({
   selector: 'app-staff-list',
@@ -36,7 +38,9 @@ import { StaffMember, StaffGroup, AvailabilityStatus, StaffFilter } from '../../
     MatChipsModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
-    MatMenuModule
+    MatMenuModule,
+    MatDividerModule,
+    LoadingSkeletonComponent
   ],
   template: `
     <div class="staff-list-container">
@@ -87,8 +91,8 @@ import { StaffMember, StaffGroup, AvailabilityStatus, StaffFilter } from '../../
       </div>
 
       @if (loading()) {
-        <div class="loading">
-          <mat-spinner></mat-spinner>
+        <div class="table-container">
+          <app-loading-skeleton type="table"></app-loading-skeleton>
         </div>
       } @else {
         <div class="table-container">
@@ -215,6 +219,7 @@ import { StaffMember, StaffGroup, AvailabilityStatus, StaffFilter } from '../../
       padding: 24px;
       max-width: 1400px;
       margin: 0 auto;
+      background-color: var(--mat-sys-background);
     }
 
     .header {
@@ -226,8 +231,9 @@ import { StaffMember, StaffGroup, AvailabilityStatus, StaffFilter } from '../../
 
     h1 {
       margin: 0;
-      font-size: 28px;
+      font-size: 32px;
       font-weight: 500;
+      color: var(--mat-sys-on-surface);
     }
 
     .filters {
@@ -248,10 +254,11 @@ import { StaffMember, StaffGroup, AvailabilityStatus, StaffFilter } from '../../
     }
 
     .table-container {
-      background: white;
+      background: var(--mat-sys-surface);
       border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: var(--mat-sys-elevation-1);
+      border: 1px solid var(--mat-sys-outline-variant);
     }
 
     table {
@@ -269,7 +276,7 @@ import { StaffMember, StaffGroup, AvailabilityStatus, StaffFilter } from '../../
       height: 40px;
       border-radius: 50%;
       overflow: hidden;
-      background: #f5f5f5;
+      background: var(--mat-sys-surface-variant);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -283,11 +290,12 @@ import { StaffMember, StaffGroup, AvailabilityStatus, StaffFilter } from '../../
 
     .name {
       font-weight: 500;
+      color: var(--mat-sys-on-surface);
     }
 
     .employee-id {
       font-size: 12px;
-      color: #666;
+      color: var(--mat-sys-on-surface-variant);
     }
 
     .availability-status {
@@ -314,7 +322,7 @@ import { StaffMember, StaffGroup, AvailabilityStatus, StaffFilter } from '../../
 
     .last-active {
       font-size: 12px;
-      color: #666;
+      color: var(--mat-sys-on-surface-variant);
     }
 
     mat-chip {

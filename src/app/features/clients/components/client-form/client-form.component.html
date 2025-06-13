@@ -1,0 +1,399 @@
+<div class="client-form-container">
+  <!-- Loading spinner -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- Form content -->
+  <div *ngIf="!isLoading">
+    <!-- Header -->
+    <div class="form-header">
+      <h1 class="form-title">{{ isEditMode ? 'Edit Client' : 'Add New Client' }}</h1>
+      <p class="form-subtitle">{{ isEditMode ? 'Update client information' : 'Create a new client profile' }}</p>
+    </div>
+
+    <!-- Stepper Form -->
+    <mat-stepper linear #stepper>
+      <!-- Step 1: Basic Information -->
+      <mat-step [stepControl]="basicInfoForm">
+        <form [formGroup]="basicInfoForm">
+          <ng-template matStepLabel>Basic Information</ng-template>
+          
+          <div class="step-content">
+            <div class="form-section">
+              <div class="form-grid">
+                <!-- Client Name -->
+                <mat-form-field appearance="outline">
+                  <mat-label>Client Name</mat-label>
+                  <input matInput formControlName="name" placeholder="Enter client name">
+                  <mat-error>{{ getErrorMessage('name', basicInfoForm) }}</mat-error>
+                </mat-form-field>
+
+                <!-- Client Type -->
+                <mat-form-field appearance="outline">
+                  <mat-label>Client Type</mat-label>
+                  <mat-select formControlName="clientType">
+                    <mat-option *ngFor="let type of clientTypes" [value]="type">
+                      {{ type }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>{{ getErrorMessage('clientType', basicInfoForm) }}</mat-error>
+                </mat-form-field>
+
+                <!-- Status -->
+                <mat-form-field appearance="outline">
+                  <mat-label>Status</mat-label>
+                  <mat-select formControlName="status">
+                    <mat-option *ngFor="let status of clientStatuses" [value]="status">
+                      {{ status }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>{{ getErrorMessage('status', basicInfoForm) }}</mat-error>
+                </mat-form-field>
+
+                <!-- Industry -->
+                <mat-form-field appearance="outline">
+                  <mat-label>Industry</mat-label>
+                  <mat-select formControlName="industry">
+                    <mat-option value="">None</mat-option>
+                    <mat-option *ngFor="let industry of industries" [value]="industry">
+                      {{ industry }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <!-- Website -->
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Website</mat-label>
+                  <input matInput formControlName="website" placeholder="https://example.com">
+                  <mat-icon matPrefix>language</mat-icon>
+                  <mat-error>{{ getErrorMessage('website', basicInfoForm) }}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="step-actions">
+              <button mat-stroked-button routerLink="/clients" type="button">
+                <mat-icon>close</mat-icon>
+                Cancel
+              </button>
+              <button mat-flat-button matStepperNext color="primary" [disabled]="basicInfoForm.invalid">
+                Next
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- Step 2: Contact Information -->
+      <mat-step [stepControl]="contactForm">
+        <form [formGroup]="contactForm">
+          <ng-template matStepLabel>Contact Information</ng-template>
+          
+          <div class="step-content">
+            <div class="form-section">
+              <div class="form-grid">
+                <!-- Contact Person -->
+                <mat-form-field appearance="outline">
+                  <mat-label>Primary Contact Person</mat-label>
+                  <input matInput formControlName="contactPerson" placeholder="Enter contact name">
+                  <mat-icon matPrefix>person</mat-icon>
+                  <mat-error>{{ getErrorMessage('contactPerson', contactForm) }}</mat-error>
+                </mat-form-field>
+
+                <!-- Email -->
+                <mat-form-field appearance="outline">
+                  <mat-label>Email Address</mat-label>
+                  <input matInput formControlName="email" placeholder="email@example.com">
+                  <mat-icon matPrefix>email</mat-icon>
+                  <mat-error>{{ getErrorMessage('email', contactForm) }}</mat-error>
+                </mat-form-field>
+
+                <!-- Phone -->
+                <mat-form-field appearance="outline">
+                  <mat-label>Phone Number</mat-label>
+                  <input matInput formControlName="phone" placeholder="+1234567890">
+                  <mat-icon matPrefix>phone</mat-icon>
+                  <mat-error>{{ getErrorMessage('phone', contactForm) }}</mat-error>
+                </mat-form-field>
+
+                <!-- Address -->
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Address</mat-label>
+                  <textarea matInput formControlName="address" rows="3" placeholder="Enter full address"></textarea>
+                  <mat-icon matPrefix>location_on</mat-icon>
+                  <mat-error>{{ getErrorMessage('address', contactForm) }}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="step-actions">
+              <button mat-stroked-button matStepperPrevious type="button">
+                <mat-icon>arrow_back</mat-icon>
+                Back
+              </button>
+              <button mat-flat-button matStepperNext color="primary" [disabled]="contactForm.invalid">
+                Next
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- Step 3: Business Information -->
+      <mat-step [stepControl]="businessForm">
+        <form [formGroup]="businessForm">
+          <ng-template matStepLabel>Business Information</ng-template>
+          
+          <div class="step-content">
+            <div class="form-section">
+              <div class="form-grid">
+                <!-- Registration Number -->
+                <mat-form-field appearance="outline">
+                  <mat-label>Registration Number</mat-label>
+                  <input matInput formControlName="registrationNumber" placeholder="Enter registration number">
+                  <mat-icon matPrefix>badge</mat-icon>
+                </mat-form-field>
+
+                <!-- VAT Number -->
+                <mat-form-field appearance="outline">
+                  <mat-label>VAT Number</mat-label>
+                  <input matInput formControlName="vatNumber" placeholder="Enter VAT number">
+                  <mat-icon matPrefix>receipt</mat-icon>
+                </mat-form-field>
+
+                <!-- Notes -->
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Notes</mat-label>
+                  <textarea matInput formControlName="notes" rows="4" placeholder="Add any additional notes"></textarea>
+                  <mat-icon matPrefix>notes</mat-icon>
+                </mat-form-field>
+              </div>
+
+              <!-- Tags Section -->
+              <div class="tags-section">
+                <h3 class="section-title">Tags</h3>
+                <mat-chip-grid #chipGrid>
+                  <mat-chip-row *ngFor="let tag of tags" [removable]="true" (removed)="removeTag(tag)">
+                    {{ tag }}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                  </mat-chip-row>
+                  <input
+                    placeholder="Add tag..."
+                    [matChipInputFor]="chipGrid"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    [matChipInputAddOnBlur]="true"
+                    (matChipInputTokenEnd)="addTag($event)"
+                  />
+                </mat-chip-grid>
+              </div>
+            </div>
+
+            <div class="step-actions">
+              <button mat-stroked-button matStepperPrevious type="button">
+                <mat-icon>arrow_back</mat-icon>
+                Back
+              </button>
+              <button mat-flat-button matStepperNext color="primary">
+                Next
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- Step 4: Additional Contacts -->
+      <mat-step>
+        <form [formGroup]="additionalForm">
+          <ng-template matStepLabel>Additional Contacts</ng-template>
+          
+          <div class="step-content">
+            <div class="form-section">
+              <h3 class="section-title">Add Additional Contacts</h3>
+              
+              <div class="form-grid">
+                <mat-form-field appearance="outline">
+                  <mat-label>Contact Name</mat-label>
+                  <input matInput formControlName="additionalContactName" placeholder="Enter name">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Role</mat-label>
+                  <input matInput formControlName="additionalContactRole" placeholder="Enter role">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Email</mat-label>
+                  <input matInput formControlName="additionalContactEmail" placeholder="email@example.com">
+                  <mat-error>{{ getErrorMessage('additionalContactEmail', additionalForm) }}</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Phone</mat-label>
+                  <input matInput formControlName="additionalContactPhone" placeholder="+1234567890">
+                  <mat-error>{{ getErrorMessage('additionalContactPhone', additionalForm) }}</mat-error>
+                </mat-form-field>
+              </div>
+
+              <button mat-stroked-button color="primary" type="button" (click)="addAdditionalContact()">
+                <mat-icon>add</mat-icon>
+                Add Contact
+              </button>
+
+              <!-- Additional Contacts List -->
+              <div class="contacts-list" *ngIf="additionalContacts.length > 0">
+                <mat-divider class="section-divider"></mat-divider>
+                <h4 class="subsection-title">Added Contacts</h4>
+                
+                <div class="contact-card" *ngFor="let contact of additionalContacts; let i = index">
+                  <div class="contact-info">
+                    <div class="contact-header">
+                      <strong>{{ contact.name }}</strong>
+                      <span class="contact-role" *ngIf="contact.role">{{ contact.role }}</span>
+                    </div>
+                    <div class="contact-details">
+                      <span><mat-icon inline>email</mat-icon> {{ contact.email }}</span>
+                      <span *ngIf="contact.phone"><mat-icon inline>phone</mat-icon> {{ contact.phone }}</span>
+                    </div>
+                  </div>
+                  <button mat-icon-button color="warn" (click)="removeAdditionalContact(i)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="step-actions">
+              <button mat-stroked-button matStepperPrevious type="button">
+                <mat-icon>arrow_back</mat-icon>
+                Back
+              </button>
+              <button mat-flat-button matStepperNext color="primary">
+                Review
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- Step 5: Review -->
+      <mat-step>
+        <ng-template matStepLabel>Review</ng-template>
+        
+        <div class="step-content">
+          <div class="review-section">
+            <h3 class="section-title">Review Client Information</h3>
+            
+            <!-- Basic Information Review -->
+            <div class="review-card">
+              <h4 class="review-card-title">Basic Information</h4>
+              <div class="review-grid">
+                <div class="review-item">
+                  <span class="review-label">Client Name:</span>
+                  <span class="review-value">{{ basicInfoForm.get('name')?.value || '-' }}</span>
+                </div>
+                <div class="review-item">
+                  <span class="review-label">Type:</span>
+                  <span class="review-value">{{ basicInfoForm.get('clientType')?.value || '-' }}</span>
+                </div>
+                <div class="review-item">
+                  <span class="review-label">Status:</span>
+                  <span class="review-value">{{ basicInfoForm.get('status')?.value || '-' }}</span>
+                </div>
+                <div class="review-item">
+                  <span class="review-label">Industry:</span>
+                  <span class="review-value">{{ basicInfoForm.get('industry')?.value || '-' }}</span>
+                </div>
+                <div class="review-item" *ngIf="basicInfoForm.get('website')?.value">
+                  <span class="review-label">Website:</span>
+                  <span class="review-value">{{ basicInfoForm.get('website')?.value }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Information Review -->
+            <div class="review-card">
+              <h4 class="review-card-title">Contact Information</h4>
+              <div class="review-grid">
+                <div class="review-item">
+                  <span class="review-label">Contact Person:</span>
+                  <span class="review-value">{{ contactForm.get('contactPerson')?.value || '-' }}</span>
+                </div>
+                <div class="review-item">
+                  <span class="review-label">Email:</span>
+                  <span class="review-value">{{ contactForm.get('email')?.value || '-' }}</span>
+                </div>
+                <div class="review-item">
+                  <span class="review-label">Phone:</span>
+                  <span class="review-value">{{ contactForm.get('phone')?.value || '-' }}</span>
+                </div>
+                <div class="review-item full-width">
+                  <span class="review-label">Address:</span>
+                  <span class="review-value">{{ contactForm.get('address')?.value || '-' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Business Information Review -->
+            <div class="review-card" *ngIf="businessForm.get('registrationNumber')?.value || businessForm.get('vatNumber')?.value || businessForm.get('notes')?.value || tags.length > 0">
+              <h4 class="review-card-title">Business Information</h4>
+              <div class="review-grid">
+                <div class="review-item" *ngIf="businessForm.get('registrationNumber')?.value">
+                  <span class="review-label">Registration Number:</span>
+                  <span class="review-value">{{ businessForm.get('registrationNumber')?.value }}</span>
+                </div>
+                <div class="review-item" *ngIf="businessForm.get('vatNumber')?.value">
+                  <span class="review-label">VAT Number:</span>
+                  <span class="review-value">{{ businessForm.get('vatNumber')?.value }}</span>
+                </div>
+                <div class="review-item full-width" *ngIf="tags.length > 0">
+                  <span class="review-label">Tags:</span>
+                  <div class="review-tags">
+                    <mat-chip-set>
+                      <mat-chip *ngFor="let tag of tags">{{ tag }}</mat-chip>
+                    </mat-chip-set>
+                  </div>
+                </div>
+                <div class="review-item full-width" *ngIf="businessForm.get('notes')?.value">
+                  <span class="review-label">Notes:</span>
+                  <span class="review-value">{{ businessForm.get('notes')?.value }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Additional Contacts Review -->
+            <div class="review-card" *ngIf="additionalContacts.length > 0">
+              <h4 class="review-card-title">Additional Contacts</h4>
+              <div class="additional-contacts-review">
+                <div class="contact-review-item" *ngFor="let contact of additionalContacts">
+                  <strong>{{ contact.name }}</strong>
+                  <span *ngIf="contact.role"> - {{ contact.role }}</span>
+                  <div class="contact-review-details">
+                    <span>{{ contact.email }}</span>
+                    <span *ngIf="contact.phone"> | {{ contact.phone }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <button mat-stroked-button matStepperPrevious type="button">
+              <mat-icon>arrow_back</mat-icon>
+              Back
+            </button>
+            <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="isSaving">
+              <mat-icon *ngIf="!isSaving">{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+              <mat-spinner *ngIf="isSaving" diameter="20" strokeWidth="2"></mat-spinner>
+              {{ isEditMode ? 'Update Client' : 'Create Client' }}
+            </button>
+          </div>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </div>
+</div>

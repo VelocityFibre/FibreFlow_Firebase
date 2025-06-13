@@ -1,0 +1,253 @@
+<div class="supplier-detail-container" *ngIf="supplier$ | async as supplier">
+  <div class="detail-header">
+    <div class="header-content">
+      <h1>{{ supplier.companyName }}</h1>
+      <div class="header-badges">
+        <span class="status-badge" [ngClass]="getStatusClass(supplier.status)">
+          {{ supplier.status | titlecase }}
+        </span>
+        <span class="verification-badge" [ngClass]="getVerificationClass(supplier.verificationStatus)">
+          <mat-icon *ngIf="supplier.verificationStatus === 'verified'">verified</mat-icon>
+          {{ supplier.verificationStatus | titlecase }}
+        </span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button mat-button [routerLink]="['/suppliers', supplier.id, 'edit']">
+        <mat-icon>edit</mat-icon>
+        Edit
+      </button>
+      <button mat-button [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item [routerLink]="['/suppliers', supplier.id, 'contacts']">
+          <mat-icon>contacts</mat-icon>
+          <span>Manage Contacts</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>history</mat-icon>
+          <span>View History</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>assignment</mat-icon>
+          <span>View Orders</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item class="delete-action">
+          <mat-icon>delete</mat-icon>
+          <span>Delete Supplier</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+
+  <mat-tab-group>
+    <mat-tab label="Overview">
+      <div class="tab-content">
+        <div class="info-grid">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Contact Information</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="info-item">
+                <mat-icon>email</mat-icon>
+                <div>
+                  <label>Primary Email</label>
+                  <p>{{ supplier.primaryEmail }}</p>
+                </div>
+              </div>
+              <div class="info-item">
+                <mat-icon>phone</mat-icon>
+                <div>
+                  <label>Primary Phone</label>
+                  <p>{{ supplier.primaryPhone }}</p>
+                </div>
+              </div>
+              <div class="info-item" *ngIf="supplier.website">
+                <mat-icon>language</mat-icon>
+                <div>
+                  <label>Website</label>
+                  <p><a [href]="supplier.website" target="_blank">{{ supplier.website }}</a></p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Address</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <address>
+                {{ supplier.address.street }}<br>
+                {{ supplier.address.city }}, {{ supplier.address.state }} {{ supplier.address.postalCode }}<br>
+                {{ supplier.address.country }}
+              </address>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Business Information</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="info-item" *ngIf="supplier.registrationNumber">
+                <label>Registration Number</label>
+                <p>{{ supplier.registrationNumber }}</p>
+              </div>
+              <div class="info-item" *ngIf="supplier.taxNumber">
+                <label>Tax Number</label>
+                <p>{{ supplier.taxNumber }}</p>
+              </div>
+              <div class="info-item">
+                <label>Portal Access</label>
+                <p>
+                  <mat-icon [class.enabled]="supplier.portalEnabled">
+                    {{ supplier.portalEnabled ? 'check_circle' : 'cancel' }}
+                  </mat-icon>
+                  {{ supplier.portalEnabled ? 'Enabled' : 'Disabled' }}
+                </p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <mat-card class="full-width-card">
+          <mat-card-header>
+            <mat-card-title>Services & Coverage</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="services-section">
+              <h3>Categories</h3>
+              <mat-chip-set>
+                <mat-chip *ngFor="let category of supplier.categories">
+                  {{ getCategoryLabel(category) }}
+                </mat-chip>
+              </mat-chip-set>
+            </div>
+
+            <div class="services-section" *ngIf="supplier.products.length > 0">
+              <h3>Products & Services</h3>
+              <mat-chip-set>
+                <mat-chip *ngFor="let product of supplier.products">
+                  {{ product }}
+                </mat-chip>
+              </mat-chip-set>
+            </div>
+
+            <div class="services-section" *ngIf="supplier.serviceAreas.length > 0">
+              <h3>Service Areas</h3>
+              <div class="service-areas">
+                <div *ngFor="let area of supplier.serviceAreas" class="service-area">
+                  <mat-icon>location_on</mat-icon>
+                  <span>{{ area.city }}, {{ area.state }}</span>
+                  <span *ngIf="area.radius" class="radius">({{ area.radius }}km radius)</span>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Financial">
+      <div class="tab-content">
+        <div class="info-grid">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Payment Terms</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="info-item">
+                <label>Terms</label>
+                <p>{{ formatPaymentTerms(supplier) }}</p>
+              </div>
+              <div class="info-item" *ngIf="supplier.paymentTerms.earlyPaymentDiscount">
+                <label>Early Payment Discount</label>
+                <p>{{ supplier.paymentTerms.earlyPaymentDiscount.percentage }}% if paid within 
+                   {{ supplier.paymentTerms.earlyPaymentDiscount.withinDays }} days</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Credit Information</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="info-item">
+                <label>Credit Limit</label>
+                <p>{{ formatCurrency(supplier.creditLimit) }}</p>
+              </div>
+              <div class="info-item">
+                <label>Current Balance</label>
+                <p [class.over-limit]="supplier.currentBalance && supplier.creditLimit && supplier.currentBalance > supplier.creditLimit">
+                  {{ formatCurrency(supplier.currentBalance) }}
+                </p>
+              </div>
+              <div class="info-item" *ngIf="supplier.creditLimit && supplier.currentBalance">
+                <label>Available Credit</label>
+                <p>{{ formatCurrency(supplier.creditLimit - supplier.currentBalance) }}</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Contacts" [matBadge]="(contacts$ | async)?.length || 0" matBadgeColor="primary">
+      <div class="tab-content">
+        <div class="contacts-header">
+          <h2>Contacts</h2>
+          <button mat-raised-button color="primary" [routerLink]="['/suppliers', supplier.id, 'contacts']">
+            <mat-icon>add</mat-icon>
+            Manage Contacts
+          </button>
+        </div>
+        
+        <mat-list class="contacts-list">
+          <mat-list-item *ngFor="let contact of contacts$ | async">
+            <mat-icon matListItemIcon>person</mat-icon>
+            <div matListItemTitle>
+              {{ contact.name }}
+              <mat-chip *ngIf="contact.isPrimary" class="primary-chip">Primary</mat-chip>
+            </div>
+            <div matListItemLine>{{ contact.position }}</div>
+            <div matListItemLine>
+              <mat-icon inline>email</mat-icon> {{ contact.email }} | 
+              <mat-icon inline>phone</mat-icon> {{ contact.phone }}
+            </div>
+            <div matListItemMeta>
+              <mat-icon *ngIf="contact.canAccessPortal" matTooltip="Can access supplier portal">
+                vpn_key
+              </mat-icon>
+            </div>
+          </mat-list-item>
+          
+          <mat-list-item *ngIf="(contacts$ | async)?.length === 0">
+            <div class="no-contacts">
+              <mat-icon>person_outline</mat-icon>
+              <p>No contacts added yet</p>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Activity">
+      <div class="tab-content">
+        <div class="coming-soon">
+          <mat-icon>timeline</mat-icon>
+          <h3>Activity Timeline</h3>
+          <p>Purchase orders, communications, and payments history coming soon</p>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<div class="loading-container" *ngIf="!(supplier$ | async)">
+  <mat-spinner></mat-spinner>
+</div>

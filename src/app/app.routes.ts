@@ -3,16 +3,117 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'projects',
+    redirectTo: 'dashboard',
     pathMatch: 'full'
+  },
+  {
+    path: 'dashboard',
+    loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.dashboardRoutes)
   },
   {
     path: 'projects',
     loadChildren: () => import('./features/projects/projects.routes').then(m => m.projectRoutes)
   },
   {
+    path: 'suppliers',
+    loadChildren: () => import('./features/suppliers/suppliers.routes').then(m => m.suppliersRoutes)
+  },
+  {
     path: 'staff',
     loadChildren: () => import('./features/staff/staff.routes').then(m => m.staffRoutes)
+  },
+  {
+    path: 'contractors',
+    loadChildren: () => import('./features/contractors/contractors.routes').then(m => m.contractorsRoutes)
+  },
+  {
+    path: 'clients',
+    loadChildren: () => import('./features/clients/clients.routes').then(m => m.clientsRoutes)
+  },
+  {
+    path: 'phases',
+    loadChildren: () => import('./features/phases/phases.routes').then(m => m.phasesRoutes)
+  },
+  // Dashboard-linked routes
+  {
+    path: 'materials',
+    redirectTo: 'stock',
+    pathMatch: 'full'
+  },
+  {
+    path: 'issues',
+    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
+    data: { title: 'Flagged Issues' }
+  },
+  {
+    path: 'analytics',
+    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
+    data: { title: 'Analytics' }
+  },
+  {
+    path: 'daily-progress',
+    loadChildren: () => import('./features/daily-progress/daily-progress.routes').then(m => m.DAILY_PROGRESS_ROUTES)
+  },
+  // Placeholder routes for pages to be implemented
+  {
+    path: 'roles',
+    loadChildren: () => import('./features/roles/roles.routes').then(m => m.ROLES_ROUTES)
+  },
+  {
+    path: 'attendance',
+    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
+    data: { title: 'Attendance' }
+  },
+  {
+    path: 'performance',
+    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
+    data: { title: 'Performance' }
+  },
+  {
+    path: 'tasks',
+    loadChildren: () => import('./features/tasks/tasks.routes').then(m => m.tasksRoutes)
+  },
+  {
+    path: 'stock',
+    loadChildren: () => import('./features/stock/stock.routes').then(m => m.stockRoutes)
+  },
+  {
+    path: 'boq',
+    loadChildren: () => import('./features/boq/boq.routes').then(m => m.boqRoutes)
+  },
+  {
+    path: 'rfq',
+    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
+    data: { title: 'RFQ Management' }
+  },
+  {
+    path: 'stock-movements',
+    loadChildren: () => import('./features/stock/stock-movements.routes').then(m => m.stockMovementsRoutes)
+  },
+  {
+    path: 'stock-analysis',
+    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
+    data: { title: 'Stock Analysis' }
+  },
+  {
+    path: 'categories',
+    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
+    data: { title: 'Category Management' }
+  },
+  {
+    path: 'supplier-portal',
+    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
+    data: { title: 'Supplier Portal' }
+  },
+  {
+    path: 'settings',
+    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
+    data: { title: 'Settings' }
+  },
+  {
+    path: 'audit-trail',
+    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
+    data: { title: 'Audit Trail' }
   },
   // Auth routes - temporary for testing
   {

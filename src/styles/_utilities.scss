@@ -1,53 +1,53 @@
 // FibreFlow Utility Classes
 // Reusable CSS classes following the Apple-inspired design system
 
-@use './spacing' as *;
-@use './theme-functions' as *;
+@use './spacing' as spacing;
+@use './theme-functions' as theme;
 
 // Layout Utilities
 .ff-page-container {
   min-height: 100vh;
-  padding: ff-spacing(xl);
+  padding: spacing.ff-spacing(xl);
   max-width: 1280px;
   margin: 0 auto;
   
-  @media #{ff-breakpoint(sm)} {
-    padding: ff-spacing(lg);
+  @media #{spacing.ff-breakpoint(sm)} {
+    padding: spacing.ff-spacing(lg);
   }
   
-  @media #{ff-breakpoint(md)} {
-    padding: ff-spacing(xl);
+  @media #{spacing.ff-breakpoint(md)} {
+    padding: spacing.ff-spacing(xl);
   }
   
-  @media #{ff-breakpoint(lg)} {
-    padding: ff-spacing(2xl);
+  @media #{spacing.ff-breakpoint(lg)} {
+    padding: spacing.ff-spacing(2xl);
   }
 }
 
 .ff-page-header {
-  margin-bottom: ff-spacing(4xl);
+  margin-bottom: spacing.ff-spacing(4xl);
 }
 
 .ff-page-title {
-  font-size: ff-font-size(5xl);
-  font-weight: ff-font-weight(light);
+  font-size: spacing.ff-font-size(5xl);
+  font-weight: spacing.ff-font-weight(light);
   line-height: 1.1;
-  color: ff-rgb(foreground);
-  margin-bottom: ff-spacing(md);
+  color: theme.ff-rgb(foreground);
+  margin-bottom: spacing.ff-spacing(md);
   
-  @media #{ff-breakpoint(sm)} {
-    font-size: ff-font-size(4xl);
+  @media #{spacing.ff-breakpoint(sm)} {
+    font-size: spacing.ff-font-size(4xl);
   }
 }
 
 .ff-page-subtitle {
-  font-size: ff-font-size(xl);
-  color: ff-rgb(muted-foreground);
+  font-size: spacing.ff-font-size(xl);
+  color: theme.ff-rgb(muted-foreground);
   line-height: 1.5;
 }
 
 .ff-section {
-  margin-bottom: ff-spacing(4xl);
+  margin-bottom: spacing.ff-spacing(4xl);
   
   &:last-child {
     margin-bottom: 0;
@@ -55,74 +55,74 @@
 }
 
 .ff-section-title {
-  font-size: ff-font-size(3xl);
-  font-weight: ff-font-weight(light);
-  color: ff-rgb(foreground);
-  margin-bottom: ff-spacing(xl);
+  font-size: spacing.ff-font-size(3xl);
+  font-weight: spacing.ff-font-weight(light);
+  color: theme.ff-rgb(foreground);
+  margin-bottom: spacing.ff-spacing(xl);
 }
 
 // Typography Utilities
 .ff-display {
-  font-size: ff-font-size(6xl);
-  font-weight: ff-font-weight(light);
+  font-size: spacing.ff-font-size(6xl);
+  font-weight: spacing.ff-font-weight(light);
   line-height: 1;
-  color: ff-rgb(foreground);
+  color: theme.ff-rgb(foreground);
 }
 
 .ff-h1 {
-  font-size: ff-font-size(4xl);
-  font-weight: ff-font-weight(light);
+  font-size: spacing.ff-font-size(4xl);
+  font-weight: spacing.ff-font-weight(light);
   line-height: 1.2;
-  color: ff-rgb(foreground);
+  color: theme.ff-rgb(foreground);
 }
 
 .ff-h2 {
-  font-size: ff-font-size(2xl);
-  font-weight: ff-font-weight(normal);
+  font-size: spacing.ff-font-size(2xl);
+  font-weight: spacing.ff-font-weight(normal);
   line-height: 1.3;
-  color: ff-rgb(foreground);
+  color: theme.ff-rgb(foreground);
 }
 
 .ff-h3 {
-  font-size: ff-font-size(xl);
-  font-weight: ff-font-weight(medium);
+  font-size: spacing.ff-font-size(xl);
+  font-weight: spacing.ff-font-weight(medium);
   line-height: 1.4;
-  color: ff-rgb(foreground);
+  color: theme.ff-rgb(foreground);
 }
 
 .ff-body {
-  font-size: ff-font-size(base);
-  font-weight: ff-font-weight(normal);
+  font-size: spacing.ff-font-size(base);
+  font-weight: spacing.ff-font-weight(normal);
   line-height: 1.6;
-  color: ff-rgb(foreground);
+  color: theme.ff-rgb(foreground);
 }
 
 .ff-small {
-  font-size: ff-font-size(sm);
-  font-weight: ff-font-weight(normal);
+  font-size: spacing.ff-font-size(sm);
+  font-weight: spacing.ff-font-weight(normal);
   line-height: 1.5;
-  color: ff-rgb(muted-foreground);
+  color: theme.ff-rgb(muted-foreground);
 }
 
 .ff-label {
   display: block;
-  font-size: ff-font-size(sm);
-  font-weight: ff-font-weight(medium);
-  color: ff-rgb(foreground);
-  margin-bottom: ff-spacing(sm);
+  font-size: spacing.ff-font-size(sm);
+  font-weight: spacing.ff-font-weight(medium);
+  color: theme.ff-rgb(foreground);
+  margin-bottom: spacing.ff-spacing(sm);
 }
 
 // Card Component
 .ff-card {
-  padding: ff-spacing(xl);
+  padding: spacing.ff-spacing(xl);
   border-radius: var(--ff-radius);
-  background-color: ff-rgb(card);
-  border: 1px solid ff-rgb(border);
-  color: ff-rgb(card-foreground);
-  transition: all ff-transition(slow) ease;
+  background-color: theme.ff-rgb(card);
+  border: 1px solid theme.ff-rgb(border);
+  color: theme.ff-rgb(card-foreground);
+  transition: all theme.ff-transition(slow) ease;
   
   &:hover {
-    box-shadow: ff-shadow(lg);
+    box-shadow: theme.ff-shadow(lg);
   }
   
   &--interactive {
@@ -134,24 +134,24 @@
   }
   
   &--compact {
-    padding: ff-spacing(lg);
+    padding: spacing.ff-spacing(lg);
   }
 }
 
 .ff-card-header {
-  margin-bottom: ff-spacing(lg);
+  margin-bottom: spacing.ff-spacing(lg);
 }
 
 .ff-card-title {
-  font-size: ff-font-size(xl);
-  font-weight: ff-font-weight(medium);
-  color: ff-rgb(card-foreground);
-  margin-bottom: ff-spacing(sm);
+  font-size: spacing.ff-font-size(xl);
+  font-weight: spacing.ff-font-weight(medium);
+  color: theme.ff-rgb(card-foreground);
+  margin-bottom: spacing.ff-spacing(sm);
 }
 
 .ff-card-description {
-  font-size: ff-font-size(base);
-  color: ff-rgb(muted-foreground);
+  font-size: spacing.ff-font-size(base);
+  color: theme.ff-rgb(muted-foreground);
   line-height: 1.5;
 }
 
@@ -160,19 +160,19 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: ff-spacing(sm) ff-spacing(lg);
+  padding: spacing.ff-spacing(sm) spacing.ff-spacing(lg);
   border-radius: var(--ff-radius);
-  font-size: ff-font-size(base);
-  font-weight: ff-font-weight(medium);
+  font-size: spacing.ff-font-size(base);
+  font-weight: spacing.ff-font-weight(medium);
   line-height: 1;
-  transition: all ff-transition(base) ease;
+  transition: all theme.ff-transition(base) ease;
   cursor: pointer;
   border: none;
   outline: none;
   text-decoration: none;
   
   &:focus-visible {
-    outline: 2px solid ff-rgb(ring);
+    outline: 2px solid theme.ff-rgb(ring);
     outline-offset: 2px;
   }
   
@@ -183,8 +183,8 @@
   
   // Variants
   &--primary {
-    background-color: ff-rgb(primary);
-    color: ff-rgb(primary-foreground);
+    background-color: theme.ff-rgb(primary);
+    color: theme.ff-rgb(primary-foreground);
     
     &:hover:not(:disabled) {
       opacity: 0.9;
@@ -192,8 +192,8 @@
   }
   
   &--secondary {
-    background-color: ff-rgb(secondary);
-    color: ff-rgb(secondary-foreground);
+    background-color: theme.ff-rgb(secondary);
+    color: theme.ff-rgb(secondary-foreground);
     
     &:hover:not(:disabled) {
       opacity: 0.9;
@@ -202,28 +202,28 @@
   
   &--outline {
     background-color: transparent;
-    border: 2px solid ff-rgb(border);
-    color: ff-rgb(foreground);
+    border: 2px solid theme.ff-rgb(border);
+    color: theme.ff-rgb(foreground);
     
     &:hover:not(:disabled) {
-      background-color: ff-rgb(accent);
-      border-color: ff-rgb(accent);
+      background-color: theme.ff-rgb(accent);
+      border-color: theme.ff-rgb(accent);
     }
   }
   
   &--ghost {
     background-color: transparent;
-    color: ff-rgb(foreground);
+    color: theme.ff-rgb(foreground);
     
     &:hover:not(:disabled) {
-      background-color: ff-rgb(accent);
-      color: ff-rgb(accent-foreground);
+      background-color: theme.ff-rgb(accent);
+      color: theme.ff-rgb(accent-foreground);
     }
   }
   
   &--destructive {
-    background-color: ff-rgb(destructive);
-    color: ff-rgb(destructive-foreground);
+    background-color: theme.ff-rgb(destructive);
+    color: theme.ff-rgb(destructive-foreground);
     
     &:hover:not(:disabled) {
       opacity: 0.9;
@@ -232,13 +232,13 @@
   
   // Sizes
   &--sm {
-    padding: ff-spacing(xs) ff-spacing(md);
-    font-size: ff-font-size(sm);
+    padding: spacing.ff-spacing(xs) spacing.ff-spacing(md);
+    font-size: spacing.ff-font-size(sm);
   }
   
   &--lg {
-    padding: ff-spacing(md) ff-spacing(xl);
-    font-size: ff-font-size(lg);
+    padding: spacing.ff-spacing(md) spacing.ff-spacing(xl);
+    font-size: spacing.ff-font-size(lg);
   }
   
   &--icon {
@@ -253,22 +253,22 @@
 .ff-select,
 .ff-textarea {
   width: 100%;
-  padding: ff-spacing(sm) ff-spacing(md);
+  padding: spacing.ff-spacing(sm) spacing.ff-spacing(md);
   border-radius: var(--ff-radius);
-  border: 1px solid ff-rgb(input);
-  background-color: ff-rgb(background);
-  color: ff-rgb(foreground);
-  font-size: ff-font-size(base);
-  transition: all ff-transition(fast) ease;
+  border: 1px solid theme.ff-rgb(input);
+  background-color: theme.ff-rgb(background);
+  color: theme.ff-rgb(foreground);
+  font-size: spacing.ff-font-size(base);
+  transition: all theme.ff-transition(fast) ease;
   
   &:hover {
-    border-color: ff-rgb(border);
+    border-color: theme.ff-rgb(border);
   }
   
   &:focus {
     outline: none;
-    border-color: ff-rgb(ring);
-    box-shadow: 0 0 0 3px ff-rgba(ring, 0.1);
+    border-color: theme.ff-rgb(ring);
+    box-shadow: 0 0 0 3px theme.ff-rgba(ring, 0.1);
   }
   
   &:disabled {
@@ -277,7 +277,7 @@
   }
   
   &::placeholder {
-    color: ff-rgb(muted-foreground);
+    color: theme.ff-rgb(muted-foreground);
     opacity: 0.7;
   }
 }
@@ -289,15 +289,15 @@
 
 .ff-checkbox,
 .ff-radio {
-  width: ff-spacing(lg);
-  height: ff-spacing(lg);
-  border: 1px solid ff-rgb(input);
+  width: spacing.ff-spacing(lg);
+  height: spacing.ff-spacing(lg);
+  border: 1px solid theme.ff-rgb(input);
   border-radius: var(--ff-radius);
   cursor: pointer;
   
   &:checked {
-    background-color: ff-rgb(primary);
-    border-color: ff-rgb(primary);
+    background-color: theme.ff-rgb(primary);
+    border-color: theme.ff-rgb(primary);
   }
 }
 
@@ -309,84 +309,84 @@
 .ff-status {
   display: inline-flex;
   align-items: center;
-  gap: ff-spacing(sm);
+  gap: spacing.ff-spacing(sm);
   
   &__indicator {
-    width: ff-spacing(sm);
-    height: ff-spacing(sm);
+    width: spacing.ff-spacing(sm);
+    height: spacing.ff-spacing(sm);
     border-radius: 50%;
     
     &--success {
-      background-color: ff-rgb(success);
+      background-color: theme.ff-rgb(success);
     }
     
     &--warning {
-      background-color: ff-rgb(warning);
+      background-color: theme.ff-rgb(warning);
     }
     
     &--error {
-      background-color: ff-rgb(destructive);
+      background-color: theme.ff-rgb(destructive);
     }
     
     &--info {
-      background-color: ff-rgb(info);
+      background-color: theme.ff-rgb(info);
     }
   }
   
   &__text {
-    font-size: ff-font-size(sm);
-    color: ff-rgb(muted-foreground);
+    font-size: spacing.ff-font-size(sm);
+    color: theme.ff-rgb(muted-foreground);
   }
 }
 
 // Selection Section Pattern
 .ff-selection-section {
-  margin-bottom: ff-spacing(4xl);
+  margin-bottom: spacing.ff-spacing(4xl);
   
   .ff-selection-label {
     display: block;
-    font-size: ff-font-size(base);
-    font-weight: ff-font-weight(medium);
-    color: ff-rgb(foreground);
-    margin-bottom: ff-spacing(md);
+    font-size: spacing.ff-font-size(base);
+    font-weight: spacing.ff-font-weight(medium);
+    color: theme.ff-rgb(foreground);
+    margin-bottom: spacing.ff-spacing(md);
   }
   
   .ff-selection-card {
     width: 100%;
-    padding: ff-spacing(xl);
-    background-color: ff-rgb(card);
-    border: 1px solid ff-rgb(border);
+    padding: spacing.ff-spacing(xl);
+    background-color: theme.ff-rgb(card);
+    border: 1px solid theme.ff-rgb(border);
     border-radius: var(--ff-radius);
     text-align: left;
     cursor: pointer;
-    transition: all ff-transition(slow) ease;
+    transition: all theme.ff-transition(slow) ease;
     
     display: flex;
     align-items: center;
     justify-content: space-between;
     
     &:hover {
-      box-shadow: ff-shadow(lg);
+      box-shadow: theme.ff-shadow(lg);
       transform: translateY(-1px);
     }
     
     &:focus {
       outline: none;
-      border-color: ff-rgb(ring);
-      box-shadow: 0 0 0 3px ff-rgba(ring, 0.1);
+      border-color: theme.ff-rgb(ring);
+      box-shadow: 0 0 0 3px theme.ff-rgba(ring, 0.1);
     }
   }
   
   .ff-selection-content {
     display: flex;
     align-items: center;
-    gap: ff-spacing(lg);
+    gap: spacing.ff-spacing(lg);
     flex: 1;
   }
   
   .ff-selection-indicator {
-    width: ff-spacing(md);
-    height: ff-spacing(md);
+    width: spacing.ff-spacing(md);
+    height: spacing.ff-spacing(md);
     border-radius: 50%;
     flex-shrink: 0;
   }
@@ -396,32 +396,32 @@
   }
   
   .ff-selection-title {
-    font-size: ff-font-size(2xl);
-    font-weight: ff-font-weight(light);
-    color: ff-rgb(foreground);
-    margin-bottom: ff-spacing(sm);
+    font-size: spacing.ff-font-size(2xl);
+    font-weight: spacing.ff-font-weight(light);
+    color: theme.ff-rgb(foreground);
+    margin-bottom: spacing.ff-spacing(sm);
     line-height: 1.2;
   }
   
   .ff-selection-details {
     display: flex;
     align-items: center;
-    gap: ff-spacing(md);
-    font-size: ff-font-size(lg);
-    color: ff-rgb(muted-foreground);
+    gap: spacing.ff-spacing(md);
+    font-size: spacing.ff-font-size(lg);
+    color: theme.ff-rgb(muted-foreground);
     
     .ff-separator {
-      color: ff-rgb(border);
+      color: theme.ff-rgb(border);
     }
   }
   
   .ff-selection-action {
-    color: ff-rgb(muted-foreground);
-    transition: transform ff-transition(fast) ease;
+    color: theme.ff-rgb(muted-foreground);
+    transition: transform theme.ff-transition(fast) ease;
     
     svg {
-      width: ff-spacing(lg);
-      height: ff-spacing(lg);
+      width: spacing.ff-spacing(lg);
+      height: spacing.ff-spacing(lg);
     }
   }
   
@@ -434,35 +434,35 @@
 .ff-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: ff-rgb(card);
+  background-color: theme.ff-rgb(card);
   border-radius: var(--ff-radius);
   overflow: hidden;
-  box-shadow: 0 0 0 1px ff-rgb(border);
+  box-shadow: 0 0 0 1px theme.ff-rgb(border);
   
   thead {
-    background-color: ff-rgb(muted);
+    background-color: theme.ff-rgb(muted);
   }
   
   th {
-    padding: ff-spacing(md) ff-spacing(lg);
+    padding: spacing.ff-spacing(md) spacing.ff-spacing(lg);
     text-align: left;
-    font-weight: ff-font-weight(medium);
-    font-size: ff-font-size(sm);
-    color: ff-rgb(foreground);
-    border-bottom: 1px solid ff-rgb(border);
+    font-weight: spacing.ff-font-weight(medium);
+    font-size: spacing.ff-font-size(sm);
+    color: theme.ff-rgb(foreground);
+    border-bottom: 1px solid theme.ff-rgb(border);
   }
   
   td {
-    padding: ff-spacing(md) ff-spacing(lg);
-    color: ff-rgb(foreground);
-    border-bottom: 1px solid ff-rgb(border);
+    padding: spacing.ff-spacing(md) spacing.ff-spacing(lg);
+    color: theme.ff-rgb(foreground);
+    border-bottom: 1px solid theme.ff-rgb(border);
   }
   
   tbody tr {
-    transition: background-color ff-transition(fast) ease;
+    transition: background-color theme.ff-transition(fast) ease;
     
     &:hover {
-      background-color: ff-rgba(muted, 0.5);
+      background-color: theme.ff-rgba(muted, 0.5);
     }
     
     &:last-child td {
@@ -474,7 +474,7 @@
 // Grid Utilities
 .ff-grid {
   display: grid;
-  gap: ff-spacing(lg);
+  gap: spacing.ff-spacing(lg);
   
   &--2 {
     grid-template-columns: repeat(2, 1fr);
@@ -492,7 +492,7 @@
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
   
-  @media #{ff-breakpoint(md)} {
+  @media #{spacing.ff-breakpoint(md)} {
     &--md-2 {
       grid-template-columns: repeat(2, 1fr);
     }
@@ -526,20 +526,20 @@
   }
   
   &--gap-sm {
-    gap: ff-spacing(sm);
+    gap: spacing.ff-spacing(sm);
   }
   
   &--gap-md {
-    gap: ff-spacing(md);
+    gap: spacing.ff-spacing(md);
   }
   
   &--gap-lg {
-    gap: ff-spacing(lg);
+    gap: spacing.ff-spacing(lg);
   }
 }
 
 // Spacing Utilities
-@each $size, $value in $ff-spacing {
+@each $size, $value in spacing.$ff-spacing {
   .ff-p-#{$size} { padding: $value; }
   .ff-pt-#{$size} { padding-top: $value; }
   .ff-pr-#{$size} { padding-right: $value; }
@@ -562,23 +562,23 @@
 .ff-text-left { text-align: left; }
 .ff-text-right { text-align: right; }
 
-.ff-font-light { font-weight: ff-font-weight(light); }
-.ff-font-normal { font-weight: ff-font-weight(normal); }
-.ff-font-medium { font-weight: ff-font-weight(medium); }
-.ff-font-semibold { font-weight: ff-font-weight(semibold); }
-.ff-font-bold { font-weight: ff-font-weight(bold); }
+.ff-font-light { font-weight: spacing.ff-font-weight(light); }
+.ff-font-normal { font-weight: spacing.ff-font-weight(normal); }
+.ff-font-medium { font-weight: spacing.ff-font-weight(medium); }
+.ff-font-semibold { font-weight: spacing.ff-font-weight(semibold); }
+.ff-font-bold { font-weight: spacing.ff-font-weight(bold); }
 
 .ff-rounded { border-radius: var(--ff-radius); }
 .ff-rounded-full { border-radius: 9999px; }
 .ff-rounded-none { border-radius: 0; }
 
-.ff-shadow-sm { box-shadow: ff-shadow(sm); }
-.ff-shadow { box-shadow: ff-shadow(base); }
-.ff-shadow-lg { box-shadow: ff-shadow(lg); }
+.ff-shadow-sm { box-shadow: theme.ff-shadow(sm); }
+.ff-shadow { box-shadow: theme.ff-shadow(base); }
+.ff-shadow-lg { box-shadow: theme.ff-shadow(lg); }
 .ff-shadow-none { box-shadow: none; }
 
 .ff-transition {
-  transition: all ff-transition(base) ease;
+  transition: all theme.ff-transition(base) ease;
 }
 
 .ff-truncate {

@@ -1,4 +1,12 @@
 FibreFlow V2 - Complete Tech Stack Summary 📋
+
+## 🌍 Localization
+- Location: South Africa
+- Timezone: Africa/Johannesburg (UTC+2)
+- Currency: South African Rand (ZAR)
+- Date Format: DD/MM/YYYY
+- Number Format: Space-separated thousands (1 000 000)
+
 Frontend
 
 Angular 17+ (with signals & standalone components)

@@ -68,32 +68,64 @@ $ff-breakpoints: (
   2xl: 1536px
 );
 
+// Animation durations
+$ff-transitions: (
+  fast: 150ms,
+  base: 200ms,
+  slow: 300ms,
+  slower: 500ms
+);
+
 // Get spacing value from scale
 // Usage: padding: ff-spacing(xl);
 @function ff-spacing($size) {
+  @if not map.has-key($ff-spacing, $size) {
+    @error "Invalid spacing size '#{$size}'. Valid sizes are: #{map.keys($ff-spacing)}";
+  }
   @return map.get($ff-spacing, $size);
 }
 
 // Get font size from scale
 // Usage: font-size: ff-font-size(2xl);
 @function ff-font-size($size) {
+  @if not map.has-key($ff-font-sizes, $size) {
+    @error "Invalid font size '#{$size}'. Valid sizes are: #{map.keys($ff-font-sizes)}";
+  }
   @return map.get($ff-font-sizes, $size);
 }
 
 // Get font weight
 // Usage: font-weight: ff-font-weight(light);
 @function ff-font-weight($weight) {
+  @if not map.has-key($ff-font-weights, $weight) {
+    @error "Invalid font weight '#{$weight}'. Valid weights are: #{map.keys($ff-font-weights)}";
+  }
   @return map.get($ff-font-weights, $weight);
 }
 
 // Get z-index value
 // Usage: z-index: ff-z(modal);
 @function ff-z($layer) {
+  @if not map.has-key($ff-z-index, $layer) {
+    @error "Invalid z-index layer '#{$layer}'. Valid layers are: #{map.keys($ff-z-index)}";
+  }
   @return map.get($ff-z-index, $layer);
 }
 
 // Responsive breakpoint function
 // Usage: @media #{ff-breakpoint(md)} { ... }
 @function ff-breakpoint($breakpoint) {
+  @if not map.has-key($ff-breakpoints, $breakpoint) {
+    @error "Invalid breakpoint '#{$breakpoint}'. Valid breakpoints are: #{map.keys($ff-breakpoints)}";
+  }
   @return "(min-width: #{map.get($ff-breakpoints, $breakpoint)})";
+}
+
+// Get transition duration
+// Usage: transition: all ff-transition(base) ease;
+@function ff-transition($speed: base) {
+  @if not map.has-key($ff-transitions, $speed) {
+    @error "Invalid transition speed '#{$speed}'. Valid speeds are: #{map.keys($ff-transitions)}";
+  }
+  @return map.get($ff-transitions, $speed);
 }

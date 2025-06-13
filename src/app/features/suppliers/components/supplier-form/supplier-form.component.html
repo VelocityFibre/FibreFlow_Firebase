@@ -1,0 +1,252 @@
+<div class="supplier-form-container">
+  <div class="form-header">
+    <h1>{{ isEditMode ? 'Edit Supplier' : 'New Supplier' }}</h1>
+  </div>
+
+  <div *ngIf="loading" class="loading-spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <mat-stepper linear #stepper *ngIf="!loading">
+    <mat-step [stepControl]="supplierForm.get('basicInfo')!" label="Basic Information">
+      <form [formGroup]="$any(supplierForm.get('basicInfo'))">
+        <div class="form-section">
+          <h2>Company Information</h2>
+          <div class="form-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Company Name</mat-label>
+              <input matInput formControlName="companyName" placeholder="Enter company name">
+              <mat-error>Company name is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Registration Number</mat-label>
+              <input matInput formControlName="registrationNumber" placeholder="Enter registration number">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Tax Number</mat-label>
+              <input matInput formControlName="taxNumber" placeholder="Enter tax number">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Primary Email</mat-label>
+              <input matInput formControlName="primaryEmail" type="email" placeholder="email@example.com">
+              <mat-error>Valid email is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Primary Phone</mat-label>
+              <input matInput formControlName="primaryPhone" placeholder="+1234567890">
+              <mat-error>Phone number is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Website</mat-label>
+              <input matInput formControlName="website" placeholder="https://example.com">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="stepper-actions">
+          <button mat-button matStepperNext type="button">Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step [stepControl]="supplierForm.get('address')!" label="Address">
+      <form [formGroup]="$any(supplierForm.get('address'))">
+        <div class="form-section">
+          <h2>Address Details</h2>
+          <div class="form-grid">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Street Address</mat-label>
+              <input matInput formControlName="street" placeholder="123 Main Street">
+              <mat-error>Street address is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>City</mat-label>
+              <input matInput formControlName="city" placeholder="New York">
+              <mat-error>City is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>State/Province</mat-label>
+              <input matInput formControlName="state" placeholder="NY">
+              <mat-error>State is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Postal Code</mat-label>
+              <input matInput formControlName="postalCode" placeholder="10001">
+              <mat-error>Postal code is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Country</mat-label>
+              <input matInput formControlName="country" placeholder="United States">
+              <mat-error>Country is required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="stepper-actions">
+          <button mat-button matStepperPrevious type="button">Back</button>
+          <button mat-button matStepperNext type="button">Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step [stepControl]="supplierForm.get('services')!" label="Services & Coverage">
+      <form [formGroup]="$any(supplierForm.get('services'))">
+        <div class="form-section">
+          <h2>Categories</h2>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Supplier Categories</mat-label>
+            <mat-select formControlName="categories" multiple>
+              <mat-option *ngFor="let category of supplierCategories" [value]="category">
+                {{ getCategoryLabel(category) }}
+              </mat-option>
+            </mat-select>
+            <mat-error>At least one category is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Products/Services (comma-separated)</mat-label>
+            <textarea matInput formControlName="products" rows="3" 
+                      placeholder="Fiber optic cables, Splicing equipment, Network testing tools"></textarea>
+          </mat-form-field>
+
+          <h2>Service Areas</h2>
+          <div class="service-areas">
+            <div *ngFor="let area of serviceAreasArray.controls; let i = index" [formGroup]="$any(area)" class="service-area-row">
+              <mat-form-field appearance="outline">
+                <mat-label>City</mat-label>
+                <input matInput formControlName="city" placeholder="City name">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>State</mat-label>
+                <input matInput formControlName="state" placeholder="State">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Radius (km)</mat-label>
+                <input matInput formControlName="radius" type="number" placeholder="50">
+              </mat-form-field>
+              <button mat-icon-button color="warn" (click)="removeServiceArea(i)" type="button">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+            <button mat-button (click)="addServiceArea()" type="button">
+              <mat-icon>add</mat-icon>
+              Add Service Area
+            </button>
+          </div>
+        </div>
+        <div class="stepper-actions">
+          <button mat-button matStepperPrevious type="button">Back</button>
+          <button mat-button matStepperNext type="button">Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step [stepControl]="supplierForm.get('financial')!" label="Financial">
+      <form [formGroup]="$any(supplierForm.get('financial'))">
+        <div class="form-section">
+          <h2>Payment Terms</h2>
+          <div [formGroup]="$any(supplierForm.get('financial.paymentTerms'))" class="form-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Payment Type</mat-label>
+              <mat-select formControlName="termType">
+                <mat-option *ngFor="let type of paymentTermTypes" [value]="type">{{ type }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Term Days</mat-label>
+              <input matInput formControlName="termDays" type="number" placeholder="30">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Custom Terms</mat-label>
+              <textarea matInput formControlName="customTerms" rows="2"></textarea>
+            </mat-form-field>
+          </div>
+
+          <h3>Early Payment Discount</h3>
+          <div [formGroup]="$any(supplierForm.get('financial.paymentTerms.earlyPaymentDiscount'))" class="form-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Discount %</mat-label>
+              <input matInput formControlName="percentage" type="number" placeholder="2">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Within Days</mat-label>
+              <input matInput formControlName="withinDays" type="number" placeholder="10">
+            </mat-form-field>
+          </div>
+
+          <h2>Credit Information</h2>
+          <div class="form-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Credit Limit</mat-label>
+              <input matInput formControlName="creditLimit" type="number" placeholder="50000">
+              <span matPrefix>R&nbsp;</span>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Current Balance</mat-label>
+              <input matInput formControlName="currentBalance" type="number" [disabled]="true">
+              <span matPrefix>R&nbsp;</span>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="stepper-actions">
+          <button mat-button matStepperPrevious type="button">Back</button>
+          <button mat-button matStepperNext type="button">Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step [stepControl]="supplierForm.get('status')!" label="Status & Portal">
+      <form [formGroup]="$any(supplierForm.get('status'))">
+        <div class="form-section">
+          <h2>Supplier Status</h2>
+          <div class="form-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Status</mat-label>
+              <mat-select formControlName="status">
+                <mat-option *ngFor="let status of supplierStatuses" [value]="status">
+                  {{ status | titlecase }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Verification Status</mat-label>
+              <mat-select formControlName="verificationStatus">
+                <mat-option *ngFor="let status of verificationStatuses" [value]="status">
+                  {{ status | titlecase }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <h2>Portal Access</h2>
+          <mat-slide-toggle formControlName="portalEnabled">
+            Enable supplier portal access
+          </mat-slide-toggle>
+        </div>
+        <div class="stepper-actions">
+          <button mat-button matStepperPrevious type="button">Back</button>
+        </div>
+      </form>
+    </mat-step>
+  </mat-stepper>
+
+  <div class="form-actions" *ngIf="!loading">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="saving">
+      <mat-spinner diameter="20" *ngIf="saving"></mat-spinner>
+      {{ saving ? 'Saving...' : (isEditMode ? 'Update' : 'Create') }} Supplier
+    </button>
+  </div>
+</div>
