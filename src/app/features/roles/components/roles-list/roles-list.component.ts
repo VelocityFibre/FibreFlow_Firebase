@@ -34,7 +34,7 @@ import { RoleFormDialogComponent } from '../role-form-dialog/role-form-dialog.co
     MatTooltipModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatDividerModule
+    MatDividerModule,
   ],
   template: `
     <div class="roles-container">
@@ -94,7 +94,6 @@ import { RoleFormDialogComponent } from '../role-form-dialog/role-form-dialog.co
         <mat-card-content>
           <div class="table-container" *ngIf="!loading; else loadingTemplate">
             <table mat-table [dataSource]="(roles$ | async) || []" class="roles-table">
-              
               <!-- Name Column -->
               <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef>Role Name</th>
@@ -164,9 +163,12 @@ import { RoleFormDialogComponent } from '../role-form-dialog/role-form-dialog.co
                       <span>Duplicate</span>
                     </button>
                     <mat-divider></mat-divider>
-                    <button mat-menu-item (click)="deleteRole(role)" 
-                            [disabled]="role.isSystem || role.userCount > 0"
-                            class="delete-action">
+                    <button
+                      mat-menu-item
+                      (click)="deleteRole(role)"
+                      [disabled]="role.isSystem || role.userCount > 0"
+                      class="delete-action"
+                    >
                       <mat-icon>delete</mat-icon>
                       <span>Delete</span>
                     </button>
@@ -175,7 +177,7 @@ import { RoleFormDialogComponent } from '../role-form-dialog/role-form-dialog.co
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
           </div>
 
@@ -189,200 +191,204 @@ import { RoleFormDialogComponent } from '../role-form-dialog/role-form-dialog.co
       </mat-card>
     </div>
   `,
-  styles: [`
-    .roles-container {
-      padding: 24px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 32px;
-    }
-
-    .header-content h1 {
-      margin: 0;
-      font-size: 32px;
-      font-weight: 500;
-      color: #1a202c;
-    }
-
-    .subtitle {
-      margin: 4px 0 0;
-      color: #718096;
-      font-size: 16px;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 24px;
-      margin-bottom: 32px;
-    }
-
-    .stat-card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .stat-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-
-    .stat-card mat-card-content {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .stat-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #e0f2fe;
-      color: #0284c7;
-    }
-
-    .stat-icon.system {
-      background: #dbeafe;
-      color: #2563eb;
-    }
-
-    .stat-icon.custom {
-      background: #e0e7ff;
-      color: #4f46e5;
-    }
-
-    .stat-icon mat-icon {
-      font-size: 28px;
-      width: 28px;
-      height: 28px;
-    }
-
-    .stat-content h3 {
-      margin: 0;
-      font-size: 28px;
-      font-weight: 600;
-      color: #1a202c;
-    }
-
-    .stat-content p {
-      margin: 0;
-      color: #718096;
-      font-size: 14px;
-    }
-
-    .table-card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-
-    .table-container {
-      overflow-x: auto;
-    }
-
-    .roles-table {
-      width: 100%;
-      background: transparent;
-    }
-
-    .role-name {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .system-badge {
-      font-size: 11px !important;
-      height: 20px !important;
-      padding: 0 8px !important;
-      background: #dbeafe !important;
-      color: #2563eb !important;
-    }
-
-    .system-badge mat-icon {
-      font-size: 14px !important;
-      width: 14px !important;
-      height: 14px !important;
-      margin-right: 4px !important;
-    }
-
-    .permissions-preview mat-chip-set {
-      display: flex;
-      gap: 4px;
-      flex-wrap: wrap;
-    }
-
-    .permissions-preview mat-chip {
-      font-size: 12px !important;
-      height: 24px !important;
-      padding: 0 8px !important;
-      background: #f3f4f6 !important;
-      color: #4b5563 !important;
-    }
-
-    .more-chip {
-      background: #e5e7eb !important;
-      color: #6b7280 !important;
-      font-weight: 500;
-    }
-
-    .user-count {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: #6b7280;
-    }
-
-    .user-count mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
-    }
-
-    .delete-action {
-      color: #ef4444;
-    }
-
-    .loading-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 48px;
-      gap: 16px;
-    }
-
-    .loading-container p {
-      color: #718096;
-      margin: 0;
-    }
-
-    @media (max-width: 768px) {
+  styles: [
+    `
       .roles-container {
-        padding: 16px;
+        padding: 24px;
+        max-width: 1400px;
+        margin: 0 auto;
       }
 
       .header {
-        flex-direction: column;
-        gap: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 32px;
+      }
+
+      .header-content h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 500;
+        color: #1a202c;
+      }
+
+      .subtitle {
+        margin: 4px 0 0;
+        color: #718096;
+        font-size: 16px;
       }
 
       .stats-grid {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 24px;
+        margin-bottom: 32px;
       }
-    }
-  `]
+
+      .stat-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .stat-card mat-card-content {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .stat-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #e0f2fe;
+        color: #0284c7;
+      }
+
+      .stat-icon.system {
+        background: #dbeafe;
+        color: #2563eb;
+      }
+
+      .stat-icon.custom {
+        background: #e0e7ff;
+        color: #4f46e5;
+      }
+
+      .stat-icon mat-icon {
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+      }
+
+      .stat-content h3 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 600;
+        color: #1a202c;
+      }
+
+      .stat-content p {
+        margin: 0;
+        color: #718096;
+        font-size: 14px;
+      }
+
+      .table-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .table-container {
+        overflow-x: auto;
+      }
+
+      .roles-table {
+        width: 100%;
+        background: transparent;
+      }
+
+      .role-name {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .system-badge {
+        font-size: 11px !important;
+        height: 20px !important;
+        padding: 0 8px !important;
+        background: #dbeafe !important;
+        color: #2563eb !important;
+      }
+
+      .system-badge mat-icon {
+        font-size: 14px !important;
+        width: 14px !important;
+        height: 14px !important;
+        margin-right: 4px !important;
+      }
+
+      .permissions-preview mat-chip-set {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+      }
+
+      .permissions-preview mat-chip {
+        font-size: 12px !important;
+        height: 24px !important;
+        padding: 0 8px !important;
+        background: #f3f4f6 !important;
+        color: #4b5563 !important;
+      }
+
+      .more-chip {
+        background: #e5e7eb !important;
+        color: #6b7280 !important;
+        font-weight: 500;
+      }
+
+      .user-count {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: #6b7280;
+      }
+
+      .user-count mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+
+      .delete-action {
+        color: #ef4444;
+      }
+
+      .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 48px;
+        gap: 16px;
+      }
+
+      .loading-container p {
+        color: #718096;
+        margin: 0;
+      }
+
+      @media (max-width: 768px) {
+        .roles-container {
+          padding: 16px;
+        }
+
+        .header {
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    `,
+  ],
 })
 export class RolesListComponent implements OnInit {
   private roleService = inject(RoleService);
@@ -418,58 +424,65 @@ export class RolesListComponent implements OnInit {
   }
 
   getPermissionPreview(permissions: string[]): string[] {
-    return permissions.slice(0, 3).map(p => this.formatPermissionName(p));
+    return permissions.slice(0, 3).map((p) => this.formatPermissionName(p));
   }
 
   formatPermissionName(permissionId: string): string {
     // Convert permission ID to readable format
-    return permissionId.split('_').map(word => 
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
+    return permissionId
+      .split('_')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   }
 
   openCreateDialog() {
-    const dialogRef = this.dialog.open(RoleFormDialogComponent, {
-      width: '800px',
+    const _dialogRef = this.dialog.open(RoleFormDialogComponent, {
+      width: '700px',
+      maxWidth: '95vw',
       maxHeight: '90vh',
-      data: { mode: 'create' }
+      data: { mode: 'create' },
+      panelClass: 'role-dialog-container',
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    _dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.snackBar.open('Role created successfully', 'Close', {
-          duration: 3000
+          duration: 3000,
         });
       }
     });
   }
 
   viewRole(role: Role) {
-    const dialogRef = this.dialog.open(RoleFormDialogComponent, {
-      width: '800px',
+    const _dialogRef = this.dialog.open(RoleFormDialogComponent, {
+      width: '700px',
+      maxWidth: '95vw',
       maxHeight: '90vh',
-      data: { mode: 'view', role }
+      data: { mode: 'view', role },
+      panelClass: 'role-dialog-container',
     });
   }
 
   editRole(role: Role) {
     if (role.isSystem) {
       this.snackBar.open('System roles cannot be edited', 'Close', {
-        duration: 3000
+        duration: 3000,
       });
       return;
     }
 
-    const dialogRef = this.dialog.open(RoleFormDialogComponent, {
-      width: '800px',
+    const _dialogRef = this.dialog.open(RoleFormDialogComponent, {
+      width: '700px',
+      maxWidth: '95vw',
       maxHeight: '90vh',
-      data: { mode: 'edit', role }
+      data: { mode: 'edit', role },
+      panelClass: 'role-dialog-container',
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    _dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.snackBar.open('Role updated successfully', 'Close', {
-          duration: 3000
+          duration: 3000,
         });
       }
     });
@@ -479,20 +492,22 @@ export class RolesListComponent implements OnInit {
     const duplicatedRole = {
       ...role,
       name: `${role.name} (Copy)`,
-      isSystem: false
+      isSystem: false,
     };
     delete duplicatedRole.id;
 
-    const dialogRef = this.dialog.open(RoleFormDialogComponent, {
-      width: '800px',
+    const _dialogRef = this.dialog.open(RoleFormDialogComponent, {
+      width: '700px',
+      maxWidth: '95vw',
       maxHeight: '90vh',
-      data: { mode: 'create', role: duplicatedRole }
+      data: { mode: 'create', role: duplicatedRole },
+      panelClass: 'role-dialog-container',
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    _dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.snackBar.open('Role duplicated successfully', 'Close', {
-          duration: 3000
+          duration: 3000,
         });
       }
     });
@@ -501,14 +516,14 @@ export class RolesListComponent implements OnInit {
   async deleteRole(role: Role) {
     if (role.isSystem) {
       this.snackBar.open('System roles cannot be deleted', 'Close', {
-        duration: 3000
+        duration: 3000,
       });
       return;
     }
 
     if (role.userCount && role.userCount > 0) {
       this.snackBar.open('Cannot delete role with assigned users', 'Close', {
-        duration: 3000
+        duration: 3000,
       });
       return;
     }
@@ -517,11 +532,11 @@ export class RolesListComponent implements OnInit {
       try {
         await this.roleService.deleteRole(role.id!);
         this.snackBar.open('Role deleted successfully', 'Close', {
-          duration: 3000
+          duration: 3000,
         });
       } catch (error) {
         this.snackBar.open('Error deleting role', 'Close', {
-          duration: 3000
+          duration: 3000,
         });
       }
     }

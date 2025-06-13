@@ -1,6 +1,6 @@
 <div class="test-auth-container">
   <h1>Auth System Test Page</h1>
-  
+
   <!-- Authentication Status -->
   <mat-card class="status-card">
     <mat-card-header>
@@ -13,7 +13,7 @@
           {{ isAuthenticated ? 'Yes' : 'No' }}
         </mat-chip>
       </div>
-      
+
       <div class="auth-buttons">
         <button mat-raised-button color="primary" (click)="testLogin()">
           <mat-icon>login</mat-icon>
@@ -46,7 +46,8 @@
       <div class="profile-info">
         <p><strong>Email:</strong> {{ currentProfile.email }}</p>
         <p><strong>Display Name:</strong> {{ currentProfile.displayName }}</p>
-        <p><strong>User Group:</strong> 
+        <p>
+          <strong>User Group:</strong>
           <mat-chip color="accent" selected>{{ currentProfile.userGroup }}</mat-chip>
         </p>
         <p><strong>Active:</strong> {{ currentProfile.isActive ? 'Yes' : 'No' }}</p>
@@ -56,29 +57,39 @@
 
       <h3>Test Different User Groups</h3>
       <div class="group-buttons">
-        <button mat-stroked-button 
-                (click)="changeUserGroup('admin')"
-                [color]="currentProfile.userGroup === 'admin' ? 'primary' : undefined">
+        <button
+          mat-stroked-button
+          (click)="changeUserGroup('admin')"
+          [color]="currentProfile.userGroup === 'admin' ? 'primary' : undefined"
+        >
           admin
         </button>
-        <button mat-stroked-button 
-                (click)="changeUserGroup('project-manager')"
-                [color]="currentProfile.userGroup === 'project-manager' ? 'primary' : undefined">
+        <button
+          mat-stroked-button
+          (click)="changeUserGroup('project-manager')"
+          [color]="currentProfile.userGroup === 'project-manager' ? 'primary' : undefined"
+        >
           project-manager
         </button>
-        <button mat-stroked-button 
-                (click)="changeUserGroup('technician')"
-                [color]="currentProfile.userGroup === 'technician' ? 'primary' : undefined">
+        <button
+          mat-stroked-button
+          (click)="changeUserGroup('technician')"
+          [color]="currentProfile.userGroup === 'technician' ? 'primary' : undefined"
+        >
           technician
         </button>
-        <button mat-stroked-button 
-                (click)="changeUserGroup('supplier')"
-                [color]="currentProfile.userGroup === 'supplier' ? 'primary' : undefined">
+        <button
+          mat-stroked-button
+          (click)="changeUserGroup('supplier')"
+          [color]="currentProfile.userGroup === 'supplier' ? 'primary' : undefined"
+        >
           supplier
         </button>
-        <button mat-stroked-button 
-                (click)="changeUserGroup('client')"
-                [color]="currentProfile.userGroup === 'client' ? 'primary' : undefined">
+        <button
+          mat-stroked-button
+          (click)="changeUserGroup('client')"
+          [color]="currentProfile.userGroup === 'client' ? 'primary' : undefined"
+        >
           client
         </button>
       </div>
@@ -109,9 +120,16 @@
     </mat-card-header>
     <mat-card-content>
       <div class="role-check">
-        <p>Is Admin: <strong>{{ checkRole('admin') }}</strong></p>
-        <p>Is Project Manager: <strong>{{ checkRole('project-manager') }}</strong></p>
-        <p>Is Admin OR Project Manager: <strong>{{ checkAnyRole(['admin', 'project-manager']) }}</strong></p>
+        <p>
+          Is Admin: <strong>{{ checkRole('admin') }}</strong>
+        </p>
+        <p>
+          Is Project Manager: <strong>{{ checkRole('project-manager') }}</strong>
+        </p>
+        <p>
+          Is Admin OR Project Manager:
+          <strong>{{ checkAnyRole(['admin', 'project-manager']) }}</strong>
+        </p>
       </div>
     </mat-card-content>
   </mat-card>

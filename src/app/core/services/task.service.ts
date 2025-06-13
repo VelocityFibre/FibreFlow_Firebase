@@ -1,23 +1,23 @@
 import { Injectable, inject } from '@angular/core';
-import { 
-  Firestore, 
-  collection, 
-  collectionData, 
-  doc, 
-  docData, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where, 
+import {
+  Firestore,
+  collection,
+  collectionData,
+  doc,
+  docData,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
   orderBy,
   serverTimestamp,
   writeBatch,
-  DocumentReference,
+  // DocumentReference,
   Query,
-  collectionGroup
+  // collectionGroup,
 } from '@angular/fire/firestore';
-import { Observable, from, map, of, catchError, switchMap, firstValueFrom } from 'rxjs';
+import { Observable, from, map, of, switchMap, firstValueFrom } from 'rxjs';
 import { Task, TaskStatus, TaskPriority } from '../models/task.model';
 import { AuthService } from './auth.service';
 import { ProjectService } from './project.service';
@@ -26,7 +26,7 @@ import { DEFAULT_TASK_TEMPLATES, PHASE_NAME_MAPPING } from '../models/task-templ
 import { Phase } from '../models/phase.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TaskService {
   private firestore = inject(Firestore);
@@ -36,37 +36,34 @@ export class TaskService {
   private tasksCollection = collection(this.firestore, 'tasks');
 
   getAllTasks(): Observable<Task[]> {
-    const q = query(
-      this.tasksCollection,
-      orderBy('dueDate', 'asc')
-    );
-    
+    const q = query(this.tasksCollection, orderBy('dueDate', 'asc'));
+
     return (collectionData(q, { idField: 'id' }) as Observable<Task[]>).pipe(
       switchMap((tasks: Task[]) => {
         if (tasks.length === 0) return of([]);
-        
+
         // Get unique project IDs
-        const projectIds = [...new Set(tasks.map(t => t.projectId))];
-        
+        const projectIds = [...new Set(tasks.map((t) => t.projectId))];
+
         // Fetch project details
-        return from(Promise.all(
-          projectIds.map(id => firstValueFrom(this.projectService.getProjectById(id)))
-        )).pipe(
-          map(projects => {
-            const projectMap = new Map(
-              projects.filter(p => p).map(p => [p!.id!, p!])
-            );
-            
+        return from(
+          Promise.all(
+            projectIds.map((id) => firstValueFrom(this.projectService.getProjectById(id))),
+          ),
+        ).pipe(
+          map((projects) => {
+            const projectMap = new Map(projects.filter((p) => p).map((p) => [p!.id!, p!]));
+
             // Enhance tasks with project information
-            return tasks.map(task => ({
+            return tasks.map((task) => ({
               ...task,
               projectName: projectMap.get(task.projectId)?.name,
               projectCode: projectMap.get(task.projectId)?.projectCode,
-              clientName: projectMap.get(task.projectId)?.clientName
+              clientName: projectMap.get(task.projectId)?.clientName,
             }));
-          })
+          }),
         );
-      })
+      }),
     ) as Observable<Task[]>;
   }
 
@@ -75,32 +72,32 @@ export class TaskService {
       this.tasksCollection,
       where('projectId', '==', projectId),
       orderBy('phaseId', 'asc'),
-      orderBy('orderNo', 'asc')
+      orderBy('orderNo', 'asc'),
     );
-    
+
     return (collectionData(q, { idField: 'id' }) as Observable<Task[]>).pipe(
-      switchMap(tasks => {
+      switchMap((tasks) => {
         if (tasks.length === 0) return of([]);
-        
+
         // Get unique user IDs for assigned tasks
-        const userIds = [...new Set(tasks.filter(t => t.assignedTo).map(t => t.assignedTo!))];
-        
+        const userIds = [...new Set(tasks.filter((t) => t.assignedTo).map((t) => t.assignedTo!))];
+
         if (userIds.length === 0) return of(tasks);
-        
+
         // Fetch user details
-        return from(Promise.all(userIds.map(id => firstValueFrom(this.staffService.getStaffById(id))))).pipe(
-          map(staffMembers => {
-            const staffMap = new Map(
-              staffMembers.filter(s => s).map(s => [s!.id!, s!])
-            );
-            
-            return tasks.map(task => ({
+        return from(
+          Promise.all(userIds.map((id) => firstValueFrom(this.staffService.getStaffById(id)))),
+        ).pipe(
+          map((staffMembers) => {
+            const staffMap = new Map(staffMembers.filter((s) => s).map((s) => [s!.id!, s!]));
+
+            return tasks.map((task) => ({
               ...task,
-              assignedToName: task.assignedTo ? staffMap.get(task.assignedTo)?.name : undefined
+              assignedToName: task.assignedTo ? staffMap.get(task.assignedTo)?.name : undefined,
             }));
-          })
+          }),
         );
-      })
+      }),
     );
   }
 
@@ -108,9 +105,9 @@ export class TaskService {
     const q = query(
       this.tasksCollection,
       where('phaseId', '==', phaseId),
-      orderBy('orderNo', 'asc')
+      orderBy('orderNo', 'asc'),
     );
-    
+
     return collectionData(q, { idField: 'id' }) as Observable<Task[]>;
   }
 
@@ -123,35 +120,35 @@ export class TaskService {
     const q = query(
       this.tasksCollection,
       where('assignedTo', '==', userId),
-      orderBy('dueDate', 'asc')
+      orderBy('dueDate', 'asc'),
     );
-    
+
     return (collectionData(q, { idField: 'id' }) as Observable<Task[]>).pipe(
       switchMap((tasks: Task[]) => {
         if (tasks.length === 0) return of([]);
-        
+
         // Get unique project IDs
-        const projectIds = [...new Set(tasks.map(t => t.projectId))];
-        
+        const projectIds = [...new Set(tasks.map((t) => t.projectId))];
+
         // Fetch project details
-        return from(Promise.all(
-          projectIds.map(id => firstValueFrom(this.projectService.getProjectById(id)))
-        )).pipe(
-          map(projects => {
-            const projectMap = new Map(
-              projects.filter(p => p).map(p => [p!.id!, p!])
-            );
-            
+        return from(
+          Promise.all(
+            projectIds.map((id) => firstValueFrom(this.projectService.getProjectById(id))),
+          ),
+        ).pipe(
+          map((projects) => {
+            const projectMap = new Map(projects.filter((p) => p).map((p) => [p!.id!, p!]));
+
             // Enhance tasks with project information
-            return tasks.map(task => ({
+            return tasks.map((task) => ({
               ...task,
               projectName: projectMap.get(task.projectId)?.name,
               projectCode: projectMap.get(task.projectId)?.projectCode,
-              clientName: projectMap.get(task.projectId)?.clientName
+              clientName: projectMap.get(task.projectId)?.clientName,
             }));
-          })
+          }),
         );
-      })
+      }),
     ) as Observable<Task[]>;
   }
 
@@ -169,7 +166,7 @@ export class TaskService {
       completionPercentage: 0,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
-      createdBy: currentUser?.uid
+      createdBy: currentUser?.uid,
     };
 
     const docRef = await addDoc(this.tasksCollection, newTask);
@@ -179,16 +176,16 @@ export class TaskService {
   async updateTask(taskId: string, updates: Partial<Task>): Promise<void> {
     const currentUser = await this.authService.getCurrentUser();
     const taskDoc = doc(this.firestore, 'tasks', taskId);
-    
+
     const updateData = {
       ...updates,
       updatedAt: serverTimestamp(),
-      updatedBy: currentUser?.uid
+      updatedBy: currentUser?.uid,
     };
 
     // If status is changing to completed, set completion date
     if (updates.status === TaskStatus.COMPLETED && !updates.completedDate) {
-      updateData.completedDate = serverTimestamp() as any;
+      updateData.completedDate = serverTimestamp();
       updateData.completionPercentage = 100;
     }
 
@@ -202,7 +199,7 @@ export class TaskService {
 
   async updateTaskOrder(tasks: { id: string; orderNo: number }[]): Promise<void> {
     const batch = writeBatch(this.firestore);
-    
+
     tasks.forEach(({ id, orderNo }) => {
       const taskDoc = doc(this.firestore, 'tasks', id);
       batch.update(taskDoc, { orderNo, updatedAt: serverTimestamp() });
@@ -215,7 +212,7 @@ export class TaskService {
     const currentUser = await this.authService.getCurrentUser();
     await this.updateTask(taskId, {
       assignedTo: userId,
-      status: TaskStatus.IN_PROGRESS
+      status: TaskStatus.IN_PROGRESS,
     });
 
     // Log the assignment
@@ -224,15 +221,19 @@ export class TaskService {
       userId,
       assignedDate: serverTimestamp(),
       assignedBy: currentUser?.uid,
-      notes
+      notes,
     };
 
     await addDoc(collection(this.firestore, 'taskAssignments'), assignmentLog);
   }
 
-  async updateTaskProgress(taskId: string, percentage: number, actualHours?: number): Promise<void> {
+  async updateTaskProgress(
+    taskId: string,
+    percentage: number,
+    actualHours?: number,
+  ): Promise<void> {
     const updates: Partial<Task> = {
-      completionPercentage: percentage
+      completionPercentage: percentage,
     };
 
     if (actualHours !== undefined) {
@@ -252,22 +253,22 @@ export class TaskService {
   async createTasksForPhase(projectId: string, phase: Phase): Promise<void> {
     const currentUser = await this.authService.getCurrentUser();
     const batch = writeBatch(this.firestore);
-    
+
     // Find matching template for this phase
     const phaseName = PHASE_NAME_MAPPING[phase.name] || phase.name;
-    const template = DEFAULT_TASK_TEMPLATES.find(t => t.phaseName === phaseName);
-    
+    const template = DEFAULT_TASK_TEMPLATES.find((t) => t.phaseName === phaseName);
+
     if (!template) {
       console.warn(`No task template found for phase: ${phase.name}`);
       return;
     }
-    
+
     // Create tasks from template
     const taskIds: string[] = [];
-    template.tasks.forEach((taskTemplate, index) => {
+    template.tasks.forEach((taskTemplate, _index) => {
       const taskRef = doc(collection(this.firestore, 'tasks'));
       taskIds.push(taskRef.id);
-      
+
       const newTask = {
         name: taskTemplate.name,
         description: taskTemplate.description || '',
@@ -280,32 +281,32 @@ export class TaskService {
         completionPercentage: 0,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
-        createdBy: currentUser?.uid
+        createdBy: currentUser?.uid,
       };
-      
+
       batch.set(taskRef, newTask);
     });
-    
+
     await batch.commit();
-    
+
     // Handle dependencies in a second pass
     const depBatch = writeBatch(this.firestore);
     let hasUpdates = false;
-    
+
     template.tasks.forEach((taskTemplate, index) => {
       if (taskTemplate.dependencies && taskTemplate.dependencies.length > 0) {
         const taskRef = doc(this.firestore, 'tasks', taskIds[index]);
         const dependencies = taskTemplate.dependencies
-          .filter(depIndex => depIndex < taskIds.length)
-          .map(depIndex => taskIds[depIndex]);
-        
+          .filter((depIndex) => depIndex < taskIds.length)
+          .map((depIndex) => taskIds[depIndex]);
+
         if (dependencies.length > 0) {
           depBatch.update(taskRef, { dependencies });
           hasUpdates = true;
         }
       }
     });
-    
+
     if (hasUpdates) {
       await depBatch.commit();
     }
@@ -314,12 +315,12 @@ export class TaskService {
   // Create tasks for all phases in a project
   async createTasksForProject(projectId: string, phases: Phase[]): Promise<void> {
     console.log(`Creating tasks for project ${projectId} with ${phases.length} phases`);
-    
+
     // Create tasks for each phase
     for (const phase of phases) {
       await this.createTasksForPhase(projectId, phase);
     }
-    
+
     console.log('All tasks created successfully');
   }
 
@@ -327,28 +328,28 @@ export class TaskService {
   async initializeProjectTasks(projectId: string): Promise<void> {
     // Check if tasks already exist
     const existingTasks = await firstValueFrom(this.getTasksByProject(projectId));
-    
+
     if (existingTasks.length > 0) {
       console.log(`Project ${projectId} already has ${existingTasks.length} tasks`);
       return;
     }
-    
+
     // Get project phases
     const phases = await firstValueFrom(
       collectionData(
         query(
           collection(this.firestore, `projects/${projectId}/phases`) as Query<Phase>,
-          orderBy('orderNo')
+          orderBy('orderNo'),
         ),
-        { idField: 'id' }
-      ) as Observable<Phase[]>
+        { idField: 'id' },
+      ) as Observable<Phase[]>,
     );
-    
+
     if (phases.length === 0) {
       console.log(`Project ${projectId} has no phases`);
       return;
     }
-    
+
     // Create tasks for all phases
     await this.createTasksForProject(projectId, phases);
   }
@@ -363,29 +364,29 @@ export class TaskService {
     todayDue: number;
   }> {
     return this.getTasksByAssignee(userId).pipe(
-      map(tasks => {
+      map((tasks) => {
         const now = new Date();
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
-        
+
         return {
           total: tasks.length,
-          pending: tasks.filter(t => t.status === TaskStatus.PENDING).length,
-          inProgress: tasks.filter(t => t.status === TaskStatus.IN_PROGRESS).length,
-          completed: tasks.filter(t => t.status === TaskStatus.COMPLETED).length,
-          overdue: tasks.filter(t => {
+          pending: tasks.filter((t) => t.status === TaskStatus.PENDING).length,
+          inProgress: tasks.filter((t) => t.status === TaskStatus.IN_PROGRESS).length,
+          completed: tasks.filter((t) => t.status === TaskStatus.COMPLETED).length,
+          overdue: tasks.filter((t) => {
             if (!t.dueDate || t.status === TaskStatus.COMPLETED) return false;
             const dueDate = t.dueDate instanceof Date ? t.dueDate : (t.dueDate as any).toDate();
             return dueDate < now;
           }).length,
-          todayDue: tasks.filter(t => {
+          todayDue: tasks.filter((t) => {
             if (!t.dueDate || t.status === TaskStatus.COMPLETED) return false;
             const dueDate = t.dueDate instanceof Date ? t.dueDate : (t.dueDate as any).toDate();
             return dueDate >= today && dueDate < tomorrow;
-          }).length
+          }).length,
         };
-      })
+      }),
     );
   }
 
@@ -397,9 +398,9 @@ export class TaskService {
       note,
       createdAt: serverTimestamp(),
       createdBy: currentUser?.uid,
-      userName: currentUser?.displayName || 'Unknown User'
+      userName: currentUser?.displayName || 'Unknown User',
     };
-    
+
     await addDoc(collection(this.firestore, 'taskNotes'), noteData);
   }
 
@@ -408,9 +409,9 @@ export class TaskService {
     const q = query(
       collection(this.firestore, 'taskNotes'),
       where('taskId', '==', taskId),
-      orderBy('createdAt', 'desc')
+      orderBy('createdAt', 'desc'),
     );
-    
+
     return collectionData(q, { idField: 'id' });
   }
 
@@ -418,16 +419,16 @@ export class TaskService {
   async reassignTask(taskId: string, newUserId: string, reason: string): Promise<void> {
     const currentUser = await this.authService.getCurrentUser();
     const task = await firstValueFrom(this.getTask(taskId));
-    
+
     if (!task) throw new Error('Task not found');
-    
+
     const previousAssignee = task.assignedTo;
-    
+
     // Update the task
     await this.updateTask(taskId, {
-      assignedTo: newUserId
+      assignedTo: newUserId,
     });
-    
+
     // Log the reassignment
     const reassignmentLog = {
       taskId,
@@ -435,12 +436,15 @@ export class TaskService {
       toUserId: newUserId,
       reason,
       reassignedAt: serverTimestamp(),
-      reassignedBy: currentUser?.uid
+      reassignedBy: currentUser?.uid,
     };
-    
+
     await addDoc(collection(this.firestore, 'taskReassignments'), reassignmentLog);
-    
+
     // Add a note about the reassignment
-    await this.addTaskNote(taskId, `Task reassigned from user ${previousAssignee} to user ${newUserId}. Reason: ${reason}`);
+    await this.addTaskNote(
+      taskId,
+      `Task reassigned from user ${previousAssignee} to user ${newUserId}. Reason: ${reason}`,
+    );
   }
 }

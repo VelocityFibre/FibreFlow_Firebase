@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
@@ -30,11 +30,11 @@ interface DialogData {
     MatSelectModule,
     MatButtonModule,
     MatCheckboxModule,
-    MatIconModule
+    MatIconModule,
   ],
   template: `
     <h2 mat-dialog-title>{{ isEditMode ? 'Edit' : 'Add' }} BOQ Item</h2>
-    
+
     <mat-dialog-content>
       <form [formGroup]="form" class="boq-form">
         <mat-form-field appearance="outline">
@@ -52,7 +52,7 @@ interface DialogData {
         <div class="form-row">
           <mat-form-field appearance="outline">
             <mat-label>Item Code</mat-label>
-            <input matInput formControlName="itemCode" placeholder="e.g., FOC-SM-1K">
+            <input matInput formControlName="itemCode" placeholder="e.g., FOC-SM-1K" />
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -66,15 +66,13 @@ interface DialogData {
               <mat-option value="set">Set</mat-option>
               <mat-option value="each">Each</mat-option>
             </mat-select>
-            <mat-error *ngIf="form.get('unit')?.hasError('required')">
-              Unit is required
-            </mat-error>
+            <mat-error *ngIf="form.get('unit')?.hasError('required')"> Unit is required </mat-error>
           </mat-form-field>
         </div>
 
         <mat-form-field appearance="outline">
           <mat-label>Description</mat-label>
-          <input matInput formControlName="description" placeholder="Enter item description">
+          <input matInput formControlName="description" placeholder="Enter item description" />
           <mat-error *ngIf="form.get('description')?.hasError('required')">
             Description is required
           </mat-error>
@@ -82,14 +80,18 @@ interface DialogData {
 
         <mat-form-field appearance="outline">
           <mat-label>Specification</mat-label>
-          <textarea matInput formControlName="specification" rows="3" 
-                    placeholder="Enter detailed specifications (optional)"></textarea>
+          <textarea
+            matInput
+            formControlName="specification"
+            rows="3"
+            placeholder="Enter detailed specifications (optional)"
+          ></textarea>
         </mat-form-field>
 
         <div class="form-row">
           <mat-form-field appearance="outline">
             <mat-label>Required Quantity</mat-label>
-            <input matInput type="number" formControlName="requiredQuantity" min="0">
+            <input matInput type="number" formControlName="requiredQuantity" min="0" />
             <mat-error *ngIf="form.get('requiredQuantity')?.hasError('required')">
               Quantity is required
             </mat-error>
@@ -100,7 +102,7 @@ interface DialogData {
 
           <mat-form-field appearance="outline">
             <mat-label>Unit Price (R)</mat-label>
-            <input matInput type="number" formControlName="unitPrice" min="0" step="0.01">
+            <input matInput type="number" formControlName="unitPrice" min="0" step="0.01" />
             <span matTextPrefix>R&nbsp;</span>
             <mat-error *ngIf="form.get('unitPrice')?.hasError('required')">
               Unit price is required
@@ -114,7 +116,7 @@ interface DialogData {
         <div class="form-row" *ngIf="isEditMode">
           <mat-form-field appearance="outline">
             <mat-label>Allocated Quantity</mat-label>
-            <input matInput type="number" formControlName="allocatedQuantity" min="0" readonly>
+            <input matInput type="number" formControlName="allocatedQuantity" min="0" readonly />
             <mat-hint>Allocated through stock management</mat-hint>
           </mat-form-field>
 
@@ -129,15 +131,16 @@ interface DialogData {
         </div>
 
         <div class="checkbox-section">
-          <mat-checkbox formControlName="needsQuote">
-            Requires Quote (RFQ)
-          </mat-checkbox>
+          <mat-checkbox formControlName="needsQuote"> Requires Quote (RFQ) </mat-checkbox>
         </div>
 
-        <div class="calculated-section" *ngIf="form.get('requiredQuantity')?.value && form.get('unitPrice')?.value">
+        <div
+          class="calculated-section"
+          *ngIf="form.get('requiredQuantity')?.value && form.get('unitPrice')?.value"
+        >
           <div class="calculated-item">
             <span class="label">Total Price:</span>
-            <span class="value">R{{ calculateTotalPrice() | number:'1.2-2' }}</span>
+            <span class="value">R{{ calculateTotalPrice() | number: '1.2-2' }}</span>
           </div>
           <div class="calculated-item" *ngIf="isEditMode">
             <span class="label">Remaining Quantity:</span>
@@ -149,99 +152,113 @@ interface DialogData {
 
     <mat-dialog-actions align="end">
       <button mat-button (click)="onCancel()">Cancel</button>
-      <button mat-raised-button color="primary" 
-              [disabled]="!form.valid || saving"
-              (click)="onSubmit()">
-        {{ saving ? 'Saving...' : (isEditMode ? 'Update' : 'Add') }}
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="!form.valid || saving"
+        (click)="onSubmit()"
+      >
+        {{ saving ? 'Saving...' : isEditMode ? 'Update' : 'Add' }}
       </button>
     </mat-dialog-actions>
   `,
-  styles: [`
-    .boq-form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      min-width: 500px;
-      padding: 16px 0;
-    }
+  styles: [
+    `
+      .boq-form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        min-width: 500px;
+        padding: 16px 0;
+      }
 
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
 
-    mat-form-field {
-      width: 100%;
-    }
+      mat-form-field {
+        width: 100%;
+      }
 
-    .checkbox-section {
-      margin: 8px 0;
-    }
+      .checkbox-section {
+        margin: 8px 0;
+      }
 
-    .calculated-section {
-      background-color: #f5f5f5;
-      border-radius: 8px;
-      padding: 16px;
-      margin-top: 16px;
-    }
+      .calculated-section {
+        background-color: #f5f5f5;
+        border-radius: 8px;
+        padding: 16px;
+        margin-top: 16px;
+      }
 
-    .calculated-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
+      .calculated-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
 
-    .calculated-item:last-child {
-      margin-bottom: 0;
-    }
+      .calculated-item:last-child {
+        margin-bottom: 0;
+      }
 
-    .calculated-item .label {
-      font-weight: 500;
-      color: #666;
-    }
+      .calculated-item .label {
+        font-weight: 500;
+        color: #666;
+      }
 
-    .calculated-item .value {
-      font-size: 18px;
-      font-weight: 600;
-      color: #1976d2;
-    }
+      .calculated-item .value {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1976d2;
+      }
 
-    mat-dialog-actions {
-      padding: 16px 24px;
-      margin: 0 -24px -24px;
-      border-top: 1px solid #e0e0e0;
-    }
-  `]
+      mat-dialog-actions {
+        padding: 16px 24px;
+        margin: 0 -24px -24px;
+        border-top: 1px solid #e0e0e0;
+      }
+    `,
+  ],
 })
 export class BOQFormDialogComponent implements OnInit {
   form: FormGroup;
   isEditMode = false;
   saving = false;
   projects: Project[] = [];
-  statuses: BOQStatus[] = ['Planned', 'Partially Allocated', 'Fully Allocated', 'Ordered', 'Delivered'];
+  statuses: BOQStatus[] = [
+    'Planned',
+    'Partially Allocated',
+    'Fully Allocated',
+    'Ordered',
+    'Delivered',
+  ];
 
-  constructor(
-    private fb: FormBuilder,
-    private boqService: BOQService,
-    private dialogRef: MatDialogRef<BOQFormDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) {
-    this.projects = data.projects || [];
-    this.isEditMode = !!data.item;
+  private fb = inject(FormBuilder);
+  private boqService = inject(BOQService);
+  private dialogRef = inject(MatDialogRef<BOQFormDialogComponent>);
+  public data = inject(MAT_DIALOG_DATA) as DialogData;
+
+  constructor() {
+    this.projects = this.data.projects || [];
+    this.isEditMode = !!this.data.item;
 
     this.form = this.fb.group({
-      projectId: [data.item?.projectId || '', Validators.required],
-      itemCode: [data.item?.itemCode || ''],
-      description: [data.item?.description || '', Validators.required],
-      specification: [data.item?.specification || ''],
-      unit: [data.item?.unit || 'each', Validators.required],
-      requiredQuantity: [data.item?.requiredQuantity || null, [Validators.required, Validators.min(1)]],
-      allocatedQuantity: [data.item?.allocatedQuantity || 0],
-      unitPrice: [data.item?.unitPrice || null, [Validators.required, Validators.min(0)]],
-      status: [data.item?.status || 'Planned'],
-      needsQuote: [data.item?.needsQuote || false]
+      projectId: [this.data.item?.projectId || '', Validators.required],
+      itemCode: [this.data.item?.itemCode || ''],
+      description: [this.data.item?.description || '', Validators.required],
+      specification: [this.data.item?.specification || ''],
+      unit: [this.data.item?.unit || 'each', Validators.required],
+      requiredQuantity: [
+        this.data.item?.requiredQuantity || null,
+        [Validators.required, Validators.min(1)],
+      ],
+      allocatedQuantity: [this.data.item?.allocatedQuantity || 0],
+      unitPrice: [this.data.item?.unitPrice || null, [Validators.required, Validators.min(0)]],
+      status: [this.data.item?.status || 'Planned'],
+      needsQuote: [this.data.item?.needsQuote || false],
     });
   }
 
@@ -276,7 +293,7 @@ export class BOQFormDialogComponent implements OnInit {
       const boqItem: Omit<BOQItem, 'id'> = {
         ...formValue,
         remainingQuantity: formValue.requiredQuantity - formValue.allocatedQuantity,
-        totalPrice: formValue.requiredQuantity * formValue.unitPrice
+        totalPrice: formValue.requiredQuantity * formValue.unitPrice,
       };
 
       if (this.isEditMode) {
@@ -284,22 +301,22 @@ export class BOQFormDialogComponent implements OnInit {
           next: () => {
             this.dialogRef.close(true);
           },
-          error: (error: any) => {
+          error: (error: unknown) => {
             console.error('Error updating BOQ item:', error);
             alert('Failed to update BOQ item. Please try again.');
             this.saving = false;
-          }
+          },
         });
       } else {
         this.boqService.addBOQItem(boqItem).subscribe({
           next: () => {
             this.dialogRef.close(true);
           },
-          error: (error: any) => {
+          error: (error: unknown) => {
             console.error('Error adding BOQ item:', error);
             alert('Failed to add BOQ item. Please try again.');
             this.saving = false;
-          }
+          },
         });
       }
     }

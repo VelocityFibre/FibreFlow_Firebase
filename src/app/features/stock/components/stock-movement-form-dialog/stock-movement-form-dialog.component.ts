@@ -12,12 +12,12 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Observable, startWith, map } from 'rxjs';
 
-import { 
-  MovementType, 
+import {
+  MovementType,
   ReferenceType,
   getMovementTypeLabel,
   isIncomingMovement,
-  isOutgoingMovement
+  isOutgoingMovement,
 } from '../../models/stock-movement.model';
 import { StockItem } from '../../models/stock-item.model';
 import { Project } from '../../../../core/models/project.model';
@@ -43,20 +43,26 @@ interface DialogData {
     MatIconModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
   ],
   template: `
     <h2 mat-dialog-title>Create Stock Movement</h2>
-    
+
     <mat-dialog-content>
       <form [formGroup]="movementForm" class="movement-form">
         <!-- Stock Item Selection -->
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Stock Item</mat-label>
-          <mat-select formControlName="itemId" (selectionChange)="onItemChange($event.value)" required>
+          <mat-select
+            formControlName="itemId"
+            (selectionChange)="onItemChange($event.value)"
+            required
+          >
             <mat-option *ngFor="let item of filteredItems$ | async" [value]="item.id">
               {{ item.itemCode }} - {{ item.name }}
-              <span class="stock-info">(Available: {{ item.currentStock - item.allocatedStock }})</span>
+              <span class="stock-info"
+                >(Available: {{ item.currentStock - item.allocatedStock }})</span
+              >
             </mat-option>
           </mat-select>
           <mat-error *ngIf="movementForm.get('itemId')?.hasError('required')">
@@ -67,7 +73,11 @@ interface DialogData {
         <!-- Movement Type -->
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Movement Type</mat-label>
-          <mat-select formControlName="movementType" (selectionChange)="onMovementTypeChange($event.value)" required>
+          <mat-select
+            formControlName="movementType"
+            (selectionChange)="onMovementTypeChange($event.value)"
+            required
+          >
             <mat-option *ngFor="let type of movementTypes" [value]="type">
               {{ getMovementTypeLabel(type) }}
             </mat-option>
@@ -80,10 +90,18 @@ interface DialogData {
         <!-- Quantity -->
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Quantity</mat-label>
-          <input matInput type="number" formControlName="quantity" required min="0.01" step="0.01">
+          <input
+            matInput
+            type="number"
+            formControlName="quantity"
+            required
+            min="0.01"
+            step="0.01"
+          />
           <span matSuffix *ngIf="selectedItem">{{ selectedItem.unitOfMeasure }}</span>
           <mat-hint *ngIf="selectedItem && isOutgoing">
-            Available: {{ selectedItem.currentStock - selectedItem.allocatedStock }} {{ selectedItem.unitOfMeasure }}
+            Available: {{ selectedItem.currentStock - selectedItem.allocatedStock }}
+            {{ selectedItem.unitOfMeasure }}
           </mat-hint>
           <mat-error *ngIf="movementForm.get('quantity')?.hasError('required')">
             Quantity is required
@@ -109,7 +127,7 @@ interface DialogData {
         <!-- Reference Number (conditional) -->
         <mat-form-field appearance="outline" class="full-width" *ngIf="showReferenceNumber">
           <mat-label>Reference Number</mat-label>
-          <input matInput formControlName="referenceNumber">
+          <input matInput formControlName="referenceNumber" />
           <mat-hint>e.g., PO number, invoice number</mat-hint>
         </mat-form-field>
 
@@ -127,19 +145,19 @@ interface DialogData {
         <div class="location-fields" *ngIf="showLocationFields">
           <mat-form-field appearance="outline" class="half-width" *ngIf="showFromLocation">
             <mat-label>From Location</mat-label>
-            <input matInput formControlName="fromLocation">
+            <input matInput formControlName="fromLocation" />
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="half-width" *ngIf="showToLocation">
             <mat-label>To Location</mat-label>
-            <input matInput formControlName="toLocation">
+            <input matInput formControlName="toLocation" />
           </mat-form-field>
         </div>
 
         <!-- Reason (for specific movement types) -->
         <mat-form-field appearance="outline" class="full-width" *ngIf="showReason">
           <mat-label>Reason</mat-label>
-          <input matInput formControlName="reason" required>
+          <input matInput formControlName="reason" required />
           <mat-error *ngIf="movementForm.get('reason')?.hasError('required')">
             Reason is required
           </mat-error>
@@ -167,79 +185,84 @@ interface DialogData {
 
     <mat-dialog-actions align="end">
       <button mat-button (click)="onCancel()">Cancel</button>
-      <button mat-raised-button color="primary" 
-              (click)="onSubmit()" 
-              [disabled]="!movementForm.valid || isSubmitting">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="onSubmit()"
+        [disabled]="!movementForm.valid || isSubmitting"
+      >
         {{ isSubmitting ? 'Creating...' : 'Create Movement' }}
       </button>
     </mat-dialog-actions>
   `,
-  styles: [`
-    .movement-form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      min-width: 500px;
-      max-width: 600px;
-    }
-
-    .full-width {
-      width: 100%;
-    }
-
-    .half-width {
-      width: calc(50% - 8px);
-    }
-
-    .location-fields {
-      display: flex;
-      gap: 16px;
-    }
-
-    .stock-info {
-      font-size: 12px;
-      color: #666;
-      margin-left: 8px;
-    }
-
-    .cost-section {
-      background-color: #f5f5f5;
-      border-radius: 4px;
-      padding: 16px;
-      margin: 8px 0;
-    }
-
-    .cost-item {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      
-      &:last-child {
-        margin-bottom: 0;
-        padding-top: 8px;
-        border-top: 1px solid #ddd;
-        font-weight: 600;
+  styles: [
+    `
+      .movement-form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        min-width: 500px;
+        max-width: 600px;
       }
-    }
 
-    .cost-label {
-      color: #666;
-    }
+      .full-width {
+        width: 100%;
+      }
 
-    .cost-value {
-      color: #333;
-    }
+      .half-width {
+        width: calc(50% - 8px);
+      }
 
-    mat-dialog-content {
-      max-height: 70vh;
-      overflow-y: auto;
-    }
+      .location-fields {
+        display: flex;
+        gap: 16px;
+      }
 
-    mat-dialog-actions {
-      padding: 16px 24px !important;
-      border-top: 1px solid #e0e0e0;
-    }
-  `]
+      .stock-info {
+        font-size: 12px;
+        color: #666;
+        margin-left: 8px;
+      }
+
+      .cost-section {
+        background-color: #f5f5f5;
+        border-radius: 4px;
+        padding: 16px;
+        margin: 8px 0;
+      }
+
+      .cost-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+
+        &:last-child {
+          margin-bottom: 0;
+          padding-top: 8px;
+          border-top: 1px solid #ddd;
+          font-weight: 600;
+        }
+      }
+
+      .cost-label {
+        color: #666;
+      }
+
+      .cost-value {
+        color: #333;
+      }
+
+      mat-dialog-content {
+        max-height: 70vh;
+        overflow-y: auto;
+      }
+
+      mat-dialog-actions {
+        padding: 16px 24px !important;
+        border-top: 1px solid #e0e0e0;
+      }
+    `,
+  ],
 })
 export class StockMovementFormDialogComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -275,12 +298,14 @@ export class StockMovementFormDialogComponent implements OnInit {
       MovementType.PURCHASE,
       MovementType.ALLOCATION,
       MovementType.ADJUSTMENT_INCREASE,
-      MovementType.ADJUSTMENT_DECREASE
+      MovementType.ADJUSTMENT_DECREASE,
     ].includes(this.selectedMovementType as MovementType);
   }
 
   get showReferenceNumber(): boolean {
-    return [MovementType.PURCHASE, MovementType.ALLOCATION].includes(this.selectedMovementType as MovementType);
+    return [MovementType.PURCHASE, MovementType.ALLOCATION].includes(
+      this.selectedMovementType as MovementType,
+    );
   }
 
   get showProjectSelection(): boolean {
@@ -288,15 +313,14 @@ export class StockMovementFormDialogComponent implements OnInit {
       MovementType.ALLOCATION,
       MovementType.RETURN_FROM_PROJECT,
       MovementType.TRANSFER_IN,
-      MovementType.TRANSFER_OUT
+      MovementType.TRANSFER_OUT,
     ].includes(this.selectedMovementType as MovementType);
   }
 
   get showLocationFields(): boolean {
-    return [
-      MovementType.TRANSFER_IN,
-      MovementType.TRANSFER_OUT
-    ].includes(this.selectedMovementType as MovementType);
+    return [MovementType.TRANSFER_IN, MovementType.TRANSFER_OUT].includes(
+      this.selectedMovementType as MovementType,
+    );
   }
 
   get showFromLocation(): boolean {
@@ -313,7 +337,7 @@ export class StockMovementFormDialogComponent implements OnInit {
       MovementType.ADJUSTMENT_DECREASE,
       MovementType.DAMAGE,
       MovementType.LOSS,
-      MovementType.RETURN_FROM_PROJECT
+      MovementType.RETURN_FROM_PROJECT,
     ].includes(this.selectedMovementType as MovementType);
   }
 
@@ -325,13 +349,13 @@ export class StockMovementFormDialogComponent implements OnInit {
   ngOnInit() {
     this.initializeForm();
     this.setupFilters();
-    
+
     // Pre-select item if provided
     if (this.data.preselectedItem) {
       this.movementForm.patchValue({ itemId: this.data.preselectedItem.id });
       this.selectedItem = this.data.preselectedItem;
     }
-    
+
     // Pre-select project if provided
     if (this.data.preselectedProject) {
       this.movementForm.patchValue({ projectId: this.data.preselectedProject.id });
@@ -349,7 +373,7 @@ export class StockMovementFormDialogComponent implements OnInit {
       fromLocation: [''],
       toLocation: [''],
       reason: [''],
-      notes: ['']
+      notes: [''],
     });
   }
 
@@ -357,26 +381,24 @@ export class StockMovementFormDialogComponent implements OnInit {
     // Filter stock items by search
     this.filteredItems$ = this.movementForm.get('itemId')!.valueChanges.pipe(
       startWith(''),
-      map(() => this.stockItems)
+      map(() => this.stockItems),
     );
   }
 
   onItemChange(itemId: string) {
-    this.selectedItem = this.stockItems.find(item => item.id === itemId) || null;
-    
+    this.selectedItem = this.stockItems.find((item) => item.id === itemId) || null;
+
     // Update quantity validation based on available stock
     if (this.selectedItem && this.isOutgoing) {
       const available = this.selectedItem.currentStock - this.selectedItem.allocatedStock;
-      this.movementForm.get('quantity')?.setValidators([
-        Validators.required,
-        Validators.min(0.01),
-        Validators.max(available)
-      ]);
+      this.movementForm
+        .get('quantity')
+        ?.setValidators([Validators.required, Validators.min(0.01), Validators.max(available)]);
       this.movementForm.get('quantity')?.updateValueAndValidity();
     }
   }
 
-  onMovementTypeChange(type: MovementType) {
+  onMovementTypeChange(_type: MovementType) {
     // Reset conditional fields
     this.movementForm.patchValue({
       referenceType: '',
@@ -384,7 +406,7 @@ export class StockMovementFormDialogComponent implements OnInit {
       projectId: '',
       fromLocation: '',
       toLocation: '',
-      reason: ''
+      reason: '',
     });
 
     // Update validators
@@ -393,9 +415,9 @@ export class StockMovementFormDialogComponent implements OnInit {
     } else {
       this.movementForm.get('reason')?.clearValidators();
     }
-    
+
     this.movementForm.get('reason')?.updateValueAndValidity();
-    
+
     // Re-validate quantity based on movement type
     if (this.selectedItem) {
       this.onItemChange(this.selectedItem.id!);
@@ -409,7 +431,7 @@ export class StockMovementFormDialogComponent implements OnInit {
   formatCurrency(value: number): string {
     return new Intl.NumberFormat('en-ZA', {
       style: 'currency',
-      currency: 'ZAR'
+      currency: 'ZAR',
     }).format(value);
   }
 
@@ -420,7 +442,7 @@ export class StockMovementFormDialogComponent implements OnInit {
   onSubmit() {
     if (this.movementForm.valid && this.selectedItem) {
       this.isSubmitting = true;
-      
+
       const formValue = this.movementForm.value;
       const movement: any = {
         itemId: formValue.itemId,
@@ -434,12 +456,12 @@ export class StockMovementFormDialogComponent implements OnInit {
         referenceType: formValue.referenceType || undefined,
         referenceNumber: formValue.referenceNumber || undefined,
         reason: formValue.reason || undefined,
-        notes: formValue.notes || undefined
+        notes: formValue.notes || undefined,
       };
 
       // Add project-specific fields
       if (this.showProjectSelection && formValue.projectId) {
-        const project = this.projects.find(p => p.id === formValue.projectId);
+        const project = this.projects.find((p) => p.id === formValue.projectId);
         if (project) {
           if (this.isIncoming) {
             movement.fromProjectId = project.id;

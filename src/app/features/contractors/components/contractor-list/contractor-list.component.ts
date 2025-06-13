@@ -34,7 +34,7 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
     MatMenuModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
-    FormsModule
+    FormsModule,
   ],
   template: `
     <div class="contractor-list-container">
@@ -51,8 +51,12 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
       <div class="filters">
         <mat-form-field appearance="outline">
           <mat-label>Search</mat-label>
-          <input matInput [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()" 
-                 placeholder="Search by name, registration number...">
+          <input
+            matInput
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="applyFilter()"
+            placeholder="Search by name, registration number..."
+          />
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
 
@@ -81,7 +85,6 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
       <!-- Table -->
       <div class="table-container" *ngIf="!loading(); else loadingTemplate">
         <table mat-table [dataSource]="filteredContractors()" class="contractor-table">
-          
           <!-- Company Column -->
           <ng-container matColumnDef="company">
             <th mat-header-cell *matHeaderCellDef>Company</th>
@@ -150,21 +153,27 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
                   <mat-icon>edit</mat-icon>
                   <span>Edit</span>
                 </button>
-                <button mat-menu-item 
-                        *ngIf="contractor.status === 'pending_approval'"
-                        (click)="approveContractor(contractor)">
+                <button
+                  mat-menu-item
+                  *ngIf="contractor.status === 'pending_approval'"
+                  (click)="approveContractor(contractor)"
+                >
                   <mat-icon>check_circle</mat-icon>
                   <span>Approve</span>
                 </button>
-                <button mat-menu-item 
-                        *ngIf="contractor.status === 'active'"
-                        (click)="suspendContractor(contractor)">
+                <button
+                  mat-menu-item
+                  *ngIf="contractor.status === 'active'"
+                  (click)="suspendContractor(contractor)"
+                >
                   <mat-icon>pause_circle</mat-icon>
                   <span>Suspend</span>
                 </button>
-                <button mat-menu-item 
-                        *ngIf="contractor.status === 'suspended'"
-                        (click)="activateContractor(contractor)">
+                <button
+                  mat-menu-item
+                  *ngIf="contractor.status === 'suspended'"
+                  (click)="activateContractor(contractor)"
+                >
                   <mat-icon>play_circle</mat-icon>
                   <span>Activate</span>
                 </button>
@@ -173,10 +182,12 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-              class="contractor-row"
-              [class.pending]="row.status === 'pending_approval'">
-          </tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            class="contractor-row"
+            [class.pending]="row.status === 'pending_approval'"
+          ></tr>
 
           <!-- No data row -->
           <tr class="mat-row no-data-row" *matNoDataRow>
@@ -194,117 +205,119 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
       </ng-template>
     </div>
   `,
-  styles: [`
-    .contractor-list-container {
-      padding: 24px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
+  styles: [
+    `
+      .contractor-list-container {
+        padding: 24px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
 
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
 
-    .header h1 {
-      margin: 0;
-      font-size: 28px;
-      font-weight: 500;
-    }
+      .header h1 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 500;
+      }
 
-    .filters {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
+      .filters {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+      }
 
-    .filters mat-form-field {
-      min-width: 200px;
-    }
+      .filters mat-form-field {
+        min-width: 200px;
+      }
 
-    .table-container {
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      overflow: hidden;
-    }
+      .table-container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
 
-    .contractor-table {
-      width: 100%;
-    }
+      .contractor-table {
+        width: 100%;
+      }
 
-    .company-info {
-      display: flex;
-      flex-direction: column;
-    }
+      .company-info {
+        display: flex;
+        flex-direction: column;
+      }
 
-    .company-info small {
-      color: #666;
-      margin-top: 2px;
-    }
+      .company-info small {
+        color: #666;
+        margin-top: 2px;
+      }
 
-    .contact-info {
-      display: flex;
-      flex-direction: column;
-    }
+      .contact-info {
+        display: flex;
+        flex-direction: column;
+      }
 
-    .contact-info small {
-      color: #666;
-      margin-top: 2px;
-    }
+      .contact-info small {
+        color: #666;
+        margin-top: 2px;
+      }
 
-    .teams-count {
-      font-weight: 500;
-      color: #1976d2;
-    }
+      .teams-count {
+        font-weight: 500;
+        color: #1976d2;
+      }
 
-    mat-chip {
-      font-size: 12px;
-    }
+      mat-chip {
+        font-size: 12px;
+      }
 
-    .status-pending_approval {
-      background-color: #fff3cd !important;
-      color: #856404 !important;
-    }
+      .status-pending_approval {
+        background-color: #fff3cd !important;
+        color: #856404 !important;
+      }
 
-    .status-active {
-      background-color: #d4edda !important;
-      color: #155724 !important;
-    }
+      .status-active {
+        background-color: #d4edda !important;
+        color: #155724 !important;
+      }
 
-    .status-suspended {
-      background-color: #f8d7da !important;
-      color: #721c24 !important;
-    }
+      .status-suspended {
+        background-color: #f8d7da !important;
+        color: #721c24 !important;
+      }
 
-    .status-blacklisted {
-      background-color: #d1d1d1 !important;
-      color: #333 !important;
-    }
+      .status-blacklisted {
+        background-color: #d1d1d1 !important;
+        color: #333 !important;
+      }
 
-    .contractor-row.pending {
-      background-color: #fffbf0;
-    }
+      .contractor-row.pending {
+        background-color: #fffbf0;
+      }
 
-    .no-data-row {
-      height: 200px;
-    }
+      .no-data-row {
+        height: 200px;
+      }
 
-    .no-data-row td {
-      text-align: center;
-      color: #666;
-    }
+      .no-data-row td {
+        text-align: center;
+        color: #666;
+      }
 
-    .loading-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 400px;
-    }
-  `]
+      .loading-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 400px;
+      }
+    `,
+  ],
 })
 export class ContractorListComponent implements OnInit {
   private contractorService = inject(ContractorService);
@@ -315,7 +328,7 @@ export class ContractorListComponent implements OnInit {
   loading = signal(true);
   searchTerm = '';
   statusFilter = '';
-  serviceFilter = '';
+  serviceFilter: ContractorService | '' = '';
   services = CONTRACTOR_SERVICES;
 
   displayedColumns = ['company', 'contact', 'services', 'teams', 'status', 'actions'];
@@ -326,23 +339,22 @@ export class ContractorListComponent implements OnInit {
     // Apply search filter
     if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(c => 
-        c.companyName.toLowerCase().includes(term) ||
-        c.registrationNumber?.toLowerCase().includes(term) ||
-        c.primaryContact.name.toLowerCase().includes(term)
+      filtered = filtered.filter(
+        (c) =>
+          c.companyName.toLowerCase().includes(term) ||
+          c.registrationNumber?.toLowerCase().includes(term) ||
+          c.primaryContact.name.toLowerCase().includes(term),
       );
     }
 
     // Apply status filter
     if (this.statusFilter) {
-      filtered = filtered.filter(c => c.status === this.statusFilter);
+      filtered = filtered.filter((c) => c.status === this.statusFilter);
     }
 
     // Apply service filter
     if (this.serviceFilter) {
-      filtered = filtered.filter(c => 
-        c.capabilities.services.includes(this.serviceFilter as any)
-      );
+      filtered = filtered.filter((c) => c.capabilities.services.includes(this.serviceFilter));
     }
 
     return filtered;
@@ -362,7 +374,7 @@ export class ContractorListComponent implements OnInit {
       error: (error) => {
         console.error('Error loading contractors:', error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -373,10 +385,10 @@ export class ContractorListComponent implements OnInit {
   openAddDialog() {
     const dialogRef = this.dialog.open(ContractorFormComponent, {
       width: '800px',
-      data: { mode: 'add' }
+      data: { mode: 'add' },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.loadContractors();
       }
@@ -386,10 +398,10 @@ export class ContractorListComponent implements OnInit {
   openEditDialog(contractor: Contractor) {
     const dialogRef = this.dialog.open(ContractorFormComponent, {
       width: '800px',
-      data: { mode: 'edit', contractor }
+      data: { mode: 'edit', contractor },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.loadContractors();
       }
@@ -403,7 +415,7 @@ export class ContractorListComponent implements OnInit {
   async approveContractor(contractor: Contractor) {
     // TODO: Get current user ID from auth service
     const currentUserId = 'current-user-id';
-    
+
     try {
       await this.contractorService.approveContractor(contractor.id!, currentUserId);
       this.loadContractors();
@@ -415,7 +427,7 @@ export class ContractorListComponent implements OnInit {
   async suspendContractor(contractor: Contractor) {
     // TODO: Show dialog to get suspension reason
     const reason = 'Suspended by admin';
-    
+
     try {
       await this.contractorService.updateContractorStatus(contractor.id!, 'suspended', reason);
       this.loadContractors();
@@ -434,11 +446,11 @@ export class ContractorListComponent implements OnInit {
   }
 
   getServiceLabel(service: string): string {
-    const found = this.services.find(s => s.value === service);
+    const found = this.services.find((s) => s.value === service);
     return found ? found.label : service;
   }
 
   formatStatus(status: ContractorStatus): string {
-    return status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    return status.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
   }
 }

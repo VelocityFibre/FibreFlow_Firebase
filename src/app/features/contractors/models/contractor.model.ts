@@ -2,12 +2,12 @@ import { Timestamp } from '@angular/fire/firestore';
 
 export interface Contractor {
   id?: string;
-  
+
   // Basic Information
   companyName: string;
   registrationNumber: string;
   vatNumber?: string;
-  
+
   // Contact Details
   primaryContact: {
     name: string;
@@ -15,7 +15,7 @@ export interface Contractor {
     phone: string;
     role: string;
   };
-  
+
   // Address
   physicalAddress: {
     street: string;
@@ -23,7 +23,7 @@ export interface Contractor {
     province: string;
     postalCode: string;
   };
-  
+
   // Capabilities
   capabilities: {
     services: ContractorService[];
@@ -31,7 +31,7 @@ export interface Contractor {
     equipment: string[];
     certifications: Certification[];
   };
-  
+
   // Compliance
   compliance: {
     insurancePolicy?: string;
@@ -41,7 +41,7 @@ export interface Contractor {
     bbbeeLevel?: number;
     bbbeeDocUrl?: string;
   };
-  
+
   // Financial
   financial: {
     bankName: string;
@@ -51,12 +51,12 @@ export interface Contractor {
     paymentTerms: number; // days
     creditLimit?: number;
   };
-  
+
   // Status
   status: ContractorStatus;
   onboardingStatus: OnboardingStatus;
   suspensionReason?: string;
-  
+
   // Metadata
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -65,24 +65,16 @@ export interface Contractor {
   approvedAt?: Timestamp;
 }
 
-export type ContractorService = 
-  | 'trenching' 
-  | 'pole_planting' 
-  | 'fiber_stringing' 
-  | 'splicing' 
+export type ContractorService =
+  | 'trenching'
+  | 'pole_planting'
+  | 'fiber_stringing'
+  | 'splicing'
   | 'home_connections';
 
-export type ContractorStatus = 
-  | 'pending_approval' 
-  | 'active' 
-  | 'suspended' 
-  | 'blacklisted';
+export type ContractorStatus = 'pending_approval' | 'active' | 'suspended' | 'blacklisted';
 
-export type OnboardingStatus = 
-  | 'documents_pending' 
-  | 'under_review' 
-  | 'approved' 
-  | 'rejected';
+export type OnboardingStatus = 'documents_pending' | 'under_review' | 'approved' | 'rejected';
 
 export interface Certification {
   name: string;
@@ -95,7 +87,7 @@ export interface ContractorTeam {
   id?: string;
   teamCode: string;
   teamName: string;
-  
+
   // Team Composition
   teamLead: {
     name: string;
@@ -103,21 +95,21 @@ export interface ContractorTeam {
     email?: string;
     employeeId?: string;
   };
-  
+
   members: TeamMember[];
-  
+
   // Capabilities
   primarySkill: ContractorService;
   secondarySkills: string[];
-  
+
   // Availability
   currentProjectId?: string;
   availableFrom?: Timestamp;
-  
+
   // Performance
   performanceScore: number;
   completedProjects: number;
-  
+
   isActive: boolean;
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -135,7 +127,7 @@ export const CONTRACTOR_SERVICES: { value: ContractorService; label: string }[] 
   { value: 'pole_planting', label: 'Pole Planting' },
   { value: 'fiber_stringing', label: 'Fiber Stringing' },
   { value: 'splicing', label: 'Splicing' },
-  { value: 'home_connections', label: 'Home Connections' }
+  { value: 'home_connections', label: 'Home Connections' },
 ];
 
 export const SOUTH_AFRICAN_PROVINCES = [
@@ -147,14 +139,7 @@ export const SOUTH_AFRICAN_PROVINCES = [
   'Mpumalanga',
   'North West',
   'Northern Cape',
-  'Western Cape'
+  'Western Cape',
 ];
 
-export const BANKS = [
-  'ABSA',
-  'Capitec Bank',
-  'FNB',
-  'Investec',
-  'Nedbank',
-  'Standard Bank'
-];
+export const BANKS = ['ABSA', 'Capitec Bank', 'FNB', 'Investec', 'Nedbank', 'Standard Bank'];

@@ -18,10 +18,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Observable } from 'rxjs';
 
 import { StockService } from '../../services/stock.service';
-import { StockItem, StockCategory, StockItemStatus, UnitOfMeasure, StockItemExport } from '../../models/stock-item.model';
+import { StockItem, StockCategory, StockItemExport } from '../../models/stock-item.model';
 import { StockFormComponent } from '../stock-form/stock-form.component';
 import { StockImportDialogComponent } from '../stock-import-dialog/stock-import-dialog.component';
 
@@ -47,13 +49,14 @@ import { StockImportDialogComponent } from '../stock-import-dialog/stock-import-
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatSnackBarModule,
-    MatDividerModule
+    MatDividerModule,
+    MatButtonToggleModule,
+    ScrollingModule,
   ],
   template: `
-    <div class="stock-container">
-      <!-- Header -->
+    <div class="stock-list-container">
       <div class="header">
-        <h1>Stock Items</h1>
+        <h1>Stock Management</h1>
         <div class="header-actions">
           <button mat-raised-button color="primary" (click)="openAddDialog()">
             <mat-icon>add</mat-icon>
@@ -70,68 +73,63 @@ import { StockImportDialogComponent } from '../stock-import-dialog/stock-import-
         </div>
       </div>
 
-      <!-- Filters -->
-      <mat-card class="filters-card">
-        <div class="filters">
-          <mat-form-field appearance="outline">
-            <mat-label>Search</mat-label>
-            <input matInput [(ngModel)]="searchTerm" (keyup)="applyFilter()" placeholder="Search by name, code, or description">
-            <mat-icon matSuffix>search</mat-icon>
-          </mat-form-field>
+      <div class="filters">
+        <mat-form-field appearance="outline">
+          <mat-label>Search</mat-label>
+          <input
+            matInput
+            [(ngModel)]="searchTerm"
+            (keyup)="applyFilter()"
+            placeholder="Search by name, code, or description"
+          />
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Category</mat-label>
-            <mat-select [(ngModel)]="selectedCategory" (selectionChange)="applyFilter()">
-              <mat-option value="">All Categories</mat-option>
-              <mat-option *ngFor="let category of categories" [value]="category.value">
-                {{ category.label }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Category</mat-label>
+          <mat-select [(ngModel)]="selectedCategory" (selectionChange)="applyFilter()">
+            <mat-option value="">All Categories</mat-option>
+            <mat-option *ngFor="let category of categories" [value]="category.value">
+              {{ category.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Status</mat-label>
-            <mat-select [(ngModel)]="selectedStatus" (selectionChange)="applyFilter()">
-              <mat-option value="">All Status</mat-option>
-              <mat-option value="active">Active</mat-option>
-              <mat-option value="inactive">Inactive</mat-option>
-              <mat-option value="out_of_stock">Out of Stock</mat-option>
-              <mat-option value="discontinued">Discontinued</mat-option>
-            </mat-select>
-          </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select [(ngModel)]="selectedStatus" (selectionChange)="applyFilter()">
+            <mat-option value="">All Status</mat-option>
+            <mat-option value="active">Active</mat-option>
+            <mat-option value="inactive">Inactive</mat-option>
+            <mat-option value="out_of_stock">Out of Stock</mat-option>
+            <mat-option value="discontinued">Discontinued</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-          <button mat-button (click)="clearFilters()" *ngIf="hasActiveFilters()">
-            <mat-icon>clear</mat-icon>
-            Clear Filters
-          </button>
+        <button mat-button (click)="clearFilters()" *ngIf="hasActiveFilters()">
+          <mat-icon>clear</mat-icon>
+          Clear Filters
+        </button>
+      </div>
+
+      <div class="table-container" *ngIf="!loading; else loadingTemplate">
+        <!-- Toggle for virtual scrolling when there are many items -->
+        <div class="view-controls" *ngIf="totalItems > virtualScrollThreshold">
+          <mat-button-toggle-group [(value)]="useVirtualScrolling" (change)="toggleView()">
+            <mat-button-toggle [value]="false">
+              <mat-icon>table_view</mat-icon>
+              Table View
+            </mat-button-toggle>
+            <mat-button-toggle [value]="true">
+              <mat-icon>view_list</mat-icon>
+              Virtual List
+            </mat-button-toggle>
+          </mat-button-toggle-group>
         </div>
 
-        <!-- Quick Stats -->
-        <div class="quick-stats">
-          <div class="stat">
-            <span class="stat-value">{{ totalItems }}</span>
-            <span class="stat-label">Total Items</span>
-          </div>
-          <div class="stat">
-            <span class="stat-value">{{ lowStockItems }}</span>
-            <span class="stat-label">Low Stock</span>
-          </div>
-          <div class="stat">
-            <span class="stat-value">{{ outOfStockItems }}</span>
-            <span class="stat-label">Out of Stock</span>
-          </div>
-          <div class="stat">
-            <span class="stat-value">{{ formatCurrency(totalValue) }}</span>
-            <span class="stat-label">Total Value</span>
-          </div>
-        </div>
-      </mat-card>
-
-      <!-- Table -->
-      <mat-card class="table-card">
-        <div class="table-container" *ngIf="!loading; else loadingTemplate">
+        <!-- Traditional table view -->
+        <div class="table-view" *ngIf="!useVirtualScrolling">
           <table mat-table [dataSource]="dataSource" matSort>
-            
             <!-- Item Code Column -->
             <ng-container matColumnDef="itemCode">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Item Code</th>
@@ -166,8 +164,10 @@ import { StockImportDialogComponent } from '../stock-import-dialog/stock-import-
                 <div class="stock-levels">
                   <div class="stock-row">
                     <span class="stock-label">Current:</span>
-                    <span [class.low-stock]="item.currentStock <= item.reorderLevel"
-                          [class.out-of-stock]="item.currentStock === 0">
+                    <span
+                      [class.low-stock]="item.currentStock <= item.reorderLevel"
+                      [class.out-of-stock]="item.currentStock === 0"
+                    >
                       {{ item.currentStock }} {{ item.unitOfMeasure }}
                     </span>
                   </div>
@@ -177,7 +177,9 @@ import { StockImportDialogComponent } from '../stock-import-dialog/stock-import-
                   </div>
                   <div class="stock-row" *ngIf="item.allocatedStock > 0">
                     <span class="stock-label">Allocated:</span>
-                    <span class="allocated">{{ item.allocatedStock }} {{ item.unitOfMeasure }}</span>
+                    <span class="allocated"
+                      >{{ item.allocatedStock }} {{ item.unitOfMeasure }}</span
+                    >
                   </div>
                 </div>
               </td>
@@ -247,193 +249,294 @@ import { StockImportDialogComponent } from '../stock-import-dialog/stock-import-
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-                [class.low-stock-row]="row.currentStock <= row.reorderLevel"
-                [class.out-of-stock-row]="row.currentStock === 0"></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns"
+              [class.low-stock-row]="row.currentStock <= row.reorderLevel"
+              [class.out-of-stock-row]="row.currentStock === 0"
+            ></tr>
           </table>
 
-          <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" 
-                         showFirstLastButtons
-                         aria-label="Select page of stock items">
+          <mat-paginator
+            [pageSizeOptions]="[10, 25, 50, 100]"
+            showFirstLastButtons
+            aria-label="Select page of stock items"
+          >
           </mat-paginator>
         </div>
 
-        <ng-template #loadingTemplate>
-          <div class="loading-container">
-            <mat-spinner></mat-spinner>
-            <p>Loading stock items...</p>
-          </div>
-        </ng-template>
-      </mat-card>
+        <!-- Virtual scroll view -->
+        <div class="virtual-scroll-view" *ngIf="useVirtualScrolling">
+          <cdk-virtual-scroll-viewport itemSize="72" class="stock-viewport">
+            <div
+              *cdkVirtualFor="let item of filteredItems; trackBy: trackByFn"
+              class="virtual-stock-item"
+            >
+              <div class="stock-item-row">
+                <span class="item-code">{{ item.itemCode }}</span>
+                <span class="item-name">{{ item.name }}</span>
+                <span class="item-category">{{ getCategoryLabel(item.category) }}</span>
+                <span class="item-stock">{{ item.currentStock }} {{ item.unitOfMeasure }}</span>
+                <span class="item-cost">{{ formatCurrency(item.standardCost) }}</span>
+                <div class="item-actions">
+                  <button mat-icon-button (click)="editItem(item)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </cdk-virtual-scroll-viewport>
+        </div>
+      </div>
+
+      <ng-template #loadingTemplate>
+        <div class="loading">
+          <mat-spinner></mat-spinner>
+          <p>Loading stock items...</p>
+        </div>
+      </ng-template>
     </div>
   `,
-  styles: [`
-    .stock-container {
-      padding: 24px;
-    }
+  styles: [
+    `
+      .stock-list-container {
+        padding: 24px;
+        max-width: 1400px;
+        margin: 0 auto;
+        background-color: var(--mat-sys-background);
+      }
 
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
 
-    .header h1 {
-      margin: 0;
-      font-size: 32px;
-      font-weight: 500;
-    }
+      h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 500;
+        color: var(--mat-sys-on-surface);
+      }
 
-    .header-actions {
-      display: flex;
-      gap: 12px;
-    }
+      .header-actions {
+        display: flex;
+        gap: 12px;
+      }
 
-    .filters-card {
-      margin-bottom: 24px;
-    }
+      .filters {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+      }
 
-    .filters {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-    }
+      .filters mat-form-field {
+        min-width: 200px;
+      }
 
-    .filters mat-form-field {
-      flex: 1;
-      min-width: 200px;
-    }
+      .loading {
+        display: flex;
+        justify-content: center;
+        padding: 48px;
+      }
 
-    .quick-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 16px;
-      padding-top: 16px;
-      border-top: 1px solid #e0e0e0;
-    }
+      .table-container {
+        background: var(--mat-sys-surface);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--mat-sys-elevation-1);
+        border: 1px solid var(--mat-sys-outline-variant);
+      }
 
-    .stat {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
+      table {
+        width: 100%;
+      }
 
-    .stat-value {
-      font-size: 24px;
-      font-weight: 600;
-      color: #1976d2;
-    }
+      .item-name {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
 
-    .stat-label {
-      font-size: 14px;
-      color: #666;
-      margin-top: 4px;
-    }
+      .item-name small {
+        color: #666;
+        font-size: 12px;
+      }
 
-    .table-container {
-      overflow: auto;
-    }
+      .stock-levels {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 13px;
+      }
 
-    table {
-      width: 100%;
-    }
+      .stock-row {
+        display: flex;
+        gap: 8px;
+      }
 
-    .item-name {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+      .stock-label {
+        color: #666;
+        min-width: 65px;
+      }
 
-    .item-name small {
-      color: #666;
-      font-size: 12px;
-    }
+      .low-stock {
+        color: #f57c00;
+        font-weight: 500;
+      }
 
-    .stock-levels {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 13px;
-    }
+      .out-of-stock {
+        color: #d32f2f;
+        font-weight: 500;
+      }
 
-    .stock-row {
-      display: flex;
-      gap: 8px;
-    }
+      .allocated {
+        color: #1976d2;
+      }
 
-    .stock-label {
-      color: #666;
-      min-width: 65px;
-    }
+      .no-location {
+        color: #999;
+      }
 
-    .low-stock {
-      color: #f57c00;
-      font-weight: 500;
-    }
+      mat-chip {
+        font-size: 12px !important;
+        height: 24px !important;
+        line-height: 24px !important;
+      }
 
-    .out-of-stock {
-      color: #d32f2f;
-      font-weight: 500;
-    }
+      .category-fibre_cable {
+        background-color: #e3f2fd !important;
+        color: #1565c0 !important;
+      }
+      .category-poles {
+        background-color: #f3e5f5 !important;
+        color: #6a1b9a !important;
+      }
+      .category-equipment {
+        background-color: #e8f5e9 !important;
+        color: #2e7d32 !important;
+      }
+      .category-tools {
+        background-color: #fff3e0 !important;
+        color: #e65100 !important;
+      }
+      .category-consumables {
+        background-color: #fce4ec !important;
+        color: #c2185b !important;
+      }
+      .category-network_equipment {
+        background-color: #e0f2f1 !important;
+        color: #00695c !important;
+      }
+      .category-safety_equipment {
+        background-color: #ffebee !important;
+        color: #c62828 !important;
+      }
+      .category-other {
+        background-color: #f5f5f5 !important;
+        color: #616161 !important;
+      }
 
-    .allocated {
-      color: #1976d2;
-    }
+      .status-active {
+        background-color: #c8e6c9 !important;
+        color: #1b5e20 !important;
+      }
+      .status-inactive {
+        background-color: #ffecb3 !important;
+        color: #e65100 !important;
+      }
+      .status-out_of_stock {
+        background-color: #ffcdd2 !important;
+        color: #b71c1c !important;
+      }
+      .status-discontinued {
+        background-color: #e0e0e0 !important;
+        color: #616161 !important;
+      }
 
-    .no-location {
-      color: #999;
-    }
+      .low-stock-row {
+        background-color: #fff8e1;
+      }
 
-    mat-chip {
-      font-size: 12px !important;
-      height: 24px !important;
-      line-height: 24px !important;
-    }
+      .out-of-stock-row {
+        background-color: #ffebee;
+      }
 
-    .category-fibre_cable { background-color: #e3f2fd !important; color: #1565c0 !important; }
-    .category-poles { background-color: #f3e5f5 !important; color: #6a1b9a !important; }
-    .category-equipment { background-color: #e8f5e9 !important; color: #2e7d32 !important; }
-    .category-tools { background-color: #fff3e0 !important; color: #e65100 !important; }
-    .category-consumables { background-color: #fce4ec !important; color: #c2185b !important; }
-    .category-network_equipment { background-color: #e0f2f1 !important; color: #00695c !important; }
-    .category-safety_equipment { background-color: #ffebee !important; color: #c62828 !important; }
-    .category-other { background-color: #f5f5f5 !important; color: #616161 !important; }
+      .delete-action {
+        color: #d32f2f;
+      }
 
-    .status-active { background-color: #c8e6c9 !important; color: #1b5e20 !important; }
-    .status-inactive { background-color: #ffecb3 !important; color: #e65100 !important; }
-    .status-out_of_stock { background-color: #ffcdd2 !important; color: #b71c1c !important; }
-    .status-discontinued { background-color: #e0e0e0 !important; color: #616161 !important; }
+      .loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+      }
 
-    .low-stock-row {
-      background-color: #fff8e1;
-    }
+      .loading p {
+        color: var(--mat-sys-on-surface-variant);
+        margin: 0;
+      }
 
-    .out-of-stock-row {
-      background-color: #ffebee;
-    }
+      // Virtual scrolling styles
+      .view-controls {
+        padding: 16px;
+        border-bottom: 1px solid var(--mat-sys-outline-variant);
+        background: var(--mat-sys-surface-variant);
+      }
 
-    .delete-action {
-      color: #d32f2f;
-    }
+      .stock-viewport {
+        height: 600px;
+        width: 100%;
+      }
 
-    .loading-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 48px;
-      gap: 16px;
-    }
+      .virtual-stock-item {
+        padding: 8px 16px;
+        border-bottom: 1px solid var(--mat-sys-outline-variant);
+      }
 
-    .loading-container p {
-      color: #666;
-      margin: 0;
-    }
-  `]
+      .stock-item-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 8px 0;
+      }
+
+      .item-code {
+        min-width: 100px;
+        font-weight: 500;
+        color: var(--mat-sys-primary);
+      }
+
+      .item-name {
+        flex: 1;
+        min-width: 200px;
+      }
+
+      .item-category {
+        min-width: 120px;
+        font-size: 12px;
+      }
+
+      .item-stock {
+        min-width: 100px;
+        text-align: right;
+      }
+
+      .item-cost {
+        min-width: 100px;
+        text-align: right;
+        font-weight: 500;
+      }
+
+      .item-actions {
+        min-width: 60px;
+      }
+    `,
+  ],
 })
 export class StockListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -445,17 +548,31 @@ export class StockListComponent implements OnInit {
 
   stockItems$!: Observable<StockItem[]>;
   dataSource!: MatTableDataSource<StockItem>;
-  displayedColumns: string[] = ['itemCode', 'name', 'category', 'stockLevels', 'cost', 'location', 'status', 'actions'];
-  
+  displayedColumns: string[] = [
+    'itemCode',
+    'name',
+    'category',
+    'stockLevels',
+    'cost',
+    'location',
+    'status',
+    'actions',
+  ];
+
   loading = true;
   searchTerm = '';
   selectedCategory = '';
   selectedStatus = '';
-  
+
   totalItems = 0;
   lowStockItems = 0;
   outOfStockItems = 0;
   totalValue = 0;
+
+  // Virtual scrolling properties
+  useVirtualScrolling = false;
+  virtualScrollThreshold = 50;
+  filteredItems: StockItem[] = [];
 
   categories = [
     { value: StockCategory.FIBRE_CABLE, label: 'Fibre Cable' },
@@ -466,7 +583,7 @@ export class StockListComponent implements OnInit {
     { value: StockCategory.HOME_CONNECTIONS, label: 'Home Connections' },
     { value: StockCategory.NETWORK_EQUIPMENT, label: 'Network Equipment' },
     { value: StockCategory.SAFETY_EQUIPMENT, label: 'Safety Equipment' },
-    { value: StockCategory.OTHER, label: 'Other' }
+    { value: StockCategory.OTHER, label: 'Other' },
   ];
 
   ngOnInit() {
@@ -476,29 +593,38 @@ export class StockListComponent implements OnInit {
   loadStockItems() {
     this.loading = true;
     this.stockItems$ = this.stockService.getStockItems();
-    
-    this.stockItems$.subscribe(items => {
+
+    this.stockItems$.subscribe((items) => {
       this.dataSource = new MatTableDataSource(items);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      
+
       // Set custom filter predicate
-      this.dataSource.filterPredicate = (data: StockItem, filter: string) => {
+      this.dataSource.filterPredicate = (data: StockItem, _filter: string) => {
         const searchStr = (
-          data.itemCode + 
-          data.name + 
-          (data.description || '') + 
-          data.category + 
+          data.itemCode +
+          data.name +
+          (data.description || '') +
+          data.category +
           (data.warehouseLocation || '')
         ).toLowerCase();
-        
+
         const matchesSearch = searchStr.includes(this.searchTerm.toLowerCase());
         const matchesCategory = !this.selectedCategory || data.category === this.selectedCategory;
         const matchesStatus = !this.selectedStatus || data.status === this.selectedStatus;
-        
+
         return matchesSearch && matchesCategory && matchesStatus;
       };
-      
+
+      // Initialize filtered items for virtual scrolling
+      this.filteredItems = items;
+
+      // Determine if virtual scrolling should be enabled automatically
+      if (items.length > this.virtualScrollThreshold && !this.useVirtualScrolling) {
+        // Auto-enable virtual scrolling for large datasets
+        this.useVirtualScrolling = items.length > 100;
+      }
+
       this.calculateStats(items);
       this.loading = false;
       this.applyFilter();
@@ -507,17 +633,20 @@ export class StockListComponent implements OnInit {
 
   calculateStats(items: StockItem[]) {
     this.totalItems = items.length;
-    this.lowStockItems = items.filter(item => 
-      item.currentStock > 0 && item.currentStock <= item.reorderLevel
+    this.lowStockItems = items.filter(
+      (item) => item.currentStock > 0 && item.currentStock <= item.reorderLevel,
     ).length;
-    this.outOfStockItems = items.filter(item => item.currentStock === 0).length;
-    this.totalValue = items.reduce((sum, item) => 
-      sum + (item.currentStock * item.standardCost), 0
-    );
+    this.outOfStockItems = items.filter((item) => item.currentStock === 0).length;
+    this.totalValue = items.reduce((sum, item) => sum + item.currentStock * item.standardCost, 0);
   }
 
   applyFilter() {
     this.dataSource.filter = 'filter';
+
+    // Also filter items for virtual scrolling
+    if (this.dataSource.filteredData) {
+      this.filteredItems = this.dataSource.filteredData;
+    }
   }
 
   hasActiveFilters(): boolean {
@@ -531,33 +660,44 @@ export class StockListComponent implements OnInit {
     this.applyFilter();
   }
 
+  // TrackBy function for virtual scrolling performance
+  trackByFn(index: number, item: StockItem): string {
+    return item.id || index.toString();
+  }
+
+  // Toggle between table and virtual scroll view
+  toggleView() {
+    // View toggle is handled by the template binding
+    // This method can be used for additional logic if needed
+  }
+
   getCategoryLabel(category: string): string {
-    const cat = this.categories.find(c => c.value === category);
+    const cat = this.categories.find((c) => c.value === category);
     return cat ? cat.label : category;
   }
 
   getStatusLabel(status: string): string {
-    return status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    return status.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
   }
 
   formatCurrency(value: number): string {
     return new Intl.NumberFormat('en-ZA', {
       style: 'currency',
-      currency: 'ZAR'
+      currency: 'ZAR',
     }).format(value);
   }
 
   openAddDialog() {
     const dialogRef = this.dialog.open(StockFormComponent, {
       width: '600px',
-      data: { mode: 'add' }
+      data: { mode: 'add' },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.loadStockItems();
         this.snackBar.open('Stock item added successfully', 'Close', {
-          duration: 3000
+          duration: 3000,
         });
       }
     });
@@ -566,14 +706,14 @@ export class StockListComponent implements OnInit {
   editItem(item: StockItem) {
     const dialogRef = this.dialog.open(StockFormComponent, {
       width: '600px',
-      data: { mode: 'edit', item }
+      data: { mode: 'edit', item },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.loadStockItems();
         this.snackBar.open('Stock item updated successfully', 'Close', {
-          duration: 3000
+          duration: 3000,
         });
       }
     });
@@ -604,12 +744,12 @@ export class StockListComponent implements OnInit {
       try {
         await this.stockService.deleteStockItem(item.id!);
         this.snackBar.open('Stock item deleted successfully', 'Close', {
-          duration: 3000
+          duration: 3000,
         });
         this.loadStockItems();
       } catch (error) {
         this.snackBar.open('Error deleting stock item', 'Close', {
-          duration: 3000
+          duration: 3000,
         });
       }
     }
@@ -617,22 +757,22 @@ export class StockListComponent implements OnInit {
 
   openImportDialog() {
     const dialogRef = this.dialog.open(StockImportDialogComponent, {
-      width: '800px'
+      width: '800px',
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.loadStockItems();
         this.snackBar.open(`Imported ${result.success} items successfully`, 'Close', {
-          duration: 3000
+          duration: 3000,
         });
       }
     });
   }
 
   exportItems() {
-    this.stockService.exportStockItems().subscribe(items => {
-      const exportData: StockItemExport[] = items.map(item => ({
+    this.stockService.exportStockItems().subscribe((items) => {
+      const exportData: StockItemExport[] = items.map((item) => ({
         id: item.id!,
         itemCode: item.itemCode,
         name: item.name,
@@ -648,7 +788,7 @@ export class StockListComponent implements OnInit {
         standardCost: item.standardCost,
         warehouseLocation: item.warehouseLocation || '',
         status: item.status,
-        lastUpdated: item.updatedAt.toDate().toISOString()
+        lastUpdated: item.updatedAt.toDate().toISOString(),
       }));
 
       this.downloadCSV(exportData);
@@ -659,14 +799,14 @@ export class StockListComponent implements OnInit {
     const headers = Object.keys(data[0]);
     const csvContent = [
       headers.join(','),
-      ...data.map(row => 
-        headers.map(header => {
-          const value = row[header as keyof StockItemExport];
-          return typeof value === 'string' && value.includes(',') 
-            ? `"${value}"` 
-            : value;
-        }).join(',')
-      )
+      ...data.map((row) =>
+        headers
+          .map((header) => {
+            const value = row[header as keyof StockItemExport];
+            return typeof value === 'string' && value.includes(',') ? `"${value}"` : value;
+          })
+          .join(','),
+      ),
     ].join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv' });

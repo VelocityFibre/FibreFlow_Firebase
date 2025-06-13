@@ -16,10 +16,12 @@ import { MatCardModule } from '@angular/material/card';
       </mat-card>
     </div>
   `,
-  styles: [`
-    .admin-dashboard {
-      padding: 24px;
-    }
-  `]
+  styles: [
+    `
+      .admin-dashboard {
+        padding: 24px;
+      }
+    `,
+  ],
 })
 export class AdminDashboardComponent {}

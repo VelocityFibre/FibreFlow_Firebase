@@ -20,7 +20,12 @@ export interface BOQItem {
   updatedBy?: string;
 }
 
-export type BOQStatus = 'Planned' | 'Partially Allocated' | 'Fully Allocated' | 'Ordered' | 'Delivered';
+export type BOQStatus =
+  | 'Planned'
+  | 'Partially Allocated'
+  | 'Fully Allocated'
+  | 'Ordered'
+  | 'Delivered';
 
 export interface BOQSummary {
   projectId: string;

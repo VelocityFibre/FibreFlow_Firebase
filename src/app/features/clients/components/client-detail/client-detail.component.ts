@@ -8,13 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-client-detail',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule
-  ],
+  imports: [CommonModule, RouterModule, MatCardModule, MatButtonModule, MatIconModule],
   template: `
     <div class="client-detail-container">
       <div class="detail-header">
@@ -36,28 +30,30 @@ import { MatIconModule } from '@angular/material/icon';
       </mat-card>
     </div>
   `,
-  styles: [`
-    .client-detail-container {
-      padding: 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+  styles: [
+    `
+      .client-detail-container {
+        padding: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
 
-    .detail-header {
-      margin-bottom: 32px;
-    }
+      .detail-header {
+        margin-bottom: 32px;
+      }
 
-    .detail-title {
-      font-size: 32px;
-      font-weight: 500;
-      margin: 0;
-      color: var(--mat-sys-on-surface);
-    }
+      .detail-title {
+        font-size: 32px;
+        font-weight: 500;
+        margin: 0;
+        color: var(--mat-sys-on-surface);
+      }
 
-    .detail-subtitle {
-      color: var(--mat-sys-on-surface-variant);
-      margin-top: 4px;
-    }
-  `]
+      .detail-subtitle {
+        color: var(--mat-sys-on-surface-variant);
+        margin-top: 4px;
+      }
+    `,
+  ],
 })
 export class ClientDetailComponent {}

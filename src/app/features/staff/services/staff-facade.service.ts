@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { StaffService } from './staff.service';
 import { StaffMember, StaffFilter, StaffGroup, AvailabilityStatus } from '../models';
@@ -9,13 +9,13 @@ import { StaffMember, StaffFilter, StaffGroup, AvailabilityStatus } from '../mod
  * All internal services remain private to the module.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StaffFacadeService {
-  constructor(private staffService: StaffService) {}
+  private staffService = inject(StaffService);
 
   // Public API methods - these are the "endpoints" for other modules
-  
+
   /**
    * Get list of staff members with optional filtering
    */

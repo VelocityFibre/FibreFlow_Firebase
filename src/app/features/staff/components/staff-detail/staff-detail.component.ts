@@ -15,7 +15,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    MatTabsModule
+    MatTabsModule,
   ],
   template: `
     <div class="staff-detail-container">
@@ -55,16 +55,18 @@ import { MatTabsModule } from '@angular/material/tabs';
       </mat-card>
     </div>
   `,
-  styles: [`
-    .staff-detail-container {
-      padding: 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    
-    mat-tab-group {
-      margin-top: 24px;
-    }
-  `]
+  styles: [
+    `
+      .staff-detail-container {
+        padding: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      mat-tab-group {
+        margin-top: 24px;
+      }
+    `,
+  ],
 })
 export class StaffDetailComponent {}

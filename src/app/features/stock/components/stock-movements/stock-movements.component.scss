@@ -21,31 +21,31 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   mat-icon {
     font-size: 28px;
     width: 28px;
     height: 28px;
   }
-  
+
   &.incoming {
-    background-color: #e8f5e9;
-    color: #2e7d32;
+    background-color: rgb(var(--ff-success) / 0.15);
+    color: rgb(var(--ff-success));
   }
-  
+
   &.outgoing {
-    background-color: #ffebee;
-    color: #c62828;
+    background-color: rgb(var(--ff-destructive) / 0.15);
+    color: rgb(var(--ff-destructive));
   }
-  
+
   &.net {
-    background-color: #e3f2fd;
-    color: #1565c0;
+    background-color: rgb(var(--ff-info) / 0.15);
+    color: rgb(var(--ff-info));
   }
-  
+
   &.value {
-    background-color: #fce4ec;
-    color: #c2185b;
+    background-color: rgb(var(--ff-primary) / 0.15);
+    color: rgb(var(--ff-primary));
   }
 }
 
@@ -56,21 +56,21 @@
 .card-value {
   font-size: 28px;
   font-weight: 600;
-  color: #1f2937;
+  color: rgb(var(--ff-foreground));
   line-height: 1;
-  
+
   &.positive {
-    color: #2e7d32;
+    color: rgb(var(--ff-success));
   }
-  
+
   &.negative {
-    color: #c62828;
+    color: rgb(var(--ff-destructive));
   }
 }
 
 .card-label {
   font-size: 14px;
-  color: #6b7280;
+  color: rgb(var(--ff-muted-foreground));
   margin-top: 4px;
 }
 
@@ -83,13 +83,13 @@
   gap: 16px;
   flex-wrap: wrap;
   align-items: flex-start;
-  
+
   mat-form-field {
     flex: 1;
     min-width: 200px;
     max-width: 250px;
   }
-  
+
   .clear-filters-btn {
     margin-top: 8px;
   }
@@ -105,24 +105,24 @@
 
 table {
   width: 100%;
-  
+
   th {
     font-weight: 600;
-    color: #374151;
-    background-color: #f9fafb;
+    color: rgb(var(--ff-foreground));
+    background-color: rgb(var(--ff-muted) / 0.3);
   }
-  
+
   td {
-    color: #1f2937;
+    color: rgb(var(--ff-foreground));
   }
-  
+
   .chip-icon {
     font-size: 16px;
     width: 16px;
     height: 16px;
     margin-right: 4px;
   }
-  
+
   mat-chip {
     font-size: 12px;
     height: 24px;
@@ -130,14 +130,14 @@ table {
     display: inline-flex;
     align-items: center;
   }
-  
+
   .incoming-qty {
-    color: #2e7d32;
+    color: rgb(var(--ff-success));
     font-weight: 600;
   }
-  
+
   .outgoing-qty {
-    color: #c62828;
+    color: rgb(var(--ff-destructive));
     font-weight: 600;
   }
 }
@@ -152,20 +152,20 @@ table {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  
+
   mat-icon {
     font-size: 64px;
     width: 64px;
     height: 64px;
-    color: #e5e7eb;
+    color: rgb(var(--ff-border));
     margin-bottom: 16px;
   }
-  
+
   p {
     margin: 0;
-    color: #6b7280;
+    color: rgb(var(--ff-muted-foreground));
     font-size: 16px;
-    
+
     &.empty-hint {
       font-size: 14px;
       margin-top: 8px;

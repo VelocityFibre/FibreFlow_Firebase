@@ -1,12 +1,13 @@
-import { inject } from '@angular/core';
-import { Router } from '@angular/router';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// import { inject } from '@angular/core';
+// import { Router } from '@angular/router';
 import { CanActivateFn } from '@angular/router';
-import { map, take } from 'rxjs/operators';
-import { AuthService } from '../services/auth.service';
+// import { map, take } from 'rxjs/operators';
+// import { AuthService } from '../services/auth.service';
 
-export const authGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
+export const authGuard: CanActivateFn = (_route, _state) => {
+  // const authService = inject(AuthService);
+  // const router = inject(Router);
 
   // DEV MODE: Always allow access
   console.log('🔓 Auth Guard - DEV MODE: Access granted (always logged in)');

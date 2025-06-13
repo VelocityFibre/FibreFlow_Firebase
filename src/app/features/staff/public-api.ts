@@ -7,11 +7,7 @@
 export { StaffFacadeService } from './services/staff-facade.service';
 
 // Public models/interfaces that other modules need
-export { 
-  StaffMember,
-  StaffGroup,
-  AvailabilityStatus 
-} from './models/staff.model';
+export { StaffMember, StaffGroup, AvailabilityStatus } from './models/staff.model';
 
 // Note: We do NOT export:
 // - Internal services (StaffService, etc.)

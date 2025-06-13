@@ -1,6 +1,6 @@
-import { Component, Inject, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -32,11 +32,11 @@ interface DialogData {
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatListModule
+    MatListModule,
   ],
   template: `
     <h2 mat-dialog-title>Assign Staff to Phase</h2>
-    
+
     <mat-dialog-content>
       <div class="phase-info">
         <h3>{{ data.phase.name }}</h3>
@@ -46,9 +46,11 @@ interface DialogData {
       <div class="current-assignment" *ngIf="data.phase.assignedTo">
         <h4>Currently Assigned To:</h4>
         <div class="assignee-info" *ngIf="data.phase.assignedToDetails">
-          <img [src]="data.phase.assignedToDetails.avatar || '/placeholder-user.jpg'" 
-               [alt]="data.phase.assignedToDetails.name"
-               class="assignee-avatar">
+          <img
+            [src]="data.phase.assignedToDetails.avatar || '/placeholder-user.jpg'"
+            [alt]="data.phase.assignedToDetails.name"
+            class="assignee-avatar"
+          />
           <div>
             <div class="assignee-name">{{ data.phase.assignedToDetails.name }}</div>
             <div class="assignee-role">{{ data.phase.assignedToDetails.role }}</div>
@@ -65,13 +67,18 @@ interface DialogData {
             </mat-option>
             <mat-option *ngFor="let staff of staff$ | async" [value]="staff.id">
               <div class="staff-option">
-                <img [src]="staff.photoUrl || '/placeholder-user.jpg'" 
-                     [alt]="staff.name"
-                     class="staff-avatar">
+                <img
+                  [src]="staff.photoUrl || '/placeholder-user.jpg'"
+                  [alt]="staff.name"
+                  class="staff-avatar"
+                />
                 <div class="staff-info">
                   <span class="staff-name">{{ staff.name }}</span>
                   <span class="staff-role">{{ staff.primaryGroup }}</span>
-                  <span class="staff-status" [class.available]="staff.availability.status === 'available'">
+                  <span
+                    class="staff-status"
+                    [class.available]="staff.availability.status === 'available'"
+                  >
                     {{ staff.availability.status }}
                   </span>
                 </div>
@@ -100,7 +107,9 @@ interface DialogData {
             </mat-list-item>
             <mat-list-item>
               <mat-icon matListItemIcon>work</mat-icon>
-              <span matListItemTitle>Current Tasks: {{ selectedStaff.activity.tasksInProgress || 0 }}</span>
+              <span matListItemTitle
+                >Current Tasks: {{ selectedStaff.activity.tasksInProgress || 0 }}</span
+              >
             </mat-list-item>
           </mat-list>
         </div>
@@ -109,187 +118,187 @@ interface DialogData {
 
     <mat-dialog-actions align="end">
       <button mat-button (click)="cancel()">Cancel</button>
-      <button mat-raised-button color="primary" 
-              (click)="assign()" 
-              [disabled]="saving">
+      <button mat-raised-button color="primary" (click)="assign()" [disabled]="saving">
         <mat-spinner diameter="20" *ngIf="saving"></mat-spinner>
         <span *ngIf="!saving">{{ assignForm.value.staffId ? 'Assign' : 'Unassign' }}</span>
       </button>
     </mat-dialog-actions>
   `,
-  styles: [`
-    mat-dialog-content {
-      min-width: 400px;
-      max-width: 600px;
-    }
-
-    .phase-info {
-      margin-bottom: 24px;
-      padding: 16px;
-      background-color: #f5f5f5;
-      border-radius: 8px;
-    }
-
-    .phase-info h3 {
-      margin: 0 0 8px 0;
-      font-size: 18px;
-      font-weight: 500;
-    }
-
-    .phase-info p {
-      margin: 0;
-      color: #666;
-      font-size: 14px;
-    }
-
-    .current-assignment {
-      margin-bottom: 24px;
-    }
-
-    .current-assignment h4 {
-      margin: 0 0 12px 0;
-      font-size: 14px;
-      font-weight: 500;
-      color: #666;
-    }
-
-    .assignee-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      background-color: #e3f2fd;
-      border-radius: 8px;
-    }
-
-    .assignee-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .assignee-name {
-      font-weight: 500;
-      font-size: 14px;
-    }
-
-    .assignee-role {
-      font-size: 12px;
-      color: #666;
-    }
-
-    .assign-form {
-      margin-bottom: 24px;
-    }
-
-    mat-form-field {
-      width: 100%;
-    }
-
-    .unassign-option {
-      font-style: italic;
-      color: #666;
-    }
-
-    .staff-option {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 8px 0;
-    }
-
-    .staff-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .staff-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .staff-name {
-      font-weight: 500;
-      font-size: 14px;
-    }
-
-    .staff-role {
-      font-size: 12px;
-      color: #666;
-    }
-
-    .staff-status {
-      font-size: 11px;
-      color: #999;
-      
-      &.available {
-        color: #4caf50;
+  styles: [
+    `
+      mat-dialog-content {
+        min-width: 400px;
+        max-width: 600px;
       }
-    }
 
-    .selected-staff-details {
-      background-color: #f9f9f9;
-      border-radius: 8px;
-      padding: 16px;
-    }
+      .phase-info {
+        margin-bottom: 24px;
+        padding: 16px;
+        background-color: #f5f5f5;
+        border-radius: 8px;
+      }
 
-    .selected-staff-details h4 {
-      margin: 0 0 12px 0;
-      font-size: 14px;
-      font-weight: 500;
-      color: #666;
-    }
+      .phase-info h3 {
+        margin: 0 0 8px 0;
+        font-size: 18px;
+        font-weight: 500;
+      }
 
-    mat-list {
-      padding: 0;
-    }
+      .phase-info p {
+        margin: 0;
+        color: #666;
+        font-size: 14px;
+      }
 
-    mat-list-item {
-      height: auto !important;
-      padding: 8px 0 !important;
-    }
+      .current-assignment {
+        margin-bottom: 24px;
+      }
 
-    mat-dialog-actions {
-      padding: 16px 24px;
-    }
+      .current-assignment h4 {
+        margin: 0 0 12px 0;
+        font-size: 14px;
+        font-weight: 500;
+        color: #666;
+      }
 
-    mat-spinner {
-      display: inline-block;
-      margin-right: 8px;
-    }
-  `]
+      .assignee-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        background-color: #e3f2fd;
+        border-radius: 8px;
+      }
+
+      .assignee-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .assignee-name {
+        font-weight: 500;
+        font-size: 14px;
+      }
+
+      .assignee-role {
+        font-size: 12px;
+        color: #666;
+      }
+
+      .assign-form {
+        margin-bottom: 24px;
+      }
+
+      mat-form-field {
+        width: 100%;
+      }
+
+      .unassign-option {
+        font-style: italic;
+        color: #666;
+      }
+
+      .staff-option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 0;
+      }
+
+      .staff-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .staff-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .staff-name {
+        font-weight: 500;
+        font-size: 14px;
+      }
+
+      .staff-role {
+        font-size: 12px;
+        color: #666;
+      }
+
+      .staff-status {
+        font-size: 11px;
+        color: #999;
+
+        &.available {
+          color: #4caf50;
+        }
+      }
+
+      .selected-staff-details {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 16px;
+      }
+
+      .selected-staff-details h4 {
+        margin: 0 0 12px 0;
+        font-size: 14px;
+        font-weight: 500;
+        color: #666;
+      }
+
+      mat-list {
+        padding: 0;
+      }
+
+      mat-list-item {
+        height: auto !important;
+        padding: 8px 0 !important;
+      }
+
+      mat-dialog-actions {
+        padding: 16px 24px;
+      }
+
+      mat-spinner {
+        display: inline-block;
+        margin-right: 8px;
+      }
+    `,
+  ],
 })
 export class PhaseAssignDialogComponent implements OnInit {
   private fb = inject(FormBuilder);
   private phaseService = inject(PhaseService);
   private staffService = inject(StaffService);
-  
+
   assignForm!: FormGroup;
   staff$!: Observable<StaffMember[]>;
   selectedStaff: StaffMember | null = null;
   saving = false;
 
-  constructor(
-    public dialogRef: MatDialogRef<PhaseAssignDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) {}
+  public dialogRef = inject(MatDialogRef<PhaseAssignDialogComponent>);
+  public data = inject(MAT_DIALOG_DATA) as DialogData;
+
+  constructor() {}
 
   ngOnInit() {
     this.assignForm = this.fb.group({
-      staffId: [this.data.phase.assignedTo || null]
+      staffId: [this.data.phase.assignedTo || null],
     });
 
     // Load available staff
     this.staff$ = this.staffService.getStaff();
 
     // Watch for staff selection changes
-    this.assignForm.get('staffId')?.valueChanges.subscribe(staffId => {
+    this.assignForm.get('staffId')?.valueChanges.subscribe((staffId) => {
       if (staffId) {
-        this.staffService.getStaffById(staffId).subscribe(staff => {
+        this.staffService.getStaffById(staffId).subscribe((staff) => {
           this.selectedStaff = staff || null;
         });
       } else {
@@ -299,7 +308,7 @@ export class PhaseAssignDialogComponent implements OnInit {
 
     // Load initially selected staff
     if (this.data.phase.assignedTo) {
-      this.staffService.getStaffById(this.data.phase.assignedTo).subscribe(staff => {
+      this.staffService.getStaffById(this.data.phase.assignedTo).subscribe((staff) => {
         this.selectedStaff = staff || null;
       });
     }
@@ -328,22 +337,14 @@ export class PhaseAssignDialogComponent implements OnInit {
     const staffId = this.assignForm.value.staffId;
 
     try {
-      console.log('Assigning phase:', {
-        projectId: this.data.projectId,
-        phaseId: this.data.phase.id,
-        staffId: staffId
-      });
-      
-      await this.phaseService.assignPhase(
-        this.data.projectId, 
-        this.data.phase.id, 
-        staffId
-      );
-      
+      // Assigning phase with the provided data
+
+      await this.phaseService.assignPhase(this.data.projectId, this.data.phase.id, staffId);
+
       this.dialogRef.close(true);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error assigning phase:', error);
-      const errorMessage = error?.message || 'Failed to assign phase. Please try again.';
+      const errorMessage = (error as Error)?.message || 'Failed to assign phase. Please try again.';
       alert(errorMessage);
     } finally {
       this.saving = false;

@@ -5,29 +5,29 @@ export interface Supplier {
   companyName: string;
   registrationNumber?: string;
   taxNumber?: string;
-  
+
   primaryEmail: string;
   primaryPhone: string;
   website?: string;
-  
+
   address: Address;
-  
+
   categories: SupplierCategory[];
   products: string[];
-  
+
   serviceAreas: ServiceArea[];
-  
+
   paymentTerms: PaymentTerms;
   creditLimit?: number;
   currentBalance?: number;
-  
+
   status: SupplierStatus;
   verificationStatus: VerificationStatus;
-  
+
   createdAt: Timestamp | Date;
   updatedAt: Timestamp | Date;
   createdBy: string;
-  
+
   portalEnabled: boolean;
   lastLogin?: Timestamp | Date;
 }
@@ -64,20 +64,20 @@ export enum SupplierCategory {
   HVAC = 'hvac',
   NETWORKING = 'networking',
   FIBRE_OPTIC = 'fibre_optic',
-  GENERAL_CONTRACTOR = 'general_contractor'
+  GENERAL_CONTRACTOR = 'general_contractor',
 }
 
 export enum SupplierStatus {
   ACTIVE = 'active',
   INACTIVE = 'inactive',
   SUSPENDED = 'suspended',
-  PENDING = 'pending'
+  PENDING = 'pending',
 }
 
 export enum VerificationStatus {
   UNVERIFIED = 'unverified',
   PENDING = 'pending',
-  VERIFIED = 'verified'
+  VERIFIED = 'verified',
 }
 
 export interface SupplierFilter {

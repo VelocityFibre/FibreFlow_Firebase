@@ -13,7 +13,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, BehaviorSubject, combineLatest, map, switchMap } from 'rxjs';
+import { Observable, BehaviorSubject, switchMap } from 'rxjs';
 import { DailyProgress, DailyProgressFilter } from '../../models/daily-progress.model';
 import { DailyProgressService } from '../../services/daily-progress.service';
 import { ProjectService } from '../../../../core/services/project.service';
@@ -36,12 +36,12 @@ import { DateFormatService } from '../../../../core/services/date-format.service
     MatDatepickerModule,
     MatNativeDateModule,
     MatInputModule,
-    FormsModule
+    FormsModule,
   ],
   template: `
-    <div class="daily-progress-list">
-      <div class="list-header">
-        <h2>Daily Progress Reports</h2>
+    <div class="daily-progress-list-container">
+      <div class="header">
+        <h1>Daily Progress Reports</h1>
         <button mat-raised-button color="primary" (click)="createNew()">
           <mat-icon>add</mat-icon>
           New Progress Report
@@ -49,27 +49,27 @@ import { DateFormatService } from '../../../../core/services/date-format.service
       </div>
 
       <div class="filters">
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
           <mat-label>Project</mat-label>
           <mat-select [(ngModel)]="filter.projectId" (selectionChange)="applyFilter()">
             <mat-option value="">All Projects</mat-option>
             <mat-option *ngFor="let project of projects$ | async" [value]="project.id">
-              {{project.name}}
+              {{ project.name }}
             </mat-option>
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
           <mat-label>Staff Member</mat-label>
           <mat-select [(ngModel)]="filter.staffId" (selectionChange)="applyFilter()">
             <mat-option value="">All Staff</mat-option>
             <mat-option *ngFor="let staff of staff$ | async" [value]="staff.id">
-              {{staff.name}}
+              {{ staff.name }}
             </mat-option>
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
           <mat-label>Status</mat-label>
           <mat-select [(ngModel)]="filter.status" (selectionChange)="applyFilter()">
             <mat-option value="">All Statuses</mat-option>
@@ -79,16 +79,26 @@ import { DateFormatService } from '../../../../core/services/date-format.service
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
           <mat-label>Date From</mat-label>
-          <input matInput [matDatepicker]="fromPicker" [(ngModel)]="filter.dateFrom" (dateChange)="applyFilter()">
+          <input
+            matInput
+            [matDatepicker]="fromPicker"
+            [(ngModel)]="filter.dateFrom"
+            (dateChange)="applyFilter()"
+          />
           <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
           <mat-datepicker #fromPicker></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
           <mat-label>Date To</mat-label>
-          <input matInput [matDatepicker]="toPicker" [(ngModel)]="filter.dateTo" (dateChange)="applyFilter()">
+          <input
+            matInput
+            [matDatepicker]="toPicker"
+            [(ngModel)]="filter.dateTo"
+            (dateChange)="applyFilter()"
+          />
           <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
           <mat-datepicker #toPicker></mat-datepicker>
         </mat-form-field>
@@ -100,39 +110,39 @@ import { DateFormatService } from '../../../../core/services/date-format.service
       </div>
 
       <div class="table-container" *ngIf="progressReports$ | async as reports; else loading">
-        <table mat-table [dataSource]="reports" class="mat-elevation-z2">
+        <table mat-table [dataSource]="reports">
           <ng-container matColumnDef="date">
             <th mat-header-cell *matHeaderCellDef>Date</th>
             <td mat-cell *matCellDef="let report">
-              {{formatDate(report.date)}}
+              {{ formatDate(report.date) }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="project">
             <th mat-header-cell *matHeaderCellDef>Project</th>
             <td mat-cell *matCellDef="let report">
-              {{report.projectName || 'N/A'}}
+              {{ report.projectName || 'N/A' }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="phase">
             <th mat-header-cell *matHeaderCellDef>Phase</th>
             <td mat-cell *matCellDef="let report">
-              {{report.phaseName || '-'}}
+              {{ report.phaseName || '-' }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="description">
             <th mat-header-cell *matHeaderCellDef>Description</th>
             <td mat-cell *matCellDef="let report" class="description-cell">
-              {{report.description}}
+              {{ report.description }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="hours">
             <th mat-header-cell *matHeaderCellDef>Hours</th>
             <td mat-cell *matCellDef="let report">
-              {{report.hoursWorked}}
+              {{ report.hoursWorked }}
             </td>
           </ng-container>
 
@@ -141,7 +151,7 @@ import { DateFormatService } from '../../../../core/services/date-format.service
             <td mat-cell *matCellDef="let report">
               <mat-chip-set>
                 <mat-chip *ngFor="let name of report.staffNames">
-                  {{name}}
+                  {{ name }}
                 </mat-chip>
               </mat-chip-set>
             </td>
@@ -151,7 +161,7 @@ import { DateFormatService } from '../../../../core/services/date-format.service
             <th mat-header-cell *matHeaderCellDef>Status</th>
             <td mat-cell *matCellDef="let report">
               <mat-chip [color]="getStatusColor(report.status)" selected>
-                {{report.status | titlecase}}
+                {{ report.status | titlecase }}
               </mat-chip>
             </td>
           </ng-container>
@@ -162,27 +172,40 @@ import { DateFormatService } from '../../../../core/services/date-format.service
               <button mat-icon-button [matTooltip]="'View Details'" (click)="viewDetails(report)">
                 <mat-icon>visibility</mat-icon>
               </button>
-              <button mat-icon-button [matTooltip]="'Edit'" (click)="edit(report)" 
-                      *ngIf="report.status === 'draft'">
+              <button
+                mat-icon-button
+                [matTooltip]="'Edit'"
+                (click)="edit(report)"
+                *ngIf="report.status === 'draft'"
+              >
                 <mat-icon>edit</mat-icon>
               </button>
-              <button mat-icon-button [matTooltip]="'Submit for Approval'" 
-                      (click)="submitForApproval(report)"
-                      *ngIf="report.status === 'draft'">
+              <button
+                mat-icon-button
+                [matTooltip]="'Submit for Approval'"
+                (click)="submitForApproval(report)"
+                *ngIf="report.status === 'draft'"
+              >
                 <mat-icon>send</mat-icon>
               </button>
-              <button mat-icon-button [matTooltip]="'Approve'" 
-                      (click)="approve(report)"
-                      *ngIf="report.status === 'submitted' && canApprove">
+              <button
+                mat-icon-button
+                [matTooltip]="'Approve'"
+                (click)="approve(report)"
+                *ngIf="report.status === 'submitted' && canApprove"
+              >
                 <mat-icon>check_circle</mat-icon>
               </button>
             </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-              [class.has-issues]="row.issuesEncountered"
-              (click)="viewDetails(row)"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            [class.has-issues]="row.issuesEncountered"
+            (click)="viewDetails(row)"
+          ></tr>
         </table>
 
         <div class="no-data" *ngIf="reports.length === 0">
@@ -198,88 +221,105 @@ import { DateFormatService } from '../../../../core/services/date-format.service
       </ng-template>
     </div>
   `,
-  styles: [`
-    .daily-progress-list {
-      padding: 24px;
-    }
+  styles: [
+    `
+      .daily-progress-list-container {
+        padding: 24px;
+        max-width: 1400px;
+        margin: 0 auto;
+        background-color: var(--mat-sys-background);
+      }
 
-    .list-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
 
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 24px;
-      padding: 16px;
-      background-color: #f5f5f5;
-      border-radius: 4px;
-    }
+      h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 500;
+        color: var(--mat-sys-on-surface);
+      }
 
-    .filters mat-form-field {
-      min-width: 200px;
-    }
+      .filters {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+      }
 
-    .table-container {
-      overflow-x: auto;
-    }
+      .filters mat-form-field {
+        min-width: 200px;
+      }
 
-    table {
-      width: 100%;
-    }
+      .table-container {
+        background: var(--mat-sys-surface);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--mat-sys-elevation-1);
+        border: 1px solid var(--mat-sys-outline-variant);
+      }
 
-    .description-cell {
-      max-width: 300px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+      table {
+        width: 100%;
+      }
 
-    .mat-row {
-      cursor: pointer;
-    }
+      .description-cell {
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
 
-    .mat-row:hover {
-      background-color: #f5f5f5;
-    }
+      .mat-row {
+        cursor: pointer;
+      }
 
-    .mat-row.has-issues {
-      border-left: 4px solid #ff9800;
-    }
+      .mat-row:hover {
+        background-color: #f5f5f5;
+      }
 
-    .no-data {
-      text-align: center;
-      padding: 48px;
-      color: #666;
-    }
+      .mat-row.has-issues {
+        border-left: 4px solid #ff9800;
+      }
 
-    .no-data mat-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
-      color: #ccc;
-    }
+      .no-data {
+        text-align: center;
+        padding: 48px;
+        color: var(--mat-sys-on-surface-variant);
+      }
 
-    .loading-container {
-      display: flex;
-      justify-content: center;
-      padding: 48px;
-    }
+      .no-data mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        color: var(--mat-sys-outline);
+      }
 
-    mat-chip-set {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
+      .loading-container {
+        display: flex;
+        justify-content: center;
+        padding: 48px;
+      }
 
-    mat-chip {
-      font-size: 12px;
-    }
-  `]
+      mat-chip-set {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+
+      mat-chip {
+        font-size: 12px;
+      }
+
+      .mat-mdc-row:hover {
+        background-color: var(--mat-sys-surface-variant);
+      }
+    `,
+  ],
 })
 export class DailyProgressListComponent implements OnInit {
   private dailyProgressService = inject(DailyProgressService);
@@ -290,17 +330,26 @@ export class DailyProgressListComponent implements OnInit {
 
   filter: DailyProgressFilter = {};
   private filterSubject = new BehaviorSubject<DailyProgressFilter>({});
-  
+
   progressReports$: Observable<DailyProgress[]>;
   projects$ = this.projectService.getProjects();
   staff$ = this.staffService.getStaff();
-  
-  displayedColumns = ['date', 'project', 'phase', 'description', 'hours', 'staff', 'status', 'actions'];
+
+  displayedColumns = [
+    'date',
+    'project',
+    'phase',
+    'description',
+    'hours',
+    'staff',
+    'status',
+    'actions',
+  ];
   canApprove = false; // This should be based on user role
 
   constructor() {
     this.progressReports$ = this.filterSubject.pipe(
-      switchMap(filter => this.dailyProgressService.getAll(filter))
+      switchMap((filter) => this.dailyProgressService.getAll(filter)),
     );
   }
 
@@ -357,7 +406,7 @@ export class DailyProgressListComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error submitting progress report:', error);
-        }
+        },
       });
     }
   }
@@ -370,7 +419,7 @@ export class DailyProgressListComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error approving progress report:', error);
-        }
+        },
       });
     }
   }

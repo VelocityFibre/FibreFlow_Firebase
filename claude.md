@@ -1,63 +1,59 @@
-markdown# FibreFlow V2 - Project Context for Claude
+# FibreFlow - Project Context for Claude
 
 ## Project Overview
-FibreFlow V2 is an enterprise fiber optic project management system built with Angular and Firebase. This is a complete rebuild focusing on performance, offline capability, and real-time collaboration.
+FibreFlow is an enterprise fiber optic project management system built with Angular and Firebase. This system manages fiber optic installations, stock management, contractors, and project workflows.
 
-## 🌍 Localization Settings
-- **Location**: South Africa
+## 🌍 Localization Settings (South Africa)
 - **Timezone**: Africa/Johannesburg (UTC+2)
-- **Currency**: South African Rand (ZAR)
-- **Currency Symbol**: R
-- **Date Format**: DD/MM/YYYY
-- **Number Format**: Space as thousands separator (e.g., 1 000 000)
+- **Currency**: ZAR (R symbol)
+- **Date Format**: DD/MM/YYYY (displayed as "13 Jun 2025")
+- **Number Format**: Space separator (1 000 000)
+- **Locale Code**: en-ZA
 
-## 🎨 Theme System & Design Guidelines
-- **Design Philosophy**: Apple-inspired minimalism with function-first approach
-- **Theme System**: CSS variables with runtime switching (light, dark, vf, fibreflow)
-- **Component Architecture**: Modular, single-responsibility components
-- **Reference Docs**:
-  - `docs/theme-strategy.md` - Complete theme system documentation
-  - `docs/angular-theme-implementation.md` - Angular-specific implementation
-  - `docs/project-card-component-architecture.md` - Modular component patterns
-  - `docs/ai-theme-collaboration-guide.md` - AI prompting guidelines
+## 🎨 Theme System (CENTRALIZED & COMPLETE)
+- **Design**: Apple-inspired minimalism with full consistency
+- **Themes**: light, dark, vf, fibreflow (all components now theme-aware)
+- **Architecture**: Centralized theme system with component mixins
+- **Status**: ✅ ALL components now use theme variables (no hard-coded colors)
 - **Key Files**:
-  - `src/styles/_variables.scss` - Theme CSS variables
-  - `src/styles/_theme-functions.scss` - Theme/color functions (ff-rgb, ff-rgba, ff-shadow)
-  - `src/styles/_spacing.scss` - Spacing/typography functions (ff-spacing, ff-font-size, ff-font-weight)
-  - `src/styles/_utilities.scss` - Pre-built utility classes
+  - `src/styles/_variables.scss` - Theme variables (4 themes defined)
+  - `src/styles/_theme-functions.scss` - Color functions (ff-rgb, ff-rgba, ff-var)
+  - `src/styles/_theme-mixins.scss` - Component mixins & typography
+  - `src/styles/_component-theming.scss` - Easy import for all components
+  - `src/styles/_spacing.scss` - Spacing/typography functions
+  - `src/app/core/services/theme.service.ts` - Runtime theme switching
 
 ## Tech Stack
+> 📊 **See CODEBASE_REVIEW.md for comprehensive tech stack evaluation & industry-specific recommendations**
 
 ### Frontend
-- **Framework**: Angular 17+ with standalone components
-- **UI Library**: Angular Material + CDK
-- **State Management**: RxJS + Angular Signals
-- **PWA**: @angular/pwa for offline support ✨
-- **Styling**: SCSS with Material theming
-- **Firebase Integration**: AngularFire
-- **Build Tool**: Angular CLI
-- **Bundle Analysis**: webpack-bundle-analyzer ✨
+- Angular 18+ (standalone components)
+- Angular Material + CDK
+- RxJS + Signals
+- SCSS with Material theming
+- AngularFire
+- Logo: 110% scale in sidebar
+
+### State Management
+- **Primary**: Firestore real-time listeners (for shared data)
+- **Local State**: Angular Signals (for UI state)
+- **Caching**: RxJS shareReplay + service patterns
+- **No NgRx/Akita needed** - Firebase provides state sync
 
 ### Backend  
-- **Platform**: Firebase (100% serverless)
-- **Functions**: Node.js 20 + TypeScript
-- **API Framework**: Express.js or Hono
-- **Rate Limiting**: firebase-functions-rate-limiter ✨
-- **Security**: Firebase App Check enabled ✨
-- **Database**: Firestore
-- **Auth**: Firebase Auth
-- **Storage**: Firebase Storage
-- **Real-time**: Firestore listeners
-- **Hosting**: Firebase Hosting
+- Firebase (serverless)
+- Firestore + Auth + Storage
+- Hosting: https://fibreflow-73daf.web.app
+- Project ID: fibreflow-73daf
 
-### DevOps & Quality
-- **Pre-commit Hooks**: Husky + lint-staged ✨
-- **Code Quality**: ESLint + Prettier
-- **Testing**: Karma + Jasmine (unit), Cypress (E2E)
-- **CI/CD**: GitHub Actions
-- **Monitoring**: Firebase Performance & Analytics
+### DevOps
+- ESLint + Prettier (configured)
+- Pre-deploy scripts with quality checks
+- Global error handling
+- TypeScript strict mode
 
 ## Project Structure
+```
 fibreflow-v2/
 ├── src/
 │   ├── app/
@@ -76,287 +72,237 @@ fibreflow-v2/
 │   ├── environments/           # Firebase config
 │   └── manifest.json          # PWA manifest ✨
 ├── functions/                  # Cloud Functions
-│   └── src/
-│       ├── api/               # REST endpoints
-│       ├── triggers/          # Firestore triggers
-│       ├── scheduled/         # Cron jobs
-│       └── middleware/        # Rate limiting ✨
-├── .husky/                    # Git hooks ✨
 ├── firebase.json              # Firebase config
 ├── firestore.rules           # Security rules
 └── storage.rules             # Storage rules
+```
 
-## 🎨 CRITICAL THEME SYSTEM UPDATE (2025-01-12)
+## 📁 File & Folder Organization Standards
 
-**IMPORTANT**: The theme system has been refactored. Key changes:
-1. `_functions.scss` has been REMOVED and split into:
-   - `_theme-functions.scss` - For color/theme functions (ff-rgb, ff-rgba, ff-shadow)
-   - `_spacing.scss` - For spacing/typography functions (ff-spacing, ff-font-size, ff-font-weight)
+### Feature Module Structure
+Each feature module should follow this consistent structure:
+```
+features/
+└── [feature-name]/
+    ├── components/           # Feature-specific components
+    ├── pages/               # Routable page components
+    ├── services/            # Feature services
+    ├── models/              # Feature models/interfaces
+    ├── guards/              # Feature-specific guards (if any)
+    ├── pipes/               # Feature-specific pipes (if any)
+    ├── directives/          # Feature-specific directives (if any)
+    └── [feature].routes.ts  # Feature routing configuration
+```
 
-2. ALL function calls MUST use namespace prefixes:
-   ```scss
-   @use 'path/to/theme-functions' as theme;
-   @use 'path/to/spacing' as spacing;
-   
-   // Then use:
-   color: theme.ff-rgb(foreground);  // NOT ff-rgb(foreground)
-   padding: spacing.ff-spacing(xl);  // NOT ff-spacing(xl)
-   ```
+### Organization Rules
+1. **NO Empty Folders**: Remove empty folders immediately or add `.gitkeep` if placeholder needed
+2. **Pages vs Components**: 
+   - `pages/` = Routable components (accessed via routes)
+   - `components/` = Reusable components used within pages
+3. **Core Module**: Only framework-wide singletons (auth, error handling, etc.)
+4. **Documentation**: All docs in root `/docs` folder, NOT mixed with source code
+5. **Test Files**: Keep `.spec.ts` files alongside their components
+6. **Model Files**: Always use `.model.ts` suffix for consistency
 
-3. Material theme configuration uses custom palettes, NOT mat.$azure-palette
+### Naming Conventions
+- **Files**: `kebab-case.type.ts` (e.g., `user-profile.model.ts`)
+- **Components**: `component-name.component.ts/html/scss/spec.ts`
+- **Services**: `service-name.service.ts`
+- **Models**: `model-name.model.ts`
+- **Guards**: `guard-name.guard.ts`
 
-## Critical Rules (NEVER VIOLATE)
+### Import Organization
+Always organize imports in this order:
+1. Angular core imports
+2. Angular common/forms/router imports  
+3. Angular Material imports
+4. Third-party library imports
+5. Core module imports
+6. Feature module imports
+7. Relative imports (./...)
 
-### Theme Implementation Rules
+### Keep It Tidy
+- Run `npm run lint` before commits
+- Remove unused imports immediately
+- Delete commented-out code
+- Keep consistent file structure across all features
+- Review empty folders regularly
+
+### Angular 18+ Alignment
+- **NO NgModules**: All features must use standalone components
+- **Flat Structure**: Avoid deep nesting unless logically grouped
+- **Lazy Loading**: Use loadComponent() in routes, not loadChildren()
+- **Inject Pattern**: Always use inject() not constructor injection
+- **Signals**: Prefer signals over BehaviorSubject for state
+
+### Special Cases
+- **Barrel Exports**: Optional - use `index.ts` for public APIs when needed
+- **Config Files**: Feature-specific config as `[feature].config.ts` when needed
+- **Empty Folders**: Create folders ONLY when you have content to add
+- **Test Files**: Always create `.spec.ts` alongside components
+
+## 🚨 CRITICAL: Theme System Usage
+
+### Theme Implementation (ALWAYS USE THIS)
 ```scss
-// ✅ CORRECT - Use theme functions with proper namespaces
-@use '../path/to/styles/theme-functions' as theme;
-@use '../path/to/styles/spacing' as spacing;
+// ✅ BEST - Use component-theming for everything
+@use '../../../styles/component-theming' as theme;
 
-background: theme.ff-rgb(background);
-padding: spacing.ff-spacing(xl);
-font-size: spacing.ff-font-size(2xl);
-
-// ❌ WRONG - Missing namespaces or hardcoded values
-background: ff-rgb(background);  // NO! Missing namespace
-background: #FFFFFF;             // NO! Hardcoded color
-padding: 32px;                   // NO! Hardcoded spacing
-font-size: 24px;                 // NO! Hardcoded size
+.my-component {
+  @include theme.card-theme();         // Use mixins for patterns
+  color: theme.ff-rgb(foreground);     // Direct color access
+  padding: theme.ff-spacing(xl);       // Spacing functions
+}
 ```
 
-### Component Architecture Rules
-```typescript
-// ✅ CORRECT - Modular components
-@Component({
-  selector: 'ff-project-card',
-  standalone: true,
-  imports: [CardHeaderComponent, ProjectStatsComponent],
-  template: `
-    <ff-card-header [title]="project.title" />
-    <ff-project-stats [stats]="projectStats" />
-  `
-})
+**MUST use namespace prefixes:**
+- `theme.ff-rgb()` NOT `ff-rgb()`
+- `theme.ff-spacing()` NOT `ff-spacing()`
 
-// ❌ WRONG - Monolithic components with everything in one file
+## Key Implementation Patterns
+
+### 1. Date Handling (ALWAYS use mat-datepicker)
+```html
+<mat-form-field>
+  <mat-label>Select Date</mat-label>
+  <input matInput [matDatepicker]="picker" formControlName="date">
+  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
 ```
 
-### Angular Patterns
+### 2. Currency Formatting (ZAR)
 ```typescript
-// ✅ CORRECT - Angular 17+ standalone
-import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
+formatCurrency(value: number): string {
+  return new Intl.NumberFormat('en-ZA', {
+    style: 'currency',
+    currency: 'ZAR'
+  }).format(value);
+}
+```
 
+### 3. Angular Patterns (ALWAYS standalone)
+```typescript
 @Component({
   selector: 'app-example',
   standalone: true,
   imports: [CommonModule, MatCardModule],
   template: `...`
 })
+export class ExampleComponent {
+  private service = inject(MyService); // Always use inject()
+}
+```
 
-// ❌ WRONG - Old module-based approach
-import { NgModule } from '@angular/core'; // NO!
-Firebase Integration
-typescript// ✅ CORRECT - AngularFire
+### 4. Firebase Integration (ALWAYS AngularFire with Real-time)
+```typescript
+// ✅ PREFERRED - Real-time listeners for shared data
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 const firestore = inject(Firestore);
-projects$ = collectionData(collection(firestore, 'projects'));
+projects$ = collectionData(collection(firestore, 'projects'), { idField: 'id' });
 
-// ❌ WRONG - Direct Firebase SDK in components
-import { getFirestore } from 'firebase/firestore'; // NO!
-Material Design
-typescript// ✅ CORRECT - Use Angular Material
-import { MatButtonModule } from '@angular/material/button';
-<button mat-raised-button color="primary">Save</button>
+// ✅ SIGNALS - For local UI state
+private selectedProjectId = signal<string | null>(null);
+selectedProject = computed(() => 
+  this.projects().find(p => p.id === this.selectedProjectId())
+);
 
-// ❌ WRONG - Custom button components
-<custom-button>Save</custom-button> // NO!
-Security Implementation
-typescript// ✅ CORRECT - Rate limiting in Functions
-import * as functions from 'firebase-functions';
-import { FirebaseFunctionsRateLimiter } from 'firebase-functions-rate-limiter';
-
-const limiter = FirebaseFunctionsRateLimiter.withRealtimeDbBackend({
-  name: 'api_limiter',
-  maxCalls: 100,
-  periodSeconds: 60,
-});
-
-// ❌ WRONG - No rate limiting
-export const api = functions.https.onRequest(app); // NO!
-Core Features
-1. Workflow System
-
-Fixed 5-Phase Structure: Planning → Design → Implementation → Testing → Deployment
-Parallel execution support
-Complex task dependencies
-Auto-assignment based on roles
-Critical path analysis
-
-2. User Roles
-
-Admin: Full system access
-Project Manager: Manage projects, assign tasks
-Team Lead: Manage team tasks
-Field Technician: View/update assigned tasks only
-Client: View project progress only
-
-3. Key Views
-
-/dashboard - Role-based dashboard
-/projects - Project list and management
-/projects/:id/workflow - Workflow designer
-/tasks - Task board (Kanban/Gantt)
-/reports - Analytics and reporting
-/offline - Offline queue status ✨
-
-4. Real-time Features
-
-Live project updates
-Task status changes
-Team notifications
-Offline queue sync
-Background sync for field workers ✨
-
-PWA Configuration
-
-Service worker for offline support
-App manifest for installability
-Cache strategies:
-
-Cache First: Static assets
-Network First: API calls with fallback
-Background Sync: Offline actions
-
-
-Push notifications for critical updates
-
-Security Requirements
-
-Row-level security in Firestore
-Role-based access control (RBAC)
-Firebase App Check enabled ✨
-Content Security Policy headers ✨
-Rate limiting on all API endpoints ✨
-Environment variables for sensitive data
-Secure Headers middleware
-
-Implementation Guidelines
-
-### Currency Formatting Pattern
-```typescript
-// Currency formatting for South African Rand
-formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('en-ZA', {
-    style: 'currency',
-    currency: 'ZAR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-  }).format(amount);
-}
-
-// Date formatting for South Africa
-formatDate(date: Date): string {
-  return new Intl.DateTimeFormat('en-ZA').format(date);
-}
+// ❌ AVOID - One-time reads (unless truly needed)
+const snapshot = await getDocs(collection(firestore, 'projects'));
 ```
 
-### Theme Service Pattern
-```typescript
-// Theme service for runtime switching
-@Injectable({ providedIn: 'root' })
-export class ThemeService {
-  private theme = signal<Theme>('light');
-  
-  setTheme(theme: Theme) {
-    this.theme.set(theme);
-    document.documentElement.setAttribute('data-theme', theme);
-  }
-}
-```
+## Common Issues & Solutions
 
-### Component Styling Pattern
+### 1. Circular Dependencies (NG0200 Error)
+- **Problem**: Services injecting each other in a circular pattern
+- **Prevention**: Use event bus pattern or facade services
+- **Detection**: Look for NG0200 errors in browser console
+
+### 2. Missing Phases in Projects
+- **Solution**: Added initialization button for existing projects
+- **Check**: `project.phases?.length === 0`
+
+## 📐 Page Layout Conventions
+
+### Standard List Page Structure
 ```scss
-// Component SCSS using theme system with proper @use
-@use '../../../styles/theme-functions' as theme;
-@use '../../../styles/spacing' as spacing;
+.[feature]-list-container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
 
-.my-component {
-  padding: spacing.ff-spacing(xl);
-  background: theme.ff-rgb(card);
-  border-radius: var(--ff-radius);
-  
-  &__title {
-    font-size: spacing.ff-font-size(2xl);
-    color: theme.ff-rgb(foreground);
-  }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.table-container {
+  background: var(--mat-sys-surface);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--mat-sys-elevation-1);
+  border: 1px solid var(--mat-sys-outline-variant);
 }
 ```
 
-Service Architecture
-typescript// All services should be providedIn: 'root'
-@Injectable({ providedIn: 'root' })
-export class ProjectService {
-  private firestore = inject(Firestore);
-  private auth = inject(Auth);
-  
-  // Use observables for real-time data
-  projects$ = collectionData(
-    collection(this.firestore, 'projects'),
-    { idField: 'id' }
-  );
-}
-Component Patterns
-typescript// Use standalone components with signals
-@Component({
-  selector: 'app-project-list',
-  standalone: true,
-  imports: [CommonModule, MatCardModule],
-  template: `
-    <mat-card *ngFor="let project of projects$ | async">
-      {{ project.name }}
-    </mat-card>
-  `
-})
-export class ProjectListComponent {
-  private projectService = inject(ProjectService);
-  projects$ = this.projectService.projects$;
-}
-Offline Support Pattern
-typescript// Service worker registration
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/ngsw-worker.js');
-}
+## 🚨 CODE QUALITY RULES
 
-// Offline queue service
-@Injectable({ providedIn: 'root' })
-export class OfflineQueueService {
-  private queue = signal<Action[]>([]);
-  
-  async sync() {
-    if (navigator.onLine) {
-      // Process queue
-    }
-  }
-}
-Firestore Schema
-typescriptinterface Project {
+### TypeScript Rules
+✅ **No `any` types** - Use proper types or `unknown`
+✅ **Remove unused imports** - Clean as you code
+✅ **Add return types** - All functions need explicit returns
+✅ **Prefix unused params** - Use `_paramName`
+
+### Angular Rules  
+✅ **Use inject()** - No constructor injection
+✅ **Standalone components** - No NgModules
+✅ **No empty methods** - Remove or add meaningful code
+
+### Pre-Deploy Checklist
+```bash
+npm run check:fix  # Auto-fix what's possible
+npm run lint       # Check remaining issues
+npm run build      # Verify build works
+npm run deploy     # Deploy with pre-checks
+```
+
+## Core Features & Routes
+
+### Main Routes
+- `/dashboard` - Role-based dashboard
+- `/projects` - Project list and management
+- `/tasks` - Task board (Kanban/Gantt)
+- `/roles` - Role management
+- `/stock-movements` - Stock tracking
+- `/staff` - Staff management
+- `/suppliers` - Supplier management
+
+### User Roles
+- **Admin**: Full system access
+- **Project Manager**: Manage projects, assign tasks
+- **Team Lead**: Manage team tasks
+- **Field Technician**: View/update assigned tasks only
+- **Client**: View project progress only
+
+### Workflow System
+- Fixed 5-Phase: Planning → Design → Implementation → Testing → Deployment
+- Parallel execution, complex dependencies, auto-assignment
+
+## Firestore Schema (Core Models)
+
+```typescript
+interface Project {
   id: string;
   title: string;
-  client: {
-    id: string;
-    name: string;
-  };
+  client: { id: string; name: string; };
   status: 'active' | 'completed' | 'pending' | 'on-hold';
   priority?: 'high' | 'medium' | 'low';
   location: string;
   startDate: Timestamp;
-  manager: string;
   type: 'FTTH' | 'FTTB' | 'FTTC' | 'P2P';
-  currentPhase: ProjectPhase;
-  phaseProgress: number;
-  overallProgress: number;
-  createdAt: Timestamp;
 }
 
 interface Task {
@@ -366,127 +312,51 @@ interface Task {
   name: string;
   assigneeId: string;
   status: TaskStatus;
-  dependencies: string[];
   dueDate: Timestamp;
 }
-Performance Requirements
+```
 
-First Contentful Paint < 1.5s
-Time to Interactive < 3s
-Lighthouse score > 90
-Offline capability required
-Handle 10,000+ tasks smoothly
-Bundle size < 500KB (lazy loaded)
+## Development Commands
 
-Code Quality Setup
-bash# Husky pre-commit hooks configured:
-- ESLint validation
-- Prettier formatting
-- TypeScript compilation check
-- Unit test execution (affected only)
-- Bundle size check
-Development Commands
-bash# Development
-ng serve                    # Frontend dev server
-npm run emulators          # Firebase emulators
-npm run functions:serve    # Functions local
-
-# Code Quality
-npm run lint               # ESLint
-npm run format             # Prettier
-npm run analyze            # Bundle analyzer
+```bash
+# Development
+ng serve                    # Dev server (http://localhost:4200)
 
 # Build & Deploy
-ng build --configuration production
+npm run build              # Production build
 firebase deploy            # Full deployment
-firebase deploy --only hosting
-firebase deploy --only functions
+./DEPLOY_NOW.sh           # Quick deploy (if available)
+```
 
-# Testing
-ng test                    # Unit tests
-ng e2e                     # E2E tests
-npm run functions:test     # Functions tests
-Environment Setup
-Create .env files:
-typescript// src/environments/environment.ts - Development
-export const environment = {
-  production: false,
-  firebase: { /* config */ },
-  useEmulators: true,
-  appCheckDebugToken: 'debug-token'
-};
+### Live URLs
+- Production: https://fibreflow-73daf.web.app
+- Firebase Console: https://console.firebase.google.com/project/fibreflow-73daf
 
-// src/environments/environment.prod.ts - Production
-export const environment = {
-  production: true,
-  firebase: { /* config */ },
-  useEmulators: false
-};
+## Project Status
+- ✅ Dashboard, Projects, Staff, Stock (Items & Movements), Roles, Tasks
+- 🚧 Suppliers, Clients, Contractors (basic implementation)
+- ⏳ BOQ Management, RFQ Management, Reports & Analytics
 
-// functions/.env - Functions environment
-FIREBASE_PROJECT_ID=your-project
-RATE_LIMIT_MAX_CALLS=100
-Current Development Status
+## 📝 Quick Reference
 
- Project setup complete
- Firebase initialized
- Angular Material theme configured
- PWA support added
- Security headers implemented
- Core services implemented
- Authentication flow
- Project CRUD operations
- Workflow engine
- Real-time updates
- Offline support
- Rate limiting configured
- App Check enabled
+### Always Remember
+1. **Currency**: ZAR with `en-ZA` locale
+2. **Dates**: mat-datepicker only, Firestore Timestamps
+3. **Components**: Standalone, no NgModules
+4. **Injection**: inject() pattern only
+5. **Themes**: Test all 4 (light, dark, vf, fibreflow)
+6. **Logo**: 110% scale in sidebar
 
-Common Pitfalls to Avoid
-❌ Using NgModules (use standalone)
-❌ Direct Firebase SDK usage (use AngularFire)
-❌ Creating custom UI components (use Material)
-❌ Nested subscriptions (use RxJS operators)
-❌ Not unsubscribing (use takeUntilDestroyed)
-❌ Synchronous Firestore calls
-❌ Missing CSP headers
-❌ No rate limiting on Functions
-❌ Not implementing offline support
-❌ Forgetting lazy loading for features
-❌ Not using OnPush change detection
-❌ Hardcoding colors/spacing (use theme functions)
-❌ Monolithic components (use modular architecture)
-❌ Ignoring theme compatibility (test all 4 themes)
-❌ Using @import instead of @use for SCSS files
-❌ Missing namespace prefixes when calling functions
-❌ Using old _functions.scss (now split into _theme-functions.scss and _spacing.scss)
-Performance Optimization Checklist
-✅ Lazy load all feature modules
-✅ Use OnPush change detection
-✅ Implement virtual scrolling for large lists
-✅ Use trackBy functions in *ngFor
-✅ Preload critical routes
-✅ Optimize images with NgOptimizedImage
-✅ Tree-shake unused Material components
-✅ Enable production build optimizations
-Questions?
-When in doubt:
+### Key Files
+- `claude.md` - This file
+- `src/styles/_variables.scss` - Theme variables
+- `src/app/app.routes.ts` - All routes
+- `src/app/layout/app-shell/app-shell.component.ts` - Navigation
+- `src/app/shared/modules/shared-material.module.ts` - Shared Material imports
 
-Check Angular Material docs
-Use AngularFire patterns
-Follow Angular style guide
-Optimize for performance
-Ensure offline capability
-Keep security in mind
+## Common Pitfalls to Avoid
+❌ NgModules ❌ Direct Firebase SDK ❌ Hardcoded colors/spacing
+❌ Constructor injection ❌ `any` types ❌ Empty lifecycle methods
+❌ Missing namespaces in SCSS ❌ Text inputs for dates
 
-Remember: This is an ENTERPRISE application. Code quality, type safety, security, and maintainability are paramount!
-Useful Resources
-
-Angular Docs
-Material Design
-AngularFire
-Firebase Docs
-PWA Guide
-
-
-This complete `claude.md` now includes all security features, PWA support, performance optimizations, and code quality tools. It gives Claude Code everything needed to build a production-ready enterprise application! 🚀
+**Remember: ENTERPRISE application - Code quality, type safety, and maintainability are paramount!**

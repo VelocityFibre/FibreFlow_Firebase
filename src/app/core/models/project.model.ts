@@ -7,7 +7,7 @@ export interface Project {
   projectCode: string; // Unique project identifier
   name: string;
   description: string;
-  
+
   // Client Information
   clientId: string;
   clientName: string;
@@ -15,7 +15,7 @@ export interface Project {
   clientContact: string;
   clientEmail: string;
   clientPhone: string;
-  
+
   // Project Details
   location: string;
   projectType: ProjectType;
@@ -23,33 +23,33 @@ export interface Project {
   status: ProjectStatus;
   currentPhase: PhaseType;
   currentPhaseName?: string;
-  
+
   // Dates
   startDate: Timestamp | Date;
   expectedEndDate: Timestamp | Date;
   actualEndDate?: Timestamp | Date;
-  
+
   // People
   projectManagerId: string;
   projectManagerName: string;
   teamIds?: string[];
-  
+
   // Financial
   budget: number;
   budgetUsed: number;
   actualCost?: number;
-  
+
   // Progress Tracking
   overallProgress: number; // 0-100
   activeTasksCount: number;
   completedTasksCount: number;
   currentPhaseProgress: number; // 0-100
-  
+
   // Work Constraints
   workingHours: string; // e.g., "8:00 AM - 5:00 PM"
   allowWeekendWork: boolean;
   allowNightWork: boolean;
-  
+
   // Metadata
   createdAt: Timestamp | Date;
   updatedAt: Timestamp | Date;
@@ -118,7 +118,7 @@ export enum ProjectStatus {
   ACTIVE = 'active',
   ON_HOLD = 'on_hold',
   COMPLETED = 'completed',
-  CANCELLED = 'cancelled'
+  CANCELLED = 'cancelled',
 }
 
 export enum ProjectType {
@@ -128,7 +128,7 @@ export enum ProjectType {
   BACKBONE = 'backbone',
   LASTMILE = 'lastmile',
   ENTERPRISE = 'enterprise',
-  MAINTENANCE = 'maintenance'
+  MAINTENANCE = 'maintenance',
 }
 
 export enum PhaseType {
@@ -137,14 +137,14 @@ export enum PhaseType {
   WORK_IN_PROGRESS = 'work_in_progress',
   HANDOVER = 'handover',
   HANDOVER_COMPLETE = 'handover_complete',
-  FINAL_ACCEPTANCE = 'final_acceptance'
+  FINAL_ACCEPTANCE = 'final_acceptance',
 }
 
 export enum PhaseStatus {
   NOT_STARTED = 'not_started',
   IN_PROGRESS = 'in_progress',
   COMPLETED = 'completed',
-  BLOCKED = 'blocked'
+  BLOCKED = 'blocked',
 }
 
 export enum StepStatus {
@@ -152,7 +152,7 @@ export enum StepStatus {
   IN_PROGRESS = 'in_progress',
   COMPLETED = 'completed',
   BLOCKED = 'blocked',
-  SKIPPED = 'skipped'
+  SKIPPED = 'skipped',
 }
 
 export enum TaskStatus {
@@ -161,14 +161,14 @@ export enum TaskStatus {
   IN_REVIEW = 'in_review',
   COMPLETED = 'completed',
   BLOCKED = 'blocked',
-  CANCELLED = 'cancelled'
+  CANCELLED = 'cancelled',
 }
 
 export enum Priority {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
-  CRITICAL = 'critical'
+  CRITICAL = 'critical',
 }
 
 // Supporting Interfaces
@@ -262,8 +262,8 @@ export const FIBER_PROJECT_PHASES: PhaseTemplate[] = [
         tasks: [
           { name: 'Initial Site Assessment', priority: Priority.HIGH },
           { name: 'Route Planning', priority: Priority.HIGH },
-          { name: 'Permit Requirements Analysis', priority: Priority.MEDIUM }
-        ]
+          { name: 'Permit Requirements Analysis', priority: Priority.MEDIUM },
+        ],
       },
       {
         name: 'Design & Engineering',
@@ -272,10 +272,10 @@ export const FIBER_PROJECT_PHASES: PhaseTemplate[] = [
         tasks: [
           { name: 'Network Design', priority: Priority.HIGH },
           { name: 'Bill of Materials', priority: Priority.HIGH },
-          { name: 'Technical Drawings', priority: Priority.MEDIUM }
-        ]
-      }
-    ]
+          { name: 'Technical Drawings', priority: Priority.MEDIUM },
+        ],
+      },
+    ],
   },
   {
     type: PhaseType.INITIATE_PROJECT,
@@ -289,8 +289,8 @@ export const FIBER_PROJECT_PHASES: PhaseTemplate[] = [
         tasks: [
           { name: 'Kick-off Meeting', priority: Priority.HIGH },
           { name: 'Resource Allocation', priority: Priority.HIGH },
-          { name: 'Budget Approval', priority: Priority.CRITICAL }
-        ]
+          { name: 'Budget Approval', priority: Priority.CRITICAL },
+        ],
       },
       {
         name: 'Permits & Approvals',
@@ -299,10 +299,10 @@ export const FIBER_PROJECT_PHASES: PhaseTemplate[] = [
         tasks: [
           { name: 'Submit Permit Applications', priority: Priority.CRITICAL },
           { name: 'Wayleave Negotiations', priority: Priority.HIGH },
-          { name: 'Environmental Clearances', priority: Priority.MEDIUM }
-        ]
-      }
-    ]
+          { name: 'Environmental Clearances', priority: Priority.MEDIUM },
+        ],
+      },
+    ],
   },
   {
     type: PhaseType.WORK_IN_PROGRESS,
@@ -317,8 +317,8 @@ export const FIBER_PROJECT_PHASES: PhaseTemplate[] = [
           { name: 'Pole Permissions', priority: Priority.HIGH },
           { name: 'Trenching', priority: Priority.HIGH },
           { name: 'Duct Installation', priority: Priority.HIGH },
-          { name: 'Cable Laying', priority: Priority.CRITICAL }
-        ]
+          { name: 'Cable Laying', priority: Priority.CRITICAL },
+        ],
       },
       {
         name: 'Optical',
@@ -328,10 +328,10 @@ export const FIBER_PROJECT_PHASES: PhaseTemplate[] = [
           { name: 'Fiber Splicing', priority: Priority.CRITICAL },
           { name: 'OTDR Testing', priority: Priority.HIGH },
           { name: 'Power Meter Testing', priority: Priority.HIGH },
-          { name: 'Documentation', priority: Priority.MEDIUM }
-        ]
-      }
-    ]
+          { name: 'Documentation', priority: Priority.MEDIUM },
+        ],
+      },
+    ],
   },
   {
     type: PhaseType.HANDOVER,
@@ -345,8 +345,8 @@ export const FIBER_PROJECT_PHASES: PhaseTemplate[] = [
         tasks: [
           { name: 'End-to-End Testing', priority: Priority.CRITICAL },
           { name: 'Quality Checklist', priority: Priority.HIGH },
-          { name: 'Punch List Items', priority: Priority.MEDIUM }
-        ]
+          { name: 'Punch List Items', priority: Priority.MEDIUM },
+        ],
       },
       {
         name: 'Documentation',
@@ -355,10 +355,10 @@ export const FIBER_PROJECT_PHASES: PhaseTemplate[] = [
         tasks: [
           { name: 'As-Built Drawings', priority: Priority.HIGH },
           { name: 'Test Certificates', priority: Priority.HIGH },
-          { name: 'Handover Package', priority: Priority.HIGH }
-        ]
-      }
-    ]
+          { name: 'Handover Package', priority: Priority.HIGH },
+        ],
+      },
+    ],
   },
   {
     type: PhaseType.HANDOVER_COMPLETE,
@@ -372,10 +372,10 @@ export const FIBER_PROJECT_PHASES: PhaseTemplate[] = [
         tasks: [
           { name: 'Client Walkthrough', priority: Priority.HIGH },
           { name: 'Sign-off Documents', priority: Priority.CRITICAL },
-          { name: 'Training Delivery', priority: Priority.MEDIUM }
-        ]
-      }
-    ]
+          { name: 'Training Delivery', priority: Priority.MEDIUM },
+        ],
+      },
+    ],
   },
   {
     type: PhaseType.FINAL_ACCEPTANCE,
@@ -389,9 +389,9 @@ export const FIBER_PROJECT_PHASES: PhaseTemplate[] = [
         tasks: [
           { name: 'Final Invoice', priority: Priority.HIGH },
           { name: 'Warranty Documentation', priority: Priority.MEDIUM },
-          { name: 'Project Archive', priority: Priority.LOW }
-        ]
-      }
-    ]
-  }
+          { name: 'Project Archive', priority: Priority.LOW },
+        ],
+      },
+    ],
+  },
 ];

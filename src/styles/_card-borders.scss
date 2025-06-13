@@ -3,45 +3,69 @@
 
 $ff-colors: (
   // Main
-  dashboard: #6366f1,      // Indigo-500
-  
+  dashboard: #6366f1,
+
+  // Indigo-500
   // Project Management (Blues)
-  projects: #3b82f6,       // Blue-500
-  phases: #2563eb,         // Blue-600
-  tasks: #60a5fa,          // Blue-400
-  my-tasks: #93c5fd,       // Blue-300
-  daily-progress: #1e40af, // Blue-800
-  
+  projects: #3b82f6,
+  // Blue-500
+  phases: #2563eb,
+  // Blue-600
+  tasks: #60a5fa,
+  // Blue-400
+  my-tasks: #93c5fd,
+  // Blue-300
+  daily-progress: #1e40af,
+
+  // Blue-800
   // Staff (Oranges)
-  staff: #fb923c,          // Orange-400
-  roles: #ea580c,          // Orange-600
-  attendance: #fed7aa,     // Orange-200
-  performance: #c2410c,    // Orange-800
-  
+  staff: #fb923c,
+  // Orange-400
+  roles: #ea580c,
+  // Orange-600
+  attendance: #fed7aa,
+  // Orange-200
+  performance: #c2410c,
+
+  // Orange-800
   // Stock/Materials (Browns/Earth tones)
-  stock: #92400e,          // Brown-800
-  stock-movements: #b45309, // Orange-700
-  stock-allocations: #d97706, // Amber-600
-  boq: #dc2626,            // Red-600
-  rfq: #ea580c,            // Orange-600
-  stock-analysis: #7c2d12,  // Orange-900
-  categories: #854d0e,      // Yellow-900
-  
+  stock: #92400e,
+  // Brown-800
+  stock-movements: #b45309,
+  // Orange-700
+  stock-allocations: #d97706,
+  // Amber-600
+  boq: #dc2626,
+  // Red-600
+  rfq: #ea580c,
+  // Orange-600
+  stock-analysis: #7c2d12,
+  // Orange-900
+  categories: #854d0e,
+
+  // Yellow-900
   // Suppliers (Yellows)
-  suppliers: #eab308,      // Yellow-500
-  supplier-portal: #facc15, // Yellow-400
-  
+  suppliers: #eab308,
+  // Yellow-500
+  supplier-portal: #facc15,
+
+  // Yellow-400
   // Clients (Greens)
-  clients: #22c55e,        // Green-500
-  contractors: #16a34a,    // Green-600
-  
+  clients: #22c55e,
+  // Green-500
+  contractors: #16a34a,
+
+  // Green-600
   // Settings (Purples)
-  settings: #9333ea,       // Purple-600
-  audit-trail: #a855f7,    // Purple-500
-  
+  settings: #9333ea,
+  // Purple-600
+  audit-trail: #a855f7,
+
+  // Purple-500
   // Alerts/Special
-  flagged-issues: #ef4444, // Red-500
-  analytics: #6366f1       // Indigo-500
+  flagged-issues: #ef4444,
+  // Red-500
+  analytics: #6366f1 // Indigo-500
 );
 
 // Mixin to apply card border
@@ -49,7 +73,7 @@ $ff-colors: (
   $color: map-get($ff-colors, $color-name);
   border: 2px solid $color !important;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   &:hover {
     border-color: darken($color, 10%) !important;
     transform: translateY(-2px);
@@ -58,31 +82,81 @@ $ff-colors: (
 }
 
 // Utility classes for each function
-.ff-card-dashboard { @include ff-card-border(dashboard); }
-.ff-card-projects { @include ff-card-border(projects); }
-.ff-card-phases { @include ff-card-border(phases); }
-.ff-card-tasks { @include ff-card-border(tasks); }
-.ff-card-my-tasks { @include ff-card-border(my-tasks); }
-.ff-card-daily-progress { @include ff-card-border(daily-progress); }
-.ff-card-staff { @include ff-card-border(staff); }
-.ff-card-roles { @include ff-card-border(roles); }
-.ff-card-attendance { @include ff-card-border(attendance); }
-.ff-card-performance { @include ff-card-border(performance); }
-.ff-card-stock { @include ff-card-border(stock); }
-.ff-card-stock-movements { @include ff-card-border(stock-movements); }
-.ff-card-stock-allocations { @include ff-card-border(stock-allocations); }
-.ff-card-boq { @include ff-card-border(boq); }
-.ff-card-rfq { @include ff-card-border(rfq); }
-.ff-card-stock-analysis { @include ff-card-border(stock-analysis); }
-.ff-card-categories { @include ff-card-border(categories); }
-.ff-card-suppliers { @include ff-card-border(suppliers); }
-.ff-card-supplier-portal { @include ff-card-border(supplier-portal); }
-.ff-card-clients { @include ff-card-border(clients); }
-.ff-card-contractors { @include ff-card-border(contractors); }
-.ff-card-settings { @include ff-card-border(settings); }
-.ff-card-audit-trail { @include ff-card-border(audit-trail); }
-.ff-card-flagged-issues { @include ff-card-border(flagged-issues); }
-.ff-card-analytics { @include ff-card-border(analytics); }
+.ff-card-dashboard {
+  @include ff-card-border(dashboard);
+}
+.ff-card-projects {
+  @include ff-card-border(projects);
+}
+.ff-card-phases {
+  @include ff-card-border(phases);
+}
+.ff-card-tasks {
+  @include ff-card-border(tasks);
+}
+.ff-card-my-tasks {
+  @include ff-card-border(my-tasks);
+}
+.ff-card-daily-progress {
+  @include ff-card-border(daily-progress);
+}
+.ff-card-staff {
+  @include ff-card-border(staff);
+}
+.ff-card-roles {
+  @include ff-card-border(roles);
+}
+.ff-card-attendance {
+  @include ff-card-border(attendance);
+}
+.ff-card-performance {
+  @include ff-card-border(performance);
+}
+.ff-card-stock {
+  @include ff-card-border(stock);
+}
+.ff-card-stock-movements {
+  @include ff-card-border(stock-movements);
+}
+.ff-card-stock-allocations {
+  @include ff-card-border(stock-allocations);
+}
+.ff-card-boq {
+  @include ff-card-border(boq);
+}
+.ff-card-rfq {
+  @include ff-card-border(rfq);
+}
+.ff-card-stock-analysis {
+  @include ff-card-border(stock-analysis);
+}
+.ff-card-categories {
+  @include ff-card-border(categories);
+}
+.ff-card-suppliers {
+  @include ff-card-border(suppliers);
+}
+.ff-card-supplier-portal {
+  @include ff-card-border(supplier-portal);
+}
+.ff-card-clients {
+  @include ff-card-border(clients);
+}
+.ff-card-contractors {
+  @include ff-card-border(contractors);
+}
+.ff-card-settings {
+  @include ff-card-border(settings);
+}
+.ff-card-audit-trail {
+  @include ff-card-border(audit-trail);
+}
+.ff-card-flagged-issues {
+  @include ff-card-border(flagged-issues);
+}
+.ff-card-analytics {
+  @include ff-card-border(analytics);
+}
 
 // Additional helper for inline color indicators
 .ff-color-indicator {
@@ -92,7 +166,7 @@ $ff-colors: (
   border-radius: 2px;
   margin-right: 8px;
   vertical-align: middle;
-  
+
   @each $name, $color in $ff-colors {
     &.#{$name} {
       background-color: $color;

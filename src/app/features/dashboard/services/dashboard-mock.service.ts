@@ -1,26 +1,25 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, interval } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { 
-  DashboardMetrics, 
-  Alert, 
-  AlertType, 
+import {
+  DashboardMetrics,
+  Alert,
+  AlertType,
   AlertSeverity,
   Activity,
   ActivityType,
-  ModuleCard
+  ModuleCard,
 } from '../models/dashboard.models';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DashboardMockService {
-  
   getDashboardMetrics(): Observable<DashboardMetrics> {
     // Simulate real-time updates every 30 seconds
     return interval(30000).pipe(
       startWith(0),
-      map(() => this.generateMockMetrics())
+      map(() => this.generateMockMetrics()),
     );
   }
 
@@ -34,8 +33,8 @@ export class DashboardMockService {
         description: 'Manage fiber installation projects',
         metrics: [
           { label: 'Active', value: 12 },
-          { label: 'On Hold', value: 3 }
-        ]
+          { label: 'On Hold', value: 3 },
+        ],
       },
       {
         title: 'Staff',
@@ -45,8 +44,8 @@ export class DashboardMockService {
         description: 'Team management and scheduling',
         metrics: [
           { label: 'Available', value: 18 },
-          { label: 'On Site', value: 24 }
-        ]
+          { label: 'On Site', value: 24 },
+        ],
       },
       {
         title: 'Inventory',
@@ -56,8 +55,8 @@ export class DashboardMockService {
         description: 'Stock levels and equipment',
         metrics: [
           { label: 'Low Stock', value: 5 },
-          { label: 'Orders', value: 3 }
-        ]
+          { label: 'Orders', value: 3 },
+        ],
       },
       {
         title: 'Contractors',
@@ -67,8 +66,8 @@ export class DashboardMockService {
         description: 'Contractor management and payments',
         metrics: [
           { label: 'Active', value: 8 },
-          { label: 'Poles Today', value: 47 }
-        ]
+          { label: 'Poles Today', value: 47 },
+        ],
       },
       {
         title: 'Suppliers',
@@ -78,8 +77,8 @@ export class DashboardMockService {
         description: 'Supplier orders and deliveries',
         metrics: [
           { label: 'Pending', value: 4 },
-          { label: 'In Transit', value: 2 }
-        ]
+          { label: 'In Transit', value: 2 },
+        ],
       },
       {
         title: 'Reports',
@@ -89,22 +88,20 @@ export class DashboardMockService {
         description: 'Analytics and reporting',
         metrics: [
           { label: 'This Week', value: 6 },
-          { label: 'Scheduled', value: 2 }
-        ]
-      }
+          { label: 'Scheduled', value: 2 },
+        ],
+      },
     ]);
   }
 
   private generateMockMetrics(): DashboardMetrics {
-    const now = new Date();
-    
     return {
       overview: {
         activeProjects: 12,
         completedThisMonth: 3,
         totalStaff: 42,
         availableToday: 18,
-        criticalIssues: 2
+        criticalIssues: 2,
       },
       poles: {
         plantedToday: Math.floor(Math.random() * 20) + 30,
@@ -118,33 +115,33 @@ export class DashboardMockService {
             contractorName: 'FiberTech Solutions',
             polesPlanted: 127,
             target: 150,
-            percentage: 84.7
+            percentage: 84.7,
           },
           {
             contractorId: '2',
             contractorName: 'Network Builders Inc',
             polesPlanted: 98,
             target: 120,
-            percentage: 81.7
+            percentage: 81.7,
           },
           {
             contractorId: '3',
             contractorName: 'CityFiber Contractors',
             polesPlanted: 89,
             target: 100,
-            percentage: 89.0
-          }
-        ]
+            percentage: 89.0,
+          },
+        ],
       },
       tasks: {
         overdueCount: 7,
         dueTodayCount: 15,
         dueThisWeekCount: 43,
         blockedCount: 4,
-        completedTodayCount: 12
+        completedTodayCount: 12,
       },
       alerts: this.generateMockAlerts(),
-      recentActivity: this.generateMockActivity()
+      recentActivity: this.generateMockActivity(),
     };
   }
 
@@ -159,7 +156,7 @@ export class DashboardMockService {
         projectId: 'proj-1',
         projectName: 'Downtown Fiber Expansion',
         createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
-        link: '/projects/proj-1'
+        link: '/projects/proj-1',
       },
       {
         id: '2',
@@ -170,7 +167,7 @@ export class DashboardMockService {
         projectId: 'proj-2',
         projectName: 'Westside Fiber Installation',
         createdAt: new Date(Date.now() - 5 * 60 * 60 * 1000),
-        link: '/projects/proj-2'
+        link: '/projects/proj-2',
       },
       {
         id: '3',
@@ -179,7 +176,7 @@ export class DashboardMockService {
         title: 'Low stock: Fiber optic cable',
         description: 'Single mode fiber cable below minimum level - 500m remaining',
         createdAt: new Date(Date.now() - 1 * 60 * 60 * 1000),
-        link: '/inventory/items/fiber-sm-01'
+        link: '/inventory/items/fiber-sm-01',
       },
       {
         id: '4',
@@ -190,8 +187,8 @@ export class DashboardMockService {
         projectId: 'proj-3',
         projectName: 'North District Connect',
         createdAt: new Date(Date.now() - 8 * 60 * 60 * 1000),
-        link: '/projects/proj-3'
-      }
+        link: '/projects/proj-3',
+      },
     ];
 
     return alerts;
@@ -206,7 +203,7 @@ export class DashboardMockService {
         user: 'John Smith',
         timestamp: new Date(Date.now() - 30 * 60 * 1000),
         projectId: 'proj-1',
-        projectName: 'Downtown Fiber Expansion'
+        projectName: 'Downtown Fiber Expansion',
       },
       {
         id: '2',
@@ -215,14 +212,14 @@ export class DashboardMockService {
         user: 'Sarah Johnson',
         timestamp: new Date(Date.now() - 45 * 60 * 1000),
         projectId: 'proj-2',
-        projectName: 'Westside Fiber Installation'
+        projectName: 'Westside Fiber Installation',
       },
       {
         id: '3',
         type: ActivityType.PROJECT_CREATED,
         description: 'Created new project: East End Connection',
         user: 'Mike Davis',
-        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000)
+        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
       },
       {
         id: '4',
@@ -231,15 +228,15 @@ export class DashboardMockService {
         user: 'Emily Brown',
         timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000),
         projectId: 'proj-1',
-        projectName: 'Downtown Fiber Expansion'
+        projectName: 'Downtown Fiber Expansion',
       },
       {
         id: '5',
         type: ActivityType.STAFF_ASSIGNED,
         description: 'Assigned 3 technicians to urgent repair',
         user: 'Tom Wilson',
-        timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000)
-      }
+        timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
+      },
     ];
 
     return activities;

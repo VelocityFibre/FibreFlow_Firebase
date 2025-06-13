@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/
+.angular/
+.firebase/
+
+# Firebase
+firebase-debug.log
+.firebaserc
+
+# Environment files
+/src/environments/*
+
+# Coverage
+coverage/
+
+# Documentation
+*.md

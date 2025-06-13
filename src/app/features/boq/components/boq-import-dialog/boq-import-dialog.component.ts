@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
@@ -30,11 +30,11 @@ interface DialogData {
     MatButtonModule,
     MatIconModule,
     MatTableModule,
-    MatProgressBarModule
+    MatProgressBarModule,
   ],
   template: `
     <h2 mat-dialog-title>Import BOQ from CSV</h2>
-    
+
     <mat-dialog-content>
       <div class="import-container">
         <div class="instructions">
@@ -59,19 +59,21 @@ interface DialogData {
           </mat-select>
         </mat-form-field>
 
-        <div class="file-upload-area" 
-             [class.has-file]="selectedFile"
-             (click)="fileInput.click()"
-             (drop)="onFileDrop($event)"
-             (dragover)="onDragOver($event)"
-             (dragleave)="onDragLeave($event)">
-          <input #fileInput type="file" accept=".csv" (change)="onFileSelected($event)" hidden>
-          
+        <div
+          class="file-upload-area"
+          [class.has-file]="selectedFile"
+          (click)="fileInput.click()"
+          (drop)="onFileDrop($event)"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave($event)"
+        >
+          <input #fileInput type="file" accept=".csv" (change)="onFileSelected($event)" hidden />
+
           <div class="upload-content" *ngIf="!selectedFile">
             <mat-icon>cloud_upload</mat-icon>
             <p>Click to browse or drag and drop CSV file here</p>
           </div>
-          
+
           <div class="file-info" *ngIf="selectedFile">
             <mat-icon>description</mat-icon>
             <div class="file-details">
@@ -92,9 +94,9 @@ interface DialogData {
                 <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
                 <td mat-cell *matCellDef="let row">{{ row[column] }}</td>
               </ng-container>
-              
+
               <tr mat-header-row *matHeaderRowDef="previewColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: previewColumns;"></tr>
+              <tr mat-row *matRowDef="let row; columns: previewColumns"></tr>
             </table>
           </div>
           <p class="preview-info" *ngIf="totalRows > 5">
@@ -108,176 +110,181 @@ interface DialogData {
 
     <mat-dialog-actions align="end">
       <button mat-button (click)="onCancel()" [disabled]="importing">Cancel</button>
-      <button mat-raised-button color="primary" 
-              [disabled]="!selectedFile || !selectedProjectId || importing"
-              (click)="onImport()">
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="!selectedFile || !selectedProjectId || importing"
+        (click)="onImport()"
+      >
         {{ importing ? 'Importing...' : 'Import BOQ' }}
       </button>
     </mat-dialog-actions>
   `,
-  styles: [`
-    .import-container {
-      min-width: 600px;
-      max-width: 800px;
-    }
+  styles: [
+    `
+      .import-container {
+        min-width: 600px;
+        max-width: 800px;
+      }
 
-    .instructions {
-      background-color: #f5f5f5;
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 24px;
-    }
+      .instructions {
+        background-color: #f5f5f5;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 24px;
+      }
 
-    .instructions p {
-      margin: 0 0 8px;
-      font-weight: 500;
-    }
+      .instructions p {
+        margin: 0 0 8px;
+        font-weight: 500;
+      }
 
-    .instructions ul {
-      margin: 8px 0 0 24px;
-      padding: 0;
-    }
+      .instructions ul {
+        margin: 8px 0 0 24px;
+        padding: 0;
+      }
 
-    .instructions li {
-      margin-bottom: 4px;
-      color: #666;
-    }
+      .instructions li {
+        margin-bottom: 4px;
+        color: #666;
+      }
 
-    .project-field {
-      width: 100%;
-      margin-bottom: 16px;
-    }
+      .project-field {
+        width: 100%;
+        margin-bottom: 16px;
+      }
 
-    .file-upload-area {
-      border: 2px dashed #ccc;
-      border-radius: 8px;
-      padding: 32px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-bottom: 24px;
-    }
+      .file-upload-area {
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+        padding: 32px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 24px;
+      }
 
-    .file-upload-area:hover {
-      border-color: #1976d2;
-      background-color: #f5f5f5;
-    }
+      .file-upload-area:hover {
+        border-color: #1976d2;
+        background-color: #f5f5f5;
+      }
 
-    .file-upload-area.has-file {
-      border-style: solid;
-      padding: 16px;
-    }
+      .file-upload-area.has-file {
+        border-style: solid;
+        padding: 16px;
+      }
 
-    .upload-content mat-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
-      color: #666;
-      margin-bottom: 8px;
-    }
+      .upload-content mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        color: #666;
+        margin-bottom: 8px;
+      }
 
-    .upload-content p {
-      margin: 0;
-      color: #666;
-    }
+      .upload-content p {
+        margin: 0;
+        color: #666;
+      }
 
-    .file-info {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+      .file-info {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
 
-    .file-info mat-icon {
-      font-size: 36px;
-      width: 36px;
-      height: 36px;
-      color: #1976d2;
-    }
+      .file-info mat-icon {
+        font-size: 36px;
+        width: 36px;
+        height: 36px;
+        color: #1976d2;
+      }
 
-    .file-details {
-      flex: 1;
-      text-align: left;
-    }
+      .file-details {
+        flex: 1;
+        text-align: left;
+      }
 
-    .file-name {
-      margin: 0;
-      font-weight: 500;
-      color: #333;
-    }
+      .file-name {
+        margin: 0;
+        font-weight: 500;
+        color: #333;
+      }
 
-    .file-size {
-      margin: 0;
-      font-size: 12px;
-      color: #666;
-    }
+      .file-size {
+        margin: 0;
+        font-size: 12px;
+        color: #666;
+      }
 
-    .preview-section {
-      margin-top: 24px;
-    }
+      .preview-section {
+        margin-top: 24px;
+      }
 
-    .preview-section h3 {
-      margin: 0 0 12px;
-      font-size: 16px;
-      font-weight: 500;
-    }
+      .preview-section h3 {
+        margin: 0 0 12px;
+        font-size: 16px;
+        font-weight: 500;
+      }
 
-    .table-container {
-      max-height: 300px;
-      overflow: auto;
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
-      margin-bottom: 8px;
-    }
+      .table-container {
+        max-height: 300px;
+        overflow: auto;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        margin-bottom: 8px;
+      }
 
-    table {
-      width: 100%;
-    }
+      table {
+        width: 100%;
+      }
 
-    th {
-      background-color: #f5f5f5;
-      font-weight: 600;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
+      th {
+        background-color: #f5f5f5;
+        font-weight: 600;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+      }
 
-    td {
-      font-size: 14px;
-    }
+      td {
+        font-size: 14px;
+      }
 
-    .preview-info {
-      margin: 0;
-      font-size: 12px;
-      color: #666;
-      text-align: right;
-    }
+      .preview-info {
+        margin: 0;
+        font-size: 12px;
+        color: #666;
+        text-align: right;
+      }
 
-    mat-progress-bar {
-      margin-top: 16px;
-    }
+      mat-progress-bar {
+        margin-top: 16px;
+      }
 
-    mat-dialog-actions {
-      padding: 16px 24px;
-      margin: 16px -24px -24px;
-      border-top: 1px solid #e0e0e0;
-    }
-  `]
+      mat-dialog-actions {
+        padding: 16px 24px;
+        margin: 16px -24px -24px;
+        border-top: 1px solid #e0e0e0;
+      }
+    `,
+  ],
 })
 export class BOQImportDialogComponent {
   projects: Project[] = [];
   selectedProjectId = '';
   selectedFile: File | null = null;
-  previewData: any[] = [];
+  previewData: Record<string, string>[] = [];
   previewColumns: string[] = [];
   totalRows = 0;
   importing = false;
 
-  constructor(
-    private boqService: BOQService,
-    private dialogRef: MatDialogRef<BOQImportDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) {
-    this.projects = data.projects || [];
+  private boqService = inject(BOQService);
+  private dialogRef = inject(MatDialogRef<BOQImportDialogComponent>);
+  public data = inject(MAT_DIALOG_DATA) as DialogData;
+
+  constructor() {
+    this.projects = this.data.projects || [];
   }
 
   onFileSelected(event: Event) {
@@ -290,7 +297,7 @@ export class BOQImportDialogComponent {
   onFileDrop(event: DragEvent) {
     event.preventDefault();
     event.stopPropagation();
-    
+
     if (event.dataTransfer?.files && event.dataTransfer.files[0]) {
       const file = event.dataTransfer.files[0];
       if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
@@ -320,8 +327,8 @@ export class BOQImportDialogComponent {
     const reader = new FileReader();
     reader.onload = (e) => {
       const text = e.target?.result as string;
-      const lines = text.split('\n').filter(line => line.trim());
-      
+      const lines = text.split('\n').filter((line) => line.trim());
+
       if (lines.length === 0) {
         alert('The CSV file is empty');
         this.removeFile(new Event('click'));
@@ -331,20 +338,20 @@ export class BOQImportDialogComponent {
       // Parse headers
       const headers = this.parseCSVLine(lines[0]);
       this.previewColumns = headers.slice(0, 6); // Show max 6 columns
-      
+
       // Parse data rows (max 5 for preview)
       this.previewData = [];
       for (let i = 1; i < Math.min(6, lines.length); i++) {
         const values = this.parseCSVLine(lines[i]);
         if (values.length > 0) {
-          const row: any = {};
+          const row: Record<string, string> = {};
           headers.forEach((header, index) => {
             row[header] = values[index] || '';
           });
           this.previewData.push(row);
         }
       }
-      
+
       this.totalRows = lines.length - 1; // Excluding header
     };
     reader.readAsText(file);
@@ -354,10 +361,10 @@ export class BOQImportDialogComponent {
     const result: string[] = [];
     let current = '';
     let inQuotes = false;
-    
+
     for (let i = 0; i < line.length; i++) {
       const char = line[i];
-      
+
       if (char === '"') {
         inQuotes = !inQuotes;
       } else if (char === ',' && !inQuotes) {
@@ -367,11 +374,11 @@ export class BOQImportDialogComponent {
         current += char;
       }
     }
-    
+
     if (current) {
       result.push(current.trim());
     }
-    
+
     return result;
   }
 
@@ -400,11 +407,11 @@ export class BOQImportDialogComponent {
 
     this.importing = true;
     const reader = new FileReader();
-    
+
     reader.onload = (e) => {
       const text = e.target?.result as string;
-      const lines = text.split('\n').filter(line => line.trim());
-      
+      const lines = text.split('\n').filter((line) => line.trim());
+
       if (lines.length <= 1) {
         alert('No data found in the CSV file');
         this.importing = false;
@@ -412,12 +419,12 @@ export class BOQImportDialogComponent {
       }
 
       const headers = this.parseCSVLine(lines[0]);
-      const csvData: any[] = [];
-      
+      const csvData: Record<string, string>[] = [];
+
       for (let i = 1; i < lines.length; i++) {
         const values = this.parseCSVLine(lines[i]);
         if (values.length > 0) {
-          const row: any = {};
+          const row: Record<string, string> = {};
           headers.forEach((header, index) => {
             row[header] = values[index] || '';
           });
@@ -433,10 +440,10 @@ export class BOQImportDialogComponent {
           console.error('Error importing BOQ items:', error);
           alert('Failed to import BOQ items. Please check your CSV format and try again.');
           this.importing = false;
-        }
+        },
       });
     };
-    
+
     reader.readAsText(this.selectedFile);
   }
 }

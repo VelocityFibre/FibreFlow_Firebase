@@ -6,13 +6,13 @@ export interface SupplierProjectAssignment {
   supplierName: string;
   projectId: string;
   projectName: string;
-  
+
   assignedBy: string;
   assignedAt: Timestamp | Date;
-  
+
   status: AssignmentStatus;
   role: string;
-  
+
   performanceRating?: number;
   notesOnPerformance?: string;
 }
@@ -20,5 +20,5 @@ export interface SupplierProjectAssignment {
 export enum AssignmentStatus {
   ACTIVE = 'active',
   COMPLETED = 'completed',
-  TERMINATED = 'terminated'
+  TERMINATED = 'terminated',
 }

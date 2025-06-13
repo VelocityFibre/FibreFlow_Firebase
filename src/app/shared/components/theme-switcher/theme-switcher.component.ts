@@ -16,19 +16,14 @@ interface ThemeOption {
 @Component({
   selector: 'app-theme-switcher',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatIconModule,
-    MatTooltipModule
-  ],
+  imports: [CommonModule, MatButtonModule, MatMenuModule, MatIconModule, MatTooltipModule],
   template: `
-    <button 
-      mat-icon-button 
+    <button
+      mat-icon-button
       [matMenuTriggerFor]="themeMenu"
       [matTooltip]="'Current theme: ' + currentThemeLabel"
-      class="theme-switcher-button">
+      class="theme-switcher-button"
+    >
       <mat-icon>{{ currentThemeIcon }}</mat-icon>
     </button>
 
@@ -36,13 +31,14 @@ interface ThemeOption {
       <div class="theme-menu-header">
         <h3 class="theme-menu-title">Choose Theme</h3>
       </div>
-      
-      <button 
+
+      <button
         *ngFor="let theme of themes"
         mat-menu-item
         (click)="setTheme(theme.value)"
         class="theme-option"
-        [class.active]="currentTheme === theme.value">
+        [class.active]="currentTheme === theme.value"
+      >
         <mat-icon class="theme-icon">{{ theme.icon }}</mat-icon>
         <div class="theme-info">
           <span class="theme-label">{{ theme.label }}</span>
@@ -52,118 +48,120 @@ interface ThemeOption {
       </button>
     </mat-menu>
   `,
-  styles: [`
-    @use '../../../../styles/theme-functions' as theme;
-    @use '../../../../styles/spacing' as spacing;
+  styles: [
+    `
+      @use '../../../../styles/theme-functions' as theme;
+      @use '../../../../styles/spacing' as spacing;
 
-    .theme-switcher-button {
-      color: theme.ff-rgb(foreground);
-      
-      &:hover {
-        background-color: theme.ff-rgba(muted, 0.5);
-      }
-    }
+      .theme-switcher-button {
+        color: theme.ff-rgb(foreground);
 
-    ::ng-deep .theme-menu {
-      margin-top: spacing.ff-spacing(sm);
-      
-      .mat-mdc-menu-content {
-        padding: 0 !important;
-      }
-    }
-
-    .theme-menu-header {
-      padding: spacing.ff-spacing(md) spacing.ff-spacing(lg);
-      border-bottom: 1px solid theme.ff-rgb(border);
-      background-color: theme.ff-rgba(muted, 0.3);
-    }
-
-    .theme-menu-title {
-      margin: 0;
-      font-size: spacing.ff-font-size(sm);
-      font-weight: spacing.ff-font-weight(medium);
-      color: theme.ff-rgb(muted-foreground);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .theme-option {
-      display: flex !important;
-      align-items: center !important;
-      gap: spacing.ff-spacing(md) !important;
-      padding: spacing.ff-spacing(md) spacing.ff-spacing(lg) !important;
-      min-height: 56px !important;
-      
-      &:hover {
-        background-color: theme.ff-rgba(muted, 0.5) !important;
-      }
-      
-      &.active {
-        background-color: theme.ff-rgba(primary, 0.1) !important;
-        
-        .theme-icon {
-          color: theme.ff-rgb(primary);
+        &:hover {
+          background-color: theme.ff-rgba(muted, 0.5);
         }
       }
-    }
 
-    .theme-icon {
-      color: theme.ff-rgb(muted-foreground);
-      margin-right: 0 !important;
-    }
+      ::ng-deep .theme-menu {
+        margin-top: spacing.ff-spacing(sm);
 
-    .theme-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: spacing.ff-spacing(xs);
-    }
+        .mat-mdc-menu-content {
+          padding: 0 !important;
+        }
+      }
 
-    .theme-label {
-      font-size: spacing.ff-font-size(base);
-      font-weight: spacing.ff-font-weight(medium);
-      color: theme.ff-rgb(foreground);
-    }
+      .theme-menu-header {
+        padding: spacing.ff-spacing(md) spacing.ff-spacing(lg);
+        border-bottom: 1px solid theme.ff-rgb(border);
+        background-color: theme.ff-rgba(muted, 0.3);
+      }
 
-    .theme-description {
-      font-size: spacing.ff-font-size(sm);
-      color: theme.ff-rgb(muted-foreground);
-    }
+      .theme-menu-title {
+        margin: 0;
+        font-size: spacing.ff-font-size(sm);
+        font-weight: spacing.ff-font-weight(medium);
+        color: theme.ff-rgb(muted-foreground);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
 
-    .check-icon {
-      color: theme.ff-rgb(primary);
-      margin-left: auto !important;
-    }
-  `]
+      .theme-option {
+        display: flex !important;
+        align-items: center !important;
+        gap: spacing.ff-spacing(md) !important;
+        padding: spacing.ff-spacing(md) spacing.ff-spacing(lg) !important;
+        min-height: 56px !important;
+
+        &:hover {
+          background-color: theme.ff-rgba(muted, 0.5) !important;
+        }
+
+        &.active {
+          background-color: theme.ff-rgba(primary, 0.1) !important;
+
+          .theme-icon {
+            color: theme.ff-rgb(primary);
+          }
+        }
+      }
+
+      .theme-icon {
+        color: theme.ff-rgb(muted-foreground);
+        margin-right: 0 !important;
+      }
+
+      .theme-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: spacing.ff-spacing(xs);
+      }
+
+      .theme-label {
+        font-size: spacing.ff-font-size(base);
+        font-weight: spacing.ff-font-weight(medium);
+        color: theme.ff-rgb(foreground);
+      }
+
+      .theme-description {
+        font-size: spacing.ff-font-size(sm);
+        color: theme.ff-rgb(muted-foreground);
+      }
+
+      .check-icon {
+        color: theme.ff-rgb(primary);
+        margin-left: auto !important;
+      }
+    `,
+  ],
 })
 export class ThemeSwitcherComponent {
   private themeService = inject(ThemeService);
-  
+
   themes: ThemeOption[] = [
     {
       value: 'light',
       label: 'Light',
       icon: 'light_mode',
-      description: 'Clean and bright interface'
+      description: 'Clean and bright interface',
     },
     {
       value: 'dark',
       label: 'Dark',
       icon: 'dark_mode',
-      description: 'Easy on the eyes in low light'
+      description: 'Easy on the eyes in low light',
     },
     {
       value: 'vf',
       label: 'Velocity Fibre',
       icon: 'speed',
-      description: 'Brand colors with blue theme'
+      description: 'Brand colors with blue theme',
     },
     {
       value: 'fibreflow',
       label: 'FibreFlow',
       icon: 'gradient',
-      description: 'Modern indigo accent theme'
-    }
+      description: 'Modern indigo accent theme',
+    },
   ];
 
   get currentTheme(): Theme {
@@ -171,12 +169,12 @@ export class ThemeSwitcherComponent {
   }
 
   get currentThemeLabel(): string {
-    const theme = this.themes.find(t => t.value === this.currentTheme);
+    const theme = this.themes.find((t) => t.value === this.currentTheme);
     return theme?.label || 'Light';
   }
 
   get currentThemeIcon(): string {
-    const theme = this.themes.find(t => t.value === this.currentTheme);
+    const theme = this.themes.find((t) => t.value === this.currentTheme);
     return theme?.icon || 'light_mode';
   }
 

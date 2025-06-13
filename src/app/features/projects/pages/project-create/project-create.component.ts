@@ -14,7 +14,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProjectService } from '../../../../core/services/project.service';
-import { ProjectType, ProjectStatus, Priority, PhaseType } from '../../../../core/models/project.model';
+import {
+  ProjectType,
+  ProjectStatus,
+  Priority,
+  PhaseType,
+} from '../../../../core/models/project.model';
 
 @Component({
   selector: 'app-project-create',
@@ -33,7 +38,7 @@ import { ProjectType, ProjectStatus, Priority, PhaseType } from '../../../../cor
     MatNativeDateModule,
     MatCheckboxModule,
     MatProgressBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   template: `
     <div class="ff-page-container">
@@ -62,7 +67,7 @@ import { ProjectType, ProjectStatus, Priority, PhaseType } from '../../../../cor
               <div class="form-section">
                 <mat-form-field appearance="outline">
                   <mat-label>Project Code</mat-label>
-                  <input matInput formControlName="projectCode" placeholder="PRJ-001">
+                  <input matInput formControlName="projectCode" placeholder="PRJ-001" />
                   <mat-error *ngIf="projectForm.get('projectCode')?.hasError('required')">
                     Project code is required
                   </mat-error>
@@ -70,7 +75,7 @@ import { ProjectType, ProjectStatus, Priority, PhaseType } from '../../../../cor
 
                 <mat-form-field appearance="outline">
                   <mat-label>Project Name</mat-label>
-                  <input matInput formControlName="name" placeholder="Enter project name">
+                  <input matInput formControlName="name" placeholder="Enter project name" />
                   <mat-error *ngIf="projectForm.get('name')?.hasError('required')">
                     Project name is required
                   </mat-error>
@@ -78,8 +83,12 @@ import { ProjectType, ProjectStatus, Priority, PhaseType } from '../../../../cor
 
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>Description</mat-label>
-                  <textarea matInput formControlName="description" rows="3" 
-                           placeholder="Describe the project scope and objectives"></textarea>
+                  <textarea
+                    matInput
+                    formControlName="description"
+                    rows="3"
+                    placeholder="Describe the project scope and objectives"
+                  ></textarea>
                 </mat-form-field>
 
                 <div class="form-row">
@@ -109,7 +118,7 @@ import { ProjectType, ProjectStatus, Priority, PhaseType } from '../../../../cor
 
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>Location</mat-label>
-                  <input matInput formControlName="location" placeholder="Project location">
+                  <input matInput formControlName="location" placeholder="Project location" />
                   <mat-icon matSuffix>location_on</mat-icon>
                   <mat-error *ngIf="projectForm.get('location')?.hasError('required')">
                     Location is required
@@ -128,7 +137,7 @@ import { ProjectType, ProjectStatus, Priority, PhaseType } from '../../../../cor
               <div class="form-section">
                 <mat-form-field appearance="outline">
                   <mat-label>Client Organization</mat-label>
-                  <input matInput formControlName="clientOrganization" placeholder="Company name">
+                  <input matInput formControlName="clientOrganization" placeholder="Company name" />
                   <mat-error *ngIf="projectForm.get('clientOrganization')?.hasError('required')">
                     Client organization is required
                   </mat-error>
@@ -136,7 +145,7 @@ import { ProjectType, ProjectStatus, Priority, PhaseType } from '../../../../cor
 
                 <mat-form-field appearance="outline">
                   <mat-label>Contact Person</mat-label>
-                  <input matInput formControlName="clientContact" placeholder="Full name">
+                  <input matInput formControlName="clientContact" placeholder="Full name" />
                   <mat-error *ngIf="projectForm.get('clientContact')?.hasError('required')">
                     Contact person is required
                   </mat-error>
@@ -144,7 +153,12 @@ import { ProjectType, ProjectStatus, Priority, PhaseType } from '../../../../cor
 
                 <mat-form-field appearance="outline">
                   <mat-label>Email</mat-label>
-                  <input matInput type="email" formControlName="clientEmail" placeholder="email@example.com">
+                  <input
+                    matInput
+                    type="email"
+                    formControlName="clientEmail"
+                    placeholder="email@example.com"
+                  />
                   <mat-icon matSuffix>email</mat-icon>
                   <mat-error *ngIf="projectForm.get('clientEmail')?.hasError('required')">
                     Email is required
@@ -156,7 +170,7 @@ import { ProjectType, ProjectStatus, Priority, PhaseType } from '../../../../cor
 
                 <mat-form-field appearance="outline">
                   <mat-label>Phone</mat-label>
-                  <input matInput formControlName="clientPhone" placeholder="+27 12 345 6789">
+                  <input matInput formControlName="clientPhone" placeholder="+27 12 345 6789" />
                   <mat-icon matSuffix>phone</mat-icon>
                   <mat-error *ngIf="projectForm.get('clientPhone')?.hasError('required')">
                     Phone is required
@@ -176,7 +190,7 @@ import { ProjectType, ProjectStatus, Priority, PhaseType } from '../../../../cor
                 <div class="form-row">
                   <mat-form-field appearance="outline">
                     <mat-label>Start Date</mat-label>
-                    <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+                    <input matInput [matDatepicker]="startPicker" formControlName="startDate" />
                     <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
                     <mat-datepicker #startPicker></mat-datepicker>
                     <mat-error *ngIf="projectForm.get('startDate')?.hasError('required')">
@@ -186,7 +200,7 @@ import { ProjectType, ProjectStatus, Priority, PhaseType } from '../../../../cor
 
                   <mat-form-field appearance="outline">
                     <mat-label>Expected End Date</mat-label>
-                    <input matInput [matDatepicker]="endPicker" formControlName="expectedEndDate">
+                    <input matInput [matDatepicker]="endPicker" formControlName="expectedEndDate" />
                     <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
                     <mat-datepicker #endPicker></mat-datepicker>
                     <mat-error *ngIf="projectForm.get('expectedEndDate')?.hasError('required')">
@@ -197,7 +211,7 @@ import { ProjectType, ProjectStatus, Priority, PhaseType } from '../../../../cor
 
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>Budget (ZAR)</mat-label>
-                  <input matInput type="number" formControlName="budget" placeholder="0">
+                  <input matInput type="number" formControlName="budget" placeholder="0" />
                   <span matPrefix>R&nbsp;</span>
                   <mat-error *ngIf="projectForm.get('budget')?.hasError('required')">
                     Budget is required
@@ -209,7 +223,11 @@ import { ProjectType, ProjectStatus, Priority, PhaseType } from '../../../../cor
 
                 <mat-form-field appearance="outline">
                   <mat-label>Project Manager</mat-label>
-                  <input matInput formControlName="projectManagerName" placeholder="Project manager name">
+                  <input
+                    matInput
+                    formControlName="projectManagerName"
+                    placeholder="Project manager name"
+                  />
                   <mat-icon matSuffix>person</mat-icon>
                   <mat-error *ngIf="projectForm.get('projectManagerName')?.hasError('required')">
                     Project manager is required
@@ -218,7 +236,11 @@ import { ProjectType, ProjectStatus, Priority, PhaseType } from '../../../../cor
 
                 <mat-form-field appearance="outline">
                   <mat-label>Working Hours</mat-label>
-                  <input matInput formControlName="workingHours" placeholder="8:00 AM - 5:00 PM SAST">
+                  <input
+                    matInput
+                    formControlName="workingHours"
+                    placeholder="8:00 AM - 5:00 PM SAST"
+                  />
                   <mat-icon matSuffix>schedule</mat-icon>
                 </mat-form-field>
 
@@ -234,7 +256,12 @@ import { ProjectType, ProjectStatus, Priority, PhaseType } from '../../../../cor
         <!-- Form Actions -->
         <div class="form-actions">
           <button mat-button type="button" routerLink="/projects">Cancel</button>
-          <button mat-raised-button color="primary" type="submit" [disabled]="projectForm.invalid || isSubmitting">
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="projectForm.invalid || isSubmitting"
+          >
             <mat-icon *ngIf="!isSubmitting">save</mat-icon>
             <mat-icon *ngIf="isSubmitting">
               <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
@@ -245,119 +272,121 @@ import { ProjectType, ProjectStatus, Priority, PhaseType } from '../../../../cor
       </form>
     </div>
   `,
-  styles: [`
-    .form-header {
-      margin: -40px -24px 32px;
-      padding: 24px;
-      background: white;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .header-content {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .page-title {
-      font-size: 32px;
-      font-weight: 500;
-      margin: 0;
-      color: #1f2937;
-    }
-
-    .page-subtitle {
-      font-size: 16px;
-      color: #6b7280;
-      margin: 4px 0 0 0;
-    }
-
-    .form-grid {
-      display: grid;
-      gap: 24px;
-      margin-bottom: 32px;
-    }
-
-    .form-section {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    mat-form-field {
-      width: 100%;
-    }
-
-    .full-width {
-      grid-column: 1 / -1;
-    }
-
-    .checkbox-group {
-      display: flex;
-      gap: 24px;
-      margin-top: 8px;
-    }
-
-    .form-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 16px;
-      padding: 24px;
-      background: white;
-      border-top: 1px solid #e5e7eb;
-      margin: 0 -24px -40px;
-      position: sticky;
-      bottom: 0;
-      z-index: 10;
-    }
-
-    mat-card {
-      border-radius: 12px !important;
-    }
-
-    mat-card-header {
-      margin-bottom: 16px;
-    }
-
-    mat-card-title {
-      font-size: 20px !important;
-      font-weight: 500 !important;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
+  styles: [
+    `
       .form-header {
-        margin: -24px -16px 24px;
+        margin: -40px -24px 32px;
+        padding: 24px;
+        background: white;
+        border-bottom: 1px solid #e5e7eb;
       }
-      
-      .form-row {
-        grid-template-columns: 1fr;
+
+      .header-content {
+        display: flex;
+        align-items: center;
+        gap: 16px;
       }
-      
-      .checkbox-group {
+
+      .page-title {
+        font-size: 32px;
+        font-weight: 500;
+        margin: 0;
+        color: #1f2937;
+      }
+
+      .page-subtitle {
+        font-size: 16px;
+        color: #6b7280;
+        margin: 4px 0 0 0;
+      }
+
+      .form-grid {
+        display: grid;
+        gap: 24px;
+        margin-bottom: 32px;
+      }
+
+      .form-section {
+        display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 20px;
       }
-      
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      mat-form-field {
+        width: 100%;
+      }
+
+      .full-width {
+        grid-column: 1 / -1;
+      }
+
+      .checkbox-group {
+        display: flex;
+        gap: 24px;
+        margin-top: 8px;
+      }
+
       .form-actions {
-        margin: 0 -16px -24px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+        padding: 24px;
+        background: white;
+        border-top: 1px solid #e5e7eb;
+        margin: 0 -24px -40px;
+        position: sticky;
+        bottom: 0;
+        z-index: 10;
       }
-    }
-  `]
+
+      mat-card {
+        border-radius: 12px !important;
+      }
+
+      mat-card-header {
+        margin-bottom: 16px;
+      }
+
+      mat-card-title {
+        font-size: 20px !important;
+        font-weight: 500 !important;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .form-header {
+          margin: -24px -16px 24px;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+
+        .checkbox-group {
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .form-actions {
+          margin: 0 -16px -24px;
+        }
+      }
+    `,
+  ],
 })
 export class ProjectCreateComponent {
   private fb = inject(FormBuilder);
   private projectService = inject(ProjectService);
   private router = inject(Router);
-  
+
   isSubmitting = false;
-  
+
   projectForm: FormGroup = this.fb.group({
     projectCode: ['', Validators.required],
     name: ['', Validators.required],
@@ -365,61 +394,61 @@ export class ProjectCreateComponent {
     projectType: [ProjectType.FTTH, Validators.required],
     priorityLevel: [Priority.MEDIUM, Validators.required],
     location: ['', Validators.required],
-    
+
     clientOrganization: ['', Validators.required],
     clientContact: ['', Validators.required],
     clientEmail: ['', [Validators.required, Validators.email]],
     clientPhone: ['', Validators.required],
-    
+
     startDate: [new Date(), Validators.required],
     expectedEndDate: ['', Validators.required],
     budget: [0, [Validators.required, Validators.min(1)]],
-    
+
     projectManagerName: ['', Validators.required],
     workingHours: ['8:00 AM - 5:00 PM SAST'],
     allowWeekendWork: [false],
-    allowNightWork: [false]
+    allowNightWork: [false],
   });
 
   async onSubmit() {
     if (this.projectForm.invalid) return;
-    
+
     this.isSubmitting = true;
-    
+
     try {
       const formValue = this.projectForm.value;
-      
+
       // Prepare project data
       const projectData = {
         ...formValue,
-        
+
         // Set client fields
         clientId: `client-${Date.now()}`,
         clientName: formValue.clientContact,
-        
+
         // Set initial status and phase
         status: ProjectStatus.PLANNING,
         currentPhase: PhaseType.PLANNING,
         currentPhaseName: 'Planning Phase',
-        
+
         // Set people
         projectManagerId: `pm-${Date.now()}`,
-        
+
         // Initialize progress
         budgetUsed: 0,
         overallProgress: 0,
         activeTasksCount: 0,
         completedTasksCount: 0,
         currentPhaseProgress: 0,
-        
+
         // Metadata
         createdBy: 'user',
-        lastModifiedBy: 'user'
+        lastModifiedBy: 'user',
       };
-      
+
       const projectId = await this.projectService.createProject(projectData);
-      console.log('Project created with ID:', projectId);
-      
+      // Project created successfully
+
       // Check if projectId is valid before navigating
       if (projectId) {
         // Navigate to the new project

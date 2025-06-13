@@ -8,12 +8,12 @@ export interface StockMovement {
   movementType: MovementType;
   quantity: number;
   unitOfMeasure: string;
-  
+
   // Reference Information
   referenceType?: ReferenceType;
   referenceId?: string;
   referenceNumber?: string;
-  
+
   // From/To Information
   fromLocation?: string;
   toLocation?: string;
@@ -21,11 +21,11 @@ export interface StockMovement {
   fromProjectName?: string;
   toProjectId?: string;
   toProjectName?: string;
-  
+
   // Financial Information
   unitCost: number;
   totalCost: number;
-  
+
   // Additional Details
   reason?: string;
   notes?: string;
@@ -33,11 +33,11 @@ export interface StockMovement {
   performedByName: string;
   approvedBy?: string;
   approvedByName?: string;
-  
+
   // Stock Levels (snapshot at time of movement)
   previousStock: number;
   newStock: number;
-  
+
   // Timestamps
   movementDate: Timestamp;
   createdAt: Timestamp;
@@ -51,7 +51,7 @@ export enum MovementType {
   TRANSFER_IN = 'transfer_in',
   ADJUSTMENT_INCREASE = 'adjustment_increase',
   FOUND = 'found',
-  
+
   // Outgoing
   ALLOCATION = 'allocation',
   TRANSFER_OUT = 'transfer_out',
@@ -61,10 +61,10 @@ export enum MovementType {
   THEFT = 'theft',
   EXPIRED = 'expired',
   SALE = 'sale',
-  
+
   // Neutral
   STOCK_TAKE = 'stock_take',
-  RECOUNT = 'recount'
+  RECOUNT = 'recount',
 }
 
 export enum ReferenceType {
@@ -74,7 +74,7 @@ export enum ReferenceType {
   ADJUSTMENT = 'adjustment',
   STOCK_TAKE = 'stock_take',
   RETURN = 'return',
-  INVOICE = 'invoice'
+  INVOICE = 'invoice',
 }
 
 export interface StockMovementFilter {
@@ -102,7 +102,7 @@ export function isIncomingMovement(type: MovementType): boolean {
     MovementType.RETURN_FROM_PROJECT,
     MovementType.TRANSFER_IN,
     MovementType.ADJUSTMENT_INCREASE,
-    MovementType.FOUND
+    MovementType.FOUND,
   ].includes(type);
 }
 
@@ -115,7 +115,7 @@ export function isOutgoingMovement(type: MovementType): boolean {
     MovementType.LOSS,
     MovementType.THEFT,
     MovementType.EXPIRED,
-    MovementType.SALE
+    MovementType.SALE,
   ].includes(type);
 }
 
@@ -135,7 +135,7 @@ export function getMovementTypeLabel(type: MovementType): string {
     [MovementType.EXPIRED]: 'Expired',
     [MovementType.SALE]: 'Sale',
     [MovementType.STOCK_TAKE]: 'Stock Take',
-    [MovementType.RECOUNT]: 'Recount'
+    [MovementType.RECOUNT]: 'Recount',
   };
   return labels[type] || type;
 }
@@ -156,7 +156,7 @@ export function getMovementTypeIcon(type: MovementType): string {
     [MovementType.EXPIRED]: 'schedule',
     [MovementType.SALE]: 'sell',
     [MovementType.STOCK_TAKE]: 'inventory',
-    [MovementType.RECOUNT]: 'refresh'
+    [MovementType.RECOUNT]: 'refresh',
   };
   return icons[type] || 'swap_horiz';
 }

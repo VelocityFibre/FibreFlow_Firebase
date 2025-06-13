@@ -48,13 +48,13 @@ export interface StaffMember {
   email: string;
   phone: string;
   photoUrl?: string;
-  
+
   primaryGroup: StaffGroup;
   additionalPermissions?: string[];
-  
+
   availability: StaffAvailability;
   activity: StaffActivity;
-  
+
   skills?: string[];
   certifications?: string[];
   emergencyContact?: {
@@ -62,7 +62,7 @@ export interface StaffMember {
     phone: string;
     relationship: string;
   };
-  
+
   isActive: boolean;
   createdAt: Timestamp;
   updatedAt: Timestamp;

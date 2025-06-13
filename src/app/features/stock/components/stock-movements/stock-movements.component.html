@@ -45,7 +45,11 @@
           <mat-icon>sync_alt</mat-icon>
         </div>
         <div class="card-info">
-          <div class="card-value" [class.positive]="sum.netMovement > 0" [class.negative]="sum.netMovement < 0">
+          <div
+            class="card-value"
+            [class.positive]="sum.netMovement > 0"
+            [class.negative]="sum.netMovement < 0"
+          >
             {{ sum.netMovement > 0 ? '+' : '' }}{{ sum.netMovement }}
           </div>
           <div class="card-label">Net Movement</div>
@@ -102,14 +106,14 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Date From</mat-label>
-          <input matInput [matDatepicker]="dateFromPicker" formControlName="dateFrom">
+          <input matInput [matDatepicker]="dateFromPicker" formControlName="dateFrom" />
           <mat-datepicker-toggle matSuffix [for]="dateFromPicker"></mat-datepicker-toggle>
           <mat-datepicker #dateFromPicker></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Date To</mat-label>
-          <input matInput [matDatepicker]="dateToPicker" formControlName="dateTo">
+          <input matInput [matDatepicker]="dateToPicker" formControlName="dateTo" />
           <mat-datepicker-toggle matSuffix [for]="dateToPicker"></mat-datepicker-toggle>
           <mat-datepicker #dateToPicker></mat-datepicker>
         </mat-form-field>
@@ -163,9 +167,12 @@
           <ng-container matColumnDef="quantity">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
             <td mat-cell *matCellDef="let movement">
-              <span [class.incoming-qty]="isIncoming(movement.movementType)" 
-                    [class.outgoing-qty]="isOutgoing(movement.movementType)">
-                {{ isIncoming(movement.movementType) ? '+' : '-' }}{{ movement.quantity }} {{ movement.unitOfMeasure }}
+              <span
+                [class.incoming-qty]="isIncoming(movement.movementType)"
+                [class.outgoing-qty]="isOutgoing(movement.movementType)"
+              >
+                {{ isIncoming(movement.movementType) ? '+' : '-' }}{{ movement.quantity }}
+                {{ movement.unitOfMeasure }}
               </span>
             </td>
           </ng-container>
@@ -192,14 +199,18 @@
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>Actions</th>
             <td mat-cell *matCellDef="let movement">
-              <button mat-icon-button (click)="viewMovementDetails(movement)" matTooltip="View Details">
+              <button
+                mat-icon-button
+                (click)="viewMovementDetails(movement)"
+                matTooltip="View Details"
+              >
                 <mat-icon>visibility</mat-icon>
               </button>
             </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
           <!-- No Data Row -->
           <tr class="mat-row" *matNoDataRow>

@@ -1,16 +1,17 @@
-import { inject } from '@angular/core';
-import { Router } from '@angular/router';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// import { inject } from '@angular/core';
+// import { Router } from '@angular/router';
 import { CanActivateFn } from '@angular/router';
-import { map, take } from 'rxjs/operators';
-import { AuthService } from '../services/auth.service';
+// import { map, take } from 'rxjs/operators';
+// import { AuthService } from '../services/auth.service';
 import { UserProfile } from '../models/user-profile';
 
-export const roleGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
+export const roleGuard: CanActivateFn = (route, _state) => {
+  // const authService = inject(AuthService);
+  // const router = inject(Router);
 
   // Get allowed roles from route data
-  const allowedRoles = route.data['roles'] as UserProfile['userGroup'][] || [];
+  const allowedRoles = (route.data['roles'] as UserProfile['userGroup'][]) || [];
 
   // DEV MODE: Always allow access
   console.log('🔓 Role Guard - DEV MODE: Access granted (user is admin)');

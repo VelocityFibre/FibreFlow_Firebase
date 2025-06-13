@@ -1,27 +1,31 @@
 import { Injectable, inject } from '@angular/core';
-import { 
-  Firestore, 
-  collection, 
-  collectionData, 
-  doc, 
-  docData, 
-  addDoc, 
-  updateDoc, 
+import {
+  Firestore,
+  collection,
+  collectionData,
+  doc,
+  docData,
+  addDoc,
+  updateDoc,
   deleteDoc,
   query,
   where,
   orderBy,
-  limit,
   QueryConstraint,
   Timestamp,
-  serverTimestamp
+  serverTimestamp,
 } from '@angular/fire/firestore';
-import { Observable, from, map, switchMap, combineLatest } from 'rxjs';
-import { DailyProgress, DailyProgressFilter, DailyProgressSummary, ProgressComment } from '../models/daily-progress.model';
+import { Observable, from, map, switchMap } from 'rxjs';
+import {
+  DailyProgress,
+  DailyProgressFilter,
+  DailyProgressSummary,
+  ProgressComment,
+} from '../models/daily-progress.model';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DailyProgressService {
   private firestore = inject(Firestore);
@@ -30,7 +34,7 @@ export class DailyProgressService {
 
   getAll(filter?: DailyProgressFilter): Observable<DailyProgress[]> {
     const constraints: QueryConstraint[] = [orderBy('date', 'desc')];
-    
+
     if (filter) {
       if (filter.projectId) {
         constraints.push(where('projectId', '==', filter.projectId));
@@ -57,7 +61,7 @@ export class DailyProgressService {
         constraints.push(where('date', '<=', Timestamp.fromDate(filter.dateTo)));
       }
     }
-    
+
     const q = query(collection(this.firestore, this.collectionName), ...constraints);
     return collectionData(q, { idField: 'id' }) as Observable<DailyProgress[]>;
   }
@@ -71,7 +75,7 @@ export class DailyProgressService {
     const q = query(
       collection(this.firestore, this.collectionName),
       where('projectId', '==', projectId),
-      orderBy('date', 'desc')
+      orderBy('date', 'desc'),
     );
     return collectionData(q, { idField: 'id' }) as Observable<DailyProgress[]>;
   }
@@ -81,7 +85,7 @@ export class DailyProgressService {
       collection(this.firestore, this.collectionName),
       where('date', '>=', Timestamp.fromDate(startDate)),
       where('date', '<=', Timestamp.fromDate(endDate)),
-      orderBy('date', 'desc')
+      orderBy('date', 'desc'),
     );
     return collectionData(q, { idField: 'id' }) as Observable<DailyProgress[]>;
   }
@@ -91,25 +95,25 @@ export class DailyProgressService {
     today.setHours(0, 0, 0, 0);
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
-    
+
     return this.getByDateRange(today, tomorrow);
   }
 
   create(progress: Omit<DailyProgress, 'id'>): Observable<string> {
     const user = this.authService.getCurrentUser();
     if (!user) throw new Error('User not authenticated');
-    
+
     const newProgress = {
       ...progress,
       submittedBy: user?.uid || 'unknown',
       submittedByName: user?.displayName || user?.email || 'Unknown',
       submittedAt: serverTimestamp(),
       createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     };
-    
+
     return from(addDoc(collection(this.firestore, this.collectionName), newProgress)).pipe(
-      map(docRef => docRef.id)
+      map((docRef) => docRef.id),
     );
   }
 
@@ -117,7 +121,7 @@ export class DailyProgressService {
     const docRef = doc(this.firestore, this.collectionName, id);
     const updateData = {
       ...progress,
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     };
     return from(updateDoc(docRef, updateData));
   }
@@ -130,15 +134,15 @@ export class DailyProgressService {
   submitForApproval(id: string): Observable<void> {
     const user = this.authService.getCurrentUser();
     if (!user) throw new Error('User not authenticated');
-    
+
     const updateData = {
       status: 'submitted',
       submittedBy: user?.uid || 'unknown',
       submittedByName: user?.displayName || user?.email || 'Unknown',
       submittedAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     };
-    
+
     const docRef = doc(this.firestore, this.collectionName, id);
     return from(updateDoc(docRef, updateData));
   }
@@ -146,15 +150,15 @@ export class DailyProgressService {
   approve(id: string): Observable<void> {
     const user = this.authService.getCurrentUser();
     if (!user) throw new Error('User not authenticated');
-    
+
     const updateData = {
       status: 'approved',
       approvedBy: user?.uid || 'unknown',
       approvedByName: user?.displayName || user?.email || 'Unknown',
       approvedAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     };
-    
+
     const docRef = doc(this.firestore, this.collectionName, id);
     return from(updateDoc(docRef, updateData));
   }
@@ -162,66 +166,72 @@ export class DailyProgressService {
   addComment(progressId: string, commentText: string): Observable<void> {
     const user = this.authService.getCurrentUser();
     if (!user) throw new Error('User not authenticated');
-    
+
     return this.getById(progressId).pipe(
-      switchMap(progress => {
+      switchMap((progress) => {
         if (!progress) throw new Error('Progress not found');
-        
+
         const newComment: ProgressComment = {
           id: Date.now().toString(),
           text: commentText,
           authorId: user?.uid || 'unknown',
           authorName: user?.displayName || user?.email || 'Unknown',
-          createdAt: new Date()
+          createdAt: new Date(),
         };
-        
+
         const comments = progress.comments || [];
         comments.push(newComment);
-        
+
         return this.update(progressId, { comments });
-      })
+      }),
     );
   }
 
-  getProjectSummary(projectId: string, startDate?: Date, endDate?: Date): Observable<DailyProgressSummary> {
+  getProjectSummary(
+    projectId: string,
+    startDate?: Date,
+    endDate?: Date,
+  ): Observable<DailyProgressSummary> {
     const constraints: QueryConstraint[] = [
       where('projectId', '==', projectId),
-      where('status', '==', 'approved')
+      where('status', '==', 'approved'),
     ];
-    
+
     if (startDate) {
       constraints.push(where('date', '>=', Timestamp.fromDate(startDate)));
     }
     if (endDate) {
       constraints.push(where('date', '<=', Timestamp.fromDate(endDate)));
     }
-    
+
     const q = query(collection(this.firestore, this.collectionName), ...constraints);
     return collectionData(q, { idField: 'id' }).pipe(
       map((progressList: any[]) => {
         const totalHours = progressList.reduce((sum, p) => sum + (p.hoursWorked || 0), 0);
-        const uniqueDates = new Set(progressList.map(p => 
-          p.date instanceof Date ? p.date.toDateString() : new Date(p.date).toDateString()
-        ));
-        const issuesCount = progressList.filter(p => p.issuesEncountered).length;
-        
-        const dates = progressList.map(p => 
-          p.date instanceof Date ? p.date : new Date(p.date)
+        const uniqueDates = new Set(
+          progressList.map((p) =>
+            p.date instanceof Date ? p.date.toDateString() : new Date(p.date).toDateString(),
+          ),
         );
-        const periodStart = dates.length > 0 ? new Date(Math.min(...dates.map(d => d.getTime()))) : new Date();
-        const periodEnd = dates.length > 0 ? new Date(Math.max(...dates.map(d => d.getTime()))) : new Date();
-        
+        const issuesCount = progressList.filter((p) => p.issuesEncountered).length;
+
+        const dates = progressList.map((p) => (p.date instanceof Date ? p.date : new Date(p.date)));
+        const periodStart =
+          dates.length > 0 ? new Date(Math.min(...dates.map((d) => d.getTime()))) : new Date();
+        const periodEnd =
+          dates.length > 0 ? new Date(Math.max(...dates.map((d) => d.getTime()))) : new Date();
+
         return {
           projectId,
           projectName: progressList[0]?.projectName || '',
           totalHours,
           totalDays: uniqueDates.size,
-          completedTasks: progressList.filter(p => p.taskId).length,
+          completedTasks: progressList.filter((p) => p.taskId).length,
           issuesCount,
           periodStart,
-          periodEnd
+          periodEnd,
         };
-      })
+      }),
     );
   }
 }

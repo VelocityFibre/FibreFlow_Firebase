@@ -12,7 +12,7 @@ import { MatCardModule } from '@angular/material/card';
         <p>Project stock allocations will be displayed here.</p>
       </mat-card-content>
     </mat-card>
-  `
+  `,
 })
 export class ProjectStockComponent {
   @Input() projectId!: string;

@@ -1,11 +1,25 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, doc, docData, addDoc, updateDoc, deleteDoc, query, where, orderBy, QueryConstraint, Timestamp } from '@angular/fire/firestore';
-import { Observable, from, map } from 'rxjs';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  doc,
+  docData,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  QueryConstraint,
+  Timestamp,
+} from '@angular/fire/firestore';
+import { Observable, map } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { Client, ClientFilter, ClientSortOptions } from '../models/client.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ClientService {
   private firestore = inject(Firestore);
@@ -39,7 +53,7 @@ export class ClientService {
     }
 
     const q = query(this.clientsCollection, ...constraints);
-    
+
     return collectionData(q, { idField: 'id' }) as Observable<Client[]>;
   }
 
@@ -52,7 +66,7 @@ export class ClientService {
     return new Promise((resolve) => {
       this.getClient(id).subscribe({
         next: (client) => resolve(client),
-        error: () => resolve(undefined)
+        error: () => resolve(undefined),
       });
     });
   }
@@ -68,7 +82,7 @@ export class ClientService {
       totalValue: 0,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
-      createdBy: currentUser.uid
+      createdBy: currentUser.uid,
     };
 
     const docRef = await addDoc(this.clientsCollection, newClient);
@@ -83,7 +97,7 @@ export class ClientService {
     await updateDoc(clientDoc, {
       ...clientData,
       updatedAt: Timestamp.now(),
-      lastModifiedBy: currentUser.uid
+      lastModifiedBy: currentUser.uid,
     });
   }
 
@@ -96,12 +110,15 @@ export class ClientService {
     // For now, we'll do client-side filtering
     // In production, consider using a search service like Algolia
     return this.getClients().pipe(
-      map(clients => clients.filter(client => 
-        client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        client.contactPerson.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        client.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (client.industry && client.industry.toLowerCase().includes(searchTerm.toLowerCase()))
-      ))
+      map((clients) =>
+        clients.filter(
+          (client) =>
+            client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            client.contactPerson.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            client.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (client.industry && client.industry.toLowerCase().includes(searchTerm.toLowerCase())),
+        ),
+      ),
     );
   }
 
@@ -118,16 +135,19 @@ export class ClientService {
   }
 
   // Update client metrics (called when projects are updated)
-  async updateClientMetrics(clientId: string, metrics: {
-    projectsCount?: number;
-    activeProjectsCount?: number;
-    totalValue?: number;
-    lastProjectDate?: Timestamp;
-  }): Promise<void> {
+  async updateClientMetrics(
+    clientId: string,
+    metrics: {
+      projectsCount?: number;
+      activeProjectsCount?: number;
+      totalValue?: number;
+      lastProjectDate?: Timestamp;
+    },
+  ): Promise<void> {
     const clientDoc = doc(this.firestore, 'clients', clientId);
     await updateDoc(clientDoc, {
       ...metrics,
-      updatedAt: Timestamp.now()
+      updatedAt: Timestamp.now(),
     });
   }
 }

@@ -6,30 +6,48 @@
 // Spacing scale
 $ff-spacing: (
   0: 0,
-  xs: 4px,    // 0.5 * 8px
-  sm: 8px,    // 1 * 8px
-  md: 16px,   // 2 * 8px
-  lg: 24px,   // 3 * 8px
-  xl: 32px,   // 4 * 8px
-  2xl: 48px,  // 6 * 8px
-  3xl: 64px,  // 8 * 8px
-  4xl: 80px,  // 10 * 8px
-  5xl: 96px   // 12 * 8px
+  xs: 4px,
+  // 0.5 * 8px
+  sm: 8px,
+  // 1 * 8px
+  md: 16px,
+  // 2 * 8px
+  lg: 24px,
+  // 3 * 8px
+  xl: 32px,
+  // 4 * 8px
+  2xl: 48px,
+  // 6 * 8px
+  3xl: 64px,
+  // 8 * 8px
+  4xl: 80px,
+  // 10 * 8px
+  5xl: 96px, // 12 * 8px
 );
 
 // Typography scale
 $ff-font-sizes: (
-  xs: 0.75rem,    // 12px
-  sm: 0.875rem,   // 14px
-  base: 1rem,     // 16px
-  lg: 1.125rem,   // 18px
-  xl: 1.25rem,    // 20px
-  2xl: 1.5rem,    // 24px
-  3xl: 1.875rem,  // 30px
-  4xl: 2.25rem,   // 36px
-  5xl: 3rem,      // 48px
-  6xl: 3.75rem,   // 60px
-  7xl: 4.5rem     // 72px
+  xs: 0.75rem,
+  // 12px
+  sm: 0.875rem,
+  // 14px
+  base: 1rem,
+  // 16px
+  lg: 1.125rem,
+  // 18px
+  xl: 1.25rem,
+  // 20px
+  2xl: 1.5rem,
+  // 24px
+  3xl: 1.875rem,
+  // 30px
+  4xl: 2.25rem,
+  // 36px
+  5xl: 3rem,
+  // 48px
+  6xl: 3.75rem,
+  // 60px
+  7xl: 4.5rem, // 72px
 );
 
 // Font weights
@@ -42,7 +60,7 @@ $ff-font-weights: (
   semibold: 600,
   bold: 700,
   extrabold: 800,
-  black: 900
+  black: 900,
 );
 
 // Z-index scale
@@ -55,7 +73,7 @@ $ff-z-index: (
   modal-backdrop: 1040,
   modal: 1050,
   popover: 1060,
-  tooltip: 1070
+  tooltip: 1070,
 );
 
 // Breakpoints
@@ -65,7 +83,7 @@ $ff-breakpoints: (
   md: 768px,
   lg: 1024px,
   xl: 1280px,
-  2xl: 1536px
+  2xl: 1536px,
 );
 
 // Animation durations
@@ -73,7 +91,7 @@ $ff-transitions: (
   fast: 150ms,
   base: 200ms,
   slow: 300ms,
-  slower: 500ms
+  slower: 500ms,
 );
 
 // Get spacing value from scale
@@ -118,7 +136,7 @@ $ff-transitions: (
   @if not map.has-key($ff-breakpoints, $breakpoint) {
     @error "Invalid breakpoint '#{$breakpoint}'. Valid breakpoints are: #{map.keys($ff-breakpoints)}";
   }
-  @return "(min-width: #{map.get($ff-breakpoints, $breakpoint)})";
+  @return '(min-width: #{map.get($ff-breakpoints, $breakpoint)})';
 }
 
 // Get transition duration

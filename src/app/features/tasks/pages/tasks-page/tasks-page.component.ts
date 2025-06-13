@@ -1,18 +1,21 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
+import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatBadgeModule } from '@angular/material/badge';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { TaskListComponent } from '../../components/task-list/task-list.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TaskFormDialogComponent } from '../../components/task-form-dialog/task-form-dialog.component';
-import { TaskService } from '../../../../core/services/task.service';
 import { Task, TaskStatus } from '../../../../core/models/task.model';
-import { Observable, map } from 'rxjs';
+import { TaskService } from '../../../../core/services/task.service';
+import { ProjectService } from '../../../../core/services/project.service';
+import { StaffService } from '../../../staff/services/staff.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DestroyRef } from '@angular/core';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-tasks-page',
@@ -20,419 +23,378 @@ import { Observable, map } from 'rxjs';
   imports: [
     CommonModule,
     MatCardModule,
+    MatTableModule,
     MatButtonModule,
     MatIconModule,
-    MatTabsModule,
-    MatBadgeModule,
-    MatButtonToggleModule,
-    TaskListComponent
+    MatChipsModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    MatProgressBarModule,
   ],
   template: `
     <div class="tasks-page">
-      <!-- Header -->
       <div class="page-header">
         <div>
-          <h1>Tasks</h1>
-          <p class="subtitle">Manage your project tasks and assignments</p>
+          <h1>Task Management</h1>
+          <p class="subtitle">Manage all tasks across projects</p>
         </div>
-        <div class="header-actions">
-          <mat-button-toggle-group [(value)]="viewMode" class="view-toggle">
-            <mat-button-toggle value="card">
-              <mat-icon>dashboard</mat-icon>
-              Card View
-            </mat-button-toggle>
-            <mat-button-toggle value="list">
-              <mat-icon>list</mat-icon>
-              List View
-            </mat-button-toggle>
-          </mat-button-toggle-group>
-          <button mat-raised-button color="primary" (click)="openCreateTaskDialog()">
-            <mat-icon>add</mat-icon>
-            New Task
-          </button>
-        </div>
+        <button mat-raised-button color="primary" (click)="addTask()">
+          <mat-icon>add</mat-icon>
+          Add Task
+        </button>
       </div>
 
-      <!-- Tabs -->
-      <mat-tab-group>
-        <!-- All Tasks Tab -->
-        <mat-tab>
-          <ng-template mat-tab-label>
-            All Tasks
-            <span class="badge" *ngIf="activeTasksCount$ | async as count">
-              {{ count }}
-            </span>
-          </ng-template>
-          <div class="tab-content">
-            <app-task-list 
-              [tasks]="activeTasks$ | async"
-              [viewMode]="viewMode"
-              (taskClick)="onTaskClick($event)"
-              (statusChange)="onStatusChange($event)">
-            </app-task-list>
-          </div>
-        </mat-tab>
+      <mat-card>
+        <mat-card-content>
+          @if (loading) {
+            <div class="loading-container">
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              <p>Loading tasks...</p>
+            </div>
+          } @else {
+            <table mat-table [dataSource]="tasks" class="tasks-table">
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Task Name</th>
+                <td mat-cell *matCellDef="let task">{{ task.name }}</td>
+              </ng-container>
 
-        <!-- Due Today Tab -->
-        <mat-tab>
-          <ng-template mat-tab-label>
-            Due Today
-            <span class="badge warning" *ngIf="dueTodayCount$ | async as count">
-              {{ count }}
-            </span>
-          </ng-template>
-          <div class="tab-content">
-            <app-task-list 
-              [tasks]="dueTodayTasks$ | async"
-              [viewMode]="viewMode"
-              [highlightDueToday]="true"
-              (taskClick)="onTaskClick($event)"
-              (statusChange)="onStatusChange($event)">
-            </app-task-list>
-          </div>
-        </mat-tab>
+              <!-- Project Column -->
+              <ng-container matColumnDef="project">
+                <th mat-header-cell *matHeaderCellDef>Project</th>
+                <td mat-cell *matCellDef="let task">{{ getProjectName(task.projectId) }}</td>
+              </ng-container>
 
-        <!-- Completed Tab -->
-        <mat-tab>
-          <ng-template mat-tab-label>
-            Completed
-            <span class="badge success" *ngIf="completedCount$ | async as count">
-              {{ count }}
-            </span>
-          </ng-template>
-          <div class="tab-content">
-            <app-task-list 
-              [tasks]="completedTasks$ | async"
-              [viewMode]="viewMode"
-              [showCompleted]="true"
-              (taskClick)="onTaskClick($event)"
-              (statusChange)="onStatusChange($event)">
-            </app-task-list>
-          </div>
-        </mat-tab>
+              <!-- Status Column -->
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let task">
+                  <mat-chip [ngClass]="'status-' + task.status">
+                    {{ formatStatus(task.status) }}
+                  </mat-chip>
+                </td>
+              </ng-container>
 
-        <!-- Project Phase Tasks Tab -->
-        <mat-tab>
-          <ng-template mat-tab-label>
-            Project Phase Tasks
-            <span class="badge info" *ngIf="projectTasksCount$ | async as count">
-              {{ count }}
-            </span>
-          </ng-template>
-          <div class="tab-content">
-            <app-task-list 
-              [tasks]="projectPhaseTasks$ | async"
-              [viewMode]="viewMode"
-              [showProjectPhase]="true"
-              (taskClick)="onTaskClick($event)"
-              (statusChange)="onStatusChange($event)">
-            </app-task-list>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
+              <!-- Priority Column -->
+              <ng-container matColumnDef="priority">
+                <th mat-header-cell *matHeaderCellDef>Priority</th>
+                <td mat-cell *matCellDef="let task">
+                  <mat-chip [ngClass]="'priority-' + task.priority">
+                    {{ task.priority }}
+                  </mat-chip>
+                </td>
+              </ng-container>
+
+              <!-- Assignee Column -->
+              <ng-container matColumnDef="assignee">
+                <th mat-header-cell *matHeaderCellDef>Assignee</th>
+                <td mat-cell *matCellDef="let task">
+                  {{ task.assignedTo ? getAssigneeName(task.assignedTo) : '-' }}
+                </td>
+              </ng-container>
+
+              <!-- Due Date Column -->
+              <ng-container matColumnDef="dueDate">
+                <th mat-header-cell *matHeaderCellDef>Due Date</th>
+                <td mat-cell *matCellDef="let task">
+                  @if (task.dueDate) {
+                    <span [ngClass]="{ overdue: isOverdue(task) }">{{
+                      formatDate(task.dueDate)
+                    }}</span>
+                  } @else {
+                    <span>-</span>
+                  }
+                </td>
+              </ng-container>
+
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let task">
+                  <button mat-icon-button (click)="editTask(task)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="deleteTask(task)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+          }
+        </mat-card-content>
+      </mat-card>
     </div>
   `,
-  styles: [`
-    .tasks-page {
-      padding: 24px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
+  styles: [
+    `
+      .tasks-page {
+        padding: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
 
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 32px;
-    }
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+      }
 
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+      .page-header h1 {
+        font-size: 32px;
+        font-weight: 500;
+        margin: 0;
+      }
 
-    .view-toggle {
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
-    }
+      .subtitle {
+        color: #666;
+        margin: 4px 0 0 0;
+      }
 
-    h1 {
-      font-size: 32px;
-      font-weight: 500;
-      margin: 0;
-    }
+      .loading-container {
+        padding: 48px;
+        text-align: center;
+      }
 
-    .subtitle {
-      color: #666;
-      margin: 4px 0 0 0;
-    }
+      .tasks-table {
+        width: 100%;
+      }
 
-    .tab-content {
-      padding: 24px 0;
-    }
+      mat-chip {
+        font-size: 12px;
+      }
 
-    .badge {
-      margin-left: 8px;
-      background-color: #e0e0e0;
-      color: #333;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 500;
-    }
+      .status-pending {
+        background-color: #e3f2fd !important;
+        color: #1976d2 !important;
+      }
 
-    .badge.warning {
-      background-color: #ff9800;
-      color: white;
-    }
+      .status-in_progress {
+        background-color: #fff3e0 !important;
+        color: #f57c00 !important;
+      }
 
-    .badge.success {
-      background-color: #4caf50;
-      color: white;
-    }
+      .status-completed {
+        background-color: #e8f5e9 !important;
+        color: #388e3c !important;
+      }
 
-    .badge.info {
-      background-color: #2196f3;
-      color: white;
-    }
+      .status-blocked {
+        background-color: #ffebee !important;
+        color: #d32f2f !important;
+      }
 
-    ::ng-deep .mat-mdc-tab-label {
-      display: flex !important;
-      align-items: center !important;
-    }
-  `]
+      .priority-low {
+        background-color: #e8f5e9 !important;
+        color: #388e3c !important;
+      }
+
+      .priority-medium {
+        background-color: #fff3e0 !important;
+        color: #f57c00 !important;
+      }
+
+      .priority-high {
+        background-color: #ffebee !important;
+        color: #d32f2f !important;
+      }
+
+      .overdue {
+        color: #d32f2f;
+        font-weight: 500;
+      }
+    `,
+  ],
 })
 export class TasksPageComponent implements OnInit {
-  // View mode toggle
-  viewMode: 'card' | 'list' = 'card';
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+  private taskService = inject(TaskService);
+  private projectService = inject(ProjectService);
+  private staffService = inject(StaffService);
+  private destroyRef = inject(DestroyRef);
 
-  // Mock data for now - will be replaced with real data from service
-  private allTasks = signal<Task[]>([
-    {
-      id: '1',
-      name: 'Complete pole permissions',
-      description: 'Obtain all necessary permits for pole installations',
-      phaseId: '1',
-      projectId: '1',
-      orderNo: 1,
-      status: TaskStatus.IN_PROGRESS,
-      priority: 'high' as any,
-      assignedTo: 'john-doe',
-      assignedToName: 'John Doe',
-      dueDate: new Date(),
-      estimatedHours: 8,
-      actualHours: 4,
-      completionPercentage: 50
-    },
-    {
-      id: '2',
-      name: 'Submit design documents',
-      description: 'Finalize and submit technical design documentation',
-      phaseId: '1',
-      projectId: '2',
-      orderNo: 2,
-      status: TaskStatus.PENDING,
-      priority: 'medium' as any,
-      assignedTo: 'sarah-johnson',
-      assignedToName: 'Sarah Johnson',
-      dueDate: new Date(Date.now() + 86400000), // Tomorrow
-      estimatedHours: 16,
-      completionPercentage: 0
-    },
-    {
-      id: '3',
-      name: 'Finalize contractor agreements',
-      description: 'Complete contract negotiations with installation contractors',
-      phaseId: '2',
-      projectId: '3',
-      orderNo: 3,
-      status: TaskStatus.IN_PROGRESS,
-      priority: 'high' as any,
-      assignedTo: 'mike-wilson',
-      assignedToName: 'Mike Wilson',
-      dueDate: new Date(Date.now() + 172800000), // 2 days from now
-      estimatedHours: 12,
-      actualHours: 6,
-      completionPercentage: 40
-    },
-    {
-      id: '4',
-      name: 'Equipment procurement approval',
-      description: 'Get approval for fiber optic equipment purchase orders',
-      phaseId: '2',
-      projectId: '4',
-      orderNo: 4,
-      status: TaskStatus.PENDING,
-      priority: 'medium' as any,
-      assignedTo: 'emily-chen',
-      assignedToName: 'Emily Chen',
-      dueDate: new Date(Date.now() + 259200000), // 3 days from now
-      estimatedHours: 8,
-      completionPercentage: 0
-    },
-    {
-      id: '5',
-      name: 'Site survey validation',
-      description: 'Validate site survey results for accuracy',
-      phaseId: '1',
-      projectId: '1',
-      orderNo: 5,
-      status: TaskStatus.COMPLETED,
-      priority: 'medium' as any,
-      assignedTo: 'john-doe',
-      assignedToName: 'John Doe',
-      dueDate: new Date(Date.now() - 86400000), // Yesterday
-      completedDate: new Date(Date.now() - 86400000),
-      estimatedHours: 6,
-      actualHours: 5,
-      completionPercentage: 100
-    },
-    {
-      id: '6',
-      name: 'Initial design review',
-      description: 'Review initial network design specifications',
-      phaseId: '1',
-      projectId: '2',
-      orderNo: 6,
-      status: TaskStatus.COMPLETED,
-      priority: 'high' as any,
-      assignedTo: 'sarah-johnson',
-      assignedToName: 'Sarah Johnson',
-      dueDate: new Date(Date.now() - 172800000), // 2 days ago
-      completedDate: new Date(Date.now() - 172800000),
-      estimatedHours: 10,
-      actualHours: 11,
-      completionPercentage: 100
-    }
-  ]);
-
-  // Observable streams
-  activeTasks$ = new Observable<Task[]>(subscriber => {
-    subscriber.next(this.allTasks().filter(task => task.status !== TaskStatus.COMPLETED));
-  });
-
-  completedTasks$ = new Observable<Task[]>(subscriber => {
-    subscriber.next(this.allTasks().filter(task => task.status === TaskStatus.COMPLETED));
-  });
-
-  dueTodayTasks$ = new Observable<Task[]>(subscriber => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    
-    subscriber.next(
-      this.allTasks().filter(task => {
-        if (task.status === TaskStatus.COMPLETED) return false;
-        const dueDate = new Date(task.dueDate!);
-        dueDate.setHours(0, 0, 0, 0);
-        return dueDate.getTime() === today.getTime();
-      })
-    );
-  });
-
-  projectPhaseTasks$ = new Observable<Task[]>(subscriber => {
-    // For now, we'll mark some tasks as project phase tasks
-    subscriber.next(
-      this.allTasks().filter(task => task.orderNo % 2 === 0)
-    );
-  });
-
-  // Count observables
-  activeTasksCount$ = this.activeTasks$.pipe(map(tasks => tasks?.length || 0));
-  completedCount$ = this.completedTasks$.pipe(map(tasks => tasks?.length || 0));
-  dueTodayCount$ = this.dueTodayTasks$.pipe(map(tasks => tasks?.length || 0));
-  projectTasksCount$ = this.projectPhaseTasks$.pipe(map(tasks => tasks?.length || 0));
-
-  constructor(
-    private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private taskService: TaskService
-  ) {}
+  displayedColumns = ['name', 'project', 'status', 'priority', 'assignee', 'dueDate', 'actions'];
+  tasks: Task[] = [];
+  projects$ = this.projectService.getProjects();
+  staff$ = this.staffService.getStaff();
+  projectsMap = new Map<string, string>();
+  staffMap = new Map<string, string>();
+  loading = true;
 
   ngOnInit() {
-    // Load real tasks when service is ready
-    // this.loadTasks();
+    this.loadData();
   }
 
-  openCreateTaskDialog() {
+  private loadData() {
+    // Load all data in parallel
+    combineLatest([this.taskService.getAllTasks(), this.projects$, this.staff$])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(([tasks, projects, staff]) => {
+        this.tasks = tasks;
+
+        // Build maps for quick lookups
+        this.projectsMap.clear();
+        projects.forEach((p: { id: string; name: string }) => this.projectsMap.set(p.id, p.name));
+
+        this.staffMap.clear();
+        staff.forEach((s: { id: string; name: string }) => this.staffMap.set(s.id, s.name));
+
+        this.loading = false;
+      });
+  }
+
+  getProjectName(projectId: string): string {
+    return this.projectsMap.get(projectId) || 'Unknown Project';
+  }
+
+  getAssigneeName(assigneeId: string): string {
+    return this.staffMap.get(assigneeId) || 'Unknown';
+  }
+
+  getStatusIcon(status: TaskStatus): string {
+    const icons: Record<string, string> = {
+      pending: 'radio_button_unchecked',
+      in_progress: 'pending',
+      completed: 'check_circle',
+      blocked: 'block',
+    };
+    return icons[status] || 'help';
+  }
+
+  formatStatus(status: TaskStatus): string {
+    const statusNames: Record<string, string> = {
+      pending: 'Pending',
+      in_progress: 'In Progress',
+      completed: 'Completed',
+      blocked: 'Blocked',
+    };
+    return statusNames[status] || status;
+  }
+
+  formatDate(date: any): string {
+    if (!date) return '';
+    const d = date.toDate ? date.toDate() : date instanceof Date ? date : new Date(date);
+    return d.toLocaleDateString('en-ZA', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  }
+
+  isOverdue(task: Task): boolean {
+    if (!task.dueDate || task.status === TaskStatus.COMPLETED) return false;
+    const dueDate =
+      task.dueDate instanceof Date
+        ? task.dueDate
+        : (task.dueDate as any).toDate
+          ? (task.dueDate as any).toDate()
+          : new Date(task.dueDate as any);
+    return dueDate < new Date();
+  }
+
+  addTask() {
     const dialogRef = this.dialog.open(TaskFormDialogComponent, {
       width: '600px',
-      data: { task: null }
+      data: { task: null, isTemplate: false },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // Create task
-        this.createTask(result);
+        this.taskService
+          .createTask(result)
+          .then(() => {
+            this.snackBar.open('Task added successfully', 'Close', { duration: 3000 });
+          })
+          .catch((error) => {
+            console.error('Error adding task:', error);
+            this.snackBar.open('Error adding task', 'Close', { duration: 3000 });
+          });
       }
     });
   }
 
-  onTaskClick(task: Task) {
-    // Navigate to project detail page with tasks tab
-    // For now, just open edit dialog
+  editTask(task: Task) {
     const dialogRef = this.dialog.open(TaskFormDialogComponent, {
       width: '600px',
-      data: { task }
+      data: { task: { ...task }, isTemplate: false },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // Update task
-        this.updateTask(task.id!, result);
+        this.taskService
+          .updateTask(task.id!, result)
+          .then(() => {
+            this.snackBar.open('Task updated successfully', 'Close', { duration: 3000 });
+          })
+          .catch((error) => {
+            console.error('Error updating task:', error);
+            this.snackBar.open('Error updating task', 'Close', { duration: 3000 });
+          });
       }
     });
   }
 
-  onStatusChange(event: { task: Task; newStatus: TaskStatus }) {
-    this.updateTaskStatus(event.task.id!, event.newStatus);
+  updateTaskStatus(task: Task) {
+    const statuses: TaskStatus[] = [
+      TaskStatus.PENDING,
+      TaskStatus.IN_PROGRESS,
+      TaskStatus.COMPLETED,
+      TaskStatus.BLOCKED,
+    ];
+    const currentIndex = statuses.indexOf(task.status);
+    const nextStatus = statuses[(currentIndex + 1) % statuses.length];
+
+    this.taskService
+      .updateTask(task.id!, { status: nextStatus })
+      .then(() => {
+        this.snackBar.open(`Task status updated to ${this.formatStatus(nextStatus)}`, 'Close', {
+          duration: 3000,
+        });
+      })
+      .catch((error) => {
+        console.error('Error updating task status:', error);
+        this.snackBar.open('Error updating task status', 'Close', { duration: 3000 });
+      });
   }
 
-  private createTask(taskData: Partial<Task>) {
-    // Mock implementation
-    const newTask: Task = {
-      ...taskData as Task,
-      id: String(this.allTasks().length + 1),
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-    
-    this.allTasks.update(tasks => [...tasks, newTask]);
-    
-    this.snackBar.open('Task created successfully', 'Close', { 
-      duration: 3000 
-    });
+  assignTask(task: Task) {
+    // For now, just cycle through available staff
+    const staffIds = Array.from(this.staffMap.keys());
+    const currentIndex = task.assignedTo ? staffIds.indexOf(task.assignedTo) : -1;
+    const nextAssignee =
+      currentIndex === -1
+        ? staffIds[0]
+        : currentIndex + 1 >= staffIds.length
+          ? undefined
+          : staffIds[currentIndex + 1];
+
+    this.taskService
+      .updateTask(task.id!, { assignedTo: nextAssignee })
+      .then(() => {
+        const assigneeName = nextAssignee ? this.getAssigneeName(nextAssignee) : 'Unassigned';
+        this.snackBar.open(`Task assigned to ${assigneeName}`, 'Close', { duration: 3000 });
+      })
+      .catch((error) => {
+        console.error('Error assigning task:', error);
+        this.snackBar.open('Error assigning task', 'Close', { duration: 3000 });
+      });
   }
 
-  private updateTask(taskId: string, updates: Partial<Task>) {
-    this.allTasks.update(tasks =>
-      tasks.map(task =>
-        task.id === taskId
-          ? { ...task, ...updates, updatedAt: new Date() }
-          : task
-      )
-    );
-    
-    this.snackBar.open('Task updated successfully', 'Close', { 
-      duration: 3000 
-    });
-  }
-
-  private updateTaskStatus(taskId: string, newStatus: TaskStatus) {
-    const updates: Partial<Task> = {
-      status: newStatus,
-      completionPercentage: newStatus === TaskStatus.COMPLETED ? 100 : undefined,
-      completedDate: newStatus === TaskStatus.COMPLETED ? new Date() : undefined
-    };
-    
-    this.updateTask(taskId, updates);
-    
-    this.snackBar.open(
-      `Task status updated to ${newStatus.toLowerCase().replace('_', ' ')}`,
-      'Close',
-      { duration: 3000 }
-    );
+  deleteTask(task: Task) {
+    if (confirm(`Are you sure you want to delete the task "${task.name}"?`)) {
+      this.taskService
+        .deleteTask(task.id!)
+        .then(() => {
+          this.snackBar.open('Task deleted successfully', 'Close', { duration: 3000 });
+        })
+        .catch((error) => {
+          console.error('Error deleting task:', error);
+          this.snackBar.open('Error deleting task', 'Close', { duration: 3000 });
+        });
+    }
   }
 }

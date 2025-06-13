@@ -15,7 +15,12 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 
 import { SupplierService } from '../../../../core/suppliers/services/supplier.service';
-import { Supplier, SupplierFilter, SupplierStatus, SupplierCategory } from '../../../../core/suppliers/models';
+import {
+  Supplier,
+  SupplierFilter,
+  SupplierStatus,
+  SupplierCategory,
+} from '../../../../core/suppliers/models';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -35,23 +40,30 @@ import { Observable } from 'rxjs';
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatMenuModule,
-    MatBadgeModule
+    MatBadgeModule,
   ],
   templateUrl: './supplier-list.component.html',
-  styleUrls: ['./supplier-list.component.scss']
+  styleUrls: ['./supplier-list.component.scss'],
 })
 export class SupplierListComponent implements OnInit {
   private supplierService = inject(SupplierService);
-  
+
   suppliers$!: Observable<Supplier[]>;
-  displayedColumns: string[] = ['companyName', 'categories', 'contact', 'status', 'verification', 'actions'];
-  
+  displayedColumns: string[] = [
+    'companyName',
+    'categories',
+    'contact',
+    'status',
+    'verification',
+    'actions',
+  ];
+
   filter: SupplierFilter = {};
   searchQuery = '';
-  
+
   supplierStatuses = Object.values(SupplierStatus);
   supplierCategories = Object.values(SupplierCategory);
-  
+
   loading = false;
 
   ngOnInit(): void {
@@ -61,7 +73,7 @@ export class SupplierListComponent implements OnInit {
   loadSuppliers(): void {
     this.loading = true;
     this.suppliers$ = this.supplierService.getSuppliers(this.filter);
-    setTimeout(() => this.loading = false, 500);
+    setTimeout(() => (this.loading = false), 500);
   }
 
   onSearch(): void {
@@ -80,8 +92,10 @@ export class SupplierListComponent implements OnInit {
   }
 
   getCategoryLabel(category: string): string {
-    return category.replace(/_/g, ' ').toLowerCase()
-      .replace(/\b\w/g, l => l.toUpperCase());
+    return category
+      .replace(/_/g, ' ')
+      .toLowerCase()
+      .replace(/\b\w/g, (l) => l.toUpperCase());
   }
 
   getStatusClass(status: SupplierStatus): string {

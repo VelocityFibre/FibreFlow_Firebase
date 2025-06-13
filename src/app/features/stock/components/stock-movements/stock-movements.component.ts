@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -25,16 +25,16 @@ import { StockService } from '../../services/stock.service';
 import { StockMovementService } from '../../services/stock-movement.service';
 import { ProjectService } from '../../../../core/services/project.service';
 import { StockMovementFormDialogComponent } from '../stock-movement-form-dialog/stock-movement-form-dialog.component';
-import { 
-  StockMovement, 
-  MovementType, 
+import {
+  StockMovement,
+  MovementType,
   ReferenceType,
   StockMovementFilter,
   isIncomingMovement,
   isOutgoingMovement,
   getMovementTypeLabel,
   getMovementTypeIcon,
-  getMovementTypeColor
+  getMovementTypeColor,
 } from '../../models/stock-movement.model';
 import { StockItem } from '../../models/stock-item.model';
 import { Project } from '../../../../core/models/project.model';
@@ -60,10 +60,10 @@ import { Project } from '../../../../core/models/project.model';
     MatPaginatorModule,
     MatSortModule,
     MatProgressBarModule,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
   templateUrl: './stock-movements.component.html',
-  styleUrls: ['./stock-movements.component.scss']
+  styleUrls: ['./stock-movements.component.scss'],
 })
 export class StockMovementsComponent implements OnInit {
   private stockService = inject(StockService);
@@ -79,17 +79,17 @@ export class StockMovementsComponent implements OnInit {
   stockItems = signal<StockItem[]>([]);
   projects = signal<Project[]>([]);
   loading = signal(false);
-  
+
   // Filter form
   filterForm!: FormGroup;
-  
+
   // Movement types for filter
   movementTypes = Object.values(MovementType);
   movementTypeLabels = getMovementTypeLabel;
-  
+
   // Reference types for filter
   referenceTypes = Object.values(ReferenceType);
-  
+
   // Table configuration
   displayedColumns = [
     'movementDate',
@@ -100,17 +100,17 @@ export class StockMovementsComponent implements OnInit {
     'reference',
     'location',
     'performedBy',
-    'actions'
+    'actions',
   ];
-  
+
   // Computed values
   summary = computed(() => {
     const movs = this.movements();
     let totalIn = 0;
     let totalOut = 0;
     let totalValue = 0;
-    
-    movs.forEach(m => {
+
+    movs.forEach((m) => {
       if (isIncomingMovement(m.movementType)) {
         totalIn += m.quantity;
         totalValue += m.totalCost;
@@ -119,12 +119,12 @@ export class StockMovementsComponent implements OnInit {
         totalValue -= m.totalCost;
       }
     });
-    
+
     return {
       totalIn,
       totalOut,
       netMovement: totalIn - totalOut,
-      totalValue: Math.abs(totalValue)
+      totalValue: Math.abs(totalValue),
     };
   });
 
@@ -140,9 +140,9 @@ export class StockMovementsComponent implements OnInit {
       referenceType: [''],
       projectId: [''],
       dateFrom: [''],
-      dateTo: ['']
+      dateTo: [''],
     });
-    
+
     // Apply filters on value changes
     this.filterForm.valueChanges.subscribe(() => {
       this.applyFilters();
@@ -151,23 +151,23 @@ export class StockMovementsComponent implements OnInit {
 
   private async loadData() {
     this.loading.set(true);
-    
+
     try {
       // Load stock items for filter
       const items = await firstValueFrom(this.stockService.getStockItems());
       this.stockItems.set(items);
-      
+
       // Load projects for filter
       const projects = await firstValueFrom(this.projectService.getProjects());
       this.projects.set(projects);
-      
+
       // Load movements
       await this.loadMovements();
     } catch (error) {
       console.error('Error loading data:', error);
       this.snackBar.open('Error loading data', 'Close', {
         duration: 3000,
-        panelClass: 'error-snackbar'
+        panelClass: 'error-snackbar',
       });
     } finally {
       this.loading.set(false);
@@ -183,30 +183,38 @@ export class StockMovementsComponent implements OnInit {
   private buildFilter(): StockMovementFilter {
     const values = this.filterForm.value;
     const filter: StockMovementFilter = {};
-    
+
     if (values.itemId) filter.itemId = values.itemId;
     if (values.movementType) filter.movementType = values.movementType;
     if (values.referenceType) filter.referenceType = values.referenceType;
     if (values.projectId) filter.projectId = values.projectId;
     if (values.dateFrom) filter.dateFrom = values.dateFrom;
     if (values.dateTo) filter.dateTo = values.dateTo;
-    
+
     return filter;
   }
 
-  private applyClientSideFilter(movements: StockMovement[], filter: StockMovementFilter): StockMovement[] {
-    return movements.filter(m => {
+  private applyClientSideFilter(
+    movements: StockMovement[],
+    filter: StockMovementFilter,
+  ): StockMovement[] {
+    return movements.filter((m) => {
       if (filter.itemId && m.itemId !== filter.itemId) return false;
       if (filter.movementType && m.movementType !== filter.movementType) return false;
       if (filter.referenceType && m.referenceType !== filter.referenceType) return false;
-      if (filter.projectId && m.toProjectId !== filter.projectId && m.fromProjectId !== filter.projectId) return false;
-      
+      if (
+        filter.projectId &&
+        m.toProjectId !== filter.projectId &&
+        m.fromProjectId !== filter.projectId
+      )
+        return false;
+
       if (filter.dateFrom || filter.dateTo) {
         const movementDate = m.movementDate.toDate();
         if (filter.dateFrom && movementDate < filter.dateFrom) return false;
         if (filter.dateTo && movementDate > filter.dateTo) return false;
       }
-      
+
       return true;
     });
   }
@@ -224,11 +232,11 @@ export class StockMovementsComponent implements OnInit {
       width: '800px',
       data: {
         stockItems: this.stockItems(),
-        projects: this.projects()
-      }
+        projects: this.projects(),
+      },
     });
-    
-    dialogRef.afterClosed().subscribe(result => {
+
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.createMovement(result);
       }
@@ -237,19 +245,21 @@ export class StockMovementsComponent implements OnInit {
 
   async createMovement(movement: Partial<StockMovement>) {
     this.loading.set(true);
-    
+
     try {
-      await this.stockMovementService.createMovement(movement as Omit<StockMovement, 'id' | 'createdAt' | 'updatedAt'>);
+      await this.stockMovementService.createMovement(
+        movement as Omit<StockMovement, 'id' | 'createdAt' | 'updatedAt'>,
+      );
       this.snackBar.open('Stock movement created successfully', 'Close', {
         duration: 3000,
-        panelClass: 'success-snackbar'
+        panelClass: 'success-snackbar',
       });
       await this.loadMovements();
     } catch (error) {
       console.error('Error creating movement:', error);
       this.snackBar.open('Error creating stock movement', 'Close', {
         duration: 3000,
-        panelClass: 'error-snackbar'
+        panelClass: 'error-snackbar',
       });
     } finally {
       this.loading.set(false);
@@ -259,7 +269,7 @@ export class StockMovementsComponent implements OnInit {
   viewMovementDetails(movement: StockMovement) {
     // Navigate to stock item detail with movement highlighted
     this.router.navigate(['/stock', movement.itemId], {
-      queryParams: { highlightMovement: movement.id }
+      queryParams: { highlightMovement: movement.id },
     });
   }
 
@@ -271,14 +281,14 @@ export class StockMovementsComponent implements OnInit {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 
   formatCurrency(value: number): string {
     return new Intl.NumberFormat('en-ZA', {
       style: 'currency',
-      currency: 'ZAR'
+      currency: 'ZAR',
     }).format(value);
   }
 

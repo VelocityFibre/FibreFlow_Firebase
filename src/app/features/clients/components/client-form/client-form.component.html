@@ -9,7 +9,9 @@
     <!-- Header -->
     <div class="form-header">
       <h1 class="form-title">{{ isEditMode ? 'Edit Client' : 'Add New Client' }}</h1>
-      <p class="form-subtitle">{{ isEditMode ? 'Update client information' : 'Create a new client profile' }}</p>
+      <p class="form-subtitle">
+        {{ isEditMode ? 'Update client information' : 'Create a new client profile' }}
+      </p>
     </div>
 
     <!-- Stepper Form -->
@@ -18,14 +20,14 @@
       <mat-step [stepControl]="basicInfoForm">
         <form [formGroup]="basicInfoForm">
           <ng-template matStepLabel>Basic Information</ng-template>
-          
+
           <div class="step-content">
             <div class="form-section">
               <div class="form-grid">
                 <!-- Client Name -->
                 <mat-form-field appearance="outline">
                   <mat-label>Client Name</mat-label>
-                  <input matInput formControlName="name" placeholder="Enter client name">
+                  <input matInput formControlName="name" placeholder="Enter client name" />
                   <mat-error>{{ getErrorMessage('name', basicInfoForm) }}</mat-error>
                 </mat-form-field>
 
@@ -65,7 +67,7 @@
                 <!-- Website -->
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>Website</mat-label>
-                  <input matInput formControlName="website" placeholder="https://example.com">
+                  <input matInput formControlName="website" placeholder="https://example.com" />
                   <mat-icon matPrefix>language</mat-icon>
                   <mat-error>{{ getErrorMessage('website', basicInfoForm) }}</mat-error>
                 </mat-form-field>
@@ -77,7 +79,12 @@
                 <mat-icon>close</mat-icon>
                 Cancel
               </button>
-              <button mat-flat-button matStepperNext color="primary" [disabled]="basicInfoForm.invalid">
+              <button
+                mat-flat-button
+                matStepperNext
+                color="primary"
+                [disabled]="basicInfoForm.invalid"
+              >
                 Next
                 <mat-icon>arrow_forward</mat-icon>
               </button>
@@ -90,14 +97,18 @@
       <mat-step [stepControl]="contactForm">
         <form [formGroup]="contactForm">
           <ng-template matStepLabel>Contact Information</ng-template>
-          
+
           <div class="step-content">
             <div class="form-section">
               <div class="form-grid">
                 <!-- Contact Person -->
                 <mat-form-field appearance="outline">
                   <mat-label>Primary Contact Person</mat-label>
-                  <input matInput formControlName="contactPerson" placeholder="Enter contact name">
+                  <input
+                    matInput
+                    formControlName="contactPerson"
+                    placeholder="Enter contact name"
+                  />
                   <mat-icon matPrefix>person</mat-icon>
                   <mat-error>{{ getErrorMessage('contactPerson', contactForm) }}</mat-error>
                 </mat-form-field>
@@ -105,7 +116,7 @@
                 <!-- Email -->
                 <mat-form-field appearance="outline">
                   <mat-label>Email Address</mat-label>
-                  <input matInput formControlName="email" placeholder="email@example.com">
+                  <input matInput formControlName="email" placeholder="email@example.com" />
                   <mat-icon matPrefix>email</mat-icon>
                   <mat-error>{{ getErrorMessage('email', contactForm) }}</mat-error>
                 </mat-form-field>
@@ -113,7 +124,7 @@
                 <!-- Phone -->
                 <mat-form-field appearance="outline">
                   <mat-label>Phone Number</mat-label>
-                  <input matInput formControlName="phone" placeholder="+1234567890">
+                  <input matInput formControlName="phone" placeholder="+1234567890" />
                   <mat-icon matPrefix>phone</mat-icon>
                   <mat-error>{{ getErrorMessage('phone', contactForm) }}</mat-error>
                 </mat-form-field>
@@ -121,7 +132,12 @@
                 <!-- Address -->
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>Address</mat-label>
-                  <textarea matInput formControlName="address" rows="3" placeholder="Enter full address"></textarea>
+                  <textarea
+                    matInput
+                    formControlName="address"
+                    rows="3"
+                    placeholder="Enter full address"
+                  ></textarea>
                   <mat-icon matPrefix>location_on</mat-icon>
                   <mat-error>{{ getErrorMessage('address', contactForm) }}</mat-error>
                 </mat-form-field>
@@ -133,7 +149,12 @@
                 <mat-icon>arrow_back</mat-icon>
                 Back
               </button>
-              <button mat-flat-button matStepperNext color="primary" [disabled]="contactForm.invalid">
+              <button
+                mat-flat-button
+                matStepperNext
+                color="primary"
+                [disabled]="contactForm.invalid"
+              >
                 Next
                 <mat-icon>arrow_forward</mat-icon>
               </button>
@@ -146,28 +167,37 @@
       <mat-step [stepControl]="businessForm">
         <form [formGroup]="businessForm">
           <ng-template matStepLabel>Business Information</ng-template>
-          
+
           <div class="step-content">
             <div class="form-section">
               <div class="form-grid">
                 <!-- Registration Number -->
                 <mat-form-field appearance="outline">
                   <mat-label>Registration Number</mat-label>
-                  <input matInput formControlName="registrationNumber" placeholder="Enter registration number">
+                  <input
+                    matInput
+                    formControlName="registrationNumber"
+                    placeholder="Enter registration number"
+                  />
                   <mat-icon matPrefix>badge</mat-icon>
                 </mat-form-field>
 
                 <!-- VAT Number -->
                 <mat-form-field appearance="outline">
                   <mat-label>VAT Number</mat-label>
-                  <input matInput formControlName="vatNumber" placeholder="Enter VAT number">
+                  <input matInput formControlName="vatNumber" placeholder="Enter VAT number" />
                   <mat-icon matPrefix>receipt</mat-icon>
                 </mat-form-field>
 
                 <!-- Notes -->
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>Notes</mat-label>
-                  <textarea matInput formControlName="notes" rows="4" placeholder="Add any additional notes"></textarea>
+                  <textarea
+                    matInput
+                    formControlName="notes"
+                    rows="4"
+                    placeholder="Add any additional notes"
+                  ></textarea>
                   <mat-icon matPrefix>notes</mat-icon>
                 </mat-form-field>
               </div>
@@ -176,7 +206,11 @@
               <div class="tags-section">
                 <h3 class="section-title">Tags</h3>
                 <mat-chip-grid #chipGrid>
-                  <mat-chip-row *ngFor="let tag of tags" [removable]="true" (removed)="removeTag(tag)">
+                  <mat-chip-row
+                    *ngFor="let tag of tags"
+                    [removable]="true"
+                    (removed)="removeTag(tag)"
+                  >
                     {{ tag }}
                     <mat-icon matChipRemove>cancel</mat-icon>
                   </mat-chip-row>
@@ -209,36 +243,61 @@
       <mat-step>
         <form [formGroup]="additionalForm">
           <ng-template matStepLabel>Additional Contacts</ng-template>
-          
+
           <div class="step-content">
             <div class="form-section">
               <h3 class="section-title">Add Additional Contacts</h3>
-              
+
               <div class="form-grid">
                 <mat-form-field appearance="outline">
                   <mat-label>Contact Name</mat-label>
-                  <input matInput formControlName="additionalContactName" placeholder="Enter name">
+                  <input
+                    matInput
+                    formControlName="additionalContactName"
+                    placeholder="Enter name"
+                  />
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
                   <mat-label>Role</mat-label>
-                  <input matInput formControlName="additionalContactRole" placeholder="Enter role">
+                  <input
+                    matInput
+                    formControlName="additionalContactRole"
+                    placeholder="Enter role"
+                  />
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
                   <mat-label>Email</mat-label>
-                  <input matInput formControlName="additionalContactEmail" placeholder="email@example.com">
-                  <mat-error>{{ getErrorMessage('additionalContactEmail', additionalForm) }}</mat-error>
+                  <input
+                    matInput
+                    formControlName="additionalContactEmail"
+                    placeholder="email@example.com"
+                  />
+                  <mat-error>{{
+                    getErrorMessage('additionalContactEmail', additionalForm)
+                  }}</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
                   <mat-label>Phone</mat-label>
-                  <input matInput formControlName="additionalContactPhone" placeholder="+1234567890">
-                  <mat-error>{{ getErrorMessage('additionalContactPhone', additionalForm) }}</mat-error>
+                  <input
+                    matInput
+                    formControlName="additionalContactPhone"
+                    placeholder="+1234567890"
+                  />
+                  <mat-error>{{
+                    getErrorMessage('additionalContactPhone', additionalForm)
+                  }}</mat-error>
                 </mat-form-field>
               </div>
 
-              <button mat-stroked-button color="primary" type="button" (click)="addAdditionalContact()">
+              <button
+                mat-stroked-button
+                color="primary"
+                type="button"
+                (click)="addAdditionalContact()"
+              >
                 <mat-icon>add</mat-icon>
                 Add Contact
               </button>
@@ -247,7 +306,7 @@
               <div class="contacts-list" *ngIf="additionalContacts.length > 0">
                 <mat-divider class="section-divider"></mat-divider>
                 <h4 class="subsection-title">Added Contacts</h4>
-                
+
                 <div class="contact-card" *ngFor="let contact of additionalContacts; let i = index">
                   <div class="contact-info">
                     <div class="contact-header">
@@ -256,7 +315,9 @@
                     </div>
                     <div class="contact-details">
                       <span><mat-icon inline>email</mat-icon> {{ contact.email }}</span>
-                      <span *ngIf="contact.phone"><mat-icon inline>phone</mat-icon> {{ contact.phone }}</span>
+                      <span *ngIf="contact.phone"
+                        ><mat-icon inline>phone</mat-icon> {{ contact.phone }}</span
+                      >
                     </div>
                   </div>
                   <button mat-icon-button color="warn" (click)="removeAdditionalContact(i)">
@@ -283,11 +344,11 @@
       <!-- Step 5: Review -->
       <mat-step>
         <ng-template matStepLabel>Review</ng-template>
-        
+
         <div class="step-content">
           <div class="review-section">
             <h3 class="section-title">Review Client Information</h3>
-            
+
             <!-- Basic Information Review -->
             <div class="review-card">
               <h4 class="review-card-title">Basic Information</h4>
@@ -298,7 +359,9 @@
                 </div>
                 <div class="review-item">
                   <span class="review-label">Type:</span>
-                  <span class="review-value">{{ basicInfoForm.get('clientType')?.value || '-' }}</span>
+                  <span class="review-value">{{
+                    basicInfoForm.get('clientType')?.value || '-'
+                  }}</span>
                 </div>
                 <div class="review-item">
                   <span class="review-label">Status:</span>
@@ -306,7 +369,9 @@
                 </div>
                 <div class="review-item">
                   <span class="review-label">Industry:</span>
-                  <span class="review-value">{{ basicInfoForm.get('industry')?.value || '-' }}</span>
+                  <span class="review-value">{{
+                    basicInfoForm.get('industry')?.value || '-'
+                  }}</span>
                 </div>
                 <div class="review-item" *ngIf="basicInfoForm.get('website')?.value">
                   <span class="review-label">Website:</span>
@@ -321,7 +386,9 @@
               <div class="review-grid">
                 <div class="review-item">
                   <span class="review-label">Contact Person:</span>
-                  <span class="review-value">{{ contactForm.get('contactPerson')?.value || '-' }}</span>
+                  <span class="review-value">{{
+                    contactForm.get('contactPerson')?.value || '-'
+                  }}</span>
                 </div>
                 <div class="review-item">
                   <span class="review-label">Email:</span>
@@ -339,12 +406,22 @@
             </div>
 
             <!-- Business Information Review -->
-            <div class="review-card" *ngIf="businessForm.get('registrationNumber')?.value || businessForm.get('vatNumber')?.value || businessForm.get('notes')?.value || tags.length > 0">
+            <div
+              class="review-card"
+              *ngIf="
+                businessForm.get('registrationNumber')?.value ||
+                businessForm.get('vatNumber')?.value ||
+                businessForm.get('notes')?.value ||
+                tags.length > 0
+              "
+            >
               <h4 class="review-card-title">Business Information</h4>
               <div class="review-grid">
                 <div class="review-item" *ngIf="businessForm.get('registrationNumber')?.value">
                   <span class="review-label">Registration Number:</span>
-                  <span class="review-value">{{ businessForm.get('registrationNumber')?.value }}</span>
+                  <span class="review-value">{{
+                    businessForm.get('registrationNumber')?.value
+                  }}</span>
                 </div>
                 <div class="review-item" *ngIf="businessForm.get('vatNumber')?.value">
                   <span class="review-label">VAT Number:</span>

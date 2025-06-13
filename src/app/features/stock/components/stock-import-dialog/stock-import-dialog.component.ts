@@ -29,17 +29,17 @@ interface ParsedItem extends StockItemImport {
     MatTableModule,
     MatChipsModule,
     MatStepperModule,
-    MatCardModule
+    MatCardModule,
   ],
   template: `
     <h2 mat-dialog-title>Import Stock Items</h2>
-    
+
     <mat-dialog-content>
       <mat-stepper #stepper linear>
         <!-- Step 1: Upload File -->
         <mat-step [completed]="fileUploaded">
           <ng-template matStepLabel>Upload CSV File</ng-template>
-          
+
           <div class="upload-section">
             <div class="upload-instructions">
               <h3>Instructions</h3>
@@ -57,24 +57,28 @@ interface ParsedItem extends StockItemImport {
                 <li><strong>standardCost</strong> - Standard cost per unit</li>
                 <li><strong>warehouseLocation</strong> - Storage location</li>
               </ul>
-              
+
               <button mat-button color="primary" (click)="downloadTemplate()">
                 <mat-icon>download</mat-icon>
                 Download Template
               </button>
             </div>
 
-            <div class="upload-area" 
-                 [class.drag-over]="isDragOver"
-                 (dragover)="onDragOver($event)"
-                 (dragleave)="onDragLeave($event)"
-                 (drop)="onDrop($event)">
-              <input type="file" 
-                     #fileInput 
-                     accept=".csv" 
-                     (change)="onFileSelected($event)"
-                     style="display: none">
-              
+            <div
+              class="upload-area"
+              [class.drag-over]="isDragOver"
+              (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave($event)"
+              (drop)="onDrop($event)"
+            >
+              <input
+                type="file"
+                #fileInput
+                accept=".csv"
+                (change)="onFileSelected($event)"
+                style="display: none"
+              />
+
               <div class="upload-content" *ngIf="!selectedFile">
                 <mat-icon>cloud_upload</mat-icon>
                 <p>Drag and drop your CSV file here or</p>
@@ -96,10 +100,12 @@ interface ParsedItem extends StockItemImport {
             </div>
 
             <div class="stepper-actions">
-              <button mat-raised-button 
-                      color="primary" 
-                      [disabled]="!selectedFile || parsing"
-                      (click)="parseFile()">
+              <button
+                mat-raised-button
+                color="primary"
+                [disabled]="!selectedFile || parsing"
+                (click)="parseFile()"
+              >
                 <mat-spinner diameter="20" *ngIf="parsing"></mat-spinner>
                 <span *ngIf="!parsing">Parse File</span>
               </button>
@@ -110,7 +116,7 @@ interface ParsedItem extends StockItemImport {
         <!-- Step 2: Review Data -->
         <mat-step [completed]="dataReviewed">
           <ng-template matStepLabel>Review Data</ng-template>
-          
+
           <div class="review-section">
             <div class="review-summary">
               <mat-chip-set>
@@ -170,17 +176,19 @@ interface ParsedItem extends StockItemImport {
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="previewColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: previewColumns;"></tr>
+                <tr mat-row *matRowDef="let row; columns: previewColumns"></tr>
               </table>
             </div>
 
             <div class="stepper-actions">
               <button mat-button matStepperPrevious>Back</button>
-              <button mat-raised-button 
-                      color="primary"
-                      [disabled]="validItems.length === 0"
-                      matStepperNext
-                      (click)="dataReviewed = true">
+              <button
+                mat-raised-button
+                color="primary"
+                [disabled]="validItems.length === 0"
+                matStepperNext
+                (click)="dataReviewed = true"
+              >
                 Continue to Import
               </button>
             </div>
@@ -190,18 +198,16 @@ interface ParsedItem extends StockItemImport {
         <!-- Step 3: Import -->
         <mat-step>
           <ng-template matStepLabel>Import</ng-template>
-          
+
           <div class="import-section">
             <div *ngIf="!importing && !importComplete" class="import-ready">
               <mat-icon color="primary">info</mat-icon>
               <h3>Ready to Import</h3>
               <p>{{ validItems.length }} items will be imported.</p>
-              
+
               <div class="stepper-actions">
                 <button mat-button matStepperPrevious>Back</button>
-                <button mat-raised-button 
-                        color="primary"
-                        (click)="importItems()">
+                <button mat-raised-button color="primary" (click)="importItems()">
                   Start Import
                 </button>
               </div>
@@ -217,7 +223,9 @@ interface ParsedItem extends StockItemImport {
               <mat-icon color="primary" class="success-icon">check_circle</mat-icon>
               <h3>Import Complete!</h3>
               <p>Successfully imported {{ importResult?.success }} items.</p>
-              <ng-container *ngIf="importResult && importResult.errors && importResult.errors.length > 0">
+              <ng-container
+                *ngIf="importResult && importResult.errors && importResult.errors.length > 0"
+              >
                 <div class="import-errors">
                   <p>{{ importResult.errors.length }} items failed to import:</p>
                   <ul>
@@ -232,184 +240,189 @@ interface ParsedItem extends StockItemImport {
     </mat-dialog-content>
 
     <mat-dialog-actions align="end" *ngIf="importComplete">
-      <button mat-raised-button color="primary" (click)="close()">
-        Close
-      </button>
+      <button mat-raised-button color="primary" (click)="close()">Close</button>
     </mat-dialog-actions>
   `,
-  styles: [`
-    mat-dialog-content {
-      min-height: 400px;
-      max-height: 70vh;
-      overflow-y: auto;
-    }
+  styles: [
+    `
+      mat-dialog-content {
+        min-height: 400px;
+        max-height: 70vh;
+        overflow-y: auto;
+      }
 
-    .upload-section, .review-section, .import-section {
-      padding: 24px 0;
-    }
+      .upload-section,
+      .review-section,
+      .import-section {
+        padding: 24px 0;
+      }
 
-    .upload-instructions {
-      margin-bottom: 24px;
-    }
+      .upload-instructions {
+        margin-bottom: 24px;
+      }
 
-    .upload-instructions h3 {
-      margin: 0 0 16px 0;
-    }
+      .upload-instructions h3 {
+        margin: 0 0 16px 0;
+      }
 
-    .upload-instructions ul {
-      margin: 8px 0;
-      padding-left: 20px;
-    }
+      .upload-instructions ul {
+        margin: 8px 0;
+        padding-left: 20px;
+      }
 
-    .upload-instructions li {
-      margin: 4px 0;
-    }
+      .upload-instructions li {
+        margin: 4px 0;
+      }
 
-    .upload-area {
-      border: 2px dashed #ccc;
-      border-radius: 8px;
-      padding: 48px;
-      text-align: center;
-      transition: all 0.3s ease;
-      background-color: #fafafa;
-    }
+      .upload-area {
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+        padding: 48px;
+        text-align: center;
+        transition: all 0.3s ease;
+        background-color: #fafafa;
+      }
 
-    .upload-area.drag-over {
-      border-color: #1976d2;
-      background-color: #e3f2fd;
-    }
+      .upload-area.drag-over {
+        border-color: #1976d2;
+        background-color: #e3f2fd;
+      }
 
-    .upload-content mat-icon {
-      font-size: 64px;
-      width: 64px;
-      height: 64px;
-      color: #999;
-      margin-bottom: 16px;
-    }
+      .upload-content mat-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        color: #999;
+        margin-bottom: 16px;
+      }
 
-    .upload-content p {
-      color: #666;
-      margin-bottom: 16px;
-    }
+      .upload-content p {
+        color: #666;
+        margin-bottom: 16px;
+      }
 
-    .file-info {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 16px;
-      background: white;
-      border-radius: 8px;
-      border: 1px solid #e0e0e0;
-    }
+      .file-info {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+      }
 
-    .file-info mat-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
-      color: #1976d2;
-    }
+      .file-info mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        color: #1976d2;
+      }
 
-    .file-name {
-      font-weight: 500;
-      margin: 0;
-    }
+      .file-name {
+        font-weight: 500;
+        margin: 0;
+      }
 
-    .file-size {
-      color: #666;
-      font-size: 14px;
-      margin: 4px 0 0 0;
-    }
+      .file-size {
+        color: #666;
+        font-size: 14px;
+        margin: 4px 0 0 0;
+      }
 
-    .stepper-actions {
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end;
-      margin-top: 24px;
-    }
+      .stepper-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        margin-top: 24px;
+      }
 
-    .review-summary {
-      margin-bottom: 24px;
-    }
+      .review-summary {
+        margin-bottom: 24px;
+      }
 
-    .errors-card {
-      margin-bottom: 24px;
-      background-color: #fff3e0;
-    }
+      .errors-card {
+        margin-bottom: 24px;
+        background-color: #fff3e0;
+      }
 
-    .error-list {
-      max-height: 200px;
-      overflow-y: auto;
-    }
+      .error-list {
+        max-height: 200px;
+        overflow-y: auto;
+      }
 
-    .error-item {
-      margin-bottom: 12px;
-      padding: 8px;
-      background: white;
-      border-radius: 4px;
-    }
+      .error-item {
+        margin-bottom: 12px;
+        padding: 8px;
+        background: white;
+        border-radius: 4px;
+      }
 
-    .error-item ul {
-      margin: 4px 0 0 0;
-      padding-left: 20px;
-    }
+      .error-item ul {
+        margin: 4px 0 0 0;
+        padding-left: 20px;
+      }
 
-    .preview-table {
-      margin-top: 24px;
-    }
+      .preview-table {
+        margin-top: 24px;
+      }
 
-    .preview-table h3 {
-      margin: 0 0 16px 0;
-    }
+      .preview-table h3 {
+        margin: 0 0 16px 0;
+      }
 
-    .preview-table table {
-      width: 100%;
-      background: white;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
+      .preview-table table {
+        width: 100%;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
 
-    .import-ready, .import-progress, .import-complete {
-      text-align: center;
-      padding: 48px;
-    }
+      .import-ready,
+      .import-progress,
+      .import-complete {
+        text-align: center;
+        padding: 48px;
+      }
 
-    .import-ready mat-icon,
-    .import-complete mat-icon {
-      font-size: 64px;
-      width: 64px;
-      height: 64px;
-      margin-bottom: 16px;
-    }
+      .import-ready mat-icon,
+      .import-complete mat-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        margin-bottom: 16px;
+      }
 
-    .success-icon {
-      color: #4caf50 !important;
-    }
+      .success-icon {
+        color: #4caf50 !important;
+      }
 
-    .import-errors {
-      margin-top: 16px;
-      padding: 16px;
-      background-color: #ffebee;
-      border-radius: 4px;
-      text-align: left;
-    }
+      .import-errors {
+        margin-top: 16px;
+        padding: 16px;
+        background-color: #ffebee;
+        border-radius: 4px;
+        text-align: left;
+      }
 
-    .import-errors ul {
-      margin: 8px 0 0 0;
-      padding-left: 20px;
-    }
+      .import-errors ul {
+        margin: 8px 0 0 0;
+        padding-left: 20px;
+      }
 
-    mat-spinner {
-      margin: 0 auto 16px;
-    }
-  `]
+      mat-spinner {
+        margin: 0 auto 16px;
+      }
+    `,
+  ],
 })
 export class StockImportDialogComponent {
   private stockService = inject(StockService);
-  
+  public dialogRef = inject(MatDialogRef<StockImportDialogComponent>);
+
   // File upload
   selectedFile: File | null = null;
   isDragOver = false;
   fileUploaded = false;
-  
+
   // Parsing
   parsing = false;
   parsedItems: ParsedItem[] = [];
@@ -417,18 +430,14 @@ export class StockImportDialogComponent {
   invalidItems: ParsedItem[] = [];
   previewItems: ParsedItem[] = [];
   previewColumns = ['itemCode', 'name', 'category', 'currentStock', 'standardCost'];
-  
+
   // Review
   dataReviewed = false;
-  
+
   // Import
   importing = false;
   importComplete = false;
   importResult: { success: number; errors: string[] } | null = null;
-
-  constructor(
-    public dialogRef: MatDialogRef<StockImportDialogComponent>
-  ) {}
 
   onDragOver(event: DragEvent) {
     event.preventDefault();
@@ -446,7 +455,7 @@ export class StockImportDialogComponent {
     event.preventDefault();
     event.stopPropagation();
     this.isDragOver = false;
-    
+
     const files = event.dataTransfer?.files;
     if (files && files.length > 0) {
       this.handleFile(files[0]);
@@ -465,7 +474,7 @@ export class StockImportDialogComponent {
       alert('Please select a CSV file');
       return;
     }
-    
+
     this.selectedFile = file;
     this.fileUploaded = true;
   }
@@ -486,29 +495,28 @@ export class StockImportDialogComponent {
 
   async parseFile() {
     if (!this.selectedFile) return;
-    
+
     this.parsing = true;
-    
+
     try {
       const text = await this.selectedFile.text();
-      const lines = text.split('\n').filter(line => line.trim());
-      const headers = lines[0].split(',').map(h => h.trim());
-      
+      const lines = text.split('\n').filter((line) => line.trim());
+      const headers = lines[0].split(',').map((h) => h.trim());
+
       this.parsedItems = [];
-      
+
       for (let i = 1; i < lines.length; i++) {
         const values = this.parseCSVLine(lines[i]);
         const item = this.createItemFromRow(headers, values, i + 1);
         this.parsedItems.push(item);
       }
-      
+
       // Validate items
-      this.validItems = this.parsedItems.filter(item => item.errors.length === 0);
-      this.invalidItems = this.parsedItems.filter(item => item.errors.length > 0);
-      
+      this.validItems = this.parsedItems.filter((item) => item.errors.length === 0);
+      this.invalidItems = this.parsedItems.filter((item) => item.errors.length > 0);
+
       // Set preview items (first 10 valid items)
       this.previewItems = this.validItems.slice(0, 10);
-      
     } catch (error) {
       console.error('Error parsing file:', error);
       alert('Error parsing file. Please check the format and try again.');
@@ -521,10 +529,10 @@ export class StockImportDialogComponent {
     const values: string[] = [];
     let current = '';
     let inQuotes = false;
-    
+
     for (let i = 0; i < line.length; i++) {
       const char = line[i];
-      
+
       if (char === '"') {
         inQuotes = !inQuotes;
       } else if (char === ',' && !inQuotes) {
@@ -534,7 +542,7 @@ export class StockImportDialogComponent {
         current += char;
       }
     }
-    
+
     values.push(current.trim());
     return values;
   }
@@ -550,13 +558,13 @@ export class StockImportDialogComponent {
       currentStock: 0,
       minimumStock: 0,
       reorderLevel: 0,
-      standardCost: 0
+      standardCost: 0,
     };
-    
+
     // Map values to item properties
     headers.forEach((header, index) => {
       const value = values[index] || '';
-      
+
       switch (header.toLowerCase()) {
         case 'itemcode':
         case 'item_code':
@@ -608,19 +616,19 @@ export class StockImportDialogComponent {
           break;
       }
     });
-    
+
     // Validate required fields
     if (!item.itemCode) item.errors.push('Item code is required');
     if (!item.name) item.errors.push('Name is required');
     if (!item.category) item.errors.push('Category is required');
     if (!item.unitOfMeasure) item.errors.push('Unit of measure is required');
-    
+
     // Validate numeric fields
     if (item.currentStock < 0) item.errors.push('Current stock cannot be negative');
     if (item.minimumStock < 0) item.errors.push('Minimum stock cannot be negative');
     if (item.reorderLevel < 0) item.errors.push('Reorder level cannot be negative');
     if (item.standardCost < 0) item.errors.push('Standard cost cannot be negative');
-    
+
     return item;
   }
 
@@ -641,13 +649,12 @@ EQP-001,Fiber Splice Closure,24 core splice closure,equipment,Closures,units,25,
 
   async importItems() {
     this.importing = true;
-    
+
     try {
-      const itemsToImport = this.validItems.map(({ row, errors, ...item }) => item);
+      const itemsToImport = this.validItems.map(({ row: _row, errors: _errors, ...item }) => item);
       this.importResult = await this.stockService.importStockItems(itemsToImport);
       this.importComplete = true;
     } catch (error) {
-      console.error('Error importing items:', error);
       alert('Error importing items. Please try again.');
     } finally {
       this.importing = false;

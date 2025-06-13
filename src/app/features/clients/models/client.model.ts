@@ -25,32 +25,32 @@ export interface Client {
   name: string;
   clientType: ClientType;
   status: ClientStatus;
-  
+
   // Primary Contact
   contactPerson: string;
   email: string;
   phone: string;
-  
+
   // Additional Info
   address: string;
   industry?: string;
   website?: string;
   registrationNumber?: string;
   vatNumber?: string;
-  
+
   // Business Metrics
   projectsCount: number;
   activeProjectsCount: number;
   totalValue: number;
   lastProjectDate?: Timestamp;
-  
+
   // Additional Contacts
   additionalContacts?: ClientContact[];
-  
+
   // Notes & Tags
   notes?: string;
   tags?: string[];
-  
+
   // Timestamps
   createdAt: Timestamp;
   updatedAt: Timestamp;

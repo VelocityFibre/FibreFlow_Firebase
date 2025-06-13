@@ -30,7 +30,7 @@ import { DateFormatService } from '../../../../core/services/date-format.service
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   template: `
     <div class="daily-progress-detail" *ngIf="progress$ | async as progress; else loading">
@@ -44,13 +44,21 @@ import { DateFormatService } from '../../../../core/services/date-format.service
             <mat-icon>edit</mat-icon>
             Edit
           </button>
-          <button mat-raised-button color="accent" (click)="submitForApproval()" 
-                  *ngIf="progress.status === 'draft'">
+          <button
+            mat-raised-button
+            color="accent"
+            (click)="submitForApproval()"
+            *ngIf="progress.status === 'draft'"
+          >
             <mat-icon>send</mat-icon>
             Submit for Approval
           </button>
-          <button mat-raised-button color="primary" (click)="approve()" 
-                  *ngIf="progress.status === 'submitted' && canApprove">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="approve()"
+            *ngIf="progress.status === 'submitted' && canApprove"
+          >
             <mat-icon>check_circle</mat-icon>
             Approve
           </button>
@@ -62,37 +70,37 @@ import { DateFormatService } from '../../../../core/services/date-format.service
           <div class="info-grid">
             <div class="info-item">
               <label>Date</label>
-              <p>{{formatDate(progress.date)}}</p>
+              <p>{{ formatDate(progress.date) }}</p>
             </div>
             <div class="info-item">
               <label>Project</label>
-              <p>{{progress.projectName || 'N/A'}}</p>
+              <p>{{ progress.projectName || 'N/A' }}</p>
             </div>
             <div class="info-item">
               <label>Phase</label>
-              <p>{{progress.phaseName || '-'}}</p>
+              <p>{{ progress.phaseName || '-' }}</p>
             </div>
             <div class="info-item">
               <label>Task</label>
-              <p>{{progress.taskName || '-'}}</p>
+              <p>{{ progress.taskName || '-' }}</p>
             </div>
             <div class="info-item">
               <label>Hours Worked</label>
-              <p>{{progress.hoursWorked}} hours</p>
+              <p>{{ progress.hoursWorked }} hours</p>
             </div>
             <div class="info-item">
               <label>Weather</label>
-              <p>{{progress.weather || '-'}}</p>
+              <p>{{ progress.weather || '-' }}</p>
             </div>
             <div class="info-item">
               <label>Status</label>
               <mat-chip [color]="getStatusColor(progress.status)" selected>
-                {{progress.status | titlecase}}
+                {{ progress.status | titlecase }}
               </mat-chip>
             </div>
             <div class="info-item">
               <label>Submitted By</label>
-              <p>{{progress.submittedByName || '-'}}</p>
+              <p>{{ progress.submittedByName || '-' }}</p>
             </div>
           </div>
 
@@ -100,46 +108,46 @@ import { DateFormatService } from '../../../../core/services/date-format.service
 
           <div class="section">
             <h3>Description</h3>
-            <p>{{progress.description}}</p>
+            <p>{{ progress.description }}</p>
           </div>
 
           <div class="section">
             <h3>Work Completed</h3>
-            <p class="multiline">{{progress.workCompleted}}</p>
+            <p class="multiline">{{ progress.workCompleted }}</p>
           </div>
 
           <div class="section" *ngIf="progress.materialsUsed && progress.materialsUsed.length > 0">
             <h3>Materials Used</h3>
             <mat-list>
               <mat-list-item *ngFor="let material of progress.materialsUsed">
-                <span matListItemTitle>{{material.materialName}}</span>
-                <span matListItemLine>{{material.quantity}} {{material.unit}}</span>
+                <span matListItemTitle>{{ material.materialName }}</span>
+                <span matListItemLine>{{ material.quantity }} {{ material.unit }}</span>
               </mat-list-item>
             </mat-list>
           </div>
 
           <div class="section" *ngIf="progress.issuesEncountered">
             <h3>Issues Encountered</h3>
-            <p class="multiline issues">{{progress.issuesEncountered}}</p>
+            <p class="multiline issues">{{ progress.issuesEncountered }}</p>
           </div>
 
           <div class="section" *ngIf="progress.nextSteps">
             <h3>Next Steps</h3>
-            <p class="multiline">{{progress.nextSteps}}</p>
+            <p class="multiline">{{ progress.nextSteps }}</p>
           </div>
 
           <div class="section">
             <h3>Staff Members</h3>
             <mat-chip-set>
               <mat-chip *ngFor="let name of progress.staffNames">
-                {{name}}
+                {{ name }}
               </mat-chip>
             </mat-chip-set>
           </div>
 
           <div class="section" *ngIf="progress.contractorName">
             <h3>Contractor</h3>
-            <p>{{progress.contractorName}}</p>
+            <p>{{ progress.contractorName }}</p>
           </div>
 
           <mat-divider></mat-divider>
@@ -149,23 +157,27 @@ import { DateFormatService } from '../../../../core/services/date-format.service
             <div class="comments-section">
               <div class="comment" *ngFor="let comment of progress.comments">
                 <div class="comment-header">
-                  <strong>{{comment.authorName}}</strong>
-                  <span class="comment-date">{{formatDate(comment.createdAt)}}</span>
+                  <strong>{{ comment.authorName }}</strong>
+                  <span class="comment-date">{{ formatDate(comment.createdAt) }}</span>
                 </div>
-                <p>{{comment.text}}</p>
+                <p>{{ comment.text }}</p>
               </div>
               <div class="no-comments" *ngIf="!progress.comments || progress.comments.length === 0">
                 No comments yet
               </div>
             </div>
-            
+
             <div class="add-comment">
               <mat-form-field appearance="fill">
                 <mat-label>Add a comment</mat-label>
                 <textarea matInput [(ngModel)]="newComment" rows="3"></textarea>
               </mat-form-field>
-              <button mat-raised-button color="primary" (click)="addComment()" 
-                      [disabled]="!newComment.trim()">
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="addComment()"
+                [disabled]="!newComment.trim()"
+              >
                 Post Comment
               </button>
             </div>
@@ -174,8 +186,8 @@ import { DateFormatService } from '../../../../core/services/date-format.service
           <div class="approval-info" *ngIf="progress.status === 'approved'">
             <mat-icon>check_circle</mat-icon>
             <div>
-              <p>Approved by {{progress.approvedByName}}</p>
-              <p class="date">{{formatDate(progress.approvedAt)}}</p>
+              <p>Approved by {{ progress.approvedByName }}</p>
+              <p class="date">{{ progress.approvedAt ? formatDate(progress.approvedAt) : '' }}</p>
             </div>
           </div>
         </mat-card-content>
@@ -188,148 +200,150 @@ import { DateFormatService } from '../../../../core/services/date-format.service
       </div>
     </ng-template>
   `,
-  styles: [`
-    .daily-progress-detail {
-      padding: 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+  styles: [
+    `
+      .daily-progress-detail {
+        padding: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
 
-    .detail-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
+      .detail-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
 
-    .detail-header h1 {
-      flex: 1;
-      margin: 0;
-    }
+      .detail-header h1 {
+        flex: 1;
+        margin: 0;
+      }
 
-    .header-actions {
-      display: flex;
-      gap: 8px;
-    }
+      .header-actions {
+        display: flex;
+        gap: 8px;
+      }
 
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 24px;
-      margin-bottom: 24px;
-    }
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 24px;
+        margin-bottom: 24px;
+      }
 
-    .info-item label {
-      display: block;
-      font-size: 12px;
-      color: #666;
-      margin-bottom: 4px;
-    }
+      .info-item label {
+        display: block;
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 4px;
+      }
 
-    .info-item p {
-      margin: 0;
-      font-size: 16px;
-    }
+      .info-item p {
+        margin: 0;
+        font-size: 16px;
+      }
 
-    .section {
-      margin: 24px 0;
-    }
+      .section {
+        margin: 24px 0;
+      }
 
-    .section h3 {
-      margin-bottom: 12px;
-      color: #333;
-    }
+      .section h3 {
+        margin-bottom: 12px;
+        color: #333;
+      }
 
-    .multiline {
-      white-space: pre-wrap;
-    }
+      .multiline {
+        white-space: pre-wrap;
+      }
 
-    .issues {
-      color: #ff6b6b;
-      padding: 12px;
-      background-color: #fff5f5;
-      border-radius: 4px;
-      border-left: 4px solid #ff6b6b;
-    }
+      .issues {
+        color: #ff6b6b;
+        padding: 12px;
+        background-color: #fff5f5;
+        border-radius: 4px;
+        border-left: 4px solid #ff6b6b;
+      }
 
-    .comments-section {
-      margin-bottom: 16px;
-    }
+      .comments-section {
+        margin-bottom: 16px;
+      }
 
-    .comment {
-      padding: 12px;
-      background-color: #f5f5f5;
-      border-radius: 4px;
-      margin-bottom: 8px;
-    }
+      .comment {
+        padding: 12px;
+        background-color: #f5f5f5;
+        border-radius: 4px;
+        margin-bottom: 8px;
+      }
 
-    .comment-header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
+      .comment-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
 
-    .comment-date {
-      font-size: 12px;
-      color: #666;
-    }
+      .comment-date {
+        font-size: 12px;
+        color: #666;
+      }
 
-    .comment p {
-      margin: 0;
-    }
+      .comment p {
+        margin: 0;
+      }
 
-    .no-comments {
-      text-align: center;
-      color: #666;
-      padding: 24px;
-    }
+      .no-comments {
+        text-align: center;
+        color: #666;
+        padding: 24px;
+      }
 
-    .add-comment {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
+      .add-comment {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
 
-    .add-comment mat-form-field {
-      width: 100%;
-    }
+      .add-comment mat-form-field {
+        width: 100%;
+      }
 
-    .approval-info {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 16px;
-      background-color: #e8f5e9;
-      border-radius: 4px;
-      margin-top: 24px;
-    }
+      .approval-info {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        background-color: #e8f5e9;
+        border-radius: 4px;
+        margin-top: 24px;
+      }
 
-    .approval-info mat-icon {
-      color: #4caf50;
-      font-size: 36px;
-      width: 36px;
-      height: 36px;
-    }
+      .approval-info mat-icon {
+        color: #4caf50;
+        font-size: 36px;
+        width: 36px;
+        height: 36px;
+      }
 
-    .approval-info p {
-      margin: 0;
-    }
+      .approval-info p {
+        margin: 0;
+      }
 
-    .approval-info .date {
-      font-size: 12px;
-      color: #666;
-    }
+      .approval-info .date {
+        font-size: 12px;
+        color: #666;
+      }
 
-    .loading-container {
-      display: flex;
-      justify-content: center;
-      padding: 48px;
-    }
+      .loading-container {
+        display: flex;
+        justify-content: center;
+        padding: 48px;
+      }
 
-    mat-divider {
-      margin: 24px 0;
-    }
-  `]
+      mat-divider {
+        margin: 24px 0;
+      }
+    `,
+  ],
 })
 export class DailyProgressDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -343,7 +357,7 @@ export class DailyProgressDetailComponent implements OnInit {
 
   constructor() {
     this.progress$ = this.route.params.pipe(
-      switchMap(params => this.dailyProgressService.getById(params['id']))
+      switchMap((params) => this.dailyProgressService.getById(params['id'])),
     );
   }
 
@@ -351,7 +365,8 @@ export class DailyProgressDetailComponent implements OnInit {
     // Check user role for approval permissions
   }
 
-  formatDate(date: Date | any): string {
+  formatDate(date: Date | string | number): string {
+    if (!date) return '';
     return this.dateFormatService.formatDate(date);
   }
 
@@ -383,7 +398,7 @@ export class DailyProgressDetailComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error submitting progress report:', error);
-      }
+      },
     });
   }
 
@@ -395,7 +410,7 @@ export class DailyProgressDetailComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error approving progress report:', error);
-      }
+      },
     });
   }
 
@@ -409,7 +424,7 @@ export class DailyProgressDetailComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error adding comment:', error);
-        }
+        },
       });
     }
   }

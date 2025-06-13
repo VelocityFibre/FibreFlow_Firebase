@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
@@ -12,7 +12,12 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { StockService } from '../../services/stock.service';
-import { StockItem, StockCategory, StockItemStatus, UnitOfMeasure } from '../../models/stock-item.model';
+import {
+  StockItem,
+  StockCategory,
+  StockItemStatus,
+  UnitOfMeasure,
+} from '../../models/stock-item.model';
 
 @Component({
   selector: 'app-stock-form',
@@ -28,25 +33,28 @@ import { StockItem, StockCategory, StockItemStatus, UnitOfMeasure } from '../../
     MatIconModule,
     MatSlideToggleModule,
     MatDividerModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   template: `
     <h2 mat-dialog-title>{{ data.mode === 'add' ? 'Add New Stock Item' : 'Edit Stock Item' }}</h2>
-    
+
     <mat-dialog-content>
       <form [formGroup]="stockForm" class="stock-form">
-        
         <!-- Basic Information -->
         <div class="form-section">
           <h3>Basic Information</h3>
-          
+
           <div class="form-row">
             <mat-form-field appearance="outline">
               <mat-label>Item Code</mat-label>
-              <input matInput formControlName="itemCode" placeholder="e.g., FIB-001">
-              <button mat-icon-button matSuffix (click)="generateItemCode()" 
-                      *ngIf="data.mode === 'add'" 
-                      matTooltip="Generate Code">
+              <input matInput formControlName="itemCode" placeholder="e.g., FIB-001" />
+              <button
+                mat-icon-button
+                matSuffix
+                (click)="generateItemCode()"
+                *ngIf="data.mode === 'add'"
+                matTooltip="Generate Code"
+              >
                 <mat-icon>auto_awesome</mat-icon>
               </button>
               <mat-error *ngIf="stockForm.get('itemCode')?.hasError('required')">
@@ -56,7 +64,7 @@ import { StockItem, StockCategory, StockItemStatus, UnitOfMeasure } from '../../
 
             <mat-form-field appearance="outline">
               <mat-label>Name</mat-label>
-              <input matInput formControlName="name" placeholder="e.g., Single Mode Fiber Cable">
+              <input matInput formControlName="name" placeholder="e.g., Single Mode Fiber Cable" />
               <mat-error *ngIf="stockForm.get('name')?.hasError('required')">
                 Name is required
               </mat-error>
@@ -65,8 +73,12 @@ import { StockItem, StockCategory, StockItemStatus, UnitOfMeasure } from '../../
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Description</mat-label>
-            <textarea matInput formControlName="description" rows="3" 
-                      placeholder="Detailed description of the item"></textarea>
+            <textarea
+              matInput
+              formControlName="description"
+              rows="3"
+              placeholder="Detailed description of the item"
+            ></textarea>
           </mat-form-field>
 
           <div class="form-row">
@@ -90,7 +102,7 @@ import { StockItem, StockCategory, StockItemStatus, UnitOfMeasure } from '../../
 
             <mat-form-field appearance="outline">
               <mat-label>Subcategory</mat-label>
-              <input matInput formControlName="subcategory" placeholder="Optional subcategory">
+              <input matInput formControlName="subcategory" placeholder="Optional subcategory" />
             </mat-form-field>
           </div>
 
@@ -129,11 +141,11 @@ import { StockItem, StockCategory, StockItemStatus, UnitOfMeasure } from '../../
         <!-- Stock Levels -->
         <div class="form-section">
           <h3>Stock Levels</h3>
-          
+
           <div class="form-row">
             <mat-form-field appearance="outline">
               <mat-label>Current Stock</mat-label>
-              <input matInput type="number" formControlName="currentStock" min="0">
+              <input matInput type="number" formControlName="currentStock" min="0" />
               <mat-error *ngIf="stockForm.get('currentStock')?.hasError('required')">
                 Current stock is required
               </mat-error>
@@ -144,7 +156,7 @@ import { StockItem, StockCategory, StockItemStatus, UnitOfMeasure } from '../../
 
             <mat-form-field appearance="outline">
               <mat-label>Minimum Stock</mat-label>
-              <input matInput type="number" formControlName="minimumStock" min="0">
+              <input matInput type="number" formControlName="minimumStock" min="0" />
               <mat-error *ngIf="stockForm.get('minimumStock')?.hasError('required')">
                 Minimum stock is required
               </mat-error>
@@ -155,7 +167,7 @@ import { StockItem, StockCategory, StockItemStatus, UnitOfMeasure } from '../../
 
             <mat-form-field appearance="outline">
               <mat-label>Reorder Level</mat-label>
-              <input matInput type="number" formControlName="reorderLevel" min="0">
+              <input matInput type="number" formControlName="reorderLevel" min="0" />
               <mat-error *ngIf="stockForm.get('reorderLevel')?.hasError('required')">
                 Reorder level is required
               </mat-error>
@@ -171,12 +183,12 @@ import { StockItem, StockCategory, StockItemStatus, UnitOfMeasure } from '../../
         <!-- Cost Information -->
         <div class="form-section">
           <h3>Cost Information</h3>
-          
+
           <div class="form-row">
             <mat-form-field appearance="outline">
               <mat-label>Standard Cost</mat-label>
               <span matPrefix>R </span>
-              <input matInput type="number" formControlName="standardCost" min="0" step="0.01">
+              <input matInput type="number" formControlName="standardCost" min="0" step="0.01" />
               <mat-error *ngIf="stockForm.get('standardCost')?.hasError('required')">
                 Standard cost is required
               </mat-error>
@@ -188,7 +200,13 @@ import { StockItem, StockCategory, StockItemStatus, UnitOfMeasure } from '../../
             <mat-form-field appearance="outline">
               <mat-label>Last Purchase Price</mat-label>
               <span matPrefix>R </span>
-              <input matInput type="number" formControlName="lastPurchasePrice" min="0" step="0.01">
+              <input
+                matInput
+                type="number"
+                formControlName="lastPurchasePrice"
+                min="0"
+                step="0.01"
+              />
               <mat-error *ngIf="stockForm.get('lastPurchasePrice')?.hasError('min')">
                 Last purchase price cannot be negative
               </mat-error>
@@ -201,16 +219,20 @@ import { StockItem, StockCategory, StockItemStatus, UnitOfMeasure } from '../../
         <!-- Storage Information -->
         <div class="form-section">
           <h3>Storage Information</h3>
-          
+
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Warehouse Location</mat-label>
-            <input matInput formControlName="warehouseLocation" placeholder="e.g., A-12-3">
+            <input matInput formControlName="warehouseLocation" placeholder="e.g., A-12-3" />
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Storage Requirements</mat-label>
-            <textarea matInput formControlName="storageRequirements" rows="2" 
-                      placeholder="Special storage requirements (temperature, humidity, etc.)"></textarea>
+            <textarea
+              matInput
+              formControlName="storageRequirements"
+              rows="2"
+              placeholder="Special storage requirements (temperature, humidity, etc.)"
+            ></textarea>
           </mat-form-field>
         </div>
 
@@ -219,7 +241,7 @@ import { StockItem, StockCategory, StockItemStatus, UnitOfMeasure } from '../../
         <!-- Quality Tracking -->
         <div class="form-section">
           <h3>Quality Tracking</h3>
-          
+
           <div class="toggle-row">
             <mat-slide-toggle formControlName="batchTracking">
               Enable Batch Tracking
@@ -234,98 +256,99 @@ import { StockItem, StockCategory, StockItemStatus, UnitOfMeasure } from '../../
             <span class="toggle-hint">Track expiration dates for items</span>
           </div>
         </div>
-
       </form>
     </mat-dialog-content>
 
     <mat-dialog-actions align="end">
       <button mat-button (click)="onCancel()">Cancel</button>
-      <button mat-raised-button color="primary" 
-              (click)="onSubmit()" 
-              [disabled]="!stockForm.valid || loading">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="onSubmit()"
+        [disabled]="!stockForm.valid || loading"
+      >
         <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
         <span *ngIf="!loading">{{ data.mode === 'add' ? 'Add Item' : 'Update Item' }}</span>
       </button>
     </mat-dialog-actions>
   `,
-  styles: [`
-    .stock-form {
-      width: 100%;
-      min-width: 500px;
-    }
+  styles: [
+    `
+      .stock-form {
+        width: 100%;
+        min-width: 500px;
+      }
 
-    .form-section {
-      margin-bottom: 24px;
-    }
+      .form-section {
+        margin-bottom: 24px;
+      }
 
-    .form-section h3 {
-      margin: 0 0 16px 0;
-      color: #333;
-      font-size: 16px;
-      font-weight: 500;
-    }
+      .form-section h3 {
+        margin: 0 0 16px 0;
+        color: #333;
+        font-size: 16px;
+        font-weight: 500;
+      }
 
-    .form-row {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
+      .form-row {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
 
-    .form-row mat-form-field {
-      flex: 1;
-    }
+      .form-row mat-form-field {
+        flex: 1;
+      }
 
-    .full-width {
-      width: 100%;
-    }
+      .full-width {
+        width: 100%;
+      }
 
-    mat-divider {
-      margin: 24px 0;
-    }
+      mat-divider {
+        margin: 24px 0;
+      }
 
-    .toggle-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 12px;
-    }
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 12px;
+      }
 
-    .toggle-hint {
-      color: #666;
-      font-size: 14px;
-    }
+      .toggle-hint {
+        color: #666;
+        font-size: 14px;
+      }
 
-    mat-dialog-actions {
-      padding: 16px 24px;
-      gap: 8px;
-    }
+      mat-dialog-actions {
+        padding: 16px 24px;
+        gap: 8px;
+      }
 
-    mat-spinner {
-      display: inline-block;
-      margin-right: 8px;
-    }
-  `]
+      mat-spinner {
+        display: inline-block;
+        margin-right: 8px;
+      }
+    `,
+  ],
 })
 export class StockFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private stockService = inject(StockService);
-  
+  public dialogRef = inject(MatDialogRef<StockFormComponent>);
+  public data = inject<{ mode: 'add' | 'edit'; item?: StockItem }>(MAT_DIALOG_DATA);
+
   stockForm!: FormGroup;
   loading = false;
-  
+
   // Expose enums to template
   StockCategory = StockCategory;
   StockItemStatus = StockItemStatus;
   UnitOfMeasure = UnitOfMeasure;
 
-  constructor(
-    public dialogRef: MatDialogRef<StockFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { mode: 'add' | 'edit', item?: StockItem }
-  ) {}
-
   ngOnInit() {
     this.initializeForm();
-    
+
     if (this.data.mode === 'edit' && this.data.item) {
       this.stockForm.patchValue(this.data.item);
     }
@@ -340,23 +363,23 @@ export class StockFormComponent implements OnInit {
       subcategory: [''],
       unitOfMeasure: ['', Validators.required],
       status: [StockItemStatus.ACTIVE],
-      
+
       // Stock levels
       currentStock: [0, [Validators.required, Validators.min(0)]],
       minimumStock: [0, [Validators.required, Validators.min(0)]],
       reorderLevel: [0, [Validators.required, Validators.min(0)]],
-      
+
       // Cost
       standardCost: [0, [Validators.required, Validators.min(0)]],
       lastPurchasePrice: [null, Validators.min(0)],
-      
+
       // Storage
       warehouseLocation: [''],
       storageRequirements: [''],
-      
+
       // Quality tracking
       batchTracking: [false],
-      expiryTracking: [false]
+      expiryTracking: [false],
     });
   }
 
@@ -369,16 +392,16 @@ export class StockFormComponent implements OnInit {
   async onSubmit() {
     if (this.stockForm.valid) {
       this.loading = true;
-      
+
       try {
         const formValue = this.stockForm.value;
-        
+
         if (this.data.mode === 'add') {
           await this.stockService.createStockItem(formValue);
         } else if (this.data.item?.id) {
           await this.stockService.updateStockItem(this.data.item.id, formValue);
         }
-        
+
         this.dialogRef.close(true);
       } catch (error) {
         console.error('Error saving stock item:', error);

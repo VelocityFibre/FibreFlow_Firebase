@@ -2,7 +2,7 @@
 
 .dashboard-container {
   padding: ff-spacing(2xl);
-  background-color: var(--mat-app-background-color);
+  background-color: rgb(var(--ff-background));
   min-height: 100vh;
 }
 
@@ -13,11 +13,11 @@
     font-size: 2.5rem;
     font-weight: 600;
     margin: 0;
-    color: var(--mat-app-on-background);
+    color: rgb(var(--ff-foreground));
   }
 
   .welcome-text {
-    color: var(--mat-app-on-surface-variant);
+    color: rgb(var(--ff-muted-foreground));
     margin-top: ff-spacing(sm);
     font-size: 1.1rem;
   }
@@ -33,16 +33,17 @@
   .dashboard-card {
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid var(--mat-app-outline-variant);
-    background: var(--mat-app-surface-container);
+    border: 1px solid rgb(var(--ff-border));
+    background: rgb(var(--ff-card));
+    color: rgb(var(--ff-card-foreground));
     padding: ff-spacing(xl);
     border-radius: 16px;
     position: relative;
 
     &:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-      border-color: var(--mat-app-primary);
+      box-shadow: var(--ff-shadow-lg);
+      border-color: rgb(var(--ff-primary));
     }
 
     .card-icon {
@@ -62,27 +63,27 @@
       }
 
       &.projects-icon {
-        background: #3b82f6;
+        background: rgb(var(--ff-info));
       }
 
       &.suppliers-icon {
-        background: #10b981;
+        background: rgb(var(--ff-success));
       }
 
       &.stock-icon {
-        background: #8b5cf6;
+        background: rgb(var(--ff-primary));
       }
 
       &.clients-icon {
-        background: #f59e0b;
+        background: rgb(var(--ff-warning));
       }
 
       &.issues-icon {
-        background: #ef4444;
+        background: rgb(var(--ff-destructive));
       }
 
       &.analytics-icon {
-        background: #6366f1;
+        background: rgb(var(--ff-primary));
       }
     }
 
@@ -102,7 +103,7 @@
 
       mat-card-subtitle {
         font-size: 0.9rem;
-        color: var(--mat-app-on-surface-variant);
+        color: rgb(var(--ff-muted-foreground));
         margin: ff-spacing(xs) 0 0 0;
         line-height: 1.4;
       }
@@ -121,20 +122,20 @@
             font-size: 1.75rem;
             font-weight: 700;
             display: block;
-            color: var(--mat-app-primary);
+            color: rgb(var(--ff-primary));
             letter-spacing: -0.03em;
             margin-bottom: ff-spacing(xs);
           }
 
           .stat-label {
             font-size: 0.9rem;
-            color: var(--mat-app-on-surface-variant);
+            color: rgb(var(--ff-muted-foreground));
             font-weight: 500;
           }
         }
 
         .action-link {
-          color: var(--mat-app-primary);
+          color: rgb(var(--ff-primary));
           font-weight: 500;
           display: flex;
           align-items: center;
@@ -153,7 +154,7 @@
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: ff-spacing(xl);
-    color: var(--mat-app-on-background);
+    color: rgb(var(--ff-foreground));
     letter-spacing: -0.02em;
   }
 
@@ -163,15 +164,16 @@
     gap: ff-spacing(lg);
 
     .summary-card {
-      background: var(--mat-app-surface-container);
-      border: 1px solid var(--mat-app-outline-variant);
+      background: rgb(var(--ff-card));
+      color: rgb(var(--ff-card-foreground));
+      border: 1px solid rgb(var(--ff-border));
       border-radius: 12px;
       padding: ff-spacing(lg);
       transition: all 0.2s ease;
 
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        box-shadow: var(--ff-shadow);
       }
 
       mat-card-content {
@@ -183,13 +185,13 @@
           width: 48px;
           height: 48px;
           border-radius: 12px;
-          background: var(--mat-app-primary-container);
+          background: rgb(var(--ff-primary) / 0.1);
           display: flex;
           align-items: center;
           justify-content: center;
 
           mat-icon {
-            color: var(--mat-app-on-primary-container);
+            color: rgb(var(--ff-primary));
             font-size: 24px;
           }
         }
@@ -201,21 +203,21 @@
             font-size: 0.9rem;
             font-weight: 500;
             margin: 0;
-            color: var(--mat-app-on-surface-variant);
+            color: rgb(var(--ff-muted-foreground));
             margin-bottom: ff-spacing(xs);
           }
 
           .summary-value {
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--mat-app-on-surface);
+            color: rgb(var(--ff-card-foreground));
             margin: ff-spacing(xs) 0;
             letter-spacing: -0.03em;
           }
 
           .summary-detail {
             font-size: 0.8rem;
-            color: var(--mat-app-on-surface-variant);
+            color: rgb(var(--ff-muted-foreground));
             font-weight: 500;
           }
         }
@@ -230,13 +232,14 @@
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: ff-spacing(xl);
-    color: var(--mat-app-on-background);
+    color: rgb(var(--ff-foreground));
     letter-spacing: -0.02em;
   }
 
   mat-card {
-    background: var(--mat-app-surface-container);
-    border: 1px solid var(--mat-app-outline-variant);
+    background: rgb(var(--ff-card));
+    color: rgb(var(--ff-card-foreground));
+    border: 1px solid rgb(var(--ff-border));
     border-radius: 12px;
     padding: ff-spacing(lg);
   }
@@ -246,15 +249,15 @@
       display: flex;
       gap: ff-spacing(lg);
       padding: ff-spacing(lg) 0;
-      
+
       &:not(:last-child) {
-        border-bottom: 1px solid var(--mat-app-outline-variant);
+        border-bottom: 1px solid rgb(var(--ff-border));
       }
 
       .activity-icon {
-        color: var(--mat-app-primary);
+        color: rgb(var(--ff-primary));
         font-size: 24px;
-        background: var(--mat-app-primary-container);
+        background: rgb(var(--ff-primary) / 0.1);
         width: 40px;
         height: 40px;
         border-radius: 10px;
@@ -268,14 +271,14 @@
 
         p {
           margin: 0;
-          color: var(--mat-app-on-surface);
+          color: rgb(var(--ff-card-foreground));
           font-size: 0.95rem;
           line-height: 1.5;
         }
 
         .activity-time {
           font-size: 0.8rem;
-          color: var(--mat-app-on-surface-variant);
+          color: rgb(var(--ff-muted-foreground));
           margin-top: ff-spacing(xs);
           display: inline-block;
         }

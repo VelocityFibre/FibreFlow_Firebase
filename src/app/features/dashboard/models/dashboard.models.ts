@@ -3,7 +3,7 @@ export enum Priority {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
-  CRITICAL = 'critical'
+  CRITICAL = 'critical',
 }
 
 // Main dashboard overview metrics
@@ -66,14 +66,14 @@ export enum AlertType {
   RESOURCE_BLOCKED = 'resource_blocked',
   STOCK_LOW = 'stock_low',
   MILESTONE_AT_RISK = 'milestone_at_risk',
-  SAFETY_ISSUE = 'safety_issue'
+  SAFETY_ISSUE = 'safety_issue',
 }
 
 export enum AlertSeverity {
   CRITICAL = 'critical',
   HIGH = 'high',
   MEDIUM = 'medium',
-  LOW = 'low'
+  LOW = 'low',
 }
 
 export interface Activity {
@@ -92,7 +92,7 @@ export enum ActivityType {
   TASK_COMPLETED = 'task_completed',
   POLE_PLANTED = 'pole_planted',
   ISSUE_RESOLVED = 'issue_resolved',
-  STAFF_ASSIGNED = 'staff_assigned'
+  STAFF_ASSIGNED = 'staff_assigned',
 }
 
 // Dashboard card configuration
@@ -104,7 +104,7 @@ export interface DashboardCard {
   size: CardSize;
   order: number;
   refreshInterval?: number;
-  data?: any;
+  data?: unknown;
 }
 
 export enum CardType {
@@ -112,14 +112,14 @@ export enum CardType {
   CHART = 'chart',
   LIST = 'list',
   ALERT = 'alert',
-  NAVIGATION = 'navigation'
+  NAVIGATION = 'navigation',
 }
 
 export enum CardSize {
-  SMALL = 'small',   // 1x1
+  SMALL = 'small', // 1x1
   MEDIUM = 'medium', // 2x1
-  LARGE = 'large',   // 2x2
-  WIDE = 'wide'      // 3x1
+  LARGE = 'large', // 2x2
+  WIDE = 'wide', // 3x1
 }
 
 // Module navigation cards
@@ -142,5 +142,5 @@ export enum UserRole {
   PROJECT_MANAGER = 'project_manager',
   FIELD_TEAM = 'field_team',
   CONTRACTOR = 'contractor',
-  SUPPLIER = 'supplier'
+  SUPPLIER = 'supplier',
 }

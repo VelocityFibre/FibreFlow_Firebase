@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,7 +6,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { AuthService } from '../../../core/services/auth.service';
-import { UserProfile, USER_GROUP_PERMISSIONS } from '../../../core/models/user-profile';
+import {
+  UserProfile,
+  USER_GROUP_PERMISSIONS,
+  UserPermissions,
+} from '../../../core/models/user-profile';
+import { User } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-test-auth',
@@ -17,28 +22,28 @@ import { UserProfile, USER_GROUP_PERMISSIONS } from '../../../core/models/user-p
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
-    MatChipsModule
+    MatChipsModule,
   ],
   templateUrl: './test-auth.component.html',
-  styleUrl: './test-auth.component.scss'
+  styleUrl: './test-auth.component.scss',
 })
 export class TestAuthComponent implements OnInit {
-  currentUser: any = null;
-  currentProfile: UserProfile | null = null;
-  permissions: any = null;
-  isAuthenticated = false;
+  private authService = inject(AuthService);
 
-  constructor(private authService: AuthService) {}
+  currentUser: User | null = null;
+  currentProfile: UserProfile | null = null;
+  permissions: UserPermissions | null = null;
+  isAuthenticated = false;
 
   ngOnInit() {
     // Subscribe to auth state
-    this.authService.user$.subscribe(user => {
+    this.authService.user$.subscribe((user) => {
       this.currentUser = user;
       this.isAuthenticated = !!user;
     });
 
     // Subscribe to user profile
-    this.authService.currentUserProfile$.subscribe(profile => {
+    this.authService.currentUserProfile$.subscribe((profile) => {
       this.currentProfile = profile;
       if (profile) {
         this.permissions = USER_GROUP_PERMISSIONS[profile.userGroup];

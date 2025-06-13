@@ -1,8 +1,9 @@
 // FibreFlow Theme Functions
 // These functions work with CSS custom properties, not SCSS variables
+// Compatible with @use (Dart Sass module system)
 
 @use 'sass:map';
-@use 'sass:string';
+@use 'sass:math';
 
 // Convert CSS custom property to RGB value
 // Usage: background: ff-rgb(background);
@@ -25,7 +26,7 @@
 // Calculate rem from px
 // Usage: font-size: ff-rem(24);
 @function ff-rem($pixels, $base: 16) {
-  @return #{$pixels / $base}rem;
+  @return #{math.div($pixels, $base)}rem;
 }
 
 // Clamp value between min and max (responsive sizing)
@@ -55,8 +56,8 @@
     fast: 150ms,
     base: 200ms,
     slow: 300ms,
-    slower: 500ms
+    slower: 500ms,
   );
-  
+
   @return map.get($transitions, $speed);
 }

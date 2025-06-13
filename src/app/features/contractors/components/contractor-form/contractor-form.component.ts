@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
@@ -15,12 +15,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { ContractorService } from '../../services/contractor.service';
-import { 
-  Contractor, 
-  CONTRACTOR_SERVICES, 
-  SOUTH_AFRICAN_PROVINCES, 
+import {
+  Contractor,
+  CONTRACTOR_SERVICES,
+  SOUTH_AFRICAN_PROVINCES,
   BANKS,
-  ContractorService as ContractorServiceType 
+  ContractorService as _ContractorServiceType,
 } from '../../models/contractor.model';
 
 @Component({
@@ -40,24 +40,24 @@ import {
     MatChipsModule,
     MatStepperModule,
     MatCheckboxModule,
-    MatProgressBarModule
+    MatProgressBarModule,
   ],
   template: `
     <h2 mat-dialog-title>{{ data.mode === 'add' ? 'Add New Contractor' : 'Edit Contractor' }}</h2>
-    
+
     <mat-dialog-content>
       <mat-stepper linear #stepper>
         <!-- Step 1: Basic Information -->
         <mat-step [stepControl]="basicInfoForm">
           <form [formGroup]="basicInfoForm">
             <ng-template matStepLabel>Basic Information</ng-template>
-            
+
             <div class="form-section">
               <h3>Company Details</h3>
               <div class="form-row">
                 <mat-form-field appearance="outline">
                   <mat-label>Company Name</mat-label>
-                  <input matInput formControlName="companyName" required>
+                  <input matInput formControlName="companyName" required />
                   <mat-error *ngIf="basicInfoForm.get('companyName')?.hasError('required')">
                     Company name is required
                   </mat-error>
@@ -65,7 +65,7 @@ import {
 
                 <mat-form-field appearance="outline">
                   <mat-label>Registration Number</mat-label>
-                  <input matInput formControlName="registrationNumber" required>
+                  <input matInput formControlName="registrationNumber" required />
                   <mat-error *ngIf="basicInfoForm.get('registrationNumber')?.hasError('required')">
                     Registration number is required
                   </mat-error>
@@ -75,7 +75,7 @@ import {
               <div class="form-row">
                 <mat-form-field appearance="outline">
                   <mat-label>VAT Number</mat-label>
-                  <input matInput formControlName="vatNumber">
+                  <input matInput formControlName="vatNumber" />
                 </mat-form-field>
               </div>
             </div>
@@ -86,19 +86,19 @@ import {
                 <div class="form-row">
                   <mat-form-field appearance="outline">
                     <mat-label>Contact Name</mat-label>
-                    <input matInput formControlName="name" required>
+                    <input matInput formControlName="name" required />
                   </mat-form-field>
 
                   <mat-form-field appearance="outline">
                     <mat-label>Role/Position</mat-label>
-                    <input matInput formControlName="role" required>
+                    <input matInput formControlName="role" required />
                   </mat-form-field>
                 </div>
 
                 <div class="form-row">
                   <mat-form-field appearance="outline">
                     <mat-label>Email</mat-label>
-                    <input matInput type="email" formControlName="email" required>
+                    <input matInput type="email" formControlName="email" required />
                     <mat-error *ngIf="basicInfoForm.get('primaryContact.email')?.hasError('email')">
                       Please enter a valid email
                     </mat-error>
@@ -106,7 +106,7 @@ import {
 
                   <mat-form-field appearance="outline">
                     <mat-label>Phone</mat-label>
-                    <input matInput formControlName="phone" required>
+                    <input matInput formControlName="phone" required />
                   </mat-form-field>
                 </div>
               </div>
@@ -118,14 +118,14 @@ import {
                 <div class="form-row">
                   <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Street Address</mat-label>
-                    <input matInput formControlName="street" required>
+                    <input matInput formControlName="street" required />
                   </mat-form-field>
                 </div>
 
                 <div class="form-row">
                   <mat-form-field appearance="outline">
                     <mat-label>City</mat-label>
-                    <input matInput formControlName="city" required>
+                    <input matInput formControlName="city" required />
                   </mat-form-field>
 
                   <mat-form-field appearance="outline">
@@ -139,7 +139,7 @@ import {
 
                   <mat-form-field appearance="outline">
                     <mat-label>Postal Code</mat-label>
-                    <input matInput formControlName="postalCode" required>
+                    <input matInput formControlName="postalCode" required />
                   </mat-form-field>
                 </div>
               </div>
@@ -155,7 +155,7 @@ import {
         <mat-step [stepControl]="capabilitiesForm">
           <form [formGroup]="capabilitiesForm">
             <ng-template matStepLabel>Capabilities & Services</ng-template>
-            
+
             <div class="form-section">
               <h3>Services Offered</h3>
               <mat-form-field appearance="outline" class="full-width">
@@ -175,7 +175,7 @@ import {
               <h3>Capacity</h3>
               <mat-form-field appearance="outline">
                 <mat-label>Maximum Number of Teams</mat-label>
-                <input matInput type="number" formControlName="maxTeams" min="1" required>
+                <input matInput type="number" formControlName="maxTeams" min="1" required />
               </mat-form-field>
             </div>
 
@@ -183,8 +183,12 @@ import {
               <h3>Equipment (Optional)</h3>
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Equipment Available</mat-label>
-                <textarea matInput formControlName="equipment" rows="3"
-                          placeholder="List equipment separated by commas"></textarea>
+                <textarea
+                  matInput
+                  formControlName="equipment"
+                  rows="3"
+                  placeholder="List equipment separated by commas"
+                ></textarea>
               </mat-form-field>
             </div>
 
@@ -199,7 +203,7 @@ import {
         <mat-step [stepControl]="financialForm">
           <form [formGroup]="financialForm">
             <ng-template matStepLabel>Financial Information</ng-template>
-            
+
             <div class="form-section">
               <h3>Banking Details</h3>
               <div class="form-row">
@@ -224,12 +228,12 @@ import {
               <div class="form-row">
                 <mat-form-field appearance="outline">
                   <mat-label>Account Number</mat-label>
-                  <input matInput formControlName="accountNumber" required>
+                  <input matInput formControlName="accountNumber" required />
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
                   <mat-label>Branch Code</mat-label>
-                  <input matInput formControlName="branchCode" required>
+                  <input matInput formControlName="branchCode" required />
                 </mat-form-field>
               </div>
             </div>
@@ -239,13 +243,13 @@ import {
               <div class="form-row">
                 <mat-form-field appearance="outline">
                   <mat-label>Payment Terms (Days)</mat-label>
-                  <input matInput type="number" formControlName="paymentTerms" min="0" required>
+                  <input matInput type="number" formControlName="paymentTerms" min="0" required />
                   <mat-hint>Number of days for payment after invoice</mat-hint>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
                   <mat-label>Credit Limit (Optional)</mat-label>
-                  <input matInput type="number" formControlName="creditLimit" min="0">
+                  <input matInput type="number" formControlName="creditLimit" min="0" />
                   <span matPrefix>R&nbsp;</span>
                 </mat-form-field>
               </div>
@@ -261,23 +265,24 @@ import {
         <!-- Step 4: Review -->
         <mat-step>
           <ng-template matStepLabel>Review & Submit</ng-template>
-          
+
           <div class="review-section">
             <h3>Review Information</h3>
-            
+
             <div class="review-item">
               <strong>Company:</strong> {{ basicInfoForm.get('companyName')?.value }}
             </div>
-            
+
             <div class="review-item">
               <strong>Registration:</strong> {{ basicInfoForm.get('registrationNumber')?.value }}
             </div>
-            
+
             <div class="review-item">
-              <strong>Contact:</strong> {{ basicInfoForm.get('primaryContact.name')?.value }} 
-              ({{ basicInfoForm.get('primaryContact.phone')?.value }})
+              <strong>Contact:</strong> {{ basicInfoForm.get('primaryContact.name')?.value }} ({{
+                basicInfoForm.get('primaryContact.phone')?.value
+              }})
             </div>
-            
+
             <div class="review-item">
               <strong>Services:</strong>
               <mat-chip-set>
@@ -286,17 +291,24 @@ import {
                 </mat-chip>
               </mat-chip-set>
             </div>
-            
+
             <div class="review-item">
-              <strong>Bank:</strong> {{ financialForm.get('bankName')?.value }} 
-              ({{ financialForm.get('accountType')?.value }})
+              <strong>Bank:</strong> {{ financialForm.get('bankName')?.value }} ({{
+                financialForm.get('accountType')?.value
+              }})
             </div>
           </div>
 
           <div class="step-actions">
             <button mat-button matStepperPrevious type="button">Back</button>
             <button mat-raised-button color="primary" (click)="save()" [disabled]="saving">
-              {{ saving ? 'Saving...' : (data.mode === 'add' ? 'Create Contractor' : 'Update Contractor') }}
+              {{
+                saving
+                  ? 'Saving...'
+                  : data.mode === 'add'
+                    ? 'Create Contractor'
+                    : 'Update Contractor'
+              }}
             </button>
           </div>
         </mat-step>
@@ -309,90 +321,89 @@ import {
       <button mat-button (click)="cancel()">Cancel</button>
     </mat-dialog-actions>
   `,
-  styles: [`
-    mat-dialog-content {
-      min-height: 400px;
-      max-height: 80vh;
-      overflow-y: auto;
-    }
+  styles: [
+    `
+      mat-dialog-content {
+        min-height: 400px;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
 
-    .form-section {
-      margin-bottom: 24px;
-    }
+      .form-section {
+        margin-bottom: 24px;
+      }
 
-    .form-section h3 {
-      margin-bottom: 16px;
-      color: #333;
-      font-size: 16px;
-    }
+      .form-section h3 {
+        margin-bottom: 16px;
+        color: #333;
+        font-size: 16px;
+      }
 
-    .form-row {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
+      .form-row {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
 
-    .form-row mat-form-field {
-      flex: 1;
-    }
+      .form-row mat-form-field {
+        flex: 1;
+      }
 
-    .full-width {
-      width: 100%;
-    }
+      .full-width {
+        width: 100%;
+      }
 
-    .step-actions {
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end;
-      margin-top: 24px;
-    }
+      .step-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        margin-top: 24px;
+      }
 
-    .review-section {
-      padding: 16px;
-      background-color: #f5f5f5;
-      border-radius: 4px;
-    }
+      .review-section {
+        padding: 16px;
+        background-color: #f5f5f5;
+        border-radius: 4px;
+      }
 
-    .review-item {
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+      .review-item {
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
-    .review-item strong {
-      min-width: 120px;
-    }
+      .review-item strong {
+        min-width: 120px;
+      }
 
-    mat-progress-bar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    }
-  `]
+      mat-progress-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+    `,
+  ],
 })
 export class ContractorFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private contractorService = inject(ContractorService);
+  public dialogRef = inject(MatDialogRef<ContractorFormComponent>);
+  public data: { mode: 'add' | 'edit'; contractor?: Contractor } = inject(MAT_DIALOG_DATA);
 
   basicInfoForm!: FormGroup;
   capabilitiesForm!: FormGroup;
   financialForm!: FormGroup;
-  
+
   provinces = SOUTH_AFRICAN_PROVINCES;
   contractorServices = CONTRACTOR_SERVICES;
   banks = BANKS;
   saving = false;
 
-  constructor(
-    public dialogRef: MatDialogRef<ContractorFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { mode: 'add' | 'edit', contractor?: Contractor }
-  ) {}
-
   ngOnInit() {
     this.initializeForms();
-    
+
     if (this.data.mode === 'edit' && this.data.contractor) {
       this.populateForms(this.data.contractor);
     }
@@ -407,20 +418,20 @@ export class ContractorFormComponent implements OnInit {
         name: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
         phone: ['', Validators.required],
-        role: ['', Validators.required]
+        role: ['', Validators.required],
       }),
       physicalAddress: this.fb.group({
         street: ['', Validators.required],
         city: ['', Validators.required],
         province: ['', Validators.required],
-        postalCode: ['', Validators.required]
-      })
+        postalCode: ['', Validators.required],
+      }),
     });
 
     this.capabilitiesForm = this.fb.group({
       services: [[], Validators.required],
       maxTeams: [1, [Validators.required, Validators.min(1)]],
-      equipment: ['']
+      equipment: [''],
     });
 
     this.financialForm = this.fb.group({
@@ -429,7 +440,7 @@ export class ContractorFormComponent implements OnInit {
       branchCode: ['', Validators.required],
       accountType: ['current', Validators.required],
       paymentTerms: [30, [Validators.required, Validators.min(0)]],
-      creditLimit: [null]
+      creditLimit: [null],
     });
   }
 
@@ -439,13 +450,13 @@ export class ContractorFormComponent implements OnInit {
       registrationNumber: contractor.registrationNumber,
       vatNumber: contractor.vatNumber,
       primaryContact: contractor.primaryContact,
-      physicalAddress: contractor.physicalAddress
+      physicalAddress: contractor.physicalAddress,
     });
 
     this.capabilitiesForm.patchValue({
       services: contractor.capabilities.services,
       maxTeams: contractor.capabilities.maxTeams,
-      equipment: contractor.capabilities.equipment?.join(', ')
+      equipment: contractor.capabilities.equipment?.join(', '),
     });
 
     this.financialForm.patchValue({
@@ -454,7 +465,7 @@ export class ContractorFormComponent implements OnInit {
       branchCode: contractor.financial.branchCode,
       accountType: contractor.financial.accountType,
       paymentTerms: contractor.financial.paymentTerms,
-      creditLimit: contractor.financial.creditLimit
+      creditLimit: contractor.financial.creditLimit,
     });
   }
 
@@ -473,7 +484,7 @@ export class ContractorFormComponent implements OnInit {
       } else {
         await this.contractorService.updateContractor(this.data.contractor!.id!, formData);
       }
-      
+
       this.dialogRef.close(true);
     } catch (error) {
       console.error('Error saving contractor:', error);
@@ -484,15 +495,16 @@ export class ContractorFormComponent implements OnInit {
   }
 
   isFormValid(): boolean {
-    return this.basicInfoForm.valid && 
-           this.capabilitiesForm.valid && 
-           this.financialForm.valid;
+    return this.basicInfoForm.valid && this.capabilitiesForm.valid && this.financialForm.valid;
   }
 
   getFormData(): Omit<Contractor, 'id' | 'createdAt' | 'updatedAt'> {
     const equipment = this.capabilitiesForm.get('equipment')?.value;
-    const equipmentArray = equipment 
-      ? equipment.split(',').map((e: string) => e.trim()).filter((e: string) => e) 
+    const equipmentArray = equipment
+      ? equipment
+          .split(',')
+          .map((e: string) => e.trim())
+          .filter((e: string) => e)
       : [];
 
     return {
@@ -500,7 +512,7 @@ export class ContractorFormComponent implements OnInit {
       capabilities: {
         ...this.capabilitiesForm.value,
         equipment: equipmentArray,
-        certifications: [] // To be implemented in phase 2
+        certifications: [], // To be implemented in phase 2
       },
       financial: this.financialForm.value,
       compliance: {
@@ -508,12 +520,12 @@ export class ContractorFormComponent implements OnInit {
       },
       status: 'pending_approval',
       onboardingStatus: 'documents_pending',
-      createdBy: 'current-user-id' // TODO: Get from auth service
+      createdBy: 'current-user-id', // TODO: Get from auth service
     };
   }
 
   getServiceLabel(service: string): string {
-    const found = this.contractorServices.find(s => s.value === service);
+    const found = this.contractorServices.find((s) => s.value === service);
     return found ? found.label : service;
   }
 

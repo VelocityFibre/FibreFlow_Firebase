@@ -2,14 +2,14 @@ export enum TaskStatus {
   PENDING = 'pending',
   IN_PROGRESS = 'in_progress',
   COMPLETED = 'completed',
-  BLOCKED = 'blocked'
+  BLOCKED = 'blocked',
 }
 
 export enum TaskPriority {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
-  CRITICAL = 'critical'
+  CRITICAL = 'critical',
 }
 
 export interface Task {
@@ -36,7 +36,7 @@ export interface Task {
   updatedAt?: Date;
   createdBy?: string;
   updatedBy?: string;
-  
+
   // Additional fields populated on read
   projectName?: string;
   projectCode?: string;
@@ -55,8 +55,8 @@ export interface TaskAssignment {
 export interface TaskUpdate {
   taskId: string;
   updateType: 'status' | 'progress' | 'hours' | 'assignment' | 'general';
-  oldValue?: any;
-  newValue?: any;
+  oldValue?: string | number | TaskStatus | TaskPriority;
+  newValue?: string | number | TaskStatus | TaskPriority;
   notes?: string;
   updatedBy: string;
   updatedAt: Date;

@@ -1,49 +1,56 @@
 import { Injectable, inject } from '@angular/core';
-import { 
-  Firestore, 
-  collection, 
-  doc, 
-  setDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where, 
-  orderBy,
+import {
+  Firestore,
+  collection,
+  doc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  // query,
+  // orderBy,
   collectionData,
   docData,
   CollectionReference,
   Timestamp,
   serverTimestamp,
-  writeBatch
+  writeBatch,
 } from '@angular/fire/firestore';
 import { Observable, from, map, switchMap, combineLatest, of, firstValueFrom } from 'rxjs';
-import { Phase, PhaseStatus, PhaseTemplate, PhaseNotification, DEFAULT_PHASES, DependencyType } from '../models/phase.model';
+import {
+  Phase,
+  PhaseStatus,
+  PhaseTemplate,
+  PhaseNotification,
+  DEFAULT_PHASES,
+  DependencyType,
+} from '../models/phase.model';
 import { Auth } from '@angular/fire/auth';
 import { StaffService } from '../../features/staff/services/staff.service';
-import { TaskService } from './task.service';
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PhaseService {
   private firestore = inject(Firestore);
   private auth = inject(Auth);
   private staffService = inject(StaffService);
-  private taskService = inject(TaskService);
 
   // Get all phases for a project
   getProjectPhases(projectId: string): Observable<Phase[]> {
-    const phasesRef = collection(this.firestore, `projects/${projectId}/phases`) as CollectionReference<Phase>;
-    const phasesQuery = query(phasesRef, orderBy('orderNo'));
-    
+    const phasesRef = collection(
+      this.firestore,
+      `projects/${projectId}/phases`,
+    ) as CollectionReference<Phase>;
+    // Query removed - using phasesRef directly with collectionData
+    // const phasesQuery = query(phasesRef, orderBy('orderNo'));
+
     return collectionData(phasesRef, { idField: 'id' }).pipe(
-      switchMap(phases => {
+      switchMap((phases) => {
         // Populate user details for assigned phases
         if (phases.length === 0) {
           return of([]);
         }
-        
-        const phaseObservables = phases.map(phase => {
+
+        const phaseObservables = phases.map((phase) => {
           // If phase already has assignedToDetails from the database, use that
           if (phase.assignedToDetails) {
             return of(phase);
@@ -51,23 +58,25 @@ export class PhaseService {
           // Otherwise, fetch staff details if assigned
           if (phase.assignedTo) {
             return this.staffService.getStaffById(phase.assignedTo).pipe(
-              map(staffMember => ({
+              map((staffMember) => ({
                 ...phase,
-                assignedToDetails: staffMember ? {
-                  id: staffMember.id!,
-                  name: staffMember.name,
-                  email: staffMember.email,
-                  avatar: staffMember.photoUrl || undefined,
-                  role: staffMember.primaryGroup
-                } : undefined
-              }))
+                assignedToDetails: staffMember
+                  ? {
+                      id: staffMember.id!,
+                      name: staffMember.name,
+                      email: staffMember.email,
+                      avatar: staffMember.photoUrl || undefined,
+                      role: staffMember.primaryGroup,
+                    }
+                  : undefined,
+              })),
             );
           }
           return of(phase);
         });
-        
+
         return combineLatest(phaseObservables);
-      })
+      }),
     );
   }
 
@@ -83,16 +92,18 @@ export class PhaseService {
   }
 
   // Create phases for a new project
-  async createProjectPhases(projectId: string, createTasks: boolean = true): Promise<void> {
+  async createProjectPhases(projectId: string, _createTasks: boolean = true): Promise<void> {
+    // _createTasks parameter kept for backwards compatibility but not used
+    // Tasks creation is now handled separately to avoid circular dependency
     const batch = writeBatch(this.firestore);
     const phaseIds: string[] = [];
     const phasesData: Phase[] = [];
-    
+
     DEFAULT_PHASES.forEach((template, index) => {
       const phaseRef = doc(collection(this.firestore, `projects/${projectId}/phases`));
       const phaseId = phaseRef.id;
       phaseIds.push(phaseId);
-      
+
       const phase: Phase = {
         id: phaseId,
         name: template.name,
@@ -101,72 +112,69 @@ export class PhaseService {
         status: PhaseStatus.PENDING,
         dependencies: this.mapTemplateDependencies(template.defaultDependencies || [], index),
         createdAt: serverTimestamp() as Timestamp,
-        updatedAt: serverTimestamp() as Timestamp
+        updatedAt: serverTimestamp() as Timestamp,
       };
-      
+
       phasesData.push(phase);
       batch.set(phaseRef, phase);
     });
-    
+
     await batch.commit();
-    
-    // Create tasks for each phase if requested
-    if (createTasks) {
-      console.log('Creating tasks for new project phases...');
-      try {
-        await this.taskService.createTasksForProject(projectId, phasesData);
-        console.log('Tasks created successfully');
-      } catch (error) {
-        console.error('Error creating tasks:', error);
-        // Don't throw - phases are already created
-      }
-    }
+
+    // Tasks creation removed - handled separately to avoid circular dependency
   }
 
   // Map template dependencies to actual phase IDs
   private mapTemplateDependencies(dependencies: any[], currentIndex: number): any[] {
-    return dependencies.map(dep => {
-      // Map phase names to indices for default phases
-      const phaseIndexMap: Record<string, number> = {
-        'planning': 0,
-        'initiate-project': 1,
-        'work-in-progress': 2,
-        'handover': 3,
-        'handover-complete': 4,
-        'final-acceptance': 5
-      };
-      
-      const depIndex = phaseIndexMap[dep.phaseId];
-      if (depIndex !== undefined && depIndex < currentIndex) {
-        return {
-          phaseId: DEFAULT_PHASES[depIndex].name.toLowerCase().replace(/\s+/g, '-'),
-          type: dep.type
+    return dependencies
+      .map((dep) => {
+        // Map phase names to indices for default phases
+        const phaseIndexMap: Record<string, number> = {
+          planning: 0,
+          'initiate-project': 1,
+          'work-in-progress': 2,
+          handover: 3,
+          'handover-complete': 4,
+          'final-acceptance': 5,
         };
-      }
-      return null;
-    }).filter(dep => dep !== null);
+
+        const depIndex = phaseIndexMap[dep.phaseId];
+        if (depIndex !== undefined && depIndex < currentIndex) {
+          return {
+            phaseId: DEFAULT_PHASES[depIndex].name.toLowerCase().replace(/\s+/g, '-'),
+            type: dep.type,
+          };
+        }
+        return null;
+      })
+      .filter((dep) => dep !== null);
   }
 
   // Update phase status
-  async updatePhaseStatus(projectId: string, phaseId: string, status: PhaseStatus, blockedReason?: string): Promise<void> {
+  async updatePhaseStatus(
+    projectId: string,
+    phaseId: string,
+    status: PhaseStatus,
+    blockedReason?: string,
+  ): Promise<void> {
     const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${phaseId}`);
     const updateData: any = {
       status,
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     };
-    
+
     if (status === PhaseStatus.COMPLETED) {
       updateData.completedAt = serverTimestamp();
       // Check and update dependent phases
       await this.checkAndUpdateDependentPhases(projectId, phaseId);
     }
-    
+
     if (status === PhaseStatus.BLOCKED && blockedReason) {
       updateData.blockedReason = blockedReason;
     } else if (status !== PhaseStatus.BLOCKED) {
       updateData.blockedReason = null;
     }
-    
+
     await updateDoc(phaseRef, updateData);
   }
 
@@ -176,9 +184,9 @@ export class PhaseService {
       const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${phaseId}`);
       const updateData: any = {
         assignedTo: staffId,
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       };
-      
+
       if (staffId) {
         // Get staff details using firstValueFrom for better async handling
         try {
@@ -188,7 +196,7 @@ export class PhaseService {
               id: staffMember.id!,
               name: staffMember.name,
               email: staffMember.email,
-              role: staffMember.primaryGroup
+              role: staffMember.primaryGroup,
             };
             // Add avatar only if it exists
             if (staffMember.photoUrl) {
@@ -203,7 +211,7 @@ export class PhaseService {
         // Unassigning - remove staff details
         updateData.assignedToDetails = null;
       }
-      
+
       await updateDoc(phaseRef, updateData);
       console.log('Phase assigned successfully:', { projectId, phaseId, staffId });
     } catch (error) {
@@ -213,65 +221,74 @@ export class PhaseService {
   }
 
   // Check and update phases that depend on this phase
-  private async checkAndUpdateDependentPhases(projectId: string, completedPhaseId: string): Promise<void> {
-    const phases = await this.getProjectPhases(projectId).pipe(map(phases => phases)).toPromise();
+  private async checkAndUpdateDependentPhases(
+    projectId: string,
+    completedPhaseId: string,
+  ): Promise<void> {
+    const phases = await this.getProjectPhases(projectId)
+      .pipe(map((phases) => phases))
+      .toPromise();
     if (!phases) return;
-    
+
     const batch = writeBatch(this.firestore);
-    
-    phases.forEach(phase => {
+
+    phases.forEach((phase) => {
       if (phase.dependencies) {
         const finishToStartDeps = phase.dependencies.filter(
-          dep => dep.phaseId === completedPhaseId && dep.type === DependencyType.FINISH_TO_START
+          (dep) => dep.phaseId === completedPhaseId && dep.type === DependencyType.FINISH_TO_START,
         );
-        
+
         if (finishToStartDeps.length > 0 && phase.status === PhaseStatus.BLOCKED) {
           // Check if all dependencies are met
-          const allDependenciesMet = phase.dependencies.every(dep => {
-            const depPhase = phases.find(p => p.id === dep.phaseId);
+          const allDependenciesMet = phase.dependencies.every((dep) => {
+            const depPhase = phases.find((p) => p.id === dep.phaseId);
             return !depPhase || depPhase.status === PhaseStatus.COMPLETED;
           });
-          
+
           if (allDependenciesMet) {
             const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${phase.id}`);
             batch.update(phaseRef, {
               status: PhaseStatus.PENDING,
               blockedReason: null,
-              updatedAt: serverTimestamp()
+              updatedAt: serverTimestamp(),
             });
           }
         }
       }
     });
-    
+
     await batch.commit();
   }
-
 
   // Unassign phase
   async unassignPhase(projectId: string, phaseId: string): Promise<void> {
     const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${phaseId}`);
     await updateDoc(phaseRef, {
       assignedTo: null,
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     });
   }
 
   // Update phase dates
-  async updatePhaseDates(projectId: string, phaseId: string, startDate?: Date, endDate?: Date): Promise<void> {
+  async updatePhaseDates(
+    projectId: string,
+    phaseId: string,
+    startDate?: Date,
+    endDate?: Date,
+  ): Promise<void> {
     const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${phaseId}`);
     const updateData: any = {
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     };
-    
+
     if (startDate) updateData.startDate = Timestamp.fromDate(startDate);
     if (endDate) updateData.endDate = Timestamp.fromDate(endDate);
-    
+
     await updateDoc(phaseRef, updateData);
   }
 
   // Get phases assigned to a user
-  getUserPhases(userId: string): Observable<any[]> {
+  getUserPhases(_userId: string): Observable<any[]> {
     // This would need to query across all projects - implement based on your needs
     // For now, returning empty array
     return of([]);
@@ -283,23 +300,24 @@ export class PhaseService {
     await setDoc(doc(notificationsRef), notification);
   }
 
-
   // Check if phase can be started based on dependencies
   canStartPhase(phase: Phase, allPhases: Phase[]): boolean {
     if (!phase.dependencies || phase.dependencies.length === 0) {
       return true;
     }
-    
-    return phase.dependencies.every(dep => {
-      const dependentPhase = allPhases.find(p => p.id === dep.phaseId);
+
+    return phase.dependencies.every((dep) => {
+      const dependentPhase = allPhases.find((p) => p.id === dep.phaseId);
       if (!dependentPhase) return true;
-      
+
       switch (dep.type) {
         case DependencyType.FINISH_TO_START:
           return dependentPhase.status === PhaseStatus.COMPLETED;
         case DependencyType.START_TO_START:
-          return dependentPhase.status === PhaseStatus.ACTIVE || 
-                 dependentPhase.status === PhaseStatus.COMPLETED;
+          return (
+            dependentPhase.status === PhaseStatus.ACTIVE ||
+            dependentPhase.status === PhaseStatus.COMPLETED
+          );
         case DependencyType.FINISH_TO_FINISH:
           // Can start anytime, but can't finish until dependency finishes
           return true;
@@ -312,52 +330,52 @@ export class PhaseService {
   // Calculate overall project progress based on phases
   calculateProjectProgress(phases: Phase[]): number {
     if (phases.length === 0) return 0;
-    
-    const completedPhases = phases.filter(p => p.status === PhaseStatus.COMPLETED).length;
+
+    const completedPhases = phases.filter((p) => p.status === PhaseStatus.COMPLETED).length;
     return Math.round((completedPhases / phases.length) * 100);
   }
 
   // Update all project phases (used by phase management dialog)
   async updateProjectPhases(projectId: string, phases: any[]): Promise<void> {
     const batch = writeBatch(this.firestore);
-    
+
     // Get existing phases to delete any that were removed
-    const existingPhasesSnapshot = await this.getProjectPhases(projectId).pipe(
-      map(phases => phases)
-    ).toPromise();
-    
-    const existingPhaseIds = existingPhasesSnapshot?.map(p => p.id) || [];
-    const updatedPhaseIds = phases.filter(p => p.id).map(p => p.id);
-    
+    const existingPhasesSnapshot = await this.getProjectPhases(projectId)
+      .pipe(map((phases) => phases))
+      .toPromise();
+
+    const existingPhaseIds = existingPhasesSnapshot?.map((p) => p.id) || [];
+    const updatedPhaseIds = phases.filter((p) => p.id).map((p) => p.id);
+
     // Delete removed phases
-    existingPhaseIds.forEach(id => {
+    existingPhaseIds.forEach((id) => {
       if (!updatedPhaseIds.includes(id)) {
         const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${id}`);
         batch.delete(phaseRef);
       }
     });
-    
+
     // Create temporary ID mapping for new phases
     const tempIdMap = new Map<string, string>();
-    
+
     // First pass: create/update phases without dependencies
     phases.forEach((phase, index) => {
       if (!phase.id || phase.id.startsWith('temp-')) {
         // New phase
         const phaseRef = doc(collection(this.firestore, `projects/${projectId}/phases`));
         const newId = phaseRef.id;
-        
+
         if (phase.id) {
           tempIdMap.set(phase.id, newId);
         }
-        
+
         batch.set(phaseRef, {
           name: phase.name,
           description: phase.description,
           orderNo: phase.orderNo,
           status: phase.status,
           createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp()
+          updatedAt: serverTimestamp(),
         });
       } else {
         // Existing phase
@@ -367,67 +385,73 @@ export class PhaseService {
           description: phase.description,
           orderNo: phase.orderNo,
           status: phase.status,
-          updatedAt: serverTimestamp()
+          updatedAt: serverTimestamp(),
         });
       }
     });
-    
+
     // Commit first batch
     await batch.commit();
-    
+
     // Second pass: update dependencies with correct IDs
     const depBatch = writeBatch(this.firestore);
-    
+
     for (let i = 0; i < phases.length; i++) {
       const phase = phases[i];
       const phaseId = phase.id?.startsWith('temp-') ? tempIdMap.get(phase.id) : phase.id;
-      
+
       if (phaseId && phase.dependencies && phase.dependencies.length > 0) {
-        const dependencies = phase.dependencies.map((dep: any) => {
-          let depPhaseId = dep.phaseId;
-          
-          // Map temporary IDs to real IDs
-          if (dep.phaseId.startsWith('temp-')) {
-            const tempIndex = parseInt(dep.phaseId.split('-')[1]);
-            const targetPhase = phases[tempIndex];
-            depPhaseId = targetPhase.id?.startsWith('temp-') 
-              ? tempIdMap.get(targetPhase.id) 
-              : targetPhase.id;
-          }
-          
-          return {
-            phaseId: depPhaseId,
-            type: dep.type
-          };
-        }).filter((dep: any) => dep.phaseId); // Filter out any invalid dependencies
-        
+        const dependencies = phase.dependencies
+          .map((dep: any) => {
+            let depPhaseId = dep.phaseId;
+
+            // Map temporary IDs to real IDs
+            if (dep.phaseId.startsWith('temp-')) {
+              const tempIndex = parseInt(dep.phaseId.split('-')[1]);
+              const targetPhase = phases[tempIndex];
+              depPhaseId = targetPhase.id?.startsWith('temp-')
+                ? tempIdMap.get(targetPhase.id)
+                : targetPhase.id;
+            }
+
+            return {
+              phaseId: depPhaseId,
+              type: dep.type,
+            };
+          })
+          .filter((dep: any) => dep.phaseId); // Filter out any invalid dependencies
+
         const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${phaseId}`);
         depBatch.update(phaseRef, {
           dependencies,
-          updatedAt: serverTimestamp()
+          updatedAt: serverTimestamp(),
         });
       }
     }
-    
+
     await depBatch.commit();
   }
 
   // Phase Template Management
   getPhaseTemplates(): Observable<PhaseTemplate[]> {
-    const templatesRef = collection(this.firestore, 'phaseTemplates') as CollectionReference<PhaseTemplate>;
-    const templatesQuery = query(templatesRef, orderBy('orderNo'));
-    
+    const templatesRef = collection(
+      this.firestore,
+      'phaseTemplates',
+    ) as CollectionReference<PhaseTemplate>;
+    // Query removed - using templatesRef directly with collectionData
+    // const templatesQuery = query(templatesRef, orderBy('orderNo'));
+
     return collectionData(templatesRef, { idField: 'id' }).pipe(
-      map(templates => {
+      map((templates) => {
         // If no templates exist, return DEFAULT_PHASES
         if (templates.length === 0) {
           return DEFAULT_PHASES.map((template, index) => ({
             ...template,
-            id: `default-${index}`
+            id: `default-${index}`,
           }));
         }
         return templates;
-      })
+      }),
     );
   }
 
@@ -437,9 +461,9 @@ export class PhaseService {
     const newTemplate = {
       ...template,
       createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     };
-    
+
     return from(setDoc(doc(templatesRef), newTemplate));
   }
 
@@ -448,9 +472,9 @@ export class PhaseService {
     const templateRef = doc(this.firestore, 'phaseTemplates', templateId);
     const updateData = {
       ...updates,
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     };
-    
+
     return from(updateDoc(templateRef, updateData));
   }
 
@@ -463,19 +487,19 @@ export class PhaseService {
   // Initialize default phase templates (run once on first app load)
   async initializeDefaultTemplates(): Promise<void> {
     const templates = await firstValueFrom(this.getPhaseTemplates());
-    
-    if (templates.length === 0 || templates.every(t => t.id?.startsWith('default-'))) {
+
+    if (templates.length === 0 || templates.every((t) => t.id?.startsWith('default-'))) {
       const batch = writeBatch(this.firestore);
-      
-      DEFAULT_PHASES.forEach(template => {
+
+      DEFAULT_PHASES.forEach((template) => {
         const templateRef = doc(collection(this.firestore, 'phaseTemplates'));
         batch.set(templateRef, {
           ...template,
           createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp()
+          updatedAt: serverTimestamp(),
         });
       });
-      
+
       await batch.commit();
     }
   }

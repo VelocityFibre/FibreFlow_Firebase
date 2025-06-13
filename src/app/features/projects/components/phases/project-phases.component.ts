@@ -33,7 +33,7 @@ import { PhaseAssignDialogComponent } from './phase-assign-dialog/phase-assign-d
     MatDividerModule,
     MatDialogModule,
     MatTableModule,
-    MatBadgeModule
+    MatBadgeModule,
   ],
   template: `
     <div class="phases-container">
@@ -41,7 +41,8 @@ import { PhaseAssignDialogComponent } from './phase-assign-dialog/phase-assign-d
         <h2 class="section-title">Project Phases</h2>
         <div class="header-actions">
           <span class="phase-status-summary" *ngIf="phases$ | async as phases">
-            Click status button to cycle through: Pending → Started → Flagged → Completed. Click phase details to edit.
+            Click status button to cycle through: Pending → Started → Flagged → Completed. Click
+            phase details to edit.
           </span>
         </div>
       </div>
@@ -50,38 +51,44 @@ import { PhaseAssignDialogComponent } from './phase-assign-dialog/phase-assign-d
       <div class="phases-grid" *ngIf="phases$ | async as phases">
         <mat-card class="phase-card ff-card-phases" *ngFor="let phase of phases; let i = index">
           <mat-card-header>
-            <mat-card-title>
-              <span class="phase-number">{{ i + 1 }}.</span>
-              {{ phase.name }}
-            </mat-card-title>
-            <button mat-raised-button 
-                    [ngClass]="'status-button status-' + phase.status"
-                    (click)="cyclePhaseStatus(phase, phases)">
-              {{ getStatusLabel(phase.status) }}
-            </button>
+            <div class="phase-header-content">
+              <mat-card-title>
+                <span class="phase-number">{{ i + 1 }}.</span>
+                {{ phase.name }}
+              </mat-card-title>
+              <button
+                mat-flat-button
+                [ngClass]="'status-button status-' + phase.status"
+                (click)="cyclePhaseStatus(phase, phases)"
+                [disabled]="!canModifyPhase(phase)"
+              >
+                <mat-icon class="status-icon">{{ getStatusIcon(phase.status) }}</mat-icon>
+                {{ getStatusLabel(phase.status) }}
+              </button>
+            </div>
           </mat-card-header>
-          
+
           <mat-card-content>
             <div class="phase-details">
               <div class="phase-duration">
                 <strong>{{ getPhaseDefaults(phase.name).duration }}</strong>
               </div>
-              
+
               <div class="phase-description">
                 {{ getPhaseDefaults(phase.name).description }}
               </div>
-              
+
               <div class="key-deliverables" *ngIf="getPhaseDefaults(phase.name).deliverables">
                 <strong>Key Deliverables:</strong> {{ getPhaseDefaults(phase.name).deliverables }}
               </div>
-              
+
               <div class="flag-reason" *ngIf="phase.status === 'blocked' && phase.blockedReason">
                 <mat-icon class="flag-icon">flag</mat-icon>
                 <strong>Flag Reason:</strong> <em>{{ phase.blockedReason }}</em>
               </div>
             </div>
           </mat-card-content>
-          
+
           <mat-card-actions>
             <button mat-button (click)="editPhase(phase)">
               <mat-icon>edit</mat-icon>
@@ -105,8 +112,11 @@ import { PhaseAssignDialogComponent } from './phase-assign-dialog/phase-assign-d
                 <mat-icon>schedule</mat-icon>
                 <span>Mark as Pending</span>
               </button>
-              <button mat-menu-item (click)="updatePhaseStatus(phase, 'active')"
-                      [disabled]="!canStartPhase(phase, phases)">
+              <button
+                mat-menu-item
+                (click)="updatePhaseStatus(phase, 'active')"
+                [disabled]="!canStartPhase(phase, phases)"
+              >
                 <mat-icon>play_arrow</mat-icon>
                 <span>Mark as Started</span>
               </button>
@@ -131,216 +141,264 @@ import { PhaseAssignDialogComponent } from './phase-assign-dialog/phase-assign-d
       </div>
     </div>
   `,
-  styles: [`
-    .phases-container {
-      padding: 0;
-      width: 100%;
-    }
-
-    .phases-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .section-title {
-      font-size: 24px;
-      font-weight: 600;
-      margin: 0;
-      color: #1f2937;
-    }
-
-    .phase-status-summary {
-      font-size: 13px;
-      color: #6b7280;
-      font-style: italic;
-    }
-
-    .phases-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-      gap: 20px;
-      width: 100%;
-    }
-
-    .phase-card {
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      transition: box-shadow 0.2s ease;
-      
-      &:hover {
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  styles: [
+    `
+      .phases-container {
+        padding: 0;
+        width: 100%;
       }
-    }
 
-    ::ng-deep .phase-card .mat-mdc-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px;
-      background-color: #f9fafb;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    ::ng-deep .phase-card .mat-mdc-card-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 18px;
-      font-weight: 600;
-      margin: 0;
-    }
-
-    .phase-number {
-      color: #6b7280;
-    }
-
-    .status-button {
-      font-size: 12px;
-      font-weight: 600;
-      padding: 4px 12px;
-      min-width: 90px;
-      height: 28px;
-      line-height: 20px;
-      border: none;
-      transition: all 0.2s ease;
-      
-      &.status-pending {
-        background-color: #f3f4f6 !important;
-        color: #6b7280 !important;
+      .phases-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+        gap: 16px;
       }
-      
-      &.status-active {
-        background-color: #dbeafe !important;
-        color: #1e40af !important;
-      }
-      
-      &.status-completed {
-        background-color: #d1fae5 !important;
-        color: #065f46 !important;
-      }
-      
-      &.status-blocked {
-        background-color: #fee2e2 !important;
-        color: #dc2626 !important;
-      }
-    }
 
-    ::ng-deep .phase-card .mat-mdc-card-content {
-      padding: 16px;
-    }
-
-    .phase-details {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .phase-duration {
-      font-size: 14px;
-      color: #6b7280;
-    }
-
-    .phase-description {
-      font-size: 14px;
-      color: #4b5563;
-      line-height: 1.5;
-    }
-
-    .key-deliverables {
-      font-size: 14px;
-      color: #4b5563;
-      line-height: 1.5;
-      
-      strong {
+      .section-title {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0;
         color: #1f2937;
       }
-    }
 
-    .flag-reason {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      padding: 12px;
-      background-color: #fef2f2;
-      border-radius: 6px;
-      border: 1px solid #fecaca;
-      font-size: 14px;
-      color: #991b1b;
-      
-      .flag-icon {
-        color: #dc2626;
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
-        flex-shrink: 0;
-        margin-top: 2px;
-      }
-      
-      strong {
-        color: #dc2626;
-      }
-      
-      em {
+      .phase-status-summary {
+        font-size: 13px;
+        color: #6b7280;
         font-style: italic;
       }
-    }
 
-    ::ng-deep .phase-card .mat-mdc-card-actions {
-      padding: 8px 16px;
-      border-top: 1px solid #e5e7eb;
-      background-color: #f9fafb;
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 64px 32px;
-      color: #6b7280;
-      
-      mat-icon {
-        font-size: 64px;
-        width: 64px;
-        height: 64px;
-        margin-bottom: 24px;
-        opacity: 0.3;
-      }
-      
-      h3 {
-        font-size: 20px;
-        margin-bottom: 8px;
-      }
-    }
-
-    // Mobile responsive
-    @media (max-width: 768px) {
       .phases-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .phase-status-summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 20px;
         width: 100%;
-        text-align: center;
       }
-    }
-  `]
+
+      .phase-card {
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.2s ease;
+
+        &:hover {
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+      }
+
+      ::ng-deep .phase-card .mat-mdc-card-header {
+        padding: 12px 16px;
+        background-color: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+        display: block;
+      }
+
+      .phase-header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
+
+      ::ng-deep .phase-card .mat-mdc-card-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+        flex: 1;
+      }
+
+      .phase-number {
+        color: #6b7280;
+      }
+
+      .status-button {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 4px 16px;
+        min-width: 120px;
+        height: 32px;
+        line-height: 24px;
+        border: none;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        justify-content: center;
+        cursor: pointer;
+
+        .status-icon {
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        &.status-pending {
+          background-color: #f3f4f6 !important;
+          color: #6b7280 !important;
+
+          &:hover:not(:disabled) {
+            background-color: #e5e7eb !important;
+          }
+        }
+
+        &.status-active {
+          background-color: #dbeafe !important;
+          color: #1e40af !important;
+
+          &:hover:not(:disabled) {
+            background-color: #bfdbfe !important;
+          }
+        }
+
+        &.status-completed {
+          background-color: #d1fae5 !important;
+          color: #065f46 !important;
+
+          &:hover:not(:disabled) {
+            background-color: #a7f3d0 !important;
+          }
+        }
+
+        &.status-blocked {
+          background-color: #fee2e2 !important;
+          color: #dc2626 !important;
+
+          &:hover:not(:disabled) {
+            background-color: #fecaca !important;
+          }
+        }
+      }
+
+      ::ng-deep .phase-card .mat-mdc-card-content {
+        padding: 16px;
+      }
+
+      .phase-details {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .phase-duration {
+        font-size: 14px;
+        color: #6b7280;
+      }
+
+      .phase-description {
+        font-size: 14px;
+        color: #4b5563;
+        line-height: 1.5;
+      }
+
+      .key-deliverables {
+        font-size: 14px;
+        color: #4b5563;
+        line-height: 1.5;
+
+        strong {
+          color: #1f2937;
+        }
+      }
+
+      .flag-reason {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 12px;
+        background-color: #fef2f2;
+        border-radius: 6px;
+        border: 1px solid #fecaca;
+        font-size: 14px;
+        color: #991b1b;
+
+        .flag-icon {
+          color: #dc2626;
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+          flex-shrink: 0;
+          margin-top: 2px;
+        }
+
+        strong {
+          color: #dc2626;
+        }
+
+        em {
+          font-style: italic;
+        }
+      }
+
+      ::ng-deep .phase-card .mat-mdc-card-actions {
+        padding: 8px 16px;
+        border-top: 1px solid #e5e7eb;
+        background-color: #f9fafb;
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 64px 32px;
+        color: #6b7280;
+
+        mat-icon {
+          font-size: 64px;
+          width: 64px;
+          height: 64px;
+          margin-bottom: 24px;
+          opacity: 0.3;
+        }
+
+        h3 {
+          font-size: 20px;
+          margin-bottom: 8px;
+        }
+      }
+
+      // Mobile responsive
+      @media (max-width: 768px) {
+        .phases-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .phase-status-summary {
+          width: 100%;
+          text-align: center;
+        }
+      }
+    `,
+  ],
 })
 export class ProjectPhasesComponent implements OnInit {
   @Input() projectId!: string;
-  
+
   private phaseService = inject(PhaseService);
   private dialog = inject(MatDialog);
-  
+
   phases$!: Observable<Phase[]>;
   currentPhases: Phase[] = [];
-  displayedColumns: string[] = ['order', 'phase', 'status', 'assignedTo', 'dates', 'dependencies', 'actions'];
-  
+  displayedColumns: string[] = [
+    'order',
+    'phase',
+    'status',
+    'assignedTo',
+    'dates',
+    'dependencies',
+    'actions',
+  ];
+
   private refreshPhases$ = new Subject<void>();
 
   ngOnInit() {
@@ -354,30 +412,46 @@ export class ProjectPhasesComponent implements OnInit {
     this.phases$ = this.refreshPhases$.pipe(
       startWith({}), // Trigger initial load
       switchMap(() => this.phaseService.getProjectPhases(this.projectId)),
-      tap(phases => {
-        console.log('Phases loaded:', phases);
+      tap((phases) => {
+        // Phases loaded successfully
         this.currentPhases = phases;
-      })
+      }),
     );
   }
 
-  getStatusLabel(status: PhaseStatus): string {
-    switch(status) {
-      case PhaseStatus.PENDING:
+  getStatusLabel(status: PhaseStatus | string): string {
+    const statusStr = status.toString().toLowerCase();
+    switch (statusStr) {
+      case 'pending':
         return 'Pending';
-      case PhaseStatus.ACTIVE:
+      case 'active':
         return 'Started';
-      case PhaseStatus.COMPLETED:
+      case 'completed':
         return 'Completed';
-      case PhaseStatus.BLOCKED:
+      case 'blocked':
         return 'Flagged';
       default:
-        const str = status as string;
-        return str.charAt(0).toUpperCase() + str.slice(1);
+        return statusStr.charAt(0).toUpperCase() + statusStr.slice(1);
     }
   }
 
-  formatDate(date: any): string {
+  getStatusIcon(status: PhaseStatus | string): string {
+    const statusStr = status.toString().toLowerCase();
+    switch (statusStr) {
+      case 'pending':
+        return 'schedule';
+      case 'active':
+        return 'play_circle';
+      case 'completed':
+        return 'check_circle';
+      case 'blocked':
+        return 'flag';
+      default:
+        return 'help';
+    }
+  }
+
+  formatDate(date: unknown): string {
     if (!date) return '';
     const d = date.toDate ? date.toDate() : new Date(date);
     return d.toLocaleDateString();
@@ -391,122 +465,131 @@ export class ProjectPhasesComponent implements OnInit {
     return this.phaseService.canStartPhase(phase, allPhases);
   }
 
-  canModifyPhase(phase: Phase): boolean {
+  canModifyPhase(_phase: Phase): boolean {
     // Add your business logic here - who can modify phases
     return true; // For now, everyone can modify
   }
 
   getDependencyTooltip(phase: Phase, allPhases: Phase[]): string {
     if (!phase.dependencies || phase.dependencies.length === 0) return '';
-    
-    const depNames = phase.dependencies.map(dep => {
-      const depPhase = allPhases.find(p => p.id === dep.phaseId);
+
+    const depNames = phase.dependencies.map((dep) => {
+      const depPhase = allPhases.find((p) => p.id === dep.phaseId);
       return depPhase ? depPhase.name : 'Unknown';
     });
-    
+
     return `Depends on: ${depNames.join(', ')}`;
   }
 
-  getPhaseDefaults(phaseName: string): any {
+  getPhaseDefaults(phaseName: string): {
+    duration: string;
+    description: string;
+    deliverables: string | null;
+  } {
     // Phase-specific details based on the screenshot
-    const phaseDetails: Record<string, any> = {
+    const phaseDetails: Record<
+      string,
+      {
+        duration: string;
+        description: string;
+        deliverables: string | null;
+      }
+    > = {
       'Site Survey and Planning': {
         duration: '2 weeks',
         description: 'Conduct comprehensive site surveys and create detailed deployment plans',
-        deliverables: 'Site survey reports, network topology maps, equipment placement plans'
+        deliverables: 'Site survey reports, network topology maps, equipment placement plans',
       },
       'Permits and Approvals': {
-        duration: '3 weeks', 
+        duration: '3 weeks',
         description: 'Obtain all necessary permits and regulatory approvals',
-        deliverables: 'Building permits, utility crossing agreements, environmental clearances'
+        deliverables: 'Building permits, utility crossing agreements, environmental clearances',
       },
       'Network Installation': {
         duration: '8 weeks',
         description: 'Install fiber optic cables, equipment, and infrastructure',
-        deliverables: 'Installed fiber network, equipment racks, power systems'
+        deliverables: 'Installed fiber network, equipment racks, power systems',
       },
       'Testing and Commissioning': {
         duration: '2 weeks',
         description: 'Test all network components and commission the system',
-        deliverables: null
+        deliverables: null,
       },
       // Map our default phases to the ones shown in screenshot
-      'Planning': {
+      Planning: {
         duration: '2 weeks',
         description: 'Initial project scoping and design',
-        deliverables: 'Project scope document, initial design plans, resource allocation'
+        deliverables: 'Project scope document, initial design plans, resource allocation',
       },
       'Initiate Project (IP)': {
         duration: '1 week',
         description: 'Setup and approval phase',
-        deliverables: 'Project charter, kickoff meeting notes, stakeholder sign-offs'
+        deliverables: 'Project charter, kickoff meeting notes, stakeholder sign-offs',
       },
       'Work in Progress (WIP)': {
         duration: '8 weeks',
         description: 'Active construction phase',
-        deliverables: 'Progress reports, installation documentation, quality checks'
+        deliverables: 'Progress reports, installation documentation, quality checks',
       },
-      'Handover': {
+      Handover: {
         duration: '1 week',
         description: 'Completion and client transition',
-        deliverables: 'Handover documentation, training materials, warranty information'
+        deliverables: 'Handover documentation, training materials, warranty information',
       },
       'Handover Complete (HOC)': {
         duration: '1 week',
         description: 'Delivery confirmation',
-        deliverables: 'Client acceptance form, final documentation, asset register'
+        deliverables: 'Client acceptance form, final documentation, asset register',
       },
       'Final Acceptance Certificate (FAC)': {
         duration: '1 week',
         description: 'Project closure',
-        deliverables: 'Final acceptance certificate, project closure report, lessons learned'
+        deliverables: 'Final acceptance certificate, project closure report, lessons learned',
+      },
+    };
+
+    return (
+      phaseDetails[phaseName] || {
+        duration: '1 week',
+        description: phaseName,
+        deliverables: null,
       }
-    };
-    
-    return phaseDetails[phaseName] || {
-      duration: '1 week',
-      description: phaseName,
-      deliverables: null
-    };
+    );
   }
 
-  async cyclePhaseStatus(phase: Phase, allPhases: Phase[]) {
+  async cyclePhaseStatus(phase: Phase, _allPhases: Phase[]) {
     if (!phase.id) {
       console.error('Phase has no ID:', phase);
       return;
     }
-    
-    console.log('Current phase status:', phase.status, 'Type:', typeof phase.status);
+
+    // Processing phase status change
     let newStatus: PhaseStatus;
-    
-    // Handle both enum and string values
-    const currentStatus = phase.status as string;
-    
+
+    // Handle both enum and string values - normalize to lowercase
+    const currentStatus = phase.status.toString().toLowerCase();
+
     // Cycle through: Pending → Started → Flagged → Completed → Pending
-    switch(currentStatus) {
+    switch (currentStatus) {
       case 'pending':
-      case PhaseStatus.PENDING:
         newStatus = PhaseStatus.ACTIVE;
         break;
       case 'active':
-      case PhaseStatus.ACTIVE:
         newStatus = PhaseStatus.BLOCKED;
         break;
       case 'blocked':
-      case PhaseStatus.BLOCKED:
         newStatus = PhaseStatus.COMPLETED;
         break;
       case 'completed':
-      case PhaseStatus.COMPLETED:
         newStatus = PhaseStatus.PENDING;
         break;
       default:
-        console.log('Unrecognized status:', phase.status);
+        // Unrecognized status, defaulting to pending
         newStatus = PhaseStatus.PENDING;
     }
-    
-    console.log('New status will be:', newStatus);
-    
+
+    // New status determined
+
     // If changing to blocked, prompt for reason
     if (newStatus === PhaseStatus.BLOCKED) {
       const reason = window.prompt('Please provide a reason for flagging this phase:');
@@ -532,7 +615,7 @@ export class ProjectPhasesComponent implements OnInit {
     }
   }
 
-  editPhase(phase: Phase) {
+  editPhase(_phase: Phase) {
     // TODO: Implement phase editing dialog
     alert('Phase editing dialog coming soon!');
   }
@@ -548,7 +631,11 @@ export class ProjectPhasesComponent implements OnInit {
       const confirm = window.confirm('Are you sure you want to mark this phase as complete?');
       if (confirm) {
         try {
-          await this.phaseService.updatePhaseStatus(this.projectId, phase.id, PhaseStatus.COMPLETED);
+          await this.phaseService.updatePhaseStatus(
+            this.projectId,
+            phase.id,
+            PhaseStatus.COMPLETED,
+          );
           // Reload phases to show updated status
           this.refreshPhases$.next();
         } catch (error) {
@@ -572,7 +659,7 @@ export class ProjectPhasesComponent implements OnInit {
   async updatePhaseStatus(phase: Phase, status: string) {
     if (phase.id) {
       let confirmMessage = '';
-      switch(status) {
+      switch (status) {
         case 'pending':
           confirmMessage = 'Are you sure you want to mark this phase as pending?';
           break;
@@ -583,10 +670,14 @@ export class ProjectPhasesComponent implements OnInit {
           confirmMessage = 'Are you sure you want to mark this phase as completed?';
           break;
       }
-      
+
       if (confirmMessage && confirm(confirmMessage)) {
         try {
-          await this.phaseService.updatePhaseStatus(this.projectId, phase.id, status as PhaseStatus);
+          await this.phaseService.updatePhaseStatus(
+            this.projectId,
+            phase.id,
+            status as PhaseStatus,
+          );
           // Reload phases to show updated status
           this.refreshPhases$.next();
         } catch (error) {
@@ -602,7 +693,12 @@ export class ProjectPhasesComponent implements OnInit {
       const reason = window.prompt('Please provide a reason for flagging this phase:');
       if (reason) {
         try {
-          await this.phaseService.updatePhaseStatus(this.projectId, phase.id, PhaseStatus.BLOCKED, reason);
+          await this.phaseService.updatePhaseStatus(
+            this.projectId,
+            phase.id,
+            PhaseStatus.BLOCKED,
+            reason,
+          );
           // Reload phases to show updated status
           this.refreshPhases$.next();
         } catch (error) {
@@ -622,10 +718,10 @@ export class ProjectPhasesComponent implements OnInit {
   assignUser(phase: Phase) {
     const dialogRef = this.dialog.open(PhaseAssignDialogComponent, {
       width: '500px',
-      data: { phase, projectId: this.projectId }
+      data: { phase, projectId: this.projectId },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         // Reload phases to show updated assignment
         this.loadPhases();
@@ -633,7 +729,7 @@ export class ProjectPhasesComponent implements OnInit {
     });
   }
 
-  setDates(phase: Phase) {
+  setDates(_phase: Phase) {
     // TODO: Open dates dialog
     alert('Dates dialog coming soon!');
     // const dialogRef = this.dialog.open(PhaseDatesDialogComponent, {
@@ -641,5 +737,4 @@ export class ProjectPhasesComponent implements OnInit {
     //   data: { phase, projectId: this.projectId }
     // });
   }
-
 }

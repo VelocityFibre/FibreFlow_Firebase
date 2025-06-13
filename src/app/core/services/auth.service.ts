@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { UserProfile } from '../models/user-profile';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   // Mock user for development - always logged in as admin
   private mockUser = {
     uid: 'dev-user',
     email: 'dev@test.com',
-    displayName: 'Dev User'
+    displayName: 'Dev User',
   };
 
   private mockUserProfile: UserProfile = {
@@ -20,11 +20,15 @@ export class AuthService {
     userGroup: 'admin' as const,
     isActive: true,
     createdAt: new Date(),
-    lastLogin: new Date()
+    lastLogin: new Date(),
   };
 
   // Observable streams for user state
-  private userSubject = new BehaviorSubject<any>(this.mockUser);
+  private userSubject = new BehaviorSubject<{
+    uid: string;
+    email: string;
+    displayName: string;
+  } | null>(this.mockUser);
   private userProfileSubject = new BehaviorSubject<UserProfile | null>(this.mockUserProfile);
 
   user$ = this.userSubject.asObservable();
@@ -35,12 +39,12 @@ export class AuthService {
   }
 
   // Mock login - always succeeds
-  async loginWithGoogle(): Promise<any> {
+  async loginWithGoogle(): Promise<{ uid: string; email: string; displayName: string }> {
     console.log('🔐 Mock Google login - would open Google popup in production');
     // In production, this would use:
     // const provider = new GoogleAuthProvider();
     // return signInWithPopup(this.auth, provider);
-    
+
     // For now, just return the mock user
     this.userSubject.next(this.mockUser);
     this.userProfileSubject.next(this.mockUserProfile);
@@ -51,13 +55,13 @@ export class AuthService {
   async logout(): Promise<void> {
     console.log('🔐 Mock logout - would clear session in production');
     // In production: return this.auth.signOut();
-    
+
     // For development, we stay logged in
     console.log('⚠️ Dev mode: User remains logged in');
   }
 
   // Get current user synchronously
-  getCurrentUser(): any {
+  getCurrentUser(): { uid: string; email: string; displayName: string } | null {
     return this.userSubject.value;
   }
 

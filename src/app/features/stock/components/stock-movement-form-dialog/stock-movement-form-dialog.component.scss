@@ -19,12 +19,12 @@ mat-dialog-content {
 
 .form-section {
   padding: 1rem 0;
-  
+
   h3 {
     margin: 0 0 1rem 0;
     font-size: 1.125rem;
     font-weight: 500;
-    color: rgba(0, 0, 0, 0.87);
+    color: rgb(var(--ff-foreground));
   }
 }
 
@@ -40,27 +40,27 @@ mat-dialog-content {
 }
 
 .item-details {
-  background: rgba(0, 0, 0, 0.04);
+  background: rgb(var(--ff-muted) / 0.3);
   border-radius: 4px;
   padding: 0.75rem;
   margin-top: 0.5rem;
-  
+
   .detail-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0.25rem 0;
-    
+
     .label {
       font-size: 0.875rem;
-      color: rgba(0, 0, 0, 0.6);
+      color: rgb(var(--ff-muted-foreground));
     }
-    
+
     .value {
       font-weight: 500;
-      
+
       &.available {
-        color: #4caf50;
+        color: rgb(var(--ff-success));
       }
     }
   }
@@ -71,17 +71,17 @@ mat-dialog-content {
   flex-direction: column;
   justify-content: center;
   padding: 0 1rem;
-  
+
   .label {
     font-size: 0.875rem;
-    color: rgba(0, 0, 0, 0.6);
+    color: rgb(var(--ff-muted-foreground));
     margin-bottom: 0.25rem;
   }
-  
+
   .value {
     font-size: 1.25rem;
     font-weight: 500;
-    color: #ff9800;
+    color: rgb(var(--ff-warning));
   }
 }
 
@@ -93,13 +93,13 @@ mat-option {
   mat-icon {
     margin-right: 0.5rem;
     vertical-align: middle;
-    
-    &[color="success"] {
-      color: #4caf50;
+
+    &[color='success'] {
+      color: rgb(var(--ff-success));
     }
-    
-    &[color="warn"] {
-      color: #f44336;
+
+    &[color='warn'] {
+      color: rgb(var(--ff-destructive));
     }
   }
 }
@@ -110,7 +110,7 @@ mat-option {
     min-width: auto;
     max-width: 100%;
   }
-  
+
   .form-row {
     grid-template-columns: 1fr;
   }

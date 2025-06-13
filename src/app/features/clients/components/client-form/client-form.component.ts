@@ -18,7 +18,6 @@ import { MatChipInputEvent } from '@angular/material/chips';
 
 import { ClientService } from '../../services/client.service';
 import { Client, ClientType, ClientStatus, ClientContact } from '../../models/client.model';
-import { Timestamp } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-client-form',
@@ -36,10 +35,10 @@ import { Timestamp } from '@angular/fire/firestore';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatDividerModule,
-    MatCheckboxModule
+    MatCheckboxModule,
   ],
   templateUrl: './client-form.component.html',
-  styleUrls: ['./client-form.component.scss']
+  styleUrls: ['./client-form.component.scss'],
 })
 export class ClientFormComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -71,7 +70,7 @@ export class ClientFormComponent implements OnInit {
     'Education',
     'Hospitality',
     'Government',
-    'Other'
+    'Other',
   ];
 
   tags: string[] = [];
@@ -90,7 +89,7 @@ export class ClientFormComponent implements OnInit {
       clientType: ['', Validators.required],
       status: ['Active', Validators.required],
       industry: [''],
-      website: ['', Validators.pattern('https?://.+')]
+      website: ['', Validators.pattern('https?://.+')],
     });
 
     // Contact Information Form
@@ -98,14 +97,14 @@ export class ClientFormComponent implements OnInit {
       contactPerson: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern('^[+]?[0-9]{10,15}$')]],
-      address: ['', Validators.required]
+      address: ['', Validators.required],
     });
 
     // Business Information Form
     this.businessForm = this.fb.group({
       registrationNumber: [''],
       vatNumber: [''],
-      notes: ['']
+      notes: [''],
     });
 
     // Additional Contacts Form
@@ -113,7 +112,7 @@ export class ClientFormComponent implements OnInit {
       additionalContactName: [''],
       additionalContactRole: [''],
       additionalContactEmail: ['', Validators.email],
-      additionalContactPhone: ['', Validators.pattern('^[+]?[0-9]{10,15}$')]
+      additionalContactPhone: ['', Validators.pattern('^[+]?[0-9]{10,15}$')],
     });
 
     // Main form that combines all step forms
@@ -121,7 +120,7 @@ export class ClientFormComponent implements OnInit {
       basicInfo: this.basicInfoForm,
       contact: this.contactForm,
       business: this.businessForm,
-      additional: this.additionalForm
+      additional: this.additionalForm,
     });
   }
 
@@ -159,20 +158,20 @@ export class ClientFormComponent implements OnInit {
       clientType: client.clientType,
       status: client.status,
       industry: client.industry || '',
-      website: client.website || ''
+      website: client.website || '',
     });
 
     this.contactForm.patchValue({
       contactPerson: client.contactPerson,
       email: client.email,
       phone: client.phone,
-      address: client.address
+      address: client.address,
     });
 
     this.businessForm.patchValue({
       registrationNumber: client.registrationNumber || '',
       vatNumber: client.vatNumber || '',
-      notes: client.notes || ''
+      notes: client.notes || '',
     });
 
     this.tags = client.tags || [];
@@ -202,7 +201,7 @@ export class ClientFormComponent implements OnInit {
         role: contactData.additionalContactRole || '',
         email: contactData.additionalContactEmail,
         phone: contactData.additionalContactPhone || '',
-        isPrimary: false
+        isPrimary: false,
       };
       this.additionalContacts.push(newContact);
       this.additionalForm.reset();
@@ -216,7 +215,7 @@ export class ClientFormComponent implements OnInit {
 
   async onSubmit() {
     if (this.clientForm.invalid) {
-      Object.keys(this.clientForm.controls).forEach(key => {
+      Object.keys(this.clientForm.controls).forEach((key) => {
         const control = this.clientForm.get(key);
         if (control && control.invalid) {
           control.markAsTouched();
@@ -231,7 +230,7 @@ export class ClientFormComponent implements OnInit {
       ...this.contactForm.value,
       ...this.businessForm.value,
       tags: this.tags,
-      additionalContacts: this.additionalContacts
+      additionalContacts: this.additionalContacts,
     };
 
     try {
@@ -239,12 +238,11 @@ export class ClientFormComponent implements OnInit {
         await this.clientService.updateClient(this.clientId, formData);
         this.snackBar.open('Client updated successfully', 'Close', { duration: 3000 });
       } else {
-        const newClient = await this.clientService.createClient(formData);
+        await this.clientService.createClient(formData);
         this.snackBar.open('Client created successfully', 'Close', { duration: 3000 });
       }
       this.router.navigate(['/clients']);
     } catch (error) {
-      console.error('Error saving client:', error);
       this.snackBar.open('Error saving client', 'Close', { duration: 3000 });
     } finally {
       this.isSaving = false;

@@ -1,48 +1,42 @@
 import { Injectable, inject } from '@angular/core';
-import { 
-  Firestore, 
-  collection, 
-  doc, 
-  setDoc, 
-  updateDoc, 
-  deleteDoc,
-  query, 
-  where, 
+import {
+  Firestore,
+  collection,
+  doc,
+  query,
+  where,
   orderBy,
   limit,
-  startAfter,
   collectionData,
-  docData,
   runTransaction,
   serverTimestamp,
   Timestamp,
   writeBatch,
-  getDoc
+  getDoc,
 } from '@angular/fire/firestore';
-import { Observable, from, map, switchMap, throwError } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { StockService } from './stock.service';
 import { ProjectService } from '../../../core/services/project.service';
-import { 
-  StockMovement, 
-  MovementType, 
+import {
+  StockMovement,
   ReferenceType,
   StockMovementFilter,
   StockMovementSummary,
   isIncomingMovement,
-  isOutgoingMovement
+  isOutgoingMovement,
 } from '../models/stock-movement.model';
-import { StockItem } from '../models/stock-item.model';
+import { StockItem, MovementType } from '../models/stock-item.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StockMovementService {
   private firestore = inject(Firestore);
   private authService = inject(AuthService);
   private stockService = inject(StockService);
   private projectService = inject(ProjectService);
-  
+
   private movementsCollection = collection(this.firestore, 'stockMovements');
 
   // Get all movements with optional filtering
@@ -51,7 +45,7 @@ export class StockMovementService {
 
     if (filter) {
       const constraints = [];
-      
+
       if (filter.itemId) {
         constraints.push(where('itemId', '==', filter.itemId));
       }
@@ -67,7 +61,7 @@ export class StockMovementService {
       if (filter.performedBy) {
         constraints.push(where('performedBy', '==', filter.performedBy));
       }
-      
+
       if (constraints.length > 0) {
         q = query(this.movementsCollection, ...constraints, orderBy('movementDate', 'desc'));
       }
@@ -81,23 +75,21 @@ export class StockMovementService {
     const q = query(
       this.movementsCollection,
       where('itemId', '==', itemId),
-      orderBy('movementDate', 'desc')
+      orderBy('movementDate', 'desc'),
     );
     return collectionData(q, { idField: 'id' }) as Observable<StockMovement[]>;
   }
 
   // Get recent movements (last 50)
   getRecentMovements(limitCount: number = 50): Observable<StockMovement[]> {
-    const q = query(
-      this.movementsCollection,
-      orderBy('movementDate', 'desc'),
-      limit(limitCount)
-    );
+    const q = query(this.movementsCollection, orderBy('movementDate', 'desc'), limit(limitCount));
     return collectionData(q, { idField: 'id' }) as Observable<StockMovement[]>;
   }
 
   // Create a new stock movement
-  async createMovement(movement: Omit<StockMovement, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  async createMovement(
+    movement: Omit<StockMovement, 'id' | 'createdAt' | 'updatedAt'>,
+  ): Promise<string> {
     const currentUser = await this.authService.getCurrentUser();
     if (!currentUser) throw new Error('User not authenticated');
 
@@ -105,7 +97,7 @@ export class StockMovementService {
       // Get the stock item
       const itemDoc = doc(this.firestore, 'stockItems', movement.itemId);
       const itemSnapshot = await transaction.get(itemDoc);
-      
+
       if (!itemSnapshot.exists()) {
         throw new Error('Stock item not found');
       }
@@ -119,10 +111,12 @@ export class StockMovementService {
         newStock = previousStock + movement.quantity;
       } else if (isOutgoingMovement(movement.movementType)) {
         newStock = previousStock - movement.quantity;
-        
+
         // Check if we have enough stock
         if (newStock < 0) {
-          throw new Error(`Insufficient stock. Available: ${previousStock}, Requested: ${movement.quantity}`);
+          throw new Error(
+            `Insufficient stock. Available: ${previousStock}, Requested: ${movement.quantity}`,
+          );
         }
       }
 
@@ -135,9 +129,9 @@ export class StockMovementService {
         newStock,
         performedBy: currentUser.uid,
         performedByName: currentUser.displayName || currentUser.email || 'Unknown',
-        movementDate: movement.movementDate || serverTimestamp() as Timestamp,
+        movementDate: movement.movementDate || (serverTimestamp() as Timestamp),
         createdAt: serverTimestamp() as Timestamp,
-        updatedAt: serverTimestamp() as Timestamp
+        updatedAt: serverTimestamp() as Timestamp,
       };
 
       // Update stock item
@@ -146,7 +140,7 @@ export class StockMovementService {
         availableStock: newStock - stockItem.allocatedStock,
         lastMovementDate: serverTimestamp(),
         lastMovementType: movement.movementType,
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       });
 
       // Create movement record
@@ -162,7 +156,9 @@ export class StockMovementService {
   }
 
   // Bulk create movements (for imports or stock takes)
-  async createBulkMovements(movements: Omit<StockMovement, 'id' | 'createdAt' | 'updatedAt'>[]): Promise<void> {
+  async createBulkMovements(
+    movements: Omit<StockMovement, 'id' | 'createdAt' | 'updatedAt'>[],
+  ): Promise<void> {
     const currentUser = await this.authService.getCurrentUser();
     if (!currentUser) throw new Error('User not authenticated');
 
@@ -172,7 +168,7 @@ export class StockMovementService {
     // First, calculate all stock changes
     for (const movement of movements) {
       const currentChange = stockUpdates.get(movement.itemId) || 0;
-      
+
       if (isIncomingMovement(movement.movementType)) {
         stockUpdates.set(movement.itemId, currentChange + movement.quantity);
       } else if (isOutgoingMovement(movement.movementType)) {
@@ -185,11 +181,13 @@ export class StockMovementService {
       if (change < 0) {
         const itemDoc = doc(this.firestore, 'stockItems', itemId);
         const itemSnapshot = await getDoc(itemDoc);
-        
+
         if (itemSnapshot.exists()) {
           const stockItem = itemSnapshot.data() as StockItem;
           if (stockItem.currentStock + change < 0) {
-            throw new Error(`Insufficient stock for item ${stockItem.name}. Available: ${stockItem.currentStock}, Change: ${change}`);
+            throw new Error(
+              `Insufficient stock for item ${stockItem.name}. Available: ${stockItem.currentStock}, Change: ${change}`,
+            );
           }
         }
       }
@@ -203,13 +201,13 @@ export class StockMovementService {
         id: movementDoc.id,
         performedBy: currentUser.uid,
         performedByName: currentUser.displayName || currentUser.email || 'Unknown',
-        movementDate: movement.movementDate || serverTimestamp() as Timestamp,
+        movementDate: movement.movementDate || (serverTimestamp() as Timestamp),
         createdAt: serverTimestamp() as Timestamp,
         updatedAt: serverTimestamp() as Timestamp,
         previousStock: 0, // Will be updated in individual transactions
-        newStock: 0
+        newStock: 0,
       };
-      
+
       batch.set(movementDoc, newMovement);
     }
 
@@ -219,7 +217,7 @@ export class StockMovementService {
       batch.update(itemDoc, {
         currentStock: change,
         lastMovementDate: serverTimestamp(),
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       });
     }
 
@@ -229,13 +227,13 @@ export class StockMovementService {
   // Get movement summary for an item or project
   getMovementSummary(filter: StockMovementFilter): Observable<StockMovementSummary> {
     return this.getMovements(filter).pipe(
-      map(movements => {
+      map((movements) => {
         let totalIn = 0;
         let totalOut = 0;
         let totalValue = 0;
         const movementsByType = new Map<MovementType, number>();
 
-        movements.forEach(movement => {
+        movements.forEach((movement) => {
           if (isIncomingMovement(movement.movementType)) {
             totalIn += movement.quantity;
           } else if (isOutgoingMovement(movement.movementType)) {
@@ -253,9 +251,9 @@ export class StockMovementService {
           totalOut,
           netMovement: totalIn - totalOut,
           movementsByType,
-          totalValue
+          totalValue,
         };
-      })
+      }),
     );
   }
 
@@ -267,7 +265,7 @@ export class StockMovementService {
     toLocation: string,
     fromProjectId?: string,
     toProjectId?: string,
-    notes?: string
+    notes?: string,
   ): Promise<void> {
     const stockItem = await this.stockService.getStockItemOnce(itemId);
     if (!stockItem) throw new Error('Stock item not found');
@@ -291,7 +289,7 @@ export class StockMovementService {
       performedByName: '',
       previousStock: 0,
       newStock: 0,
-      movementDate: serverTimestamp() as Timestamp
+      movementDate: serverTimestamp() as Timestamp,
     };
 
     // Create incoming movement
@@ -303,7 +301,7 @@ export class StockMovementService {
       toProjectName: toProjectId ? 'Project Name' : undefined,
       fromLocation: undefined,
       fromProjectId: undefined,
-      fromProjectName: undefined
+      fromProjectName: undefined,
     };
 
     // Create both movements
@@ -317,7 +315,7 @@ export class StockMovementService {
     adjustmentQuantity: number,
     movementType: MovementType,
     reason: string,
-    notes?: string
+    notes?: string,
   ): Promise<void> {
     const stockItem = await this.stockService.getStockItemOnce(itemId);
     if (!stockItem) throw new Error('Stock item not found');
@@ -338,7 +336,7 @@ export class StockMovementService {
       performedByName: '',
       previousStock: 0,
       newStock: 0,
-      movementDate: serverTimestamp() as Timestamp
+      movementDate: serverTimestamp() as Timestamp,
     };
 
     await this.createMovement(movement);
@@ -349,11 +347,11 @@ export class StockMovementService {
     itemId: string,
     quantity: number,
     projectId: string,
-    notes?: string
+    notes?: string,
   ): Promise<void> {
     const [stockItem, project] = await Promise.all([
       this.stockService.getStockItemOnce(itemId),
-      this.projectService.getProjectOnce(projectId)
+      this.projectService.getProjectOnce(projectId),
     ]);
 
     if (!stockItem) throw new Error('Stock item not found');
@@ -378,7 +376,7 @@ export class StockMovementService {
       performedByName: '',
       previousStock: 0,
       newStock: 0,
-      movementDate: serverTimestamp() as Timestamp
+      movementDate: serverTimestamp() as Timestamp,
     };
 
     await this.createMovement(movement);
@@ -393,11 +391,11 @@ export class StockMovementService {
     quantity: number,
     projectId: string,
     reason: string,
-    notes?: string
+    notes?: string,
   ): Promise<void> {
     const [stockItem, project] = await Promise.all([
       this.stockService.getStockItemOnce(itemId),
-      this.projectService.getProjectOnce(projectId)
+      this.projectService.getProjectOnce(projectId),
     ]);
 
     if (!stockItem) throw new Error('Stock item not found');
@@ -423,7 +421,7 @@ export class StockMovementService {
       performedByName: '',
       previousStock: 0,
       newStock: 0,
-      movementDate: serverTimestamp() as Timestamp
+      movementDate: serverTimestamp() as Timestamp,
     };
 
     await this.createMovement(movement);

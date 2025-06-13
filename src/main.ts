@@ -4,6 +4,16 @@ import { AppComponent } from './app/app.component';
 
 console.log('FibreFlow: Starting application bootstrap...');
 
+// Add error handler for unhandled rejections
+window.addEventListener('unhandledrejection', (event) => {
+  console.error('FibreFlow: Unhandled promise rejection:', event.reason);
+});
+
+// Add global error handler
+window.addEventListener('error', (event) => {
+  console.error('FibreFlow: Global error:', event.error);
+});
+
 bootstrapApplication(AppComponent, appConfig)
   .then(() => console.log('FibreFlow: Application bootstrapped successfully'))
   .catch((err) => {

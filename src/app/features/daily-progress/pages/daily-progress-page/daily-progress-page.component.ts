@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { DailyProgressListComponent } from '../../components/daily-progress-list/daily-progress-list.component';
 import { DailyProgressFormComponent } from '../../components/daily-progress-form/daily-progress-form.component';
 import { DailyProgressDetailComponent } from '../../components/daily-progress-detail/daily-progress-detail.component';
@@ -16,47 +16,51 @@ import { DailyProgress } from '../../models/daily-progress.model';
     MatDialogModule,
     DailyProgressListComponent,
     DailyProgressFormComponent,
-    DailyProgressDetailComponent
+    DailyProgressDetailComponent,
   ],
   template: `
     <div class="daily-progress-page">
       <ng-container [ngSwitch]="currentView">
         <app-daily-progress-list *ngSwitchCase="'list'"></app-daily-progress-list>
-        
-        <app-daily-progress-form 
+
+        <app-daily-progress-form
           *ngSwitchCase="'new'"
           (save)="onSave($event)"
-          (cancel)="onCancel()">
+          (cancel)="onCancel()"
+        >
         </app-daily-progress-form>
-        
-        <app-daily-progress-form 
+
+        <app-daily-progress-form
           *ngSwitchCase="'edit'"
           [progress]="selectedProgress"
           (save)="onUpdate($event)"
-          (cancel)="onCancel()">
+          (cancel)="onCancel()"
+        >
         </app-daily-progress-form>
-        
+
         <app-daily-progress-detail *ngSwitchCase="'detail'"></app-daily-progress-detail>
       </ng-container>
     </div>
   `,
-  styles: [`
-    .daily-progress-page {
-      height: 100%;
-    }
-  `]
+  styles: [
+    `
+      .daily-progress-page {
+        height: 100%;
+      }
+    `,
+  ],
 })
 export class DailyProgressPageComponent {
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private dailyProgressService = inject(DailyProgressService);
+
   currentView: 'list' | 'new' | 'edit' | 'detail' = 'list';
   selectedProgress?: DailyProgress;
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private dailyProgressService: DailyProgressService
-  ) {
+  constructor() {
     // Determine view based on route
-    this.route.url.subscribe(segments => {
+    this.route.url.subscribe((segments) => {
       if (segments.length === 0) {
         this.currentView = 'list';
       } else if (segments[0].path === 'new') {
@@ -71,7 +75,7 @@ export class DailyProgressPageComponent {
   }
 
   loadProgress(id: string) {
-    this.dailyProgressService.getById(id).subscribe(progress => {
+    this.dailyProgressService.getById(id).subscribe((progress) => {
       this.selectedProgress = progress;
     });
   }
@@ -84,7 +88,7 @@ export class DailyProgressPageComponent {
       },
       error: (error) => {
         console.error('Error creating daily progress:', error);
-      }
+      },
     });
   }
 
@@ -97,7 +101,7 @@ export class DailyProgressPageComponent {
         },
         error: (error) => {
           console.error('Error updating daily progress:', error);
-        }
+        },
       });
     }
   }

@@ -13,7 +13,11 @@ import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Observable, switchMap, of } from 'rxjs';
 import { ContractorService } from '../../services/contractor.service';
-import { Contractor, ContractorStatus, ContractorService as ServiceType } from '../../models/contractor.model';
+import {
+  Contractor,
+  ContractorStatus,
+  ContractorService as ServiceType,
+} from '../../models/contractor.model';
 
 @Component({
   selector: 'app-contractor-detail-page',
@@ -30,7 +34,7 @@ import { Contractor, ContractorStatus, ContractorService as ServiceType } from '
     MatBadgeModule,
     MatProgressSpinnerModule,
     MatListModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   template: `
     <div class="detail-container" *ngIf="contractor$ | async as contractor; else loading">
@@ -63,7 +67,11 @@ import { Contractor, ContractorStatus, ContractorService as ServiceType } from '
             <mat-icon>block</mat-icon>
             Suspend
           </button>
-          <button mat-raised-button color="primary" *ngIf="contractor.status === 'pending_approval'">
+          <button
+            mat-raised-button
+            color="primary"
+            *ngIf="contractor.status === 'pending_approval'"
+          >
             <mat-icon>check_circle</mat-icon>
             Approve
           </button>
@@ -96,7 +104,10 @@ import { Contractor, ContractorStatus, ContractorService as ServiceType } from '
                     </div>
                     <div class="info-item">
                       <span class="info-label">Email</span>
-                      <a class="info-value link" [href]="'mailto:' + contractor.primaryContact.email">
+                      <a
+                        class="info-value link"
+                        [href]="'mailto:' + contractor.primaryContact.email"
+                      >
                         {{ contractor.primaryContact.email }}
                       </a>
                     </div>
@@ -121,7 +132,10 @@ import { Contractor, ContractorStatus, ContractorService as ServiceType } from '
                 <mat-card-content>
                   <div class="address">
                     <p>{{ contractor.physicalAddress.street }}</p>
-                    <p>{{ contractor.physicalAddress.city }}, {{ contractor.physicalAddress.province }}</p>
+                    <p>
+                      {{ contractor.physicalAddress.city }},
+                      {{ contractor.physicalAddress.province }}
+                    </p>
                     <p>{{ contractor.physicalAddress.postalCode }}</p>
                   </div>
                 </mat-card-content>
@@ -140,13 +154,15 @@ import { Contractor, ContractorStatus, ContractorService as ServiceType } from '
                     <div class="capability-group">
                       <h4>Services</h4>
                       <div class="chips-container">
-                        <mat-chip *ngFor="let service of contractor.capabilities.services" 
-                                  class="service-chip">
+                        <mat-chip
+                          *ngFor="let service of contractor.capabilities.services"
+                          class="service-chip"
+                        >
                           {{ getServiceLabel(service) }}
                         </mat-chip>
                       </div>
                     </div>
-                    
+
                     <div class="capability-group">
                       <h4>Equipment</h4>
                       <div class="chips-container">
@@ -190,12 +206,17 @@ import { Contractor, ContractorStatus, ContractorService as ServiceType } from '
                       <p *ngIf="contractor.compliance.insurancePolicy">
                         Policy: {{ contractor.compliance.insurancePolicy }}
                       </p>
-                      <p *ngIf="contractor.compliance.insuranceExpiry" 
-                         [class.expired]="isExpired(contractor.compliance.insuranceExpiry)">
+                      <p
+                        *ngIf="contractor.compliance.insuranceExpiry"
+                        [class.expired]="isExpired(contractor.compliance.insuranceExpiry)"
+                      >
                         Expires: {{ formatDate(contractor.compliance.insuranceExpiry) }}
                       </p>
-                      <button mat-stroked-button size="small" 
-                              *ngIf="contractor.compliance.insuranceDocUrl">
+                      <button
+                        mat-stroked-button
+                        size="small"
+                        *ngIf="contractor.compliance.insuranceDocUrl"
+                      >
                         <mat-icon>description</mat-icon>
                         View Document
                       </button>
@@ -210,8 +231,11 @@ import { Contractor, ContractorStatus, ContractorService as ServiceType } from '
                       <p *ngIf="contractor.compliance.bbbeeLevel">
                         Level {{ contractor.compliance.bbbeeLevel }}
                       </p>
-                      <button mat-stroked-button size="small" 
-                              *ngIf="contractor.compliance.bbbeeDocUrl">
+                      <button
+                        mat-stroked-button
+                        size="small"
+                        *ngIf="contractor.compliance.bbbeeDocUrl"
+                      >
                         <mat-icon>description</mat-icon>
                         View Certificate
                       </button>
@@ -224,8 +248,10 @@ import { Contractor, ContractorStatus, ContractorService as ServiceType } from '
                     <div class="compliance-content">
                       <h4>Safety Rating</h4>
                       <div class="rating" *ngIf="contractor.compliance.safetyRating">
-                        <mat-icon *ngFor="let star of getStars(contractor.compliance.safetyRating)" 
-                                  class="star-icon">
+                        <mat-icon
+                          *ngFor="let star of getStars(contractor.compliance.safetyRating)"
+                          class="star-icon"
+                        >
                           star
                         </mat-icon>
                         <span>{{ contractor.compliance.safetyRating }}/5</span>
@@ -273,11 +299,15 @@ import { Contractor, ContractorStatus, ContractorService as ServiceType } from '
                   </div>
                   <div class="info-item">
                     <span class="info-label">Account Type</span>
-                    <span class="info-value">{{ contractor.financial.accountType | titlecase }}</span>
+                    <span class="info-value">{{
+                      contractor.financial.accountType | titlecase
+                    }}</span>
                   </div>
                   <div class="info-item">
                     <span class="info-label">Account Number</span>
-                    <span class="info-value">{{ maskAccountNumber(contractor.financial.accountNumber) }}</span>
+                    <span class="info-value">{{
+                      maskAccountNumber(contractor.financial.accountNumber)
+                    }}</span>
                   </div>
                   <div class="info-item">
                     <span class="info-label">Branch Code</span>
@@ -289,7 +319,9 @@ import { Contractor, ContractorStatus, ContractorService as ServiceType } from '
                   </div>
                   <div class="info-item" *ngIf="contractor.financial.creditLimit">
                     <span class="info-label">Credit Limit</span>
-                    <span class="info-value">{{ formatCurrency(contractor.financial.creditLimit) }}</span>
+                    <span class="info-value">{{
+                      formatCurrency(contractor.financial.creditLimit)
+                    }}</span>
                   </div>
                 </div>
               </mat-card-content>
@@ -345,325 +377,327 @@ import { Contractor, ContractorStatus, ContractorService as ServiceType } from '
       </div>
     </ng-template>
   `,
-  styles: [`
-    .detail-container {
-      padding: 24px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 32px;
-      gap: 24px;
-    }
-
-    .header-content {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      flex: 1;
-    }
-
-    .title-section {
-      flex: 1;
-    }
-
-    .page-title {
-      font-size: 32px;
-      font-weight: 500;
-      margin: 0;
-      color: var(--mat-sys-on-surface);
-    }
-
-    .header-meta {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-top: 8px;
-    }
-
-    .registration-number {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: var(--mat-sys-on-surface-variant);
-      font-size: 14px;
-
-      mat-icon {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
-      }
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    /* Status Chip Styles */
-    mat-chip {
-      &.status-active {
-        background-color: rgba(34, 197, 94, 0.1) !important;
-        color: #22c55e !important;
+  styles: [
+    `
+      .detail-container {
+        padding: 24px;
+        max-width: 1400px;
+        margin: 0 auto;
       }
 
-      &.status-pending_approval {
-        background-color: rgba(245, 158, 11, 0.1) !important;
-        color: #f59e0b !important;
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 32px;
+        gap: 24px;
       }
 
-      &.status-suspended {
-        background-color: rgba(239, 68, 68, 0.1) !important;
-        color: #ef4444 !important;
+      .header-content {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        flex: 1;
       }
 
-      &.status-blacklisted {
-        background-color: rgba(0, 0, 0, 0.1) !important;
-        color: #000000 !important;
-      }
-    }
-
-    .status-icon {
-      font-size: 18px !important;
-      width: 18px !important;
-      height: 18px !important;
-      margin-right: 4px !important;
-    }
-
-    /* Tab Content */
-    .tab-content {
-      padding: 24px 0;
-    }
-
-    .content-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 24px;
-    }
-
-    .info-card {
-      mat-card-header {
-        margin-bottom: 16px;
+      .title-section {
+        flex: 1;
       }
 
-      mat-card-title {
+      .page-title {
+        font-size: 32px;
+        font-weight: 500;
+        margin: 0;
+        color: var(--mat-sys-on-surface);
+      }
+
+      .header-meta {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 8px;
+      }
+
+      .registration-number {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: var(--mat-sys-on-surface-variant);
+        font-size: 14px;
+
+        mat-icon {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      /* Status Chip Styles */
+      mat-chip {
+        &.status-active {
+          background-color: rgba(34, 197, 94, 0.1) !important;
+          color: #22c55e !important;
+        }
+
+        &.status-pending_approval {
+          background-color: rgba(245, 158, 11, 0.1) !important;
+          color: #f59e0b !important;
+        }
+
+        &.status-suspended {
+          background-color: rgba(239, 68, 68, 0.1) !important;
+          color: #ef4444 !important;
+        }
+
+        &.status-blacklisted {
+          background-color: rgba(0, 0, 0, 0.1) !important;
+          color: #000000 !important;
+        }
+      }
+
+      .status-icon {
+        font-size: 18px !important;
+        width: 18px !important;
+        height: 18px !important;
+        margin-right: 4px !important;
+      }
+
+      /* Tab Content */
+      .tab-content {
+        padding: 24px 0;
+      }
+
+      .content-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 24px;
+      }
+
+      .info-card {
+        mat-card-header {
+          margin-bottom: 16px;
+        }
+
+        mat-card-title {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 18px;
+          font-weight: 500;
+
+          mat-icon {
+            color: var(--mat-sys-primary);
+          }
+        }
+
+        &.full-width {
+          grid-column: 1 / -1;
+        }
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+      }
+
+      .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .info-label {
+        font-size: 12px;
+        color: var(--mat-sys-on-surface-variant);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .info-value {
+        font-size: 16px;
+        color: var(--mat-sys-on-surface);
+
+        &.link {
+          color: var(--mat-sys-primary);
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      .address {
+        p {
+          margin: 0;
+          line-height: 1.5;
+          color: var(--mat-sys-on-surface);
+        }
+      }
+
+      /* Capabilities */
+      .capabilities-section {
+        display: grid;
+        gap: 24px;
+      }
+
+      .capability-group {
+        h4 {
+          font-size: 14px;
+          font-weight: 500;
+          color: var(--mat-sys-on-surface);
+          margin: 0 0 12px 0;
+        }
+      }
+
+      .chips-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .service-chip {
+        background-color: var(--mat-sys-primary-container) !important;
+        color: var(--mat-sys-on-primary-container) !important;
+      }
+
+      .stat-value {
         display: flex;
         align-items: center;
         gap: 8px;
         font-size: 18px;
         font-weight: 500;
+        color: var(--mat-sys-on-surface);
 
         mat-icon {
           color: var(--mat-sys-primary);
         }
       }
 
-      &.full-width {
-        grid-column: 1 / -1;
+      /* Compliance */
+      .compliance-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 24px;
       }
-    }
 
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-    }
+      .compliance-item {
+        display: flex;
+        gap: 16px;
 
-    .info-item {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .info-label {
-      font-size: 12px;
-      color: var(--mat-sys-on-surface-variant);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .info-value {
-      font-size: 16px;
-      color: var(--mat-sys-on-surface);
-
-      &.link {
-        color: var(--mat-sys-primary);
-        text-decoration: none;
-
-        &:hover {
-          text-decoration: underline;
+        &.full-width {
+          grid-column: 1 / -1;
         }
       }
-    }
 
-    .address {
-      p {
-        margin: 0;
-        line-height: 1.5;
-        color: var(--mat-sys-on-surface);
-      }
-    }
-
-    /* Capabilities */
-    .capabilities-section {
-      display: grid;
-      gap: 24px;
-    }
-
-    .capability-group {
-      h4 {
-        font-size: 14px;
-        font-weight: 500;
-        color: var(--mat-sys-on-surface);
-        margin: 0 0 12px 0;
-      }
-    }
-
-    .chips-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .service-chip {
-      background-color: var(--mat-sys-primary-container) !important;
-      color: var(--mat-sys-on-primary-container) !important;
-    }
-
-    .stat-value {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 18px;
-      font-weight: 500;
-      color: var(--mat-sys-on-surface);
-
-      mat-icon {
+      .compliance-icon {
+        font-size: 32px !important;
+        width: 32px !important;
+        height: 32px !important;
         color: var(--mat-sys-primary);
       }
-    }
 
-    /* Compliance */
-    .compliance-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-    }
+      .compliance-content {
+        flex: 1;
 
-    .compliance-item {
-      display: flex;
-      gap: 16px;
+        h4 {
+          font-size: 16px;
+          font-weight: 500;
+          margin: 0 0 8px 0;
+          color: var(--mat-sys-on-surface);
+        }
 
-      &.full-width {
-        grid-column: 1 / -1;
-      }
-    }
+        p {
+          margin: 4px 0;
+          color: var(--mat-sys-on-surface-variant);
 
-    .compliance-icon {
-      font-size: 32px !important;
-      width: 32px !important;
-      height: 32px !important;
-      color: var(--mat-sys-primary);
-    }
-
-    .compliance-content {
-      flex: 1;
-
-      h4 {
-        font-size: 16px;
-        font-weight: 500;
-        margin: 0 0 8px 0;
-        color: var(--mat-sys-on-surface);
-      }
-
-      p {
-        margin: 4px 0;
-        color: var(--mat-sys-on-surface-variant);
-
-        &.expired {
-          color: var(--mat-sys-error);
+          &.expired {
+            color: var(--mat-sys-error);
+          }
         }
       }
-    }
 
-    .rating {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .star-icon {
-      font-size: 20px !important;
-      width: 20px !important;
-      height: 20px !important;
-      color: #fbbf24;
-    }
-
-    /* Teams */
-    .teams-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-
-      h3 {
-        margin: 0;
-        font-size: 20px;
-        font-weight: 500;
+      .rating {
+        display: flex;
+        align-items: center;
+        gap: 4px;
       }
-    }
 
-    .empty-message {
-      text-align: center;
-      padding: 48px;
-      color: var(--mat-sys-on-surface-variant);
-    }
+      .star-icon {
+        font-size: 20px !important;
+        width: 20px !important;
+        height: 20px !important;
+        color: #fbbf24;
+      }
 
-    /* Loading */
-    .loading-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 80px;
-      gap: 16px;
+      /* Teams */
+      .teams-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
 
-      p {
+        h3 {
+          margin: 0;
+          font-size: 20px;
+          font-weight: 500;
+        }
+      }
+
+      .empty-message {
+        text-align: center;
+        padding: 48px;
         color: var(--mat-sys-on-surface-variant);
       }
-    }
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      .detail-container {
-        padding: 16px;
-      }
-
-      .page-header {
+      /* Loading */
+      .loading-container {
+        display: flex;
         flex-direction: column;
-      }
+        align-items: center;
+        justify-content: center;
+        padding: 80px;
+        gap: 16px;
 
-      .header-actions {
-        width: 100%;
-        
-        button {
-          flex: 1;
+        p {
+          color: var(--mat-sys-on-surface-variant);
         }
       }
 
-      .content-grid {
-        grid-template-columns: 1fr;
-      }
+      /* Responsive */
+      @media (max-width: 768px) {
+        .detail-container {
+          padding: 16px;
+        }
 
-      .info-grid {
-        grid-template-columns: 1fr;
+        .page-header {
+          flex-direction: column;
+        }
+
+        .header-actions {
+          width: 100%;
+
+          button {
+            flex: 1;
+          }
+        }
+
+        .content-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
       }
-    }
-  `]
+    `,
+  ],
 })
 export class ContractorDetailPageComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -674,13 +708,13 @@ export class ContractorDetailPageComponent implements OnInit {
 
   ngOnInit() {
     this.contractor$ = this.route.paramMap.pipe(
-      switchMap(params => {
+      switchMap((params) => {
         const id = params.get('id');
         if (id) {
           return this.contractorService.getContractor(id);
         }
         return of(undefined);
-      })
+      }),
     );
   }
 
@@ -691,33 +725,37 @@ export class ContractorDetailPageComponent implements OnInit {
 
   getStatusIcon(status: ContractorStatus): string {
     const icons: Record<ContractorStatus, string> = {
-      'active': 'check_circle',
-      'pending_approval': 'pending',
-      'suspended': 'pause_circle',
-      'blacklisted': 'cancel'
+      active: 'check_circle',
+      pending_approval: 'pending',
+      suspended: 'pause_circle',
+      blacklisted: 'cancel',
     };
     return icons[status];
   }
 
   getStatusLabel(status: ContractorStatus): string {
-    return status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    return status.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
   }
 
   // Service label helper
   getServiceLabel(service: ServiceType): string {
-    return service.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    return service.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
   }
 
   // Date formatting
-  formatDate(timestamp: any): string {
+  formatDate(timestamp: unknown): string {
     if (!timestamp) return 'N/A';
-    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+    const date = (timestamp as any).toDate
+      ? (timestamp as any).toDate()
+      : new Date(timestamp as any);
     return date.toLocaleDateString('en-ZA');
   }
 
-  isExpired(timestamp: any): boolean {
+  isExpired(timestamp: unknown): boolean {
     if (!timestamp) return false;
-    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+    const date = (timestamp as any).toDate
+      ? (timestamp as any).toDate()
+      : new Date(timestamp as any);
     return date < new Date();
   }
 
@@ -734,12 +772,14 @@ export class ContractorDetailPageComponent implements OnInit {
       style: 'currency',
       currency: 'ZAR',
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(amount);
   }
 
   // Rating helper
   getStars(rating: number): number[] {
-    return Array(5).fill(0).map((_, i) => i < rating ? 1 : 0);
+    return Array(5)
+      .fill(0)
+      .map((_, i) => (i < rating ? 1 : 0));
   }
 }

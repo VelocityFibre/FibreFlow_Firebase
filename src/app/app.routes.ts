@@ -4,124 +4,166 @@ export const routes: Routes = [
   {
     path: '',
     redirectTo: 'dashboard',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'dashboard',
-    loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.dashboardRoutes)
+    loadChildren: () =>
+      import('./features/dashboard/dashboard.routes').then((m) => m.dashboardRoutes),
+    data: { preload: true },
   },
   {
     path: 'projects',
-    loadChildren: () => import('./features/projects/projects.routes').then(m => m.projectRoutes)
+    loadChildren: () => import('./features/projects/projects.routes').then((m) => m.projectRoutes),
+    data: { preload: true },
   },
   {
     path: 'suppliers',
-    loadChildren: () => import('./features/suppliers/suppliers.routes').then(m => m.suppliersRoutes)
+    loadChildren: () =>
+      import('./features/suppliers/suppliers.routes').then((m) => m.suppliersRoutes),
   },
   {
     path: 'staff',
-    loadChildren: () => import('./features/staff/staff.routes').then(m => m.staffRoutes)
+    loadChildren: () => import('./features/staff/staff.routes').then((m) => m.staffRoutes),
   },
   {
     path: 'contractors',
-    loadChildren: () => import('./features/contractors/contractors.routes').then(m => m.contractorsRoutes)
+    loadChildren: () =>
+      import('./features/contractors/contractors.routes').then((m) => m.contractorsRoutes),
   },
   {
     path: 'clients',
-    loadChildren: () => import('./features/clients/clients.routes').then(m => m.clientsRoutes)
+    loadChildren: () => import('./features/clients/clients.routes').then((m) => m.clientsRoutes),
   },
   {
     path: 'phases',
-    loadChildren: () => import('./features/phases/phases.routes').then(m => m.phasesRoutes)
+    loadChildren: () => import('./features/phases/phases.routes').then((m) => m.phasesRoutes),
   },
   // Dashboard-linked routes
   {
     path: 'materials',
     redirectTo: 'stock',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'issues',
-    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
-    data: { title: 'Flagged Issues' }
+    loadComponent: () =>
+      import('./shared/components/placeholder-page/placeholder-page.component').then(
+        (m) => m.PlaceholderPageComponent,
+      ),
+    data: { title: 'Flagged Issues' },
   },
   {
     path: 'analytics',
-    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
-    data: { title: 'Analytics' }
+    loadComponent: () =>
+      import('./shared/components/placeholder-page/placeholder-page.component').then(
+        (m) => m.PlaceholderPageComponent,
+      ),
+    data: { title: 'Analytics' },
   },
   {
     path: 'daily-progress',
-    loadChildren: () => import('./features/daily-progress/daily-progress.routes').then(m => m.DAILY_PROGRESS_ROUTES)
+    loadChildren: () =>
+      import('./features/daily-progress/daily-progress.routes').then(
+        (m) => m.DAILY_PROGRESS_ROUTES,
+      ),
   },
   // Placeholder routes for pages to be implemented
   {
     path: 'roles',
-    loadChildren: () => import('./features/roles/roles.routes').then(m => m.ROLES_ROUTES)
+    loadChildren: () => import('./features/roles/roles.routes').then((m) => m.ROLES_ROUTES),
   },
   {
     path: 'attendance',
-    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
-    data: { title: 'Attendance' }
+    loadComponent: () =>
+      import('./shared/components/placeholder-page/placeholder-page.component').then(
+        (m) => m.PlaceholderPageComponent,
+      ),
+    data: { title: 'Attendance' },
   },
   {
     path: 'performance',
-    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
-    data: { title: 'Performance' }
+    loadComponent: () =>
+      import('./shared/components/placeholder-page/placeholder-page.component').then(
+        (m) => m.PlaceholderPageComponent,
+      ),
+    data: { title: 'Performance' },
   },
   {
     path: 'tasks',
-    loadChildren: () => import('./features/tasks/tasks.routes').then(m => m.tasksRoutes)
+    loadChildren: () => import('./features/tasks/tasks.routes').then((m) => m.tasksRoutes),
   },
   {
     path: 'stock',
-    loadChildren: () => import('./features/stock/stock.routes').then(m => m.stockRoutes)
+    loadChildren: () => import('./features/stock/stock.routes').then((m) => m.stockRoutes),
+    data: { preload: true },
   },
   {
     path: 'boq',
-    loadChildren: () => import('./features/boq/boq.routes').then(m => m.boqRoutes)
+    loadChildren: () => import('./features/boq/boq.routes').then((m) => m.boqRoutes),
   },
   {
     path: 'rfq',
-    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
-    data: { title: 'RFQ Management' }
+    loadComponent: () =>
+      import('./shared/components/placeholder-page/placeholder-page.component').then(
+        (m) => m.PlaceholderPageComponent,
+      ),
+    data: { title: 'RFQ Management' },
   },
   {
     path: 'stock-movements',
-    loadChildren: () => import('./features/stock/stock-movements.routes').then(m => m.stockMovementsRoutes)
+    loadChildren: () =>
+      import('./features/stock/stock-movements.routes').then((m) => m.stockMovementsRoutes),
   },
   {
     path: 'stock-analysis',
-    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
-    data: { title: 'Stock Analysis' }
+    loadComponent: () =>
+      import('./shared/components/placeholder-page/placeholder-page.component').then(
+        (m) => m.PlaceholderPageComponent,
+      ),
+    data: { title: 'Stock Analysis' },
   },
   {
     path: 'categories',
-    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
-    data: { title: 'Category Management' }
+    loadComponent: () =>
+      import('./shared/components/placeholder-page/placeholder-page.component').then(
+        (m) => m.PlaceholderPageComponent,
+      ),
+    data: { title: 'Category Management' },
   },
   {
     path: 'supplier-portal',
-    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
-    data: { title: 'Supplier Portal' }
+    loadComponent: () =>
+      import('./shared/components/placeholder-page/placeholder-page.component').then(
+        (m) => m.PlaceholderPageComponent,
+      ),
+    data: { title: 'Supplier Portal' },
   },
   {
     path: 'settings',
-    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
-    data: { title: 'Settings' }
+    loadComponent: () =>
+      import('./shared/components/placeholder-page/placeholder-page.component').then(
+        (m) => m.PlaceholderPageComponent,
+      ),
+    data: { title: 'Settings' },
   },
   {
     path: 'audit-trail',
-    loadComponent: () => import('./shared/components/placeholder-page/placeholder-page.component').then(m => m.PlaceholderPageComponent),
-    data: { title: 'Audit Trail' }
+    loadComponent: () =>
+      import('./shared/components/placeholder-page/placeholder-page.component').then(
+        (m) => m.PlaceholderPageComponent,
+      ),
+    data: { title: 'Audit Trail' },
   },
   // Auth routes - temporary for testing
   {
     path: 'test-auth',
-    loadComponent: () => import('./features/auth/test-auth/test-auth.component').then(m => m.TestAuthComponent)
+    loadComponent: () =>
+      import('./features/auth/test-auth/test-auth.component').then((m) => m.TestAuthComponent),
   },
   {
     path: 'login',
-    loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent)
-  }
+    loadComponent: () =>
+      import('./features/auth/login/login.component').then((m) => m.LoginComponent),
+  },
 ];

@@ -10,15 +10,15 @@
   padding: spacing.ff-spacing(xl);
   max-width: 1280px;
   margin: 0 auto;
-  
+
   @media #{spacing.ff-breakpoint(sm)} {
     padding: spacing.ff-spacing(lg);
   }
-  
+
   @media #{spacing.ff-breakpoint(md)} {
     padding: spacing.ff-spacing(xl);
   }
-  
+
   @media #{spacing.ff-breakpoint(lg)} {
     padding: spacing.ff-spacing(2xl);
   }
@@ -34,7 +34,7 @@
   line-height: 1.1;
   color: theme.ff-rgb(foreground);
   margin-bottom: spacing.ff-spacing(md);
-  
+
   @media #{spacing.ff-breakpoint(sm)} {
     font-size: spacing.ff-font-size(4xl);
   }
@@ -48,7 +48,7 @@
 
 .ff-section {
   margin-bottom: spacing.ff-spacing(4xl);
-  
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -120,19 +120,19 @@
   border: 1px solid theme.ff-rgb(border);
   color: theme.ff-rgb(card-foreground);
   transition: all theme.ff-transition(slow) ease;
-  
+
   &:hover {
     box-shadow: theme.ff-shadow(lg);
   }
-  
+
   &--interactive {
     cursor: pointer;
-    
+
     &:hover {
       transform: translateY(-2px);
     }
   }
-  
+
   &--compact {
     padding: spacing.ff-spacing(lg);
   }
@@ -170,77 +170,77 @@
   border: none;
   outline: none;
   text-decoration: none;
-  
+
   &:focus-visible {
     outline: 2px solid theme.ff-rgb(ring);
     outline-offset: 2px;
   }
-  
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
-  
+
   // Variants
   &--primary {
     background-color: theme.ff-rgb(primary);
     color: theme.ff-rgb(primary-foreground);
-    
+
     &:hover:not(:disabled) {
       opacity: 0.9;
     }
   }
-  
+
   &--secondary {
     background-color: theme.ff-rgb(secondary);
     color: theme.ff-rgb(secondary-foreground);
-    
+
     &:hover:not(:disabled) {
       opacity: 0.9;
     }
   }
-  
+
   &--outline {
     background-color: transparent;
     border: 2px solid theme.ff-rgb(border);
     color: theme.ff-rgb(foreground);
-    
+
     &:hover:not(:disabled) {
       background-color: theme.ff-rgb(accent);
       border-color: theme.ff-rgb(accent);
     }
   }
-  
+
   &--ghost {
     background-color: transparent;
     color: theme.ff-rgb(foreground);
-    
+
     &:hover:not(:disabled) {
       background-color: theme.ff-rgb(accent);
       color: theme.ff-rgb(accent-foreground);
     }
   }
-  
+
   &--destructive {
     background-color: theme.ff-rgb(destructive);
     color: theme.ff-rgb(destructive-foreground);
-    
+
     &:hover:not(:disabled) {
       opacity: 0.9;
     }
   }
-  
+
   // Sizes
   &--sm {
     padding: spacing.ff-spacing(xs) spacing.ff-spacing(md);
     font-size: spacing.ff-font-size(sm);
   }
-  
+
   &--lg {
     padding: spacing.ff-spacing(md) spacing.ff-spacing(xl);
     font-size: spacing.ff-font-size(lg);
   }
-  
+
   &--icon {
     width: 40px;
     height: 40px;
@@ -260,22 +260,22 @@
   color: theme.ff-rgb(foreground);
   font-size: spacing.ff-font-size(base);
   transition: all theme.ff-transition(fast) ease;
-  
+
   &:hover {
     border-color: theme.ff-rgb(border);
   }
-  
+
   &:focus {
     outline: none;
     border-color: theme.ff-rgb(ring);
     box-shadow: 0 0 0 3px theme.ff-rgba(ring, 0.1);
   }
-  
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
-  
+
   &::placeholder {
     color: theme.ff-rgb(muted-foreground);
     opacity: 0.7;
@@ -294,7 +294,7 @@
   border: 1px solid theme.ff-rgb(input);
   border-radius: var(--ff-radius);
   cursor: pointer;
-  
+
   &:checked {
     background-color: theme.ff-rgb(primary);
     border-color: theme.ff-rgb(primary);
@@ -310,29 +310,29 @@
   display: inline-flex;
   align-items: center;
   gap: spacing.ff-spacing(sm);
-  
+
   &__indicator {
     width: spacing.ff-spacing(sm);
     height: spacing.ff-spacing(sm);
     border-radius: 50%;
-    
+
     &--success {
       background-color: theme.ff-rgb(success);
     }
-    
+
     &--warning {
       background-color: theme.ff-rgb(warning);
     }
-    
+
     &--error {
       background-color: theme.ff-rgb(destructive);
     }
-    
+
     &--info {
       background-color: theme.ff-rgb(info);
     }
   }
-  
+
   &__text {
     font-size: spacing.ff-font-size(sm);
     color: theme.ff-rgb(muted-foreground);
@@ -342,7 +342,7 @@
 // Selection Section Pattern
 .ff-selection-section {
   margin-bottom: spacing.ff-spacing(4xl);
-  
+
   .ff-selection-label {
     display: block;
     font-size: spacing.ff-font-size(base);
@@ -350,7 +350,7 @@
     color: theme.ff-rgb(foreground);
     margin-bottom: spacing.ff-spacing(md);
   }
-  
+
   .ff-selection-card {
     width: 100%;
     padding: spacing.ff-spacing(xl);
@@ -360,41 +360,41 @@
     text-align: left;
     cursor: pointer;
     transition: all theme.ff-transition(slow) ease;
-    
+
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
+
     &:hover {
       box-shadow: theme.ff-shadow(lg);
       transform: translateY(-1px);
     }
-    
+
     &:focus {
       outline: none;
       border-color: theme.ff-rgb(ring);
       box-shadow: 0 0 0 3px theme.ff-rgba(ring, 0.1);
     }
   }
-  
+
   .ff-selection-content {
     display: flex;
     align-items: center;
     gap: spacing.ff-spacing(lg);
     flex: 1;
   }
-  
+
   .ff-selection-indicator {
     width: spacing.ff-spacing(md);
     height: spacing.ff-spacing(md);
     border-radius: 50%;
     flex-shrink: 0;
   }
-  
+
   .ff-selection-info {
     flex: 1;
   }
-  
+
   .ff-selection-title {
     font-size: spacing.ff-font-size(2xl);
     font-weight: spacing.ff-font-weight(light);
@@ -402,29 +402,29 @@
     margin-bottom: spacing.ff-spacing(sm);
     line-height: 1.2;
   }
-  
+
   .ff-selection-details {
     display: flex;
     align-items: center;
     gap: spacing.ff-spacing(md);
     font-size: spacing.ff-font-size(lg);
     color: theme.ff-rgb(muted-foreground);
-    
+
     .ff-separator {
       color: theme.ff-rgb(border);
     }
   }
-  
+
   .ff-selection-action {
     color: theme.ff-rgb(muted-foreground);
     transition: transform theme.ff-transition(fast) ease;
-    
+
     svg {
       width: spacing.ff-spacing(lg);
       height: spacing.ff-spacing(lg);
     }
   }
-  
+
   &:hover .ff-selection-action {
     transform: translateX(4px);
   }
@@ -438,11 +438,11 @@
   border-radius: var(--ff-radius);
   overflow: hidden;
   box-shadow: 0 0 0 1px theme.ff-rgb(border);
-  
+
   thead {
     background-color: theme.ff-rgb(muted);
   }
-  
+
   th {
     padding: spacing.ff-spacing(md) spacing.ff-spacing(lg);
     text-align: left;
@@ -451,20 +451,20 @@
     color: theme.ff-rgb(foreground);
     border-bottom: 1px solid theme.ff-rgb(border);
   }
-  
+
   td {
     padding: spacing.ff-spacing(md) spacing.ff-spacing(lg);
     color: theme.ff-rgb(foreground);
     border-bottom: 1px solid theme.ff-rgb(border);
   }
-  
+
   tbody tr {
     transition: background-color theme.ff-transition(fast) ease;
-    
+
     &:hover {
       background-color: theme.ff-rgba(muted, 0.5);
     }
-    
+
     &:last-child td {
       border-bottom: none;
     }
@@ -475,28 +475,28 @@
 .ff-grid {
   display: grid;
   gap: spacing.ff-spacing(lg);
-  
+
   &--2 {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   &--3 {
     grid-template-columns: repeat(3, 1fr);
   }
-  
+
   &--4 {
     grid-template-columns: repeat(4, 1fr);
   }
-  
+
   &--auto {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
-  
+
   @media #{spacing.ff-breakpoint(md)} {
     &--md-2 {
       grid-template-columns: repeat(2, 1fr);
     }
-    
+
     &--md-3 {
       grid-template-columns: repeat(3, 1fr);
     }
@@ -506,33 +506,33 @@
 // Flex Utilities
 .ff-flex {
   display: flex;
-  
+
   &--center {
     align-items: center;
     justify-content: center;
   }
-  
+
   &--between {
     align-items: center;
     justify-content: space-between;
   }
-  
+
   &--column {
     flex-direction: column;
   }
-  
+
   &--wrap {
     flex-wrap: wrap;
   }
-  
+
   &--gap-sm {
     gap: spacing.ff-spacing(sm);
   }
-  
+
   &--gap-md {
     gap: spacing.ff-spacing(md);
   }
-  
+
   &--gap-lg {
     gap: spacing.ff-spacing(lg);
   }
@@ -540,42 +540,104 @@
 
 // Spacing Utilities
 @each $size, $value in spacing.$ff-spacing {
-  .ff-p-#{$size} { padding: $value; }
-  .ff-pt-#{$size} { padding-top: $value; }
-  .ff-pr-#{$size} { padding-right: $value; }
-  .ff-pb-#{$size} { padding-bottom: $value; }
-  .ff-pl-#{$size} { padding-left: $value; }
-  .ff-px-#{$size} { padding-left: $value; padding-right: $value; }
-  .ff-py-#{$size} { padding-top: $value; padding-bottom: $value; }
-  
-  .ff-m-#{$size} { margin: $value; }
-  .ff-mt-#{$size} { margin-top: $value; }
-  .ff-mr-#{$size} { margin-right: $value; }
-  .ff-mb-#{$size} { margin-bottom: $value; }
-  .ff-ml-#{$size} { margin-left: $value; }
-  .ff-mx-#{$size} { margin-left: $value; margin-right: $value; }
-  .ff-my-#{$size} { margin-top: $value; margin-bottom: $value; }
+  .ff-p-#{$size} {
+    padding: $value;
+  }
+  .ff-pt-#{$size} {
+    padding-top: $value;
+  }
+  .ff-pr-#{$size} {
+    padding-right: $value;
+  }
+  .ff-pb-#{$size} {
+    padding-bottom: $value;
+  }
+  .ff-pl-#{$size} {
+    padding-left: $value;
+  }
+  .ff-px-#{$size} {
+    padding-left: $value;
+    padding-right: $value;
+  }
+  .ff-py-#{$size} {
+    padding-top: $value;
+    padding-bottom: $value;
+  }
+
+  .ff-m-#{$size} {
+    margin: $value;
+  }
+  .ff-mt-#{$size} {
+    margin-top: $value;
+  }
+  .ff-mr-#{$size} {
+    margin-right: $value;
+  }
+  .ff-mb-#{$size} {
+    margin-bottom: $value;
+  }
+  .ff-ml-#{$size} {
+    margin-left: $value;
+  }
+  .ff-mx-#{$size} {
+    margin-left: $value;
+    margin-right: $value;
+  }
+  .ff-my-#{$size} {
+    margin-top: $value;
+    margin-bottom: $value;
+  }
 }
 
 // Utility Classes
-.ff-text-center { text-align: center; }
-.ff-text-left { text-align: left; }
-.ff-text-right { text-align: right; }
+.ff-text-center {
+  text-align: center;
+}
+.ff-text-left {
+  text-align: left;
+}
+.ff-text-right {
+  text-align: right;
+}
 
-.ff-font-light { font-weight: spacing.ff-font-weight(light); }
-.ff-font-normal { font-weight: spacing.ff-font-weight(normal); }
-.ff-font-medium { font-weight: spacing.ff-font-weight(medium); }
-.ff-font-semibold { font-weight: spacing.ff-font-weight(semibold); }
-.ff-font-bold { font-weight: spacing.ff-font-weight(bold); }
+.ff-font-light {
+  font-weight: spacing.ff-font-weight(light);
+}
+.ff-font-normal {
+  font-weight: spacing.ff-font-weight(normal);
+}
+.ff-font-medium {
+  font-weight: spacing.ff-font-weight(medium);
+}
+.ff-font-semibold {
+  font-weight: spacing.ff-font-weight(semibold);
+}
+.ff-font-bold {
+  font-weight: spacing.ff-font-weight(bold);
+}
 
-.ff-rounded { border-radius: var(--ff-radius); }
-.ff-rounded-full { border-radius: 9999px; }
-.ff-rounded-none { border-radius: 0; }
+.ff-rounded {
+  border-radius: var(--ff-radius);
+}
+.ff-rounded-full {
+  border-radius: 9999px;
+}
+.ff-rounded-none {
+  border-radius: 0;
+}
 
-.ff-shadow-sm { box-shadow: theme.ff-shadow(sm); }
-.ff-shadow { box-shadow: theme.ff-shadow(base); }
-.ff-shadow-lg { box-shadow: theme.ff-shadow(lg); }
-.ff-shadow-none { box-shadow: none; }
+.ff-shadow-sm {
+  box-shadow: theme.ff-shadow(sm);
+}
+.ff-shadow {
+  box-shadow: theme.ff-shadow(base);
+}
+.ff-shadow-lg {
+  box-shadow: theme.ff-shadow(lg);
+}
+.ff-shadow-none {
+  box-shadow: none;
+}
 
 .ff-transition {
   transition: all theme.ff-transition(base) ease;

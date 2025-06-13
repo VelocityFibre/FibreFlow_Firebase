@@ -29,7 +29,8 @@
   }
 }
 
-.status-badge, .verification-badge {
+.status-badge,
+.verification-badge {
   padding: 4px 12px;
   border-radius: 16px;
   font-size: 12px;
@@ -47,40 +48,40 @@
 
 .status-badge {
   &.status-active {
-    background-color: #e8f5e9;
-    color: #2e7d32;
+    background-color: rgb(var(--ff-success) / 0.15);
+    color: rgb(var(--ff-success));
   }
 
   &.status-inactive {
-    background-color: #f3e5f5;
-    color: #6a1b9a;
+    background-color: rgb(var(--ff-muted) / 0.5);
+    color: rgb(var(--ff-muted-foreground));
   }
 
   &.status-suspended {
-    background-color: #ffe0b2;
-    color: #e65100;
+    background-color: rgb(var(--ff-warning) / 0.15);
+    color: rgb(var(--ff-warning));
   }
 
   &.status-pending {
-    background-color: #e3f2fd;
-    color: #1565c0;
+    background-color: rgb(var(--ff-info) / 0.15);
+    color: rgb(var(--ff-info));
   }
 }
 
 .verification-badge {
   &.verification-verified {
-    background-color: #e8f5e9;
-    color: #2e7d32;
+    background-color: rgb(var(--ff-success) / 0.15);
+    color: rgb(var(--ff-success));
   }
 
   &.verification-pending {
-    background-color: #fff3e0;
-    color: #ef6c00;
+    background-color: rgb(var(--ff-warning) / 0.15);
+    color: rgb(var(--ff-warning));
   }
 
   &.verification-unverified {
-    background-color: #fafafa;
-    color: #757575;
+    background-color: rgb(var(--ff-muted));
+    color: rgb(var(--ff-muted-foreground));
   }
 }
 
@@ -126,14 +127,14 @@ mat-card {
   }
 
   mat-icon {
-    color: #666;
+    color: rgb(var(--ff-muted-foreground));
     margin-top: 2px;
   }
 
   label {
     display: block;
     font-size: 12px;
-    color: #666;
+    color: rgb(var(--ff-muted-foreground));
     margin-bottom: 4px;
   }
 
@@ -142,13 +143,13 @@ mat-card {
     font-size: 14px;
 
     &.over-limit {
-      color: #f44336;
+      color: rgb(var(--ff-destructive));
       font-weight: 500;
     }
   }
 
   a {
-    color: var(--primary-color);
+    color: rgb(var(--ff-primary));
     text-decoration: none;
 
     &:hover {
@@ -157,7 +158,7 @@ mat-card {
   }
 
   .enabled {
-    color: #4caf50;
+    color: rgb(var(--ff-success));
   }
 }
 
@@ -172,7 +173,7 @@ mat-card {
     font-size: 16px;
     font-weight: 500;
     margin-bottom: 12px;
-    color: #333;
+    color: rgb(var(--ff-foreground));
   }
 
   mat-chip-set {
@@ -197,11 +198,11 @@ mat-card {
       font-size: 18px;
       width: 18px;
       height: 18px;
-      color: #666;
+      color: rgb(var(--ff-muted-foreground));
     }
 
     .radius {
-      color: #666;
+      color: rgb(var(--ff-muted-foreground));
       font-size: 13px;
     }
   }
@@ -221,9 +222,9 @@ mat-card {
 }
 
 .contacts-list {
-  background: white;
+  background: rgb(var(--ff-card));
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   mat-list-item {
     height: auto;
@@ -252,13 +253,13 @@ mat-card {
     align-items: center;
     padding: 48px;
     width: 100%;
-    color: #666;
+    color: rgb(var(--ff-muted-foreground));
 
     mat-icon {
       font-size: 48px;
       width: 48px;
       height: 48px;
-      color: #ccc;
+      color: rgb(var(--ff-border));
     }
 
     p {
@@ -275,13 +276,13 @@ mat-card {
   justify-content: center;
   padding: 80px 20px;
   text-align: center;
-  color: #666;
+  color: rgb(var(--ff-muted-foreground));
 
   mat-icon {
     font-size: 64px;
     width: 64px;
     height: 64px;
-    color: #ccc;
+    color: rgb(var(--ff-border));
     margin-bottom: 16px;
   }
 
@@ -289,7 +290,7 @@ mat-card {
     margin: 0 0 8px 0;
     font-size: 24px;
     font-weight: 400;
-    color: #333;
+    color: rgb(var(--ff-foreground));
   }
 
   p {
@@ -306,5 +307,5 @@ mat-card {
 }
 
 .delete-action {
-  color: #f44336;
+  color: rgb(var(--ff-destructive));
 }

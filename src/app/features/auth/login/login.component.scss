@@ -3,8 +3,37 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, rgb(var(--ff-primary)) 0%, rgb(var(--ff-primary) / 0.8) 100%);
   padding: 1rem;
+
+  // Theme-specific gradients
+  :root & {
+    background: linear-gradient(
+      135deg,
+      rgb(var(--ff-primary)) 0%,
+      rgb(var(--ff-primary) / 0.8) 100%
+    );
+  }
+
+  [data-theme='dark'] & {
+    background: linear-gradient(135deg, rgb(var(--ff-background)) 0%, rgb(var(--ff-card)) 100%);
+  }
+
+  [data-theme='vf'] & {
+    background: linear-gradient(
+      135deg,
+      rgb(var(--ff-background)) 0%,
+      rgb(var(--ff-secondary)) 100%
+    );
+  }
+
+  [data-theme='fibreflow'] & {
+    background: linear-gradient(
+      135deg,
+      rgb(var(--ff-primary)) 0%,
+      rgb(var(--ff-primary) / 0.7) 100%
+    );
+  }
 }
 
 .login-card {
@@ -12,6 +41,11 @@
   max-width: 400px;
   padding: 2rem;
   text-align: center;
+  background: rgb(var(--ff-card));
+  color: rgb(var(--ff-card-foreground));
+  border: 1px solid rgb(var(--ff-border));
+  border-radius: var(--ff-radius);
+  box-shadow: var(--ff-shadow-lg);
 
   mat-card-header {
     display: block;
@@ -24,16 +58,18 @@
       gap: 1rem;
 
       .logo {
-        width: 80px;
-        height: 80px;
+        width: 200px;
+        height: auto;
+        max-height: 60px;
         object-fit: contain;
+        margin-bottom: 0.5rem;
       }
 
       h1 {
         margin: 0;
         font-size: 1.75rem;
         font-weight: 500;
-        color: #333;
+        color: rgb(var(--ff-card-foreground));
       }
     }
   }
@@ -44,7 +80,7 @@
     gap: 1.5rem;
 
     .welcome-text {
-      color: #666;
+      color: rgb(var(--ff-muted-foreground));
       margin: 0;
     }
 
@@ -65,7 +101,7 @@
 
       .spinner {
         ::ng-deep .mat-progress-spinner circle {
-          stroke: #fff;
+          stroke: rgb(var(--ff-primary-foreground));
         }
       }
     }
@@ -75,9 +111,10 @@
       align-items: center;
       gap: 0.5rem;
       padding: 0.75rem;
-      background-color: #e3f2fd;
+      background-color: rgb(var(--ff-info) / 0.1);
       border-radius: 4px;
-      color: #1976d2;
+      color: rgb(var(--ff-info));
+      border: 1px solid rgb(var(--ff-info) / 0.2);
 
       mat-icon {
         font-size: 20px;
@@ -96,9 +133,10 @@
       align-items: center;
       gap: 0.5rem;
       padding: 0.75rem;
-      background-color: #ffebee;
+      background-color: rgb(var(--ff-destructive) / 0.1);
       border-radius: 4px;
-      color: #c62828;
+      color: rgb(var(--ff-destructive));
+      border: 1px solid rgb(var(--ff-destructive) / 0.2);
 
       mat-icon {
         font-size: 20px;
@@ -116,12 +154,12 @@
   mat-card-footer {
     margin-top: 2rem;
     padding-top: 1rem;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid rgb(var(--ff-border));
 
     .footer-text {
       margin: 0;
       font-size: 0.75rem;
-      color: #999;
+      color: rgb(var(--ff-muted-foreground));
     }
   }
 }

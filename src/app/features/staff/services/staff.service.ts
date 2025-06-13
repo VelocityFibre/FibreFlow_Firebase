@@ -11,23 +11,21 @@ import {
   query,
   where,
   orderBy,
-  limit,
   QueryConstraint,
-  Timestamp,
   serverTimestamp,
   DocumentReference,
-  CollectionReference
+  CollectionReference,
 } from '@angular/fire/firestore';
 import { Observable, from, map, catchError, throwError, shareReplay, startWith } from 'rxjs';
 import { StaffMember, StaffFilter, StaffGroup, AvailabilityStatus } from '../models';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StaffService {
   private firestore = inject(Firestore);
   private staffCollection = collection(this.firestore, 'staff') as CollectionReference<StaffMember>;
-  
+
   // Cache for staff list
   private staffCache$?: Observable<StaffMember[]>;
 
@@ -49,43 +47,50 @@ export class StaffService {
     constraints.push(orderBy('name'));
 
     const q = query(this.staffCollection, ...constraints);
-    
+
     // If no filter, use cached version
-    if (!filter || (!filter.groups && filter.isActive === undefined && !filter.availabilityStatus && !filter.searchTerm)) {
+    if (
+      !filter ||
+      (!filter.groups &&
+        filter.isActive === undefined &&
+        !filter.availabilityStatus &&
+        !filter.searchTerm)
+    ) {
       if (!this.staffCache$) {
         this.staffCache$ = collectionData(q, { idField: 'id' }).pipe(
           shareReplay(1),
-          catchError(error => {
+          catchError((error) => {
             console.error('Error fetching staff:', error);
             this.staffCache$ = undefined; // Clear cache on error
             return throwError(() => new Error('Failed to fetch staff members'));
-          })
+          }),
         );
       }
       return this.staffCache$;
     }
-    
+
     // For filtered queries, don't cache
     return collectionData(q, { idField: 'id' }).pipe(
-      map(staff => {
+      map((staff) => {
         if (filter?.searchTerm) {
           const term = filter.searchTerm.toLowerCase();
-          return staff.filter(s => 
-            s.name.toLowerCase().includes(term) ||
-            s.email.toLowerCase().includes(term) ||
-            s.employeeId.toLowerCase().includes(term)
+          return staff.filter(
+            (s) =>
+              s.name.toLowerCase().includes(term) ||
+              s.email.toLowerCase().includes(term) ||
+              s.employeeId.toLowerCase().includes(term),
           );
         }
         return staff;
       }),
       startWith([]), // Return empty array while loading
-      catchError(error => {
+      catchError((error) => {
         console.error('Error fetching staff:', error);
         return throwError(() => new Error('Failed to fetch staff members'));
-      })
+      }),
     );
   }
-  
+
   clearCache() {
     this.staffCache$ = undefined;
   }
@@ -93,10 +98,10 @@ export class StaffService {
   getStaffById(id: string): Observable<StaffMember | undefined> {
     const staffDoc = doc(this.staffCollection, id);
     return docData(staffDoc, { idField: 'id' }).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error fetching staff member:', error);
         return throwError(() => new Error('Failed to fetch staff member'));
-      })
+      }),
     );
   }
 
@@ -105,14 +110,14 @@ export class StaffService {
       this.staffCollection,
       where('primaryGroup', '==', group),
       where('isActive', '==', true),
-      orderBy('name')
+      orderBy('name'),
     );
-    
+
     return collectionData(q, { idField: 'id' }).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error fetching staff by group:', error);
         return throwError(() => new Error('Failed to fetch staff by group'));
-      })
+      }),
     );
   }
 
@@ -121,33 +126,35 @@ export class StaffService {
       this.staffCollection,
       where('isActive', '==', true),
       where('availability.status', 'in', ['available', 'busy']),
-      orderBy('availability.currentTaskCount')
+      orderBy('availability.currentTaskCount'),
     );
-    
+
     return collectionData(q, { idField: 'id' }).pipe(
-      map(staff => {
+      map((staff) => {
         // Filter by available task capacity
-        let filtered = staff.filter(s => 
-          s.availability.currentTaskCount < s.availability.maxConcurrentTasks
+        let filtered = staff.filter(
+          (s) => s.availability.currentTaskCount < s.availability.maxConcurrentTasks,
         );
 
         // Filter by required skills if provided
         if (requiredSkills && requiredSkills.length > 0) {
-          filtered = filtered.filter(s => 
-            s.skills && requiredSkills.some(skill => s.skills!.includes(skill))
+          filtered = filtered.filter(
+            (s) => s.skills && requiredSkills.some((skill) => s.skills!.includes(skill)),
           );
         }
 
         return filtered;
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('Error fetching available staff:', error);
         return throwError(() => new Error('Failed to fetch available staff'));
-      })
+      }),
     );
   }
 
-  createStaff(staffData: Omit<StaffMember, 'id' | 'createdAt' | 'updatedAt'>): Observable<DocumentReference> {
+  createStaff(
+    staffData: Omit<StaffMember, 'id' | 'createdAt' | 'updatedAt'>,
+  ): Observable<DocumentReference> {
     const newStaff = {
       ...staffData,
       createdAt: serverTimestamp(),
@@ -159,19 +166,19 @@ export class StaffService {
         tasksInProgress: 0,
         tasksFlagged: 0,
         totalProjectsWorked: 0,
-        averageTaskCompletionTime: 0
-      }
+        averageTaskCompletionTime: 0,
+      },
     };
 
     return from(addDoc(this.staffCollection, newStaff as any)).pipe(
-      map(result => {
+      map((result) => {
         this.clearCache(); // Clear cache after successful creation
         return result;
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('Error creating staff member:', error);
         return throwError(() => new Error('Failed to create staff member'));
-      })
+      }),
     );
   }
 
@@ -179,17 +186,17 @@ export class StaffService {
     const staffDoc = doc(this.staffCollection, id);
     const updateData = {
       ...updates,
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     };
 
     return from(updateDoc(staffDoc, updateData)).pipe(
       map(() => {
         this.clearCache(); // Clear cache after successful update
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('Error updating staff member:', error);
         return throwError(() => new Error('Failed to update staff member'));
-      })
+      }),
     );
   }
 
@@ -198,14 +205,14 @@ export class StaffService {
     const updateData = {
       'availability.status': status,
       'activity.lastActive': serverTimestamp(),
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     };
 
     return from(updateDoc(staffDoc, updateData)).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error updating staff availability:', error);
         return throwError(() => new Error('Failed to update staff availability'));
-      })
+      }),
     );
   }
 
@@ -213,24 +220,24 @@ export class StaffService {
     const staffDoc = doc(this.staffCollection, id);
     const updateData = {
       'availability.currentTaskCount': increment,
-      updatedAt: serverTimestamp()
+      updatedAt: serverTimestamp(),
     };
 
     return from(updateDoc(staffDoc, updateData)).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error updating task count:', error);
         return throwError(() => new Error('Failed to update task count'));
-      })
+      }),
     );
   }
 
   deleteStaff(id: string): Observable<void> {
     const staffDoc = doc(this.staffCollection, id);
     return from(deleteDoc(staffDoc)).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error deleting staff member:', error);
         return throwError(() => new Error('Failed to delete staff member'));
-      })
+      }),
     );
   }
 

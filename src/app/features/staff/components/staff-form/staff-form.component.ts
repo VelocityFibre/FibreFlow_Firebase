@@ -19,7 +19,6 @@ import { MatChipInputEvent } from '@angular/material/chips';
 
 import { StaffService } from '../../services/staff.service';
 import { StaffGroup, StaffMember, WorkingHours } from '../../models/staff.model';
-import { Timestamp } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-staff-form',
@@ -39,14 +38,16 @@ import { Timestamp } from '@angular/fire/firestore';
     MatStepperModule,
     MatCheckboxModule,
     MatSnackBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   template: `
     <div class="staff-form-container">
       <!-- Header -->
       <div class="form-header">
         <h1 class="form-title">{{ isEditMode ? 'Edit Staff Member' : 'Add New Staff Member' }}</h1>
-        <p class="form-subtitle">{{ isEditMode ? 'Update staff member information' : 'Create a new staff profile' }}</p>
+        <p class="form-subtitle">
+          {{ isEditMode ? 'Update staff member information' : 'Create a new staff profile' }}
+        </p>
       </div>
 
       <!-- Form Card -->
@@ -57,14 +58,14 @@ import { Timestamp } from '@angular/fire/firestore';
             <mat-step [stepControl]="basicInfoForm">
               <form [formGroup]="basicInfoForm">
                 <ng-template matStepLabel>Basic Information</ng-template>
-                
+
                 <div class="form-section">
                   <h3 class="section-title">Personal Details</h3>
-                  
+
                   <div class="form-grid">
                     <mat-form-field appearance="outline">
                       <mat-label>Employee ID</mat-label>
-                      <input matInput formControlName="employeeId" placeholder="EMP001">
+                      <input matInput formControlName="employeeId" placeholder="EMP001" />
                       <mat-error *ngIf="basicInfoForm.get('employeeId')?.hasError('required')">
                         Employee ID is required
                       </mat-error>
@@ -72,7 +73,7 @@ import { Timestamp } from '@angular/fire/firestore';
 
                     <mat-form-field appearance="outline">
                       <mat-label>Full Name</mat-label>
-                      <input matInput formControlName="name" placeholder="John Doe">
+                      <input matInput formControlName="name" placeholder="John Doe" />
                       <mat-error *ngIf="basicInfoForm.get('name')?.hasError('required')">
                         Name is required
                       </mat-error>
@@ -80,7 +81,12 @@ import { Timestamp } from '@angular/fire/firestore';
 
                     <mat-form-field appearance="outline">
                       <mat-label>Email</mat-label>
-                      <input matInput type="email" formControlName="email" placeholder="john.doe@company.com">
+                      <input
+                        matInput
+                        type="email"
+                        formControlName="email"
+                        placeholder="john.doe@company.com"
+                      />
                       <mat-error *ngIf="basicInfoForm.get('email')?.hasError('required')">
                         Email is required
                       </mat-error>
@@ -91,7 +97,7 @@ import { Timestamp } from '@angular/fire/firestore';
 
                     <mat-form-field appearance="outline">
                       <mat-label>Phone</mat-label>
-                      <input matInput formControlName="phone" placeholder="+1 234 567 8900">
+                      <input matInput formControlName="phone" placeholder="+1 234 567 8900" />
                       <mat-error *ngIf="basicInfoForm.get('phone')?.hasError('required')">
                         Phone is required
                       </mat-error>
@@ -118,8 +124,12 @@ import { Timestamp } from '@angular/fire/firestore';
                     <mat-icon>close</mat-icon>
                     Cancel
                   </button>
-                  <button mat-raised-button color="primary" matStepperNext 
-                          [disabled]="!basicInfoForm.valid">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    matStepperNext
+                    [disabled]="!basicInfoForm.valid"
+                  >
                     Next
                     <mat-icon>arrow_forward</mat-icon>
                   </button>
@@ -131,40 +141,48 @@ import { Timestamp } from '@angular/fire/firestore';
             <mat-step [stepControl]="skillsForm">
               <form [formGroup]="skillsForm">
                 <ng-template matStepLabel>Skills & Availability</ng-template>
-                
+
                 <div class="form-section">
                   <h3 class="section-title">Skills & Certifications</h3>
-                  
+
                   <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Skills</mat-label>
                     <mat-chip-grid #chipGrid>
-                      <mat-chip-row *ngFor="let skill of skills"
-                                    [removable]="true"
-                                    (removed)="removeSkill(skill)">
-                        {{skill}}
+                      <mat-chip-row
+                        *ngFor="let skill of skills"
+                        [removable]="true"
+                        (removed)="removeSkill(skill)"
+                      >
+                        {{ skill }}
                         <mat-icon matChipRemove>cancel</mat-icon>
                       </mat-chip-row>
                     </mat-chip-grid>
-                    <input placeholder="Add skill..."
-                           [matChipInputFor]="chipGrid"
-                           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                           (matChipInputTokenEnd)="addSkill($event)">
+                    <input
+                      placeholder="Add skill..."
+                      [matChipInputFor]="chipGrid"
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                      (matChipInputTokenEnd)="addSkill($event)"
+                    />
                   </mat-form-field>
 
                   <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Certifications</mat-label>
                     <mat-chip-grid #certChipGrid>
-                      <mat-chip-row *ngFor="let cert of certifications"
-                                    [removable]="true"
-                                    (removed)="removeCertification(cert)">
-                        {{cert}}
+                      <mat-chip-row
+                        *ngFor="let cert of certifications"
+                        [removable]="true"
+                        (removed)="removeCertification(cert)"
+                      >
+                        {{ cert }}
                         <mat-icon matChipRemove>cancel</mat-icon>
                       </mat-chip-row>
                     </mat-chip-grid>
-                    <input placeholder="Add certification..."
-                           [matChipInputFor]="certChipGrid"
-                           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                           (matChipInputTokenEnd)="addCertification($event)">
+                    <input
+                      placeholder="Add certification..."
+                      [matChipInputFor]="certChipGrid"
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                      (matChipInputTokenEnd)="addCertification($event)"
+                    />
                   </mat-form-field>
                 </div>
 
@@ -172,11 +190,17 @@ import { Timestamp } from '@angular/fire/firestore';
 
                 <div class="form-section">
                   <h3 class="section-title">Availability Settings</h3>
-                  
+
                   <div class="form-grid">
                     <mat-form-field appearance="outline">
                       <mat-label>Max Concurrent Tasks</mat-label>
-                      <input matInput type="number" formControlName="maxConcurrentTasks" min="1" max="20">
+                      <input
+                        matInput
+                        type="number"
+                        formControlName="maxConcurrentTasks"
+                        min="1"
+                        max="20"
+                      />
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
@@ -208,25 +232,31 @@ import { Timestamp } from '@angular/fire/firestore';
             <mat-step [stepControl]="emergencyForm">
               <form [formGroup]="emergencyForm">
                 <ng-template matStepLabel>Emergency Contact</ng-template>
-                
+
                 <div class="form-section">
                   <h3 class="section-title">Emergency Contact Information</h3>
-                  <p class="section-description">This information will only be used in case of emergencies</p>
-                  
+                  <p class="section-description">
+                    This information will only be used in case of emergencies
+                  </p>
+
                   <div class="form-grid">
                     <mat-form-field appearance="outline">
                       <mat-label>Contact Name</mat-label>
-                      <input matInput formControlName="name" placeholder="Jane Doe">
+                      <input matInput formControlName="name" placeholder="Jane Doe" />
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
                       <mat-label>Contact Phone</mat-label>
-                      <input matInput formControlName="phone" placeholder="+1 234 567 8900">
+                      <input matInput formControlName="phone" placeholder="+1 234 567 8900" />
                     </mat-form-field>
 
                     <mat-form-field appearance="outline" class="full-width">
                       <mat-label>Relationship</mat-label>
-                      <input matInput formControlName="relationship" placeholder="Spouse, Parent, Friend, etc.">
+                      <input
+                        matInput
+                        formControlName="relationship"
+                        placeholder="Spouse, Parent, Friend, etc."
+                      />
                     </mat-form-field>
                   </div>
                 </div>
@@ -247,10 +277,10 @@ import { Timestamp } from '@angular/fire/firestore';
             <!-- Step 4: Review & Submit -->
             <mat-step>
               <ng-template matStepLabel>Review & Submit</ng-template>
-              
+
               <div class="review-section">
                 <h3 class="section-title">Review Information</h3>
-                
+
                 <div class="review-grid">
                   <div class="review-item">
                     <span class="review-label">Employee ID:</span>
@@ -275,7 +305,9 @@ import { Timestamp } from '@angular/fire/firestore';
                   <div class="review-item full-width" *ngIf="skills.length > 0">
                     <span class="review-label">Skills:</span>
                     <div class="chip-list">
-                      <mat-chip *ngFor="let skill of skills" class="small-chip">{{ skill }}</mat-chip>
+                      <mat-chip *ngFor="let skill of skills" class="small-chip">{{
+                        skill
+                      }}</mat-chip>
                     </div>
                   </div>
                 </div>
@@ -286,10 +318,15 @@ import { Timestamp } from '@angular/fire/firestore';
                   <mat-icon>arrow_back</mat-icon>
                   Back
                 </button>
-                <button mat-raised-button color="primary" 
-                        (click)="onSubmit()"
-                        [disabled]="isSubmitting">
-                  <mat-icon *ngIf="!isSubmitting">{{ isEditMode ? 'save' : 'person_add' }}</mat-icon>
+                <button
+                  mat-raised-button
+                  color="primary"
+                  (click)="onSubmit()"
+                  [disabled]="isSubmitting"
+                >
+                  <mat-icon *ngIf="!isSubmitting">{{
+                    isEditMode ? 'save' : 'person_add'
+                  }}</mat-icon>
                   <mat-spinner *ngIf="isSubmitting" diameter="20"></mat-spinner>
                   {{ isEditMode ? 'Update Staff Member' : 'Create Staff Member' }}
                 </button>
@@ -300,148 +337,150 @@ import { Timestamp } from '@angular/fire/firestore';
       </mat-card>
     </div>
   `,
-  styles: [`
-    .staff-form-container {
-      padding: 24px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .form-header {
-      margin-bottom: 32px;
-    }
-
-    .form-title {
-      font-size: 32px;
-      font-weight: 500;
-      margin: 0;
-      color: var(--mat-sys-on-surface);
-    }
-
-    .form-subtitle {
-      color: var(--mat-sys-on-surface-variant);
-      margin-top: 4px;
-    }
-
-    .form-card {
-      box-shadow: var(--mat-sys-elevation-1);
-    }
-
-    .form-section {
-      margin-bottom: 32px;
-    }
-
-    .section-title {
-      font-size: 20px;
-      font-weight: 500;
-      color: var(--mat-sys-on-surface);
-      margin: 0 0 16px 0;
-    }
-
-    .section-description {
-      color: var(--mat-sys-on-surface-variant);
-      margin: -8px 0 16px 0;
-      font-size: 14px;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-    }
-
-    .full-width {
-      grid-column: 1 / -1;
-    }
-
-    mat-form-field {
-      width: 100%;
-    }
-
-    .section-divider {
-      margin: 32px 0;
-    }
-
-    .step-actions {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 32px;
-      padding-top: 16px;
-      border-top: 1px solid var(--mat-sys-outline-variant);
-    }
-
-    .review-section {
-      padding: 16px;
-      background: var(--mat-sys-surface-variant);
-      border-radius: 12px;
-      margin-bottom: 24px;
-    }
-
-    .review-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-      margin-top: 16px;
-    }
-
-    .review-item {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .review-label {
-      font-size: 12px;
-      color: var(--mat-sys-on-surface-variant);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .review-value {
-      font-size: 16px;
-      color: var(--mat-sys-on-surface);
-      font-weight: 500;
-    }
-
-    .chip-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 4px;
-    }
-
-    .small-chip {
-      font-size: 12px !important;
-      height: 24px !important;
-      background-color: var(--mat-sys-primary-container) !important;
-      color: var(--mat-sys-on-primary-container) !important;
-    }
-
-    mat-spinner {
-      display: inline-block;
-      margin-right: 8px;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
+  styles: [
+    `
       .staff-form-container {
-        padding: 16px;
+        padding: 24px;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .form-header {
+        margin-bottom: 32px;
+      }
+
+      .form-title {
+        font-size: 32px;
+        font-weight: 500;
+        margin: 0;
+        color: var(--mat-sys-on-surface);
+      }
+
+      .form-subtitle {
+        color: var(--mat-sys-on-surface-variant);
+        margin-top: 4px;
+      }
+
+      .form-card {
+        box-shadow: var(--mat-sys-elevation-1);
+      }
+
+      .form-section {
+        margin-bottom: 32px;
+      }
+
+      .section-title {
+        font-size: 20px;
+        font-weight: 500;
+        color: var(--mat-sys-on-surface);
+        margin: 0 0 16px 0;
+      }
+
+      .section-description {
+        color: var(--mat-sys-on-surface-variant);
+        margin: -8px 0 16px 0;
+        font-size: 14px;
       }
 
       .form-grid {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+      }
+
+      .full-width {
+        grid-column: 1 / -1;
+      }
+
+      mat-form-field {
+        width: 100%;
+      }
+
+      .section-divider {
+        margin: 32px 0;
       }
 
       .step-actions {
-        flex-direction: column-reverse;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 32px;
+        padding-top: 16px;
+        border-top: 1px solid var(--mat-sys-outline-variant);
+      }
+
+      .review-section {
+        padding: 16px;
+        background: var(--mat-sys-surface-variant);
+        border-radius: 12px;
+        margin-bottom: 24px;
+      }
+
+      .review-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      .review-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .review-label {
+        font-size: 12px;
+        color: var(--mat-sys-on-surface-variant);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .review-value {
+        font-size: 16px;
+        color: var(--mat-sys-on-surface);
+        font-weight: 500;
+      }
+
+      .chip-list {
+        display: flex;
+        flex-wrap: wrap;
         gap: 8px;
-        
-        button {
-          width: 100%;
+        margin-top: 4px;
+      }
+
+      .small-chip {
+        font-size: 12px !important;
+        height: 24px !important;
+        background-color: var(--mat-sys-primary-container) !important;
+        color: var(--mat-sys-on-primary-container) !important;
+      }
+
+      mat-spinner {
+        display: inline-block;
+        margin-right: 8px;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .staff-form-container {
+          padding: 16px;
+        }
+
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .step-actions {
+          flex-direction: column-reverse;
+          gap: 8px;
+
+          button {
+            width: 100%;
+          }
         }
       }
-    }
-  `]
+    `,
+  ],
 })
 export class StaffFormComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -466,11 +505,11 @@ export class StaffFormComponent implements OnInit {
 
   ngOnInit() {
     this.initializeForms();
-    
+
     // Check if we're in edit mode
     this.staffId = this.route.snapshot.paramMap.get('id') || undefined;
     this.isEditMode = !!this.staffId;
-    
+
     if (this.isEditMode && this.staffId) {
       this.loadStaffData(this.staffId);
     }
@@ -482,18 +521,18 @@ export class StaffFormComponent implements OnInit {
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
-      primaryGroup: ['', Validators.required]
+      primaryGroup: ['', Validators.required],
     });
 
     this.skillsForm = this.fb.group({
       maxConcurrentTasks: [5, [Validators.required, Validators.min(1), Validators.max(20)]],
-      availabilityStatus: ['available', Validators.required]
+      availabilityStatus: ['available', Validators.required],
     });
 
     this.emergencyForm = this.fb.group({
       name: [''],
       phone: [''],
-      relationship: ['']
+      relationship: [''],
     });
   }
 
@@ -502,33 +541,33 @@ export class StaffFormComponent implements OnInit {
       this.staffService.getStaffById(id).subscribe({
         next: (staff) => {
           if (staff) {
-        // Populate basic info
-        this.basicInfoForm.patchValue({
-          employeeId: staff.employeeId,
-          name: staff.name,
-          email: staff.email,
-          phone: staff.phone,
-          primaryGroup: staff.primaryGroup
-        });
+            // Populate basic info
+            this.basicInfoForm.patchValue({
+              employeeId: staff.employeeId,
+              name: staff.name,
+              email: staff.email,
+              phone: staff.phone,
+              primaryGroup: staff.primaryGroup,
+            });
 
-        // Populate skills
-        this.skills = staff.skills || [];
-        this.certifications = staff.certifications || [];
-        this.skillsForm.patchValue({
-          maxConcurrentTasks: staff.availability.maxConcurrentTasks,
-          availabilityStatus: staff.availability.status
-        });
+            // Populate skills
+            this.skills = staff.skills || [];
+            this.certifications = staff.certifications || [];
+            this.skillsForm.patchValue({
+              maxConcurrentTasks: staff.availability.maxConcurrentTasks,
+              availabilityStatus: staff.availability.status,
+            });
 
-        // Populate emergency contact
-        if (staff.emergencyContact) {
-          this.emergencyForm.patchValue(staff.emergencyContact);
-        }
+            // Populate emergency contact
+            if (staff.emergencyContact) {
+              this.emergencyForm.patchValue(staff.emergencyContact);
+            }
           }
         },
         error: (error) => {
           console.error('Error loading staff data:', error);
           this.snackBar.open('Error loading staff data', 'Close', { duration: 3000 });
-        }
+        },
       });
     } catch (error) {
       console.error('Error loading staff data:', error);
@@ -582,7 +621,7 @@ export class StaffFormComponent implements OnInit {
           status: this.skillsForm.get('availabilityStatus')?.value,
           maxConcurrentTasks: this.skillsForm.get('maxConcurrentTasks')?.value,
           currentTaskCount: 0,
-          workingHours: this.getDefaultWorkingHours()
+          workingHours: this.getDefaultWorkingHours(),
         },
         activity: {
           lastLogin: null,
@@ -591,9 +630,9 @@ export class StaffFormComponent implements OnInit {
           tasksInProgress: 0,
           tasksFlagged: 0,
           totalProjectsWorked: 0,
-          averageTaskCompletionTime: 0
+          averageTaskCompletionTime: 0,
         },
-        isActive: true
+        isActive: true,
       };
 
       // Add emergency contact if provided
@@ -612,7 +651,7 @@ export class StaffFormComponent implements OnInit {
             console.error('Error updating staff member:', error);
             this.snackBar.open('Error updating staff member', 'Close', { duration: 3000 });
             this.isSubmitting = false;
-          }
+          },
         });
       } else {
         // Ensure all required fields are present for creation
@@ -621,14 +660,14 @@ export class StaffFormComponent implements OnInit {
           name: staffData.name || '',
           email: staffData.email || '',
           phone: staffData.phone || '',
-          primaryGroup: staffData.primaryGroup || 'Technician' as StaffGroup,
+          primaryGroup: staffData.primaryGroup || ('Technician' as StaffGroup),
           skills: staffData.skills || [],
           certifications: staffData.certifications || [],
           availability: staffData.availability || {
             status: 'available' as const,
             maxConcurrentTasks: 5,
             currentTaskCount: 0,
-            workingHours: this.getDefaultWorkingHours()
+            workingHours: this.getDefaultWorkingHours(),
           },
           activity: {
             lastLogin: null,
@@ -637,13 +676,13 @@ export class StaffFormComponent implements OnInit {
             tasksInProgress: 0,
             tasksFlagged: 0,
             totalProjectsWorked: 0,
-            averageTaskCompletionTime: 0
+            averageTaskCompletionTime: 0,
           },
           isActive: true,
           emergencyContact: staffData.emergencyContact,
-          createdBy: 'system' // TODO: Replace with actual user ID when auth is implemented
+          createdBy: 'system', // TODO: Replace with actual user ID when auth is implemented
         };
-        
+
         this.staffService.createStaff(createData).subscribe({
           next: () => {
             this.snackBar.open('Staff member created successfully', 'Close', { duration: 3000 });
@@ -653,7 +692,7 @@ export class StaffFormComponent implements OnInit {
             console.error('Error creating staff member:', error);
             this.snackBar.open('Error creating staff member', 'Close', { duration: 3000 });
             this.isSubmitting = false;
-          }
+          },
         });
       }
     } catch (error) {
@@ -666,18 +705,18 @@ export class StaffFormComponent implements OnInit {
   private getDefaultWorkingHours(): WorkingHours {
     const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
     const workingHours: WorkingHours = {};
-    
-    days.forEach(day => {
+
+    days.forEach((day) => {
       workingHours[day] = {
         start: '09:00',
         end: '17:00',
-        isWorkingDay: true
+        isWorkingDay: true,
       };
     });
-    
+
     workingHours['saturday'] = null;
     workingHours['sunday'] = null;
-    
+
     return workingHours;
   }
 }

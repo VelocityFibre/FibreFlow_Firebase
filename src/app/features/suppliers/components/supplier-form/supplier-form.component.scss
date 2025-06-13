@@ -6,7 +6,7 @@
 
 .form-header {
   margin-bottom: 24px;
-  
+
   h1 {
     margin: 0;
     font-size: 28px;
@@ -23,19 +23,19 @@
 
 .form-section {
   margin-bottom: 24px;
-  
+
   h2 {
     font-size: 20px;
     font-weight: 500;
     margin-bottom: 16px;
-    color: #333;
+    color: rgb(var(--ff-foreground));
   }
-  
+
   h3 {
     font-size: 16px;
     font-weight: 500;
     margin-bottom: 12px;
-    color: #555;
+    color: rgb(var(--ff-muted-foreground));
   }
 }
 
@@ -43,7 +43,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 16px;
-  
+
   .full-width {
     grid-column: 1 / -1;
   }
@@ -55,7 +55,7 @@
     gap: 16px;
     align-items: center;
     margin-bottom: 12px;
-    
+
     mat-form-field {
       flex: 1;
     }
@@ -68,7 +68,7 @@
   gap: 8px;
   margin-top: 24px;
   padding-top: 16px;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid rgb(var(--ff-border));
 }
 
 .form-actions {
@@ -77,12 +77,12 @@
   gap: 16px;
   margin-top: 32px;
   padding-top: 24px;
-  border-top: 1px solid #e0e0e0;
-  
+  border-top: 1px solid rgb(var(--ff-border));
+
   button {
     min-width: 120px;
   }
-  
+
   mat-spinner {
     display: inline-block;
     margin-right: 8px;
@@ -97,10 +97,10 @@ mat-slide-toggle {
   .mat-stepper-horizontal {
     background: transparent;
   }
-  
+
   .mat-step-header {
     &:hover {
-      background-color: rgba(0, 0, 0, 0.04);
+      background-color: rgb(var(--ff-muted) / 0.5);
     }
   }
 }

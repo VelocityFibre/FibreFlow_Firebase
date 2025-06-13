@@ -1,4 +1,13 @@
-import { Component, OnInit, inject, signal, computed, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  signal,
+  computed,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,9 +23,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { PhaseService } from '../../../../core/services/phase.service';
-import { Phase, PhaseStatus, PhaseTemplate } from '../../../../core/models/phase.model';
-import { PhaseFormComponent } from '../phase-form/phase-form.component';
+// import { PhaseService } from '../../../../core/services/phase.service';
+import { PhaseStatus, PhaseTemplate } from '../../../../core/models/phase.model';
 
 @Component({
   selector: 'app-phase-list',
@@ -34,7 +42,7 @@ import { PhaseFormComponent } from '../phase-form/phase-form.component';
     MatMenuModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
-    FormsModule
+    FormsModule,
   ],
   template: `
     <div class="phase-list-container">
@@ -51,8 +59,12 @@ import { PhaseFormComponent } from '../phase-form/phase-form.component';
       <div class="filters">
         <mat-form-field appearance="outline">
           <mat-label>Search</mat-label>
-          <input matInput [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()" 
-                 placeholder="Search by name, description...">
+          <input
+            matInput
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="applyFilter()"
+            placeholder="Search by name, description..."
+          />
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
 
@@ -71,7 +83,6 @@ import { PhaseFormComponent } from '../phase-form/phase-form.component';
       <!-- Table -->
       <div class="table-container" *ngIf="!loading(); else loadingTemplate">
         <table mat-table [dataSource]="filteredPhases()" class="phase-table">
-          
           <!-- Name Column -->
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef>Phase Name</th>
@@ -95,11 +106,17 @@ import { PhaseFormComponent } from '../phase-form/phase-form.component';
           <ng-container matColumnDef="dependencies">
             <th mat-header-cell *matHeaderCellDef>Dependencies</th>
             <td mat-cell *matCellDef="let phase">
-              <span class="dependency-count" *ngIf="phase.dependencies && phase.dependencies.length > 0">
+              <span
+                class="dependency-count"
+                *ngIf="phase.dependencies && phase.dependencies.length > 0"
+              >
                 <mat-icon class="dependency-icon">link</mat-icon>
                 {{ phase.dependencies.length }} dependencies
               </span>
-              <span class="no-dependencies" *ngIf="!phase.dependencies || phase.dependencies.length === 0">
+              <span
+                class="no-dependencies"
+                *ngIf="!phase.dependencies || phase.dependencies.length === 0"
+              >
                 None
               </span>
             </td>
@@ -139,9 +156,12 @@ import { PhaseFormComponent } from '../phase-form/phase-form.component';
                   <mat-icon>content_copy</mat-icon>
                   <span>Duplicate</span>
                 </button>
-                <button mat-menu-item (click)="deletePhase(phase)" 
-                        [disabled]="false"
-                        class="delete-option">
+                <button
+                  mat-menu-item
+                  (click)="deletePhase(phase)"
+                  [disabled]="false"
+                  class="delete-option"
+                >
                   <mat-icon>delete</mat-icon>
                   <span>Delete</span>
                 </button>
@@ -150,7 +170,7 @@ import { PhaseFormComponent } from '../phase-form/phase-form.component';
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="phase-row"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" class="phase-row"></tr>
 
           <!-- No data row -->
           <tr class="mat-row no-data-row" *matNoDataRow>
@@ -168,147 +188,149 @@ import { PhaseFormComponent } from '../phase-form/phase-form.component';
       </ng-template>
     </div>
   `,
-  styles: [`
-    .phase-list-container {
-      padding: 24px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-
-    .header h1 {
-      margin: 0;
-      font-size: 28px;
-      font-weight: 500;
-    }
-
-    .filters {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
-
-    .filters mat-form-field {
-      min-width: 200px;
-    }
-
-    .table-container {
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      overflow: hidden;
-    }
-
-    .phase-table {
-      width: 100%;
-    }
-
-    .phase-info {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .phase-info small {
-      color: #666;
-      margin-top: 4px;
-      font-size: 13px;
-    }
-
-    .order-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background-color: #e3f2fd;
-      color: #1976d2;
-      font-weight: 600;
-    }
-
-    .dependency-count {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: #f57c00;
-      font-size: 14px;
-    }
-
-    .dependency-icon {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-    }
-
-    .no-dependencies {
-      color: #999;
-      font-size: 14px;
-    }
-
-    .projects-count {
-      font-weight: 500;
-      color: #1976d2;
-    }
-
-    mat-chip {
-      font-size: 12px;
-    }
-
-    .default-phase {
-      background-color: #e3f2fd !important;
-      color: #1976d2 !important;
-    }
-
-    .custom-phase {
-      background-color: #f3e5f5 !important;
-      color: #7b1fa2 !important;
-    }
-
-    .phase-row:hover {
-      background-color: #f5f5f5;
-    }
-
-    .no-data-row {
-      height: 200px;
-    }
-
-    .no-data-row td {
-      text-align: center;
-      color: #666;
-    }
-
-    .loading-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 400px;
-    }
-
-    .delete-option {
-      color: #ef4444;
-      
-      mat-icon {
-        color: #ef4444;
+  styles: [
+    `
+      .phase-list-container {
+        padding: 24px;
+        max-width: 1400px;
+        margin: 0 auto;
       }
-    }
 
-    .delete-option:disabled {
-      opacity: 0.5;
-    }
-  `]
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 500;
+      }
+
+      .filters {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+      }
+
+      .filters mat-form-field {
+        min-width: 200px;
+      }
+
+      .table-container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .phase-table {
+        width: 100%;
+      }
+
+      .phase-info {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .phase-info small {
+        color: #666;
+        margin-top: 4px;
+        font-size: 13px;
+      }
+
+      .order-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: #e3f2fd;
+        color: #1976d2;
+        font-weight: 600;
+      }
+
+      .dependency-count {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: #f57c00;
+        font-size: 14px;
+      }
+
+      .dependency-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+
+      .no-dependencies {
+        color: #999;
+        font-size: 14px;
+      }
+
+      .projects-count {
+        font-weight: 500;
+        color: #1976d2;
+      }
+
+      mat-chip {
+        font-size: 12px;
+      }
+
+      .default-phase {
+        background-color: #e3f2fd !important;
+        color: #1976d2 !important;
+      }
+
+      .custom-phase {
+        background-color: #f3e5f5 !important;
+        color: #7b1fa2 !important;
+      }
+
+      .phase-row:hover {
+        background-color: #f5f5f5;
+      }
+
+      .no-data-row {
+        height: 200px;
+      }
+
+      .no-data-row td {
+        text-align: center;
+        color: #666;
+      }
+
+      .loading-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 400px;
+      }
+
+      .delete-option {
+        color: #ef4444;
+
+        mat-icon {
+          color: #ef4444;
+        }
+      }
+
+      .delete-option:disabled {
+        opacity: 0.5;
+      }
+    `,
+  ],
 })
 export class PhaseListComponent implements OnInit {
   @Input() phases: PhaseTemplate[] | null = [];
   @Output() edit = new EventEmitter<PhaseTemplate>();
   @Output() delete = new EventEmitter<PhaseTemplate>();
-  
+
   private dialog = inject(MatDialog);
   private router = inject(Router);
 
@@ -324,9 +346,9 @@ export class PhaseListComponent implements OnInit {
     // Apply search filter
     if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase();
-      filtered = filtered.filter((p: PhaseTemplate) => 
-        p.name.toLowerCase().includes(term) ||
-        p.description.toLowerCase().includes(term)
+      filtered = filtered.filter(
+        (p: PhaseTemplate) =>
+          p.name.toLowerCase().includes(term) || p.description.toLowerCase().includes(term),
       );
     }
 
@@ -358,9 +380,9 @@ export class PhaseListComponent implements OnInit {
     const duplicatedPhase = {
       ...phase,
       name: `${phase.name} (Copy)`,
-      orderNo: (this.phases?.length || 0) + 1
+      orderNo: (this.phases?.length || 0) + 1,
     };
-    
+
     // Emit edit with duplicated phase
     this.edit.emit(duplicatedPhase);
   }

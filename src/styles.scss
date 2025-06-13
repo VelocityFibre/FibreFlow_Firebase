@@ -4,6 +4,8 @@
 @use 'sass:map';
 @use './styles/spacing' as spacing;
 @use './styles/theme-functions' as theme;
+@use './styles/theme-mixins' as mixins;
+@use './styles/component-theming' as component-theme;
 @use './styles/variables' as *; // CSS custom properties need to be available globally
 @use './styles/utilities' as *; // Utility classes need to be available globally
 @use './styles/card-borders' as *; // Card border colors
@@ -118,16 +120,18 @@ $fibreflow-error-palette: (
 @include mat.core();
 
 // Define the light theme using Material 3
-$fibreflow-light-theme: mat.define-theme((
-  color: (
-    theme-type: light,
-    primary: mat.$azure-palette,
-    tertiary: mat.$blue-palette,
-  ),
-  density: (
-    scale: 0,
-  ),
-));
+$fibreflow-light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    density: (
+      scale: 0,
+    ),
+  )
+);
 
 // Apply the theme to all components
 html {
@@ -135,41 +139,39 @@ html {
 }
 
 // Apple-inspired global styles
-html, body { 
+html,
+body {
   height: 100%;
   background-color: var(--mat-sys-background);
   color: var(--mat-sys-on-background);
 }
 
-body { 
-  margin: 0; 
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-// Typography scale
+// Typography scale using new theme mixins
 h1 {
-  font-size: spacing.ff-font-size(5xl);
-  font-weight: spacing.ff-font-weight(light);
-  letter-spacing: -0.02em;
-  line-height: 1.2;
+  @include mixins.heading-1();
   margin: 0;
 }
 
 h2 {
-  font-size: spacing.ff-font-size(3xl);
-  font-weight: spacing.ff-font-weight(light);
-  letter-spacing: -0.01em;
-  line-height: 1.3;
+  @include mixins.heading-2();
   margin: 0;
 }
 
 h3 {
-  font-size: spacing.ff-font-size(xl);
-  font-weight: spacing.ff-font-weight(medium);
-  line-height: 1.4;
+  @include mixins.heading-3();
+  margin: 0;
+}
+
+h4 {
+  @include mixins.heading-4();
   margin: 0;
 }
 
@@ -178,7 +180,7 @@ h3 {
   max-width: 1400px;
   margin: 0 auto;
   padding: 40px 24px;
-  
+
   @media (max-width: 768px) {
     padding: 24px 16px;
   }
@@ -207,24 +209,22 @@ h3 {
 }
 
 .ff-section-title {
-  font-size: ff-font-size(3xl);
-  font-weight: ff-font-weight(light);
-  color: ff-rgb(foreground);
-  margin-bottom: ff-spacing(xl);
+  font-size: spacing.ff-font-size(3xl);
+  font-weight: spacing.ff-font-weight(light);
+  color: theme.ff-rgb(foreground);
+  margin-bottom: spacing.ff-spacing(xl);
 }
 
-// Card styling
+// Card styling using new theme mixins
 .ff-card {
-  background: ff-rgb(card);
-  border: 1px solid ff-rgb(border);
-  border-radius: var(--ff-radius);
-  padding: ff-spacing(xl);
-  transition: all ff-transition(slow) cubic-bezier(0.4, 0, 0.2, 1);
-  
-  &:hover {
-    box-shadow: ff-shadow(lg);
-    transform: translateY(-2px);
-    border-color: ff-rgba(border, 0.8);
+  @include mixins.card-theme();
+
+  &--interactive {
+    @include mixins.card-theme(interactive);
+  }
+
+  &--compact {
+    @include mixins.card-theme(compact);
   }
 }
 
@@ -232,15 +232,15 @@ h3 {
 .mat-mdc-card {
   border-radius: var(--ff-radius) !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
-  border: 1px solid ff-rgb(border) !important;
-  transition: all ff-transition(slow) cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border: 1px solid theme.ff-rgb(border) !important;
+  transition: all theme.ff-transition(slow) cubic-bezier(0.4, 0, 0.2, 1) !important;
   overflow: hidden;
-  background-color: ff-rgb(card) !important;
-  
+  background-color: theme.ff-rgb(card) !important;
+
   &:hover {
-    box-shadow: ff-shadow(lg) !important;
+    box-shadow: theme.ff-shadow(lg) !important;
     transform: translateY(-4px);
-    border-color: ff-rgba(border, 0.8) !important;
+    border-color: theme.ff-rgba(border, 0.8) !important;
   }
 }
 
@@ -259,9 +259,9 @@ h3 {
 }
 
 .mat-mdc-card-subtitle {
-  font-size: ff-font-size(base) !important;
-  color: ff-rgb(muted-foreground) !important;
-  margin-top: ff-spacing(xs) !important;
+  font-size: spacing.ff-font-size(base) !important;
+  color: theme.ff-rgb(muted-foreground) !important;
+  margin-top: spacing.ff-spacing(xs) !important;
 }
 
 // Button styling
@@ -269,43 +269,43 @@ h3 {
 .mat-mdc-raised-button {
   border-radius: calc(var(--ff-radius) * 0.66) !important;
   text-transform: none !important;
-  font-weight: ff-font-weight(medium) !important;
+  font-weight: spacing.ff-font-weight(medium) !important;
   letter-spacing: 0 !important;
-  padding: 0 ff-spacing(lg) !important;
+  padding: 0 spacing.ff-spacing(lg) !important;
   height: 40px !important;
-  transition: all ff-transition(base) ease !important;
+  transition: all theme.ff-transition(base) ease !important;
 }
 
 .mat-mdc-raised-button {
-  box-shadow: ff-shadow(sm) !important;
-  
+  box-shadow: theme.ff-shadow(sm) !important;
+
   &:hover:not([disabled]) {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
     transform: translateY(-1px);
   }
-  
+
   &.mat-primary {
-    background-color: ff-rgb(primary) !important;
-    color: ff-rgb(primary-foreground) !important;
-    
+    background-color: theme.ff-rgb(primary) !important;
+    color: theme.ff-rgb(primary-foreground) !important;
+
     &:hover:not([disabled]) {
       opacity: 0.9;
     }
   }
-  
+
   &.mat-accent {
-    background-color: ff-rgb(info) !important;
-    color: ff-rgb(info-foreground) !important;
-    
+    background-color: theme.ff-rgb(info) !important;
+    color: theme.ff-rgb(info-foreground) !important;
+
     &:hover:not([disabled]) {
       opacity: 0.9;
     }
   }
-  
+
   &.mat-warn {
-    background-color: ff-rgb(destructive) !important;
-    color: ff-rgb(destructive-foreground) !important;
-    
+    background-color: theme.ff-rgb(destructive) !important;
+    color: theme.ff-rgb(destructive-foreground) !important;
+
     &:hover:not([disabled]) {
       opacity: 0.9;
     }
@@ -317,11 +317,11 @@ h3 {
   height: 6px !important;
   border-radius: 3px !important;
   overflow: hidden !important;
-  
+
   .mdc-linear-progress__buffer {
     background-color: #f3f4f6 !important;
   }
-  
+
   .mdc-linear-progress__bar-inner {
     border-radius: 3px !important;
   }
@@ -330,13 +330,13 @@ h3 {
 // Chip styling
 .mat-mdc-chip {
   border-radius: calc(var(--ff-radius) * 0.5) !important;
-  font-weight: ff-font-weight(medium) !important;
-  font-size: ff-font-size(sm) !important;
-  padding: 0 ff-spacing(sm) !important;
+  font-weight: spacing.ff-font-weight(medium) !important;
+  font-size: spacing.ff-font-size(sm) !important;
+  padding: 0 spacing.ff-spacing(sm) !important;
   height: 28px !important;
-  
+
   .mdc-evolution-chip__text-label {
-    font-size: ff-font-size(sm) !important;
+    font-size: spacing.ff-font-size(sm) !important;
   }
 }
 
@@ -346,14 +346,14 @@ h3 {
   height: 20px !important;
   font-size: 20px !important;
   line-height: 20px !important;
-  
+
   &.small-icon {
     width: 16px !important;
     height: 16px !important;
     font-size: 16px !important;
     line-height: 16px !important;
   }
-  
+
   &.large-icon {
     width: 24px !important;
     height: 24px !important;
@@ -364,59 +364,64 @@ h3 {
 
 // Tooltip styling
 .mat-mdc-tooltip {
-  background-color: ff-rgb(foreground) !important;
-  color: ff-rgb(background) !important;
-  font-size: ff-font-size(xs) !important;
-  padding: ff-spacing(xs) ff-spacing(sm) !important;
+  background-color: theme.ff-rgb(foreground) !important;
+  color: theme.ff-rgb(background) !important;
+  font-size: spacing.ff-font-size(xs) !important;
+  padding: spacing.ff-spacing(xs) spacing.ff-spacing(sm) !important;
   border-radius: calc(var(--ff-radius) * 0.5) !important;
 }
 
 // Status color classes
 .status-planning {
-  background-color: ff-rgb(muted-foreground) !important;
-  color: ff-rgb(background) !important;
+  background-color: theme.ff-rgb(muted-foreground) !important;
+  color: theme.ff-rgb(background) !important;
 }
 
 .status-active {
-  background-color: ff-rgb(success) !important;
-  color: ff-rgb(success-foreground) !important;
+  background-color: theme.ff-rgb(success) !important;
+  color: theme.ff-rgb(success-foreground) !important;
 }
 
 .status-on_hold {
-  background-color: ff-rgb(warning) !important;
-  color: ff-rgb(warning-foreground) !important;
+  background-color: theme.ff-rgb(warning) !important;
+  color: theme.ff-rgb(warning-foreground) !important;
 }
 
 .status-completed {
-  background-color: ff-rgb(info) !important;
-  color: ff-rgb(info-foreground) !important;
+  background-color: theme.ff-rgb(info) !important;
+  color: theme.ff-rgb(info-foreground) !important;
 }
 
 .status-cancelled {
-  background-color: ff-rgb(destructive) !important;
-  color: ff-rgb(destructive-foreground) !important;
+  background-color: theme.ff-rgb(destructive) !important;
+  color: theme.ff-rgb(destructive-foreground) !important;
 }
 
 // Priority colors
 .priority-low {
-  color: ff-rgb(muted-foreground);
+  color: theme.ff-rgb(muted-foreground);
 }
 
 .priority-medium {
-  color: ff-rgb(info);
+  color: theme.ff-rgb(info);
 }
 
 .priority-high {
-  color: ff-rgb(warning);
+  color: theme.ff-rgb(warning);
 }
 
 .priority-critical {
-  color: ff-rgb(destructive);
+  color: theme.ff-rgb(destructive);
 }
 
 // Loading states
 .loading-skeleton {
-  background: linear-gradient(90deg, ff-rgb(muted) 25%, ff-rgb(border) 50%, ff-rgb(muted) 75%);
+  background: linear-gradient(
+    90deg,
+    theme.ff-rgb(muted) 25%,
+    theme.ff-rgb(border) 50%,
+    theme.ff-rgb(muted) 75%
+  );
   background-size: 200% 100%;
   animation: loading 1.5s infinite;
 }
@@ -437,17 +442,50 @@ h3 {
 }
 
 ::-webkit-scrollbar-track {
-  background: ff-rgb(muted);
+  background: theme.ff-rgb(muted);
   border-radius: calc(var(--ff-radius) * 0.5);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: ff-rgb(border);
+  background: theme.ff-rgb(border);
   border-radius: calc(var(--ff-radius) * 0.5);
-  border: 2px solid ff-rgb(muted);
-  
+  border: 2px solid theme.ff-rgb(muted);
+
   &:hover {
-    background: ff-rgb(muted-foreground);
+    background: theme.ff-rgb(muted-foreground);
+  }
+}
+
+// Snackbar notification styles
+.mat-mdc-snack-bar-container {
+  &.success-snackbar {
+    --mdc-snackbar-container-color: #{theme.ff-rgb(success)};
+    --mdc-snackbar-supporting-text-color: #{theme.ff-rgb(success-foreground)};
+    --mat-snack-bar-button-color: #{theme.ff-rgb(success-foreground)};
+  }
+
+  &.error-snackbar {
+    --mdc-snackbar-container-color: #{theme.ff-rgb(destructive)};
+    --mdc-snackbar-supporting-text-color: #{theme.ff-rgb(destructive-foreground)};
+    --mat-snack-bar-button-color: #{theme.ff-rgb(destructive-foreground)};
+  }
+
+  &.warning-snackbar {
+    --mdc-snackbar-container-color: #{theme.ff-rgb(warning)};
+    --mdc-snackbar-supporting-text-color: #{theme.ff-rgb(warning-foreground)};
+    --mat-snack-bar-button-color: #{theme.ff-rgb(warning-foreground)};
+  }
+
+  &.info-snackbar {
+    --mdc-snackbar-container-color: #{theme.ff-rgb(info)};
+    --mdc-snackbar-supporting-text-color: #{theme.ff-rgb(info-foreground)};
+    --mat-snack-bar-button-color: #{theme.ff-rgb(info-foreground)};
+  }
+
+  &.progress-snackbar {
+    --mdc-snackbar-container-color: #{theme.ff-rgb(muted)};
+    --mdc-snackbar-supporting-text-color: #{theme.ff-rgb(muted-foreground)};
+    --mat-snack-bar-button-color: #{theme.ff-rgb(muted-foreground)};
   }
 }
 
@@ -470,18 +508,18 @@ h3 {
     // Increase contrast for borders
     --ff-border: 0 0 0; // Pure black
     --ff-muted: 245 245 245; // Lighter gray
-    
+
     // Ensure text has maximum contrast
     --ff-foreground: 0 0 0; // Pure black
     --ff-muted-foreground: 64 64 64; // Darker gray
   }
-  
+
   // Stronger shadows for better definition
   .mat-mdc-card,
   .ff-card {
     box-shadow: 0 0 0 2px black !important;
   }
-  
+
   // More visible focus states
   :focus-visible {
     outline: 3px solid black !important;
@@ -508,5 +546,17 @@ h3 {
     --ff-border: 55 65 81;
     --ff-input: 55 65 81;
     --ff-ring: 59 130 246;
+  }
+}
+
+// Role dialog specific styles
+.role-dialog-container {
+  .mat-mdc-dialog-container {
+    padding: 0 !important;
+  }
+
+  .mat-mdc-dialog-surface {
+    border-radius: 12px !important;
+    overflow: hidden;
   }
 }

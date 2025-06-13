@@ -1,0 +1,576 @@
+// FibreFlow Theme Mixins
+// Centralized mixins for consistent theming across components
+// Compatible with @use (Dart Sass module system)
+
+@use './theme-functions' as theme;
+@use 'sass:map';
+
+// =============================================================================
+// CORE THEME MIXINS
+// =============================================================================
+
+/// Import theme variables into a component
+/// Makes all FF theme variables available as CSS custom properties
+/// @example scss
+///   .my-component {
+///     @include theme-vars();
+///     background: ff-rgb(background);
+///   }
+@mixin theme-vars() {
+  // This mixin doesn't need to do anything since CSS custom properties
+  // are globally available. It's here for consistency and future use.
+  // Components can directly use ff-rgb(), ff-rgba(), etc.
+}
+
+/// Apply theme-aware focus ring styling
+/// @param {string} $color [ring] - The theme color to use for focus ring
+/// @example scss
+///   .button {
+///     @include focus-ring();
+///   }
+@mixin focus-ring($color: ring) {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+
+  &:focus-visible {
+    outline: 2px solid theme.ff-rgb($color);
+    outline-offset: 2px;
+  }
+}
+
+/// Apply consistent border radius
+/// @param {string} $size [base] - Size variant (sm, base, lg, full)
+/// @example scss
+///   .card {
+///     @include border-radius(lg);
+///   }
+@mixin border-radius($size: base) {
+  @if $size == sm {
+    border-radius: calc(var(--ff-radius) * 0.5);
+  } @else if $size == base {
+    border-radius: var(--ff-radius);
+  } @else if $size == lg {
+    border-radius: calc(var(--ff-radius) * 1.5);
+  } @else if $size == full {
+    border-radius: 9999px;
+  } @else {
+    border-radius: #{$size};
+  }
+}
+
+/// Apply theme-aware transitions
+/// @param {list} $properties [all] - CSS properties to transition
+/// @param {string} $duration [base] - Transition duration (fast, base, slow, slower)
+/// @param {string} $easing [ease] - Easing function
+/// @example scss
+///   .button {
+///     @include transition(background-color transform, fast, ease-out);
+///   }
+@mixin transition($properties: all, $duration: base, $easing: ease) {
+  transition: #{$properties} #{theme.ff-transition($duration)} #{$easing};
+}
+
+// =============================================================================
+// TYPOGRAPHY MIXINS
+// =============================================================================
+
+/// Heading 1 typography
+/// @example scss
+///   .page-title {
+///     @include heading-1();
+///   }
+@mixin heading-1() {
+  font-size: theme.ff-clamp(32, 4, 48);
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: theme.ff-rgb(foreground);
+}
+
+/// Heading 2 typography
+/// @example scss
+///   .section-title {
+///     @include heading-2();
+///   }
+@mixin heading-2() {
+  font-size: theme.ff-clamp(24, 3, 36);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: theme.ff-rgb(foreground);
+}
+
+/// Heading 3 typography
+/// @example scss
+///   .subsection-title {
+///     @include heading-3();
+///   }
+@mixin heading-3() {
+  font-size: theme.ff-clamp(20, 2.5, 28);
+  font-weight: 500;
+  line-height: 1.4;
+  color: theme.ff-rgb(foreground);
+}
+
+/// Heading 4 typography
+/// @example scss
+///   .card-title {
+///     @include heading-4();
+///   }
+@mixin heading-4() {
+  font-size: theme.ff-clamp(18, 2, 24);
+  font-weight: 500;
+  line-height: 1.4;
+  color: theme.ff-rgb(foreground);
+}
+
+/// Body text typography
+/// @param {string} $size [base] - Size variant (sm, base, lg)
+/// @example scss
+///   .description {
+///     @include body-text(lg);
+///   }
+@mixin body-text($size: base) {
+  @if $size == sm {
+    font-size: theme.ff-rem(14);
+    line-height: 1.5;
+  } @else if $size == base {
+    font-size: theme.ff-rem(16);
+    line-height: 1.6;
+  } @else if $size == lg {
+    font-size: theme.ff-rem(18);
+    line-height: 1.6;
+  }
+
+  color: theme.ff-rgb(foreground);
+  font-weight: 400;
+}
+
+/// Caption/small text typography
+/// @example scss
+///   .metadata {
+///     @include caption-text();
+///   }
+@mixin caption-text() {
+  font-size: theme.ff-rem(12);
+  line-height: 1.4;
+  color: theme.ff-rgb(muted-foreground);
+  font-weight: 400;
+}
+
+/// Display text typography (for large headlines)
+/// @example scss
+///   .hero-title {
+///     @include display-text();
+///   }
+@mixin display-text() {
+  font-size: theme.ff-clamp(40, 5, 64);
+  font-weight: 200;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: theme.ff-rgb(foreground);
+}
+
+// =============================================================================
+// COMPONENT PATTERN MIXINS
+// =============================================================================
+
+/// Theme-aware card styling
+/// @param {string} $variant [default] - Card variant (default, interactive, compact, elevated)
+/// @example scss
+///   .project-card {
+///     @include card-theme(interactive);
+///   }
+@mixin card-theme($variant: default) {
+  background-color: theme.ff-rgb(card);
+  color: theme.ff-rgb(card-foreground);
+  border: 1px solid theme.ff-rgb(border);
+  @include border-radius();
+  @include transition(all, base, cubic-bezier(0.4, 0, 0.2, 1));
+
+  @if $variant == default {
+    box-shadow: theme.ff-shadow(sm);
+    padding: theme.ff-rem(24);
+  } @else if $variant == interactive {
+    box-shadow: theme.ff-shadow(sm);
+    padding: theme.ff-rem(24);
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: theme.ff-shadow(lg);
+      transform: translateY(-2px);
+      border-color: theme.ff-rgba(border, 0.8);
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: theme.ff-shadow();
+    }
+  } @else if $variant == compact {
+    box-shadow: theme.ff-shadow(sm);
+    padding: theme.ff-rem(16);
+  } @else if $variant == elevated {
+    box-shadow: theme.ff-shadow(lg);
+    padding: theme.ff-rem(32);
+    border: none;
+  }
+}
+
+/// Theme-aware button styling
+/// @param {string} $variant [primary] - Button variant (primary, secondary, outline, ghost, destructive)
+/// @param {string} $size [base] - Button size (sm, base, lg)
+/// @example scss
+///   .action-button {
+///     @include button-theme(primary, lg);
+///   }
+@mixin button-theme($variant: primary, $size: base) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  @include focus-ring();
+  @include transition(all, base);
+
+  // Size variants
+  @if $size == sm {
+    height: theme.ff-rem(32);
+    padding: 0 theme.ff-rem(12);
+    font-size: theme.ff-rem(14);
+    @include border-radius(sm);
+  } @else if $size == base {
+    height: theme.ff-rem(40);
+    padding: 0 theme.ff-rem(16);
+    font-size: theme.ff-rem(16);
+    @include border-radius(sm);
+  } @else if $size == lg {
+    height: theme.ff-rem(48);
+    padding: 0 theme.ff-rem(24);
+    font-size: theme.ff-rem(18);
+    @include border-radius();
+  }
+
+  // Style variants
+  @if $variant == primary {
+    background-color: theme.ff-rgb(primary);
+    color: theme.ff-rgb(primary-foreground);
+    border: 1px solid theme.ff-rgb(primary);
+
+    &:hover:not(:disabled) {
+      opacity: 0.9;
+      transform: translateY(-1px);
+      box-shadow: theme.ff-shadow();
+    }
+  } @else if $variant == secondary {
+    background-color: theme.ff-rgb(secondary);
+    color: theme.ff-rgb(secondary-foreground);
+    border: 1px solid theme.ff-rgb(border);
+
+    &:hover:not(:disabled) {
+      background-color: theme.ff-rgba(secondary, 0.8);
+    }
+  } @else if $variant == outline {
+    background-color: transparent;
+    color: theme.ff-rgb(foreground);
+    border: 1px solid theme.ff-rgb(border);
+
+    &:hover:not(:disabled) {
+      background-color: theme.ff-rgb(accent);
+      color: theme.ff-rgb(accent-foreground);
+    }
+  } @else if $variant == ghost {
+    background-color: transparent;
+    color: theme.ff-rgb(foreground);
+    border: 1px solid transparent;
+
+    &:hover:not(:disabled) {
+      background-color: theme.ff-rgb(accent);
+      color: theme.ff-rgb(accent-foreground);
+    }
+  } @else if $variant == destructive {
+    background-color: theme.ff-rgb(destructive);
+    color: theme.ff-rgb(destructive-foreground);
+    border: 1px solid theme.ff-rgb(destructive);
+
+    &:hover:not(:disabled) {
+      opacity: 0.9;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/// Theme-aware form input styling
+/// @param {string} $variant [default] - Input variant (default, error, success)
+/// @example scss
+///   .form-input {
+///     @include form-input-theme();
+///   }
+@mixin form-input-theme($variant: default) {
+  width: 100%;
+  padding: theme.ff-rem(12) theme.ff-rem(16);
+  font-size: theme.ff-rem(16);
+  line-height: 1.5;
+  color: theme.ff-rgb(foreground);
+  background-color: theme.ff-rgb(background);
+  border: 1px solid theme.ff-rgb(input);
+  @include border-radius(sm);
+  @include transition(border-color box-shadow, base);
+
+  &::placeholder {
+    color: theme.ff-rgb(muted-foreground);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: theme.ff-rgb(ring);
+    box-shadow: 0 0 0 2px theme.ff-rgba(ring, 0.2);
+  }
+
+  @if $variant == error {
+    border-color: theme.ff-rgb(destructive);
+
+    &:focus {
+      border-color: theme.ff-rgb(destructive);
+      box-shadow: 0 0 0 2px theme.ff-rgba(destructive, 0.2);
+    }
+  } @else if $variant == success {
+    border-color: theme.ff-rgb(success);
+
+    &:focus {
+      border-color: theme.ff-rgb(success);
+      box-shadow: 0 0 0 2px theme.ff-rgba(success, 0.2);
+    }
+  }
+
+  &:disabled {
+    background-color: theme.ff-rgb(muted);
+    color: theme.ff-rgb(muted-foreground);
+    cursor: not-allowed;
+  }
+}
+
+/// Theme-aware badge/chip styling
+/// @param {string} $variant [default] - Badge variant (default, success, warning, error, info)
+/// @param {string} $size [base] - Badge size (sm, base)
+/// @example scss
+///   .status-badge {
+///     @include badge-theme(success, sm);
+///   }
+@mixin badge-theme($variant: default, $size: base) {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+  white-space: nowrap;
+  @include border-radius(full);
+
+  @if $size == sm {
+    padding: theme.ff-rem(4) theme.ff-rem(8);
+    font-size: theme.ff-rem(12);
+    line-height: 1;
+  } @else {
+    padding: theme.ff-rem(6) theme.ff-rem(12);
+    font-size: theme.ff-rem(14);
+    line-height: 1;
+  }
+
+  @if $variant == default {
+    background-color: theme.ff-rgb(muted);
+    color: theme.ff-rgb(muted-foreground);
+  } @else if $variant == success {
+    background-color: theme.ff-rgb(success);
+    color: theme.ff-rgb(success-foreground);
+  } @else if $variant == warning {
+    background-color: theme.ff-rgb(warning);
+    color: theme.ff-rgb(warning-foreground);
+  } @else if $variant == error {
+    background-color: theme.ff-rgb(destructive);
+    color: theme.ff-rgb(destructive-foreground);
+  } @else if $variant == info {
+    background-color: theme.ff-rgb(info);
+    color: theme.ff-rgb(info-foreground);
+  }
+}
+
+/// Theme-aware table styling
+/// @example scss
+///   .data-table {
+///     @include table-theme();
+///   }
+@mixin table-theme() {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  th {
+    padding: theme.ff-rem(12) theme.ff-rem(16);
+    text-align: left;
+    font-weight: 600;
+    color: theme.ff-rgb(muted-foreground);
+    background-color: theme.ff-rgb(muted);
+    border-bottom: 1px solid theme.ff-rgb(border);
+    font-size: theme.ff-rem(14);
+  }
+
+  td {
+    padding: theme.ff-rem(12) theme.ff-rem(16);
+    border-bottom: 1px solid theme.ff-rgb(border);
+    color: theme.ff-rgb(foreground);
+  }
+
+  tr:hover td {
+    background-color: theme.ff-rgba(muted, 0.5);
+  }
+}
+
+/// Theme-aware loading skeleton
+/// @example scss
+///   .skeleton {
+///     @include loading-skeleton();
+///   }
+@mixin loading-skeleton() {
+  background: linear-gradient(
+    90deg,
+    theme.ff-rgb(muted) 25%,
+    theme.ff-rgb(border) 50%,
+    theme.ff-rgb(muted) 75%
+  );
+  background-size: 200% 100%;
+  animation: loading-shimmer 1.5s infinite;
+  @include border-radius(sm);
+
+  @keyframes loading-shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+}
+
+// =============================================================================
+// LAYOUT MIXINS
+// =============================================================================
+
+/// Consistent container layout
+/// @param {string} $size [default] - Container size (narrow, default, wide, full)
+/// @example scss
+///   .page-container {
+///     @include container(wide);
+///   }
+@mixin container($size: default) {
+  margin: 0 auto;
+
+  @if $size == narrow {
+    max-width: theme.ff-rem(768);
+    padding: 0 theme.ff-rem(24);
+  } @else if $size == default {
+    max-width: theme.ff-rem(1200);
+    padding: 0 theme.ff-rem(24);
+  } @else if $size == wide {
+    max-width: theme.ff-rem(1400);
+    padding: 0 theme.ff-rem(24);
+  } @else if $size == full {
+    max-width: none;
+    padding: 0 theme.ff-rem(24);
+  }
+
+  @media (max-width: #{theme.ff-rem(768)}) {
+    padding: 0 theme.ff-rem(16);
+  }
+}
+
+/// Flexbox layout utilities
+/// @param {string} $direction [row] - Flex direction
+/// @param {string} $justify [flex-start] - Justify content
+/// @param {string} $align [stretch] - Align items
+/// @param {string} $gap [0] - Gap between items
+/// @example scss
+///   .toolbar {
+///     @include flex(row, space-between, center, 16px);
+///   }
+@mixin flex($direction: row, $justify: flex-start, $align: stretch, $gap: 0) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+
+  @if $gap != 0 {
+    gap: $gap;
+  }
+}
+
+/// Grid layout utilities
+/// @param {string} $columns [1fr] - Grid template columns
+/// @param {string} $gap [1rem] - Gap between grid items
+/// @example scss
+///   .card-grid {
+///     @include grid(repeat(auto-fill, minmax(300px, 1fr)), 24px);
+///   }
+@mixin grid($columns: 1fr, $gap: 1rem) {
+  display: grid;
+  grid-template-columns: $columns;
+  gap: $gap;
+}
+
+// =============================================================================
+// RESPONSIVE MIXINS
+// =============================================================================
+
+/// Media query breakpoints
+/// @param {string} $breakpoint - Breakpoint name (xs, sm, md, lg, xl, 2xl)
+/// @example scss
+///   .responsive-element {
+///     @include responsive(md) {
+///       display: grid;
+///     }
+///   }
+@mixin responsive($breakpoint) {
+  $breakpoints: (
+    xs: 480px,
+    sm: 640px,
+    md: 768px,
+    lg: 1024px,
+    xl: 1280px,
+    2xl: 1536px,
+  );
+
+  @if map.has-key($breakpoints, $breakpoint) {
+    @media (min-width: #{map.get($breakpoints, $breakpoint)}) {
+      @content;
+    }
+  } @else {
+    @error "Unknown breakpoint: #{$breakpoint}";
+  }
+}
+
+/// Mobile-first responsive design
+/// @example scss
+///   .element {
+///     @include mobile-first() {
+///       font-size: 18px;
+///     }
+///   }
+@mixin mobile-first() {
+  @media (min-width: #{theme.ff-rem(640)}) {
+    @content;
+  }
+}
+
+/// Desktop-first responsive design
+/// @example scss
+///   .element {
+///     @include desktop-first() {
+///       font-size: 14px;
+///     }
+///   }
+@mixin desktop-first() {
+  @media (max-width: #{theme.ff-rem(1023)}) {
+    @content;
+  }
+}

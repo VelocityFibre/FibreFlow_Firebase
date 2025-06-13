@@ -13,5 +13,5 @@ export const defaultStaffConfig: StaffModuleConfig = {
   enableOfflineMode: false,
   maxConcurrentTasks: 5,
   defaultAvailabilityStatus: 'available',
-  enableActivityTracking: true
+  enableActivityTracking: true,
 };

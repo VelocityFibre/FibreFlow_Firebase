@@ -2,14 +2,22 @@
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  background-color: rgb(var(--ff-background));
+  color: rgb(var(--ff-foreground));
+  min-height: 100vh;
 
   h1 {
     text-align: center;
     margin-bottom: 2rem;
+    color: rgb(var(--ff-foreground));
   }
 
   mat-card {
     margin-bottom: 1.5rem;
+    background-color: rgb(var(--ff-card));
+    color: rgb(var(--ff-card-foreground));
+    border: 1px solid rgb(var(--ff-border));
+    border-radius: var(--ff-radius);
   }
 
   .status-item {
@@ -51,8 +59,9 @@
       align-items: center;
       justify-content: space-between;
       padding: 0.5rem;
-      background-color: #f5f5f5;
+      background-color: rgb(var(--ff-muted));
       border-radius: 4px;
+      color: rgb(var(--ff-muted-foreground));
 
       span {
         text-transform: capitalize;
@@ -64,14 +73,17 @@
   .role-check {
     p {
       margin: 0.5rem 0;
+      color: rgb(var(--ff-card-foreground));
     }
   }
 
   pre {
-    background-color: #f5f5f5;
+    background-color: rgb(var(--ff-muted));
+    color: rgb(var(--ff-muted-foreground));
     padding: 1rem;
     border-radius: 4px;
     overflow-x: auto;
+    border: 1px solid rgb(var(--ff-border));
   }
 
   mat-divider {
@@ -79,7 +91,9 @@
   }
 
   .notes-card {
-    background-color: #e3f2fd;
+    background-color: rgb(var(--ff-info) / 0.1);
+    border: 1px solid rgb(var(--ff-info) / 0.2);
+    color: rgb(var(--ff-card-foreground));
 
     ul {
       margin: 0;

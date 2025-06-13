@@ -10,7 +10,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { Observable, map, startWith } from 'rxjs';
+import { Observable } from 'rxjs';
 import { DailyProgress, MaterialUsage } from '../../models/daily-progress.model';
 import { ProjectService } from '../../../../core/services/project.service';
 import { PhaseService } from '../../../../core/services/phase.service';
@@ -33,22 +33,26 @@ import { StockService } from '../../../stock/services/stock.service';
     MatNativeDateModule,
     MatIconModule,
     MatChipsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
   ],
   template: `
     <form [formGroup]="progressForm" (ngSubmit)="onSubmit()" class="daily-progress-form">
       <mat-form-field appearance="fill">
         <mat-label>Date</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="date" required>
+        <input matInput [matDatepicker]="picker" formControlName="date" required />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>Project</mat-label>
-        <mat-select formControlName="projectId" required (selectionChange)="onProjectChange($event.value)">
+        <mat-select
+          formControlName="projectId"
+          required
+          (selectionChange)="onProjectChange($event.value)"
+        >
           <mat-option *ngFor="let project of projects$ | async" [value]="project.id">
-            {{project.name}}
+            {{ project.name }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -58,7 +62,7 @@ import { StockService } from '../../../stock/services/stock.service';
         <mat-select formControlName="phaseId" (selectionChange)="onPhaseChange($event.value)">
           <mat-option value="">None</mat-option>
           <mat-option *ngFor="let phase of phases" [value]="phase.id">
-            {{phase.name}}
+            {{ phase.name }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -68,7 +72,7 @@ import { StockService } from '../../../stock/services/stock.service';
         <mat-select formControlName="taskId">
           <mat-option value="">None</mat-option>
           <mat-option *ngFor="let task of tasks" [value]="task.id">
-            {{task.title}}
+            {{ task.title }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -85,32 +89,43 @@ import { StockService } from '../../../stock/services/stock.service';
 
       <mat-form-field appearance="fill">
         <mat-label>Hours Worked</mat-label>
-        <input matInput type="number" formControlName="hoursWorked" min="0" step="0.5" required>
+        <input matInput type="number" formControlName="hoursWorked" min="0" step="0.5" required />
       </mat-form-field>
 
       <div class="materials-section">
         <h3>Materials Used</h3>
         <div formArrayName="materialsUsed">
-          <div *ngFor="let material of materialsUsed.controls; let i=index" [formGroupName]="i" class="material-row">
+          <div
+            *ngFor="let material of materialsUsed.controls; let i = index"
+            [formGroupName]="i"
+            class="material-row"
+          >
             <mat-form-field appearance="fill">
               <mat-label>Material</mat-label>
               <mat-select formControlName="materialId" required>
                 <mat-option *ngFor="let item of stockItems$ | async" [value]="item.id">
-                  {{item.name}}
+                  {{ item.name }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            
+
             <mat-form-field appearance="fill">
               <mat-label>Quantity</mat-label>
-              <input matInput type="number" formControlName="quantity" min="0" step="0.01" required>
+              <input
+                matInput
+                type="number"
+                formControlName="quantity"
+                min="0"
+                step="0.01"
+                required
+              />
             </mat-form-field>
-            
+
             <mat-form-field appearance="fill">
               <mat-label>Unit</mat-label>
-              <input matInput formControlName="unit" required>
+              <input matInput formControlName="unit" required />
             </mat-form-field>
-            
+
             <button mat-icon-button color="warn" type="button" (click)="removeMaterial(i)">
               <mat-icon>delete</mat-icon>
             </button>
@@ -133,14 +148,14 @@ import { StockService } from '../../../stock/services/stock.service';
 
       <mat-form-field appearance="fill">
         <mat-label>Weather Conditions</mat-label>
-        <input matInput formControlName="weather">
+        <input matInput formControlName="weather" />
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>Staff Members</mat-label>
         <mat-select formControlName="staffIds" multiple required>
           <mat-option *ngFor="let staff of staff$ | async" [value]="staff.id">
-            {{staff.name}}
+            {{ staff.name }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -150,56 +165,63 @@ import { StockService } from '../../../stock/services/stock.service';
         <mat-select formControlName="contractorId">
           <mat-option value="">None</mat-option>
           <mat-option *ngFor="let contractor of contractors$ | async" [value]="contractor.id">
-            {{contractor.companyName}}
+            {{ contractor.companyName }}
           </mat-option>
         </mat-select>
       </mat-form-field>
 
       <div class="form-actions">
         <button mat-button type="button" (click)="cancel.emit()">Cancel</button>
-        <button mat-raised-button color="primary" type="submit" [disabled]="!progressForm.valid || isSubmitting">
-          {{ isSubmitting ? 'Saving...' : (progress ? 'Update' : 'Create') }}
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!progressForm.valid || isSubmitting"
+        >
+          {{ isSubmitting ? 'Saving...' : progress ? 'Update' : 'Create' }}
         </button>
       </div>
     </form>
   `,
-  styles: [`
-    .daily-progress-form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      padding: 16px;
-    }
+  styles: [
+    `
+      .daily-progress-form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+      }
 
-    .materials-section {
-      margin: 16px 0;
-      padding: 16px;
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
-    }
+      .materials-section {
+        margin: 16px 0;
+        padding: 16px;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+      }
 
-    .material-row {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      margin-bottom: 16px;
-    }
+      .material-row {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        margin-bottom: 16px;
+      }
 
-    .material-row mat-form-field {
-      flex: 1;
-    }
+      .material-row mat-form-field {
+        flex: 1;
+      }
 
-    .form-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 16px;
-      margin-top: 24px;
-    }
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+        margin-top: 24px;
+      }
 
-    mat-form-field {
-      width: 100%;
-    }
-  `]
+      mat-form-field {
+        width: 100%;
+      }
+    `,
+  ],
 })
 export class DailyProgressFormComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -239,7 +261,7 @@ export class DailyProgressFormComponent implements OnInit {
       weather: [''],
       staffIds: [[], Validators.required],
       contractorId: [''],
-      status: ['draft']
+      status: ['draft'],
     });
   }
 
@@ -247,15 +269,16 @@ export class DailyProgressFormComponent implements OnInit {
     if (this.progress) {
       this.progressForm.patchValue({
         ...this.progress,
-        date: this.progress.date instanceof Date ? this.progress.date : new Date(this.progress.date)
+        date:
+          this.progress.date instanceof Date ? this.progress.date : new Date(this.progress.date),
       });
-      
+
       if (this.progress.materialsUsed) {
-        this.progress.materialsUsed.forEach(material => {
+        this.progress.materialsUsed.forEach((material) => {
           this.addMaterial(material);
         });
       }
-      
+
       if (this.progress.projectId) {
         this.onProjectChange(this.progress.projectId);
       }
@@ -271,7 +294,7 @@ export class DailyProgressFormComponent implements OnInit {
       materialId: [material?.materialId || '', Validators.required],
       materialName: [material?.materialName || ''],
       quantity: [material?.quantity || 0, [Validators.required, Validators.min(0)]],
-      unit: [material?.unit || '', Validators.required]
+      unit: [material?.unit || '', Validators.required],
     });
     this.materialsUsed.push(materialGroup);
   }
@@ -298,20 +321,20 @@ export class DailyProgressFormComponent implements OnInit {
     if (this.progressForm.valid && !this.isSubmitting) {
       this.isSubmitting = true;
       const formValue = this.progressForm.value;
-      
+
       // Add material names
       const materialsWithNames = formValue.materialsUsed.map((material: any) => {
         return {
           ...material,
-          materialName: material.materialName || ''
+          materialName: material.materialName || '',
         };
       });
-      
+
       const progressData: Partial<DailyProgress> = {
         ...formValue,
-        materialsUsed: materialsWithNames
+        materialsUsed: materialsWithNames,
       };
-      
+
       this.save.emit(progressData);
     }
   }

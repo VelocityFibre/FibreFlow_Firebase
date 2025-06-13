@@ -12,7 +12,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
-import { Observable, map, startWith, switchMap, combineLatest } from 'rxjs';
+import { Observable, map, startWith, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { ClientService } from '../../services/client.service';
@@ -34,7 +34,7 @@ import { Client, ClientType, ClientStatus } from '../../models/client.model';
     MatChipsModule,
     MatBadgeModule,
     MatTooltipModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   template: `
     <div class="clients-container">
@@ -55,7 +55,11 @@ import { Client, ClientType, ClientStatus } from '../../models/client.model';
         <mat-form-field appearance="outline" class="search-field">
           <mat-label>Search clients</mat-label>
           <mat-icon matPrefix>search</mat-icon>
-          <input matInput [formControl]="searchControl" placeholder="Search by name, contact, or industry...">
+          <input
+            matInput
+            [formControl]="searchControl"
+            placeholder="Search by name, contact, or industry..."
+          />
         </mat-form-field>
       </div>
 
@@ -116,10 +120,12 @@ import { Client, ClientType, ClientStatus } from '../../models/client.model';
 
       <!-- Clients Grid -->
       <div class="clients-grid" *ngIf="filteredClients$ | async as clients; else loading">
-        <mat-card *ngFor="let client of clients" 
-                  class="client-card ff-card-clients" 
-                  [routerLink]="['/clients', client.id]"
-                  matRipple>
+        <mat-card
+          *ngFor="let client of clients"
+          class="client-card ff-card-clients"
+          [routerLink]="['/clients', client.id]"
+          matRipple
+        >
           <mat-card-header>
             <div class="card-header-content">
               <div class="client-info">
@@ -177,8 +183,19 @@ import { Client, ClientType, ClientStatus } from '../../models/client.model';
         <div *ngIf="clients.length === 0" class="empty-state">
           <mat-icon class="empty-icon">business_off</mat-icon>
           <h2>No clients found</h2>
-          <p>{{ searchControl.value ? 'Try adjusting your search criteria' : 'Add your first client to get started' }}</p>
-          <a mat-raised-button color="primary" routerLink="/clients/new" *ngIf="!searchControl.value">
+          <p>
+            {{
+              searchControl.value
+                ? 'Try adjusting your search criteria'
+                : 'Add your first client to get started'
+            }}
+          </p>
+          <a
+            mat-raised-button
+            color="primary"
+            routerLink="/clients/new"
+            *ngIf="!searchControl.value"
+          >
             <mat-icon>add</mat-icon>
             Add Your First Client
           </a>
@@ -194,343 +211,345 @@ import { Client, ClientType, ClientStatus } from '../../models/client.model';
       </ng-template>
     </div>
   `,
-  styles: [`
-    .clients-container {
-      padding: 24px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 32px;
-    }
-
-    .header-content {
-      flex: 1;
-    }
-
-    .page-title {
-      font-size: 32px;
-      font-weight: 500;
-      margin: 0;
-      color: var(--mat-sys-on-surface);
-    }
-
-    .page-subtitle {
-      color: var(--mat-sys-on-surface-variant);
-      margin-top: 4px;
-    }
-
-    .search-section {
-      margin-bottom: 24px;
-    }
-
-    .search-field {
-      width: 100%;
-      max-width: 500px;
-    }
-
-    /* Stats Grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-
-    .stat-card {
-      mat-card-content {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-      }
-    }
-
-    .stat-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: rgba(59, 130, 246, 0.1);
-      color: #3b82f6;
-      flex-shrink: 0;
-
-      mat-icon {
-        font-size: 28px;
-        width: 28px;
-        height: 28px;
-      }
-
-      &.currency {
-        background-color: rgba(34, 197, 94, 0.1);
-        color: #22c55e;
-      }
-
-      &.projects {
-        background-color: rgba(245, 158, 11, 0.1);
-        color: #f59e0b;
-      }
-
-      &.enterprise {
-        background-color: rgba(139, 92, 246, 0.1);
-        color: #8b5cf6;
-      }
-    }
-
-    .stat-content {
-      flex: 1;
-
-      h3 {
-        font-size: 14px;
-        font-weight: 500;
-        color: var(--mat-sys-on-surface-variant);
-        margin: 0 0 4px 0;
-      }
-    }
-
-    .stat-value {
-      font-size: 28px;
-      font-weight: 600;
-      color: var(--mat-sys-on-surface);
-      line-height: 1.2;
-    }
-
-    .stat-subtitle {
-      font-size: 12px;
-      color: var(--mat-sys-on-surface-variant);
-      margin-top: 4px;
-    }
-
-    /* Clients Grid */
-    .clients-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-      gap: 24px;
-    }
-
-    .client-card {
-      cursor: pointer;
-      transition: all 0.2s ease;
-
-      &:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--mat-sys-elevation-4);
-      }
-    }
-
-    .card-header-content {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-    }
-
-    .client-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    mat-card-title {
-      font-size: 18px;
-      font-weight: 500;
-      color: var(--mat-sys-on-surface);
-      margin-bottom: 4px;
-    }
-
-    mat-card-subtitle {
-      color: var(--mat-sys-on-surface-variant);
-    }
-
-    .header-badges {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 8px;
-    }
-
-    mat-chip {
-      font-size: 12px !important;
-
-      &.type-Enterprise {
-        background-color: rgba(59, 130, 246, 0.1);
-        color: #3b82f6;
-      }
-
-      &.type-SMB {
-        background-color: rgba(139, 92, 246, 0.1);
-        color: #8b5cf6;
-      }
-
-      &.type-Residential {
-        background-color: rgba(34, 197, 94, 0.1);
-        color: #22c55e;
-      }
-    }
-
-    .status-indicator {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-
-      &.status-Active {
-        background-color: #22c55e;
-      }
-
-      &.status-Inactive {
-        background-color: #6b7280;
-      }
-
-      &.status-Pending {
-        background-color: #f59e0b;
-      }
-    }
-
-    .status-text {
-      font-size: 12px;
-      color: var(--mat-sys-on-surface-variant);
-    }
-
-    .contact-info {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-
-    .info-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 14px;
-      color: var(--mat-sys-on-surface-variant);
-    }
-
-    .info-icon {
-      font-size: 16px !important;
-      width: 16px !important;
-      height: 16px !important;
-      color: var(--mat-sys-on-surface-variant);
-    }
-
-    .content-divider {
-      margin: 16px 0;
-    }
-
-    .metrics-section {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .metric {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-    }
-
-    .metric-label {
-      color: var(--mat-sys-on-surface-variant);
-    }
-
-    .metric-value {
-      font-weight: 500;
-      color: var(--mat-sys-on-surface);
-    }
-
-    /* Empty State */
-    .empty-state {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 80px 32px;
-      background: var(--mat-sys-surface-variant);
-      border-radius: 12px;
-      border: 2px dashed var(--mat-sys-outline-variant);
-    }
-
-    .empty-icon {
-      font-size: 64px !important;
-      width: 64px !important;
-      height: 64px !important;
-      color: var(--mat-sys-on-surface-variant);
-      margin-bottom: 16px;
-    }
-
-    .empty-state h2 {
-      font-size: 24px;
-      font-weight: 500;
-      color: var(--mat-sys-on-surface);
-      margin: 0 0 8px 0;
-    }
-
-    .empty-state p {
-      font-size: 16px;
-      color: var(--mat-sys-on-surface-variant);
-      margin: 0 0 24px 0;
-    }
-
-    /* Loading State */
-    .loading-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 80px;
-      gap: 16px;
-
-      p {
-        color: var(--mat-sys-on-surface-variant);
-      }
-    }
-
-    /* Responsive */
-    @media (max-width: 1200px) {
-      .clients-grid {
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      }
-    }
-
-    @media (max-width: 768px) {
+  styles: [
+    `
       .clients-container {
-        padding: 16px;
+        padding: 24px;
+        max-width: 1400px;
+        margin: 0 auto;
       }
 
       .page-header {
-        flex-direction: column;
-        gap: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 32px;
       }
 
+      .header-content {
+        flex: 1;
+      }
+
+      .page-title {
+        font-size: 32px;
+        font-weight: 500;
+        margin: 0;
+        color: var(--mat-sys-on-surface);
+      }
+
+      .page-subtitle {
+        color: var(--mat-sys-on-surface-variant);
+        margin-top: 4px;
+      }
+
+      .search-section {
+        margin-bottom: 24px;
+      }
+
+      .search-field {
+        width: 100%;
+        max-width: 500px;
+      }
+
+      /* Stats Grid */
       .stats-grid {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+        margin-bottom: 32px;
       }
 
+      .stat-card {
+        mat-card-content {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+      }
+
+      .stat-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+        flex-shrink: 0;
+
+        mat-icon {
+          font-size: 28px;
+          width: 28px;
+          height: 28px;
+        }
+
+        &.currency {
+          background-color: rgba(34, 197, 94, 0.1);
+          color: #22c55e;
+        }
+
+        &.projects {
+          background-color: rgba(245, 158, 11, 0.1);
+          color: #f59e0b;
+        }
+
+        &.enterprise {
+          background-color: rgba(139, 92, 246, 0.1);
+          color: #8b5cf6;
+        }
+      }
+
+      .stat-content {
+        flex: 1;
+
+        h3 {
+          font-size: 14px;
+          font-weight: 500;
+          color: var(--mat-sys-on-surface-variant);
+          margin: 0 0 4px 0;
+        }
+      }
+
+      .stat-value {
+        font-size: 28px;
+        font-weight: 600;
+        color: var(--mat-sys-on-surface);
+        line-height: 1.2;
+      }
+
+      .stat-subtitle {
+        font-size: 12px;
+        color: var(--mat-sys-on-surface-variant);
+        margin-top: 4px;
+      }
+
+      /* Clients Grid */
       .clients-grid {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 24px;
+      }
+
+      .client-card {
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          transform: translateY(-4px);
+          box-shadow: var(--mat-sys-elevation-4);
+        }
       }
 
       .card-header-content {
-        flex-direction: column;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
         align-items: flex-start;
+        gap: 16px;
+      }
+
+      .client-info {
+        flex: 1;
+        min-width: 0;
+      }
+
+      mat-card-title {
+        font-size: 18px;
+        font-weight: 500;
+        color: var(--mat-sys-on-surface);
+        margin-bottom: 4px;
+      }
+
+      mat-card-subtitle {
+        color: var(--mat-sys-on-surface-variant);
       }
 
       .header-badges {
-        flex-direction: row;
-        align-items: center;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
       }
-    }
-  `]
+
+      mat-chip {
+        font-size: 12px !important;
+
+        &.type-Enterprise {
+          background-color: rgba(59, 130, 246, 0.1);
+          color: #3b82f6;
+        }
+
+        &.type-SMB {
+          background-color: rgba(139, 92, 246, 0.1);
+          color: #8b5cf6;
+        }
+
+        &.type-Residential {
+          background-color: rgba(34, 197, 94, 0.1);
+          color: #22c55e;
+        }
+      }
+
+      .status-indicator {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+
+        &.status-Active {
+          background-color: #22c55e;
+        }
+
+        &.status-Inactive {
+          background-color: #6b7280;
+        }
+
+        &.status-Pending {
+          background-color: #f59e0b;
+        }
+      }
+
+      .status-text {
+        font-size: 12px;
+        color: var(--mat-sys-on-surface-variant);
+      }
+
+      .contact-info {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .info-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: var(--mat-sys-on-surface-variant);
+      }
+
+      .info-icon {
+        font-size: 16px !important;
+        width: 16px !important;
+        height: 16px !important;
+        color: var(--mat-sys-on-surface-variant);
+      }
+
+      .content-divider {
+        margin: 16px 0;
+      }
+
+      .metrics-section {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .metric {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+      }
+
+      .metric-label {
+        color: var(--mat-sys-on-surface-variant);
+      }
+
+      .metric-value {
+        font-weight: 500;
+        color: var(--mat-sys-on-surface);
+      }
+
+      /* Empty State */
+      .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 80px 32px;
+        background: var(--mat-sys-surface-variant);
+        border-radius: 12px;
+        border: 2px dashed var(--mat-sys-outline-variant);
+      }
+
+      .empty-icon {
+        font-size: 64px !important;
+        width: 64px !important;
+        height: 64px !important;
+        color: var(--mat-sys-on-surface-variant);
+        margin-bottom: 16px;
+      }
+
+      .empty-state h2 {
+        font-size: 24px;
+        font-weight: 500;
+        color: var(--mat-sys-on-surface);
+        margin: 0 0 8px 0;
+      }
+
+      .empty-state p {
+        font-size: 16px;
+        color: var(--mat-sys-on-surface-variant);
+        margin: 0 0 24px 0;
+      }
+
+      /* Loading State */
+      .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 80px;
+        gap: 16px;
+
+        p {
+          color: var(--mat-sys-on-surface-variant);
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 1200px) {
+        .clients-grid {
+          grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        }
+      }
+
+      @media (max-width: 768px) {
+        .clients-container {
+          padding: 16px;
+        }
+
+        .page-header {
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .clients-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .card-header-content {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .header-badges {
+          flex-direction: row;
+          align-items: center;
+        }
+      }
+    `,
+  ],
 })
 export class ClientListComponent implements OnInit {
   private clientService = inject(ClientService);
@@ -542,32 +561,33 @@ export class ClientListComponent implements OnInit {
 
   ngOnInit() {
     this.clients$ = this.clientService.getClients();
-    
+
     this.filteredClients$ = combineLatest([
       this.clients$,
       this.searchControl.valueChanges.pipe(
         startWith(''),
         debounceTime(300),
-        distinctUntilChanged()
-      )
+        distinctUntilChanged(),
+      ),
     ]).pipe(
       map(([clients, searchTerm]) => {
         if (!searchTerm) return clients;
-        
+
         const term = searchTerm.toLowerCase();
-        return clients.filter(client =>
-          client.name.toLowerCase().includes(term) ||
-          client.contactPerson.toLowerCase().includes(term) ||
-          client.email.toLowerCase().includes(term) ||
-          (client.industry && client.industry.toLowerCase().includes(term))
+        return clients.filter(
+          (client) =>
+            client.name.toLowerCase().includes(term) ||
+            client.contactPerson.toLowerCase().includes(term) ||
+            client.email.toLowerCase().includes(term) ||
+            (client.industry && client.industry.toLowerCase().includes(term)),
         );
-      })
+      }),
     );
   }
 
   // Stats calculations
   getActiveCount(clients: Client[]): number {
-    return clients.filter(c => c.status === 'Active').length;
+    return clients.filter((c) => c.status === 'Active').length;
   }
 
   getTotalValue(clients: Client[]): number {
@@ -579,7 +599,7 @@ export class ClientListComponent implements OnInit {
   }
 
   getEnterpriseCount(clients: Client[]): number {
-    return clients.filter(c => c.clientType === 'Enterprise').length;
+    return clients.filter((c) => c.clientType === 'Enterprise').length;
   }
 
   // Formatting helpers
@@ -588,7 +608,7 @@ export class ClientListComponent implements OnInit {
       style: 'currency',
       currency: 'ZAR',
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0
+      maximumFractionDigits: 0,
     }).format(amount);
   }
 

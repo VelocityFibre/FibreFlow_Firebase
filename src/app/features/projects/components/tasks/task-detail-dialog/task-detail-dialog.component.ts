@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
@@ -41,18 +41,18 @@ interface DialogData {
     MatButtonModule,
     MatIconModule,
     MatSliderModule,
-    MatChipsModule
+    MatChipsModule,
   ],
   template: `
     <h2 mat-dialog-title>
       {{ getDialogTitle() }}
     </h2>
-    
+
     <mat-dialog-content>
       <form [formGroup]="taskForm" class="task-form">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Task Name</mat-label>
-          <input matInput formControlName="name" [readonly]="isViewMode">
+          <input matInput formControlName="name" [readonly]="isViewMode" />
           <mat-error *ngIf="taskForm.get('name')?.hasError('required')">
             Task name is required
           </mat-error>
@@ -60,7 +60,12 @@ interface DialogData {
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Description</mat-label>
-          <textarea matInput formControlName="description" rows="3" [readonly]="isViewMode"></textarea>
+          <textarea
+            matInput
+            formControlName="description"
+            rows="3"
+            [readonly]="isViewMode"
+          ></textarea>
         </mat-form-field>
 
         <div class="form-row">
@@ -112,15 +117,33 @@ interface DialogData {
         <div class="form-row">
           <mat-form-field appearance="outline">
             <mat-label>Start Date</mat-label>
-            <input matInput [matDatepicker]="startPicker" formControlName="startDate" [readonly]="isViewMode">
-            <mat-datepicker-toggle matSuffix [for]="startPicker" [disabled]="isViewMode"></mat-datepicker-toggle>
+            <input
+              matInput
+              [matDatepicker]="startPicker"
+              formControlName="startDate"
+              [readonly]="isViewMode"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="startPicker"
+              [disabled]="isViewMode"
+            ></mat-datepicker-toggle>
             <mat-datepicker #startPicker></mat-datepicker>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Due Date</mat-label>
-            <input matInput [matDatepicker]="duePicker" formControlName="dueDate" [readonly]="isViewMode">
-            <mat-datepicker-toggle matSuffix [for]="duePicker" [disabled]="isViewMode"></mat-datepicker-toggle>
+            <input
+              matInput
+              [matDatepicker]="duePicker"
+              formControlName="dueDate"
+              [readonly]="isViewMode"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="duePicker"
+              [disabled]="isViewMode"
+            ></mat-datepicker-toggle>
             <mat-datepicker #duePicker></mat-datepicker>
           </mat-form-field>
         </div>
@@ -128,25 +151,34 @@ interface DialogData {
         <div class="form-row">
           <mat-form-field appearance="outline">
             <mat-label>Estimated Hours</mat-label>
-            <input matInput type="number" formControlName="estimatedHours" [readonly]="isViewMode">
+            <input
+              matInput
+              type="number"
+              formControlName="estimatedHours"
+              [readonly]="isViewMode"
+            />
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Actual Hours</mat-label>
-            <input matInput type="number" formControlName="actualHours" [readonly]="isViewMode">
+            <input matInput type="number" formControlName="actualHours" [readonly]="isViewMode" />
           </mat-form-field>
         </div>
 
         <div class="progress-section">
-          <label>Completion Progress: {{ taskForm.get('completionPercentage')?.value }}%</label>
+          <label for="completion-slider"
+            >Completion Progress: {{ taskForm.get('completionPercentage')?.value }}%</label
+          >
           <mat-slider
+            id="completion-slider"
             [min]="0"
             [max]="100"
             [step]="5"
             [discrete]="true"
             [displayWith]="formatLabel"
-            [disabled]="isViewMode">
-            <input matSliderThumb formControlName="completionPercentage">
+            [disabled]="isViewMode"
+          >
+            <input matSliderThumb formControlName="completionPercentage" />
           </mat-slider>
         </div>
 
@@ -161,80 +193,82 @@ interface DialogData {
       <button mat-button (click)="onCancel()">
         {{ isViewMode ? 'Close' : 'Cancel' }}
       </button>
-      <button 
-        mat-raised-button 
-        color="primary" 
+      <button
+        mat-raised-button
+        color="primary"
         (click)="onSave()"
         *ngIf="!isViewMode"
-        [disabled]="!taskForm.valid || isLoading">
+        [disabled]="!taskForm.valid || isLoading"
+      >
         {{ isLoading ? 'Saving...' : 'Save' }}
       </button>
     </mat-dialog-actions>
   `,
-  styles: [`
-    .task-form {
-      min-width: 500px;
-      padding: 16px 0;
-    }
-
-    .full-width {
-      width: 100%;
-    }
-
-    .form-row {
-      display: flex;
-      gap: 16px;
-      
-      mat-form-field {
-        flex: 1;
+  styles: [
+    `
+      .task-form {
+        min-width: 500px;
+        padding: 16px 0;
       }
-    }
 
-    .progress-section {
-      margin: 16px 0;
-      
-      label {
-        display: block;
-        margin-bottom: 8px;
-        color: rgba(0, 0, 0, 0.6);
-        font-size: 14px;
-      }
-      
-      mat-slider {
+      .full-width {
         width: 100%;
       }
-    }
 
-    @media (max-width: 600px) {
       .form-row {
-        flex-direction: column;
+        display: flex;
+        gap: 16px;
+
+        mat-form-field {
+          flex: 1;
+        }
       }
-      
-      .task-form {
-        min-width: auto;
+
+      .progress-section {
+        margin: 16px 0;
+
+        label {
+          display: block;
+          margin-bottom: 8px;
+          color: rgba(0, 0, 0, 0.6);
+          font-size: 14px;
+        }
+
+        mat-slider {
+          width: 100%;
+        }
       }
-    }
-  `]
+
+      @media (max-width: 600px) {
+        .form-row {
+          flex-direction: column;
+        }
+
+        .task-form {
+          min-width: auto;
+        }
+      }
+    `,
+  ],
 })
 export class TaskDetailDialogComponent implements OnInit {
   private fb = inject(FormBuilder);
   private taskService = inject(TaskService);
   private phaseService = inject(PhaseService);
   private staffService = inject(StaffService);
-  
+  public dialogRef = inject(MatDialogRef<TaskDetailDialogComponent>);
+  public data = inject(MAT_DIALOG_DATA) as DialogData;
+
   taskForm!: FormGroup;
   phases$!: Observable<Phase[]>;
   staffMembers$!: Observable<StaffMember[]>;
   isLoading = false;
-  
+
   get isViewMode(): boolean {
     return this.data.mode === 'view';
   }
 
-  constructor(
-    public dialogRef: MatDialogRef<TaskDetailDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) {
+  constructor() {
     this.initializeForm();
   }
 
@@ -243,7 +277,7 @@ export class TaskDetailDialogComponent implements OnInit {
       this.phases$ = this.phaseService.getProjectPhases(this.data.projectId);
     }
     this.staffMembers$ = this.staffService.getStaff();
-    
+
     if (this.data.task) {
       this.taskForm.patchValue(this.data.task);
     } else if (this.data.phaseId) {
@@ -264,7 +298,7 @@ export class TaskDetailDialogComponent implements OnInit {
       estimatedHours: [null, [Validators.min(0)]],
       actualHours: [null, [Validators.min(0)]],
       completionPercentage: [0, [Validators.min(0), Validators.max(100)]],
-      notes: ['']
+      notes: [''],
     });
   }
 
@@ -300,13 +334,13 @@ export class TaskDetailDialogComponent implements OnInit {
         const newTask: Omit<Task, 'id'> = {
           ...formValue,
           projectId: this.data.projectId,
-          orderNo: Date.now() // Simple ordering for now
+          orderNo: Date.now(), // Simple ordering for now
         };
         await this.taskService.createTask(newTask);
       } else if (this.data.mode === 'edit' && this.data.task?.id) {
         await this.taskService.updateTask(this.data.task.id, formValue);
       }
-      
+
       this.dialogRef.close(true);
     } catch (error) {
       console.error('Error saving task:', error);

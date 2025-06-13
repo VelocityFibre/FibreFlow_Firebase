@@ -8,7 +8,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTableModule } from '@angular/material/table';
-import { Task, TaskStatus, TaskPriority } from '../../../../core/models/task.model';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { Task, TaskStatus } from '../../../../core/models/task.model';
 
 @Component({
   selector: 'app-task-list',
@@ -22,111 +23,115 @@ import { Task, TaskStatus, TaskPriority } from '../../../../core/models/task.mod
     MatMenuModule,
     MatBadgeModule,
     MatTooltipModule,
-    MatTableModule
+    MatTableModule,
+    ScrollingModule,
   ],
   template: `
     <div class="task-list">
       <ng-container *ngIf="tasks && tasks.length > 0; else noTasks">
-        
         <!-- Card View -->
         <div class="grid" *ngIf="viewMode === 'card'">
-          <mat-card 
-            *ngFor="let task of tasks" 
-            class="task-card"
-            [class.completed]="showCompleted"
-            [class.due-today]="highlightDueToday && isDueToday(task)"
-            [class.project-phase]="showProjectPhase"
-            (click)="taskClick.emit(task)">
-            
-            <mat-card-header>
-              <mat-card-title class="task-title">
-                <mat-icon *ngIf="showProjectPhase" class="phase-icon">timeline</mat-icon>
-                {{ task.name }}
-              </mat-card-title>
-              <mat-card-subtitle>{{ task.projectId }}</mat-card-subtitle>
-            </mat-card-header>
+          <cdk-virtual-scroll-viewport itemSize="280" class="task-viewport">
+            <mat-card
+              *cdkVirtualFor="let task of tasks; trackBy: trackByTaskFn"
+              class="task-card"
+              [class.completed]="showCompleted"
+              [class.due-today]="highlightDueToday && isDueToday(task)"
+              [class.project-phase]="showProjectPhase"
+              (click)="taskClick.emit(task)"
+            >
+              <mat-card-header>
+                <mat-card-title class="task-title">
+                  <mat-icon *ngIf="showProjectPhase" class="phase-icon">timeline</mat-icon>
+                  {{ task.name }}
+                </mat-card-title>
+                <mat-card-subtitle>{{ task.projectId }}</mat-card-subtitle>
+              </mat-card-header>
 
-            <mat-card-content>
-              <p class="task-description" *ngIf="task.description">
-                {{ task.description }}
-              </p>
+              <mat-card-content>
+                <p class="task-description" *ngIf="task.description">
+                  {{ task.description }}
+                </p>
 
-              <!-- Task Details -->
-              <div class="task-details">
-                <div class="detail-item" *ngIf="task.assignedToName">
-                  <mat-icon>person</mat-icon>
-                  <span>{{ task.assignedToName }}</span>
+                <!-- Task Details -->
+                <div class="task-details">
+                  <div class="detail-item" *ngIf="task.assignedToName">
+                    <mat-icon>person</mat-icon>
+                    <span>{{ task.assignedToName }}</span>
+                  </div>
+
+                  <div class="detail-item" *ngIf="task.dueDate" [class.overdue]="isOverdue(task)">
+                    <mat-icon>calendar_today</mat-icon>
+                    <span>{{ formatDueDate(task.dueDate) }}</span>
+                  </div>
+
+                  <div class="detail-item" *ngIf="task.estimatedHours">
+                    <mat-icon>schedule</mat-icon>
+                    <span>{{ task.estimatedHours }}h estimated</span>
+                  </div>
+
+                  <div class="detail-item" *ngIf="task.completionPercentage > 0">
+                    <mat-icon>donut_large</mat-icon>
+                    <span>{{ task.completionPercentage }}% complete</span>
+                  </div>
                 </div>
-                
-                <div class="detail-item" *ngIf="task.dueDate" [class.overdue]="isOverdue(task)">
-                  <mat-icon>calendar_today</mat-icon>
-                  <span>{{ formatDueDate(task.dueDate) }}</span>
+
+                <!-- Tags -->
+                <div class="task-tags">
+                  <mat-chip-set>
+                    <mat-chip [ngClass]="'priority-' + task.priority">
+                      {{ formatPriority(task.priority) }}
+                    </mat-chip>
+                    <mat-chip [ngClass]="'status-' + task.status">
+                      <mat-icon class="status-icon">{{ getStatusIcon(task.status) }}</mat-icon>
+                      {{ formatStatus(task.status) }}
+                    </mat-chip>
+                  </mat-chip-set>
                 </div>
+              </mat-card-content>
 
-                <div class="detail-item" *ngIf="task.estimatedHours">
-                  <mat-icon>schedule</mat-icon>
-                  <span>{{ task.estimatedHours }}h estimated</span>
-                </div>
-
-                <div class="detail-item" *ngIf="task.completionPercentage > 0">
-                  <mat-icon>donut_large</mat-icon>
-                  <span>{{ task.completionPercentage }}% complete</span>
-                </div>
-              </div>
-
-              <!-- Tags -->
-              <div class="task-tags">
-                <mat-chip-set>
-                  <mat-chip [ngClass]="'priority-' + task.priority">
-                    {{ formatPriority(task.priority) }}
-                  </mat-chip>
-                  <mat-chip [ngClass]="'status-' + task.status">
-                    <mat-icon class="status-icon">{{ getStatusIcon(task.status) }}</mat-icon>
-                    {{ formatStatus(task.status) }}
-                  </mat-chip>
-                </mat-chip-set>
-              </div>
-            </mat-card-content>
-
-            <!-- Actions -->
-            <mat-card-actions align="end">
-              <button 
-                mat-icon-button 
-                [matMenuTriggerFor]="menu"
-                (click)="$event.stopPropagation()">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu">
-                <button 
-                  mat-menu-item 
-                  (click)="changeStatus(task, TaskStatus.PENDING)"
-                  [disabled]="task.status === TaskStatus.PENDING">
-                  <mat-icon>schedule</mat-icon>
-                  <span>Mark as Pending</span>
+              <!-- Actions -->
+              <mat-card-actions align="end">
+                <button
+                  mat-icon-button
+                  [matMenuTriggerFor]="menu"
+                  (click)="$event.stopPropagation()"
+                >
+                  <mat-icon>more_vert</mat-icon>
                 </button>
-                <button 
-                  mat-menu-item 
-                  (click)="changeStatus(task, TaskStatus.IN_PROGRESS)"
-                  [disabled]="task.status === TaskStatus.IN_PROGRESS">
-                  <mat-icon>play_circle</mat-icon>
-                  <span>Mark as In Progress</span>
-                </button>
-                <button 
-                  mat-menu-item 
-                  (click)="changeStatus(task, TaskStatus.COMPLETED)"
-                  [disabled]="task.status === TaskStatus.COMPLETED">
-                  <mat-icon>check_circle</mat-icon>
-                  <span>Mark as Completed</span>
-                </button>
-                <button 
-                  mat-menu-item 
-                  (click)="changeStatus(task, TaskStatus.BLOCKED)">
-                  <mat-icon>block</mat-icon>
-                  <span>Mark as Blocked</span>
-                </button>
-              </mat-menu>
-            </mat-card-actions>
-          </mat-card>
+                <mat-menu #menu="matMenu">
+                  <button
+                    mat-menu-item
+                    (click)="changeStatus(task, TaskStatus.PENDING)"
+                    [disabled]="task.status === TaskStatus.PENDING"
+                  >
+                    <mat-icon>schedule</mat-icon>
+                    <span>Mark as Pending</span>
+                  </button>
+                  <button
+                    mat-menu-item
+                    (click)="changeStatus(task, TaskStatus.IN_PROGRESS)"
+                    [disabled]="task.status === TaskStatus.IN_PROGRESS"
+                  >
+                    <mat-icon>play_circle</mat-icon>
+                    <span>Mark as In Progress</span>
+                  </button>
+                  <button
+                    mat-menu-item
+                    (click)="changeStatus(task, TaskStatus.COMPLETED)"
+                    [disabled]="task.status === TaskStatus.COMPLETED"
+                  >
+                    <mat-icon>check_circle</mat-icon>
+                    <span>Mark as Completed</span>
+                  </button>
+                  <button mat-menu-item (click)="changeStatus(task, TaskStatus.BLOCKED)">
+                    <mat-icon>block</mat-icon>
+                    <span>Mark as Blocked</span>
+                  </button>
+                </mat-menu>
+              </mat-card-actions>
+            </mat-card>
+          </cdk-virtual-scroll-viewport>
         </div>
 
         <!-- List View -->
@@ -138,7 +143,9 @@ import { Task, TaskStatus, TaskPriority } from '../../../../core/models/task.mod
               <td mat-cell *matCellDef="let task" (click)="taskClick.emit(task)" class="clickable">
                 <div class="task-name-cell">
                   <mat-icon *ngIf="showProjectPhase" class="phase-icon">timeline</mat-icon>
-                  <span [class.completed]="task.status === TaskStatus.COMPLETED">{{ task.name }}</span>
+                  <span [class.completed]="task.status === TaskStatus.COMPLETED">{{
+                    task.name
+                  }}</span>
                 </div>
               </td>
             </ng-container>
@@ -202,37 +209,39 @@ import { Task, TaskStatus, TaskPriority } from '../../../../core/models/task.mod
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let task">
-                <button 
-                  mat-icon-button 
+                <button
+                  mat-icon-button
                   [matMenuTriggerFor]="menu"
-                  (click)="$event.stopPropagation()">
+                  (click)="$event.stopPropagation()"
+                >
                   <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                  <button 
-                    mat-menu-item 
+                  <button
+                    mat-menu-item
                     (click)="changeStatus(task, TaskStatus.PENDING)"
-                    [disabled]="task.status === TaskStatus.PENDING">
+                    [disabled]="task.status === TaskStatus.PENDING"
+                  >
                     <mat-icon>schedule</mat-icon>
                     <span>Mark as Pending</span>
                   </button>
-                  <button 
-                    mat-menu-item 
+                  <button
+                    mat-menu-item
                     (click)="changeStatus(task, TaskStatus.IN_PROGRESS)"
-                    [disabled]="task.status === TaskStatus.IN_PROGRESS">
+                    [disabled]="task.status === TaskStatus.IN_PROGRESS"
+                  >
                     <mat-icon>play_circle</mat-icon>
                     <span>Mark as In Progress</span>
                   </button>
-                  <button 
-                    mat-menu-item 
+                  <button
+                    mat-menu-item
                     (click)="changeStatus(task, TaskStatus.COMPLETED)"
-                    [disabled]="task.status === TaskStatus.COMPLETED">
+                    [disabled]="task.status === TaskStatus.COMPLETED"
+                  >
                     <mat-icon>check_circle</mat-icon>
                     <span>Mark as Completed</span>
                   </button>
-                  <button 
-                    mat-menu-item 
-                    (click)="changeStatus(task, TaskStatus.BLOCKED)">
+                  <button mat-menu-item (click)="changeStatus(task, TaskStatus.BLOCKED)">
                     <mat-icon>block</mat-icon>
                     <span>Mark as Blocked</span>
                   </button>
@@ -241,9 +250,12 @@ import { Task, TaskStatus, TaskPriority } from '../../../../core/models/task.mod
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-                [class.completed-row]="row.status === TaskStatus.COMPLETED"
-                [class.due-today-row]="highlightDueToday && isDueToday(row)"></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns"
+              [class.completed-row]="row.status === TaskStatus.COMPLETED"
+              [class.due-today-row]="highlightDueToday && isDueToday(row)"
+            ></tr>
           </table>
         </div>
       </ng-container>
@@ -260,263 +272,272 @@ import { Task, TaskStatus, TaskPriority } from '../../../../core/models/task.mod
       </ng-template>
     </div>
   `,
-  styles: [`
-    .task-list {
-      width: 100%;
-    }
+  styles: [
+    `
+      .task-list {
+        width: 100%;
+      }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 20px;
-    }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 20px;
+      }
 
-    .task-card {
-      cursor: pointer;
-      transition: all 0.2s ease;
-      position: relative;
-      overflow: hidden;
-    }
+      .task-viewport {
+        height: 600px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 20px;
+      }
 
-    .task-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
+      .task-card {
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+        overflow: hidden;
+      }
 
-    .task-card.completed {
-      opacity: 0.7;
-    }
+      .task-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
 
-    .task-card.completed .task-title {
-      text-decoration: line-through;
-    }
+      .task-card.completed {
+        opacity: 0.7;
+      }
 
-    .task-card.due-today {
-      border: 2px solid #ff9800;
-    }
+      .task-card.completed .task-title {
+        text-decoration: line-through;
+      }
 
-    .task-card.project-phase {
-      border: 2px solid #60a5fa;
-    }
+      .task-card.due-today {
+        border: 2px solid #ff9800;
+      }
 
-    .phase-icon {
-      color: #2196f3;
-      margin-right: 8px;
-    }
+      .task-card.project-phase {
+        border: 2px solid #60a5fa;
+      }
 
-    .task-title {
-      font-size: 18px;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-    }
+      .phase-icon {
+        color: #2196f3;
+        margin-right: 8px;
+      }
 
-    .task-description {
-      color: #666;
-      margin: 12px 0;
-      line-height: 1.5;
-    }
+      .task-title {
+        font-size: 18px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+      }
 
-    .task-details {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin: 16px 0;
-    }
+      .task-description {
+        color: #666;
+        margin: 12px 0;
+        line-height: 1.5;
+      }
 
-    .detail-item {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 14px;
-      color: #666;
-    }
+      .task-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin: 16px 0;
+      }
 
-    .detail-item mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
-    }
+      .detail-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 14px;
+        color: #666;
+      }
 
-    .detail-item.overdue {
-      color: #f44336;
-    }
+      .detail-item mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
 
-    .task-tags {
-      margin-top: 16px;
-    }
+      .detail-item.overdue {
+        color: #f44336;
+      }
 
-    mat-chip {
-      font-size: 12px;
-    }
+      .task-tags {
+        margin-top: 16px;
+      }
 
-    .priority-low {
-      background-color: #4caf50 !important;
-      color: white !important;
-    }
+      mat-chip {
+        font-size: 12px;
+      }
 
-    .priority-medium {
-      background-color: #ff9800 !important;
-      color: white !important;
-    }
+      .priority-low {
+        background-color: #4caf50 !important;
+        color: white !important;
+      }
 
-    .priority-high {
-      background-color: #f44336 !important;
-      color: white !important;
-    }
+      .priority-medium {
+        background-color: #ff9800 !important;
+        color: white !important;
+      }
 
-    .priority-critical {
-      background-color: #9c27b0 !important;
-      color: white !important;
-    }
+      .priority-high {
+        background-color: #f44336 !important;
+        color: white !important;
+      }
 
-    .status-pending {
-      background-color: #e0e0e0 !important;
-      color: #666 !important;
-    }
+      .priority-critical {
+        background-color: #9c27b0 !important;
+        color: white !important;
+      }
 
-    .status-in_progress {
-      background-color: #2196f3 !important;
-      color: white !important;
-    }
+      .status-pending {
+        background-color: #e0e0e0 !important;
+        color: #666 !important;
+      }
 
-    .status-completed {
-      background-color: #4caf50 !important;
-      color: white !important;
-    }
+      .status-in_progress {
+        background-color: #2196f3 !important;
+        color: white !important;
+      }
 
-    .status-blocked {
-      background-color: #f44336 !important;
-      color: white !important;
-    }
+      .status-completed {
+        background-color: #4caf50 !important;
+        color: white !important;
+      }
 
-    .status-icon {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-      margin-right: 4px;
-    }
+      .status-blocked {
+        background-color: #f44336 !important;
+        color: white !important;
+      }
 
-    .no-tasks-card {
-      max-width: 500px;
-      margin: 0 auto;
-    }
+      .status-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
+      }
 
-    .no-tasks-content {
-      text-align: center;
-      padding: 40px;
-    }
+      .no-tasks-card {
+        max-width: 500px;
+        margin: 0 auto;
+      }
 
-    .no-tasks-icon {
-      font-size: 64px;
-      width: 64px;
-      height: 64px;
-      color: #ccc;
-      margin: 0 auto 16px;
-    }
+      .no-tasks-content {
+        text-align: center;
+        padding: 40px;
+      }
 
-    mat-card-actions {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      margin: 0;
-      padding: 0;
-    }
+      .no-tasks-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        color: #ccc;
+        margin: 0 auto 16px;
+      }
 
-    /* List View Styles */
-    .list-view {
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+      mat-card-actions {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        margin: 0;
+        padding: 0;
+      }
 
-    .task-table {
-      width: 100%;
-    }
+      /* List View Styles */
+      .list-view {
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
 
-    .task-table th {
-      font-weight: 600;
-      color: #374151;
-      background-color: #f9fafb;
-    }
+      .task-table {
+        width: 100%;
+      }
 
-    .task-table td {
-      padding: 16px;
-    }
+      .task-table th {
+        font-weight: 600;
+        color: #374151;
+        background-color: #f9fafb;
+      }
 
-    .clickable {
-      cursor: pointer;
-    }
+      .task-table td {
+        padding: 16px;
+      }
 
-    .clickable:hover {
-      background-color: #f9fafb;
-    }
+      .clickable {
+        cursor: pointer;
+      }
 
-    .task-name-cell {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 500;
-    }
+      .clickable:hover {
+        background-color: #f9fafb;
+      }
 
-    .task-name-cell span.completed {
-      text-decoration: line-through;
-      opacity: 0.7;
-    }
+      .task-name-cell {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+      }
 
-    .assignee-cell {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
+      .task-name-cell span.completed {
+        text-decoration: line-through;
+        opacity: 0.7;
+      }
 
-    .assignee-cell mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
-    }
+      .assignee-cell {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
 
-    .progress-cell {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+      .assignee-cell mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
 
-    .progress-bar {
-      flex: 1;
-      height: 8px;
-      background-color: #e5e7eb;
-      border-radius: 4px;
-      overflow: hidden;
-      max-width: 100px;
-    }
+      .progress-cell {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
-    .progress-fill {
-      height: 100%;
-      background-color: #3b82f6;
-      transition: width 0.3s ease;
-    }
+      .progress-bar {
+        flex: 1;
+        height: 8px;
+        background-color: #e5e7eb;
+        border-radius: 4px;
+        overflow: hidden;
+        max-width: 100px;
+      }
 
-    .progress-text {
-      font-size: 12px;
-      color: #6b7280;
-      min-width: 35px;
-    }
+      .progress-fill {
+        height: 100%;
+        background-color: #3b82f6;
+        transition: width 0.3s ease;
+      }
 
-    .completed-row {
-      opacity: 0.7;
-    }
+      .progress-text {
+        font-size: 12px;
+        color: #6b7280;
+        min-width: 35px;
+      }
 
-    .due-today-row {
-      background-color: #fff7ed;
-    }
+      .completed-row {
+        opacity: 0.7;
+      }
 
-    .overdue {
-      color: #f44336;
-      font-weight: 500;
-    }
-  `]
+      .due-today-row {
+        background-color: #fff7ed;
+      }
+
+      .overdue {
+        color: #f44336;
+        font-weight: 500;
+      }
+    `,
+  ],
 })
 export class TaskListComponent {
   @Input() tasks: Task[] | null = [];
@@ -524,12 +545,12 @@ export class TaskListComponent {
   @Input() showCompleted = false;
   @Input() showProjectPhase = false;
   @Input() highlightDueToday = false;
-  
+
   @Output() taskClick = new EventEmitter<Task>();
   @Output() statusChange = new EventEmitter<{ task: Task; newStatus: TaskStatus }>();
 
   TaskStatus = TaskStatus;
-  
+
   // Table columns for list view
   displayedColumns = ['name', 'status', 'priority', 'assignee', 'dueDate', 'progress', 'actions'];
 
@@ -538,9 +559,11 @@ export class TaskListComponent {
   }
 
   formatStatus(status: TaskStatus): string {
-    return status.replace('_', ' ').toLowerCase()
+    return status
+      .replace('_', ' ')
+      .toLowerCase()
       .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   }
 
@@ -565,19 +588,19 @@ export class TaskListComponent {
 
   formatDueDate(date: Date | undefined): string {
     if (!date) return '';
-    
+
     const dueDate = new Date(date);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
-    
+
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
-    
+
     dueDate.setHours(0, 0, 0, 0);
-    
+
     if (dueDate.getTime() === today.getTime()) {
       return 'Due Today';
     } else if (dueDate.getTime() === tomorrow.getTime()) {
@@ -594,21 +617,25 @@ export class TaskListComponent {
 
   isDueToday(task: Task): boolean {
     if (!task.dueDate || task.status === TaskStatus.COMPLETED) return false;
-    
+
     const dueDate = new Date(task.dueDate);
     const today = new Date();
-    
+
     return dueDate.toDateString() === today.toDateString();
   }
 
   isOverdue(task: Task): boolean {
     if (!task.dueDate || task.status === TaskStatus.COMPLETED) return false;
-    
+
     const dueDate = new Date(task.dueDate);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     dueDate.setHours(0, 0, 0, 0);
-    
+
     return dueDate < today;
+  }
+
+  trackByTaskFn(index: number, task: Task): string {
+    return task.id || index.toString();
   }
 }

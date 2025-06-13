@@ -1,0 +1,292 @@
+// FibreFlow Component Theming
+// Single import file for all theme utilities
+// This file provides everything a component needs for theming
+
+// =============================================================================
+// FORWARD ALL THEME UTILITIES
+// =============================================================================
+
+// Forward theme functions for use in components
+// This makes ff-rgb(), ff-rgba(), ff-var(), etc. available
+@forward './theme-functions';
+
+// Forward all mixins for use in components
+// This makes all theme mixins available with their original names
+@forward './theme-mixins';
+
+// =============================================================================
+// COMPONENT THEMING GUIDE
+// =============================================================================
+
+/*
+  USAGE GUIDE FOR COMPONENTS:
+  
+  1. Import this file in your component SCSS:
+     @use '../../styles/component-theming' as theme;
+  
+  2. Use theme functions for colors:
+     background-color: theme.ff-rgb(background);
+     color: theme.ff-rgba(primary, 0.8);
+     border: 1px solid theme.ff-var(border);
+  
+  3. Use theme mixins for common patterns:
+     @include theme.card-theme(interactive);
+     @include theme.button-theme(primary, lg);
+     @include theme.heading-2();
+  
+  4. Example component usage:
+
+     // my-component.component.scss
+     @use '../../styles/component-theming' as theme;
+     
+     .my-component {
+       @include theme.card-theme(interactive);
+       
+       &__title {
+         @include theme.heading-3();
+         margin-bottom: theme.ff-rem(16);
+       }
+       
+       &__description {
+         @include theme.body-text();
+         color: theme.ff-rgb(muted-foreground);
+       }
+       
+       &__button {
+         @include theme.button-theme(primary);
+         margin-top: theme.ff-rem(24);
+       }
+       
+       &__badge {
+         @include theme.badge-theme(success, sm);
+       }
+     }
+
+  AVAILABLE THEME FUNCTIONS:
+  - theme.ff-rgb(color-name) - RGB color
+  - theme.ff-rgba(color-name, opacity) - RGBA color with opacity
+  - theme.ff-var(property) - CSS custom property reference
+  - theme.ff-rem(pixels) - Convert px to rem
+  - theme.ff-clamp(min, preferred, max) - Responsive clamp
+  - theme.ff-shadow(size) - Theme-aware shadows
+  - theme.ff-transition(speed) - Consistent transitions
+
+  AVAILABLE THEME COLORS:
+  - background, foreground
+  - card, card-foreground
+  - primary, primary-foreground
+  - secondary, secondary-foreground
+  - muted, muted-foreground
+  - accent, accent-foreground
+  - destructive, destructive-foreground
+  - success, success-foreground
+  - warning, warning-foreground
+  - info, info-foreground
+  - border, input, ring
+
+  TYPOGRAPHY MIXINS:
+  - theme.heading-1() through theme.heading-4()
+  - theme.body-text(size) - size: sm, base, lg
+  - theme.caption-text()
+  - theme.display-text()
+
+  COMPONENT MIXINS:
+  - theme.card-theme(variant) - variant: default, interactive, compact, elevated
+  - theme.button-theme(variant, size) - variant: primary, secondary, outline, ghost, destructive
+  - theme.form-input-theme(variant) - variant: default, error, success
+  - theme.badge-theme(variant, size) - variant: default, success, warning, error, info
+  - theme.table-theme()
+  - theme.loading-skeleton()
+
+  LAYOUT MIXINS:
+  - theme.container(size) - size: narrow, default, wide, full
+  - theme.flex(direction, justify, align, gap)
+  - theme.grid(columns, gap)
+
+  UTILITY MIXINS:
+  - theme.focus-ring(color)
+  - theme.border-radius(size)
+  - theme.transition(properties, duration, easing)
+  - theme.responsive(breakpoint) - breakpoint: xs, sm, md, lg, xl, 2xl
+  - theme.mobile-first()
+  - theme.desktop-first()
+
+  THEME SUPPORT:
+  All utilities automatically support the 4 FibreFlow themes:
+  - light (default clean theme)
+  - dark (dark mode)
+  - vf (VelocityFibre branded blue theme)
+  - fibreflow (modern indigo accent theme)
+  
+  Themes are switched via the ThemeService and apply automatically
+  through CSS custom properties.
+*/
+
+// =============================================================================
+// THEME-AWARE UTILITY CLASSES
+// =============================================================================
+
+// These classes can be used directly in templates for common patterns
+// They use the same theming system as the mixins
+
+// Text utilities
+.ff-text {
+  &-foreground {
+    color: var(--ff-foreground);
+  }
+  &-muted {
+    color: var(--ff-muted-foreground);
+  }
+  &-primary {
+    color: var(--ff-primary);
+  }
+  &-success {
+    color: var(--ff-success);
+  }
+  &-warning {
+    color: var(--ff-warning);
+  }
+  &-error {
+    color: var(--ff-destructive);
+  }
+  &-info {
+    color: var(--ff-info);
+  }
+}
+
+// Background utilities
+.ff-bg {
+  &-background {
+    background-color: var(--ff-background);
+  }
+  &-card {
+    background-color: var(--ff-card);
+  }
+  &-muted {
+    background-color: var(--ff-muted);
+  }
+  &-primary {
+    background-color: var(--ff-primary);
+  }
+  &-success {
+    background-color: var(--ff-success);
+  }
+  &-warning {
+    background-color: var(--ff-warning);
+  }
+  &-error {
+    background-color: var(--ff-destructive);
+  }
+  &-info {
+    background-color: var(--ff-info);
+  }
+}
+
+// Border utilities
+.ff-border {
+  border: 1px solid var(--ff-border);
+
+  &-0 {
+    border: none;
+  }
+  &-primary {
+    border-color: var(--ff-primary);
+  }
+  &-success {
+    border-color: var(--ff-success);
+  }
+  &-warning {
+    border-color: var(--ff-warning);
+  }
+  &-error {
+    border-color: var(--ff-destructive);
+  }
+  &-info {
+    border-color: var(--ff-info);
+  }
+}
+
+// Radius utilities
+.ff-rounded {
+  &-none {
+    border-radius: 0;
+  }
+  &-sm {
+    border-radius: calc(var(--ff-radius) * 0.5);
+  }
+  &-base {
+    border-radius: var(--ff-radius);
+  }
+  &-lg {
+    border-radius: calc(var(--ff-radius) * 1.5);
+  }
+  &-full {
+    border-radius: 9999px;
+  }
+}
+
+// Shadow utilities
+.ff-shadow {
+  &-none {
+    box-shadow: none;
+  }
+  &-sm {
+    box-shadow: var(--ff-shadow-sm);
+  }
+  &-base {
+    box-shadow: var(--ff-shadow);
+  }
+  &-lg {
+    box-shadow: var(--ff-shadow-lg);
+  }
+}
+
+// =============================================================================
+// QUICK REFERENCE
+// =============================================================================
+
+/*
+  QUICK REFERENCE FOR DEVELOPERS:
+
+  COMPONENT SCSS PATTERN:
+  
+  @use '../../styles/component-theming' as theme;
+  
+  .component {
+    // Use card styling
+    @include theme.card-theme(interactive);
+    
+    // Custom colors
+    background: theme.ff-rgb(background);
+    border-color: theme.ff-rgba(primary, 0.2);
+    
+    &__title {
+      @include theme.heading-3();
+    }
+    
+    &__content {
+      @include theme.body-text();
+    }
+    
+    &__actions {
+      @include theme.flex(row, flex-end, center, 12px);
+      margin-top: theme.ff-rem(16);
+    }
+    
+    &__button {
+      @include theme.button-theme(primary);
+    }
+    
+    // Responsive behavior
+    @include theme.responsive(md) {
+      @include theme.grid(repeat(2, 1fr), 24px);
+    }
+  }
+
+  TEMPLATE UTILITY CLASSES:
+  
+  <div class="ff-bg-card ff-border ff-rounded-base ff-shadow-sm">
+    <h3 class="ff-text-foreground">Title</h3>
+    <p class="ff-text-muted">Description</p>
+  </div>
+*/

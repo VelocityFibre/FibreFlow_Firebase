@@ -4,14 +4,20 @@ import { ProjectListComponent } from './components/project-list/project-list.com
 export const projectRoutes: Routes = [
   {
     path: '',
-    component: ProjectListComponent
+    component: ProjectListComponent,
   },
   {
     path: 'new',
-    loadComponent: () => import('./pages/project-create/project-create.component').then(m => m.ProjectCreateComponent)
+    loadComponent: () =>
+      import('./pages/project-create/project-create.component').then(
+        (m) => m.ProjectCreateComponent,
+      ),
   },
   {
     path: ':id',
-    loadComponent: () => import('./pages/project-detail/project-detail.component').then(m => m.ProjectDetailComponent)
-  }
+    loadComponent: () =>
+      import('./pages/project-detail/project-detail.component').then(
+        (m) => m.ProjectDetailComponent,
+      ),
+  },
 ];

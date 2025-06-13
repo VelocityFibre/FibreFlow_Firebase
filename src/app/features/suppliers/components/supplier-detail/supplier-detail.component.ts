@@ -16,10 +16,12 @@ import { MatCardModule } from '@angular/material/card';
       </mat-card>
     </div>
   `,
-  styles: [`
-    .supplier-detail {
-      padding: 24px;
-    }
-  `]
+  styles: [
+    `
+      .supplier-detail {
+        padding: 24px;
+      }
+    `,
+  ],
 })
 export class SupplierDetailComponent {}

@@ -1,30 +1,30 @@
 import { Injectable, inject } from '@angular/core';
-import { 
-  Firestore, 
-  collection, 
-  collectionData, 
-  doc, 
-  docData, 
-  setDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where,
+import {
+  Firestore,
+  collection,
+  collectionData,
+  doc,
+  docData,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  // query,
+  // where,
   serverTimestamp,
-  Timestamp 
+  Timestamp,
 } from '@angular/fire/firestore';
-import { Observable, from, map, of } from 'rxjs';
-import { 
-  Role, 
-  Permission, 
-  DEFAULT_PERMISSIONS, 
-  SYSTEM_ROLES, 
-  DEFAULT_ROLE_PERMISSIONS 
+import { Observable, map, of } from 'rxjs';
+import {
+  Role,
+  Permission,
+  DEFAULT_PERMISSIONS,
+  SYSTEM_ROLES,
+  DEFAULT_ROLE_PERMISSIONS,
 } from '../models/role.model';
 import { AuthService } from './auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RoleService {
   private firestore = inject(Firestore);
@@ -57,7 +57,7 @@ export class RoleService {
       createdAt: serverTimestamp() as Timestamp,
       updatedAt: serverTimestamp() as Timestamp,
       createdBy: currentUser?.uid || 'system',
-      updatedBy: currentUser?.uid || 'system'
+      updatedBy: currentUser?.uid || 'system',
     };
 
     const roleDoc = doc(this.rolesCollection);
@@ -69,11 +69,11 @@ export class RoleService {
   async updateRole(id: string, updates: Partial<Role>): Promise<void> {
     const currentUser = await this.authService.getCurrentUser();
     const roleDoc = doc(this.firestore, 'roles', id);
-    
+
     const updateData = {
       ...updates,
       updatedAt: serverTimestamp(),
-      updatedBy: currentUser?.uid || 'system'
+      updatedBy: currentUser?.uid || 'system',
     };
 
     // Remove fields that shouldn't be updated
@@ -93,8 +93,10 @@ export class RoleService {
 
   // Initialize default roles (call this during app setup)
   async initializeDefaultRoles(): Promise<void> {
-    const roles = await this.getRoles().pipe(map(roles => roles)).toPromise();
-    
+    const roles = await this.getRoles()
+      .pipe(map((roles) => roles))
+      .toPromise();
+
     if (!roles || roles.length === 0) {
       // Create default roles
       const defaultRoles: Omit<Role, 'id' | 'createdAt' | 'updatedAt'>[] = [
@@ -105,7 +107,7 @@ export class RoleService {
           isSystem: true,
           userCount: 0,
           createdBy: 'system',
-          updatedBy: 'system'
+          updatedBy: 'system',
         },
         {
           name: 'Project Manager',
@@ -114,7 +116,7 @@ export class RoleService {
           isSystem: true,
           userCount: 0,
           createdBy: 'system',
-          updatedBy: 'system'
+          updatedBy: 'system',
         },
         {
           name: 'Sales',
@@ -123,7 +125,7 @@ export class RoleService {
           isSystem: true,
           userCount: 0,
           createdBy: 'system',
-          updatedBy: 'system'
+          updatedBy: 'system',
         },
         {
           name: 'Technician',
@@ -132,7 +134,7 @@ export class RoleService {
           isSystem: true,
           userCount: 0,
           createdBy: 'system',
-          updatedBy: 'system'
+          updatedBy: 'system',
         },
         {
           name: 'Data Capture',
@@ -141,8 +143,8 @@ export class RoleService {
           isSystem: true,
           userCount: 0,
           createdBy: 'system',
-          updatedBy: 'system'
-        }
+          updatedBy: 'system',
+        },
       ];
 
       // Create all default roles
@@ -153,7 +155,7 @@ export class RoleService {
   }
 
   // Check if a user has a specific permission
-  async hasPermission(userId: string, permissionId: string): Promise<boolean> {
+  async hasPermission(_userId: string, _permissionId: string): Promise<boolean> {
     // This would need to be implemented based on your user-role relationship
     // For now, returning true for demonstration
     return true;
@@ -162,9 +164,9 @@ export class RoleService {
   // Get permissions grouped by category
   getPermissionsByCategory(): Observable<Map<string, Permission[]>> {
     return of(DEFAULT_PERMISSIONS).pipe(
-      map(permissions => {
+      map((permissions) => {
         const grouped = new Map<string, Permission[]>();
-        permissions.forEach(permission => {
+        permissions.forEach((permission) => {
           const category = permission.category;
           if (!grouped.has(category)) {
             grouped.set(category, []);
@@ -172,7 +174,7 @@ export class RoleService {
           grouped.get(category)!.push(permission);
         });
         return grouped;
-      })
+      }),
     );
   }
 }

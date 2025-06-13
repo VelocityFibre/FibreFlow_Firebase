@@ -1,67 +1,75 @@
-FibreFlow V2 - Complete Tech Stack Summary 📋
+# FibreFlow - Tech Stack 📋
 
-## 🌍 Localization
-- Location: South Africa
-- Timezone: Africa/Johannesburg (UTC+2)
-- Currency: South African Rand (ZAR)
-- Date Format: DD/MM/YYYY
-- Number Format: Space-separated thousands (1 000 000)
+## 🌍 Localization (South Africa)
+- **Timezone**: Africa/Johannesburg (UTC+2)
+- **Currency**: ZAR (R symbol)
+- **Date Format**: DD/MM/YYYY
+- **Number Format**: Space separator (1 000 000)
+- **Locale Code**: en-ZA
 
-Frontend
+## Core Stack
 
-Angular 17+ (with signals & standalone components)
-AngularFire (Firebase integration)
-Angular Material (UI components)
-Angular CDK (Component Dev Kit)
-Angular PWA (Offline support) ✨
-RxJS (Reactive programming)
-TypeScript 5+
-SCSS (Styling)
+### Frontend
+- **Angular 19.2** (standalone components, signals)
+- **Angular Material 19.2** (UI components)
+- **AngularFire 19.2** (Firebase integration)
+- **RxJS 7.8** (Reactive programming)
+- **TypeScript 5.7**
+- **SCSS** (Custom theme system - 4 themes)
 
-Backend
+### Backend
+- **Firebase 11.9.1**
+  - Firestore (NoSQL database)
+  - Auth (Authentication)
+  - Storage (File uploads)
+  - Hosting (https://fibreflow-73daf.web.app)
+- **Firebase Functions** (Node.js - when needed)
 
-Firebase Functions (Node.js 20)
-Express.js or Hono (API framework)
-Firebase Admin SDK
-TypeScript
-firebase-functions-rate-limiter (Rate limiting) ✨
+### DevOps
+- **Angular CLI 19.2**
+- **ESLint + Prettier** (code quality)
+- **Karma + Jasmine** (testing)
+- **Firebase CLI** (deployment)
 
-Database & Services
+## Key Features Implemented
 
-Firestore (NoSQL database)
-Firebase Auth (Authentication)
-Firebase Storage (File uploads)
-Firebase Hosting (Frontend hosting)
+✅ **Architecture**
+- Standalone components (no NgModules)
+- Inject pattern (no constructor DI)
+- Lazy-loaded routes
+- Role-based access control
 
-Cloud Scheduler (Cron jobs)
-Cloud Tasks (Job queues)
-Firebase App Check (Security layer) ✨
+✅ **Theme System**
+- 4 themes: light, dark, vf, fibreflow
+- All components use theme variables
+- Real-time theme switching
+- Component mixins for consistency
 
-DevOps & Tools
+✅ **Modules**
+- Dashboard, Projects, Staff, Tasks
+- Stock (Items & Movements), Roles
+- Suppliers, Clients, Contractors (basic)
+- BOQ, RFQ (planned)
 
-Firebase Emulator Suite (Local development)
-Firebase Performance Monitoring
-Firebase Analytics
-GitHub Actions (CI/CD)
-ESLint & Prettier
-Husky & lint-staged (Pre-commit hooks) ✨
-webpack-bundle-analyzer (Bundle optimization) ✨
+✅ **UI/UX**
+- Material Design components
+- Responsive mobile-first
+- List/Card view toggles
+- Loading states & error handling
 
-Security
+## Project Structure
+```
+src/app/
+├── core/          # Services, guards, models
+├── features/      # Feature modules
+├── shared/        # Shared components
+├── layout/        # App shell
+└── styles/        # Theme system
+```
 
-Content Security Policy (CSP headers) ✨
-Firebase Security Rules (Firestore/Storage)
-Environment variables (.env files)
-
-Deployment
-
-100% Firebase Hosting & Infrastructure
-
-Optional Add-ons (When Needed)
-
-Compodoc - API documentation generator
-Storybook - Component development environment
-Cypress/Playwright - E2E testing
-ng2-charts - Data visualization
-xlsx - Excel export
-jsPDF - PDF generation
+## Future Additions
+- ng2-charts (data visualization)
+- xlsx (Excel export)
+- jsPDF (PDF generation)
+- PWA service worker
+- Offline capabilities

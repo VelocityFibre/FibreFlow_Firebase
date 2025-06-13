@@ -1,34 +1,53 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable, filter } from 'rxjs';
+import { StaffMember } from '../../features/staff/public-api';
+import { Project } from '../models/project.model';
 
 // Event types
 export interface AppEvent {
   type: string;
-  payload: any;
+  payload: unknown;
   timestamp: Date;
   source: string;
 }
 
 // Staff events
 export interface StaffEvent extends AppEvent {
-  type: 'staff.created' | 'staff.updated' | 'staff.deactivated' | 'staff.activated' | 
-        'staff.availability.changed' | 'staff.assigned' | 'staff.unassigned';
+  type:
+    | 'staff.created'
+    | 'staff.updated'
+    | 'staff.deactivated'
+    | 'staff.activated'
+    | 'staff.availability.changed'
+    | 'staff.assigned'
+    | 'staff.unassigned';
 }
 
-// Project events  
+// Project events
 export interface ProjectEvent extends AppEvent {
-  type: 'project.created' | 'project.updated' | 'project.completed' | 'project.cancelled' |
-        'project.staffing.needed' | 'project.staff.added' | 'project.staff.removed';
+  type:
+    | 'project.created'
+    | 'project.updated'
+    | 'project.completed'
+    | 'project.cancelled'
+    | 'project.staffing.needed'
+    | 'project.staff.added'
+    | 'project.staff.removed';
 }
 
 // Task events
 export interface TaskEvent extends AppEvent {
-  type: 'task.created' | 'task.assigned' | 'task.started' | 'task.completed' | 
-        'task.flagged' | 'task.updated';
+  type:
+    | 'task.created'
+    | 'task.assigned'
+    | 'task.started'
+    | 'task.completed'
+    | 'task.flagged'
+    | 'task.updated';
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EventBusService {
   private eventSubject = new Subject<AppEvent>();
@@ -38,7 +57,7 @@ export class EventBusService {
   emit(event: AppEvent): void {
     this.eventSubject.next({
       ...event,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -50,46 +69,44 @@ export class EventBusService {
   // Subscribe to specific event types
   onType<T extends AppEvent>(eventType: string | string[]): Observable<T> {
     const types = Array.isArray(eventType) ? eventType : [eventType];
-    return this.events$.pipe(
-      filter(event => types.includes(event.type))
-    ) as Observable<T>;
+    return this.events$.pipe(filter((event) => types.includes(event.type))) as Observable<T>;
   }
 
   // Convenience methods for specific event types
   onStaffEvent(): Observable<StaffEvent> {
     return this.events$.pipe(
-      filter(event => event.type.startsWith('staff.'))
+      filter((event) => event.type.startsWith('staff.')),
     ) as Observable<StaffEvent>;
   }
 
   onProjectEvent(): Observable<ProjectEvent> {
     return this.events$.pipe(
-      filter(event => event.type.startsWith('project.'))
+      filter((event) => event.type.startsWith('project.')),
     ) as Observable<ProjectEvent>;
   }
 
   onTaskEvent(): Observable<TaskEvent> {
     return this.events$.pipe(
-      filter(event => event.type.startsWith('task.'))
+      filter((event) => event.type.startsWith('task.')),
     ) as Observable<TaskEvent>;
   }
 
   // Helper methods to emit specific events
-  emitStaffCreated(staff: any): void {
+  emitStaffCreated(staff: StaffMember): void {
     this.emit({
       type: 'staff.created',
       payload: { staff },
       source: 'StaffModule',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
-  emitStaffUpdated(staffId: string, changes: any): void {
+  emitStaffUpdated(staffId: string, changes: Partial<StaffMember>): void {
     this.emit({
       type: 'staff.updated',
       payload: { staffId, changes },
       source: 'StaffModule',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -98,34 +115,40 @@ export class EventBusService {
       type: 'staff.deactivated',
       payload: { staffId },
       source: 'StaffModule',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
-  emitStaffAvailabilityChanged(staffId: string, availability: any): void {
+  emitStaffAvailabilityChanged(
+    staffId: string,
+    availability: { available: boolean; fromDate?: Date; toDate?: Date },
+  ): void {
     this.emit({
       type: 'staff.availability.changed',
       payload: { staffId, availability },
       source: 'StaffModule',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
-  emitProjectCreated(project: any): void {
+  emitProjectCreated(project: Project): void {
     this.emit({
       type: 'project.created',
       payload: { project },
       source: 'ProjectModule',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
-  emitProjectStaffingNeeded(projectId: string, requirements: any): void {
+  emitProjectStaffingNeeded(
+    projectId: string,
+    requirements: { skillsRequired: string[]; count: number; priority: 'high' | 'medium' | 'low' },
+  ): void {
     this.emit({
       type: 'project.staffing.needed',
       payload: { projectId, requirements },
       source: 'ProjectModule',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -134,7 +157,7 @@ export class EventBusService {
       type: 'task.assigned',
       payload: { taskId, staffId, projectId },
       source: 'TaskModule',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -143,7 +166,7 @@ export class EventBusService {
       type: 'task.completed',
       payload: { taskId, staffId },
       source: 'TaskModule',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 }

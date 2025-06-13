@@ -39,9 +39,9 @@
 }
 
 .table-container {
-  background: white;
+  background: rgb(var(--ff-card));
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   position: relative;
 }
@@ -57,7 +57,7 @@
   width: 100%;
 
   .company-link {
-    color: var(--primary-color);
+    color: rgb(var(--ff-primary));
     text-decoration: none;
     font-weight: 500;
 
@@ -72,7 +72,8 @@
     gap: 4px;
     font-size: 14px;
 
-    .email, .phone {
+    .email,
+    .phone {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -81,7 +82,7 @@
         font-size: 16px;
         width: 16px;
         height: 16px;
-        color: #666;
+        color: rgb(var(--ff-muted-foreground));
       }
     }
   }
@@ -100,23 +101,23 @@
     text-transform: uppercase;
 
     &.status-active {
-      background-color: #e8f5e9;
-      color: #2e7d32;
+      background-color: rgb(var(--ff-success) / 0.15);
+      color: rgb(var(--ff-success));
     }
 
     &.status-inactive {
-      background-color: #f3e5f5;
-      color: #6a1b9a;
+      background-color: rgb(var(--ff-muted) / 0.5);
+      color: rgb(var(--ff-muted-foreground));
     }
 
     &.status-suspended {
-      background-color: #ffe0b2;
-      color: #e65100;
+      background-color: rgb(var(--ff-warning) / 0.15);
+      color: rgb(var(--ff-warning));
     }
 
     &.status-pending {
-      background-color: #e3f2fd;
-      color: #1565c0;
+      background-color: rgb(var(--ff-info) / 0.15);
+      color: rgb(var(--ff-info));
     }
   }
 
@@ -136,23 +137,23 @@
     }
 
     &.verification-verified {
-      background-color: #e8f5e9;
-      color: #2e7d32;
+      background-color: rgb(var(--ff-success) / 0.15);
+      color: rgb(var(--ff-success));
     }
 
     &.verification-pending {
-      background-color: #fff3e0;
-      color: #ef6c00;
+      background-color: rgb(var(--ff-warning) / 0.15);
+      color: rgb(var(--ff-warning));
     }
 
     &.verification-unverified {
-      background-color: #fafafa;
-      color: #757575;
+      background-color: rgb(var(--ff-muted));
+      color: rgb(var(--ff-muted-foreground));
     }
   }
 
   .delete-action {
-    color: #f44336;
+    color: rgb(var(--ff-destructive));
   }
 }
 
@@ -162,13 +163,13 @@
   align-items: center;
   justify-content: center;
   padding: 48px;
-  color: #666;
+  color: rgb(var(--ff-muted-foreground));
 
   mat-icon {
     font-size: 48px;
     width: 48px;
     height: 48px;
-    color: #ccc;
+    color: rgb(var(--ff-border));
   }
 
   p {

@@ -21,14 +21,14 @@ export interface UserPermissions {
 }
 
 export const USER_GROUP_PERMISSIONS: Record<UserProfile['userGroup'], UserPermissions> = {
-  'admin': {
+  admin: {
     canCreateProject: true,
     canEditProject: true,
     canDeleteProject: true,
     canViewFinancials: true,
     canManageUsers: true,
     canManageStock: true,
-    canViewReports: true
+    canViewReports: true,
   },
   'project-manager': {
     canCreateProject: true,
@@ -37,33 +37,33 @@ export const USER_GROUP_PERMISSIONS: Record<UserProfile['userGroup'], UserPermis
     canViewFinancials: true,
     canManageUsers: false,
     canManageStock: true,
-    canViewReports: true
+    canViewReports: true,
   },
-  'technician': {
+  technician: {
     canCreateProject: false,
     canEditProject: false,
     canDeleteProject: false,
     canViewFinancials: false,
     canManageUsers: false,
     canManageStock: true,
-    canViewReports: false
+    canViewReports: false,
   },
-  'supplier': {
+  supplier: {
     canCreateProject: false,
     canEditProject: false,
     canDeleteProject: false,
     canViewFinancials: false,
     canManageUsers: false,
     canManageStock: false,
-    canViewReports: false
+    canViewReports: false,
   },
-  'client': {
+  client: {
     canCreateProject: false,
     canEditProject: false,
     canDeleteProject: false,
     canViewFinancials: false,
     canManageUsers: false,
     canManageStock: false,
-    canViewReports: false
-  }
+    canViewReports: false,
+  },
 };
