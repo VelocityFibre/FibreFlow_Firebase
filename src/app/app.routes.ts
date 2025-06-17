@@ -173,4 +173,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/debug/debug-logs.component').then((m) => m.DebugLogsComponent),
   },
+  // Sentry test route
+  {
+    path: 'debug/sentry-test',
+    loadComponent: () =>
+      import('./features/debug/sentry-test.component').then((m) => m.SentryTestComponent),
+  },
 ];

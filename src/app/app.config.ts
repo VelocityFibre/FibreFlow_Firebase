@@ -1,5 +1,5 @@
-import { ApplicationConfig, provideZoneChangeDetection, ErrorHandler } from '@angular/core';
-import { provideRouter, withPreloading, withViewTransitions } from '@angular/router';
+import { ApplicationConfig, provideZoneChangeDetection, ErrorHandler, APP_INITIALIZER } from '@angular/core';
+import { provideRouter, withPreloading, withViewTransitions, Router } from '@angular/router';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import {
   provideFirestore,
@@ -9,10 +9,11 @@ import {
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import * as Sentry from '@sentry/angular';
 
 import { routes } from './app.routes';
 import { environment } from '../environments/environment';
-import { ErrorHandlerService } from './core/services/error-handler.service';
+import { SentryErrorHandlerService } from './core/services/sentry-error-handler.service';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 import { CustomPreloadingStrategy } from './core/services/custom-preload.service';
@@ -23,7 +24,19 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withPreloading(CustomPreloadingStrategy), withViewTransitions()),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([errorInterceptor, loadingInterceptor])),
-    { provide: ErrorHandler, useClass: ErrorHandlerService },
+    // Custom error handler that integrates Sentry
+    { provide: ErrorHandler, useClass: SentryErrorHandlerService },
+    // Sentry trace service for performance monitoring
+    {
+      provide: Sentry.TraceService,
+      deps: [Router],
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => () => {},
+      deps: [Sentry.TraceService],
+      multi: true,
+    },
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => {
       const firestore = getFirestore();

@@ -1,6 +1,32 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
+import { environment } from './environments/environment';
+import * as Sentry from '@sentry/angular';
+
+// Initialize Sentry
+Sentry.init({
+  dsn: environment.sentry.dsn,
+  integrations: [
+    Sentry.browserTracingIntegration(),
+    Sentry.replayIntegration(),
+  ],
+  // Performance Monitoring
+  tracesSampleRate: environment.production ? 0.1 : 1.0, // 10% in production, 100% in development
+  // Session Replay
+  replaysSessionSampleRate: environment.production ? 0.1 : 0.5, // Lower rate in production
+  replaysOnErrorSampleRate: 1.0, // Always capture replay on errors
+  // Release tracking
+  environment: environment.sentry.environment,
+  beforeSend(event, hint) {
+    // Filter out certain errors if needed
+    if (event.exception && environment.production) {
+      const error = hint.originalException;
+      // You can filter errors here
+    }
+    return event;
+  },
+});
 
 console.log('FibreFlow: Starting application bootstrap...');
 

@@ -30,6 +30,7 @@
 - **ESLint + Prettier** (code quality)
 - **Karma + Jasmine** (testing)
 - **Firebase CLI** (deployment)
+- **Sentry** (error tracking & monitoring)
 
 ## Key Features Implemented
 
@@ -56,6 +57,13 @@
 - Responsive mobile-first
 - List/Card view toggles
 - Loading states & error handling
+
+✅ **Error Tracking & Monitoring**
+- Sentry integration for production errors
+- Session replay for debugging
+- Performance monitoring
+- Custom error context
+- Source maps for readable stack traces
 
 ## Project Structure
 ```

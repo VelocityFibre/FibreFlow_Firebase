@@ -47,6 +47,7 @@ A comprehensive project management system for fiber optic installations, built w
 - RxJS for reactive programming
 - Standalone components architecture
 - Centralized SCSS theme system
+- Sentry for error tracking and performance monitoring
 
 ## Development server
 
@@ -147,6 +148,19 @@ Major performance enhancements have been implemented to address critical issues:
 - **Unit Tests**: Created comprehensive test suites for core services (Auth, Project, Staff, Client, Supplier)
 
 For detailed information, see [Performance Improvements Report](./docs/performance-improvements-report.md)
+
+### Error Tracking and Monitoring (January 2025)
+
+- **Sentry Integration**: Professional error tracking and performance monitoring
+  - Automatic error capture with source maps
+  - Session replay for debugging (100% on errors)
+  - Performance monitoring (10% prod, 100% dev)
+  - Custom error context and breadcrumbs
+  - Real-time error alerts
+- **Error Handling**: Centralized error handler with user-friendly messages
+- **Debug Tools**: Test page at `/debug/sentry-test` for error simulation
+
+For setup details, see [Sentry Setup Guide](./SENTRY_SETUP.md)
 
 ## Additional Resources
 

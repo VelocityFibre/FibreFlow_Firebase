@@ -1,3 +1,4 @@
+
 # Master Materials vs Stock Items - System Design
 
 ## Overview
