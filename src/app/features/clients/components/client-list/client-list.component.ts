@@ -123,10 +123,7 @@ import { NotificationService } from '../../../../core/services/notification.serv
 
       <!-- Clients Grid -->
       <div class="clients-grid" *ngIf="filteredClients$ | async as clients; else loading">
-        <mat-card
-          *ngFor="let client of clients"
-          class="client-card ff-card-clients"
-        >
+        <mat-card *ngFor="let client of clients" class="client-card ff-card-clients">
           <mat-card-header>
             <div class="card-header-content">
               <div class="client-info">

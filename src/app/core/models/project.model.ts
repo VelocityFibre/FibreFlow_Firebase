@@ -81,6 +81,10 @@ export interface Step {
   description?: string;
   status: StepStatus;
   order: number;
+  startDate?: Timestamp | Date;
+  endDate?: Timestamp | Date;
+  progress: number; // 0-100
+  feedback?: string;
   assignedTeamId?: string;
   estimatedHours: number;
   actualHours?: number;

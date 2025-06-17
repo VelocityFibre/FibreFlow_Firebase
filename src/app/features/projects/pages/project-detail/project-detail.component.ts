@@ -23,6 +23,8 @@ import { ProjectStockComponent } from '../../components/stock/project-stock.comp
 import { PhaseService } from '../../../../core/services/phase.service';
 import { TaskService } from '../../../../core/services/task.service';
 import { Task } from '../../../../core/models/task.model';
+import { BOQService } from '../../../boq/services/boq.service';
+import { BOQSummary } from '../../../boq/models/boq.model';
 
 @Component({
   selector: 'app-project-detail',
@@ -264,6 +266,30 @@ import { Task } from '../../../../core/models/task.model';
                     <div class="budget-percentage">
                       {{ getBudgetPercentage(project) }}% of budget used
                     </div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+
+              <!-- BOQ Management Card -->
+              <mat-card class="ff-card-stock action-card" (click)="navigateToBOQ(project.id!)">
+                <mat-card-header>
+                  <mat-card-title>BOQ Management</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  <div class="boq-overview">
+                    <div class="boq-icon">
+                      <mat-icon>receipt_long</mat-icon>
+                    </div>
+                    <div class="boq-info">
+                      <p class="boq-description">Manage Bill of Quantities for this project</p>
+                      <div class="boq-stats" *ngIf="boqSummary$ | async as boqSummary">
+                        <span class="stat-item">{{ boqSummary.totalItems }} Items</span>
+                        <span class="stat-item"
+                          >R{{ boqSummary.totalValue | number: '1.0-0' }} Total</span
+                        >
+                      </div>
+                    </div>
+                    <mat-icon class="navigate-icon">arrow_forward</mat-icon>
                   </div>
                 </mat-card-content>
               </mat-card>
@@ -1080,14 +1106,18 @@ export class ProjectDetailComponent implements OnInit {
   private dialog = inject(MatDialog);
   private phaseService = inject(PhaseService);
   private taskService = inject(TaskService);
+  private boqService = inject(BOQService);
 
   project$!: Observable<Project | undefined>;
   phasesWithTasks$!: Observable<{ phase: Phase; tasks: Task[] }[]>;
+  boqSummary$!: Observable<BOQSummary | null>;
 
   ngOnInit() {
     const projectId$ = this.route.params.pipe(map((params) => params['id']));
 
     this.project$ = projectId$.pipe(switchMap((id) => this.projectService.getProjectById(id)));
+
+    this.boqSummary$ = projectId$.pipe(switchMap((id) => this.boqService.getProjectSummary(id)));
 
     this.phasesWithTasks$ = projectId$.pipe(
       switchMap((projectId) =>
@@ -1276,5 +1306,9 @@ export class ProjectDetailComponent implements OnInit {
 
   trackByTaskFn(index: number, task: Task): string {
     return task.id || index.toString();
+  }
+
+  navigateToBOQ(projectId: string): void {
+    this.router.navigate(['/projects', projectId, 'boq']);
   }
 }

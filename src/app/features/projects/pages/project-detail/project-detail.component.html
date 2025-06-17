@@ -245,6 +245,28 @@
           </div>
         </mat-card-content>
       </mat-card>
+
+      <!-- BOQ Management Card -->
+      <mat-card class="ff-card-stock action-card" (click)="navigateToBOQ(project.id!)">
+        <mat-card-header>
+          <mat-card-title>BOQ Management</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="boq-overview">
+            <div class="boq-icon">
+              <mat-icon>receipt_long</mat-icon>
+            </div>
+            <div class="boq-info">
+              <p class="boq-description">Manage Bill of Quantities for this project</p>
+              <div class="boq-stats" *ngIf="boqSummary$ | async as boqSummary">
+                <span class="stat-item">{{ boqSummary.totalItems }} Items</span>
+                <span class="stat-item">R{{ boqSummary.totalValue | number: '1.0-0' }} Total</span>
+              </div>
+            </div>
+            <mat-icon class="navigate-icon">arrow_forward</mat-icon>
+          </div>
+        </mat-card-content>
+      </mat-card>
     </div>
   </div>
 </ng-template>

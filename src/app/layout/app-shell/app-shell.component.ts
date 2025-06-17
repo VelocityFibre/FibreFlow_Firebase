@@ -75,30 +75,6 @@ interface NavItem {
             </mat-nav-list>
           </div>
 
-          <!-- Staff Category -->
-          <div class="nav-category">
-            <h3 class="category-title">Staff</h3>
-            <mat-nav-list class="nav-list">
-              <a
-                mat-list-item
-                *ngFor="let item of staffItems"
-                [routerLink]="item.route"
-                routerLinkActive="active-link"
-                class="nav-item"
-              >
-                <mat-icon
-                  matListItemIcon
-                  [matBadge]="item.badge"
-                  [matBadgeHidden]="!item.badge || item.badge === 0"
-                  matBadgeColor="warn"
-                  matBadgeSize="small"
-                  >{{ item.icon }}</mat-icon
-                >
-                <span matListItemTitle>{{ item.label }}</span>
-              </a>
-            </mat-nav-list>
-          </div>
-
           <!-- Project Management Category -->
           <div class="nav-category">
             <h3 class="category-title">Project Management</h3>
@@ -130,6 +106,30 @@ interface NavItem {
               <a
                 mat-list-item
                 *ngFor="let item of stockItems"
+                [routerLink]="item.route"
+                routerLinkActive="active-link"
+                class="nav-item"
+              >
+                <mat-icon
+                  matListItemIcon
+                  [matBadge]="item.badge"
+                  [matBadgeHidden]="!item.badge || item.badge === 0"
+                  matBadgeColor="warn"
+                  matBadgeSize="small"
+                  >{{ item.icon }}</mat-icon
+                >
+                <span matListItemTitle>{{ item.label }}</span>
+              </a>
+            </mat-nav-list>
+          </div>
+
+          <!-- Staff Category -->
+          <div class="nav-category">
+            <h3 class="category-title">Staff</h3>
+            <mat-nav-list class="nav-list">
+              <a
+                mat-list-item
+                *ngFor="let item of staffItems"
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
@@ -394,13 +394,13 @@ export class AppShellComponent {
 
   // Stock Management category items
   stockItems: NavItem[] = [
+    { label: 'Master Materials', icon: 'category', route: '/materials' },
     { label: 'Stock Items', icon: 'inventory_2', route: '/stock' },
     { label: 'Stock Movements', icon: 'swap_horiz', route: '/stock-movements' },
     { label: 'Stock Allocations', icon: 'assignment', route: '/stock/allocations' },
     { label: 'BOQ Management', icon: 'receipt_long', route: '/boq' },
     { label: 'RFQ Management', icon: 'request_quote', route: '/rfq' },
     { label: 'Stock Analysis', icon: 'analytics', route: '/stock-analysis' },
-    { label: 'Category Management', icon: 'category', route: '/categories' },
   ];
 
   // Suppliers category items

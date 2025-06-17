@@ -22,7 +22,7 @@ export class MainDashboardComponent implements OnInit {
   private stockService = inject(StockService);
   private clientService = inject(ClientService);
   private taskService = inject(TaskService);
-  
+
   // Counts for dashboard cards
   projectsCount = 0;
   suppliersCount = 0;
@@ -32,22 +32,22 @@ export class MainDashboardComponent implements OnInit {
 
   ngOnInit() {
     // Get projects count
-    this.projectService.getProjects().subscribe(projects => {
+    this.projectService.getProjects().subscribe((projects) => {
       this.projectsCount = projects.length;
     });
 
     // Get suppliers count
-    this.supplierService.getSuppliers().subscribe(suppliers => {
+    this.supplierService.getSuppliers().subscribe((suppliers) => {
       this.suppliersCount = suppliers.length;
     });
 
     // Get stock items count
-    this.stockService.getStockItems().subscribe(items => {
+    this.stockService.getStockItems().subscribe((items) => {
       this.stockItemsCount = items.length;
     });
 
     // Get clients count
-    this.clientService.getClients().subscribe(clients => {
+    this.clientService.getClients().subscribe((clients) => {
       this.clientsCount = clients.length;
     });
 

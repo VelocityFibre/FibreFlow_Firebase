@@ -6,7 +6,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatChipsModule } from '@angular/material/chips';
-import { Firestore, collection, query, orderBy, limit, collectionData } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  query,
+  orderBy,
+  limit,
+  collectionData,
+} from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 
 interface LogEntry {
@@ -73,7 +80,7 @@ interface LogEntry {
                           <strong>Data:</strong> {{ log.data }}
                         </div>
                         <div *ngIf="log.stack" class="log-stack">
-                          <strong>Stack:</strong> 
+                          <strong>Stack:</strong>
                           <pre>{{ log.stack }}</pre>
                         </div>
                       </div>
@@ -88,8 +95,11 @@ interface LogEntry {
                   </ng-container>
 
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
-                      [class]="'row-' + row.level"></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: displayedColumns"
+                    [class]="'row-' + row.level"
+                  ></tr>
                 </table>
               </div>
             </mat-tab>
@@ -127,8 +137,11 @@ interface LogEntry {
                   </ng-container>
 
                   <tr mat-header-row *matHeaderRowDef="['timestamp', 'component', 'message']"></tr>
-                  <tr mat-row *matRowDef="let row; columns: ['timestamp', 'component', 'message'];" 
-                      class="error-row"></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: ['timestamp', 'component', 'message']"
+                    class="error-row"
+                  ></tr>
                 </table>
               </div>
             </mat-tab>
@@ -144,87 +157,93 @@ interface LogEntry {
       </mat-card>
     </div>
   `,
-  styles: [`
-    .debug-logs-container {
-      max-width: 100%;
-      overflow-x: auto;
-    }
+  styles: [
+    `
+      .debug-logs-container {
+        max-width: 100%;
+        overflow-x: auto;
+      }
 
-    .logs-table {
-      margin-top: 16px;
-      max-height: 600px;
-      overflow-y: auto;
-    }
+      .logs-table {
+        margin-top: 16px;
+        max-height: 600px;
+        overflow-y: auto;
+      }
 
-    .full-width-table {
-      width: 100%;
-    }
+      .full-width-table {
+        width: 100%;
+      }
 
-    .message-cell {
-      max-width: 400px;
-      word-wrap: break-word;
-    }
+      .message-cell {
+        max-width: 400px;
+        word-wrap: break-word;
+      }
 
-    .log-data, .log-stack {
-      margin-top: 8px;
-      font-size: 12px;
-      color: #666;
-    }
+      .log-data,
+      .log-stack {
+        margin-top: 8px;
+        font-size: 12px;
+        color: #666;
+      }
 
-    .log-stack pre, .error-stack pre, .error-data pre {
-      white-space: pre-wrap;
-      font-size: 11px;
-      background: #f5f5f5;
-      padding: 8px;
-      border-radius: 4px;
-      max-height: 200px;
-      overflow-y: auto;
-    }
+      .log-stack pre,
+      .error-stack pre,
+      .error-data pre {
+        white-space: pre-wrap;
+        font-size: 11px;
+        background: #f5f5f5;
+        padding: 8px;
+        border-radius: 4px;
+        max-height: 200px;
+        overflow-y: auto;
+      }
 
-    .level-error {
-      background-color: #ffebee;
-      color: #c62828;
-    }
+      .level-error {
+        background-color: #ffebee;
+        color: #c62828;
+      }
 
-    .level-warn {
-      background-color: #fff3e0;
-      color: #ef6c00;
-    }
+      .level-warn {
+        background-color: #fff3e0;
+        color: #ef6c00;
+      }
 
-    .level-info {
-      background-color: #e3f2fd;
-      color: #1565c0;
-    }
+      .level-info {
+        background-color: #e3f2fd;
+        color: #1565c0;
+      }
 
-    .level-debug {
-      background-color: #f3e5f5;
-      color: #7b1fa2;
-    }
+      .level-debug {
+        background-color: #f3e5f5;
+        color: #7b1fa2;
+      }
 
-    .row-error {
-      background-color: #ffebee;
-    }
+      .row-error {
+        background-color: #ffebee;
+      }
 
-    .error-row {
-      background-color: #ffebee;
-    }
+      .error-row {
+        background-color: #ffebee;
+      }
 
-    .error-details h4 {
-      margin: 0 0 8px 0;
-      color: #c62828;
-    }
+      .error-details h4 {
+        margin: 0 0 8px 0;
+        color: #c62828;
+      }
 
-    .error-data, .error-stack {
-      margin-top: 12px;
-    }
-  `]
+      .error-data,
+      .error-stack {
+        margin-top: 12px;
+      }
+    `,
+  ],
 })
 export class DebugLogsComponent implements OnInit {
   private firestore = inject(Firestore);
-  
+
   allLogs$!: Observable<LogEntry[]>;
   errorLogs$!: Observable<LogEntry[]>;
-  
+
   displayedColumns = ['timestamp', 'level', 'component', 'message', 'url'];
 
   ngOnInit() {
@@ -233,15 +252,15 @@ export class DebugLogsComponent implements OnInit {
 
   loadLogs() {
     const logsCollection = collection(this.firestore, 'debug-logs');
-    
+
     // All logs - last 100 entries
     const allLogsQuery = query(logsCollection, orderBy('timestamp', 'desc'), limit(100));
     this.allLogs$ = collectionData(allLogsQuery, { idField: 'id' }) as Observable<LogEntry[]>;
-    
+
     // Error logs only - last 50 error entries
     const errorLogsQuery = query(logsCollection, orderBy('timestamp', 'desc'), limit(50));
     this.errorLogs$ = collectionData(errorLogsQuery, { idField: 'id' }).pipe(
-      map((logs: any[]) => logs.filter((log: any) => log.level === 'error') as LogEntry[])
+      map((logs: any[]) => logs.filter((log: any) => log.level === 'error') as LogEntry[]),
     ) as Observable<LogEntry[]>;
   }
 
@@ -251,7 +270,7 @@ export class DebugLogsComponent implements OnInit {
 
   formatTimestamp(timestamp: any): string {
     if (!timestamp) return 'N/A';
-    
+
     let date: Date;
     if (timestamp.toDate) {
       date = timestamp.toDate();
@@ -260,7 +279,7 @@ export class DebugLogsComponent implements OnInit {
     } else {
       date = new Date(timestamp);
     }
-    
+
     return date.toLocaleString();
   }
 

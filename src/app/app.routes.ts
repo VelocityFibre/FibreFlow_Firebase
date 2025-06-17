@@ -42,8 +42,9 @@ export const routes: Routes = [
   // Dashboard-linked routes
   {
     path: 'materials',
-    redirectTo: 'stock',
-    pathMatch: 'full',
+    loadChildren: () =>
+      import('./features/materials/materials.routes').then((m) => m.materialRoutes),
+    data: { preload: true },
   },
   {
     path: 'issues',

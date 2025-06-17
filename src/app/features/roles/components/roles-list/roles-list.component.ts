@@ -398,7 +398,7 @@ export class RolesListComponent implements OnInit {
   roles$!: Observable<Role[]>;
   displayedColumns: string[] = ['name', 'description', 'permissions', 'users', 'actions'];
   loading = true;
-  
+
   // Role counts
   systemRolesCount = 0;
   customRolesCount = 0;
@@ -416,8 +416,8 @@ export class RolesListComponent implements OnInit {
     this.roles$ = this.roleService.getRoles();
     this.roles$.subscribe((roles) => {
       this.rolesArray = roles;
-      this.systemRolesCount = roles.filter(r => r.isSystem).length;
-      this.customRolesCount = roles.filter(r => !r.isSystem).length;
+      this.systemRolesCount = roles.filter((r) => r.isSystem).length;
+      this.customRolesCount = roles.filter((r) => !r.isSystem).length;
       this.loading = false;
     });
   }

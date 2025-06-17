@@ -97,7 +97,7 @@ export class RoleService {
       const roles = await new Promise<Role[]>((resolve) => {
         this.getRoles()
           .pipe(map((roles) => roles))
-          .subscribe(roles => resolve(roles));
+          .subscribe((roles) => resolve(roles));
       });
 
       if (!roles || roles.length === 0) {

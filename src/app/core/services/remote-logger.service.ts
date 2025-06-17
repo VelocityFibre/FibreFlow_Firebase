@@ -28,7 +28,12 @@ export class RemoteLoggerService {
     }, 100);
   }
 
-  async log(level: LogEntry['level'], message: string, component?: string, data?: any): Promise<void> {
+  async log(
+    level: LogEntry['level'],
+    message: string,
+    component?: string,
+    data?: any,
+  ): Promise<void> {
     try {
       const logEntry: LogEntry = {
         level,
@@ -79,7 +84,9 @@ export class RemoteLoggerService {
         data: JSON.stringify({
           name: error.name,
           context,
-          isNG0200: error.message?.includes('NG0200') || error.message?.includes('ExpressionChangedAfterItHasBeenCheckedError'),
+          isNG0200:
+            error.message?.includes('NG0200') ||
+            error.message?.includes('ExpressionChangedAfterItHasBeenCheckedError'),
         }),
         sessionId: this.sessionId,
       };

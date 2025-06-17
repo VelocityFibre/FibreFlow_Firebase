@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
+import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -33,6 +34,7 @@ import { BOQImportDialogComponent } from '../boq-import-dialog/boq-import-dialog
     ReactiveFormsModule,
     MatCardModule,
     MatTableModule,
+    MatSortModule,
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
@@ -167,10 +169,16 @@ import { BOQImportDialogComponent } from '../boq-import-dialog/boq-import-dialog
         </mat-card-header>
         <mat-card-content>
           <div class="table-container" *ngIf="!loading; else loadingTemplate">
-            <table mat-table [dataSource]="filteredItems" class="boq-table">
+            <table
+              mat-table
+              [dataSource]="filteredItems"
+              class="boq-table"
+              matSort
+              (matSortChange)="onSortChange($event)"
+            >
               <!-- Project Column -->
               <ng-container matColumnDef="project">
-                <th mat-header-cell *matHeaderCellDef>Project</th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Project</th>
                 <td mat-cell *matCellDef="let item">
                   <div class="project-info">
                     <div class="project-name">{{ getProjectName(item.projectId) }}</div>
@@ -181,7 +189,7 @@ import { BOQImportDialogComponent } from '../boq-import-dialog/boq-import-dialog
 
               <!-- Item Code Column -->
               <ng-container matColumnDef="itemCode">
-                <th mat-header-cell *matHeaderCellDef>Item Code</th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Item Code</th>
                 <td mat-cell *matCellDef="let item" class="code-cell">
                   {{ item.itemCode || '-' }}
                 </td>
@@ -189,7 +197,7 @@ import { BOQImportDialogComponent } from '../boq-import-dialog/boq-import-dialog
 
               <!-- Description Column -->
               <ng-container matColumnDef="description">
-                <th mat-header-cell *matHeaderCellDef>Description</th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
                 <td mat-cell *matCellDef="let item">
                   <div class="description-cell">
                     <div class="description-text">{{ item.description }}</div>
@@ -202,7 +210,9 @@ import { BOQImportDialogComponent } from '../boq-import-dialog/boq-import-dialog
 
               <!-- Required Column -->
               <ng-container matColumnDef="required">
-                <th mat-header-cell *matHeaderCellDef class="number-header">Required</th>
+                <th mat-header-cell *matHeaderCellDef class="number-header" mat-sort-header>
+                  Required
+                </th>
                 <td mat-cell *matCellDef="let item" class="number-cell">
                   {{ item.requiredQuantity | number }}
                 </td>
@@ -210,7 +220,9 @@ import { BOQImportDialogComponent } from '../boq-import-dialog/boq-import-dialog
 
               <!-- Allocated Column -->
               <ng-container matColumnDef="allocated">
-                <th mat-header-cell *matHeaderCellDef class="number-header">Allocated</th>
+                <th mat-header-cell *matHeaderCellDef class="number-header" mat-sort-header>
+                  Allocated
+                </th>
                 <td mat-cell *matCellDef="let item" class="number-cell">
                   {{ item.allocatedQuantity | number }}
                 </td>
@@ -218,7 +230,9 @@ import { BOQImportDialogComponent } from '../boq-import-dialog/boq-import-dialog
 
               <!-- Remaining Column -->
               <ng-container matColumnDef="remaining">
-                <th mat-header-cell *matHeaderCellDef class="number-header">Remaining</th>
+                <th mat-header-cell *matHeaderCellDef class="number-header" mat-sort-header>
+                  Remaining
+                </th>
                 <td mat-cell *matCellDef="let item" class="number-cell">
                   {{ item.remainingQuantity | number }}
                 </td>
@@ -226,7 +240,9 @@ import { BOQImportDialogComponent } from '../boq-import-dialog/boq-import-dialog
 
               <!-- Unit Price Column -->
               <ng-container matColumnDef="unitPrice">
-                <th mat-header-cell *matHeaderCellDef class="number-header">Unit Price</th>
+                <th mat-header-cell *matHeaderCellDef class="number-header" mat-sort-header>
+                  Unit Price
+                </th>
                 <td mat-cell *matCellDef="let item" class="number-cell">
                   R{{ item.unitPrice | number: '1.2-2' }}
                 </td>
@@ -234,7 +250,9 @@ import { BOQImportDialogComponent } from '../boq-import-dialog/boq-import-dialog
 
               <!-- Total Price Column -->
               <ng-container matColumnDef="totalPrice">
-                <th mat-header-cell *matHeaderCellDef class="number-header">Total Price</th>
+                <th mat-header-cell *matHeaderCellDef class="number-header" mat-sort-header>
+                  Total Price
+                </th>
                 <td mat-cell *matCellDef="let item" class="number-cell">
                   R{{ item.totalPrice | number: '1.2-2' }}
                 </td>
@@ -242,7 +260,7 @@ import { BOQImportDialogComponent } from '../boq-import-dialog/boq-import-dialog
 
               <!-- Status Column -->
               <ng-container matColumnDef="status">
-                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
                 <td mat-cell *matCellDef="let item">
                   <mat-chip [class]="'status-' + item.status.toLowerCase().replace(' ', '-')">
                     {{ item.status }}
@@ -252,7 +270,7 @@ import { BOQImportDialogComponent } from '../boq-import-dialog/boq-import-dialog
 
               <!-- Quote Column -->
               <ng-container matColumnDef="quote">
-                <th mat-header-cell *matHeaderCellDef>Quote</th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Quote</th>
                 <td mat-cell *matCellDef="let item">
                   <mat-chip *ngIf="item.needsQuote" class="quote-chip">
                     <mat-icon>description</mat-icon>
@@ -578,6 +596,7 @@ export class BOQListComponent implements OnInit, OnDestroy {
   projects: Project[] = [];
   projectSummary: BOQSummary | null = null;
   loading = true;
+  currentSort: Sort = { active: '', direction: '' };
 
   selectedProjectId = 'all';
   selectedStatus: BOQStatus | 'all' = 'all';
@@ -614,12 +633,12 @@ export class BOQListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Check for projectId in query params
-    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
+    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       if (params['projectId']) {
         this.selectedProjectId = params['projectId'];
       }
     });
-    
+
     this.loadData();
     this.setupSearch();
   }
@@ -676,6 +695,11 @@ export class BOQListComponent implements OnInit, OnDestroy {
       );
     }
 
+    // Apply sorting
+    if (this.currentSort.active && this.currentSort.direction) {
+      filtered = this.sortData(filtered, this.currentSort);
+    }
+
     this.filteredItems = filtered;
   }
 
@@ -708,9 +732,9 @@ export class BOQListComponent implements OnInit, OnDestroy {
   openAddDialog() {
     const dialogRef = this.dialog.open(BOQFormDialogComponent, {
       width: '600px',
-      data: { 
+      data: {
         projects: this.projects,
-        selectedProjectId: this.selectedProjectId !== 'all' ? this.selectedProjectId : null
+        selectedProjectId: this.selectedProjectId !== 'all' ? this.selectedProjectId : null,
       },
     });
 
@@ -724,9 +748,9 @@ export class BOQListComponent implements OnInit, OnDestroy {
   openImportDialog() {
     const dialogRef = this.dialog.open(BOQImportDialogComponent, {
       width: '800px',
-      data: { 
+      data: {
         projects: this.projects,
-        selectedProjectId: this.selectedProjectId !== 'all' ? this.selectedProjectId : null
+        selectedProjectId: this.selectedProjectId !== 'all' ? this.selectedProjectId : null,
       },
     });
 
@@ -798,5 +822,52 @@ export class BOQListComponent implements OnInit, OnDestroy {
     a.download = `boq-items-${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
     window.URL.revokeObjectURL(url);
+  }
+
+  onSortChange(sort: Sort) {
+    this.currentSort = sort;
+    this.filterItems();
+  }
+
+  private sortData(data: BOQItem[], sort: Sort): BOQItem[] {
+    if (!sort.active || sort.direction === '') {
+      return data;
+    }
+
+    return data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'project':
+          return this.compare(
+            this.getProjectName(a.projectId),
+            this.getProjectName(b.projectId),
+            isAsc,
+          );
+        case 'itemCode':
+          return this.compare(a.itemCode, b.itemCode, isAsc);
+        case 'description':
+          return this.compare(a.description, b.description, isAsc);
+        case 'required':
+          return this.compare(a.requiredQuantity, b.requiredQuantity, isAsc);
+        case 'allocated':
+          return this.compare(a.allocatedQuantity, b.allocatedQuantity, isAsc);
+        case 'remaining':
+          return this.compare(a.remainingQuantity, b.remainingQuantity, isAsc);
+        case 'unitPrice':
+          return this.compare(a.unitPrice, b.unitPrice, isAsc);
+        case 'totalPrice':
+          return this.compare(a.totalPrice, b.totalPrice, isAsc);
+        case 'status':
+          return this.compare(a.status, b.status, isAsc);
+        case 'quote':
+          return this.compare(a.needsQuote ? 1 : 0, b.needsQuote ? 1 : 0, isAsc);
+        default:
+          return 0;
+      }
+    });
+  }
+
+  private compare(a: number | string, b: number | string, isAsc: boolean): number {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 }

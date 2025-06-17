@@ -52,15 +52,23 @@ export class ErrorHandlerService implements ErrorHandler {
     }
 
     // Special handling for NG0200 errors (ExpressionChangedAfterItHasBeenCheckedError)
-    if (error.message?.includes('NG0200') || error.message?.includes('ExpressionChangedAfterItHasBeenCheckedError')) {
+    if (
+      error.message?.includes('NG0200') ||
+      error.message?.includes('ExpressionChangedAfterItHasBeenCheckedError')
+    ) {
       console.error('🔴 NG0200 ERROR DETECTED - Expression Changed After Check:');
       console.error('Full error message:', error.message);
       console.error('Error name:', error.name);
       console.error('Current URL:', this.router.url);
       console.error('Stack trace:', error.stack);
       console.error('Error object:', error);
-      console.error('Angular zone state:', typeof (window as any).Zone !== 'undefined' ? (window as any).Zone.current.name : 'Zone not available');
-      
+      console.error(
+        'Angular zone state:',
+        typeof (window as any).Zone !== 'undefined'
+          ? (window as any).Zone.current.name
+          : 'Zone not available',
+      );
+
       // Log detailed NG0200 info to remote logger
       if (this.remoteLogger) {
         try {
@@ -69,7 +77,10 @@ export class ErrorHandlerService implements ErrorHandler {
             errorName: error.name,
             url: this.router.url,
             stack: error.stack,
-            zoneState: typeof (window as any).Zone !== 'undefined' ? (window as any).Zone.current.name : 'Zone not available',
+            zoneState:
+              typeof (window as any).Zone !== 'undefined'
+                ? (window as any).Zone.current.name
+                : 'Zone not available',
             timestamp: new Date().toISOString(),
           });
         } catch (logError) {

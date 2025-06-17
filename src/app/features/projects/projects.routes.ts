@@ -20,4 +20,9 @@ export const projectRoutes: Routes = [
         (m) => m.ProjectDetailComponent,
       ),
   },
+  {
+    path: ':projectId/boq',
+    loadChildren: () =>
+      import('../boq-management/boq-management.routes').then((m) => m.boqManagementRoutes),
+  },
 ];

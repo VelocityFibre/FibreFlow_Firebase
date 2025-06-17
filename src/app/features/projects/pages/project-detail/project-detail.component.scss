@@ -596,3 +596,63 @@ mat-chip.priority-critical {
   font-size: 11px !important;
   min-height: 22px !important;
 }
+
+/* BOQ Card Styles */
+.action-card {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.boq-overview {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 8px 0;
+}
+
+.boq-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(var(--ff-primary) / 0.1);
+  color: rgb(var(--ff-primary));
+  
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.boq-info {
+  flex: 1;
+  
+  .boq-description {
+    margin: 0 0 8px 0;
+    color: rgb(var(--ff-muted-foreground));
+    font-size: 14px;
+  }
+  
+  .boq-stats {
+    display: flex;
+    gap: 16px;
+    
+    .stat-item {
+      font-size: 14px;
+      font-weight: 600;
+      color: rgb(var(--ff-foreground));
+    }
+  }
+}
+
+.navigate-icon {
+  color: rgb(var(--ff-muted-foreground));
+}
