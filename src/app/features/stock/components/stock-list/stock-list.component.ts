@@ -141,8 +141,17 @@ import { StockImportDialogComponent } from '../stock-import-dialog/stock-import-
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
               <td mat-cell *matCellDef="let item">
                 <div class="item-name">
-                  <strong>{{ item.name }}</strong>
-                  <small *ngIf="item.description">{{ item.description }}</small>
+                  <strong>{{ item.materialDetails?.name || item.name }}</strong>
+                  <small *ngIf="item.materialDetails?.description || item.description">
+                    {{ item.materialDetails?.description || item.description }}
+                  </small>
+                  <mat-icon 
+                    *ngIf="item.materialDetails" 
+                    class="material-linked-icon" 
+                    matTooltip="Linked to Master Material: {{item.itemCode}}"
+                    inline="true">
+                    link
+                  </mat-icon>
                 </div>
               </td>
             </ng-container>
@@ -358,11 +367,21 @@ import { StockImportDialogComponent } from '../stock-import-dialog/stock-import-
         display: flex;
         flex-direction: column;
         gap: 2px;
+        position: relative;
       }
 
       .item-name small {
         color: #666;
         font-size: 12px;
+      }
+
+      .material-linked-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        color: #4caf50;
+        vertical-align: middle;
+        margin-left: 8px;
       }
 
       .stock-levels {

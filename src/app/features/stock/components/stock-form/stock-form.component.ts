@@ -10,6 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { Observable, map, startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 
 import { StockService } from '../../services/stock.service';
 import {
@@ -18,6 +20,8 @@ import {
   StockItemStatus,
   UnitOfMeasure,
 } from '../../models/stock-item.model';
+import { MaterialService } from '../../../materials/services/material.service';
+import { MasterMaterial } from '../../../materials/models/material.model';
 
 @Component({
   selector: 'app-stock-form',
@@ -34,6 +38,7 @@ import {
     MatSlideToggleModule,
     MatDividerModule,
     MatProgressSpinnerModule,
+    MatAutocompleteModule,
   ],
   template: `
     <h2 mat-dialog-title>{{ data.mode === 'add' ? 'Add New Stock Item' : 'Edit Stock Item' }}</h2>
@@ -46,8 +51,21 @@ import {
 
           <div class="form-row">
             <mat-form-field appearance="outline">
-              <mat-label>Item Code</mat-label>
-              <input matInput formControlName="itemCode" placeholder="e.g., FIB-001" />
+              <mat-label>Item Code / Search Material</mat-label>
+              <input 
+                matInput 
+                formControlName="itemCode" 
+                placeholder="Type to search materials or enter custom code"
+                [matAutocomplete]="auto" />
+              <mat-icon matSuffix *ngIf="selectedMaterial" class="material-linked">link</mat-icon>
+              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMaterial" (optionSelected)="onMaterialSelected($event)">
+                <mat-option *ngFor="let material of filteredMaterials$ | async" [value]="material">
+                  <div class="material-option">
+                    <span class="material-code">{{ material.itemCode }}</span>
+                    <span class="material-name">{{ material.description }}</span>
+                  </div>
+                </mat-option>
+              </mat-autocomplete>
               <button
                 mat-icon-button
                 matSuffix
@@ -329,17 +347,55 @@ import {
         display: inline-block;
         margin-right: 8px;
       }
+
+      /* Material autocomplete styles */
+      .material-linked {
+        color: #4caf50;
+        font-size: 18px;
+      }
+
+      .material-option {
+        display: flex;
+        flex-direction: column;
+        padding: 4px 0;
+        line-height: 1.4;
+      }
+
+      .material-code {
+        font-weight: 500;
+        color: var(--mat-sys-primary);
+        font-family: monospace;
+        font-size: 13px;
+      }
+
+      .material-name {
+        color: var(--mat-sys-on-surface-variant);
+        font-size: 12px;
+        margin-top: 2px;
+      }
+
+      ::ng-deep .mat-mdc-autocomplete-panel {
+        max-height: 400px;
+      }
+
+      ::ng-deep .mat-mdc-option {
+        min-height: 48px;
+        line-height: normal;
+      }
     `,
   ],
 })
 export class StockFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private stockService = inject(StockService);
+  private materialService = inject(MaterialService);
   public dialogRef = inject(MatDialogRef<StockFormComponent>);
   public data = inject<{ mode: 'add' | 'edit'; item?: StockItem }>(MAT_DIALOG_DATA);
 
   stockForm!: FormGroup;
   loading = false;
+  selectedMaterial: MasterMaterial | null = null;
+  filteredMaterials$!: Observable<MasterMaterial[]>;
 
   // Expose enums to template
   StockCategory = StockCategory;
@@ -348,10 +404,75 @@ export class StockFormComponent implements OnInit {
 
   ngOnInit() {
     this.initializeForm();
+    this.setupMaterialAutocomplete();
 
     if (this.data.mode === 'edit' && this.data.item) {
       this.stockForm.patchValue(this.data.item);
     }
+  }
+
+  setupMaterialAutocomplete() {
+    this.filteredMaterials$ = this.stockForm.get('itemCode')!.valueChanges.pipe(
+      startWith(''),
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(value => {
+        const searchTerm = typeof value === 'string' ? value : value?.itemCode || '';
+        return this.materialService.getMaterials({ 
+          searchTerm: searchTerm,
+          isActive: true 
+        });
+      })
+    );
+  }
+
+  displayMaterial(material: MasterMaterial): string {
+    return material ? material.itemCode : '';
+  }
+
+  onMaterialSelected(event: any) {
+    const material = event.option.value as MasterMaterial;
+    this.selectedMaterial = material;
+    
+    // Auto-populate form fields from material
+    this.stockForm.patchValue({
+      itemCode: material.itemCode,
+      name: material.description,
+      description: material.specifications || '',
+      unitOfMeasure: this.mapMaterialUoMToStockUoM(material.unitOfMeasure),
+      standardCost: material.unitCost || 0,
+      minimumStock: material.minimumStockLevel || 0,
+      reorderLevel: material.reorderPoint || 0,
+    });
+
+    // Try to map category
+    const mappedCategory = this.mapMaterialCategoryToStockCategory(material.category);
+    if (mappedCategory) {
+      this.stockForm.patchValue({ category: mappedCategory });
+    }
+  }
+
+  mapMaterialUoMToStockUoM(materialUoM: string): UnitOfMeasure {
+    // Map material UoM to stock UoM
+    const mapping: Record<string, UnitOfMeasure> = {
+      'each': UnitOfMeasure.UNITS,
+      'meters': UnitOfMeasure.METERS,
+      'feet': UnitOfMeasure.METERS, // Convert feet to meters
+      'units': UnitOfMeasure.UNITS,
+      'rolls': UnitOfMeasure.ROLLS,
+      'boxes': UnitOfMeasure.BOXES,
+    };
+    return mapping[materialUoM] || UnitOfMeasure.UNITS;
+  }
+
+  mapMaterialCategoryToStockCategory(materialCategory: string): StockCategory | null {
+    // Map material categories to stock categories
+    if (materialCategory.includes('Cable')) return StockCategory.FIBRE_CABLE;
+    if (materialCategory.includes('Pole')) return StockCategory.POLES;
+    if (materialCategory.includes('Connector')) return StockCategory.EQUIPMENT;
+    if (materialCategory.includes('Duct')) return StockCategory.EQUIPMENT;
+    if (materialCategory.includes('Closure')) return StockCategory.EQUIPMENT;
+    return StockCategory.OTHER;
   }
 
   initializeForm() {

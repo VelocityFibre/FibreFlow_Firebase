@@ -19,7 +19,7 @@ import {
   getDoc,
 } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
-import { Observable, map } from 'rxjs';
+import { Observable, map, switchMap, of, combineLatest, firstValueFrom } from 'rxjs';
 import {
   StockItem,
   StockAllocation,
@@ -33,6 +33,7 @@ import {
   isIncomingMovement,
   isOutgoingMovement,
 } from '../models/stock-movement.model';
+import { MaterialService } from '../../materials/services/material.service';
 
 @Injectable({
   providedIn: 'root',
@@ -40,6 +41,7 @@ import {
 export class StockService {
   private firestore = inject(Firestore);
   private auth = inject(Auth);
+  private materialService = inject(MaterialService);
 
   private stockItemsCollection = collection(
     this.firestore,
@@ -58,6 +60,7 @@ export class StockService {
   getStockItems(): Observable<StockItem[]> {
     const q = query(this.stockItemsCollection, orderBy('name'));
     return collectionData(q, { idField: 'id' }).pipe(
+      switchMap((items) => this.enrichStockItemsWithMaterialData(items)),
       map((items) =>
         items.map((item) => ({
           ...item,
@@ -67,17 +70,76 @@ export class StockService {
     );
   }
 
+  // Helper method to enrich stock items with material data
+  private enrichStockItemsWithMaterialData(stockItems: StockItem[]): Observable<StockItem[]> {
+    if (stockItems.length === 0) return of([]);
+    
+    // Get unique item codes
+    const itemCodes = [...new Set(stockItems.map(item => item.itemCode))];
+    
+    // Fetch material data for all item codes
+    const materialObservables = itemCodes.map(code => 
+      this.materialService.getMaterialByCode(code).pipe(
+        map(material => ({ code, material }))
+      )
+    );
+    
+    return combineLatest(materialObservables).pipe(
+      map(materialsData => {
+        // Create a map for quick lookup
+        const materialMap = new Map(
+          materialsData.map(({ code, material }) => [code, material])
+        );
+        
+        // Enrich stock items with material data
+        return stockItems.map(item => {
+          const material = materialMap.get(item.itemCode);
+          if (material) {
+            return {
+              ...item,
+              materialDetails: {
+                name: material.description,
+                description: material.description,
+                category: material.category,
+                specifications: material.specifications,
+                unitOfMeasure: material.unitOfMeasure,
+              }
+            };
+          }
+          return item;
+        });
+      })
+    );
+  }
+
   getStockItemById(id: string): Observable<StockItem | undefined> {
     const docRef = doc(this.stockItemsCollection, id);
     return docData(docRef, { idField: 'id' }).pipe(
-      map((item) =>
-        item
-          ? {
+      switchMap((item) => {
+        if (!item) return of(undefined);
+        
+        // Enrich with material data
+        return this.materialService.getMaterialByCode(item.itemCode).pipe(
+          map((material) => {
+            const enrichedItem = {
               ...item,
               availableStock: item.currentStock - item.allocatedStock,
+            };
+            
+            if (material) {
+              enrichedItem.materialDetails = {
+                name: material.description,
+                description: material.description,
+                category: material.category,
+                specifications: material.specifications,
+                unitOfMeasure: material.unitOfMeasure,
+              };
             }
-          : undefined,
-      ),
+            
+            return enrichedItem;
+          })
+        );
+      }),
     );
   }
 

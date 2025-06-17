@@ -14,7 +14,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Observable, Subject, debounceTime, distinctUntilChanged, startWith, switchMap, merge } from 'rxjs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Observable, Subject, debounceTime, distinctUntilChanged, startWith, switchMap, merge, of } from 'rxjs';
 
 import { MasterMaterial, MaterialFilter, MaterialCategory } from '../../models/material.model';
 import { MaterialService } from '../../services/material.service';
@@ -41,68 +42,55 @@ import { LoadingService } from '../../../../core/services/loading.service';
     MatTooltipModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatProgressSpinnerModule,
   ],
   template: `
     <div class="materials-container">
-      <!-- Header -->
-      <mat-card class="header-card ff-card-header">
-        <div class="header-content">
-          <div class="header-title">
-            <h1>Master Materials</h1>
-            <p class="subtitle">Manage material catalog and specifications</p>
-          </div>
-          <div class="header-actions">
-            <button
-              mat-button
-              (click)="exportMaterials()"
-              [disabled]="!(materials$ | async)?.length"
-            >
-              <mat-icon>download</mat-icon>
-              Export
-            </button>
-            <button mat-button (click)="openImportDialog()">
-              <mat-icon>upload</mat-icon>
-              Import
-            </button>
-            <button mat-raised-button color="primary" (click)="openMaterialDialog()">
-              <mat-icon>add</mat-icon>
-              Add Material
-            </button>
-          </div>
-        </div>
-      </mat-card>
-
-      <!-- Filters -->
-      <mat-card class="filters-card ff-card">
-        <div class="filters-content">
-          <mat-form-field appearance="outline" class="search-field">
-            <mat-label>Search materials</mat-label>
-            <input
-              matInput
-              [formControl]="searchControl"
-              placeholder="Search by code, description..."
-            />
-            <mat-icon matSuffix>search</mat-icon>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="category-field">
-            <mat-label>Category</mat-label>
-            <mat-select [(ngModel)]="selectedCategory" (ngModelChange)="applyFilter()">
-              <mat-option value="">All Categories</mat-option>
-              <mat-option *ngFor="let cat of categories" [value]="cat">{{ cat }}</mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <button mat-icon-button (click)="resetFilters()" matTooltip="Reset filters">
-            <mat-icon>filter_alt_off</mat-icon>
+      <div class="header">
+        <h1>Master Materials</h1>
+        <div class="header-actions">
+          <button mat-raised-button color="primary" (click)="openMaterialDialog()">
+            <mat-icon>add</mat-icon>
+            Add Material
+          </button>
+          <button mat-raised-button (click)="openImportDialog()">
+            <mat-icon>upload</mat-icon>
+            Import
+          </button>
+          <button mat-raised-button (click)="exportMaterials()">
+            <mat-icon>download</mat-icon>
+            Export
           </button>
         </div>
-      </mat-card>
+      </div>
 
-      <!-- Materials Table -->
-      <mat-card class="table-card ff-card">
-        <div class="table-container">
-          <table mat-table [dataSource]="(materials$ | async) || []" class="materials-table">
+      <div class="filters">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search</mat-label>
+          <input
+            matInput
+            [formControl]="searchControl"
+            placeholder="Search by code, description..."
+          />
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="category-field">
+          <mat-label>Category</mat-label>
+          <mat-select [(ngModel)]="selectedCategory" (ngModelChange)="applyFilter()">
+            <mat-option value="">All Categories</mat-option>
+            <mat-option *ngFor="let cat of categories" [value]="cat">{{ cat }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-button (click)="resetFilters()" *ngIf="hasActiveFilters()">
+          <mat-icon>clear</mat-icon>
+          Clear Filters
+        </button>
+      </div>
+
+      <div class="table-container" *ngIf="!(loading$ | async); else loadingTemplate">
+        <table mat-table [dataSource]="(materials$ | async) || []" class="materials-table">
             <!-- Item Code Column -->
             <ng-container matColumnDef="itemCode">
               <th mat-header-cell *matHeaderCellDef>Item Code</th>
@@ -146,7 +134,7 @@ import { LoadingService } from '../../../../core/services/loading.service';
             <ng-container matColumnDef="unitCost">
               <th mat-header-cell *matHeaderCellDef class="number-header">Unit Cost</th>
               <td mat-cell *matCellDef="let material" class="number-cell">
-                R{{ material.unitCost | number: '1.2-2' }}
+                {{ formatCurrency(material.unitCost) }}
               </td>
             </ng-container>
 
@@ -210,8 +198,14 @@ import { LoadingService } from '../../../../core/services/loading.service';
               </td>
             </tr>
           </table>
+      </div>
+
+      <ng-template #loadingTemplate>
+        <div class="loading">
+          <mat-spinner></mat-spinner>
+          <p>Loading materials...</p>
         </div>
-      </mat-card>
+      </ng-template>
     </div>
   `,
   styles: [
@@ -220,181 +214,189 @@ import { LoadingService } from '../../../../core/services/loading.service';
         padding: 24px;
         max-width: 1400px;
         margin: 0 auto;
+        background-color: var(--mat-sys-background);
       }
 
-      .header-card {
-        margin-bottom: 24px;
-      }
-
-      .header-content {
+      .header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        flex-wrap: wrap;
-        gap: 16px;
+        margin-bottom: 24px;
       }
 
-      .header-title {
-        h1 {
-          margin: 0;
-          font-size: 28px;
-          font-weight: 500;
-          color: rgb(var(--ff-foreground));
-        }
-
-        .subtitle {
-          margin: 4px 0 0;
-          color: rgb(var(--ff-muted-foreground));
-        }
+      h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 500;
+        color: var(--mat-sys-on-surface);
       }
 
       .header-actions {
         display: flex;
-        gap: 8px;
-        align-items: center;
+        gap: 12px;
       }
 
-      .filters-card {
-        margin-bottom: 24px;
-      }
-
-      .filters-content {
+      .filters {
         display: flex;
         gap: 16px;
-        align-items: center;
+        margin-bottom: 24px;
         flex-wrap: wrap;
+      }
+
+      .filters mat-form-field {
+        min-width: 200px;
       }
 
       .search-field {
         flex: 1;
-        min-width: 300px;
+        max-width: 400px;
       }
 
       .category-field {
         width: 250px;
       }
 
-      .table-card {
+      .table-container {
+        background: var(--mat-sys-surface);
+        border-radius: 8px;
         overflow: hidden;
+        box-shadow: var(--mat-sys-elevation-1);
+        border: 1px solid var(--mat-sys-outline-variant);
       }
 
-      .table-container {
-        overflow-x: auto;
+      table {
+        width: 100%;
       }
 
       .materials-table {
         width: 100%;
         min-width: 800px;
+      }
 
-        .code-cell {
-          font-family: monospace;
-          font-weight: 500;
+      .code-cell {
+        font-family: monospace;
+        font-weight: 500;
+      }
+
+      .item-code {
+        color: var(--mat-sys-primary);
+        font-weight: 500;
+      }
+
+      .description-cell {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .description {
+        font-weight: 500;
+      }
+
+      .specifications {
+        color: #666;
+        font-size: 12px;
+      }
+
+      mat-chip {
+        font-size: 12px !important;
+        height: 24px !important;
+        line-height: 24px !important;
+      }
+
+      .category-chip {
+        &.cable {
+          background-color: #e3f2fd !important;
+          color: #1565c0 !important;
         }
 
-        .description-cell {
-          .description {
-            display: block;
-            font-weight: 500;
-            color: rgb(var(--ff-foreground));
-          }
-
-          .specifications {
-            display: block;
-            font-size: 12px;
-            color: rgb(var(--ff-muted-foreground));
-            margin-top: 2px;
-          }
+        &.pole {
+          background-color: #f3e5f5 !important;
+          color: #6a1b9a !important;
         }
 
-        .category-chip {
-          font-size: 12px !important;
-          height: 24px !important;
-
-          &.cable {
-            background-color: rgb(var(--ff-info) / 0.15) !important;
-            color: rgb(var(--ff-info)) !important;
-          }
-
-          &.pole {
-            background-color: rgb(var(--ff-warning) / 0.15) !important;
-            color: rgb(var(--ff-warning)) !important;
-          }
-
-          &.connector {
-            background-color: rgb(var(--ff-success) / 0.15) !important;
-            color: rgb(var(--ff-success)) !important;
-          }
-
-          &.accessories {
-            background-color: rgb(var(--ff-muted)) !important;
-            color: rgb(var(--ff-muted-foreground)) !important;
-          }
+        &.connector {
+          background-color: #e8f5e9 !important;
+          color: #2e7d32 !important;
         }
 
-        .uom-cell {
-          .uom-badge {
-            background-color: rgb(var(--ff-secondary));
-            color: rgb(var(--ff-secondary-foreground));
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 500;
-          }
+        &.accessories {
+          background-color: #f5f5f5 !important;
+          color: #616161 !important;
         }
+      }
 
-        .number-header {
-          text-align: right;
-        }
+      .uom-badge {
+        background-color: #e0e0e0;
+        color: #424242;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+      }
 
-        .number-cell {
-          text-align: right;
-          font-weight: 500;
-        }
+      .number-header {
+        text-align: right;
+      }
 
-        .stock-levels {
-          display: flex;
-          flex-direction: column;
-          gap: 2px;
-          font-size: 12px;
+      .number-cell {
+        text-align: right;
+        font-weight: 500;
+      }
 
-          .min-stock {
-            color: rgb(var(--ff-muted-foreground));
-          }
+      .stock-levels {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        font-size: 13px;
+      }
 
-          .reorder-point {
-            color: rgb(var(--ff-warning));
-          }
-        }
+      .min-stock {
+        color: #666;
+      }
+
+      .reorder-point {
+        color: #f57c00;
       }
 
       .empty-state {
         text-align: center;
         padding: 64px 24px;
+      }
 
-        mat-icon {
-          font-size: 64px;
-          width: 64px;
-          height: 64px;
-          color: rgb(var(--ff-muted-foreground));
-          margin-bottom: 16px;
-        }
+      .empty-state mat-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        color: #999;
+        margin-bottom: 16px;
+      }
 
-        p {
-          color: rgb(var(--ff-muted-foreground));
-          margin: 0 0 24px;
-        }
+      .empty-state p {
+        color: #666;
+        margin: 0 0 24px;
       }
 
       .delete-option {
-        color: rgb(var(--ff-destructive));
-
-        mat-icon {
-          color: rgb(var(--ff-destructive));
-        }
+        color: #d32f2f;
       }
 
       .no-data {
         height: 400px;
+      }
+
+      .loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        padding: 48px;
+      }
+
+      .loading p {
+        color: var(--mat-sys-on-surface-variant);
+        margin: 0;
       }
     `,
   ],
@@ -407,6 +409,7 @@ export class MaterialListComponent implements OnInit {
   private loadingService = inject(LoadingService);
 
   materials$!: Observable<MasterMaterial[]>;
+  loading$ = of(false);
   displayedColumns = [
     'itemCode',
     'description',
@@ -455,6 +458,10 @@ export class MaterialListComponent implements OnInit {
     this.loadMaterials();
   }
 
+  hasActiveFilters(): boolean {
+    return !!(this.searchControl.value || this.selectedCategory);
+  }
+
   resetFilters() {
     this.searchControl.setValue('');
     this.selectedCategory = '';
@@ -466,6 +473,13 @@ export class MaterialListComponent implements OnInit {
     if (category.includes('Pole')) return 'pole';
     if (category.includes('Connector')) return 'connector';
     return 'accessories';
+  }
+
+  formatCurrency(value: number): string {
+    return new Intl.NumberFormat('en-ZA', {
+      style: 'currency',
+      currency: 'ZAR',
+    }).format(value);
   }
 
   openMaterialDialog(material?: MasterMaterial) {

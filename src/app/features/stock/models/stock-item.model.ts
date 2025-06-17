@@ -2,12 +2,23 @@ import { Timestamp } from '@angular/fire/firestore';
 
 export interface StockItem {
   id?: string;
-  itemCode: string;
-  name: string;
-  description?: string;
-  category: StockCategory;
+  itemCode: string; // This links to MasterMaterial.itemCode
+  
+  // Material details (populated from MasterMaterial)
+  materialDetails?: {
+    name: string;
+    description: string;
+    category: string;
+    specifications?: string;
+    unitOfMeasure: string;
+  };
+  
+  // Legacy fields (to be deprecated)
+  name: string; // Will be replaced by materialDetails.name
+  description?: string; // Will be replaced by materialDetails.description
+  category: StockCategory; // Will be replaced by materialDetails.category
   subcategory?: string;
-  unitOfMeasure: UnitOfMeasure;
+  unitOfMeasure: UnitOfMeasure; // Will be replaced by materialDetails.unitOfMeasure
 
   // Stock levels
   currentStock: number;
@@ -23,6 +34,10 @@ export interface StockItem {
   // Storage information
   warehouseLocation?: string;
   storageRequirements?: string;
+  
+  // Batch/Lot tracking
+  batchNumber?: string;
+  expiryDate?: Timestamp;
 
   // Supplier information
   primarySupplierId?: string;
@@ -76,6 +91,7 @@ export enum StockItemStatus {
 export interface StockMovement {
   id?: string;
   stockItemId: string;
+  itemCode: string; // Links to MasterMaterial.itemCode
   stockItemDetails?: StockItem; // Populated on read
   type: MovementType;
   quantity: number;
