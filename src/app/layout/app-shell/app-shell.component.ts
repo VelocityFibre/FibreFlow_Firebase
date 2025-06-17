@@ -45,7 +45,7 @@ interface NavItem {
         <!-- Logo Section -->
         <div class="logo-section">
           <div class="logo-container">
-            <img src="velocity-fibre-logo-new.png" alt="Velocity Fibre" class="logo-image" />
+            <img src="velocity-fibre-logo.jpeg" alt="Velocity Fibre" class="logo-image" />
           </div>
         </div>
 
