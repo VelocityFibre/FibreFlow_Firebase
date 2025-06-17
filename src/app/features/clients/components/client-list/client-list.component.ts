@@ -12,11 +12,13 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatMenuModule } from '@angular/material/menu';
 import { Observable, map, startWith, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { ClientService } from '../../services/client.service';
 import { Client, ClientType, ClientStatus } from '../../models/client.model';
+import { NotificationService } from '../../../../core/services/notification.service';
 
 @Component({
   selector: 'app-client-list',
@@ -35,6 +37,7 @@ import { Client, ClientType, ClientStatus } from '../../models/client.model';
     MatBadgeModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
+    MatMenuModule,
   ],
   template: `
     <div class="clients-container">
@@ -123,8 +126,6 @@ import { Client, ClientType, ClientStatus } from '../../models/client.model';
         <mat-card
           *ngFor="let client of clients"
           class="client-card ff-card-clients"
-          [routerLink]="['/clients', client.id]"
-          matRipple
         >
           <mat-card-header>
             <div class="card-header-content">
@@ -132,14 +133,37 @@ import { Client, ClientType, ClientStatus } from '../../models/client.model';
                 <mat-card-title>{{ client.name }}</mat-card-title>
                 <mat-card-subtitle>{{ client.contactPerson }}</mat-card-subtitle>
               </div>
-              <div class="header-badges">
-                <mat-chip [ngClass]="getTypeClass(client.clientType)">
-                  {{ client.clientType }}
-                </mat-chip>
-                <div class="status-indicator">
-                  <div class="status-dot" [ngClass]="getStatusClass(client.status)"></div>
-                  <span class="status-text">{{ client.status }}</span>
+              <div class="header-actions">
+                <div class="header-badges">
+                  <mat-chip [ngClass]="getTypeClass(client.clientType)">
+                    {{ client.clientType }}
+                  </mat-chip>
+                  <div class="status-indicator">
+                    <div class="status-dot" [ngClass]="getStatusClass(client.status)"></div>
+                    <span class="status-text">{{ client.status }}</span>
+                  </div>
                 </div>
+                <button
+                  mat-icon-button
+                  [matMenuTriggerFor]="menu"
+                  (click)="$event.stopPropagation()"
+                >
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item [routerLink]="['/clients', client.id]">
+                    <mat-icon>visibility</mat-icon>
+                    <span>View Details</span>
+                  </button>
+                  <button mat-menu-item [routerLink]="['/clients', client.id, 'edit']">
+                    <mat-icon>edit</mat-icon>
+                    <span>Edit</span>
+                  </button>
+                  <button mat-menu-item (click)="deleteClient(client)">
+                    <mat-icon>delete</mat-icon>
+                    <span>Delete</span>
+                  </button>
+                </mat-menu>
               </div>
             </div>
           </mat-card-header>
@@ -365,6 +389,12 @@ import { Client, ClientType, ClientStatus } from '../../models/client.model';
         color: var(--mat-sys-on-surface-variant);
       }
 
+      .header-actions {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
       .header-badges {
         display: flex;
         flex-direction: column;
@@ -554,6 +584,7 @@ import { Client, ClientType, ClientStatus } from '../../models/client.model';
 export class ClientListComponent implements OnInit {
   private clientService = inject(ClientService);
   private router = inject(Router);
+  private notificationService = inject(NotificationService);
 
   searchControl = new FormControl('');
   clients$!: Observable<Client[]>;
@@ -618,5 +649,20 @@ export class ClientListComponent implements OnInit {
 
   getStatusClass(status: ClientStatus): string {
     return `status-${status}`;
+  }
+
+  async deleteClient(client: Client): Promise<void> {
+    if (confirm(`Are you sure you want to delete ${client.name}? This action cannot be undone.`)) {
+      try {
+        await this.clientService.deleteClient(client.id!);
+        this.notificationService.success(`Client "${client.name}" has been deleted successfully.`);
+        // Refresh the clients list
+        this.clients$ = this.clientService.getClients();
+        this.ngOnInit(); // Re-initialize to refresh filtered clients
+      } catch (error) {
+        console.error('Error deleting client:', error);
+        this.notificationService.error('Failed to delete client. Please try again.');
+      }
+    }
   }
 }

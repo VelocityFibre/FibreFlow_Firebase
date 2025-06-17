@@ -93,64 +93,74 @@ export class RoleService {
 
   // Initialize default roles (call this during app setup)
   async initializeDefaultRoles(): Promise<void> {
-    const roles = await this.getRoles()
-      .pipe(map((roles) => roles))
-      .toPromise();
+    try {
+      const roles = await new Promise<Role[]>((resolve) => {
+        this.getRoles()
+          .pipe(map((roles) => roles))
+          .subscribe(roles => resolve(roles));
+      });
 
-    if (!roles || roles.length === 0) {
-      // Create default roles
-      const defaultRoles: Omit<Role, 'id' | 'createdAt' | 'updatedAt'>[] = [
-        {
-          name: 'Admin',
-          description: 'Full system access with all permissions',
-          permissions: DEFAULT_ROLE_PERMISSIONS[SYSTEM_ROLES.ADMIN],
-          isSystem: true,
-          userCount: 0,
-          createdBy: 'system',
-          updatedBy: 'system',
-        },
-        {
-          name: 'Project Manager',
-          description: 'Manage projects, tasks, and teams',
-          permissions: DEFAULT_ROLE_PERMISSIONS[SYSTEM_ROLES.PROJECT_MANAGER],
-          isSystem: true,
-          userCount: 0,
-          createdBy: 'system',
-          updatedBy: 'system',
-        },
-        {
-          name: 'Sales',
-          description: 'Manage clients and view project information',
-          permissions: DEFAULT_ROLE_PERMISSIONS[SYSTEM_ROLES.SALES],
-          isSystem: true,
-          userCount: 0,
-          createdBy: 'system',
-          updatedBy: 'system',
-        },
-        {
-          name: 'Technician',
-          description: 'Field technician with task and stock viewing permissions',
-          permissions: DEFAULT_ROLE_PERMISSIONS[SYSTEM_ROLES.TECHNICIAN],
-          isSystem: true,
-          userCount: 0,
-          createdBy: 'system',
-          updatedBy: 'system',
-        },
-        {
-          name: 'Data Capture',
-          description: 'Data entry and stock management permissions',
-          permissions: DEFAULT_ROLE_PERMISSIONS[SYSTEM_ROLES.DATA_CAPTURE],
-          isSystem: true,
-          userCount: 0,
-          createdBy: 'system',
-          updatedBy: 'system',
-        },
-      ];
+      if (!roles || roles.length === 0) {
+        console.log('No roles found, creating default roles...');
+        // Create default roles
+        const defaultRoles: Omit<Role, 'id' | 'createdAt' | 'updatedAt'>[] = [
+          {
+            name: 'Admin',
+            description: 'Full system access with all permissions',
+            permissions: DEFAULT_ROLE_PERMISSIONS[SYSTEM_ROLES.ADMIN],
+            isSystem: true,
+            userCount: 0,
+            createdBy: 'system',
+            updatedBy: 'system',
+          },
+          {
+            name: 'Project Manager',
+            description: 'Manage projects, tasks, and teams',
+            permissions: DEFAULT_ROLE_PERMISSIONS[SYSTEM_ROLES.PROJECT_MANAGER],
+            isSystem: true,
+            userCount: 0,
+            createdBy: 'system',
+            updatedBy: 'system',
+          },
+          {
+            name: 'Sales',
+            description: 'Manage clients and view project information',
+            permissions: DEFAULT_ROLE_PERMISSIONS[SYSTEM_ROLES.SALES],
+            isSystem: true,
+            userCount: 0,
+            createdBy: 'system',
+            updatedBy: 'system',
+          },
+          {
+            name: 'Technician',
+            description: 'Field technician with task and stock viewing permissions',
+            permissions: DEFAULT_ROLE_PERMISSIONS[SYSTEM_ROLES.TECHNICIAN],
+            isSystem: true,
+            userCount: 0,
+            createdBy: 'system',
+            updatedBy: 'system',
+          },
+          {
+            name: 'Data Capture',
+            description: 'Data entry and stock management permissions',
+            permissions: DEFAULT_ROLE_PERMISSIONS[SYSTEM_ROLES.DATA_CAPTURE],
+            isSystem: true,
+            userCount: 0,
+            createdBy: 'system',
+            updatedBy: 'system',
+          },
+        ];
 
-      // Create all default roles
-      for (const role of defaultRoles) {
-        await this.createRole(role);
+        // Create all default roles
+        for (const role of defaultRoles) {
+          await this.createRole(role);
+        }
+        console.log('Default roles created successfully');
+      } else {
+        console.log(`Found ${roles.length} existing roles`);
       }
+    } catch (error) {
+      console.error('Error initializing default roles:', error);
     }
   }
 

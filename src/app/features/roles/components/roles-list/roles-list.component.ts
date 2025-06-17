@@ -398,29 +398,36 @@ export class RolesListComponent implements OnInit {
   roles$!: Observable<Role[]>;
   displayedColumns: string[] = ['name', 'description', 'permissions', 'users', 'actions'];
   loading = true;
+  
+  // Role counts
+  systemRolesCount = 0;
+  customRolesCount = 0;
+  rolesArray: Role[] = [];
 
   ngOnInit() {
-    this.loadRoles();
     // Initialize default roles if needed
-    this.roleService.initializeDefaultRoles();
+    this.roleService.initializeDefaultRoles().then(() => {
+      this.loadRoles();
+    });
   }
 
   loadRoles() {
     this.loading = true;
     this.roles$ = this.roleService.getRoles();
-    this.roles$.subscribe(() => {
+    this.roles$.subscribe((roles) => {
+      this.rolesArray = roles;
+      this.systemRolesCount = roles.filter(r => r.isSystem).length;
+      this.customRolesCount = roles.filter(r => !r.isSystem).length;
       this.loading = false;
     });
   }
 
   getSystemRolesCount(): number {
-    // This would be calculated from the roles observable
-    return 5; // Default system roles count
+    return this.systemRolesCount;
   }
 
   getCustomRolesCount(): number {
-    // This would be calculated from the roles observable
-    return 0; // Will be updated when custom roles are added
+    return this.customRolesCount;
   }
 
   getPermissionPreview(permissions: string[]): string[] {
