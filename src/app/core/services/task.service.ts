@@ -15,6 +15,7 @@ import {
   writeBatch,
   // DocumentReference,
   Query,
+  // Timestamp,
   // collectionGroup,
 } from '@angular/fire/firestore';
 import { Observable, from, map, of, switchMap, firstValueFrom } from 'rxjs';
@@ -185,7 +186,7 @@ export class TaskService {
 
     // If status is changing to completed, set completion date
     if (updates.status === TaskStatus.COMPLETED && !updates.completedDate) {
-      updateData.completedDate = serverTimestamp();
+      updateData.completedDate = serverTimestamp() as any;
       updateData.completionPercentage = 100;
     }
 

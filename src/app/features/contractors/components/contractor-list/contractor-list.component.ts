@@ -328,7 +328,7 @@ export class ContractorListComponent implements OnInit {
   loading = signal(true);
   searchTerm = '';
   statusFilter = '';
-  serviceFilter: ContractorService | '' = '';
+  serviceFilter = '';
   services = CONTRACTOR_SERVICES;
 
   displayedColumns = ['company', 'contact', 'services', 'teams', 'status', 'actions'];
@@ -354,7 +354,9 @@ export class ContractorListComponent implements OnInit {
 
     // Apply service filter
     if (this.serviceFilter) {
-      filtered = filtered.filter((c) => c.capabilities.services.includes(this.serviceFilter));
+      filtered = filtered.filter((c) =>
+        c.capabilities.services.includes(this.serviceFilter as any),
+      );
     }
 
     return filtered;

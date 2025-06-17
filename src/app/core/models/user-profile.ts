@@ -8,6 +8,7 @@ export interface UserProfile {
   phoneNumber?: string;
   company?: string;
   lastLogin?: Date;
+  updatedAt?: Date;
 }
 
 export interface UserPermissions {

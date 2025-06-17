@@ -281,7 +281,7 @@ export class ProjectService {
     await this.phaseService.createProjectPhases(projectId);
   }
 
-  private async updateProjectTaskCounts(projectId: string): Promise<void> {
+  private async updateProjectTaskCounts(_projectId: string): Promise<void> {
     // In a real app, you'd aggregate this data from all tasks
     // For now, we'll just increment counters
     // This would be better handled with Cloud Functions

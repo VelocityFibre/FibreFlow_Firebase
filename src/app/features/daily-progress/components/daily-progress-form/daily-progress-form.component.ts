@@ -171,7 +171,7 @@ import { StockService } from '../../../stock/services/stock.service';
       </mat-form-field>
 
       <div class="form-actions">
-        <button mat-button type="button" (click)="cancel.emit()">Cancel</button>
+        <button mat-button type="button" (click)="cancelForm.emit()">Cancel</button>
         <button
           mat-raised-button
           color="primary"
@@ -234,7 +234,7 @@ export class DailyProgressFormComponent implements OnInit {
 
   @Input() progress?: DailyProgress;
   @Output() save = new EventEmitter<Partial<DailyProgress>>();
-  @Output() cancel = new EventEmitter<void>();
+  @Output() cancelForm = new EventEmitter<void>();
 
   progressForm: FormGroup;
   isSubmitting = false;

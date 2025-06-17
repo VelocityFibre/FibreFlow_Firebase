@@ -26,7 +26,7 @@ import { DailyProgress } from '../../models/daily-progress.model';
         <app-daily-progress-form
           *ngSwitchCase="'new'"
           (save)="onSave($event)"
-          (cancel)="onCancel()"
+          (cancelForm)="onCancel()"
         >
         </app-daily-progress-form>
 
@@ -34,7 +34,7 @@ import { DailyProgress } from '../../models/daily-progress.model';
           *ngSwitchCase="'edit'"
           [progress]="selectedProgress"
           (save)="onUpdate($event)"
-          (cancel)="onCancel()"
+          (cancelForm)="onCancel()"
         >
         </app-daily-progress-form>
 

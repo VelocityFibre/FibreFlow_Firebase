@@ -413,5 +413,6 @@ export class AppShellComponent {
   settingsItems: NavItem[] = [
     { label: 'Settings', icon: 'settings', route: '/settings' },
     { label: 'Audit Trail', icon: 'history', route: '/audit-trail' },
+    { label: 'Debug Logs', icon: 'bug_report', route: '/debug-logs' },
   ];
 }

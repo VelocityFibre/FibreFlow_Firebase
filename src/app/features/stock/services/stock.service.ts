@@ -29,7 +29,7 @@ import {
 } from '../models/stock-item.model';
 import {
   StockMovement,
-  MovementType,
+  // MovementType,
   isIncomingMovement,
   isOutgoingMovement,
 } from '../models/stock-movement.model';

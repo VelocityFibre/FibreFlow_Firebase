@@ -384,7 +384,7 @@ export class ProjectTasksComponent implements OnInit {
   }
 
   formatDate(date: unknown): string {
-    return this.dateFormat.formatDate(date);
+    return this.dateFormat.formatDate(date as any);
   }
 
   addTask(): void {

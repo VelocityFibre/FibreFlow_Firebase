@@ -359,7 +359,7 @@ export class PhaseService {
     const tempIdMap = new Map<string, string>();
 
     // First pass: create/update phases without dependencies
-    phases.forEach((phase, index) => {
+    phases.forEach((phase, _index) => {
       if (!phase.id || phase.id.startsWith('temp-')) {
         // New phase
         const phaseRef = doc(collection(this.firestore, `projects/${projectId}/phases`));

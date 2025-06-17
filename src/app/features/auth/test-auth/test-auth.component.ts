@@ -11,7 +11,7 @@ import {
   USER_GROUP_PERMISSIONS,
   UserPermissions,
 } from '../../../core/models/user-profile';
-import { User } from '@angular/fire/auth';
+// import { User } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-test-auth',
@@ -30,7 +30,7 @@ import { User } from '@angular/fire/auth';
 export class TestAuthComponent implements OnInit {
   private authService = inject(AuthService);
 
-  currentUser: User | null = null;
+  currentUser: { uid: string; email: string; displayName: string } | null = null;
   currentProfile: UserProfile | null = null;
   permissions: UserPermissions | null = null;
   isAuthenticated = false;

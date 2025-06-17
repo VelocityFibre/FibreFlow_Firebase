@@ -238,10 +238,18 @@ export class TasksPageComponent implements OnInit {
 
         // Build maps for quick lookups
         this.projectsMap.clear();
-        projects.forEach((p: { id: string; name: string }) => this.projectsMap.set(p.id, p.name));
+        projects.forEach((p) => {
+          if (p.id) {
+            this.projectsMap.set(p.id, p.name);
+          }
+        });
 
         this.staffMap.clear();
-        staff.forEach((s: { id: string; name: string }) => this.staffMap.set(s.id, s.name));
+        staff.forEach((s) => {
+          if (s.id) {
+            this.staffMap.set(s.id, s.name);
+          }
+        });
 
         this.loading = false;
       });

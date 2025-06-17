@@ -26,7 +26,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { StaffService } from '../../services/staff.service';
-import { StaffMember, StaffGroup, AvailabilityStatus, StaffFilter } from '../../models';
+import { StaffMember, StaffGroup, AvailabilityStatus } from '../../models';
 import { LoadingSkeletonComponent } from '../../../../shared/components/loading-skeleton/loading-skeleton.component';
 
 @Component({

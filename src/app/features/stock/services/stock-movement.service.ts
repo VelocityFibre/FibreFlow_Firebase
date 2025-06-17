@@ -20,13 +20,14 @@ import { StockService } from './stock.service';
 import { ProjectService } from '../../../core/services/project.service';
 import {
   StockMovement,
+  MovementType,
   ReferenceType,
   StockMovementFilter,
   StockMovementSummary,
   isIncomingMovement,
   isOutgoingMovement,
 } from '../models/stock-movement.model';
-import { StockItem, MovementType } from '../models/stock-item.model';
+import { StockItem } from '../models/stock-item.model';
 
 @Injectable({
   providedIn: 'root',

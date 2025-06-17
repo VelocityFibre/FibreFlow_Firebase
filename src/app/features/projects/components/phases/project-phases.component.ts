@@ -451,9 +451,9 @@ export class ProjectPhasesComponent implements OnInit {
     }
   }
 
-  formatDate(date: unknown): string {
+  formatDate(date: any): string {
     if (!date) return '';
-    const d = date.toDate ? date.toDate() : new Date(date);
+    const d = date?.toDate ? date.toDate() : new Date(date);
     return d.toLocaleDateString();
   }
 

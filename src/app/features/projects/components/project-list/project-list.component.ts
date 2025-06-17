@@ -673,7 +673,7 @@ export class ProjectListComponent implements OnInit {
   }
 
   formatDate(date: unknown): string {
-    return this.dateFormat.formatShortDate(date);
+    return this.dateFormat.formatShortDate(date as any);
   }
 
   getBudgetPercentage(project: Project): number {

@@ -1,0 +1,320 @@
+// FibreFlow Page Layout Standards
+// Based on the stock-movements page design
+
+@use './spacing' as spacing;
+@use './theme-functions' as theme;
+
+// Page Header Component
+.ff-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: spacing.ff-spacing(4xl);
+  gap: spacing.ff-spacing(xl);
+
+  // Mobile responsive
+  @media #{spacing.ff-breakpoint(sm)} {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-content {
+    flex: 1;
+    min-width: 0; // Prevent flex item from overflowing
+  }
+
+  .page-title {
+    font-size: 32px;
+    font-weight: 300;
+    color: theme.ff-rgb(foreground);
+    margin: 0 0 spacing.ff-spacing(sm) 0;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .page-subtitle {
+    font-size: 18px;
+    color: theme.ff-rgb(muted-foreground);
+    font-weight: 400;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: spacing.ff-spacing(sm);
+    flex-shrink: 0;
+
+    // Mobile responsive
+    @media #{spacing.ff-breakpoint(sm)} {
+      width: 100%;
+      margin-top: spacing.ff-spacing(lg);
+    }
+  }
+}
+
+// Summary Cards Grid
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: spacing.ff-spacing(lg);
+  margin-bottom: spacing.ff-spacing(xl);
+}
+
+// Summary Card Pattern
+.summary-card {
+  mat-card-content {
+    display: flex;
+    align-items: center;
+    gap: spacing.ff-spacing(lg);
+    padding: spacing.ff-spacing(xl) !important;
+  }
+}
+
+// Card Icon Pattern
+.card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  // Color variants
+  &.incoming,
+  &.success {
+    background-color: theme.ff-rgba(success, 0.15);
+    color: theme.ff-rgb(success);
+  }
+
+  &.outgoing,
+  &.error,
+  &.destructive {
+    background-color: theme.ff-rgba(destructive, 0.15);
+    color: theme.ff-rgb(destructive);
+  }
+
+  &.net,
+  &.info {
+    background-color: theme.ff-rgba(info, 0.15);
+    color: theme.ff-rgb(info);
+  }
+
+  &.value,
+  &.primary {
+    background-color: theme.ff-rgba(primary, 0.15);
+    color: theme.ff-rgb(primary);
+  }
+
+  &.warning {
+    background-color: theme.ff-rgba(warning, 0.15);
+    color: theme.ff-rgb(warning);
+  }
+}
+
+// Card Info Pattern
+.card-info {
+  flex: 1;
+  min-width: 0; // Prevent overflow
+}
+
+.card-value {
+  font-size: 28px;
+  font-weight: 600;
+  color: theme.ff-rgb(foreground);
+  line-height: 1;
+
+  &.positive {
+    color: theme.ff-rgb(success);
+  }
+
+  &.negative {
+    color: theme.ff-rgb(destructive);
+  }
+}
+
+.card-label {
+  font-size: 14px;
+  color: theme.ff-rgb(muted-foreground);
+  margin-top: spacing.ff-spacing(xs);
+}
+
+// Filter Card Pattern
+.filters-card {
+  margin-bottom: spacing.ff-spacing(xl);
+
+  mat-card-content {
+    padding: spacing.ff-spacing(xl) !important;
+  }
+}
+
+.filter-form {
+  display: flex;
+  gap: spacing.ff-spacing(lg);
+  flex-wrap: wrap;
+  align-items: flex-start;
+
+  mat-form-field {
+    flex: 1;
+    min-width: 200px;
+    max-width: 250px;
+  }
+
+  .clear-filters-btn {
+    margin-top: spacing.ff-spacing(sm);
+  }
+}
+
+// Table Card Pattern
+.table-card {
+  margin-bottom: spacing.ff-spacing(xl);
+
+  mat-card-content {
+    padding: 0 !important;
+  }
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+// Empty State Pattern
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: spacing.ff-spacing(4xl);
+  text-align: center;
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: theme.ff-rgb(border);
+    margin-bottom: spacing.ff-spacing(lg);
+  }
+
+  p {
+    margin: 0;
+    color: theme.ff-rgb(muted-foreground);
+    font-size: 16px;
+
+    &.empty-hint {
+      font-size: 14px;
+      margin-top: spacing.ff-spacing(sm);
+    }
+  }
+}
+
+// No Data Row for tables
+.no-data {
+  padding: spacing.ff-spacing(4xl) !important;
+  text-align: center;
+}
+
+// Detail Page Header (alternative pattern)
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: spacing.ff-spacing(xl);
+  gap: spacing.ff-spacing(xl);
+
+  @media #{spacing.ff-breakpoint(sm)} {
+    flex-direction: column;
+  }
+
+  .header-content {
+    flex: 1;
+
+    h1 {
+      margin: 0 0 spacing.ff-spacing(sm) 0;
+      font-size: 32px;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+    }
+
+    .header-badges {
+      display: flex;
+      gap: spacing.ff-spacing(md);
+      flex-wrap: wrap;
+    }
+  }
+
+  .header-actions {
+    display: flex;
+    gap: spacing.ff-spacing(sm);
+    flex-shrink: 0;
+
+    @media #{spacing.ff-breakpoint(sm)} {
+      width: 100%;
+    }
+  }
+}
+
+// Status Badge Pattern
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+
+  &.status-active {
+    background-color: theme.ff-rgba(success, 0.15);
+    color: theme.ff-rgb(success);
+  }
+
+  &.status-inactive {
+    background-color: theme.ff-rgba(muted, 0.5);
+    color: theme.ff-rgb(muted-foreground);
+  }
+
+  &.status-pending {
+    background-color: theme.ff-rgba(warning, 0.15);
+    color: theme.ff-rgb(warning);
+  }
+
+  &.status-completed {
+    background-color: theme.ff-rgba(info, 0.15);
+    color: theme.ff-rgb(info);
+  }
+
+  &.status-cancelled {
+    background-color: theme.ff-rgba(destructive, 0.15);
+    color: theme.ff-rgb(destructive);
+  }
+}
+
+// Info Grid Pattern
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: spacing.ff-spacing(lg);
+  margin-bottom: spacing.ff-spacing(lg);
+
+  @media #{spacing.ff-breakpoint(sm)} {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Tab Content Spacing
+.tab-content {
+  padding: spacing.ff-spacing(xl) 0;
+}

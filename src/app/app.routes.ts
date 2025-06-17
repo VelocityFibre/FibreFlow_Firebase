@@ -166,4 +166,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/auth/login/login.component').then((m) => m.LoginComponent),
   },
+  // Debug route for accessing logs
+  {
+    path: 'debug-logs',
+    loadComponent: () =>
+      import('./features/debug/debug-logs.component').then((m) => m.DebugLogsComponent),
+  },
 ];
