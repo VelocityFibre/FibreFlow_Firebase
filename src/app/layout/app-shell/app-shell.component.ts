@@ -244,9 +244,13 @@ interface NavItem {
       }
 
       .logo-section {
-        padding: 16px;
+        padding: 24px 16px;
         background-color: #1a2332;
         border-bottom: 1px solid #2a3344;
+        height: 160px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .logo-container {
@@ -254,12 +258,14 @@ interface NavItem {
         align-items: center;
         justify-content: center;
         width: 100%;
+        height: 100%;
       }
 
       .logo-image {
-        width: 90%;
+        width: auto;
         height: auto;
-        max-height: 80px;
+        max-width: 240px;
+        max-height: 120px;
         border-radius: 8px;
         object-fit: contain;
         background-color: #ffffff;
