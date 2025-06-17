@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -607,10 +608,18 @@ export class BOQListComponent implements OnInit, OnDestroy {
   private boqService = inject(BOQService);
   private projectService = inject(ProjectService);
   private dialog = inject(MatDialog);
+  private route = inject(ActivatedRoute);
 
   constructor() {}
 
   ngOnInit() {
+    // Check for projectId in query params
+    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
+      if (params['projectId']) {
+        this.selectedProjectId = params['projectId'];
+      }
+    });
+    
     this.loadData();
     this.setupSearch();
   }
@@ -699,7 +708,10 @@ export class BOQListComponent implements OnInit, OnDestroy {
   openAddDialog() {
     const dialogRef = this.dialog.open(BOQFormDialogComponent, {
       width: '600px',
-      data: { projects: this.projects },
+      data: { 
+        projects: this.projects,
+        selectedProjectId: this.selectedProjectId !== 'all' ? this.selectedProjectId : null
+      },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -712,7 +724,10 @@ export class BOQListComponent implements OnInit, OnDestroy {
   openImportDialog() {
     const dialogRef = this.dialog.open(BOQImportDialogComponent, {
       width: '800px',
-      data: { projects: this.projects },
+      data: { 
+        projects: this.projects,
+        selectedProjectId: this.selectedProjectId !== 'all' ? this.selectedProjectId : null
+      },
     });
 
     dialogRef.afterClosed().subscribe((result) => {

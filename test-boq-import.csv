@@ -1,0 +1,16 @@
+itemCode,description,specification,unit,requiredQuantity,unitPrice,needsQuote
+FF-001,Fiber Optic Cable - Single Mode,OS2 9/125μm Outdoor Armored 12-Core,Meters,500,12.50,false
+FF-002,Fiber Optic Cable - Multi Mode,OM4 50/125μm Indoor 24-Core,Meters,300,18.75,false
+FF-003,Splice Closure,48-Core Dome Type IP68 Rated,Units,10,450.00,false
+FF-004,Fiber Patch Panel,24-Port LC Duplex 1U Rack Mount,Units,15,275.00,false
+FF-005,Fiber Patch Cord,LC-LC Duplex OS2 3m,Units,50,15.00,false
+FF-006,Media Converter,1000Base-LX SFP Module,Units,25,125.00,true
+FF-007,ODF Cabinet,72-Core Wall Mount with Splicing Tray,Units,8,850.00,true
+FF-008,Underground Duct,110mm HDPE Conduit Orange,Meters,1000,8.50,false
+FF-009,Fiber Splitter,1x8 PLC Splitter SC/APC Connectors,Units,20,65.00,false
+FF-010,Cable Pulling Lubricant,5L Container Heavy Duty,Units,10,45.00,false
+FF-011,Warning Tape,Underground Fiber Optic Cable Warning 150mm,Meters,1000,1.25,false
+FF-012,Fiber Cleaning Kit,Professional Grade with IPA Solution,Units,5,120.00,false
+FF-013,OTDR Test Equipment,Handheld 1310/1550nm with VFL,Units,2,5500.00,true
+FF-014,Fusion Splicer,Core Alignment 6-Second Splice Time,Units,1,8500.00,true
+FF-015,Cable Markers,Numbered 0-9 Set for Fiber Identification,Sets,30,12.00,false

@@ -15,6 +15,7 @@ import { Project } from '../../../../core/models/project.model';
 
 interface DialogData {
   projects: Project[];
+  selectedProjectId?: string | null;
 }
 
 @Component({
@@ -285,6 +286,10 @@ export class BOQImportDialogComponent {
 
   constructor() {
     this.projects = this.data.projects || [];
+    // Pre-select project if provided
+    if (this.data.selectedProjectId) {
+      this.selectedProjectId = this.data.selectedProjectId;
+    }
   }
 
   onFileSelected(event: Event) {
