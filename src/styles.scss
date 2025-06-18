@@ -117,7 +117,8 @@ $fibreflow-error-palette: (
 );
 
 // Include only the core styles once
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 // Define the light theme using Material 3
 $fibreflow-light-theme: mat.define-theme(
@@ -459,32 +460,32 @@ h4 {
 // Snackbar notification styles
 .mat-mdc-snack-bar-container {
   &.success-snackbar {
-    --mdc-snackbar-container-color: #{theme.ff-rgb(success)};
-    --mdc-snackbar-supporting-text-color: #{theme.ff-rgb(success-foreground)};
+    --mat-snackbar-container-color: #{theme.ff-rgb(success)};
+    --mat-snackbar-supporting-text-color: #{theme.ff-rgb(success-foreground)};
     --mat-snack-bar-button-color: #{theme.ff-rgb(success-foreground)};
   }
 
   &.error-snackbar {
-    --mdc-snackbar-container-color: #{theme.ff-rgb(destructive)};
-    --mdc-snackbar-supporting-text-color: #{theme.ff-rgb(destructive-foreground)};
+    --mat-snackbar-container-color: #{theme.ff-rgb(destructive)};
+    --mat-snackbar-supporting-text-color: #{theme.ff-rgb(destructive-foreground)};
     --mat-snack-bar-button-color: #{theme.ff-rgb(destructive-foreground)};
   }
 
   &.warning-snackbar {
-    --mdc-snackbar-container-color: #{theme.ff-rgb(warning)};
-    --mdc-snackbar-supporting-text-color: #{theme.ff-rgb(warning-foreground)};
+    --mat-snackbar-container-color: #{theme.ff-rgb(warning)};
+    --mat-snackbar-supporting-text-color: #{theme.ff-rgb(warning-foreground)};
     --mat-snack-bar-button-color: #{theme.ff-rgb(warning-foreground)};
   }
 
   &.info-snackbar {
-    --mdc-snackbar-container-color: #{theme.ff-rgb(info)};
-    --mdc-snackbar-supporting-text-color: #{theme.ff-rgb(info-foreground)};
+    --mat-snackbar-container-color: #{theme.ff-rgb(info)};
+    --mat-snackbar-supporting-text-color: #{theme.ff-rgb(info-foreground)};
     --mat-snack-bar-button-color: #{theme.ff-rgb(info-foreground)};
   }
 
   &.progress-snackbar {
-    --mdc-snackbar-container-color: #{theme.ff-rgb(muted)};
-    --mdc-snackbar-supporting-text-color: #{theme.ff-rgb(muted-foreground)};
+    --mat-snackbar-container-color: #{theme.ff-rgb(muted)};
+    --mat-snackbar-supporting-text-color: #{theme.ff-rgb(muted-foreground)};
     --mat-snack-bar-button-color: #{theme.ff-rgb(muted-foreground)};
   }
 }
