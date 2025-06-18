@@ -49,7 +49,7 @@ interface PaymentSummary {
     MatChipsModule,
     MatTooltipModule,
     MatMenuModule,
-    MatProgressBarModule
+    MatProgressBarModule,
   ],
   template: `
     <div class="payment-made-container">
@@ -77,21 +77,31 @@ interface PaymentSummary {
             <div class="progress-header">
               <div>
                 <span class="progress-label">Total Paid</span>
-                <span class="progress-amount">{{ summary.totalPaid | currency:'ZAR':'symbol':'1.0-0' }}</span>
+                <span class="progress-amount">{{
+                  summary.totalPaid | currency: 'ZAR' : 'symbol' : '1.0-0'
+                }}</span>
               </div>
               <div class="text-right">
                 <span class="progress-label">Contract Value</span>
-                <span class="progress-amount">{{ summary.contractValue | currency:'ZAR':'symbol':'1.0-0' }}</span>
+                <span class="progress-amount">{{
+                  summary.contractValue | currency: 'ZAR' : 'symbol' : '1.0-0'
+                }}</span>
               </div>
             </div>
-            <mat-progress-bar 
-              mode="determinate" 
+            <mat-progress-bar
+              mode="determinate"
               [value]="summary.percentagePaid"
-              [color]="summary.percentagePaid >= 90 ? 'warn' : 'primary'">
+              [color]="summary.percentagePaid >= 90 ? 'warn' : 'primary'"
+            >
             </mat-progress-bar>
             <div class="progress-footer">
               <span>{{ summary.percentagePaid }}% Paid</span>
-              <span>{{ summary.contractValue - summary.totalPaid | currency:'ZAR':'symbol':'1.0-0' }} Remaining</span>
+              <span
+                >{{
+                  summary.contractValue - summary.totalPaid | currency: 'ZAR' : 'symbol' : '1.0-0'
+                }}
+                Remaining</span
+              >
             </div>
           </div>
 
@@ -100,7 +110,7 @@ interface PaymentSummary {
               <mat-icon>event</mat-icon>
               <div>
                 <span class="stat-label">Last Payment</span>
-                <span class="stat-value">{{ summary.lastPaymentDate | date:'MMM d, y' }}</span>
+                <span class="stat-value">{{ summary.lastPaymentDate | date: 'MMM d, y' }}</span>
               </div>
             </div>
             <div class="stat-item">
@@ -127,8 +137,12 @@ interface PaymentSummary {
               </div>
               <div class="method-details">
                 <span class="method-name">{{ method.method | titlecase }}</span>
-                <span class="method-amount">{{ method.amount | currency:'ZAR':'symbol':'1.0-0' }}</span>
-                <span class="method-count">{{ method.count }} payment{{ method.count > 1 ? 's' : '' }}</span>
+                <span class="method-amount">{{
+                  method.amount | currency: 'ZAR' : 'symbol' : '1.0-0'
+                }}</span>
+                <span class="method-count"
+                  >{{ method.count }} payment{{ method.count > 1 ? 's' : '' }}</span
+                >
               </div>
             </div>
           </div>
@@ -146,7 +160,7 @@ interface PaymentSummary {
             <ng-container matColumnDef="date">
               <th mat-header-cell *matHeaderCellDef>Date</th>
               <td mat-cell *matCellDef="let payment">
-                {{ payment.paymentDate | date:'MMM d, y' }}
+                {{ payment.paymentDate | date: 'MMM d, y' }}
               </td>
             </ng-container>
 
@@ -162,7 +176,9 @@ interface PaymentSummary {
             <ng-container matColumnDef="amount">
               <th mat-header-cell *matHeaderCellDef>Amount</th>
               <td mat-cell *matCellDef="let payment">
-                <span class="amount">{{ payment.amount | currency:'ZAR':'symbol':'1.2-2' }}</span>
+                <span class="amount">{{
+                  payment.amount | currency: 'ZAR' : 'symbol' : '1.2-2'
+                }}</span>
               </td>
             </ng-container>
 
@@ -226,7 +242,7 @@ interface PaymentSummary {
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           </table>
 
           <div *ngIf="payments.length === 0" class="no-data">
@@ -237,207 +253,218 @@ interface PaymentSummary {
       </mat-card>
     </div>
   `,
-  styles: [`
-    .payment-made-container {
-      padding: 16px;
-    }
+  styles: [
+    `
+      .payment-made-container {
+        padding: 16px;
+      }
 
-    .header-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
+      .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
 
-    .header-section h3 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 500;
-    }
+      .header-section h3 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 500;
+      }
 
-    .header-actions {
-      display: flex;
-      gap: 12px;
-    }
+      .header-actions {
+        display: flex;
+        gap: 12px;
+      }
 
-    mat-card {
-      margin-bottom: 24px;
-    }
+      mat-card {
+        margin-bottom: 24px;
+      }
 
-    .payment-progress {
-      margin-bottom: 32px;
-    }
+      .payment-progress {
+        margin-bottom: 32px;
+      }
 
-    .progress-header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
+      .progress-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
 
-    .progress-label {
-      display: block;
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.6);
-      margin-bottom: 4px;
-    }
+      .progress-label {
+        display: block;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.6);
+        margin-bottom: 4px;
+      }
 
-    .progress-amount {
-      display: block;
-      font-size: 24px;
-      font-weight: 500;
-    }
+      .progress-amount {
+        display: block;
+        font-size: 24px;
+        font-weight: 500;
+      }
 
-    .text-right {
-      text-align: right;
-    }
+      .text-right {
+        text-align: right;
+      }
 
-    mat-progress-bar {
-      height: 12px;
-      border-radius: 6px;
-    }
+      mat-progress-bar {
+        height: 12px;
+        border-radius: 6px;
+      }
 
-    .progress-footer {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 8px;
-      font-size: 14px;
-      color: rgba(0, 0, 0, 0.6);
-    }
+      .progress-footer {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 8px;
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.6);
+      }
 
-    .payment-stats {
-      display: flex;
-      gap: 32px;
-    }
+      .payment-stats {
+        display: flex;
+        gap: 32px;
+      }
 
-    .stat-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+      .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
 
-    .stat-item mat-icon {
-      color: #1976d2;
-    }
+      .stat-item mat-icon {
+        color: #1976d2;
+      }
 
-    .stat-label {
-      display: block;
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.6);
-    }
+      .stat-label {
+        display: block;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.6);
+      }
 
-    .stat-value {
-      display: block;
-      font-weight: 500;
-    }
+      .stat-value {
+        display: block;
+        font-weight: 500;
+      }
 
-    .methods-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-    }
+      .methods-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+      }
 
-    .method-item {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 16px;
-      background-color: #f5f5f5;
-      border-radius: 8px;
-    }
+      .method-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        background-color: #f5f5f5;
+        border-radius: 8px;
+      }
 
-    .method-icon {
-      width: 48px;
-      height: 48px;
-      background-color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+      .method-icon {
+        width: 48px;
+        height: 48px;
+        background-color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-    .method-icon mat-icon {
-      color: #1976d2;
-    }
+      .method-icon mat-icon {
+        color: #1976d2;
+      }
 
-    .method-details {
-      flex: 1;
-    }
+      .method-details {
+        flex: 1;
+      }
 
-    .method-name {
-      display: block;
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 4px;
-    }
+      .method-name {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 4px;
+      }
 
-    .method-amount {
-      display: block;
-      font-size: 18px;
-      font-weight: 500;
-      color: #1976d2;
-      margin-bottom: 2px;
-    }
+      .method-amount {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        color: #1976d2;
+        margin-bottom: 2px;
+      }
 
-    .method-count {
-      display: block;
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.6);
-    }
+      .method-count {
+        display: block;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.6);
+      }
 
-    .payments-table {
-      width: 100%;
-    }
+      .payments-table {
+        width: 100%;
+      }
 
-    .amount {
-      font-weight: 500;
-      color: #388e3c;
-    }
+      .amount {
+        font-weight: 500;
+        color: #388e3c;
+      }
 
-    mat-chip {
-      font-size: 12px;
-    }
+      mat-chip {
+        font-size: 12px;
+      }
 
-    .chip-icon {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-      margin-right: 4px;
-    }
+      .chip-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
+      }
 
-    code {
-      font-family: 'Courier New', monospace;
-      font-size: 12px;
-      background-color: #f5f5f5;
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
+      code {
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        background-color: #f5f5f5;
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
 
-    .no-data {
-      text-align: center;
-      padding: 48px;
-      color: rgba(0, 0, 0, 0.4);
-    }
+      .no-data {
+        text-align: center;
+        padding: 48px;
+        color: rgba(0, 0, 0, 0.4);
+      }
 
-    .no-data mat-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
-      margin-bottom: 16px;
-    }
-  `]
+      .no-data mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        margin-bottom: 16px;
+      }
+    `,
+  ],
 })
 export class PaymentMadeTabComponent implements OnInit {
   @Input() contractorProject!: ContractorProject;
 
-  displayedColumns: string[] = ['date', 'paymentNumber', 'amount', 'method', 'reference', 'phase', 'processedBy', 'actions'];
+  displayedColumns: string[] = [
+    'date',
+    'paymentNumber',
+    'amount',
+    'method',
+    'reference',
+    'phase',
+    'processedBy',
+    'actions',
+  ];
   payments: Payment[] = [];
-  
+
   summary: PaymentSummary = {
     totalPaid: 0,
     contractValue: 1500000, // Mock contract value
     percentagePaid: 0,
     lastPaymentDate: null,
-    paymentsByMethod: []
+    paymentsByMethod: [],
   };
 
   ngOnInit(): void {
@@ -463,8 +490,8 @@ export class PaymentMadeTabComponent implements OnInit {
         bankDetails: {
           accountName: 'ABC Contractors Ltd',
           accountNumber: '1234567890',
-          bank: 'Standard Bank'
-        }
+          bank: 'Standard Bank',
+        },
       },
       {
         id: '2',
@@ -477,7 +504,7 @@ export class PaymentMadeTabComponent implements OnInit {
         phase: 'Phase 2 - Foundation Work',
         description: 'Partial payment for material procurement',
         processedBy: 'Finance Manager',
-        receipt: 'receipt-002.pdf'
+        receipt: 'receipt-002.pdf',
       },
       {
         id: '3',
@@ -490,8 +517,8 @@ export class PaymentMadeTabComponent implements OnInit {
         phase: 'Phase 2 - Foundation Work',
         description: 'Payment for additional materials',
         processedBy: 'Admin User',
-        receipt: 'receipt-003.pdf'
-      }
+        receipt: 'receipt-003.pdf',
+      },
     ];
 
     this.calculateSummary();
@@ -499,28 +526,30 @@ export class PaymentMadeTabComponent implements OnInit {
 
   calculateSummary(): void {
     this.summary.totalPaid = this.payments.reduce((sum, p) => sum + p.amount, 0);
-    this.summary.percentagePaid = Math.round((this.summary.totalPaid / this.summary.contractValue) * 100);
-    
+    this.summary.percentagePaid = Math.round(
+      (this.summary.totalPaid / this.summary.contractValue) * 100,
+    );
+
     if (this.payments.length > 0) {
-      this.summary.lastPaymentDate = this.payments
-        .sort((a, b) => b.paymentDate.getTime() - a.paymentDate.getTime())[0]
-        .paymentDate;
+      this.summary.lastPaymentDate = this.payments.sort(
+        (a, b) => b.paymentDate.getTime() - a.paymentDate.getTime(),
+      )[0].paymentDate;
     }
 
     // Calculate payments by method
     const methodMap = new Map<string, { amount: number; count: number }>();
-    this.payments.forEach(payment => {
+    this.payments.forEach((payment) => {
       const existing = methodMap.get(payment.paymentMethod) || { amount: 0, count: 0 };
       methodMap.set(payment.paymentMethod, {
         amount: existing.amount + payment.amount,
-        count: existing.count + 1
+        count: existing.count + 1,
       });
     });
 
     this.summary.paymentsByMethod = Array.from(methodMap.entries()).map(([method, data]) => ({
       method,
       amount: data.amount,
-      count: data.count
+      count: data.count,
     }));
   }
 

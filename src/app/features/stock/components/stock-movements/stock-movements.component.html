@@ -14,61 +14,63 @@
   </div>
 
   <!-- Summary Cards -->
-  <div class="summary-cards" *ngIf="summary() as sum">
-    <mat-card class="summary-card">
-      <mat-card-content>
-        <div class="card-icon incoming">
-          <mat-icon>arrow_downward</mat-icon>
-        </div>
-        <div class="card-info">
-          <div class="card-value">{{ sum.totalIn }}</div>
-          <div class="card-label">Total Incoming</div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="summary-card">
-      <mat-card-content>
-        <div class="card-icon outgoing">
-          <mat-icon>arrow_upward</mat-icon>
-        </div>
-        <div class="card-info">
-          <div class="card-value">{{ sum.totalOut }}</div>
-          <div class="card-label">Total Outgoing</div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="summary-card">
-      <mat-card-content>
-        <div class="card-icon net">
-          <mat-icon>sync_alt</mat-icon>
-        </div>
-        <div class="card-info">
-          <div
-            class="card-value"
-            [class.positive]="sum.netMovement > 0"
-            [class.negative]="sum.netMovement < 0"
-          >
-            {{ sum.netMovement > 0 ? '+' : '' }}{{ sum.netMovement }}
+  @if (summary(); as sum) {
+    <div class="summary-cards">
+      <mat-card class="summary-card">
+        <mat-card-content>
+          <div class="card-icon incoming">
+            <mat-icon>arrow_downward</mat-icon>
           </div>
-          <div class="card-label">Net Movement</div>
-        </div>
-      </mat-card-content>
-    </mat-card>
+          <div class="card-info">
+            <div class="card-value">{{ sum.totalIn }}</div>
+            <div class="card-label">Total Incoming</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
 
-    <mat-card class="summary-card">
-      <mat-card-content>
-        <div class="card-icon value">
-          <mat-icon>payments</mat-icon>
-        </div>
-        <div class="card-info">
-          <div class="card-value">{{ formatCurrency(sum.totalValue) }}</div>
-          <div class="card-label">Total Value</div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
+      <mat-card class="summary-card">
+        <mat-card-content>
+          <div class="card-icon outgoing">
+            <mat-icon>arrow_upward</mat-icon>
+          </div>
+          <div class="card-info">
+            <div class="card-value">{{ sum.totalOut }}</div>
+            <div class="card-label">Total Outgoing</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="summary-card">
+        <mat-card-content>
+          <div class="card-icon net">
+            <mat-icon>sync_alt</mat-icon>
+          </div>
+          <div class="card-info">
+            <div
+              class="card-value"
+              [class.positive]="sum.netMovement > 0"
+              [class.negative]="sum.netMovement < 0"
+            >
+              {{ sum.netMovement > 0 ? '+' : '' }}{{ sum.netMovement }}
+            </div>
+            <div class="card-label">Net Movement</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="summary-card">
+        <mat-card-content>
+          <div class="card-icon value">
+            <mat-icon>payments</mat-icon>
+          </div>
+          <div class="card-info">
+            <div class="card-value">{{ formatCurrency(sum.totalValue) }}</div>
+            <div class="card-label">Total Value</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
 
   <!-- Filters -->
   <mat-card class="filters-card">
@@ -78,9 +80,9 @@
           <mat-label>Stock Item</mat-label>
           <mat-select formControlName="itemId">
             <mat-option value="">All Items</mat-option>
-            <mat-option *ngFor="let item of stockItems()" [value]="item.id">
-              {{ item.itemCode }} - {{ item.name }}
-            </mat-option>
+            @for (item of stockItems(); track item.id) {
+              <mat-option [value]="item.id"> {{ item.itemCode }} - {{ item.name }} </mat-option>
+            }
           </mat-select>
         </mat-form-field>
 
@@ -88,9 +90,11 @@
           <mat-label>Movement Type</mat-label>
           <mat-select formControlName="movementType">
             <mat-option value="">All Types</mat-option>
-            <mat-option *ngFor="let type of movementTypes" [value]="type">
-              {{ movementTypeLabels(type) }}
-            </mat-option>
+            @for (type of movementTypes; track type) {
+              <mat-option [value]="type">
+                {{ movementTypeLabels(type) }}
+              </mat-option>
+            }
           </mat-select>
         </mat-form-field>
 
@@ -98,9 +102,11 @@
           <mat-label>Project</mat-label>
           <mat-select formControlName="projectId">
             <mat-option value="">All Projects</mat-option>
-            <mat-option *ngFor="let project of projects()" [value]="project.id">
-              {{ project.projectCode }} - {{ project.name }}
-            </mat-option>
+            @for (project of projects(); track project.id) {
+              <mat-option [value]="project.id">
+                {{ project.projectCode }} - {{ project.name }}
+              </mat-option>
+            }
           </mat-select>
         </mat-form-field>
 
@@ -127,7 +133,9 @@
   </mat-card>
 
   <!-- Loading State -->
-  <mat-progress-bar *ngIf="loading()" mode="indeterminate"></mat-progress-bar>
+  @if (loading()) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
 
   <!-- Movements Table -->
   <mat-card class="table-card">

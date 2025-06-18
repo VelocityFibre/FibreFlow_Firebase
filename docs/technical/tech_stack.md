@@ -15,7 +15,7 @@
 - **Angular CDK 20.0.3** (Component development kit)
 - **@angular/fire 19.2.0** (Firebase integration)
 - **RxJS 7.8.0** (Reactive programming)
-- **TypeScript 5.8.3**
+- **TypeScript 5.8.3** (Strict mode, zero `any` types)
 - **Zone.js 0.15.0** (Change detection)
 - **SCSS** (Custom theme system - 4 themes)
 
@@ -47,6 +47,15 @@
 - Lazy-loaded routes
 - Role-based access control
 
+✅ **TypeScript Features** (January 2025) 🆕
+- Zero `any` types (enforced by ESLint)
+- Branded types for entity IDs
+- Discriminated unions for state management
+- Template literal types for routing
+- Modern features: `satisfies`, const type parameters
+- Comprehensive type guards and utilities
+- Strict mode with all flags enabled
+
 ✅ **Theme System**
 - 4 themes: light, dark, vf, fibreflow
 - All components use theme variables
@@ -76,6 +85,14 @@
 ```
 src/app/
 ├── core/          # Services, guards, models
+│   ├── types/     # TypeScript type definitions 🆕
+│   │   ├── branded.types.ts      # Entity ID types
+│   │   ├── state.types.ts        # State management
+│   │   ├── route.types.ts        # Routing types
+│   │   └── environment.types.ts  # Config types
+│   └── utils/     # TypeScript utilities 🆕
+│       ├── type-guards.ts        # Type validation
+│       └── type-utils.ts         # Advanced utilities
 ├── features/      # Feature modules
 ├── shared/        # Shared components
 ├── layout/        # App shell

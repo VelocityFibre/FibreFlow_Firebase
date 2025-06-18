@@ -1,3 +1,5 @@
+import { Environment } from '../app/core/types/environment.types';
+
 export const environment = {
   production: false,
   firebase: {
@@ -13,4 +15,4 @@ export const environment = {
     dsn: 'https://6cff665ed0e4b1cdba0d84da3585c68f@o4508210707431424.ingest.us.sentry.io/4509515741200384',
     environment: 'development'
   }
-};
+} satisfies Environment;

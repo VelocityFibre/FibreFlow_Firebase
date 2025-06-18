@@ -30,7 +30,7 @@ interface TeamAllocation {
     MatTableModule,
     MatChipsModule,
     MatTooltipModule,
-    MatMenuModule
+    MatMenuModule,
   ],
   template: `
     <div class="team-allocation-container">
@@ -92,10 +92,11 @@ interface TeamAllocation {
             <ng-container matColumnDef="status">
               <th mat-header-cell *matHeaderCellDef>Status</th>
               <td mat-cell *matCellDef="let team">
-                <mat-chip 
+                <mat-chip
                   [class.active-chip]="team.status === 'active'"
                   [class.inactive-chip]="team.status === 'inactive'"
-                  [class.completed-chip]="team.status === 'completed'">
+                  [class.completed-chip]="team.status === 'completed'"
+                >
                   {{ team.status | titlecase }}
                 </mat-chip>
               </td>
@@ -132,7 +133,7 @@ interface TeamAllocation {
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           </table>
 
           <div *ngIf="teams.length === 0" class="no-data">
@@ -143,104 +144,113 @@ interface TeamAllocation {
       </mat-card>
     </div>
   `,
-  styles: [`
-    .team-allocation-container {
-      padding: 16px;
-    }
+  styles: [
+    `
+      .team-allocation-container {
+        padding: 16px;
+      }
 
-    .header-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
+      .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
 
-    .header-section h3 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 500;
-    }
+      .header-section h3 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 500;
+      }
 
-    .summary-card {
-      margin-bottom: 24px;
-    }
+      .summary-card {
+        margin-bottom: 24px;
+      }
 
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 24px;
-    }
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 24px;
+      }
 
-    .summary-item {
-      text-align: center;
-    }
+      .summary-item {
+        text-align: center;
+      }
 
-    .summary-item .label {
-      display: block;
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.6);
-      margin-bottom: 4px;
-    }
+      .summary-item .label {
+        display: block;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.6);
+        margin-bottom: 4px;
+      }
 
-    .summary-item .value {
-      display: block;
-      font-size: 24px;
-      font-weight: 500;
-    }
+      .summary-item .value {
+        display: block;
+        font-size: 24px;
+        font-weight: 500;
+      }
 
-    .teams-table {
-      width: 100%;
-    }
+      .teams-table {
+        width: 100%;
+      }
 
-    .teams-table-card {
-      overflow: hidden;
-    }
+      .teams-table-card {
+        overflow: hidden;
+      }
 
-    mat-chip {
-      font-size: 12px;
-    }
+      mat-chip {
+        font-size: 12px;
+      }
 
-    .active-chip {
-      background-color: #4caf50 !important;
-      color: white !important;
-    }
+      .active-chip {
+        background-color: #4caf50 !important;
+        color: white !important;
+      }
 
-    .inactive-chip {
-      background-color: #ff9800 !important;
-      color: white !important;
-    }
+      .inactive-chip {
+        background-color: #ff9800 !important;
+        color: white !important;
+      }
 
-    .completed-chip {
-      background-color: #2196f3 !important;
-      color: white !important;
-    }
+      .completed-chip {
+        background-color: #2196f3 !important;
+        color: white !important;
+      }
 
-    .no-data {
-      text-align: center;
-      padding: 48px;
-      color: rgba(0, 0, 0, 0.4);
-    }
+      .no-data {
+        text-align: center;
+        padding: 48px;
+        color: rgba(0, 0, 0, 0.4);
+      }
 
-    .no-data mat-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
-      margin-bottom: 16px;
-    }
+      .no-data mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        margin-bottom: 16px;
+      }
 
-    .delete-action {
-      color: #f44336;
-    }
-  `]
+      .delete-action {
+        color: #f44336;
+      }
+    `,
+  ],
 })
 export class TeamAllocationTabComponent implements OnInit {
   @Input() contractorProject!: ContractorProject;
 
-  displayedColumns: string[] = ['teamName', 'teamLead', 'members', 'status', 'currentPhase', 'actions'];
+  displayedColumns: string[] = [
+    'teamName',
+    'teamLead',
+    'members',
+    'status',
+    'currentPhase',
+    'actions',
+  ];
   teams: TeamAllocation[] = [];
 
   get activeTeamsCount(): number {
-    return this.teams.filter(t => t.status === 'active').length;
+    return this.teams.filter((t) => t.status === 'active').length;
   }
 
   get totalMembers(): number {
@@ -262,7 +272,7 @@ export class TeamAllocationTabComponent implements OnInit {
         membersCount: 5,
         allocatedDate: new Date(),
         status: 'active',
-        currentPhase: 'Phase 1 - Foundation'
+        currentPhase: 'Phase 1 - Foundation',
       },
       {
         id: '2',
@@ -271,8 +281,8 @@ export class TeamAllocationTabComponent implements OnInit {
         membersCount: 8,
         allocatedDate: new Date(),
         status: 'active',
-        currentPhase: 'Phase 2 - Main Installation'
-      }
+        currentPhase: 'Phase 2 - Main Installation',
+      },
     ];
   }
 

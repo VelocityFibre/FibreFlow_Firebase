@@ -1,4 +1,11 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  signal,
+  computed,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
@@ -26,6 +33,7 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
 @Component({
   selector: 'app-contractor-list',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     MatTableModule,
@@ -137,9 +145,11 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
           <mat-card-content>
             <!-- Active Projects Section -->
             <div class="projects-section" *ngIf="summary.activeProjects.length > 0">
-              <h3 class="section-title" 
-                  [matBadge]="summary.activeProjects.length"
-                  matBadgeColor="accent">
+              <h3
+                class="section-title"
+                [matBadge]="summary.activeProjects.length"
+                matBadgeColor="accent"
+              >
                 Active Projects
               </h3>
               <div class="projects-list">
@@ -169,9 +179,11 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
 
             <!-- Completed Projects Section -->
             <div class="projects-section" *ngIf="summary.completedProjects.length > 0">
-              <h3 class="section-title"
-                  [matBadge]="summary.completedProjects.length"
-                  matBadgeColor="primary">
+              <h3
+                class="section-title"
+                [matBadge]="summary.completedProjects.length"
+                matBadgeColor="primary"
+              >
                 Completed Projects
               </h3>
               <div class="completed-projects-summary">
@@ -589,7 +601,7 @@ export class ContractorListComponent implements OnInit {
 
   filteredContractorSummaries = computed(() => {
     let filtered = this.contractorSummaries();
-    
+
     console.log('Contractor summaries:', filtered); // Debug log
 
     // Apply search filter
@@ -663,7 +675,9 @@ export class ContractorListComponent implements OnInit {
             }
           },
           error: (error) => {
-            console.log('No contractor projects found yet - showing contractors without project data');
+            console.log(
+              'No contractor projects found yet - showing contractors without project data',
+            );
           },
         });
       },

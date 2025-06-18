@@ -2,6 +2,19 @@
 
 A comprehensive project management system for fiber optic installations, built with Angular 20 and Firebase.
 
+## Prerequisites
+
+- Node.js v20.19+ or v22.12+ (required by Angular 20)
+- npm 10.8.2+
+- Firebase CLI
+
+### ⚠️ Important: Node.js Version Management
+See [Node.js Version Management Guide](./docs/NODEJS_VERSION_MANAGEMENT.md) for:
+- Setting up correct Node version
+- Avoiding hardcoded path issues
+- Managing multiple Node versions
+- Troubleshooting version conflicts
+
 ## Features
 
 ### Core Modules
@@ -13,7 +26,7 @@ A comprehensive project management system for fiber optic installations, built w
 - **Stock Management** - Project-based inventory tracking and material management
 - **Dashboard** - Real-time project metrics and analytics
 
-### Contractors Module (Phase 2 Complete - June 18, 2025) ✨
+### Contractors Module (Phase 2 Complete - 2025/06/18) ✨
 #### Phase 1 (Completed December 2024)
 - ✅ Contractor CRUD operations
 - ✅ Multi-step onboarding form
@@ -105,7 +118,12 @@ Phase 3 (Planned):
 - Firebase 11.9.1 / Firestore
 - Angular Material 20.0.3
 - RxJS 7.8.0 for reactive programming
-- TypeScript 5.8.3
+- **TypeScript 5.8.3** with advanced type safety features:
+  - Zero `any` types policy (enforced by ESLint)
+  - Branded types for entity IDs
+  - Discriminated unions for state management
+  - Template literal types for routing
+  - Modern features: `satisfies`, const type parameters
 - Standalone components architecture
 - Centralized SCSS theme system
 - Sentry 9.30.0 for error tracking and performance monitoring
@@ -208,6 +226,35 @@ The app uses Firestore with the following collections:
 
 ## Recent Updates
 
+### Angular v20 Modernization (June 18, 2025) ⚡
+
+Upgraded key components to leverage Angular v20 signals and new control flow syntax:
+
+- **Dashboard Component Migration**: 
+  - Migrated from observables to signals for reactive state management
+  - Added computed signals for real-time dashboard stats (active projects, completion rates, low stock alerts)
+  - Implemented `toSignal()` with error handling for data streams
+  - Improved loading states and error resilience
+- **Project List Component Migration**:
+  - Converted to signal-based architecture for better performance
+  - Extracted 600+ line inline template to separate HTML file for maintainability
+  - Extracted styles to separate SCSS file
+  - Updated control flow from `*ngIf/*ngFor` to new `@if/@for/@empty` syntax
+- **Auth Service Enhancement**:
+  - Implemented signal-based user state management
+  - Added computed signals for authentication status and role checking
+  - Maintained backward compatibility with observable support
+- **Theme Service Modernization**:
+  - Converted to signal-based theme state with computed properties
+  - Added proper initialization to prevent NG0200 errors
+  - Improved browser storage integration
+
+**Technical Improvements**:
+- Zero `any` types maintained throughout refactoring
+- OnPush change detection strategy for optimal performance
+- Enhanced error handling with user-friendly fallbacks
+- Modern dependency injection using `inject()` function
+
 ### Project Steps Management (January 2025) 🆕
 
 Added a new Steps management layer between Phases and Tasks for improved project workflow organization:
@@ -279,6 +326,46 @@ For detailed information, see [Performance Improvements Report](./docs/performan
 - **Debug Tools**: Test page at `/debug/sentry-test` for error simulation
 
 For setup details, see [Sentry Setup Guide](./SENTRY_SETUP.md)
+
+### TypeScript Best Practices (January 2025) 🆕
+
+The codebase follows strict TypeScript 5.8 best practices:
+
+- **Zero `any` Types**: ESLint configured to error on any usage
+- **Type Safety Utilities**: 
+  - Type guards in `/src/app/core/utils/type-guards.ts`
+  - Advanced type utilities in `/src/app/core/utils/type-utils.ts`
+  - Branded types for all entity IDs
+  - Discriminated unions for state management
+- **Modern TypeScript Features**:
+  - `satisfies` operator for better type inference
+  - `const` type parameters for literal preservation
+  - Template literal types for type-safe routing
+- **Strict Configuration**: All TypeScript strict flags enabled
+
+For implementation details, see:
+- [TypeScript Improvement Plan](./docs/typescript/TYPESCRIPT_IMPROVEMENT_PLAN.md)
+- [TypeScript Improvements Summary](./docs/typescript/TYPESCRIPT_IMPROVEMENTS_SUMMARY.md)
+- Type definitions in `/src/app/core/types/`
+
+## 📚 Documentation & Organization
+
+All technical documentation and assets are organized in structured folders:
+
+### Documentation
+- **[📘 TypeScript](./docs/typescript/)** - Type safety improvements and best practices
+- **[🚀 Deployment](./docs/deployment/)** - Deployment guides and DevOps documentation
+- **[⚡ Performance](./docs/performance/)** - Performance optimization guides
+- **[🔧 Technical](./docs/technical/)** - Setup guides and technical documentation
+- **[🔄 Upgrades](./docs/upgrades/)** - Angular v20 upgrade documentation
+- **[📋 Reviews](./docs/reviews/)** - Code reviews and quality assessments
+
+### Utilities & Assets
+- **[🛠️ Scripts](./scripts/)** - Utility scripts for data processing and maintenance
+- **[📁 Archives](./docs/archives/)** - Archived documentation and backup files
+- **[🎨 Assets](./docs/assets/)** - Development images and design resources
+
+See [docs/README.md](./docs/README.md) for complete documentation index.
 
 ## Additional Resources
 

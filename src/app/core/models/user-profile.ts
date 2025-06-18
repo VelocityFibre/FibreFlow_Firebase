@@ -21,7 +21,7 @@ export interface UserPermissions {
   canViewReports: boolean;
 }
 
-export const USER_GROUP_PERMISSIONS: Record<UserProfile['userGroup'], UserPermissions> = {
+export const USER_GROUP_PERMISSIONS = {
   admin: {
     canCreateProject: true,
     canEditProject: true,
@@ -67,4 +67,4 @@ export const USER_GROUP_PERMISSIONS: Record<UserProfile['userGroup'], UserPermis
     canManageStock: false,
     canViewReports: false,
   },
-};
+} satisfies Record<UserProfile['userGroup'], UserPermissions>;

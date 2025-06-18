@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,6 +17,7 @@ export interface SummaryCard {
   selector: 'app-summary-cards',
   standalone: true,
   imports: [CommonModule, MatCardModule, MatIconModule, MatProgressBarModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="summary-cards">
       <mat-card *ngFor="let card of cards" class="summary-card">

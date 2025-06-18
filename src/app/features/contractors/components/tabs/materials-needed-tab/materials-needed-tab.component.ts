@@ -36,7 +36,7 @@ interface MaterialRequirement {
     MatChipsModule,
     MatTooltipModule,
     MatMenuModule,
-    MatProgressBarModule
+    MatProgressBarModule,
   ],
   template: `
     <div class="materials-needed-container">
@@ -136,10 +136,13 @@ interface MaterialRequirement {
                 <div class="quantity-info">
                   <span>{{ material.quantityRequired }} {{ material.unit }}</span>
                   <div class="allocation-progress">
-                    <mat-progress-bar 
-                      mode="determinate" 
+                    <mat-progress-bar
+                      mode="determinate"
                       [value]="(material.quantityAllocated / material.quantityRequired) * 100"
-                      [color]="material.quantityAllocated >= material.quantityRequired ? 'primary' : 'warn'">
+                      [color]="
+                        material.quantityAllocated >= material.quantityRequired ? 'primary' : 'warn'
+                      "
+                    >
                     </mat-progress-bar>
                     <span class="allocation-text">{{ material.quantityAllocated }} allocated</span>
                   </div>
@@ -151,7 +154,7 @@ interface MaterialRequirement {
             <ng-container matColumnDef="requiredDate">
               <th mat-header-cell *matHeaderCellDef>Required By</th>
               <td mat-cell *matCellDef="let material">
-                {{ material.requiredDate | date:'MMM d, y' }}
+                {{ material.requiredDate | date: 'MMM d, y' }}
               </td>
             </ng-container>
 
@@ -159,10 +162,11 @@ interface MaterialRequirement {
             <ng-container matColumnDef="priority">
               <th mat-header-cell *matHeaderCellDef>Priority</th>
               <td mat-cell *matCellDef="let material">
-                <mat-chip 
+                <mat-chip
                   [class.high-priority]="material.priority === 'high'"
                   [class.medium-priority]="material.priority === 'medium'"
-                  [class.low-priority]="material.priority === 'low'">
+                  [class.low-priority]="material.priority === 'low'"
+                >
                   {{ material.priority | titlecase }}
                 </mat-chip>
               </td>
@@ -172,11 +176,12 @@ interface MaterialRequirement {
             <ng-container matColumnDef="status">
               <th mat-header-cell *matHeaderCellDef>Status</th>
               <td mat-cell *matCellDef="let material">
-                <mat-chip 
+                <mat-chip
                   [class.pending-chip]="material.status === 'pending'"
                   [class.partial-chip]="material.status === 'partial'"
                   [class.allocated-chip]="material.status === 'allocated'"
-                  [class.delivered-chip]="material.status === 'delivered'">
+                  [class.delivered-chip]="material.status === 'delivered'"
+                >
                   {{ material.status | titlecase }}
                 </mat-chip>
               </td>
@@ -211,7 +216,7 @@ interface MaterialRequirement {
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           </table>
 
           <div *ngIf="materials.length === 0" class="no-data">
@@ -222,195 +227,205 @@ interface MaterialRequirement {
       </mat-card>
     </div>
   `,
-  styles: [`
-    .materials-needed-container {
-      padding: 16px;
-    }
+  styles: [
+    `
+      .materials-needed-container {
+        padding: 16px;
+      }
 
-    .header-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
+      .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
 
-    .header-section h3 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 500;
-    }
+      .header-section h3 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 500;
+      }
 
-    .header-actions {
-      display: flex;
-      gap: 12px;
-    }
+      .header-actions {
+        display: flex;
+        gap: 12px;
+      }
 
-    .summary-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
+      .summary-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+      }
 
-    .summary-card {
-      position: relative;
-      overflow: hidden;
-    }
+      .summary-card {
+        position: relative;
+        overflow: hidden;
+      }
 
-    .summary-card mat-card-content {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 20px;
-    }
+      .summary-card mat-card-content {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 20px;
+      }
 
-    .summary-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #e3f2fd;
-      color: #1976d2;
-    }
+      .summary-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #e3f2fd;
+        color: #1976d2;
+      }
 
-    .summary-icon.pending {
-      background-color: #fff3e0;
-      color: #f57c00;
-    }
+      .summary-icon.pending {
+        background-color: #fff3e0;
+        color: #f57c00;
+      }
 
-    .summary-icon.allocated {
-      background-color: #e8f5e9;
-      color: #388e3c;
-    }
+      .summary-icon.allocated {
+        background-color: #e8f5e9;
+        color: #388e3c;
+      }
 
-    .summary-icon.urgent {
-      background-color: #ffebee;
-      color: #d32f2f;
-    }
+      .summary-icon.urgent {
+        background-color: #ffebee;
+        color: #d32f2f;
+      }
 
-    .summary-icon mat-icon {
-      font-size: 28px;
-      width: 28px;
-      height: 28px;
-    }
+      .summary-icon mat-icon {
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+      }
 
-    .summary-content {
-      flex: 1;
-    }
+      .summary-content {
+        flex: 1;
+      }
 
-    .summary-value {
-      display: block;
-      font-size: 28px;
-      font-weight: 500;
-      line-height: 1;
-    }
+      .summary-value {
+        display: block;
+        font-size: 28px;
+        font-weight: 500;
+        line-height: 1;
+      }
 
-    .summary-label {
-      display: block;
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.6);
-      margin-top: 4px;
-    }
+      .summary-label {
+        display: block;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.6);
+        margin-top: 4px;
+      }
 
-    .materials-table {
-      width: 100%;
-    }
+      .materials-table {
+        width: 100%;
+      }
 
-    .material-info {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+      .material-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
 
-    .material-info .category {
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.6);
-    }
+      .material-info .category {
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.6);
+      }
 
-    .quantity-info {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+      .quantity-info {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
 
-    .allocation-progress {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+      .allocation-progress {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
-    .allocation-progress mat-progress-bar {
-      width: 80px;
-    }
+      .allocation-progress mat-progress-bar {
+        width: 80px;
+      }
 
-    .allocation-text {
-      font-size: 11px;
-      color: rgba(0, 0, 0, 0.6);
-    }
+      .allocation-text {
+        font-size: 11px;
+        color: rgba(0, 0, 0, 0.6);
+      }
 
-    mat-chip {
-      font-size: 12px;
-    }
+      mat-chip {
+        font-size: 12px;
+      }
 
-    .high-priority {
-      background-color: #d32f2f !important;
-      color: white !important;
-    }
+      .high-priority {
+        background-color: #d32f2f !important;
+        color: white !important;
+      }
 
-    .medium-priority {
-      background-color: #f57c00 !important;
-      color: white !important;
-    }
+      .medium-priority {
+        background-color: #f57c00 !important;
+        color: white !important;
+      }
 
-    .low-priority {
-      background-color: #388e3c !important;
-      color: white !important;
-    }
+      .low-priority {
+        background-color: #388e3c !important;
+        color: white !important;
+      }
 
-    .pending-chip {
-      background-color: #9e9e9e !important;
-      color: white !important;
-    }
+      .pending-chip {
+        background-color: #9e9e9e !important;
+        color: white !important;
+      }
 
-    .partial-chip {
-      background-color: #ff9800 !important;
-      color: white !important;
-    }
+      .partial-chip {
+        background-color: #ff9800 !important;
+        color: white !important;
+      }
 
-    .allocated-chip {
-      background-color: #2196f3 !important;
-      color: white !important;
-    }
+      .allocated-chip {
+        background-color: #2196f3 !important;
+        color: white !important;
+      }
 
-    .delivered-chip {
-      background-color: #4caf50 !important;
-      color: white !important;
-    }
+      .delivered-chip {
+        background-color: #4caf50 !important;
+        color: white !important;
+      }
 
-    .no-data {
-      text-align: center;
-      padding: 48px;
-      color: rgba(0, 0, 0, 0.4);
-    }
+      .no-data {
+        text-align: center;
+        padding: 48px;
+        color: rgba(0, 0, 0, 0.4);
+      }
 
-    .no-data mat-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
-      margin-bottom: 16px;
-    }
+      .no-data mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        margin-bottom: 16px;
+      }
 
-    .delete-action {
-      color: #f44336;
-    }
-  `]
+      .delete-action {
+        color: #f44336;
+      }
+    `,
+  ],
 })
 export class MaterialsNeededTabComponent implements OnInit {
   @Input() contractorProject!: ContractorProject;
 
-  displayedColumns: string[] = ['material', 'phase', 'quantity', 'requiredDate', 'priority', 'status', 'actions'];
+  displayedColumns: string[] = [
+    'material',
+    'phase',
+    'quantity',
+    'requiredDate',
+    'priority',
+    'status',
+    'actions',
+  ];
   materials: MaterialRequirement[] = [];
 
   get totalMaterials(): number {
@@ -418,15 +433,15 @@ export class MaterialsNeededTabComponent implements OnInit {
   }
 
   get pendingMaterials(): number {
-    return this.materials.filter(m => m.status === 'pending').length;
+    return this.materials.filter((m) => m.status === 'pending').length;
   }
 
   get allocatedMaterials(): number {
-    return this.materials.filter(m => m.status === 'allocated').length;
+    return this.materials.filter((m) => m.status === 'allocated').length;
   }
 
   get urgentMaterials(): number {
-    return this.materials.filter(m => m.priority === 'high').length;
+    return this.materials.filter((m) => m.priority === 'high').length;
   }
 
   ngOnInit(): void {
@@ -448,7 +463,7 @@ export class MaterialsNeededTabComponent implements OnInit {
         phase: 'Phase 2 - Installation',
         requiredDate: new Date('2024-02-15'),
         priority: 'high',
-        status: 'partial'
+        status: 'partial',
       },
       {
         id: '2',
@@ -461,7 +476,7 @@ export class MaterialsNeededTabComponent implements OnInit {
         phase: 'Phase 2 - Installation',
         requiredDate: new Date('2024-02-20'),
         priority: 'medium',
-        status: 'allocated'
+        status: 'allocated',
       },
       {
         id: '3',
@@ -474,7 +489,7 @@ export class MaterialsNeededTabComponent implements OnInit {
         phase: 'Phase 1 - Preparation',
         requiredDate: new Date('2024-01-30'),
         priority: 'high',
-        status: 'pending'
+        status: 'pending',
       },
       {
         id: '4',
@@ -487,8 +502,8 @@ export class MaterialsNeededTabComponent implements OnInit {
         phase: 'Phase 3 - Termination',
         requiredDate: new Date('2024-03-10'),
         priority: 'low',
-        status: 'delivered'
-      }
+        status: 'delivered',
+      },
     ];
   }
 

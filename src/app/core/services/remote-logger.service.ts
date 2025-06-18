@@ -1,5 +1,11 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, addDoc, serverTimestamp } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  addDoc,
+  serverTimestamp,
+  CollectionReference,
+} from '@angular/fire/firestore';
 
 export interface LogEntry {
   level: 'info' | 'warn' | 'error' | 'debug';
@@ -19,13 +25,20 @@ export interface LogEntry {
 export class RemoteLoggerService {
   private firestore = inject(Firestore);
   private sessionId = this.generateSessionId();
-  private logsCollection = collection(this.firestore, 'debug-logs');
+  private logsCollection?: CollectionReference;
 
   constructor() {
     // Initialize without immediate Firebase logging to avoid dependency injection issues
     setTimeout(() => {
       this.log('info', 'RemoteLoggerService initialized', 'RemoteLoggerService');
     }, 100);
+  }
+
+  private getLogsCollection(): CollectionReference {
+    if (!this.logsCollection) {
+      this.logsCollection = collection(this.firestore, 'debug-logs');
+    }
+    return this.logsCollection;
   }
 
   async log(
@@ -63,7 +76,7 @@ export class RemoteLoggerService {
       }
 
       // Store in Firebase
-      await addDoc(this.logsCollection, logEntry);
+      await addDoc(this.getLogsCollection(), logEntry);
     } catch (error) {
       // Fallback to console if Firebase fails
       console.error('Failed to log to Firebase:', error);
@@ -99,7 +112,7 @@ export class RemoteLoggerService {
       });
 
       // Store in Firebase
-      await addDoc(this.logsCollection, logEntry);
+      await addDoc(this.getLogsCollection(), logEntry);
     } catch (fbError) {
       console.error('Failed to log error to Firebase:', fbError);
       console.error('Original error:', error);

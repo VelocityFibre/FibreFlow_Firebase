@@ -1,8 +1,16 @@
 import { Component, Inject, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SharedMaterialModule } from '../../../../../shared/modules/shared-material.module';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
 import { Step, StepStatus } from '../../../../../core/models/step.model';
 import { Phase } from '../../../../../core/models/phase.model';
 import { StepService } from '../../../../../core/services/step.service';
@@ -18,7 +26,20 @@ interface DialogData {
 @Component({
   selector: 'app-step-form-dialog',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SharedMaterialModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatButtonModule,
+    MatProgressBarModule,
+    MatSliderModule,
+    MatIconModule,
+    MatChipsModule,
+  ],
   template: `
     <h2 mat-dialog-title>{{ data.step ? 'Edit Step' : 'Add New Step' }}</h2>
 
@@ -266,14 +287,14 @@ export class StepFormDialogComponent implements OnInit {
 
       if (this.data.step) {
         this.stepService.updateStep(this.data.step.id!, stepData).subscribe({
-        next: () => {
-          this.dialogRef.close(true);
-        },
-        error: (error: any) => {
-          console.error('Error saving step:', error);
-          this.loading = false;
-        },
-      });
+          next: () => {
+            this.dialogRef.close(true);
+          },
+          error: (error: any) => {
+            console.error('Error saving step:', error);
+            this.loading = false;
+          },
+        });
       } else {
         this.stepService.createStep(stepData).subscribe({
           next: () => {
@@ -288,4 +309,3 @@ export class StepFormDialogComponent implements OnInit {
     }
   }
 }
-

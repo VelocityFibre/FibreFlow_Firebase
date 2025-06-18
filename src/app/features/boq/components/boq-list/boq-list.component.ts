@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -15,6 +15,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Subject, takeUntil, combineLatest, debounceTime } from 'rxjs';
 import { FormControl } from '@angular/forms';
 
@@ -29,6 +30,7 @@ import { BOQImportExcelDialogComponent } from '../boq-import-excel-dialog/boq-im
 @Component({
   selector: 'app-boq-list',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     FormsModule,
@@ -46,6 +48,7 @@ import { BOQImportExcelDialogComponent } from '../boq-import-excel-dialog/boq-im
     MatTooltipModule,
     MatDialogModule,
     MatProgressSpinnerModule,
+    ScrollingModule,
   ],
   template: `
     <div class="boq-container">
@@ -163,6 +166,17 @@ import { BOQImportExcelDialogComponent } from '../boq-import-excel-dialog/boq-im
           <mat-card-title>
             <mat-icon>receipt_long</mat-icon>
             BOQ Items ({{ filteredItems.length }})
+            <span class="spacer"></span>
+            <button
+              mat-icon-button
+              [matTooltip]="
+                useVirtualScrolling ? 'Switch to Table View' : 'Switch to Virtual Scroll'
+              "
+              (click)="toggleVirtualScrolling()"
+              *ngIf="filteredItems.length > 20"
+            >
+              <mat-icon>{{ useVirtualScrolling ? 'table_view' : 'view_list' }}</mat-icon>
+            </button>
           </mat-card-title>
           <mat-card-subtitle
             >Bill of Quantities items and their allocation status</mat-card-subtitle
@@ -170,7 +184,39 @@ import { BOQImportExcelDialogComponent } from '../boq-import-excel-dialog/boq-im
         </mat-card-header>
         <mat-card-content>
           <div class="table-container" *ngIf="!loading; else loadingTemplate">
+            <!-- Virtual Scrolling Table -->
+            <cdk-virtual-scroll-viewport
+              *ngIf="useVirtualScrolling"
+              [itemSize]="virtualScrollItemSize"
+              class="virtual-scroll-viewport"
+            >
+              <table
+                mat-table
+                [dataSource]="filteredItems"
+                class="boq-table"
+                matSort
+                (matSortChange)="onSortChange($event)"
+              >
+                <!-- Table columns remain the same -->
+                <!-- Project Column -->
+                <ng-container matColumnDef="project">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Project</th>
+                  <td mat-cell *matCellDef="let item">
+                    <div class="project-info">
+                      <div class="project-name">{{ getProjectName(item.projectId) }}</div>
+                      <div class="project-location">{{ getProjectLocation(item.projectId) }}</div>
+                    </div>
+                  </td>
+                </ng-container>
+                <!-- Add other columns as needed -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              </table>
+            </cdk-virtual-scroll-viewport>
+
+            <!-- Regular Table -->
             <table
+              *ngIf="!useVirtualScrolling"
               mat-table
               [dataSource]="filteredItems"
               class="boq-table"
@@ -435,9 +481,18 @@ import { BOQImportExcelDialogComponent } from '../boq-import-excel-dialog/boq-im
         overflow-x: auto;
       }
 
+      .virtual-scroll-viewport {
+        height: 600px;
+        width: 100%;
+      }
+
       .boq-table {
         width: 100%;
         min-width: 1200px;
+      }
+
+      .spacer {
+        flex: 1 1 auto;
       }
 
       .project-info {
@@ -599,6 +654,11 @@ export class BOQListComponent implements OnInit, OnDestroy {
   loading = true;
   currentSort: Sort = { active: '', direction: '' };
 
+  // Virtual scrolling properties
+  useVirtualScrolling = false;
+  virtualScrollItemSize = 60;
+  virtualScrollThreshold = 50;
+
   selectedProjectId = 'all';
   selectedStatus: BOQStatus | 'all' = 'all';
   searchControl = new FormControl('');
@@ -702,6 +762,17 @@ export class BOQListComponent implements OnInit, OnDestroy {
     }
 
     this.filteredItems = filtered;
+
+    // Check if virtual scrolling should be enabled
+    this.checkVirtualScrolling();
+  }
+
+  private checkVirtualScrolling() {
+    this.useVirtualScrolling = this.filteredItems.length > this.virtualScrollThreshold;
+  }
+
+  toggleVirtualScrolling() {
+    this.useVirtualScrolling = !this.useVirtualScrolling;
   }
 
   onProjectChange() {

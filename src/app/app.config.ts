@@ -22,6 +22,7 @@ import { SentryErrorHandlerService } from './core/services/sentry-error-handler.
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 import { CustomPreloadingStrategy } from './core/services/custom-preload.service';
+import { AppInitializerService } from './core/services/app-initializer.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -42,17 +43,16 @@ export const appConfig: ApplicationConfig = {
       deps: [Sentry.TraceService],
       multi: true,
     },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (initializer: AppInitializerService) => () => initializer.initialize(),
+      deps: [AppInitializerService],
+      multi: true,
+    },
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => {
       const firestore = getFirestore();
-      // Enable offline persistence with error handling
-      enableIndexedDbPersistence(firestore).catch((err) => {
-        if (err.code === 'failed-precondition') {
-          console.warn('Multiple tabs open, persistence can only be enabled in one tab at a time.');
-        } else if (err.code === 'unimplemented') {
-          console.warn('The current browser does not support offline persistence');
-        }
-      });
+      // Persistence will be enabled after app initialization to avoid NG0200
       return firestore;
     }),
     provideAuth(() => getAuth()),

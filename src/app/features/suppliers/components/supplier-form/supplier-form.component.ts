@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -13,6 +13,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatStepperModule } from '@angular/material/stepper';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { SupplierService } from '../../../../core/suppliers/services/supplier.service';
 import {
@@ -49,6 +50,7 @@ export class SupplierFormComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private snackBar = inject(MatSnackBar);
+  private destroyRef = inject(DestroyRef);
 
   supplierForm!: FormGroup;
   isEditMode = false;
@@ -136,19 +138,22 @@ export class SupplierFormComponent implements OnInit {
     if (!this.supplierId) return;
 
     this.loading = true;
-    this.supplierService.getSupplierById(this.supplierId).subscribe({
-      next: (supplier) => {
-        if (supplier) {
-          this.populateForm(supplier);
-        }
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error loading supplier:', error);
-        this.snackBar.open('Failed to load supplier', 'Close', { duration: 3000 });
-        this.loading = false;
-      },
-    });
+    this.supplierService
+      .getSupplierById(this.supplierId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (supplier) => {
+          if (supplier) {
+            this.populateForm(supplier);
+          }
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error loading supplier:', error);
+          this.snackBar.open('Failed to load supplier', 'Close', { duration: 3000 });
+          this.loading = false;
+        },
+      });
   }
 
   populateForm(supplier: Supplier): void {

@@ -1,11 +1,13 @@
 <div class="client-form-container">
   <!-- Loading spinner -->
-  <div *ngIf="isLoading" class="loading-container">
-    <mat-spinner></mat-spinner>
-  </div>
+  @if (isLoading) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  }
 
   <!-- Form content -->
-  <div *ngIf="!isLoading">
+  @if (!isLoading) {
     <!-- Header -->
     <div class="form-header">
       <h1 class="form-title">{{ isEditMode ? 'Edit Client' : 'Add New Client' }}</h1>
@@ -35,9 +37,11 @@
                 <mat-form-field appearance="outline">
                   <mat-label>Client Type</mat-label>
                   <mat-select formControlName="clientType">
-                    <mat-option *ngFor="let type of clientTypes" [value]="type">
-                      {{ type }}
-                    </mat-option>
+                    @for (type of clientTypes; track type) {
+                      <mat-option [value]="type">
+                        {{ type }}
+                      </mat-option>
+                    }
                   </mat-select>
                   <mat-error>{{ getErrorMessage('clientType', basicInfoForm) }}</mat-error>
                 </mat-form-field>
@@ -46,9 +50,11 @@
                 <mat-form-field appearance="outline">
                   <mat-label>Status</mat-label>
                   <mat-select formControlName="status">
-                    <mat-option *ngFor="let status of clientStatuses" [value]="status">
-                      {{ status }}
-                    </mat-option>
+                    @for (status of clientStatuses; track status) {
+                      <mat-option [value]="status">
+                        {{ status }}
+                      </mat-option>
+                    }
                   </mat-select>
                   <mat-error>{{ getErrorMessage('status', basicInfoForm) }}</mat-error>
                 </mat-form-field>
@@ -58,9 +64,11 @@
                   <mat-label>Industry</mat-label>
                   <mat-select formControlName="industry">
                     <mat-option value="">None</mat-option>
-                    <mat-option *ngFor="let industry of industries" [value]="industry">
-                      {{ industry }}
-                    </mat-option>
+                    @for (industry of industries; track industry) {
+                      <mat-option [value]="industry">
+                        {{ industry }}
+                      </mat-option>
+                    }
                   </mat-select>
                 </mat-form-field>
 
@@ -206,14 +214,15 @@
               <div class="tags-section">
                 <h3 class="section-title">Tags</h3>
                 <mat-chip-grid #chipGrid>
-                  <mat-chip-row
-                    *ngFor="let tag of tags"
-                    [removable]="true"
-                    (removed)="removeTag(tag)"
-                  >
-                    {{ tag }}
-                    <mat-icon matChipRemove>cancel</mat-icon>
-                  </mat-chip-row>
+                  @for (tag of tags; track tag) {
+                    <mat-chip-row
+                      [removable]="true"
+                      (removed)="removeTag(tag)"
+                    >
+                      {{ tag }}
+                      <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip-row>
+                  }
                   <input
                     placeholder="Add tag..."
                     [matChipInputFor]="chipGrid"
@@ -303,28 +312,34 @@
               </button>
 
               <!-- Additional Contacts List -->
-              <div class="contacts-list" *ngIf="additionalContacts.length > 0">
-                <mat-divider class="section-divider"></mat-divider>
-                <h4 class="subsection-title">Added Contacts</h4>
+              @if (additionalContacts.length > 0) {
+                <div class="contacts-list">
+                  <mat-divider class="section-divider"></mat-divider>
+                  <h4 class="subsection-title">Added Contacts</h4>
 
-                <div class="contact-card" *ngFor="let contact of additionalContacts; let i = index">
-                  <div class="contact-info">
-                    <div class="contact-header">
-                      <strong>{{ contact.name }}</strong>
-                      <span class="contact-role" *ngIf="contact.role">{{ contact.role }}</span>
+                  @for (contact of additionalContacts; track $index) {
+                    <div class="contact-card">
+                      <div class="contact-info">
+                        <div class="contact-header">
+                          <strong>{{ contact.name }}</strong>
+                          @if (contact.role) {
+                            <span class="contact-role">{{ contact.role }}</span>
+                          }
+                        </div>
+                        <div class="contact-details">
+                          <span><mat-icon inline>email</mat-icon> {{ contact.email }}</span>
+                          @if (contact.phone) {
+                            <span><mat-icon inline>phone</mat-icon> {{ contact.phone }}</span>
+                          }
+                        </div>
+                      </div>
+                      <button mat-icon-button color="warn" (click)="removeAdditionalContact($index)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
                     </div>
-                    <div class="contact-details">
-                      <span><mat-icon inline>email</mat-icon> {{ contact.email }}</span>
-                      <span *ngIf="contact.phone"
-                        ><mat-icon inline>phone</mat-icon> {{ contact.phone }}</span
-                      >
-                    </div>
-                  </div>
-                  <button mat-icon-button color="warn" (click)="removeAdditionalContact(i)">
-                    <mat-icon>delete</mat-icon>
-                  </button>
+                  }
                 </div>
-              </div>
+              }
             </div>
 
             <div class="step-actions">
@@ -373,10 +388,12 @@
                     basicInfoForm.get('industry')?.value || '-'
                   }}</span>
                 </div>
-                <div class="review-item" *ngIf="basicInfoForm.get('website')?.value">
-                  <span class="review-label">Website:</span>
-                  <span class="review-value">{{ basicInfoForm.get('website')?.value }}</span>
-                </div>
+                @if (basicInfoForm.get('website')?.value) {
+                  <div class="review-item">
+                    <span class="review-label">Website:</span>
+                    <span class="review-value">{{ basicInfoForm.get('website')?.value }}</span>
+                  </div>
+                }
               </div>
             </div>
 
@@ -406,56 +423,73 @@
             </div>
 
             <!-- Business Information Review -->
-            <div
-              class="review-card"
-              *ngIf="
-                businessForm.get('registrationNumber')?.value ||
-                businessForm.get('vatNumber')?.value ||
-                businessForm.get('notes')?.value ||
-                tags.length > 0
-              "
-            >
+            @if (
+              businessForm.get('registrationNumber')?.value ||
+              businessForm.get('vatNumber')?.value ||
+              businessForm.get('notes')?.value ||
+              tags.length > 0
+            ) {
+              <div class="review-card">
               <h4 class="review-card-title">Business Information</h4>
               <div class="review-grid">
-                <div class="review-item" *ngIf="businessForm.get('registrationNumber')?.value">
-                  <span class="review-label">Registration Number:</span>
-                  <span class="review-value">{{
-                    businessForm.get('registrationNumber')?.value
-                  }}</span>
-                </div>
-                <div class="review-item" *ngIf="businessForm.get('vatNumber')?.value">
-                  <span class="review-label">VAT Number:</span>
-                  <span class="review-value">{{ businessForm.get('vatNumber')?.value }}</span>
-                </div>
-                <div class="review-item full-width" *ngIf="tags.length > 0">
-                  <span class="review-label">Tags:</span>
-                  <div class="review-tags">
-                    <mat-chip-set>
-                      <mat-chip *ngFor="let tag of tags">{{ tag }}</mat-chip>
-                    </mat-chip-set>
+                @if (businessForm.get('registrationNumber')?.value) {
+                  <div class="review-item">
+                    <span class="review-label">Registration Number:</span>
+                    <span class="review-value">{{
+                      businessForm.get('registrationNumber')?.value
+                    }}</span>
                   </div>
-                </div>
-                <div class="review-item full-width" *ngIf="businessForm.get('notes')?.value">
-                  <span class="review-label">Notes:</span>
-                  <span class="review-value">{{ businessForm.get('notes')?.value }}</span>
-                </div>
+                }
+                @if (businessForm.get('vatNumber')?.value) {
+                  <div class="review-item">
+                    <span class="review-label">VAT Number:</span>
+                    <span class="review-value">{{ businessForm.get('vatNumber')?.value }}</span>
+                  </div>
+                }
+                @if (tags.length > 0) {
+                  <div class="review-item full-width">
+                    <span class="review-label">Tags:</span>
+                    <div class="review-tags">
+                      <mat-chip-set>
+                        @for (tag of tags; track tag) {
+                          <mat-chip>{{ tag }}</mat-chip>
+                        }
+                      </mat-chip-set>
+                    </div>
+                  </div>
+                }
+                @if (businessForm.get('notes')?.value) {
+                  <div class="review-item full-width">
+                    <span class="review-label">Notes:</span>
+                    <span class="review-value">{{ businessForm.get('notes')?.value }}</span>
+                  </div>
+                }
               </div>
             </div>
+            }
 
             <!-- Additional Contacts Review -->
-            <div class="review-card" *ngIf="additionalContacts.length > 0">
-              <h4 class="review-card-title">Additional Contacts</h4>
-              <div class="additional-contacts-review">
-                <div class="contact-review-item" *ngFor="let contact of additionalContacts">
-                  <strong>{{ contact.name }}</strong>
-                  <span *ngIf="contact.role"> - {{ contact.role }}</span>
-                  <div class="contact-review-details">
-                    <span>{{ contact.email }}</span>
-                    <span *ngIf="contact.phone"> | {{ contact.phone }}</span>
-                  </div>
+            @if (additionalContacts.length > 0) {
+              <div class="review-card">
+                <h4 class="review-card-title">Additional Contacts</h4>
+                <div class="additional-contacts-review">
+                  @for (contact of additionalContacts; track contact) {
+                    <div class="contact-review-item">
+                      <strong>{{ contact.name }}</strong>
+                      @if (contact.role) {
+                        <span> - {{ contact.role }}</span>
+                      }
+                      <div class="contact-review-details">
+                        <span>{{ contact.email }}</span>
+                        @if (contact.phone) {
+                          <span> | {{ contact.phone }}</span>
+                        }
+                      </div>
+                    </div>
+                  }
                 </div>
               </div>
-            </div>
+            }
           </div>
 
           <div class="step-actions">
@@ -464,13 +498,17 @@
               Back
             </button>
             <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="isSaving">
-              <mat-icon *ngIf="!isSaving">{{ isEditMode ? 'save' : 'add' }}</mat-icon>
-              <mat-spinner *ngIf="isSaving" diameter="20" strokeWidth="2"></mat-spinner>
+              @if (!isSaving) {
+                <mat-icon>{{ isEditMode ? 'save' : 'add' }}</mat-icon>
+              }
+              @if (isSaving) {
+                <mat-spinner diameter="20" strokeWidth="2"></mat-spinner>
+              }
               {{ isEditMode ? 'Update Client' : 'Create Client' }}
             </button>
           </div>
         </div>
       </mat-step>
     </mat-stepper>
-  </div>
+  }
 </div>

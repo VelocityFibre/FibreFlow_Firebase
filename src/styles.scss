@@ -9,6 +9,7 @@
 @use './styles/variables' as *; // CSS custom properties need to be available globally
 @use './styles/utilities' as *; // Utility classes need to be available globally
 @use './styles/card-borders' as *; // Card border colors
+@use './styles/image-loading' as *; // Image loading states and animations
 
 // Define custom FibreFlow palette for Material
 $fibreflow-primary-palette: (

@@ -35,6 +35,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "sw.js",
+                "input": "src",
+                "output": "/"
               }
             ],
             "styles": [
@@ -47,8 +52,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2MB",
-                  "maximumError": "5MB"
+                  "maximumWarning": "1MB",
+                  "maximumError": "2MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -57,7 +62,14 @@
                 }
               ],
               "outputHashing": "all",
-              "optimization": true,
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": true
+                },
+                "fonts": true
+              },
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true
@@ -98,6 +110,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "sw.js",
+                "input": "src",
+                "output": "/"
               }
             ],
             "styles": [

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, Injector, afterNextRender } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
@@ -146,16 +146,26 @@ import { DEFAULT_PHASES, PhaseTemplate } from '../../../../core/models/phase.mod
 export class PhasesPageComponent implements OnInit {
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
+  private injector = inject(Injector);
 
   displayedColumns = ['name', 'description', 'type', 'order', 'actions'];
   phases = [...DEFAULT_PHASES];
 
   ngOnInit() {
-    // Load phases from local storage or use defaults
-    const savedPhases = localStorage.getItem('app-phases');
-    if (savedPhases) {
-      this.phases = JSON.parse(savedPhases);
-    }
+    // Use afterNextRender to avoid NG0200
+    afterNextRender(
+      () => {
+        const savedPhases = localStorage.getItem('app-phases');
+        if (savedPhases) {
+          try {
+            this.phases = JSON.parse(savedPhases);
+          } catch (error) {
+            console.error('Error parsing saved phases:', error);
+          }
+        }
+      },
+      { injector: this.injector },
+    );
   }
 
   addPhase() {

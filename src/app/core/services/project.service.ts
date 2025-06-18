@@ -33,16 +33,16 @@ import {
   PhaseHierarchy,
   StepHierarchy,
 } from '../models/project.model';
+import { ProjectInitializationService } from './project-initialization.service';
 import { PhaseService } from './phase.service';
-import { TaskService } from './task.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProjectService {
   private firestore = inject(Firestore);
+  private projectInitService = inject(ProjectInitializationService);
   private phaseService = inject(PhaseService);
-  private taskService = inject(TaskService);
 
   // Collection references
   private projectsCollection = collection(
@@ -156,14 +156,10 @@ export class ProjectService {
 
     // Create default phases and tasks from template
     try {
-      console.log(`Creating phases for project ${docRef.id}...`);
-      await this.phaseService.createProjectPhases(docRef.id, true);
-      console.log(`Successfully created phases for project ${docRef.id}`);
-      
-      // Initialize tasks for the project
-      console.log(`Creating tasks for project ${docRef.id}...`);
-      await this.taskService.initializeProjectTasks(docRef.id);
-      console.log(`Successfully created tasks for project ${docRef.id}`);
+      // Initialize phases and tasks for the project
+      console.log(`Initializing phases and tasks for project ${docRef.id}...`);
+      await this.projectInitService.initializeProjectPhasesAndTasks(docRef.id);
+      console.log(`Successfully initialized phases and tasks for project ${docRef.id}`);
     } catch (error) {
       console.error('Error creating phases and tasks:', error);
       // Don't throw - project is already created

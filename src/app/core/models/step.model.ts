@@ -44,4 +44,3 @@ export interface StepWithPhase extends Step {
   phaseName?: string;
   phaseStatus?: string;
 }
-

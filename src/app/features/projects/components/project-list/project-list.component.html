@@ -1,0 +1,160 @@
+<div class="ff-page-container">
+  <!-- Header -->
+  <div class="ff-page-header">
+    <h1 class="ff-page-title">Projects</h1>
+    <p class="ff-page-subtitle">Manage your fiber optic infrastructure deployments</p>
+  </div>
+
+  <!-- Actions Bar -->
+  <div class="actions-bar">
+    <button mat-raised-button class="ff-button-primary" (click)="createNewProject()">
+      <mat-icon>add</mat-icon>
+      New Project
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <section class="ff-section">
+      <div class="loading-grid">
+        @for (i of [1, 2, 3, 4]; track i) {
+          <div class="loading-card">
+            <div class="loading-skeleton loading-header"></div>
+            <div class="loading-skeleton loading-content"></div>
+            <div class="loading-skeleton loading-progress"></div>
+          </div>
+        }
+      </div>
+    </section>
+  } @else {
+    <!-- Project Grid -->
+    <section class="ff-section">
+      <cdk-virtual-scroll-viewport itemSize="420" class="project-viewport">
+        <div class="project-grid">
+          @for (project of projects(); track project.id) {
+            <mat-card
+              class="project-card ff-card-projects"
+              [routerLink]="['/projects', project.id]"
+              matRipple
+            >
+              <!-- Priority Indicator -->
+              @if (project.priorityLevel === 'high' || project.priorityLevel === 'critical') {
+                <div class="priority-ribbon" [ngClass]="'priority-' + project.priorityLevel">
+                  <mat-icon class="small-icon">flag</mat-icon>
+                </div>
+              }
+
+              <!-- Card Header -->
+              <mat-card-header>
+                <div class="header-content">
+                  <div class="title-section">
+                    <mat-card-title>{{ project.name }}</mat-card-title>
+                    <mat-card-subtitle>{{ project.clientOrganization }}</mat-card-subtitle>
+                  </div>
+                  <mat-chip class="status-chip" [ngClass]="'status-' + project.status">
+                    {{ getStatusLabel(project.status) }}
+                  </mat-chip>
+                </div>
+              </mat-card-header>
+
+              <!-- Card Content -->
+              <mat-card-content>
+                <!-- Project Meta Info -->
+                <div class="project-meta">
+                  <div class="meta-item">
+                    <mat-icon class="small-icon">location_on</mat-icon>
+                    <span>{{ project.location }}</span>
+                  </div>
+                  <div class="meta-item">
+                    <mat-icon class="small-icon">calendar_today</mat-icon>
+                    <span>{{ formatDate(project.startDate) }}</span>
+                  </div>
+                  <div class="meta-item">
+                    <mat-icon class="small-icon">person</mat-icon>
+                    <span>{{ project.projectManagerName }}</span>
+                  </div>
+                  <div class="meta-item">
+                    <mat-icon class="small-icon">category</mat-icon>
+                    <span class="project-type">{{ getProjectTypeLabel(project.projectType) }}</span>
+                  </div>
+                </div>
+
+                <!-- Current Phase Card -->
+                <div class="phase-card">
+                  <div class="phase-header">
+                    <span class="phase-label">Current Phase</span>
+                    <span class="phase-progress">{{ project.currentPhaseProgress }}%</span>
+                  </div>
+                  <div class="phase-name">
+                    {{ project.currentPhaseName || getPhaseLabel(project.currentPhase) }}
+                  </div>
+                  <mat-progress-bar
+                    mode="determinate"
+                    [value]="project.currentPhaseProgress"
+                    color="primary"
+                  >
+                  </mat-progress-bar>
+                </div>
+
+                <!-- Overall Progress -->
+                <div class="progress-section">
+                  <div class="progress-header">
+                    <span class="progress-label">Overall Progress</span>
+                    <span class="progress-value">{{ project.overallProgress }}%</span>
+                  </div>
+                  <mat-progress-bar
+                    mode="determinate"
+                    [value]="project.overallProgress"
+                    [color]="project.overallProgress === 100 ? 'accent' : 'primary'"
+                  >
+                  </mat-progress-bar>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                  <div class="stat-card">
+                    <mat-icon color="primary">assignment</mat-icon>
+                    <div class="stat-content">
+                      <div class="stat-value">{{ project.activeTasksCount }}</div>
+                      <div class="stat-label">Active Tasks</div>
+                    </div>
+                  </div>
+                  <div class="stat-card">
+                    <mat-icon class="completed-icon">check_circle</mat-icon>
+                    <div class="stat-content">
+                      <div class="stat-value">{{ project.completedTasksCount }}</div>
+                      <div class="stat-label">Completed</div>
+                    </div>
+                  </div>
+                  <div
+                    class="stat-card"
+                    [matTooltip]="'Budget: R' + (project.budget | number: '1.0-0')"
+                  >
+                    <mat-icon class="budget-icon">attach_money</mat-icon>
+                    <div class="stat-content">
+                      <div class="stat-value">{{ getBudgetPercentage(project) }}%</div>
+                      <div class="stat-label">Budget Used</div>
+                    </div>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          } @empty {
+            <!-- Empty State -->
+            <div class="empty-state">
+              <div class="empty-state-icon">
+                <mat-icon class="large-icon">folder_open</mat-icon>
+              </div>
+              <h2>No projects yet</h2>
+              <p>Create your first fiber optic project to get started</p>
+              <button mat-raised-button class="ff-button-primary" (click)="createNewProject()">
+                <mat-icon>add</mat-icon>
+                Create Your First Project
+              </button>
+            </div>
+          }
+        </div>
+      </cdk-virtual-scroll-viewport>
+    </section>
+  }
+</div>

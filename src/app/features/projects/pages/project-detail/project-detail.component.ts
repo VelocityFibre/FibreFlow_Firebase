@@ -1124,16 +1124,16 @@ export class ProjectDetailComponent implements OnInit {
   boqSummary$!: Observable<BOQSummary | null>;
 
   ngOnInit() {
-    const projectId$ = this.route.params.pipe(map((params) => params['id']));
+    const projectId$ = this.route.paramMap.pipe(map((params) => params.get('id') || ''));
 
     this.project$ = projectId$.pipe(switchMap((id) => this.projectService.getProjectById(id)));
 
     this.boqSummary$ = projectId$.pipe(switchMap((id) => this.boqService.getProjectSummary(id)));
 
     // Ensure phases exist for this project
-    projectId$.pipe(
-      switchMap(projectId => from(this.phaseService.ensureProjectHasPhases(projectId)))
-    ).subscribe();
+    projectId$
+      .pipe(switchMap((projectId) => from(this.phaseService.ensureProjectHasPhases(projectId))))
+      .subscribe();
 
     this.phasesWithTasks$ = projectId$.pipe(
       switchMap((projectId) =>
@@ -1142,9 +1142,13 @@ export class ProjectDetailComponent implements OnInit {
           this.taskService.getTasksByProject(projectId),
         ]).pipe(
           map(([phases, tasks]) => {
-            console.log(`ProjectDetailComponent: Loaded ${phases.length} phases for project ${projectId}`);
+            console.log(
+              `ProjectDetailComponent: Loaded ${phases.length} phases for project ${projectId}`,
+            );
             console.log('Phases:', phases);
-            console.log(`ProjectDetailComponent: Loaded ${tasks.length} tasks for project ${projectId}`);
+            console.log(
+              `ProjectDetailComponent: Loaded ${tasks.length} tasks for project ${projectId}`,
+            );
             return phases.map((phase) => ({
               phase,
               tasks: tasks

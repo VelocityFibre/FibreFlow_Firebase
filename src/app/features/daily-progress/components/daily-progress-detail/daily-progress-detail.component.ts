@@ -356,8 +356,8 @@ export class DailyProgressDetailComponent implements OnInit {
   canApprove = false; // This should be based on user role
 
   constructor() {
-    this.progress$ = this.route.params.pipe(
-      switchMap((params) => this.dailyProgressService.getById(params['id'])),
+    this.progress$ = this.route.paramMap.pipe(
+      switchMap((params) => this.dailyProgressService.getById(params.get('id') || '')),
     );
   }
 

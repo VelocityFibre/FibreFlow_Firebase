@@ -6,6 +6,7 @@ import {
   DestroyRef,
   ViewChild,
   AfterViewInit,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
@@ -32,6 +33,7 @@ import { LoadingSkeletonComponent } from '../../../../shared/components/loading-
 @Component({
   selector: 'app-staff-list',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     ReactiveFormsModule,

@@ -53,8 +53,16 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
         production: environment.production,
         angularVersion: (window as any).ng?.VERSION?.full || 'Unknown',
         hydrationEnabled: false,
-        platform: 'browser'
+        platform: 'browser',
       });
+
+      // Register service worker in production
+      if (environment.production && 'serviceWorker' in navigator) {
+        navigator.serviceWorker
+          .register('/sw.js')
+          .then(() => console.log('FibreFlow: Service Worker registered'))
+          .catch((err) => console.error('FibreFlow: Service Worker registration failed:', err));
+      }
     })
     .catch((err) => {
       console.error('FibreFlow: Bootstrap error:', err);
@@ -62,7 +70,7 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
         message: err.message,
         stack: err.stack,
         name: err.name,
-        code: err.code
+        code: err.code,
       });
       // Display error in the browser
       document.body.innerHTML = `<div style="padding: 20px; color: red;">

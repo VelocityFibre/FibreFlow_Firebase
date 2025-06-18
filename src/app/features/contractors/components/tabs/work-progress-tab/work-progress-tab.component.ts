@@ -31,7 +31,7 @@ interface PhaseProgress {
     MatIconModule,
     MatTableModule,
     MatChipsModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   template: `
     <div class="work-progress-container">
@@ -54,10 +54,13 @@ interface PhaseProgress {
               <span>Total Progress</span>
               <span class="progress-percentage">{{ overallProgress }}%</span>
             </div>
-            <mat-progress-bar 
-              mode="determinate" 
+            <mat-progress-bar
+              mode="determinate"
               [value]="overallProgress"
-              [color]="overallProgress >= 80 ? 'primary' : overallProgress >= 50 ? 'accent' : 'warn'">
+              [color]="
+                overallProgress >= 80 ? 'primary' : overallProgress >= 50 ? 'accent' : 'warn'
+              "
+            >
             </mat-progress-bar>
           </div>
 
@@ -106,7 +109,7 @@ interface PhaseProgress {
             <ng-container matColumnDef="duration">
               <th mat-header-cell *matHeaderCellDef>Duration</th>
               <td mat-cell *matCellDef="let phase">
-                {{ phase.startDate | date:'MMM d' }} - {{ phase.endDate | date:'MMM d, y' }}
+                {{ phase.startDate | date: 'MMM d' }} - {{ phase.endDate | date: 'MMM d, y' }}
               </td>
             </ng-container>
 
@@ -115,10 +118,13 @@ interface PhaseProgress {
               <th mat-header-cell *matHeaderCellDef>Progress</th>
               <td mat-cell *matCellDef="let phase">
                 <div class="progress-cell">
-                  <mat-progress-bar 
-                    mode="determinate" 
+                  <mat-progress-bar
+                    mode="determinate"
                     [value]="phase.progress"
-                    [color]="phase.progress >= 80 ? 'primary' : phase.progress >= 50 ? 'accent' : 'warn'">
+                    [color]="
+                      phase.progress >= 80 ? 'primary' : phase.progress >= 50 ? 'accent' : 'warn'
+                    "
+                  >
                   </mat-progress-bar>
                   <span class="progress-text">{{ phase.progress }}%</span>
                 </div>
@@ -137,11 +143,12 @@ interface PhaseProgress {
             <ng-container matColumnDef="status">
               <th mat-header-cell *matHeaderCellDef>Status</th>
               <td mat-cell *matCellDef="let phase">
-                <mat-chip 
+                <mat-chip
                   [class.not-started-chip]="phase.status === 'not-started'"
                   [class.in-progress-chip]="phase.status === 'in-progress'"
                   [class.completed-chip]="phase.status === 'completed'"
-                  [class.delayed-chip]="phase.status === 'delayed'">
+                  [class.delayed-chip]="phase.status === 'delayed'"
+                >
                   {{ phase.status | titlecase }}
                 </mat-chip>
               </td>
@@ -154,14 +161,18 @@ interface PhaseProgress {
                 <button mat-icon-button (click)="viewPhaseDetails(phase)" matTooltip="View Details">
                   <mat-icon>visibility</mat-icon>
                 </button>
-                <button mat-icon-button (click)="editPhaseProgress(phase)" matTooltip="Edit Progress">
+                <button
+                  mat-icon-button
+                  (click)="editPhaseProgress(phase)"
+                  matTooltip="Edit Progress"
+                >
                   <mat-icon>edit</mat-icon>
                 </button>
               </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           </table>
         </mat-card-content>
       </mat-card>
@@ -206,159 +217,161 @@ interface PhaseProgress {
       </mat-card>
     </div>
   `,
-  styles: [`
-    .work-progress-container {
-      padding: 16px;
-    }
+  styles: [
+    `
+      .work-progress-container {
+        padding: 16px;
+      }
 
-    .header-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
+      .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
 
-    .header-section h3 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 500;
-    }
+      .header-section h3 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 500;
+      }
 
-    mat-card {
-      margin-bottom: 24px;
-    }
+      mat-card {
+        margin-bottom: 24px;
+      }
 
-    .progress-section {
-      margin-bottom: 24px;
-    }
+      .progress-section {
+        margin-bottom: 24px;
+      }
 
-    .progress-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
+      .progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
 
-    .progress-percentage {
-      font-size: 24px;
-      font-weight: 500;
-      color: #1976d2;
-    }
+      .progress-percentage {
+        font-size: 24px;
+        font-weight: 500;
+        color: #1976d2;
+      }
 
-    .progress-stats {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 24px;
-    }
+      .progress-stats {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 24px;
+      }
 
-    .stat-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+      .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
 
-    .stat-item mat-icon {
-      font-size: 32px;
-      width: 32px;
-      height: 32px;
-      color: #1976d2;
-    }
+      .stat-item mat-icon {
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+        color: #1976d2;
+      }
 
-    .stat-value {
-      display: block;
-      font-size: 24px;
-      font-weight: 500;
-    }
+      .stat-value {
+        display: block;
+        font-size: 24px;
+        font-weight: 500;
+      }
 
-    .stat-label {
-      display: block;
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.6);
-    }
+      .stat-label {
+        display: block;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.6);
+      }
 
-    .phases-table {
-      width: 100%;
-    }
+      .phases-table {
+        width: 100%;
+      }
 
-    .progress-cell {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+      .progress-cell {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
 
-    .progress-cell mat-progress-bar {
-      flex: 1;
-    }
+      .progress-cell mat-progress-bar {
+        flex: 1;
+      }
 
-    .progress-text {
-      min-width: 40px;
-      text-align: right;
-      font-weight: 500;
-    }
+      .progress-text {
+        min-width: 40px;
+        text-align: right;
+        font-weight: 500;
+      }
 
-    mat-chip {
-      font-size: 12px;
-    }
+      mat-chip {
+        font-size: 12px;
+      }
 
-    .not-started-chip {
-      background-color: #9e9e9e !important;
-      color: white !important;
-    }
+      .not-started-chip {
+        background-color: #9e9e9e !important;
+        color: white !important;
+      }
 
-    .in-progress-chip {
-      background-color: #2196f3 !important;
-      color: white !important;
-    }
+      .in-progress-chip {
+        background-color: #2196f3 !important;
+        color: white !important;
+      }
 
-    .completed-chip {
-      background-color: #4caf50 !important;
-      color: white !important;
-    }
+      .completed-chip {
+        background-color: #4caf50 !important;
+        color: white !important;
+      }
 
-    .delayed-chip {
-      background-color: #f44336 !important;
-      color: white !important;
-    }
+      .delayed-chip {
+        background-color: #f44336 !important;
+        color: white !important;
+      }
 
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 24px;
-    }
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 24px;
+      }
 
-    .metric-item {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 16px;
-      background-color: #f5f5f5;
-      border-radius: 8px;
-    }
+      .metric-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        background-color: #f5f5f5;
+        border-radius: 8px;
+      }
 
-    .metric-item mat-icon {
-      font-size: 40px;
-      width: 40px;
-      height: 40px;
-    }
+      .metric-item mat-icon {
+        font-size: 40px;
+        width: 40px;
+        height: 40px;
+      }
 
-    .metric-content {
-      flex: 1;
-    }
+      .metric-content {
+        flex: 1;
+      }
 
-    .metric-value {
-      display: block;
-      font-size: 28px;
-      font-weight: 500;
-      line-height: 1;
-    }
+      .metric-value {
+        display: block;
+        font-size: 28px;
+        font-weight: 500;
+        line-height: 1;
+      }
 
-    .metric-label {
-      display: block;
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.6);
-      margin-top: 4px;
-    }
-  `]
+      .metric-label {
+        display: block;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.6);
+        margin-top: 4px;
+      }
+    `,
+  ],
 })
 export class WorkProgressTabComponent implements OnInit {
   @Input() contractorProject!: ContractorProject;
@@ -391,7 +404,7 @@ export class WorkProgressTabComponent implements OnInit {
         progress: 100,
         status: 'completed',
         tasksCompleted: 15,
-        totalTasks: 15
+        totalTasks: 15,
       },
       {
         id: '2',
@@ -401,7 +414,7 @@ export class WorkProgressTabComponent implements OnInit {
         progress: 75,
         status: 'in-progress',
         tasksCompleted: 12,
-        totalTasks: 16
+        totalTasks: 16,
       },
       {
         id: '3',
@@ -411,7 +424,7 @@ export class WorkProgressTabComponent implements OnInit {
         progress: 30,
         status: 'in-progress',
         tasksCompleted: 6,
-        totalTasks: 20
+        totalTasks: 20,
       },
       {
         id: '4',
@@ -421,17 +434,17 @@ export class WorkProgressTabComponent implements OnInit {
         progress: 0,
         status: 'not-started',
         tasksCompleted: 0,
-        totalTasks: 10
-      }
+        totalTasks: 10,
+      },
     ];
 
     this.calculateMetrics();
   }
 
   calculateMetrics(): void {
-    this.completedPhases = this.phases.filter(p => p.status === 'completed').length;
-    this.inProgressPhases = this.phases.filter(p => p.status === 'in-progress').length;
-    this.pendingPhases = this.phases.filter(p => p.status === 'not-started').length;
+    this.completedPhases = this.phases.filter((p) => p.status === 'completed').length;
+    this.inProgressPhases = this.phases.filter((p) => p.status === 'in-progress').length;
+    this.pendingPhases = this.phases.filter((p) => p.status === 'not-started').length;
 
     const totalProgress = this.phases.reduce((sum, phase) => sum + phase.progress, 0);
     this.overallProgress = Math.round(totalProgress / this.phases.length);

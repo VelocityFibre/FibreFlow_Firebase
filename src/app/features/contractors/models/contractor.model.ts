@@ -133,7 +133,6 @@ export interface TeamMember {
   skills: string[];
 }
 
-
 // Form helpers
 export const CONTRACTOR_SERVICES: { value: ContractorService; label: string }[] = [
   { value: 'trenching', label: 'Trenching' },

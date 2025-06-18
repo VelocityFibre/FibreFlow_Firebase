@@ -1,4 +1,5 @@
-import { Injectable, signal, effect, computed } from '@angular/core';
+import { Injectable, signal, effect, computed, afterNextRender, Injector } from '@angular/core';
+import { BrowserStorageService } from './browser-storage.service';
 
 export type Theme = 'light' | 'dark' | 'vf' | 'fibreflow';
 
@@ -7,18 +8,47 @@ export type Theme = 'light' | 'dark' | 'vf' | 'fibreflow';
 })
 export class ThemeService {
   private theme = signal<Theme>('light');
+  private storage?: BrowserStorageService;
+  private effectRef: any;
+  private initialized = false;
 
   constructor() {
-    const saved = localStorage.getItem('ff-theme') as Theme;
-    if (saved && this.isValidTheme(saved)) {
-      this.setTheme(saved, false);
-    }
+    // Set default theme immediately (no DOM/storage access)
+    this.theme.set('light');
+    // Defer ALL initialization to prevent NG0200 errors
+  }
 
-    effect(() => {
-      const currentTheme = this.theme();
-      document.documentElement.setAttribute('data-theme', currentTheme);
-      localStorage.setItem('ff-theme', currentTheme);
-    });
+  initialize(injector: Injector): void {
+    if (this.initialized) return;
+    this.initialized = true;
+
+    // Get storage service after Angular is stable
+    this.storage = injector.get(BrowserStorageService);
+
+    // Use afterNextRender to ensure we're outside change detection
+    afterNextRender(
+      () => {
+        // Now safe to access storage
+        const saved = this.storage?.getItem('ff-theme') as Theme;
+        if (saved && this.isValidTheme(saved)) {
+          this.theme.set(saved);
+        }
+
+        // Apply initial theme to DOM
+        document.documentElement.setAttribute('data-theme', this.theme());
+
+        // Create effect for future changes
+        this.effectRef = effect(
+          () => {
+            const currentTheme = this.theme();
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            this.storage?.setItem('ff-theme', currentTheme);
+          },
+          { injector },
+        );
+      },
+      { injector },
+    );
   }
 
   getTheme() {
@@ -37,7 +67,7 @@ export class ThemeService {
 
   toggleTheme() {
     const current = this.theme();
-    const themes: Theme[] = ['light', 'dark', 'vf', 'fibreflow'];
+    const themes = ['light', 'dark', 'vf', 'fibreflow'] as const satisfies readonly Theme[];
     const currentIndex = themes.indexOf(current);
     const nextIndex = (currentIndex + 1) % themes.length;
     this.setTheme(themes[nextIndex]);

@@ -155,7 +155,7 @@ export class StaffService {
   createStaff(
     staffData: Omit<StaffMember, 'id' | 'createdAt' | 'updatedAt'>,
   ): Observable<DocumentReference> {
-    const newStaff = {
+    const newStaff: any = {
       ...staffData,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
@@ -170,7 +170,7 @@ export class StaffService {
       },
     };
 
-    return from(addDoc(this.staffCollection, newStaff as any)).pipe(
+    return from(addDoc(this.staffCollection, newStaff)).pipe(
       map((result) => {
         this.clearCache(); // Clear cache after successful creation
         return result;

@@ -6,117 +6,128 @@
     </p>
   </div>
 
-  <!-- Main Dashboard Cards -->
-  <div class="dashboard-grid">
-    <!-- Projects Card -->
-    <mat-card class="dashboard-card ff-card-projects" routerLink="/projects">
-      <div class="card-icon projects-icon">
-        <mat-icon>folder</mat-icon>
-      </div>
-      <mat-card-header>
-        <mat-card-title>Projects</mat-card-title>
-        <mat-card-subtitle>Manage and track all projects</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="card-stats">
-          <div class="stat-item">
-            <span class="stat-number">{{ projectsCount }}</span>
-            <span class="stat-label">Total Projects</span>
-          </div>
-          <div class="action-link">
-            <span>Open →</span>
-          </div>
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading-container">
+      <mat-card class="loading-card">
+        <div class="loading-content">
+          <mat-icon class="loading-spinner">hourglass_empty</mat-icon>
+          <p>Loading dashboard data...</p>
         </div>
-      </mat-card-content>
-    </mat-card>
+      </mat-card>
+    </div>
+  } @else {
+    <!-- Main Dashboard Cards -->
+    <div class="dashboard-grid">
+      <!-- Projects Card -->
+      <mat-card class="dashboard-card ff-card-projects" routerLink="/projects">
+        <div class="card-icon projects-icon">
+          <mat-icon>folder</mat-icon>
+        </div>
+        <mat-card-header>
+          <mat-card-title>Projects</mat-card-title>
+          <mat-card-subtitle>Manage and track all projects</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="card-stats">
+            <div class="stat-item">
+              <span class="stat-number">{{ projectsCount() }}</span>
+              <span class="stat-label">Total Projects</span>
+            </div>
+            <div class="action-link">
+              <span>Open →</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
 
-    <!-- Suppliers Card -->
-    <mat-card class="dashboard-card ff-card-suppliers" routerLink="/suppliers">
-      <div class="card-icon suppliers-icon">
-        <mat-icon>business</mat-icon>
-      </div>
-      <mat-card-header>
-        <mat-card-title>Suppliers</mat-card-title>
-        <mat-card-subtitle>Supplier management and contacts</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="card-stats">
-          <div class="stat-item">
-            <span class="stat-number">{{ suppliersCount }}</span>
-            <span class="stat-label">Total Suppliers</span>
-          </div>
-          <div class="action-link">
-            <span>Open →</span>
-          </div>
+      <!-- Suppliers Card -->
+      <mat-card class="dashboard-card ff-card-suppliers" routerLink="/suppliers">
+        <div class="card-icon suppliers-icon">
+          <mat-icon>business</mat-icon>
         </div>
-      </mat-card-content>
-    </mat-card>
+        <mat-card-header>
+          <mat-card-title>Suppliers</mat-card-title>
+          <mat-card-subtitle>Supplier management and contacts</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="card-stats">
+            <div class="stat-item">
+              <span class="stat-number">{{ suppliersCount() }}</span>
+              <span class="stat-label">Total Suppliers</span>
+            </div>
+            <div class="action-link">
+              <span>Open →</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
 
-    <!-- Stock Card -->
-    <mat-card class="dashboard-card ff-card-stock" routerLink="/stock">
-      <div class="card-icon stock-icon">
-        <mat-icon>inventory_2</mat-icon>
-      </div>
-      <mat-card-header>
-        <mat-card-title>Stock</mat-card-title>
-        <mat-card-subtitle>Inventory and stock management</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="card-stats">
-          <div class="stat-item">
-            <span class="stat-number">{{ stockItemsCount }}</span>
-            <span class="stat-label">Stock Items</span>
-          </div>
-          <div class="action-link">
-            <span>Open →</span>
-          </div>
+      <!-- Stock Card -->
+      <mat-card class="dashboard-card ff-card-stock" routerLink="/stock">
+        <div class="card-icon stock-icon">
+          <mat-icon>inventory_2</mat-icon>
         </div>
-      </mat-card-content>
-    </mat-card>
+        <mat-card-header>
+          <mat-card-title>Stock</mat-card-title>
+          <mat-card-subtitle>Inventory and stock management</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="card-stats">
+            <div class="stat-item">
+              <span class="stat-number">{{ stockItemsCount() }}</span>
+              <span class="stat-label">Stock Items</span>
+            </div>
+            <div class="action-link">
+              <span>Open →</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
 
-    <!-- Clients Card -->
-    <mat-card class="dashboard-card ff-card-clients" routerLink="/clients">
-      <div class="card-icon clients-icon">
-        <mat-icon>groups</mat-icon>
-      </div>
-      <mat-card-header>
-        <mat-card-title>Clients</mat-card-title>
-        <mat-card-subtitle>Client information and projects</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="card-stats">
-          <div class="stat-item">
-            <span class="stat-number">{{ clientsCount }}</span>
-            <span class="stat-label">Total Clients</span>
-          </div>
-          <div class="action-link">
-            <span>Open →</span>
-          </div>
+      <!-- Clients Card -->
+      <mat-card class="dashboard-card ff-card-clients" routerLink="/clients">
+        <div class="card-icon clients-icon">
+          <mat-icon>groups</mat-icon>
         </div>
-      </mat-card-content>
-    </mat-card>
+        <mat-card-header>
+          <mat-card-title>Clients</mat-card-title>
+          <mat-card-subtitle>Client information and projects</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="card-stats">
+            <div class="stat-item">
+              <span class="stat-number">{{ clientsCount() }}</span>
+              <span class="stat-label">Total Clients</span>
+            </div>
+            <div class="action-link">
+              <span>Open →</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
 
-    <!-- Flagged Issues Card -->
-    <mat-card class="dashboard-card ff-card-flagged-issues" routerLink="/issues">
-      <div class="card-icon issues-icon">
-        <mat-icon>flag</mat-icon>
-      </div>
-      <mat-card-header>
-        <mat-card-title>Flagged Issues</mat-card-title>
-        <mat-card-subtitle>Issues requiring attention</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="card-stats">
-          <div class="stat-item">
-            <span class="stat-number">{{ flaggedIssuesCount }}</span>
-            <span class="stat-label">Blocked Tasks</span>
-          </div>
-          <div class="action-link">
-            <span>Open →</span>
-          </div>
+      <!-- Flagged Issues Card -->
+      <mat-card class="dashboard-card ff-card-flagged-issues" routerLink="/projects">
+        <div class="card-icon issues-icon">
+          <mat-icon>flag</mat-icon>
         </div>
-      </mat-card-content>
-    </mat-card>
+        <mat-card-header>
+          <mat-card-title>Flagged Issues</mat-card-title>
+          <mat-card-subtitle>High priority projects requiring attention</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="card-stats">
+            <div class="stat-item">
+              <span class="stat-number">{{ flaggedIssuesCount() }}</span>
+              <span class="stat-label">Priority Projects</span>
+            </div>
+            <div class="action-link">
+              <span>Open →</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
 
     <!-- Analytics Card -->
     <mat-card class="dashboard-card ff-card-analytics" routerLink="/analytics">
@@ -150,9 +161,9 @@
             <mat-icon>trending_up</mat-icon>
           </div>
           <div class="summary-content">
-            <h3>Poles Planted</h3>
-            <div class="summary-value">1,247</div>
-            <div class="summary-detail">+12% from last month</div>
+            <h3>Tasks Completed</h3>
+            <div class="summary-value">{{ dashboardStats().polesPlanted }}</div>
+            <div class="summary-detail">Across all projects</div>
           </div>
         </mat-card-content>
       </mat-card>
@@ -164,7 +175,7 @@
           </div>
           <div class="summary-content">
             <h3>Materials Needed</h3>
-            <div class="summary-value">23 Items</div>
+            <div class="summary-value">{{ dashboardStats().materialsNeeded }}</div>
             <div class="summary-detail">Below minimum stock</div>
           </div>
         </mat-card-content>
@@ -177,8 +188,8 @@
           </div>
           <div class="summary-content">
             <h3>Active Projects</h3>
-            <div class="summary-value">12</div>
-            <div class="summary-detail">2 starting this week</div>
+            <div class="summary-value">{{ dashboardStats().activeProjects }}</div>
+            <div class="summary-detail">Currently running</div>
           </div>
         </mat-card-content>
       </mat-card>
@@ -190,8 +201,8 @@
           </div>
           <div class="summary-content">
             <h3>Completion Rate</h3>
-            <div class="summary-value">94%</div>
-            <div class="summary-detail">On-time delivery</div>
+            <div class="summary-value">{{ dashboardStats().completionRate }}%</div>
+            <div class="summary-detail">Project completion</div>
           </div>
         </mat-card-content>
       </mat-card>
@@ -222,4 +233,4 @@
       </mat-card-content>
     </mat-card>
   </div>
-</div>
+}

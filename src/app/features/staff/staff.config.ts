@@ -9,9 +9,9 @@ export interface StaffModuleConfig {
 
 export const STAFF_MODULE_CONFIG = new InjectionToken<StaffModuleConfig>('StaffModuleConfig');
 
-export const defaultStaffConfig: StaffModuleConfig = {
+export const defaultStaffConfig = {
   enableOfflineMode: false,
   maxConcurrentTasks: 5,
   defaultAvailabilityStatus: 'available',
   enableActivityTracking: true,
-};
+} satisfies StaffModuleConfig;

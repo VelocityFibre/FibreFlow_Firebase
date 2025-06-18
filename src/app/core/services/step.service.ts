@@ -229,7 +229,7 @@ export class StepService {
   // Global methods for Steps management page
   getAllSteps(): Observable<StepWithPhase[]> {
     const stepsCollection = collection(this.firestore, this.collectionName);
-    
+
     return from(getDocs(stepsCollection)).pipe(
       map((snapshot) => {
         const steps = snapshot.docs.map(
@@ -259,10 +259,9 @@ export class StepService {
   }
 
   getAllPhases(): Observable<Phase[]> {
-    // This is a simplified version - in a real app you might want to 
+    // This is a simplified version - in a real app you might want to
     // get phases from all projects, but for now we'll return an empty array
     // since phases are stored as subcollections under projects
     return of([]);
   }
 }
-

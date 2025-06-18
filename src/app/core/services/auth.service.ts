@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, signal, computed, inject } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { UserProfile } from '../models/user-profile';
 
 @Injectable({
@@ -23,16 +23,27 @@ export class AuthService {
     lastLogin: new Date(),
   };
 
-  // Observable streams for user state
-  private userSubject = new BehaviorSubject<{
+  // Signal-based state management
+  private userSignal = signal<{
     uid: string;
     email: string;
     displayName: string;
   } | null>(this.mockUser);
-  private userProfileSubject = new BehaviorSubject<UserProfile | null>(this.mockUserProfile);
 
-  user$ = this.userSubject.asObservable();
-  currentUserProfile$ = this.userProfileSubject.asObservable();
+  private userProfileSignal = signal<UserProfile | null>(this.mockUserProfile);
+
+  // Public signals for components
+  readonly currentUser = this.userSignal.asReadonly();
+  readonly currentUserProfile = this.userProfileSignal.asReadonly();
+
+  // Computed signals
+  readonly isAuthenticated = computed(() => !!this.userSignal());
+  readonly userRole = computed(() => this.userProfileSignal()?.userGroup || null);
+  readonly isAdmin = computed(() => this.userProfileSignal()?.userGroup === 'admin');
+
+  // Legacy observable support for gradual migration
+  readonly user$ = toObservable(this.userSignal);
+  readonly currentUserProfile$ = toObservable(this.userProfileSignal);
 
   constructor() {
     console.log('🔐 Auth Service initialized in MOCK MODE - Always logged in as admin');
@@ -46,8 +57,8 @@ export class AuthService {
     // return signInWithPopup(this.auth, provider);
 
     // For now, just return the mock user
-    this.userSubject.next(this.mockUser);
-    this.userProfileSubject.next(this.mockUserProfile);
+    this.userSignal.set(this.mockUser);
+    this.userProfileSignal.set(this.mockUserProfile);
     return this.mockUser;
   }
 
@@ -62,38 +73,30 @@ export class AuthService {
 
   // Get current user synchronously
   getCurrentUser(): { uid: string; email: string; displayName: string } | null {
-    return this.userSubject.value;
+    return this.userSignal();
   }
 
   // Get current user profile synchronously
   getCurrentUserProfile(): UserProfile | null {
-    return this.userProfileSubject.value;
-  }
-
-  // Check if user is authenticated
-  isAuthenticated(): boolean {
-    return !!this.userSubject.value;
+    return this.userProfileSignal();
   }
 
   // Check if user has specific role
   hasRole(role: UserProfile['userGroup']): boolean {
-    const profile = this.userProfileSubject.value;
+    const profile = this.userProfileSignal();
     return profile ? profile.userGroup === role : false;
   }
 
   // Check if user has any of the specified roles
   hasAnyRole(roles: UserProfile['userGroup'][]): boolean {
-    const profile = this.userProfileSubject.value;
+    const profile = this.userProfileSignal();
     return profile ? roles.includes(profile.userGroup) : false;
   }
 
   // Update user profile (mock)
   async updateUserProfile(updates: Partial<UserProfile>): Promise<void> {
     console.log('🔐 Mock update user profile:', updates);
-    const current = this.userProfileSubject.value;
-    if (current) {
-      this.userProfileSubject.next({ ...current, ...updates });
-    }
+    this.userProfileSignal.update((current) => (current ? { ...current, ...updates } : null));
   }
 
   // TODO: Remove mock implementation when ready for production

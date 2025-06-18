@@ -39,7 +39,7 @@ interface PaymentRequest {
     MatChipsModule,
     MatTooltipModule,
     MatMenuModule,
-    MatExpansionModule
+    MatExpansionModule,
   ],
   template: `
     <div class="payment-requested-container">
@@ -59,7 +59,9 @@ interface PaymentRequest {
               <mat-icon>request_quote</mat-icon>
             </div>
             <div class="summary-content">
-              <span class="summary-value">{{ totalRequested | currency:'ZAR':'symbol':'1.0-0' }}</span>
+              <span class="summary-value">{{
+                totalRequested | currency: 'ZAR' : 'symbol' : '1.0-0'
+              }}</span>
               <span class="summary-label">Total Requested</span>
             </div>
           </mat-card-content>
@@ -71,7 +73,9 @@ interface PaymentRequest {
               <mat-icon>pending</mat-icon>
             </div>
             <div class="summary-content">
-              <span class="summary-value">{{ pendingAmount | currency:'ZAR':'symbol':'1.0-0' }}</span>
+              <span class="summary-value">{{
+                pendingAmount | currency: 'ZAR' : 'symbol' : '1.0-0'
+              }}</span>
               <span class="summary-label">Pending Approval</span>
             </div>
           </mat-card-content>
@@ -83,7 +87,9 @@ interface PaymentRequest {
               <mat-icon>check_circle</mat-icon>
             </div>
             <div class="summary-content">
-              <span class="summary-value">{{ approvedAmount | currency:'ZAR':'symbol':'1.0-0' }}</span>
+              <span class="summary-value">{{
+                approvedAmount | currency: 'ZAR' : 'symbol' : '1.0-0'
+              }}</span>
               <span class="summary-label">Approved</span>
             </div>
           </mat-card-content>
@@ -109,10 +115,12 @@ interface PaymentRequest {
         </mat-card-header>
         <mat-card-content>
           <mat-accordion>
-            <mat-expansion-panel *ngFor="let request of requests" 
+            <mat-expansion-panel
+              *ngFor="let request of requests"
               [class.pending-panel]="request.status === 'pending'"
               [class.approved-panel]="request.status === 'approved'"
-              [class.rejected-panel]="request.status === 'rejected'">
+              [class.rejected-panel]="request.status === 'rejected'"
+            >
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   <div class="panel-title">
@@ -122,12 +130,15 @@ interface PaymentRequest {
                 </mat-panel-title>
                 <mat-panel-description>
                   <div class="panel-description">
-                    <span class="amount">{{ request.amount | currency:'ZAR':'symbol':'1.2-2' }}</span>
-                    <mat-chip 
+                    <span class="amount">{{
+                      request.amount | currency: 'ZAR' : 'symbol' : '1.2-2'
+                    }}</span>
+                    <mat-chip
                       [class.pending-chip]="request.status === 'pending'"
                       [class.approved-chip]="request.status === 'approved'"
                       [class.rejected-chip]="request.status === 'rejected'"
-                      [class.partial-chip]="request.status === 'partially-approved'">
+                      [class.partial-chip]="request.status === 'partially-approved'"
+                    >
                       {{ request.status | titlecase }}
                     </mat-chip>
                   </div>
@@ -138,7 +149,7 @@ interface PaymentRequest {
                 <div class="detail-grid">
                   <div class="detail-item">
                     <span class="detail-label">Request Date:</span>
-                    <span class="detail-value">{{ request.requestDate | date:'MMM d, y' }}</span>
+                    <span class="detail-value">{{ request.requestDate | date: 'MMM d, y' }}</span>
                   </div>
                   <div class="detail-item">
                     <span class="detail-label">Milestone:</span>
@@ -146,15 +157,20 @@ interface PaymentRequest {
                   </div>
                   <div class="detail-item" *ngIf="request.approvalDate">
                     <span class="detail-label">Approval Date:</span>
-                    <span class="detail-value">{{ request.approvalDate | date:'MMM d, y' }}</span>
+                    <span class="detail-value">{{ request.approvalDate | date: 'MMM d, y' }}</span>
                   </div>
                   <div class="detail-item" *ngIf="request.approvedBy">
                     <span class="detail-label">Approved By:</span>
                     <span class="detail-value">{{ request.approvedBy }}</span>
                   </div>
-                  <div class="detail-item" *ngIf="request.approvedAmount && request.approvedAmount !== request.amount">
+                  <div
+                    class="detail-item"
+                    *ngIf="request.approvedAmount && request.approvedAmount !== request.amount"
+                  >
                     <span class="detail-label">Approved Amount:</span>
-                    <span class="detail-value approved-amount">{{ request.approvedAmount | currency:'ZAR':'symbol':'1.2-2' }}</span>
+                    <span class="detail-value approved-amount">{{
+                      request.approvedAmount | currency: 'ZAR' : 'symbol' : '1.2-2'
+                    }}</span>
                   </div>
                 </div>
 
@@ -171,8 +187,11 @@ interface PaymentRequest {
                 <div class="attachments-section" *ngIf="request.attachments.length > 0">
                   <h4>Attachments</h4>
                   <div class="attachments-list">
-                    <button mat-stroked-button *ngFor="let attachment of request.attachments" 
-                      (click)="viewAttachment(attachment)">
+                    <button
+                      mat-stroked-button
+                      *ngFor="let attachment of request.attachments"
+                      (click)="viewAttachment(attachment)"
+                    >
                       <mat-icon>attach_file</mat-icon>
                       {{ attachment }}
                     </button>
@@ -184,14 +203,20 @@ interface PaymentRequest {
                     <mat-icon>visibility</mat-icon>
                     View Details
                   </button>
-                  <button mat-button (click)="editRequest(request)" 
-                    *ngIf="request.status === 'pending'">
+                  <button
+                    mat-button
+                    (click)="editRequest(request)"
+                    *ngIf="request.status === 'pending'"
+                  >
                     <mat-icon>edit</mat-icon>
                     Edit
                   </button>
-                  <button mat-button (click)="withdrawRequest(request)" 
-                    *ngIf="request.status === 'pending'" 
-                    color="warn">
+                  <button
+                    mat-button
+                    (click)="withdrawRequest(request)"
+                    *ngIf="request.status === 'pending'"
+                    color="warn"
+                  >
                     <mat-icon>cancel</mat-icon>
                     Withdraw
                   </button>
@@ -212,245 +237,247 @@ interface PaymentRequest {
       </mat-card>
     </div>
   `,
-  styles: [`
-    .payment-requested-container {
-      padding: 16px;
-    }
+  styles: [
+    `
+      .payment-requested-container {
+        padding: 16px;
+      }
 
-    .header-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
+      .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
 
-    .header-section h3 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 500;
-    }
+      .header-section h3 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 500;
+      }
 
-    .summary-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
+      .summary-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+      }
 
-    .summary-card {
-      position: relative;
-      overflow: hidden;
-    }
+      .summary-card {
+        position: relative;
+        overflow: hidden;
+      }
 
-    .summary-card mat-card-content {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 20px;
-    }
+      .summary-card mat-card-content {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 20px;
+      }
 
-    .summary-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+      .summary-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-    .summary-card.total .summary-icon {
-      background-color: #e3f2fd;
-      color: #1976d2;
-    }
+      .summary-card.total .summary-icon {
+        background-color: #e3f2fd;
+        color: #1976d2;
+      }
 
-    .summary-card.pending .summary-icon {
-      background-color: #fff3e0;
-      color: #f57c00;
-    }
+      .summary-card.pending .summary-icon {
+        background-color: #fff3e0;
+        color: #f57c00;
+      }
 
-    .summary-card.approved .summary-icon {
-      background-color: #e8f5e9;
-      color: #388e3c;
-    }
+      .summary-card.approved .summary-icon {
+        background-color: #e8f5e9;
+        color: #388e3c;
+      }
 
-    .summary-card.rejected .summary-icon {
-      background-color: #ffebee;
-      color: #d32f2f;
-    }
+      .summary-card.rejected .summary-icon {
+        background-color: #ffebee;
+        color: #d32f2f;
+      }
 
-    .summary-icon mat-icon {
-      font-size: 28px;
-      width: 28px;
-      height: 28px;
-    }
+      .summary-icon mat-icon {
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+      }
 
-    .summary-content {
-      flex: 1;
-    }
+      .summary-content {
+        flex: 1;
+      }
 
-    .summary-value {
-      display: block;
-      font-size: 24px;
-      font-weight: 500;
-      line-height: 1;
-    }
+      .summary-value {
+        display: block;
+        font-size: 24px;
+        font-weight: 500;
+        line-height: 1;
+      }
 
-    .summary-label {
-      display: block;
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.6);
-      margin-top: 4px;
-    }
+      .summary-label {
+        display: block;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.6);
+        margin-top: 4px;
+      }
 
-    mat-accordion {
-      display: block;
-    }
+      mat-accordion {
+        display: block;
+      }
 
-    mat-expansion-panel {
-      margin-bottom: 8px;
-      border-radius: 8px !important;
-    }
+      mat-expansion-panel {
+        margin-bottom: 8px;
+        border-radius: 8px !important;
+      }
 
-    .pending-panel {
-      border-left: 4px solid #ff9800;
-    }
+      .pending-panel {
+        border-left: 4px solid #ff9800;
+      }
 
-    .approved-panel {
-      border-left: 4px solid #4caf50;
-    }
+      .approved-panel {
+        border-left: 4px solid #4caf50;
+      }
 
-    .rejected-panel {
-      border-left: 4px solid #f44336;
-    }
+      .rejected-panel {
+        border-left: 4px solid #f44336;
+      }
 
-    .panel-title {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
+      .panel-title {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
 
-    .panel-title .phase {
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.6);
-      font-weight: normal;
-    }
+      .panel-title .phase {
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.6);
+        font-weight: normal;
+      }
 
-    .panel-description {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      justify-content: flex-end;
-    }
+      .panel-description {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        justify-content: flex-end;
+      }
 
-    .panel-description .amount {
-      font-weight: 500;
-      font-size: 16px;
-    }
+      .panel-description .amount {
+        font-weight: 500;
+        font-size: 16px;
+      }
 
-    mat-chip {
-      font-size: 12px;
-    }
+      mat-chip {
+        font-size: 12px;
+      }
 
-    .pending-chip {
-      background-color: #ff9800 !important;
-      color: white !important;
-    }
+      .pending-chip {
+        background-color: #ff9800 !important;
+        color: white !important;
+      }
 
-    .approved-chip {
-      background-color: #4caf50 !important;
-      color: white !important;
-    }
+      .approved-chip {
+        background-color: #4caf50 !important;
+        color: white !important;
+      }
 
-    .rejected-chip {
-      background-color: #f44336 !important;
-      color: white !important;
-    }
+      .rejected-chip {
+        background-color: #f44336 !important;
+        color: white !important;
+      }
 
-    .partial-chip {
-      background-color: #2196f3 !important;
-      color: white !important;
-    }
+      .partial-chip {
+        background-color: #2196f3 !important;
+        color: white !important;
+      }
 
-    .request-details {
-      padding: 16px;
-    }
+      .request-details {
+        padding: 16px;
+      }
 
-    .detail-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
+      .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+      }
 
-    .detail-item {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+      .detail-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
 
-    .detail-label {
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.6);
-    }
+      .detail-label {
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.6);
+      }
 
-    .detail-value {
-      font-weight: 500;
-    }
+      .detail-value {
+        font-weight: 500;
+      }
 
-    .approved-amount {
-      color: #388e3c;
-    }
+      .approved-amount {
+        color: #388e3c;
+      }
 
-    .description-section,
-    .rejection-section,
-    .attachments-section {
-      margin-bottom: 16px;
-    }
+      .description-section,
+      .rejection-section,
+      .attachments-section {
+        margin-bottom: 16px;
+      }
 
-    .description-section h4,
-    .rejection-section h4,
-    .attachments-section h4 {
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 8px;
-    }
+      .description-section h4,
+      .rejection-section h4,
+      .attachments-section h4 {
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
 
-    .rejection-reason {
-      color: #d32f2f;
-      font-style: italic;
-    }
+      .rejection-reason {
+        color: #d32f2f;
+        font-style: italic;
+      }
 
-    .attachments-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
+      .attachments-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
 
-    .attachments-list button {
-      font-size: 12px;
-    }
+      .attachments-list button {
+        font-size: 12px;
+      }
 
-    .actions-section {
-      display: flex;
-      gap: 8px;
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid #e0e0e0;
-    }
+      .actions-section {
+        display: flex;
+        gap: 8px;
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid #e0e0e0;
+      }
 
-    .no-data {
-      text-align: center;
-      padding: 48px;
-      color: rgba(0, 0, 0, 0.4);
-    }
+      .no-data {
+        text-align: center;
+        padding: 48px;
+        color: rgba(0, 0, 0, 0.4);
+      }
 
-    .no-data mat-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
-      margin-bottom: 16px;
-    }
-  `]
+      .no-data mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        margin-bottom: 16px;
+      }
+    `,
+  ],
 })
 export class PaymentRequestedTabComponent implements OnInit {
   @Input() contractorProject!: ContractorProject;
@@ -476,12 +503,13 @@ export class PaymentRequestedTabComponent implements OnInit {
         amount: 150000,
         phase: 'Phase 1 - Site Preparation',
         milestone: 'Site preparation completed',
-        description: 'Payment for completion of site preparation including clearing, grading, and initial infrastructure setup.',
+        description:
+          'Payment for completion of site preparation including clearing, grading, and initial infrastructure setup.',
         status: 'approved',
         approvedAmount: 150000,
         approvalDate: new Date('2024-01-20'),
         approvedBy: 'John Manager',
-        attachments: ['invoice-001.pdf', 'completion-certificate.pdf']
+        attachments: ['invoice-001.pdf', 'completion-certificate.pdf'],
       },
       {
         id: '2',
@@ -490,9 +518,10 @@ export class PaymentRequestedTabComponent implements OnInit {
         amount: 250000,
         phase: 'Phase 2 - Foundation Work',
         milestone: '50% foundation work completed',
-        description: 'Payment request for 50% completion of foundation work including excavation and concrete work.',
+        description:
+          'Payment request for 50% completion of foundation work including excavation and concrete work.',
         status: 'pending',
-        attachments: ['invoice-002.pdf', 'progress-report.pdf']
+        attachments: ['invoice-002.pdf', 'progress-report.pdf'],
       },
       {
         id: '3',
@@ -501,10 +530,12 @@ export class PaymentRequestedTabComponent implements OnInit {
         amount: 100000,
         phase: 'Phase 1 - Site Preparation',
         milestone: 'Additional work request',
-        description: 'Payment for additional excavation work required due to unexpected rock formations.',
+        description:
+          'Payment for additional excavation work required due to unexpected rock formations.',
         status: 'rejected',
-        rejectionReason: 'Additional work was not approved in the original scope. Please submit a change order first.',
-        attachments: ['invoice-003.pdf']
+        rejectionReason:
+          'Additional work was not approved in the original scope. Please submit a change order first.',
+        attachments: ['invoice-003.pdf'],
       },
       {
         id: '4',
@@ -513,14 +544,16 @@ export class PaymentRequestedTabComponent implements OnInit {
         amount: 180000,
         phase: 'Phase 2 - Foundation Work',
         milestone: 'Material procurement',
-        description: 'Payment request for procurement of specialized materials for foundation work.',
+        description:
+          'Payment request for procurement of specialized materials for foundation work.',
         status: 'partially-approved',
         approvedAmount: 150000,
         approvalDate: new Date('2024-02-18'),
         approvedBy: 'Jane Approver',
         attachments: ['invoice-004.pdf', 'material-list.xlsx'],
-        comments: 'Approved R150,000 out of R180,000. Remaining amount pending additional documentation.'
-      }
+        comments:
+          'Approved R150,000 out of R180,000. Remaining amount pending additional documentation.',
+      },
     ];
 
     this.calculateSummary();
@@ -529,12 +562,12 @@ export class PaymentRequestedTabComponent implements OnInit {
   calculateSummary(): void {
     this.totalRequested = this.requests.reduce((sum, r) => sum + r.amount, 0);
     this.pendingAmount = this.requests
-      .filter(r => r.status === 'pending')
+      .filter((r) => r.status === 'pending')
       .reduce((sum, r) => sum + r.amount, 0);
     this.approvedAmount = this.requests
-      .filter(r => r.status === 'approved' || r.status === 'partially-approved')
+      .filter((r) => r.status === 'approved' || r.status === 'partially-approved')
       .reduce((sum, r) => sum + (r.approvedAmount || r.amount), 0);
-    this.rejectedCount = this.requests.filter(r => r.status === 'rejected').length;
+    this.rejectedCount = this.requests.filter((r) => r.status === 'rejected').length;
   }
 
   createRequest(): void {

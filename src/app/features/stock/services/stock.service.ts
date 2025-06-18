@@ -26,6 +26,8 @@ import {
   StockItemStatus,
   AllocationStatus,
   StockItemImport,
+  StockCategory,
+  UnitOfMeasure,
 } from '../models/stock-item.model';
 import {
   StockMovement,
@@ -56,6 +58,64 @@ export class StockService {
     'stockAllocations',
   ) as CollectionReference<StockAllocation>;
 
+  // Helper methods for type validation
+  private isValidStockCategory(value: string): value is StockCategory {
+    return Object.values(StockCategory).includes(value as StockCategory);
+  }
+
+  private isValidUnitOfMeasure(value: string): value is UnitOfMeasure {
+    return Object.values(UnitOfMeasure).includes(value as UnitOfMeasure);
+  }
+
+  private mapToStockCategory(value: string): StockCategory {
+    const normalizedValue = value.toLowerCase().replace(/\s+/g, '_');
+
+    const categoryMap: Record<string, StockCategory> = {
+      fibre_cable: StockCategory.FIBRE_CABLE,
+      'fibre cable': StockCategory.FIBRE_CABLE,
+      cable: StockCategory.FIBRE_CABLE,
+      poles: StockCategory.POLES,
+      equipment: StockCategory.EQUIPMENT,
+      tools: StockCategory.TOOLS,
+      consumables: StockCategory.CONSUMABLES,
+      home_connections: StockCategory.HOME_CONNECTIONS,
+      'home connections': StockCategory.HOME_CONNECTIONS,
+      network_equipment: StockCategory.NETWORK_EQUIPMENT,
+      'network equipment': StockCategory.NETWORK_EQUIPMENT,
+      safety_equipment: StockCategory.SAFETY_EQUIPMENT,
+      'safety equipment': StockCategory.SAFETY_EQUIPMENT,
+    };
+
+    return categoryMap[normalizedValue] || StockCategory.OTHER;
+  }
+
+  private mapToUnitOfMeasure(value: string): UnitOfMeasure {
+    const normalizedValue = value.toLowerCase();
+
+    const unitMap: Record<string, UnitOfMeasure> = {
+      meters: UnitOfMeasure.METERS,
+      m: UnitOfMeasure.METERS,
+      units: UnitOfMeasure.UNITS,
+      unit: UnitOfMeasure.UNITS,
+      pieces: UnitOfMeasure.PIECES,
+      piece: UnitOfMeasure.PIECES,
+      boxes: UnitOfMeasure.BOXES,
+      box: UnitOfMeasure.BOXES,
+      rolls: UnitOfMeasure.ROLLS,
+      roll: UnitOfMeasure.ROLLS,
+      sets: UnitOfMeasure.SETS,
+      set: UnitOfMeasure.SETS,
+      liters: UnitOfMeasure.LITERS,
+      l: UnitOfMeasure.LITERS,
+      kilograms: UnitOfMeasure.KILOGRAMS,
+      kg: UnitOfMeasure.KILOGRAMS,
+      hours: UnitOfMeasure.HOURS,
+      hr: UnitOfMeasure.HOURS,
+    };
+
+    return unitMap[normalizedValue] || UnitOfMeasure.UNITS;
+  }
+
   // Stock Items CRUD
   getStockItems(projectId?: string): Observable<StockItem[]> {
     let q;
@@ -65,7 +125,11 @@ export class StockService {
     } else {
       // Get global stock items (no projectId or isProjectSpecific = false)
       // Use == false instead of != true to avoid composite index requirement
-      q = query(this.stockItemsCollection, where('isProjectSpecific', '==', false), orderBy('name'));
+      q = query(
+        this.stockItemsCollection,
+        where('isProjectSpecific', '==', false),
+        orderBy('name'),
+      );
     }
 
     return collectionData(q, { idField: 'id' }).pipe(
@@ -472,9 +536,9 @@ export class StockService {
           itemCode: item.itemCode,
           name: item.name,
           description: item.description,
-          category: item.category as any,
+          category: this.mapToStockCategory(item.category),
           subcategory: item.subcategory,
-          unitOfMeasure: item.unitOfMeasure as any,
+          unitOfMeasure: this.mapToUnitOfMeasure(item.unitOfMeasure),
           currentStock: item.currentStock || 0,
           allocatedStock: 0,
           minimumStock: item.minimumStock || 0,
@@ -514,7 +578,6 @@ export class StockService {
   exportStockItems(): Observable<StockItem[]> {
     return this.getStockItems();
   }
-
 
   checkStockAvailability(stockItemId: string, requiredQuantity: number): Observable<boolean> {
     return this.getStockItemById(stockItemId).pipe(

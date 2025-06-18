@@ -1,10 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../../core/services/auth.service';
 import {
   UserProfile,
@@ -29,6 +30,7 @@ import {
 })
 export class TestAuthComponent implements OnInit {
   private authService = inject(AuthService);
+  private destroyRef = inject(DestroyRef);
 
   currentUser: { uid: string; email: string; displayName: string } | null = null;
   currentProfile: UserProfile | null = null;
@@ -37,18 +39,20 @@ export class TestAuthComponent implements OnInit {
 
   ngOnInit() {
     // Subscribe to auth state
-    this.authService.user$.subscribe((user) => {
+    this.authService.user$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((user) => {
       this.currentUser = user;
       this.isAuthenticated = !!user;
     });
 
     // Subscribe to user profile
-    this.authService.currentUserProfile$.subscribe((profile) => {
-      this.currentProfile = profile;
-      if (profile) {
-        this.permissions = USER_GROUP_PERMISSIONS[profile.userGroup];
-      }
-    });
+    this.authService.currentUserProfile$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((profile) => {
+        this.currentProfile = profile;
+        if (profile) {
+          this.permissions = USER_GROUP_PERMISSIONS[profile.userGroup];
+        }
+      });
   }
 
   async testLogin() {

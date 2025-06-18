@@ -2,7 +2,15 @@ import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SharedMaterialModule } from '../../../../shared/modules/shared-material.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDialog } from '@angular/material/dialog';
 import { StepService } from '../../../../core/services/step.service';
@@ -28,7 +36,20 @@ interface FilteredStepsData {
 @Component({
   selector: 'app-steps-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, SharedMaterialModule, MatExpansionModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatChipsModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
+    MatDividerModule,
+    MatExpansionModule,
+  ],
   template: `
     <div class="steps-page-container">
       <!-- Header -->
@@ -58,7 +79,6 @@ interface FilteredStepsData {
                 </mat-select>
               </mat-form-field>
 
-
               <mat-form-field appearance="outline">
                 <mat-label>Status</mat-label>
                 <mat-select [(ngModel)]="selectedStatus" (ngModelChange)="onFiltersChange()">
@@ -73,8 +93,12 @@ interface FilteredStepsData {
 
               <mat-form-field appearance="outline">
                 <mat-label>Search</mat-label>
-                <input matInput [(ngModel)]="searchTerm" (ngModelChange)="onFiltersChange()" 
-                       placeholder="Search steps...">
+                <input
+                  matInput
+                  [(ngModel)]="searchTerm"
+                  (ngModelChange)="onFiltersChange()"
+                  placeholder="Search steps..."
+                />
                 <mat-icon matSuffix>search</mat-icon>
               </mat-form-field>
             </div>
@@ -200,212 +224,220 @@ interface FilteredStepsData {
       </div>
     </div>
   `,
-  styles: [`
-    .steps-page-container {
-      padding: 24px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .header-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 32px;
-    }
-
-    .header-content h1 {
-      margin: 0;
-      font-size: 32px;
-      font-weight: 500;
-      color: #1f2937;
-    }
-
-    .header-subtitle {
-      margin: 8px 0 0 0;
-      color: #6b7280;
-      font-size: 16px;
-    }
-
-    .filters-section {
-      margin-bottom: 32px;
-    }
-
-    .filters-card {
-      border-radius: 12px;
-    }
-
-    .filters-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-
-    .filter-stats {
-      display: flex;
-      gap: 24px;
-      padding-top: 16px;
-      border-top: 1px solid #e5e7eb;
-    }
-
-    .stats-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #6b7280;
-      font-size: 14px;
-    }
-
-    .stats-item mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
-    }
-
-    .empty-state, .loading-state {
-      text-align: center;
-      padding: 80px 40px;
-      color: #6b7280;
-    }
-
-    .empty-state mat-icon, .loading-state mat-icon {
-      font-size: 64px;
-      width: 64px;
-      height: 64px;
-      color: #d1d5db;
-      margin-bottom: 16px;
-    }
-
-    .loading-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-      gap: 24px;
-    }
-
-    .step-card {
-      border-radius: 12px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .step-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    }
-
-    .step-title-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-    }
-
-    .step-name {
-      font-weight: 500;
-      font-size: 18px;
-    }
-
-    .step-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .project-info, .phase-info {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #6b7280;
-      font-size: 14px;
-    }
-
-    .project-info mat-icon, .phase-info mat-icon {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-    }
-
-    .step-description {
-      margin: 16px 0;
-      color: #374151;
-      line-height: 1.5;
-    }
-
-    .step-details {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin: 16px 0;
-    }
-
-    .detail-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #6b7280;
-      font-size: 14px;
-    }
-
-    .detail-row mat-icon {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-    }
-
-    .step-progress {
-      margin: 16px 0;
-      height: 8px;
-      border-radius: 4px;
-    }
-
-    .deliverables {
-      margin-top: 16px;
-    }
-
-    .deliverables h4 {
-      margin: 0 0 8px 0;
-      font-size: 14px;
-      font-weight: 500;
-      color: #374151;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
+  styles: [
+    `
       .steps-page-container {
-        padding: 16px;
+        padding: 24px;
+        max-width: 1400px;
+        margin: 0 auto;
       }
 
       .header-section {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 32px;
+      }
+
+      .header-content h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 500;
+        color: #1f2937;
+      }
+
+      .header-subtitle {
+        margin: 8px 0 0 0;
+        color: #6b7280;
+        font-size: 16px;
+      }
+
+      .filters-section {
+        margin-bottom: 32px;
+      }
+
+      .filters-card {
+        border-radius: 12px;
       }
 
       .filters-grid {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 16px;
       }
 
       .filter-stats {
+        display: flex;
+        gap: 24px;
+        padding-top: 16px;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .stats-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #6b7280;
+        font-size: 14px;
+      }
+
+      .stats-item mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+
+      .empty-state,
+      .loading-state {
+        text-align: center;
+        padding: 80px 40px;
+        color: #6b7280;
+      }
+
+      .empty-state mat-icon,
+      .loading-state mat-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        color: #d1d5db;
+        margin-bottom: 16px;
+      }
+
+      .loading-state {
+        display: flex;
         flex-direction: column;
-        gap: 12px;
+        align-items: center;
       }
 
       .steps-grid {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 24px;
+      }
+
+      .step-card {
+        border-radius: 12px;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .step-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      }
+
+      .step-title-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
+
+      .step-name {
+        font-weight: 500;
+        font-size: 18px;
       }
 
       .step-meta {
+        display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        gap: 8px;
       }
-    }
-  `]
+
+      .project-info,
+      .phase-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #6b7280;
+        font-size: 14px;
+      }
+
+      .project-info mat-icon,
+      .phase-info mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+
+      .step-description {
+        margin: 16px 0;
+        color: #374151;
+        line-height: 1.5;
+      }
+
+      .step-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin: 16px 0;
+      }
+
+      .detail-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #6b7280;
+        font-size: 14px;
+      }
+
+      .detail-row mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+
+      .step-progress {
+        margin: 16px 0;
+        height: 8px;
+        border-radius: 4px;
+      }
+
+      .deliverables {
+        margin-top: 16px;
+      }
+
+      .deliverables h4 {
+        margin: 0 0 8px 0;
+        font-size: 14px;
+        font-weight: 500;
+        color: #374151;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .steps-page-container {
+          padding: 16px;
+        }
+
+        .header-section {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
+        }
+
+        .filters-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .filter-stats {
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .steps-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .step-meta {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    `,
+  ],
 })
 export class StepsPageComponent implements OnInit {
   private stepService = inject(StepService);
@@ -417,7 +449,7 @@ export class StepsPageComponent implements OnInit {
   // Signals for reactive state
   loading = signal(true);
   filteredData = signal<FilteredStepsData | null>(null);
-  
+
   // Filter values
   selectedProjectId = '';
   selectedStatus = '';
@@ -432,21 +464,21 @@ export class StepsPageComponent implements OnInit {
 
     // Apply filters
     if (this.selectedProjectId) {
-      steps = steps.filter(step => step.projectId === this.selectedProjectId);
+      steps = steps.filter((step) => step.projectId === this.selectedProjectId);
     }
 
-
     if (this.selectedStatus) {
-      steps = steps.filter(step => step.status === this.selectedStatus);
+      steps = steps.filter((step) => step.status === this.selectedStatus);
     }
 
     if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase();
-      steps = steps.filter(step => 
-        step.name.toLowerCase().includes(term) ||
-        step.description?.toLowerCase().includes(term) ||
-        step.projectName?.toLowerCase().includes(term) ||
-        step.phaseName?.toLowerCase().includes(term)
+      steps = steps.filter(
+        (step) =>
+          step.name.toLowerCase().includes(term) ||
+          step.description?.toLowerCase().includes(term) ||
+          step.projectName?.toLowerCase().includes(term) ||
+          step.phaseName?.toLowerCase().includes(term),
       );
     }
 
@@ -470,35 +502,32 @@ export class StepsPageComponent implements OnInit {
     this.loading.set(true);
 
     // Since phases are subcollections, we'll skip loading them globally for now
-    combineLatest([
-      this.stepService.getAllSteps(),
-      this.projectService.getProjects()
-    ]).subscribe({
+    combineLatest([this.stepService.getAllSteps(), this.projectService.getProjects()]).subscribe({
       next: ([steps, projects]) => {
         // Enrich steps with project information
-        const enrichedSteps: StepWithProjectPhase[] = steps.map(step => {
-          const project = projects.find(p => p.id === step.projectId);
-          
+        const enrichedSteps: StepWithProjectPhase[] = steps.map((step) => {
+          const project = projects.find((p) => p.id === step.projectId);
+
           return {
             ...step,
             projectName: project?.name,
             projectCode: project?.projectCode,
             phaseName: step.phaseName || 'Unknown Phase',
-            phaseStatus: step.phaseStatus
+            phaseStatus: step.phaseStatus,
           };
         });
 
         this.filteredData.set({
           steps: enrichedSteps,
           projects,
-          phases: [] // Empty for now since phases are subcollections
+          phases: [], // Empty for now since phases are subcollections
         });
         this.loading.set(false);
       },
       error: (error) => {
         console.error('Error loading steps data:', error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -512,13 +541,13 @@ export class StepsPageComponent implements OnInit {
       width: '600px',
       data: {
         projectId: this.selectedProjectId || '',
-        phases: this.selectedProjectId ? 
-          this.phaseService.getByProject(this.selectedProjectId) : 
-          of([])
-      }
+        phases: this.selectedProjectId
+          ? this.phaseService.getByProject(this.selectedProjectId)
+          : of([]),
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.loadData();
       }
@@ -531,11 +560,11 @@ export class StepsPageComponent implements OnInit {
       data: {
         step,
         projectId: step.projectId,
-        phases: this.phaseService.getByProject(step.projectId)
-      }
+        phases: this.phaseService.getByProject(step.projectId),
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.loadData();
       }
@@ -582,7 +611,7 @@ export class StepsPageComponent implements OnInit {
   calculateOverallProgress(): number {
     const steps = this.filteredSteps();
     if (steps.length === 0) return 0;
-    
+
     const totalProgress = steps.reduce((sum, step) => sum + step.progress, 0);
     return Math.round(totalProgress / steps.length);
   }

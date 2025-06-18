@@ -12,7 +12,11 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 
 import { ContractorProjectService } from '../../../contractors/services/contractor-project.service';
-import { ContractorProject, PaymentStatus, ContractorProjectStatus } from '../../../contractors/models/contractor-project.model';
+import {
+  ContractorProject,
+  PaymentStatus,
+  ContractorProjectStatus,
+} from '../../../contractors/models/contractor-project.model';
 
 @Component({
   selector: 'app-project-contractors',
@@ -27,7 +31,7 @@ import { ContractorProject, PaymentStatus, ContractorProjectStatus } from '../..
     MatTooltipModule,
     MatDividerModule,
     MatDialogModule,
-    MatMenuModule
+    MatMenuModule,
   ],
   template: `
     <div class="project-contractors-container">
@@ -50,24 +54,19 @@ import { ContractorProject, PaymentStatus, ContractorProjectStatus } from '../..
         </div>
 
         <!-- Contractor Cards -->
-        <mat-card 
-          *ngFor="let cp of contractorProjects()" 
+        <mat-card
+          *ngFor="let cp of contractorProjects()"
           class="contractor-card ff-card-contractors"
           (click)="viewContractorDetails(cp)"
         >
           <mat-card-header>
             <mat-card-title>
               {{ cp.contractorName }}
-              <mat-chip 
-                class="status-chip" 
-                [ngClass]="'status-' + cp.status"
-              >
+              <mat-chip class="status-chip" [ngClass]="'status-' + cp.status">
                 {{ formatStatus(cp.status) }}
               </mat-chip>
             </mat-card-title>
-            <mat-card-subtitle>
-              Contract #{{ cp.contractNumber || 'N/A' }}
-            </mat-card-subtitle>
+            <mat-card-subtitle> Contract #{{ cp.contractNumber || 'N/A' }} </mat-card-subtitle>
           </mat-card-header>
 
           <mat-card-content>
@@ -77,8 +76,8 @@ import { ContractorProject, PaymentStatus, ContractorProjectStatus } from '../..
                 <span>Overall Progress</span>
                 <span>{{ cp.overallProgress }}%</span>
               </div>
-              <mat-progress-bar 
-                mode="determinate" 
+              <mat-progress-bar
+                mode="determinate"
                 [value]="cp.overallProgress"
                 [color]="cp.overallProgress < 50 ? 'warn' : 'primary'"
               ></mat-progress-bar>
@@ -103,7 +102,9 @@ import { ContractorProject, PaymentStatus, ContractorProjectStatus } from '../..
               <div class="metric">
                 <mat-icon>star</mat-icon>
                 <div class="metric-content">
-                  <span class="value">{{ cp.performance?.overallRating?.toFixed(1) || '0.0' }}</span>
+                  <span class="value">{{
+                    cp.performance?.overallRating?.toFixed(1) || '0.0'
+                  }}</span>
                   <span class="label">Rating</span>
                 </div>
               </div>
@@ -121,8 +122,8 @@ import { ContractorProject, PaymentStatus, ContractorProjectStatus } from '../..
                 <span class="value">R{{ (cp.totalPaymentMade / 1000).toFixed(0) }}K</span>
               </div>
               <div class="payment-progress">
-                <mat-progress-bar 
-                  mode="determinate" 
+                <mat-progress-bar
+                  mode="determinate"
                   [value]="getPaymentProgress(cp)"
                   color="accent"
                 ></mat-progress-bar>
@@ -192,238 +193,240 @@ import { ContractorProject, PaymentStatus, ContractorProjectStatus } from '../..
       </div>
     </div>
   `,
-  styles: [`
-    .project-contractors-container {
-      padding: 24px;
-    }
-
-    .contractors-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-
-    .contractors-header h3 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 500;
-    }
-
-    .contractors-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-      gap: 24px;
-    }
-
-    .contractor-card {
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .contractor-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .contractor-card mat-card-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 18px;
-    }
-
-    .status-chip {
-      font-size: 11px;
-      height: 22px;
-      line-height: 22px;
-      padding: 0 8px;
-    }
-
-    .status-chip.status-pending {
-      background-color: #fff3cd !important;
-      color: #856404 !important;
-    }
-
-    .status-chip.status-active {
-      background-color: #d4edda !important;
-      color: #155724 !important;
-    }
-
-    .status-chip.status-on_hold {
-      background-color: #f8d7da !important;
-      color: #721c24 !important;
-    }
-
-    .status-chip.status-completed {
-      background-color: #cce5ff !important;
-      color: #004085 !important;
-    }
-
-    .progress-section {
-      margin: 16px 0;
-    }
-
-    .progress-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin: 16px 0;
-    }
-
-    .metric {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .metric mat-icon {
-      color: #666;
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-    }
-
-    .metric-content {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .metric-content .value {
-      font-size: 16px;
-      font-weight: 500;
-      line-height: 1;
-    }
-
-    .metric-content .label {
-      font-size: 11px;
-      color: #666;
-    }
-
-    .financial-summary {
-      margin: 16px 0;
-    }
-
-    .financial-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
-
-    .financial-row .label {
-      color: #666;
-    }
-
-    .financial-row .value {
-      font-weight: 500;
-    }
-
-    .payment-progress {
-      margin-top: 8px;
-    }
-
-    .progress-text {
-      font-size: 12px;
-      color: #666;
-      display: block;
-      margin-top: 4px;
-    }
-
-    .teams-section {
-      margin-top: 16px;
-    }
-
-    .teams-section h4 {
-      font-size: 14px;
-      font-weight: 500;
-      margin: 0 0 8px 0;
-      color: #666;
-    }
-
-    .team-chips {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .team-chips mat-chip {
-      font-size: 12px;
-    }
-
-    .pending-payments {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 12px;
-      padding: 8px 12px;
-      background-color: #fff3cd;
-      border-radius: 4px;
-      font-size: 13px;
-      color: #856404;
-    }
-
-    .pending-payments mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
-    }
-
-    mat-card-actions {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 16px !important;
-    }
-
-    .empty-state {
-      grid-column: 1 / -1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 40px;
-      text-align: center;
-      color: #666;
-    }
-
-    .empty-state mat-icon {
-      font-size: 64px;
-      width: 64px;
-      height: 64px;
-      color: #ddd;
-      margin-bottom: 16px;
-    }
-
-    .empty-state p {
-      margin: 0 0 16px 0;
-      font-size: 16px;
-    }
-
-    .loading-state {
-      padding: 40px;
-    }
-
-    .danger-item {
-      color: #dc3545;
-    }
-
-    mat-divider {
-      margin: 16px 0;
-    }
-
-    @media (max-width: 768px) {
-      .contractors-grid {
-        grid-template-columns: 1fr;
+  styles: [
+    `
+      .project-contractors-container {
+        padding: 24px;
       }
-    }
-  `]
+
+      .contractors-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .contractors-header h3 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 500;
+      }
+
+      .contractors-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 24px;
+      }
+
+      .contractor-card {
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .contractor-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .contractor-card mat-card-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 18px;
+      }
+
+      .status-chip {
+        font-size: 11px;
+        height: 22px;
+        line-height: 22px;
+        padding: 0 8px;
+      }
+
+      .status-chip.status-pending {
+        background-color: #fff3cd !important;
+        color: #856404 !important;
+      }
+
+      .status-chip.status-active {
+        background-color: #d4edda !important;
+        color: #155724 !important;
+      }
+
+      .status-chip.status-on_hold {
+        background-color: #f8d7da !important;
+        color: #721c24 !important;
+      }
+
+      .status-chip.status-completed {
+        background-color: #cce5ff !important;
+        color: #004085 !important;
+      }
+
+      .progress-section {
+        margin: 16px 0;
+      }
+
+      .progress-header {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        margin-bottom: 8px;
+      }
+
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin: 16px 0;
+      }
+
+      .metric {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .metric mat-icon {
+        color: #666;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+
+      .metric-content {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .metric-content .value {
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 1;
+      }
+
+      .metric-content .label {
+        font-size: 11px;
+        color: #666;
+      }
+
+      .financial-summary {
+        margin: 16px 0;
+      }
+
+      .financial-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .financial-row .label {
+        color: #666;
+      }
+
+      .financial-row .value {
+        font-weight: 500;
+      }
+
+      .payment-progress {
+        margin-top: 8px;
+      }
+
+      .progress-text {
+        font-size: 12px;
+        color: #666;
+        display: block;
+        margin-top: 4px;
+      }
+
+      .teams-section {
+        margin-top: 16px;
+      }
+
+      .teams-section h4 {
+        font-size: 14px;
+        font-weight: 500;
+        margin: 0 0 8px 0;
+        color: #666;
+      }
+
+      .team-chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .team-chips mat-chip {
+        font-size: 12px;
+      }
+
+      .pending-payments {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 12px;
+        padding: 8px 12px;
+        background-color: #fff3cd;
+        border-radius: 4px;
+        font-size: 13px;
+        color: #856404;
+      }
+
+      .pending-payments mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+
+      mat-card-actions {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 16px !important;
+      }
+
+      .empty-state {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 40px;
+        text-align: center;
+        color: #666;
+      }
+
+      .empty-state mat-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        color: #ddd;
+        margin-bottom: 16px;
+      }
+
+      .empty-state p {
+        margin: 0 0 16px 0;
+        font-size: 16px;
+      }
+
+      .loading-state {
+        padding: 40px;
+      }
+
+      .danger-item {
+        color: #dc3545;
+      }
+
+      mat-divider {
+        margin: 16px 0;
+      }
+
+      @media (max-width: 768px) {
+        .contractors-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    `,
+  ],
 })
 export class ProjectContractorsComponent implements OnInit {
   @Input() projectId!: string;
@@ -449,12 +452,12 @@ export class ProjectContractorsComponent implements OnInit {
       error: (error) => {
         console.error('Error loading contractor projects:', error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
   formatStatus(status: ContractorProjectStatus): string {
-    return status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    return status.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
   }
 
   getPaymentProgress(cp: ContractorProject): number {
@@ -463,13 +466,14 @@ export class ProjectContractorsComponent implements OnInit {
   }
 
   getActiveTeams(cp: ContractorProject) {
-    return cp.allocatedTeams?.filter(team => team.isActive) || [];
+    return cp.allocatedTeams?.filter((team) => team.isActive) || [];
   }
 
   getPendingPaymentsCount(cp: ContractorProject): number {
-    return cp.payments?.filter(p => 
-      p.paymentStatus === 'not_paid' || p.paymentStatus === 'processing'
-    ).length || 0;
+    return (
+      cp.payments?.filter((p) => p.paymentStatus === 'not_paid' || p.paymentStatus === 'processing')
+        .length || 0
+    );
   }
 
   viewContractorDetails(event: Event | ContractorProject, cp?: ContractorProject) {
@@ -478,7 +482,7 @@ export class ProjectContractorsComponent implements OnInit {
     } else {
       cp = event;
     }
-    
+
     if (cp) {
       this.router.navigate(['/contractors', cp.contractorId, 'projects', cp.projectId]);
     }

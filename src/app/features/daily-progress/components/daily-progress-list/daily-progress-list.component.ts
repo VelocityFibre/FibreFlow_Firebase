@@ -1,4 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  signal,
+  computed,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,7 +20,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, BehaviorSubject, switchMap } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 import { DailyProgress, DailyProgressFilter } from '../../models/daily-progress.model';
 import { DailyProgressService } from '../../services/daily-progress.service';
 import { ProjectService } from '../../../../core/services/project.service';
@@ -23,6 +30,7 @@ import { DateFormatService } from '../../../../core/services/date-format.service
 @Component({
   selector: 'app-daily-progress-list',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     MatTableModule,
@@ -51,27 +59,31 @@ import { DateFormatService } from '../../../../core/services/date-format.service
       <div class="filters">
         <mat-form-field appearance="outline">
           <mat-label>Project</mat-label>
-          <mat-select [(ngModel)]="filter.projectId" (selectionChange)="applyFilter()">
+          <mat-select [(ngModel)]="filter().projectId" (selectionChange)="applyFilter()">
             <mat-option value="">All Projects</mat-option>
-            <mat-option *ngFor="let project of projects$ | async" [value]="project.id">
-              {{ project.name }}
-            </mat-option>
+            @for (project of projects$ | async; track project.id) {
+              <mat-option [value]="project.id">
+                {{ project.name }}
+              </mat-option>
+            }
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Staff Member</mat-label>
-          <mat-select [(ngModel)]="filter.staffId" (selectionChange)="applyFilter()">
+          <mat-select [(ngModel)]="filter().staffId" (selectionChange)="applyFilter()">
             <mat-option value="">All Staff</mat-option>
-            <mat-option *ngFor="let staff of staff$ | async" [value]="staff.id">
-              {{ staff.name }}
-            </mat-option>
+            @for (staff of staff$ | async; track staff.id) {
+              <mat-option [value]="staff.id">
+                {{ staff.name }}
+              </mat-option>
+            }
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Status</mat-label>
-          <mat-select [(ngModel)]="filter.status" (selectionChange)="applyFilter()">
+          <mat-select [(ngModel)]="filter().status" (selectionChange)="applyFilter()">
             <mat-option value="">All Statuses</mat-option>
             <mat-option value="draft">Draft</mat-option>
             <mat-option value="submitted">Submitted</mat-option>
@@ -84,7 +96,7 @@ import { DateFormatService } from '../../../../core/services/date-format.service
           <input
             matInput
             [matDatepicker]="fromPicker"
-            [(ngModel)]="filter.dateFrom"
+            [(ngModel)]="filter().dateFrom"
             (dateChange)="applyFilter()"
           />
           <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
@@ -96,7 +108,7 @@ import { DateFormatService } from '../../../../core/services/date-format.service
           <input
             matInput
             [matDatepicker]="toPicker"
-            [(ngModel)]="filter.dateTo"
+            [(ngModel)]="filter().dateTo"
             (dateChange)="applyFilter()"
           />
           <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
@@ -109,7 +121,8 @@ import { DateFormatService } from '../../../../core/services/date-format.service
         </button>
       </div>
 
-      <div class="table-container" *ngIf="progressReports$ | async as reports; else loading">
+      @if (progressReports$ | async; as reports) {
+        <div class="table-container">
         <table mat-table [dataSource]="reports">
           <ng-container matColumnDef="date">
             <th mat-header-cell *matHeaderCellDef>Date</th>
@@ -150,9 +163,11 @@ import { DateFormatService } from '../../../../core/services/date-format.service
             <th mat-header-cell *matHeaderCellDef>Staff</th>
             <td mat-cell *matCellDef="let report">
               <mat-chip-set>
-                <mat-chip *ngFor="let name of report.staffNames">
-                  {{ name }}
-                </mat-chip>
+                @for (name of report.staffNames; track name) {
+                  <mat-chip>
+                    {{ name }}
+                  </mat-chip>
+                }
               </mat-chip-set>
             </td>
           </ng-container>
@@ -172,30 +187,31 @@ import { DateFormatService } from '../../../../core/services/date-format.service
               <button mat-icon-button [matTooltip]="'View Details'" (click)="viewDetails(report)">
                 <mat-icon>visibility</mat-icon>
               </button>
-              <button
-                mat-icon-button
-                [matTooltip]="'Edit'"
-                (click)="edit(report)"
-                *ngIf="report.status === 'draft'"
-              >
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button
-                mat-icon-button
-                [matTooltip]="'Submit for Approval'"
-                (click)="submitForApproval(report)"
-                *ngIf="report.status === 'draft'"
-              >
-                <mat-icon>send</mat-icon>
-              </button>
-              <button
-                mat-icon-button
-                [matTooltip]="'Approve'"
-                (click)="approve(report)"
-                *ngIf="report.status === 'submitted' && canApprove"
-              >
-                <mat-icon>check_circle</mat-icon>
-              </button>
+              @if (report.status === 'draft') {
+                <button
+                  mat-icon-button
+                  [matTooltip]="'Edit'"
+                  (click)="edit(report)"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  [matTooltip]="'Submit for Approval'"
+                  (click)="submitForApproval(report)"
+                >
+                  <mat-icon>send</mat-icon>
+                </button>
+              }
+              @if (report.status === 'submitted' && canApprove) {
+                <button
+                  mat-icon-button
+                  [matTooltip]="'Approve'"
+                  (click)="approve(report)"
+                >
+                  <mat-icon>check_circle</mat-icon>
+                </button>
+              }
             </td>
           </ng-container>
 
@@ -208,17 +224,18 @@ import { DateFormatService } from '../../../../core/services/date-format.service
           ></tr>
         </table>
 
-        <div class="no-data" *ngIf="reports.length === 0">
-          <mat-icon>assignment</mat-icon>
-          <p>No progress reports found</p>
+          @if (reports.length === 0) {
+            <div class="no-data">
+              <mat-icon>assignment</mat-icon>
+              <p>No progress reports found</p>
+            </div>
+          }
         </div>
-      </div>
-
-      <ng-template #loading>
+      } @else {
         <div class="loading-container">
           <mat-spinner></mat-spinner>
         </div>
-      </ng-template>
+      }
     </div>
   `,
   styles: [
@@ -328,10 +345,9 @@ export class DailyProgressListComponent implements OnInit {
   private dateFormatService = inject(DateFormatService);
   private router = inject(Router);
 
-  filter: DailyProgressFilter = {};
-  private filterSubject = new BehaviorSubject<DailyProgressFilter>({});
+  filter = signal<DailyProgressFilter>({});
 
-  progressReports$: Observable<DailyProgress[]>;
+  progressReports$ = this.dailyProgressService.getAll({});
   projects$ = this.projectService.getProjects();
   staff$ = this.staffService.getStaff();
 
@@ -347,28 +363,17 @@ export class DailyProgressListComponent implements OnInit {
   ];
   canApprove = false; // This should be based on user role
 
-  constructor() {
-    this.progressReports$ = this.filterSubject.pipe(
-      switchMap((filter) => this.dailyProgressService.getAll(filter)),
-    );
-  }
-
   ngOnInit() {
-    this.loadProgressReports();
-  }
-
-  loadProgressReports() {
-    this.progressReports$ = this.dailyProgressService.getAll(this.filter);
+    // Component initialized with reactive signals
   }
 
   applyFilter() {
-    this.filterSubject.next(this.filter);
-    this.loadProgressReports();
+    // Filter updates are handled by ngModel two-way binding
+    // The computed progressReports$ will automatically react to filter changes
   }
 
   clearFilters() {
-    this.filter = {};
-    this.applyFilter();
+    this.filter.set({});
   }
 
   formatDate(date: Date | any): string {

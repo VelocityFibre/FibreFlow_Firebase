@@ -1,97 +1,92 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ProjectService } from '../../../../core/services/project.service';
 import { SupplierService } from '../../../../core/suppliers/services/supplier.service';
 import { StockService } from '../../../stock/services/stock.service';
 import { ClientService } from '../../../clients/services/client.service';
 import { TaskService } from '../../../../core/services/task.service';
-import { Subject, takeUntil } from 'rxjs';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-main-dashboard',
   standalone: true,
   imports: [CommonModule, RouterModule, MatIconModule, MatCardModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './main-dashboard.component.html',
-  styleUrls: ['./main-dashboard.component.scss']
+  styleUrls: ['./main-dashboard.component.scss'],
 })
-export class MainDashboardComponent implements OnInit, OnDestroy {
+export class MainDashboardComponent {
   private projectService = inject(ProjectService);
   private supplierService = inject(SupplierService);
   private stockService = inject(StockService);
   private clientService = inject(ClientService);
   private taskService = inject(TaskService);
-  private destroy$ = new Subject<void>();
 
-  // Counts for dashboard cards
-  projectsCount = 0;
-  suppliersCount = 0;
-  stockItemsCount = 0;
-  clientsCount = 0;
-  flaggedIssuesCount = 0;
+  // Signal-based state management for dashboard data
+  projects = toSignal(this.projectService.getProjects().pipe(catchError(() => of([]))), {
+    initialValue: [],
+  });
 
-  ngOnInit() {
-    // Get projects count
-    this.projectService.getProjects()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (projects) => {
-          this.projectsCount = projects.length;
-        },
-        error: (error) => {
-          console.error('Error loading projects count:', error);
-          this.projectsCount = 0;
-        }
-      });
+  suppliers = toSignal(this.supplierService.getSuppliers().pipe(catchError(() => of([]))), {
+    initialValue: [],
+  });
 
-    // Get suppliers count
-    this.supplierService.getSuppliers()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (suppliers) => {
-          this.suppliersCount = suppliers.length;
-        },
-        error: (error) => {
-          console.error('Error loading suppliers count:', error);
-          this.suppliersCount = 0;
-        }
-      });
+  stockItems = toSignal(this.stockService.getStockItems().pipe(catchError(() => of([]))), {
+    initialValue: [],
+  });
 
-    // Get stock items count
-    this.stockService.getStockItems()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (items) => {
-          this.stockItemsCount = items.length;
-        },
-        error: (error) => {
-          console.error('Error loading stock items count:', error);
-          this.stockItemsCount = 0;
-        }
-      });
+  clients = toSignal(this.clientService.getClients().pipe(catchError(() => of([]))), {
+    initialValue: [],
+  });
 
-    // Get clients count
-    this.clientService.getClients()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (clients) => {
-          this.clientsCount = clients.length;
-        },
-        error: (error) => {
-          console.error('Error loading clients count:', error);
-          this.clientsCount = 0;
-        }
-      });
+  // Computed signals for dashboard counts
+  projectsCount = computed(() => this.projects().length);
+  suppliersCount = computed(() => this.suppliers().length);
+  stockItemsCount = computed(() => this.stockItems().length);
+  clientsCount = computed(() => this.clients().length);
 
-    // Get flagged issues count (blocked tasks from all projects)
-    // For now, we'll set this to 0 since we'd need to query all projects
-    this.flaggedIssuesCount = 0;
-  }
+  // Loading state computed from all data sources
+  isLoading = computed(
+    () =>
+      this.projects().length === 0 &&
+      this.suppliers().length === 0 &&
+      this.stockItems().length === 0 &&
+      this.clients().length === 0,
+  );
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+  // Dashboard stats computed from real data
+  dashboardStats = computed(() => {
+    const projects = this.projects();
+    const activeProjects = projects.filter((p) => p.status === 'active').length;
+    const stockItems = this.stockItems();
+    const lowStockItems = stockItems.filter(
+      (item) => item.currentStock < (item.minimumStock || 10),
+    ).length;
+
+    return {
+      polesPlanted: projects.reduce(
+        (total, project) => total + (project.completedTasksCount || 0),
+        0,
+      ),
+      materialsNeeded: lowStockItems,
+      activeProjects,
+      completionRate:
+        projects.length > 0
+          ? Math.round(
+              (projects.filter((p) => p.status === 'completed').length / projects.length) * 100,
+            )
+          : 0,
+    };
+  });
+
+  // Flagged issues computed from project data
+  flaggedIssuesCount = computed(() => {
+    return this.projects().filter(
+      (project) => project.priorityLevel === 'critical' || project.priorityLevel === 'high',
+    ).length;
+  });
 }

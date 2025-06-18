@@ -1,4 +1,12 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  signal,
+  computed,
+  Injector,
+  afterNextRender,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -73,6 +81,7 @@ export class StockMovementsComponent implements OnInit {
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
   private router = inject(Router);
+  private injector = inject(Injector);
 
   // State signals
   movements = signal<StockMovement[]>([]);
@@ -130,7 +139,13 @@ export class StockMovementsComponent implements OnInit {
 
   ngOnInit() {
     this.initializeForm();
-    this.loadData();
+    // Use afterNextRender to avoid NG0200
+    afterNextRender(
+      () => {
+        this.loadData();
+      },
+      { injector: this.injector },
+    );
   }
 
   private initializeForm() {
@@ -143,10 +158,15 @@ export class StockMovementsComponent implements OnInit {
       dateTo: [''],
     });
 
-    // Apply filters on value changes
-    this.filterForm.valueChanges.subscribe(() => {
-      this.applyFilters();
-    });
+    // Apply filters on value changes - defer initial emission
+    afterNextRender(
+      () => {
+        this.filterForm.valueChanges.subscribe(() => {
+          this.applyFilters();
+        });
+      },
+      { injector: this.injector },
+    );
   }
 
   private async loadData() {

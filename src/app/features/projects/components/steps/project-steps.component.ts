@@ -1,7 +1,14 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SharedMaterialModule } from '../../../../shared/modules/shared-material.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { StepService } from '../../../../core/services/step.service';
 import { PhaseService } from '../../../../core/services/phase.service';
@@ -20,7 +27,19 @@ interface PhaseWithSteps {
 @Component({
   selector: 'app-project-steps',
   standalone: true,
-  imports: [CommonModule, FormsModule, SharedMaterialModule, MatExpansionModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatExpansionModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatChipsModule,
+    MatProgressBarModule,
+    MatMenuModule,
+    MatCheckboxModule,
+    MatTooltipModule,
+  ],
   template: `
     <div class="steps-container">
       <div class="header-section">
@@ -420,4 +439,3 @@ export class ProjectStepsComponent implements OnInit {
     }
   }
 }
-

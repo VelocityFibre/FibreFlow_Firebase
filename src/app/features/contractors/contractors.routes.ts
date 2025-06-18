@@ -11,9 +11,9 @@ export const contractorsRoutes: Routes = [
   {
     path: ':contractorId/projects/:projectId',
     loadComponent: () =>
-      import('./pages/contractor-project-detail-page/contractor-project-detail-page.component').then(
-        (m) => m.ContractorProjectDetailPageComponent,
-      ),
+      import(
+        './pages/contractor-project-detail-page/contractor-project-detail-page.component'
+      ).then((m) => m.ContractorProjectDetailPageComponent),
   },
   {
     path: ':id',

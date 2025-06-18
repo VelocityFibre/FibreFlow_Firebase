@@ -1,4 +1,11 @@
-import { Component, OnInit, inject, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  ViewChild,
+  DestroyRef,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -21,6 +28,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Observable } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { StockService } from '../../services/stock.service';
 import { StockItem, StockCategory, StockItemExport } from '../../models/stock-item.model';
@@ -32,6 +40,7 @@ import { Project } from '../../../../core/models/project.model';
 @Component({
   selector: 'app-stock-list',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     RouterModule,
@@ -582,6 +591,7 @@ export class StockListComponent implements OnInit {
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
   private projectService = inject(ProjectService);
+  private destroyRef = inject(DestroyRef);
 
   stockItems$!: Observable<StockItem[]>;
   dataSource!: MatTableDataSource<StockItem>;
@@ -635,7 +645,7 @@ export class StockListComponent implements OnInit {
     this.loading = true;
     this.stockItems$ = this.stockService.getStockItems(this.selectedProjectId || undefined);
 
-    this.stockItems$.subscribe((items) => {
+    this.stockItems$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((items) => {
       this.dataSource = new MatTableDataSource(items);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;

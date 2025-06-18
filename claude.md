@@ -1,5 +1,91 @@
 # FibreFlow - Project Context for Claude
 
+## 🚨 CRITICAL: LLM Training Data is 6-12 Months Outdated!
+**Your training data is from April 2024 or earlier. Always verify with latest documentation:**
+- **Angular v20**: https://angular.dev/guide/
+- **TypeScript 5.8**: https://www.typescriptlang.org/docs/
+- **Use MCP Tools**: When unsure, use the `context7` MCP tool or `WebFetch` to check latest docs
+- **Assume Changes**: Framework APIs, best practices, and patterns may have changed
+
+## 📚 IMPORTANT: Angular v20 Documentation Reference
+**ALWAYS refer to https://angular.dev/guide/ for:**
+- Code examples and best practices for Angular v20
+- Error fixes and debugging solutions
+- New functions, APIs, and features
+- Migration guides and breaking changes
+- Component patterns and architectural decisions
+- Performance optimization techniques
+- Testing strategies and patterns
+
+**When uncertain about Angular v20 features:**
+1. Check the official docs first at https://angular.dev/guide/
+2. Use MCP tools to fetch latest documentation when needed
+3. Save relevant examples and patterns to:
+   - `/docs/` folder for architectural patterns and guides
+   - `claude.md` for quick reference and critical updates
+   - Component files as implementation notes
+4. Document any significant differences from previous Angular versions
+5. Keep track of new best practices that differ from training data
+
+## 🚨 CRITICAL: Angular v20 Updates (2025-06-18)
+
+### NG0200 Error Resolution
+The NG0200 error is actually a **Circular Dependency in DI** error, not ExpressionChangedAfterItHasBeenCheckedError. Key fixes:
+- Removed circular dependency between `SentryErrorHandlerService` and `RemoteLoggerService`
+- Proper initialization patterns using `afterNextRender`
+- Separated concerns between error handling and logging
+
+### Angular v20 Best Practices
+
+#### 1. Signal Best Practices
+- **Prefer `computed` signals** over effects for state derivation
+- **Use effects sparingly** only for:
+  - Logging data
+  - Synchronizing with localStorage  
+  - Custom DOM behavior
+  - Third-party library integration
+- **Avoid effects for state propagation** to prevent circular updates
+
+#### 2. afterNextRender API
+New structured DOM interaction pattern:
+```typescript
+afterNextRender({
+  earlyRead: () => { /* read DOM before write */ },
+  write: (earlyReadResult) => { /* write to DOM */ },
+  read: (writeResult) => { /* final DOM read */ }
+}, { injector: this.injector });
+```
+Phases execute in order: `earlyRead` → `write` → `mixedReadWrite` → `read`
+
+#### 3. Service Initialization Pattern
+```typescript
+@Injectable({ providedIn: 'root' })
+export class ThemeService {
+  private theme = signal<Theme>('light');
+  private storage?: BrowserStorageService;
+  
+  constructor() {
+    // NO initialization in constructor
+  }
+  
+  initialize(injector: Injector): void {
+    afterNextRender(() => {
+      // Safe DOM/browser API access
+    }, { injector });
+  }
+}
+```
+
+#### 4. Component Data Loading
+Replace `setTimeout` with `afterNextRender`:
+```typescript
+ngOnInit() {
+  afterNextRender(() => {
+    this.loadData();
+  }, { injector: this.injector });
+}
+```
+
 ## Project Overview
 FibreFlow is an enterprise fiber optic project management system built with Angular and Firebase. This system manages fiber optic installations, stock management, contractors, and project workflows.
 
@@ -36,6 +122,8 @@ FibreFlow is an enterprise fiber optic project management system built with Angu
 - Zone.js 0.15.0
 - SCSS with Material theming
 - Logo: 110% scale in sidebar
+- **NEW**: afterNextRender for DOM operations
+- **NEW**: Proper DI patterns to avoid circular dependencies
 
 ### State Management
 - **Primary**: Firestore real-time listeners (for shared data)
@@ -216,6 +304,15 @@ selectedProject = computed(() =>
   this.projects().find(p => p.id === this.selectedProjectId())
 );
 
+// ✅ DEFERRED INITIALIZATION - For Firebase collections
+private logsCollection?: CollectionReference;
+private getLogsCollection(): CollectionReference {
+  if (!this.logsCollection) {
+    this.logsCollection = collection(this.firestore, 'debug-logs');
+  }
+  return this.logsCollection;
+}
+
 // ❌ AVOID - One-time reads (unless truly needed)
 const snapshot = await getDocs(collection(firestore, 'projects'));
 ```
@@ -224,8 +321,12 @@ const snapshot = await getDocs(collection(firestore, 'projects'));
 
 ### 1. Circular Dependencies (NG0200 Error)
 - **Problem**: Services injecting each other in a circular pattern
-- **Prevention**: Use event bus pattern or facade services
+- **Solution**: 
+  - Remove circular service dependencies
+  - Use `afterNextRender` for deferred initialization
+  - Separate error handling from logging concerns
 - **Detection**: Look for NG0200 errors in browser console
+- **Example Fix**: Removed `RemoteLoggerService` from `SentryErrorHandlerService`
 
 ### 2. Missing Phases in Projects
 - **Solution**: Added initialization button for existing projects
@@ -277,6 +378,42 @@ npm run lint       # Check remaining issues
 npm run build      # Verify build works
 npm run deploy     # Deploy with pre-checks
 ```
+
+## 🚨 Node.js Version Management Best Practices
+
+### NEVER Use Hardcoded Node Paths
+❌ **WRONG**: 
+```bash
+alias claude="/home/ldp/.nvm/versions/node/v18.20.7/bin/claude"
+node /home/ldp/.nvm/versions/node/v18.20.7/bin/something
+```
+
+✅ **CORRECT**: 
+```bash
+# Dynamic path resolution
+CLAUDE_CLI=$(find "$HOME/.nvm/versions/node" -name "cli.js" -path "*/claude-code/*" | head -1)
+node "$CLAUDE_CLI"
+
+# Or use nvm to ensure correct version
+source ~/.nvm/nvm.sh && nvm use default
+```
+
+### Setting Default Node Version
+```bash
+# Set v20 as default
+nvm alias default 20.19.2
+
+# Always load nvm in scripts
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+```
+
+### Key Principles
+1. **Use dynamic paths** - Never hardcode version-specific paths
+2. **Load nvm in scripts** - Ensure nvm is available before using Node
+3. **Set proper defaults** - Use `nvm alias default` for persistent version
+4. **Use `command -v`** - Check if commands exist before using them
+5. **Fail gracefully** - Provide meaningful error messages
 
 ## Core Features & Routes
 
@@ -370,3 +507,205 @@ firebase deploy            # Full deployment
 ❌ Missing namespaces in SCSS ❌ Text inputs for dates
 
 **Remember: ENTERPRISE application - Code quality, type safety, and maintainability are paramount!**
+
+## 📘 TypeScript 5.8 Best Practices & Deviations (2025-06-18)
+
+### Current TypeScript Configuration
+- **Version**: TypeScript 5.8.3 (latest stable)
+- **Target**: ES2022
+- **Module**: ES2022
+- **Strict Mode**: ✅ Enabled (all strict flags on)
+- **Module Resolution**: bundler (modern resolution)
+
+### ✅ Best Practices We Follow
+1. **Strict Type Checking**
+   - `strict: true` in tsconfig.json
+   - `noImplicitReturns: true`
+   - `noFallthroughCasesInSwitch: true`
+   - `noImplicitOverride: true`
+
+2. **Modern TypeScript Features**
+   - Using ES2022 features (top-level await, private fields)
+   - Proper use of generics in services
+   - Union types and type guards
+   - Template literal types
+   - Conditional types where appropriate
+
+3. **Angular-Specific TypeScript**
+   - Standalone components (no NgModules)
+   - inject() pattern for DI
+   - Signals for reactive state
+   - Proper typing of Observables
+
+### ⚠️ Current Deviations & Issues
+
+#### 1. **Any Type Usage** (4 instances found)
+**Problem**: Using `as any` casts instead of proper typing
+**Files**:
+- `stock.service.ts:475,479` - Category/UnitOfMeasure casts
+- `boq.service.ts:171` - Firestore addDoc cast
+- `staff.service.ts:172` - Firestore addDoc cast
+- `boq-list.component.ts:456` - formatDate parameter
+
+**Solution**: Create proper type definitions or use type guards
+
+#### 2. **Missing TypeScript 5.x Features**
+**Not Yet Adopted**:
+- `const` type parameters (5.0+)
+- `satisfies` operator (4.9+)
+- `using` declarations for resource management (5.2+)
+- Decorator metadata (5.0+)
+
+#### 3. **Firestore Type Safety**
+**Problem**: Loose typing with Firestore operations
+**Current**:
+```typescript
+addDoc(collection, data as any)  // ❌ Bad
+```
+**Should Be**:
+```typescript
+addDoc<T>(collection: CollectionReference<T>, data: T)  // ✅ Good
+```
+
+### 📋 TypeScript Improvement Plan
+
+#### Phase 1: Eliminate Any Types (Immediate)
+1. **Fix Firestore Casts**:
+   ```typescript
+   // Instead of:
+   addDoc(this.staffCollection, newStaff as any)
+   
+   // Use:
+   private staffCollection = collection(this.firestore, 'staff') as CollectionReference<Staff>;
+   addDoc(this.staffCollection, newStaff)
+   ```
+
+2. **Fix Enum Casts**:
+   ```typescript
+   // Instead of:
+   category: item.category as any
+   
+   // Use proper enum types:
+   category: item.category as StockCategory
+   ```
+
+3. **Fix Date Parameter**:
+   ```typescript
+   // Instead of:
+   formatDate(date: any): string
+   
+   // Use:
+   formatDate(date: Date | Timestamp | string): string
+   ```
+
+#### Phase 2: Adopt Modern TypeScript Features
+1. **Use `satisfies` for Better Type Inference**:
+   ```typescript
+   // Current:
+   const config: AppConfig = { ... }
+   
+   // Better:
+   const config = { ... } satisfies AppConfig
+   ```
+
+2. **Use `const` Type Parameters**:
+   ```typescript
+   // For generic functions that don't modify types:
+   function getValue<const T>(obj: T): T[keyof T]
+   ```
+
+3. **Resource Management with `using`**:
+   ```typescript
+   // For cleanup operations:
+   using subscription = observable$.subscribe()
+   // Auto-cleanup when scope ends
+   ```
+
+#### Phase 3: Enhanced Type Safety
+1. **Branded Types for IDs**:
+   ```typescript
+   type ProjectId = string & { __brand: 'ProjectId' }
+   type UserId = string & { __brand: 'UserId' }
+   ```
+
+2. **Template Literal Types for Routes**:
+   ```typescript
+   type AppRoute = `/projects/${string}` | `/users/${string}` | '/dashboard'
+   ```
+
+3. **Discriminated Unions for State**:
+   ```typescript
+   type LoadingState<T> = 
+     | { status: 'idle' }
+     | { status: 'loading' }
+     | { status: 'success'; data: T }
+     | { status: 'error'; error: Error }
+   ```
+
+### 🛠️ Immediate Actions Required
+
+1. **Add ESLint Rule**:
+   ```json
+   "@typescript-eslint/no-explicit-any": "error"
+   ```
+
+2. **Update Firestore Service Pattern**:
+   ```typescript
+   // Create typed collection references
+   private getTypedCollection<T>(path: string) {
+     return collection(this.firestore, path) as CollectionReference<T>;
+   }
+   ```
+
+3. **Create Type Guards**:
+   ```typescript
+   function isValidDate(value: unknown): value is Date {
+     return value instanceof Date && !isNaN(value.getTime());
+   }
+   ```
+
+### 📚 TypeScript Resources
+- [TypeScript 5.8 Release Notes](https://devblogs.microsoft.com/typescript/announcing-typescript-5-8/)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
+- [Angular TypeScript Style Guide](https://angular.dev/style-guide)
+- [Type Challenges](https://github.com/type-challenges/type-challenges) for practice
+
+### 🎯 Goal
+Achieve 100% type safety with zero `any` types and leverage modern TypeScript features for better developer experience and runtime safety.
+
+## 📘 TypeScript Best Practices Reminder
+
+### ALWAYS Use Latest TypeScript Features
+- **Check Documentation**: Your training data is outdated. Always verify TypeScript features at https://www.typescriptlang.org/docs/
+- **Use MCP Tools**: When implementing TypeScript patterns, use `context7` or `WebFetch` to check latest best practices
+- **Modern Features to Use**:
+  - `satisfies` operator (4.9+) - Better than type annotations
+  - `const` type parameters (5.0+) - Preserve literal types
+  - `using` declarations (5.2+) - Resource management
+  - Template literal types - Type-safe strings
+  - Branded types - Prevent ID mixing
+
+### Type Safety Checklist
+- [ ] Zero `any` types (ESLint will error)
+- [ ] Use branded types for all entity IDs
+- [ ] Use discriminated unions for state
+- [ ] Use type guards for validation
+- [ ] Use `satisfies` for configs
+- [ ] Use template literals for routes
+
+### Import Type Utilities
+```typescript
+// Always available - use these!
+import { 
+  // Type guards
+  isDefined, isValidDate, toDate, DateLike,
+  // Branded types
+  ProjectId, UserId, toProjectId,
+  // State types
+  LoadingState, FormState, 
+  // Route types
+  AppRoute, projectRoute,
+  // Utils
+  pick, omit, tuple, createEnum
+} from '@app/core/types';
+```

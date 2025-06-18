@@ -1,7 +1,6 @@
 import { Injectable, ErrorHandler, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { RemoteLoggerService } from './remote-logger.service';
 import * as Sentry from '@sentry/angular';
 
 export interface AppError {
@@ -19,18 +18,11 @@ export interface AppError {
 export class SentryErrorHandlerService implements ErrorHandler {
   private snackBar = inject(MatSnackBar);
   private router = inject(Router);
-  private remoteLogger?: RemoteLoggerService;
   private errors: AppError[] = [];
 
   constructor() {
-    // Defer remote logger injection to avoid DI issues
-    setTimeout(() => {
-      try {
-        this.remoteLogger = inject(RemoteLoggerService);
-      } catch (error) {
-        console.error('Failed to inject RemoteLoggerService:', error);
-      }
-    }, 100);
+    // Remove RemoteLoggerService injection to prevent circular dependency
+    // This service should only use Sentry for error tracking
   }
 
   handleError(error: Error): void {
@@ -56,14 +48,8 @@ export class SentryErrorHandlerService implements ErrorHandler {
       Sentry.captureException(error);
     });
 
-    // Log to remote logger service for debugging access (with error handling)
-    if (this.remoteLogger) {
-      try {
-        this.remoteLogger.logError(error, 'ErrorHandler', 'Global error handler caught error');
-      } catch (logError) {
-        console.error('Failed to log to remote logger:', logError);
-      }
-    }
+    // Remote logger removed to prevent circular dependency
+    // All error tracking is handled by Sentry
 
     // Special handling for NG0200 errors (ExpressionChangedAfterItHasBeenCheckedError)
     if (
@@ -82,18 +68,18 @@ export class SentryErrorHandlerService implements ErrorHandler {
           ? (window as any).Zone.current.name
           : 'Zone not available',
       );
-      
+
       // Try to extract more information from the error
       const errorString = error.toString();
       const stackLines = error.stack?.split('\n') || [];
       console.error('Error toString():', errorString);
       console.error('Stack trace lines:', stackLines);
-      
+
       // Log component information if available
       if ((error as any).ngDebugContext) {
         console.error('Angular debug context:', (error as any).ngDebugContext);
       }
-      
+
       // Log the specific expression that changed
       const match = error.message?.match(/Previous value: '(.*)'\. Current value: '(.*)'/);
       if (match) {
@@ -101,6 +87,12 @@ export class SentryErrorHandlerService implements ErrorHandler {
         console.error('  Previous value:', match[1]);
         console.error('  Current value:', match[2]);
       }
+
+      // Parse stack trace to find the component
+      const componentMatch = error.stack?.match(/at\s+(\w+Component)/);
+      const componentName = componentMatch ? componentMatch[1] : 'Unknown Component';
+
+      // Detailed error logging handled by Sentry with proper context
 
       // Add NG0200 specific context to Sentry
       Sentry.withScope((scope) => {
@@ -117,24 +109,7 @@ export class SentryErrorHandlerService implements ErrorHandler {
         Sentry.captureException(error);
       });
 
-      // Log detailed NG0200 info to remote logger
-      if (this.remoteLogger) {
-        try {
-          this.remoteLogger.error('NG0200 Error Detected', 'ErrorHandler', {
-            fullMessage: error.message,
-            errorName: error.name,
-            url: this.router.url,
-            stack: error.stack,
-            zoneState:
-              typeof (window as any).Zone !== 'undefined'
-                ? (window as any).Zone.current.name
-                : 'Zone not available',
-            timestamp: new Date().toISOString(),
-          });
-        } catch (logError) {
-          console.error('Failed to log NG0200 error to remote logger:', logError);
-        }
-      }
+      // NG0200 error tracking handled by Sentry above
     }
 
     // Log to console in development

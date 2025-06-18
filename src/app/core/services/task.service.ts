@@ -13,6 +13,8 @@ import {
   orderBy,
   serverTimestamp,
   writeBatch,
+  getDoc,
+  getDocs,
   // DocumentReference,
   Query,
   // Timestamp,
@@ -21,7 +23,7 @@ import {
 import { Observable, from, map, of, switchMap, firstValueFrom } from 'rxjs';
 import { Task, TaskStatus, TaskPriority } from '../models/task.model';
 import { AuthService } from './auth.service';
-import { ProjectService } from './project.service';
+// Removed ProjectService import to break circular dependency
 import { StaffService } from '../../features/staff/services/staff.service';
 import { DEFAULT_TASK_TEMPLATES, PHASE_NAME_MAPPING } from '../models/task-templates.model';
 import { Phase } from '../models/phase.model';
@@ -32,7 +34,8 @@ import { Phase } from '../models/phase.model';
 export class TaskService {
   private firestore = inject(Firestore);
   private authService = inject(AuthService);
-  private projectService = inject(ProjectService);
+  // Removed projectService to break circular dependency
+  private projectsCollection = collection(this.firestore, 'projects');
   private staffService = inject(StaffService);
   private tasksCollection = collection(this.firestore, 'tasks');
 
@@ -46,12 +49,8 @@ export class TaskService {
         // Get unique project IDs
         const projectIds = [...new Set(tasks.map((t) => t.projectId))];
 
-        // Fetch project details
-        return from(
-          Promise.all(
-            projectIds.map((id) => firstValueFrom(this.projectService.getProjectById(id))),
-          ),
-        ).pipe(
+        // Fetch project details directly from Firestore
+        return from(Promise.all(projectIds.map((id) => this.getProjectBasicInfo(id)))).pipe(
           map((projects) => {
             const projectMap = new Map(projects.filter((p) => p).map((p) => [p!.id!, p!]));
 
@@ -131,12 +130,8 @@ export class TaskService {
         // Get unique project IDs
         const projectIds = [...new Set(tasks.map((t) => t.projectId))];
 
-        // Fetch project details
-        return from(
-          Promise.all(
-            projectIds.map((id) => firstValueFrom(this.projectService.getProjectById(id))),
-          ),
-        ).pipe(
+        // Fetch project details directly from Firestore
+        return from(Promise.all(projectIds.map((id) => this.getProjectBasicInfo(id)))).pipe(
           map((projects) => {
             const projectMap = new Map(projects.filter((p) => p).map((p) => [p!.id!, p!]));
 
@@ -389,6 +384,21 @@ export class TaskService {
         };
       }),
     );
+  }
+
+  // Helper method to get basic project info without circular dependency
+  private async getProjectBasicInfo(projectId: string): Promise<any> {
+    try {
+      const projectDoc = doc(this.projectsCollection, projectId);
+      const projectSnap = await getDoc(projectDoc);
+      if (projectSnap.exists()) {
+        return { id: projectSnap.id, ...projectSnap.data() };
+      }
+      return null;
+    } catch (error) {
+      console.error(`Error fetching project ${projectId}:`, error);
+      return null;
+    }
   }
 
   // Add a note to a task

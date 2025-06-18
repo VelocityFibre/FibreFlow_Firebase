@@ -1,14 +1,16 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProjectService } from '../../../core/services/project.service';
 
 @Component({
   selector: 'app-static-dashboard',
   standalone: true,
   imports: [CommonModule, RouterModule, MatCardModule, MatIconModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="dashboard-container">
       <h1>Dashboard</h1>
@@ -129,6 +131,7 @@ import { ProjectService } from '../../../core/services/project.service';
 })
 export class StaticDashboardComponent implements OnInit {
   private projectService = inject(ProjectService);
+  private destroyRef = inject(DestroyRef);
 
   projectCount = 0;
 
@@ -146,17 +149,20 @@ export class StaticDashboardComponent implements OnInit {
     setTimeout(() => {
       console.log('🟡 Dashboard: Timeout executed, calling Firebase...');
       try {
-        this.projectService.getProjects().subscribe({
-          next: (projects) => {
-            console.log('🟢 Dashboard: Firebase data received:', projects);
-            this.projectCount = projects.length;
-            console.log('🟢 Dashboard: projectCount updated to:', this.projectCount);
-          },
-          error: (error) => {
-            console.error('🔴 Dashboard: Error loading projects:', error);
-            this.projectCount = 0;
-          },
-        });
+        this.projectService
+          .getProjects()
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe({
+            next: (projects) => {
+              console.log('🟢 Dashboard: Firebase data received:', projects);
+              this.projectCount = projects.length;
+              console.log('🟢 Dashboard: projectCount updated to:', this.projectCount);
+            },
+            error: (error) => {
+              console.error('🔴 Dashboard: Error loading projects:', error);
+              this.projectCount = 0;
+            },
+          });
       } catch (error) {
         console.error('🔴 Dashboard: Exception in Firebase call:', error);
       }

@@ -9,37 +9,41 @@
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Stock Item</mat-label>
         <mat-select formControlName="itemId" required>
-          <mat-option *ngFor="let item of data.stockItems" [value]="item.id">
-            {{ getStockItemDisplay(item) }}
-          </mat-option>
+          @for (item of data.stockItems; track item.id) {
+            <mat-option [value]="item.id">
+              {{ getStockItemDisplay(item) }}
+            </mat-option>
+          }
         </mat-select>
-        <mat-error *ngIf="movementForm.get('itemId')?.hasError('required')">
-          Stock item is required
-        </mat-error>
+        @if (movementForm.get('itemId')?.hasError('required')) {
+          <mat-error> Stock item is required </mat-error>
+        }
       </mat-form-field>
 
       <!-- Display selected item details -->
-      <div class="item-details" *ngIf="selectedItem()">
-        <div class="detail-row">
-          <span class="label">Current Stock:</span>
-          <span class="value"
-            >{{ selectedItem()!.currentStock }} {{ selectedItem()!.unitOfMeasure }}</span
-          >
+      @if (selectedItem()) {
+        <div class="item-details">
+          <div class="detail-row">
+            <span class="label">Current Stock:</span>
+            <span class="value"
+              >{{ selectedItem()!.currentStock }} {{ selectedItem()!.unitOfMeasure }}</span
+            >
+          </div>
+          <div class="detail-row">
+            <span class="label">Allocated:</span>
+            <span class="value"
+              >{{ selectedItem()!.allocatedStock }} {{ selectedItem()!.unitOfMeasure }}</span
+            >
+          </div>
+          <div class="detail-row">
+            <span class="label">Available:</span>
+            <span class="value available">
+              {{ selectedItem()!.currentStock - selectedItem()!.allocatedStock }}
+              {{ selectedItem()!.unitOfMeasure }}
+            </span>
+          </div>
         </div>
-        <div class="detail-row">
-          <span class="label">Allocated:</span>
-          <span class="value"
-            >{{ selectedItem()!.allocatedStock }} {{ selectedItem()!.unitOfMeasure }}</span
-          >
-        </div>
-        <div class="detail-row">
-          <span class="label">Available:</span>
-          <span class="value available">
-            {{ selectedItem()!.currentStock - selectedItem()!.allocatedStock }}
-            {{ selectedItem()!.unitOfMeasure }}
-          </span>
-        </div>
-      </div>
+      }
     </section>
 
     <mat-divider></mat-divider>
@@ -53,27 +57,33 @@
           <mat-label>Movement Type</mat-label>
           <mat-select formControlName="movementType" required>
             <mat-optgroup label="Incoming">
-              <mat-option *ngFor="let type of incomingTypes" [value]="type">
-                <mat-icon>add_circle</mat-icon>
-                {{ movementTypeLabel(type) }}
-              </mat-option>
+              @for (type of incomingTypes; track type) {
+                <mat-option [value]="type">
+                  <mat-icon>add_circle</mat-icon>
+                  {{ movementTypeLabel(type) }}
+                </mat-option>
+              }
             </mat-optgroup>
             <mat-optgroup label="Outgoing">
-              <mat-option *ngFor="let type of outgoingTypes" [value]="type">
-                <mat-icon>remove_circle</mat-icon>
-                {{ movementTypeLabel(type) }}
-              </mat-option>
+              @for (type of outgoingTypes; track type) {
+                <mat-option [value]="type">
+                  <mat-icon>remove_circle</mat-icon>
+                  {{ movementTypeLabel(type) }}
+                </mat-option>
+              }
             </mat-optgroup>
             <mat-optgroup label="Neutral">
-              <mat-option *ngFor="let type of neutralTypes" [value]="type">
-                <mat-icon>swap_horiz</mat-icon>
-                {{ movementTypeLabel(type) }}
-              </mat-option>
+              @for (type of neutralTypes; track type) {
+                <mat-option [value]="type">
+                  <mat-icon>swap_horiz</mat-icon>
+                  {{ movementTypeLabel(type) }}
+                </mat-option>
+              }
             </mat-optgroup>
           </mat-select>
-          <mat-error *ngIf="movementForm.get('movementType')?.hasError('required')">
-            Movement type is required
-          </mat-error>
+          @if (movementForm.get('movementType')?.hasError('required')) {
+            <mat-error> Movement type is required </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -81,9 +91,9 @@
           <input matInput [matDatepicker]="datePicker" formControlName="movementDate" required />
           <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
           <mat-datepicker #datePicker></mat-datepicker>
-          <mat-error *ngIf="movementForm.get('movementDate')?.hasError('required')">
-            Date is required
-          </mat-error>
+          @if (movementForm.get('movementDate')?.hasError('required')) {
+            <mat-error> Date is required </mat-error>
+          }
         </mat-form-field>
       </div>
 
@@ -97,25 +107,27 @@
             (blur)="validateQuantity()"
             required
           />
-          <span matTextSuffix *ngIf="selectedItem()">{{ selectedItem()!.unitOfMeasure }}</span>
-          <mat-error *ngIf="movementForm.get('quantity')?.hasError('required')">
-            Quantity is required
-          </mat-error>
-          <mat-error *ngIf="movementForm.get('quantity')?.hasError('min')">
-            Quantity must be greater than 0
-          </mat-error>
+          @if (selectedItem()) {
+            <span matTextSuffix>{{ selectedItem()!.unitOfMeasure }}</span>
+          }
+          @if (movementForm.get('quantity')?.hasError('required')) {
+            <mat-error> Quantity is required </mat-error>
+          }
+          @if (movementForm.get('quantity')?.hasError('min')) {
+            <mat-error> Quantity must be greater than 0 </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Unit Cost</mat-label>
           <span matTextPrefix>$&nbsp;</span>
           <input matInput type="number" formControlName="unitCost" required />
-          <mat-error *ngIf="movementForm.get('unitCost')?.hasError('required')">
-            Unit cost is required
-          </mat-error>
-          <mat-error *ngIf="movementForm.get('unitCost')?.hasError('min')">
-            Unit cost must be 0 or greater
-          </mat-error>
+          @if (movementForm.get('unitCost')?.hasError('required')) {
+            <mat-error> Unit cost is required </mat-error>
+          }
+          @if (movementForm.get('unitCost')?.hasError('min')) {
+            <mat-error> Unit cost must be 0 or greater </mat-error>
+          }
         </mat-form-field>
 
         <div class="total-cost">
@@ -126,39 +138,46 @@
     </section>
 
     <!-- Project Fields (conditional) -->
-    <section class="form-section" *ngIf="showProjectFields()">
-      <mat-divider></mat-divider>
-      <h3>Project Information</h3>
+    @if (showProjectFields()) {
+      <section class="form-section">
+        <mat-divider></mat-divider>
+        <h3>Project Information</h3>
 
-      <div class="form-row">
-        <mat-form-field
-          appearance="outline"
-          *ngIf="movementForm.get('fromProjectId')?.hasValidators"
-        >
-          <mat-label>From Project</mat-label>
-          <mat-select formControlName="fromProjectId">
-            <mat-option *ngFor="let project of data.projects" [value]="project.id">
-              {{ getProjectDisplay(project) }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="movementForm.get('fromProjectId')?.hasError('required')">
-            Source project is required
-          </mat-error>
-        </mat-form-field>
+        <div class="form-row">
+          @if (movementForm.get('fromProjectId')?.hasValidators) {
+            <mat-form-field appearance="outline">
+              <mat-label>From Project</mat-label>
+              <mat-select formControlName="fromProjectId">
+                @for (project of data.projects; track project.id) {
+                  <mat-option [value]="project.id">
+                    {{ getProjectDisplay(project) }}
+                  </mat-option>
+                }
+              </mat-select>
+              @if (movementForm.get('fromProjectId')?.hasError('required')) {
+                <mat-error> Source project is required </mat-error>
+              }
+            </mat-form-field>
+          }
 
-        <mat-form-field appearance="outline" *ngIf="movementForm.get('toProjectId')?.hasValidators">
-          <mat-label>To Project</mat-label>
-          <mat-select formControlName="toProjectId">
-            <mat-option *ngFor="let project of data.projects" [value]="project.id">
-              {{ getProjectDisplay(project) }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="movementForm.get('toProjectId')?.hasError('required')">
-            Destination project is required
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </section>
+          @if (movementForm.get('toProjectId')?.hasValidators) {
+            <mat-form-field appearance="outline">
+              <mat-label>To Project</mat-label>
+              <mat-select formControlName="toProjectId">
+                @for (project of data.projects; track project.id) {
+                  <mat-option [value]="project.id">
+                    {{ getProjectDisplay(project) }}
+                  </mat-option>
+                }
+              </mat-select>
+              @if (movementForm.get('toProjectId')?.hasError('required')) {
+                <mat-error> Destination project is required </mat-error>
+              }
+            </mat-form-field>
+          }
+        </div>
+      </section>
+    }
 
     <!-- Reference Fields -->
     <section class="form-section">
@@ -170,16 +189,20 @@
           <mat-label>Reference Type</mat-label>
           <mat-select formControlName="referenceType">
             <mat-option value="">None</mat-option>
-            <mat-option *ngFor="let type of referenceTypes" [value]="type">
-              {{ type }}
-            </mat-option>
+            @for (type of referenceTypes; track type) {
+              <mat-option [value]="type">
+                {{ type }}
+              </mat-option>
+            }
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" *ngIf="showReferenceFields()">
-          <mat-label>Reference Number</mat-label>
-          <input matInput formControlName="referenceNumber" />
-        </mat-form-field>
+        @if (showReferenceFields()) {
+          <mat-form-field appearance="outline">
+            <mat-label>Reference Number</mat-label>
+            <input matInput formControlName="referenceNumber" />
+          </mat-form-field>
+        }
       </div>
     </section>
 
@@ -191,9 +214,9 @@
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Reason</mat-label>
         <input matInput formControlName="reason" />
-        <mat-error *ngIf="movementForm.get('reason')?.hasError('required')">
-          Reason is required for this movement type
-        </mat-error>
+        @if (movementForm.get('reason')?.hasError('required')) {
+          <mat-error> Reason is required for this movement type </mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">

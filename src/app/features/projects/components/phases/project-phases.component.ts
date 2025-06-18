@@ -12,6 +12,7 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatBadgeModule } from '@angular/material/badge';
 import { Observable, tap, Subject, switchMap, startWith } from 'rxjs';
+import { Timestamp } from '@angular/fire/firestore';
 import { Phase, PhaseStatus } from '../../../../core/models/phase.model';
 import { PhaseService } from '../../../../core/services/phase.service';
 import { PhaseAssignDialogComponent } from './phase-assign-dialog/phase-assign-dialog.component';
@@ -451,9 +452,20 @@ export class ProjectPhasesComponent implements OnInit {
     }
   }
 
-  formatDate(date: any): string {
+  formatDate(date: Date | Timestamp | string | null | undefined): string {
     if (!date) return '';
-    const d = date?.toDate ? date.toDate() : new Date(date);
+
+    let d: Date;
+    if (date instanceof Timestamp) {
+      d = date.toDate();
+    } else if (typeof date === 'string') {
+      d = new Date(date);
+    } else if (date instanceof Date) {
+      d = date;
+    } else {
+      return '';
+    }
+
     return d.toLocaleDateString();
   }
 

@@ -45,7 +45,7 @@ interface UsageSummary {
     MatChipsModule,
     MatTooltipModule,
     MatMenuModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   template: `
     <div class="materials-used-container">
@@ -80,7 +80,9 @@ interface UsageSummary {
             <div class="summary-item">
               <mat-icon color="accent">attach_money</mat-icon>
               <div class="summary-details">
-                <span class="summary-value">{{ summary.totalCost | currency:'ZAR':'symbol':'1.0-0' }}</span>
+                <span class="summary-value">{{
+                  summary.totalCost | currency: 'ZAR' : 'symbol' : '1.0-0'
+                }}</span>
                 <span class="summary-label">Total Cost</span>
               </div>
             </div>
@@ -113,10 +115,12 @@ interface UsageSummary {
               <div class="wastage-item" *ngFor="let category of wastageByCategory">
                 <div class="category-header">
                   <span class="category-name">{{ category.name }}</span>
-                  <span class="wastage-percent" 
+                  <span
+                    class="wastage-percent"
                     [class.low]="category.percentage < 5"
                     [class.medium]="category.percentage >= 5 && category.percentage < 10"
-                    [class.high]="category.percentage >= 10">
+                    [class.high]="category.percentage >= 10"
+                  >
                     {{ category.percentage }}%
                   </span>
                 </div>
@@ -140,7 +144,9 @@ interface UsageSummary {
                   <div class="progress-bar">
                     <div class="progress-fill" [style.width.%]="phase.percentage"></div>
                   </div>
-                  <span class="phase-value">{{ phase.cost | currency:'ZAR':'symbol':'1.0-0' }}</span>
+                  <span class="phase-value">{{
+                    phase.cost | currency: 'ZAR' : 'symbol' : '1.0-0'
+                  }}</span>
                 </div>
               </div>
             </div>
@@ -159,7 +165,7 @@ interface UsageSummary {
             <ng-container matColumnDef="date">
               <th mat-header-cell *matHeaderCellDef>Date</th>
               <td mat-cell *matCellDef="let material">
-                {{ material.usedDate | date:'MMM d, y' }}
+                {{ material.usedDate | date: 'MMM d, y' }}
               </td>
             </ng-container>
 
@@ -194,10 +200,13 @@ interface UsageSummary {
               <td mat-cell *matCellDef="let material">
                 <div class="wastage-info">
                   <span>{{ material.quantityWasted }} {{ material.unit }}</span>
-                  <mat-chip 
+                  <mat-chip
                     [class.low-wastage]="material.wastagePercentage < 5"
-                    [class.medium-wastage]="material.wastagePercentage >= 5 && material.wastagePercentage < 10"
-                    [class.high-wastage]="material.wastagePercentage >= 10">
+                    [class.medium-wastage]="
+                      material.wastagePercentage >= 5 && material.wastagePercentage < 10
+                    "
+                    [class.high-wastage]="material.wastagePercentage >= 10"
+                  >
                     {{ material.wastagePercentage }}%
                   </mat-chip>
                 </div>
@@ -208,7 +217,7 @@ interface UsageSummary {
             <ng-container matColumnDef="cost">
               <th mat-header-cell *matHeaderCellDef>Total Cost</th>
               <td mat-cell *matCellDef="let material">
-                {{ material.totalCost | currency:'ZAR':'symbol':'1.2-2' }}
+                {{ material.totalCost | currency: 'ZAR' : 'symbol' : '1.2-2' }}
               </td>
             </ng-container>
 
@@ -243,7 +252,7 @@ interface UsageSummary {
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           </table>
 
           <div *ngIf="materials.length === 0" class="no-data">
@@ -254,260 +263,271 @@ interface UsageSummary {
       </mat-card>
     </div>
   `,
-  styles: [`
-    .materials-used-container {
-      padding: 16px;
-    }
-
-    .header-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-
-    .header-section h3 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 500;
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 12px;
-    }
-
-    .summary-card {
-      margin-bottom: 24px;
-    }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 24px;
-    }
-
-    .summary-item {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .summary-item mat-icon {
-      font-size: 40px;
-      width: 40px;
-      height: 40px;
-    }
-
-    .summary-details {
-      flex: 1;
-    }
-
-    .summary-value {
-      display: block;
-      font-size: 24px;
-      font-weight: 500;
-      line-height: 1;
-    }
-
-    .summary-label {
-      display: block;
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.6);
-      margin-top: 4px;
-    }
-
-    .analysis-cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    @media (max-width: 768px) {
-      .analysis-cards {
-        grid-template-columns: 1fr;
+  styles: [
+    `
+      .materials-used-container {
+        padding: 16px;
       }
-    }
 
-    .wastage-stats {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
+      .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
 
-    .wastage-item {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+      .header-section h3 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 500;
+      }
 
-    .category-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+      .header-actions {
+        display: flex;
+        gap: 12px;
+      }
 
-    .category-name {
-      font-weight: 500;
-    }
+      .summary-card {
+        margin-bottom: 24px;
+      }
 
-    .wastage-percent {
-      font-weight: bold;
-    }
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 24px;
+      }
 
-    .wastage-percent.low {
-      color: #4caf50;
-    }
+      .summary-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
 
-    .wastage-percent.medium {
-      color: #ff9800;
-    }
+      .summary-item mat-icon {
+        font-size: 40px;
+        width: 40px;
+        height: 40px;
+      }
 
-    .wastage-percent.high {
-      color: #f44336;
-    }
+      .summary-details {
+        flex: 1;
+      }
 
-    .wastage-bar {
-      height: 8px;
-      background-color: #e0e0e0;
-      border-radius: 4px;
-      overflow: hidden;
-    }
+      .summary-value {
+        display: block;
+        font-size: 24px;
+        font-weight: 500;
+        line-height: 1;
+      }
 
-    .wastage-fill {
-      height: 100%;
-      background-color: #ff9800;
-      transition: width 0.3s ease;
-    }
+      .summary-label {
+        display: block;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.6);
+        margin-top: 4px;
+      }
 
-    .phase-stats {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
+      .analysis-cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
 
-    .phase-item {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+      @media (max-width: 768px) {
+        .analysis-cards {
+          grid-template-columns: 1fr;
+        }
+      }
 
-    .phase-name {
-      font-weight: 500;
-    }
+      .wastage-stats {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
 
-    .phase-progress {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+      .wastage-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
 
-    .progress-bar {
-      flex: 1;
-      height: 8px;
-      background-color: #e0e0e0;
-      border-radius: 4px;
-      overflow: hidden;
-    }
+      .category-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-    .progress-fill {
-      height: 100%;
-      background-color: #2196f3;
-      transition: width 0.3s ease;
-    }
+      .category-name {
+        font-weight: 500;
+      }
 
-    .phase-value {
-      font-size: 12px;
-      font-weight: 500;
-      min-width: 80px;
-      text-align: right;
-    }
+      .wastage-percent {
+        font-weight: bold;
+      }
 
-    .usage-table {
-      width: 100%;
-    }
+      .wastage-percent.low {
+        color: #4caf50;
+      }
 
-    .material-info {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+      .wastage-percent.medium {
+        color: #ff9800;
+      }
 
-    .material-info .category {
-      font-size: 12px;
-      color: rgba(0, 0, 0, 0.6);
-    }
+      .wastage-percent.high {
+        color: #f44336;
+      }
 
-    .wastage-info {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+      .wastage-bar {
+        height: 8px;
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        overflow: hidden;
+      }
 
-    mat-chip {
-      font-size: 11px;
-      height: 20px;
-      padding: 0 8px;
-    }
+      .wastage-fill {
+        height: 100%;
+        background-color: #ff9800;
+        transition: width 0.3s ease;
+      }
 
-    .low-wastage {
-      background-color: #4caf50 !important;
-      color: white !important;
-    }
+      .phase-stats {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
 
-    .medium-wastage {
-      background-color: #ff9800 !important;
-      color: white !important;
-    }
+      .phase-item {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
 
-    .high-wastage {
-      background-color: #f44336 !important;
-      color: white !important;
-    }
+      .phase-name {
+        font-weight: 500;
+      }
 
-    .no-data {
-      text-align: center;
-      padding: 48px;
-      color: rgba(0, 0, 0, 0.4);
-    }
+      .phase-progress {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
 
-    .no-data mat-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
-      margin-bottom: 16px;
-    }
+      .progress-bar {
+        flex: 1;
+        height: 8px;
+        background-color: #e0e0e0;
+        border-radius: 4px;
+        overflow: hidden;
+      }
 
-    .delete-action {
-      color: #f44336;
-    }
-  `]
+      .progress-fill {
+        height: 100%;
+        background-color: #2196f3;
+        transition: width 0.3s ease;
+      }
+
+      .phase-value {
+        font-size: 12px;
+        font-weight: 500;
+        min-width: 80px;
+        text-align: right;
+      }
+
+      .usage-table {
+        width: 100%;
+      }
+
+      .material-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .material-info .category {
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.6);
+      }
+
+      .wastage-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      mat-chip {
+        font-size: 11px;
+        height: 20px;
+        padding: 0 8px;
+      }
+
+      .low-wastage {
+        background-color: #4caf50 !important;
+        color: white !important;
+      }
+
+      .medium-wastage {
+        background-color: #ff9800 !important;
+        color: white !important;
+      }
+
+      .high-wastage {
+        background-color: #f44336 !important;
+        color: white !important;
+      }
+
+      .no-data {
+        text-align: center;
+        padding: 48px;
+        color: rgba(0, 0, 0, 0.4);
+      }
+
+      .no-data mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        margin-bottom: 16px;
+      }
+
+      .delete-action {
+        color: #f44336;
+      }
+    `,
+  ],
 })
 export class MaterialsUsedTabComponent implements OnInit {
   @Input() contractorProject!: ContractorProject;
 
-  displayedColumns: string[] = ['date', 'material', 'phase', 'quantity', 'wastage', 'cost', 'usedBy', 'actions'];
+  displayedColumns: string[] = [
+    'date',
+    'material',
+    'phase',
+    'quantity',
+    'wastage',
+    'cost',
+    'usedBy',
+    'actions',
+  ];
   materials: MaterialUsage[] = [];
-  
+
   summary: UsageSummary = {
     totalMaterialsUsed: 0,
     totalCost: 0,
     averageWastage: 0,
-    mostUsedCategory: 'Cables'
+    mostUsedCategory: 'Cables',
   };
 
   wastageByCategory = [
     { name: 'Cables', percentage: 3.5 },
     { name: 'Accessories', percentage: 8.2 },
     { name: 'Infrastructure', percentage: 12.5 },
-    { name: 'Tools', percentage: 2.1 }
+    { name: 'Tools', percentage: 2.1 },
   ];
 
   phaseUsage = [
     { name: 'Phase 1 - Preparation', cost: 25000, percentage: 20 },
     { name: 'Phase 2 - Installation', cost: 75000, percentage: 60 },
-    { name: 'Phase 3 - Termination', cost: 25000, percentage: 20 }
+    { name: 'Phase 3 - Termination', cost: 25000, percentage: 20 },
   ];
 
   ngOnInit(): void {
@@ -531,7 +551,7 @@ export class MaterialsUsedTabComponent implements OnInit {
         costPerUnit: 150,
         totalCost: 127500,
         wastagePercentage: 3.5,
-        notes: 'Used for main trunk installation'
+        notes: 'Used for main trunk installation',
       },
       {
         id: '2',
@@ -545,7 +565,7 @@ export class MaterialsUsedTabComponent implements OnInit {
         usedBy: 'Team B - Jane Doe',
         costPerUnit: 850,
         totalCost: 38250,
-        wastagePercentage: 11.1
+        wastagePercentage: 11.1,
       },
       {
         id: '3',
@@ -559,8 +579,8 @@ export class MaterialsUsedTabComponent implements OnInit {
         usedBy: 'Team A - John Smith',
         costPerUnit: 5,
         totalCost: 2250,
-        wastagePercentage: 4.4
-      }
+        wastagePercentage: 4.4,
+      },
     ];
 
     this.calculateSummary();
@@ -569,7 +589,7 @@ export class MaterialsUsedTabComponent implements OnInit {
   calculateSummary(): void {
     this.summary.totalMaterialsUsed = this.materials.length;
     this.summary.totalCost = this.materials.reduce((sum, m) => sum + m.totalCost, 0);
-    
+
     const totalWastage = this.materials.reduce((sum, m) => sum + m.wastagePercentage, 0);
     this.summary.averageWastage = Math.round((totalWastage / this.materials.length) * 10) / 10;
   }

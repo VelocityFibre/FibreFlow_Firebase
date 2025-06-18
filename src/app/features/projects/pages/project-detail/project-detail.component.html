@@ -1,139 +1,143 @@
-<div class="ff-page-container" *ngIf="project$ | async as project">
-  <!-- Header -->
-  <div class="project-header">
-    <div class="header-top">
-      <button mat-icon-button routerLink="/projects" class="back-button">
-        <mat-icon>arrow_back</mat-icon>
-      </button>
-      <div class="header-info">
-        <h1 class="project-title">{{ project.name }}</h1>
-        <p class="project-code">{{ project.projectCode }}</p>
-      </div>
-      <div class="header-actions">
-        <mat-chip [ngClass]="'status-' + project.status">
-          {{ getStatusLabel(project.status) }}
-        </mat-chip>
-        <button mat-button (click)="editProject(project.id!)" [disabled]="!project.id">
-          <mat-icon>edit</mat-icon>
-          Edit
+@if (project$ | async; as project) {
+  <div class="ff-page-container">
+    <!-- Header -->
+    <div class="project-header">
+      <div class="header-top">
+        <button mat-icon-button routerLink="/projects" class="back-button">
+          <mat-icon>arrow_back</mat-icon>
         </button>
-        <button mat-icon-button [matMenuTriggerFor]="menu">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="editProject(project.id!)" [disabled]="!project.id">
+        <div class="header-info">
+          <h1 class="project-title">{{ project.name }}</h1>
+          <p class="project-code">{{ project.projectCode }}</p>
+        </div>
+        <div class="header-actions">
+          <mat-chip [ngClass]="'status-' + project.status">
+            {{ getStatusLabel(project.status) }}
+          </mat-chip>
+          <button mat-button (click)="editProject(project.id!)" [disabled]="!project.id">
             <mat-icon>edit</mat-icon>
-            <span>Edit Project</span>
+            Edit
           </button>
-          <button
-            mat-menu-item
-            (click)="deleteProject(project.id!)"
-            [disabled]="!project.id"
-            class="delete-option"
-          >
-            <mat-icon>delete</mat-icon>
-            <span>Delete Project</span>
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
           </button>
-        </mat-menu>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="editProject(project.id!)" [disabled]="!project.id">
+              <mat-icon>edit</mat-icon>
+              <span>Edit Project</span>
+            </button>
+            <button
+              mat-menu-item
+              (click)="deleteProject(project.id!)"
+              [disabled]="!project.id"
+              class="delete-option"
+            >
+              <mat-icon>delete</mat-icon>
+              <span>Delete Project</span>
+            </button>
+          </mat-menu>
+        </div>
       </div>
     </div>
+
+    <!-- Key Metrics Cards -->
+    <div class="metrics-grid">
+      <mat-card class="metric-card ff-card-projects">
+        <mat-card-content>
+          <div class="metric-icon overall-progress">
+            <mat-icon>donut_large</mat-icon>
+          </div>
+          <div class="metric-info">
+            <div class="metric-value">{{ project.overallProgress }}%</div>
+            <div class="metric-label">Overall Progress</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="metric-card ff-card-projects">
+        <mat-card-content>
+          <div class="metric-icon budget">
+            <mat-icon>attach_money</mat-icon>
+          </div>
+          <div class="metric-info">
+            <div class="metric-value">{{ 'R' + (project.budgetUsed | number: '1.0-0') }}</div>
+            <div class="metric-label">Budget Used ({{ getBudgetPercentage(project) }}%)</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="metric-card ff-card-projects">
+        <mat-card-content>
+          <div class="metric-icon tasks">
+            <mat-icon>assignment</mat-icon>
+          </div>
+          <div class="metric-info">
+            <div class="metric-value">{{ project.activeTasksCount }}</div>
+            <div class="metric-label">Active Tasks</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="metric-card ff-card-projects">
+        <mat-card-content>
+          <div class="metric-icon phase">
+            <mat-icon>flag</mat-icon>
+          </div>
+          <div class="metric-info">
+            <div class="metric-value">{{ project.currentPhaseName }}</div>
+            <div class="metric-label">Current Phase ({{ project.currentPhaseProgress }}%)</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Tabs -->
+    <mat-tab-group class="content-tabs">
+      <!-- Overview Tab -->
+      <mat-tab label="Overview">
+        <ng-container *ngTemplateOutlet="overviewTab; context: { project: project }"></ng-container>
+      </mat-tab>
+
+      <!-- Phases Tab -->
+      <mat-tab label="Phases">
+        <ng-container *ngTemplateOutlet="phasesTab"></ng-container>
+      </mat-tab>
+
+      <!-- Steps Tab -->
+      <mat-tab label="Steps">
+        <div class="tab-content">
+          <app-project-steps [projectId]="project.id!"></app-project-steps>
+        </div>
+      </mat-tab>
+
+      <!-- Tasks Tab -->
+      <mat-tab label="Tasks">
+        <ng-container *ngTemplateOutlet="tasksTab; context: { project: project }"></ng-container>
+      </mat-tab>
+
+      <!-- Stock Tab -->
+      <mat-tab label="Stock">
+        <div class="tab-content">
+          <app-project-stock [projectId]="project.id!"></app-project-stock>
+        </div>
+      </mat-tab>
+
+      <!-- Contractors Tab -->
+      <mat-tab label="Contractors">
+        <div class="tab-content">
+          <app-project-contractors [projectId]="project.id!"></app-project-contractors>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
   </div>
-
-  <!-- Key Metrics Cards -->
-  <div class="metrics-grid">
-    <mat-card class="metric-card ff-card-projects">
-      <mat-card-content>
-        <div class="metric-icon overall-progress">
-          <mat-icon>donut_large</mat-icon>
-        </div>
-        <div class="metric-info">
-          <div class="metric-value">{{ project.overallProgress }}%</div>
-          <div class="metric-label">Overall Progress</div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="metric-card ff-card-projects">
-      <mat-card-content>
-        <div class="metric-icon budget">
-          <mat-icon>attach_money</mat-icon>
-        </div>
-        <div class="metric-info">
-          <div class="metric-value">{{ 'R' + (project.budgetUsed | number: '1.0-0') }}</div>
-          <div class="metric-label">Budget Used ({{ getBudgetPercentage(project) }}%)</div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="metric-card ff-card-projects">
-      <mat-card-content>
-        <div class="metric-icon tasks">
-          <mat-icon>assignment</mat-icon>
-        </div>
-        <div class="metric-info">
-          <div class="metric-value">{{ project.activeTasksCount }}</div>
-          <div class="metric-label">Active Tasks</div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="metric-card ff-card-projects">
-      <mat-card-content>
-        <div class="metric-icon phase">
-          <mat-icon>flag</mat-icon>
-        </div>
-        <div class="metric-info">
-          <div class="metric-value">{{ project.currentPhaseName }}</div>
-          <div class="metric-label">Current Phase ({{ project.currentPhaseProgress }}%)</div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-
-  <!-- Tabs -->
-  <mat-tab-group class="content-tabs">
-    <!-- Overview Tab -->
-    <mat-tab label="Overview">
-      <ng-container *ngTemplateOutlet="overviewTab; context: { project: project }"></ng-container>
-    </mat-tab>
-
-    <!-- Phases Tab -->
-    <mat-tab label="Phases">
-      <ng-container *ngTemplateOutlet="phasesTab"></ng-container>
-    </mat-tab>
-
-    <!-- Steps Tab -->
-    <mat-tab label="Steps">
-      <div class="tab-content">
-        <app-project-steps [projectId]="project.id!"></app-project-steps>
-      </div>
-    </mat-tab>
-
-    <!-- Tasks Tab -->
-    <mat-tab label="Tasks">
-      <ng-container *ngTemplateOutlet="tasksTab; context: { project: project }"></ng-container>
-    </mat-tab>
-
-    <!-- Stock Tab -->
-    <mat-tab label="Stock">
-      <div class="tab-content">
-        <app-project-stock [projectId]="project.id!"></app-project-stock>
-      </div>
-    </mat-tab>
-
-    <!-- Contractors Tab -->
-    <mat-tab label="Contractors">
-      <div class="tab-content">
-        <app-project-contractors [projectId]="project.id!"></app-project-contractors>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
-</div>
+}
 
 <!-- Loading State -->
-<div class="loading-container" *ngIf="(project$ | async) === null">
-  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-</div>
+@if ((project$ | async) === null) {
+  <div class="loading-container">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+}
 
 <!-- Overview Tab Template -->
 <ng-template #overviewTab let-project="project">
@@ -265,10 +269,14 @@
             </div>
             <div class="boq-info">
               <p class="boq-description">Manage Bill of Quantities for this project</p>
-              <div class="boq-stats" *ngIf="boqSummary$ | async as boqSummary">
-                <span class="stat-item">{{ boqSummary.totalItems }} Items</span>
-                <span class="stat-item">R{{ boqSummary.totalValue | number: '1.0-0' }} Total</span>
-              </div>
+              @if (boqSummary$ | async; as boqSummary) {
+                <div class="boq-stats">
+                  <span class="stat-item">{{ boqSummary.totalItems }} Items</span>
+                  <span class="stat-item"
+                    >R{{ boqSummary.totalValue | number: '1.0-0' }} Total</span
+                  >
+                </div>
+              }
             </div>
             <mat-icon class="navigate-icon">arrow_forward</mat-icon>
           </div>
@@ -280,150 +288,183 @@
 
 <!-- Phases Tab Template -->
 <ng-template #phasesTab>
-  <div class="tab-content" *ngIf="phasesWithTasks$ | async as phasesWithTasks">
-    <div class="phases-tasks-container">
-      <div class="phases-header">
-        <h2>Project Phases & Tasks</h2>
-        <div class="header-actions">
-          <button
-            mat-button
-            *ngIf="phasesWithTasks.length > 0 && getTotalTaskCount(phasesWithTasks) === 0"
-            (click)="initializeTasks()"
-          >
-            <mat-icon>auto_awesome</mat-icon>
-            Initialize Default Tasks
-          </button>
-          <button mat-raised-button color="primary" (click)="addTask()">
-            <mat-icon>add</mat-icon>
-            Add Task
-          </button>
-        </div>
-      </div>
-
-      <div *ngIf="phasesWithTasks.length === 0" class="empty-state">
-        <mat-icon>view_list</mat-icon>
-        <p>No phases created for this project</p>
-        <button mat-raised-button color="primary" (click)="initializePhases()">
-          <mat-icon>add_circle</mat-icon>
-          Initialize Default Phases
-        </button>
-      </div>
-
-      <mat-accordion *ngIf="phasesWithTasks.length > 0" multi>
-        <mat-expansion-panel
-          *ngFor="let phaseData of phasesWithTasks; trackBy: trackByPhaseFn"
-          [expanded]="true"
-        >
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <div class="phase-header-content">
-                <span class="phase-name">{{ phaseData.phase.name }}</span>
-                <button
-                  mat-raised-button
-                  [ngClass]="'phase-status-button status-' + phaseData.phase.status"
-                  [matMenuTriggerFor]="phaseStatusMenu"
-                  (click)="$event.stopPropagation()"
-                >
-                  {{ getPhaseStatusLabel(phaseData.phase.status) }}
-                  <mat-icon>arrow_drop_down</mat-icon>
-                </button>
-                <mat-menu #phaseStatusMenu="matMenu">
-                  <button mat-menu-item (click)="updatePhaseStatus(phaseData.phase, 'pending')">
-                    <mat-icon>schedule</mat-icon>
-                    <span>Pending</span>
-                  </button>
-                  <button mat-menu-item (click)="updatePhaseStatus(phaseData.phase, 'active')">
-                    <mat-icon>play_arrow</mat-icon>
-                    <span>Active</span>
-                  </button>
-                  <button mat-menu-item (click)="updatePhaseStatus(phaseData.phase, 'completed')">
-                    <mat-icon>check_circle</mat-icon>
-                    <span>Completed</span>
-                  </button>
-                  <button mat-menu-item (click)="updatePhaseStatus(phaseData.phase, 'blocked')">
-                    <mat-icon>block</mat-icon>
-                    <span>Blocked</span>
-                  </button>
-                </mat-menu>
-              </div>
-            </mat-panel-title>
-            <mat-panel-description>
-              <span class="task-count">{{ phaseData.tasks.length }} tasks</span>
-              <span class="phase-progress" *ngIf="phaseData.tasks.length > 0">
-                {{ getPhaseProgress(phaseData.tasks) }}% complete
-              </span>
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-
-          <div class="phase-tasks">
-            <div
-              *ngIf="phaseData.phase.status === 'blocked' && phaseData.phase.blockedReason"
-              class="phase-blocked-reason"
-            >
-              <mat-icon>warning</mat-icon>
-              <span><strong>Blocked:</strong> {{ phaseData.phase.blockedReason }}</span>
-            </div>
-            <div *ngIf="phaseData.tasks.length === 0" class="no-tasks">
-              <p>No tasks in this phase</p>
-              <button mat-button color="primary" (click)="addTaskToPhase(phaseData.phase.id!)">
-                Add Task
+  @if (phasesWithTasks$ | async; as phasesWithTasks) {
+    <div class="tab-content">
+      <div class="phases-tasks-container">
+        <div class="phases-header">
+          <h2>Project Phases & Tasks</h2>
+          <div class="header-actions">
+            @if (phasesWithTasks.length > 0 && getTotalTaskCount(phasesWithTasks) === 0) {
+              <button mat-button (click)="initializeTasks()">
+                <mat-icon>auto_awesome</mat-icon>
+                Initialize Default Tasks
               </button>
-            </div>
-
-            <div *ngIf="phaseData.tasks.length > 0" class="task-list">
-              <div
-                *ngFor="let task of phaseData.tasks; trackBy: trackByTaskFn"
-                class="task-item"
-                (click)="viewTask(task)"
-              >
-                <div class="task-status-indicator" [class]="'status-' + task.status"></div>
-
-                <div class="task-main">
-                  <div class="task-header-row">
-                    <h4 class="task-name">{{ task.name }}</h4>
-                    <mat-chip [class]="'priority-' + task.priority">
-                      {{ task.priority }}
-                    </mat-chip>
-                  </div>
-
-                  <div class="task-meta">
-                    <div class="meta-item" *ngIf="task.assignedToName">
-                      <mat-icon>person</mat-icon>
-                      <span>{{ task.assignedToName }}</span>
-                    </div>
-                    <div class="meta-item" *ngIf="task.dueDate">
-                      <mat-icon>event</mat-icon>
-                      <span>Due {{ formatDate(task.dueDate) }}</span>
-                    </div>
-                    <div class="meta-item">
-                      <mat-icon>donut_small</mat-icon>
-                      <span>{{ task.completionPercentage }}%</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="task-actions" (click)="$event.stopPropagation()">
-                  <button mat-icon-button [matMenuTriggerFor]="taskMenu">
-                    <mat-icon>more_vert</mat-icon>
-                  </button>
-                  <mat-menu #taskMenu="matMenu">
-                    <button mat-menu-item (click)="editTask(task)">
-                      <mat-icon>edit</mat-icon>
-                      <span>Edit Task</span>
-                    </button>
-                    <button mat-menu-item (click)="deleteTask(task)" class="delete-option">
-                      <mat-icon>delete</mat-icon>
-                      <span>Delete Task</span>
-                    </button>
-                  </mat-menu>
-                </div>
-              </div>
-            </div>
+            }
+            <button mat-raised-button color="primary" (click)="addTask()">
+              <mat-icon>add</mat-icon>
+              Add Task
+            </button>
           </div>
-        </mat-expansion-panel>
-      </mat-accordion>
+        </div>
+
+        @if (phasesWithTasks.length === 0) {
+          <div class="empty-state">
+            <mat-icon>view_list</mat-icon>
+            <p>No phases created for this project</p>
+            <button mat-raised-button color="primary" (click)="initializePhases()">
+              <mat-icon>add_circle</mat-icon>
+              Initialize Default Phases
+            </button>
+          </div>
+        }
+
+        @if (phasesWithTasks.length > 0) {
+          <mat-accordion multi>
+            @for (phaseData of phasesWithTasks; track trackByPhaseFn($index, phaseData)) {
+              <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <div class="phase-header-content">
+                      <span class="phase-name">{{ phaseData.phase.name }}</span>
+                      <button
+                        mat-raised-button
+                        [ngClass]="'phase-status-button status-' + phaseData.phase.status"
+                        [matMenuTriggerFor]="phaseStatusMenu"
+                        (click)="$event.stopPropagation()"
+                      >
+                        {{ getPhaseStatusLabel(phaseData.phase.status) }}
+                        <mat-icon>arrow_drop_down</mat-icon>
+                      </button>
+                      <mat-menu #phaseStatusMenu="matMenu">
+                        <button
+                          mat-menu-item
+                          (click)="updatePhaseStatus(phaseData.phase, 'pending')"
+                        >
+                          <mat-icon>schedule</mat-icon>
+                          <span>Pending</span>
+                        </button>
+                        <button
+                          mat-menu-item
+                          (click)="updatePhaseStatus(phaseData.phase, 'active')"
+                        >
+                          <mat-icon>play_arrow</mat-icon>
+                          <span>Active</span>
+                        </button>
+                        <button
+                          mat-menu-item
+                          (click)="updatePhaseStatus(phaseData.phase, 'completed')"
+                        >
+                          <mat-icon>check_circle</mat-icon>
+                          <span>Completed</span>
+                        </button>
+                        <button
+                          mat-menu-item
+                          (click)="updatePhaseStatus(phaseData.phase, 'blocked')"
+                        >
+                          <mat-icon>block</mat-icon>
+                          <span>Blocked</span>
+                        </button>
+                      </mat-menu>
+                    </div>
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    <span class="task-count">{{ phaseData.tasks.length }} tasks</span>
+                    @if (phaseData.tasks.length > 0) {
+                      <span class="phase-progress">
+                        {{ getPhaseProgress(phaseData.tasks) }}% complete
+                      </span>
+                    }
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="phase-tasks">
+                  @if (phaseData.phase.status === 'blocked' && phaseData.phase.blockedReason) {
+                    <div class="phase-blocked-reason">
+                      <mat-icon>warning</mat-icon>
+                      <span><strong>Blocked:</strong> {{ phaseData.phase.blockedReason }}</span>
+                    </div>
+                  }
+                  @if (phaseData.tasks.length === 0) {
+                    <div class="no-tasks">
+                      <p>No tasks in this phase</p>
+                      <button
+                        mat-button
+                        color="primary"
+                        (click)="addTaskToPhase(phaseData.phase.id!)"
+                      >
+                        Add Task
+                      </button>
+                    </div>
+                  }
+
+                  @if (phaseData.tasks.length > 0) {
+                    <div class="task-list">
+                      @for (task of phaseData.tasks; track trackByTaskFn($index, task)) {
+                        <div class="task-item" (click)="viewTask(task)">
+                          <div
+                            class="task-status-indicator"
+                            [class]="'status-' + task.status"
+                          ></div>
+
+                          <div class="task-main">
+                            <div class="task-header-row">
+                              <h4 class="task-name">{{ task.name }}</h4>
+                              <mat-chip [class]="'priority-' + task.priority">
+                                {{ task.priority }}
+                              </mat-chip>
+                            </div>
+
+                            <div class="task-meta">
+                              @if (task.assignedToName) {
+                                <div class="meta-item">
+                                  <mat-icon>person</mat-icon>
+                                  <span>{{ task.assignedToName }}</span>
+                                </div>
+                              }
+                              @if (task.dueDate) {
+                                <div class="meta-item">
+                                  <mat-icon>event</mat-icon>
+                                  <span>Due {{ formatDate(task.dueDate) }}</span>
+                                </div>
+                              }
+                              <div class="meta-item">
+                                <mat-icon>donut_small</mat-icon>
+                                <span>{{ task.completionPercentage }}%</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="task-actions" (click)="$event.stopPropagation()">
+                            <button mat-icon-button [matMenuTriggerFor]="taskMenu">
+                              <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #taskMenu="matMenu">
+                              <button mat-menu-item (click)="editTask(task)">
+                                <mat-icon>edit</mat-icon>
+                                <span>Edit Task</span>
+                              </button>
+                              <button
+                                mat-menu-item
+                                (click)="deleteTask(task)"
+                                class="delete-option"
+                              >
+                                <mat-icon>delete</mat-icon>
+                                <span>Delete Task</span>
+                              </button>
+                            </mat-menu>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              </mat-expansion-panel>
+            }
+          </mat-accordion>
+        }
+      </div>
     </div>
-  </div>
+  }
 </ng-template>
 
 <!-- Tasks Tab Template -->

@@ -50,16 +50,19 @@ interface ContractorProjectDetail {
     MaterialsNeededTabComponent,
     MaterialsUsedTabComponent,
     PaymentRequestedTabComponent,
-    PaymentMadeTabComponent
+    PaymentMadeTabComponent,
   ],
   template: `
-    <div class="contractor-project-detail-container" *ngIf="contractorProjectDetail$ | async as detail">
+    <div
+      class="contractor-project-detail-container"
+      *ngIf="contractorProjectDetail$ | async as detail"
+    >
       <!-- Header -->
       <div class="detail-header">
         <button mat-icon-button (click)="goBack()" class="back-button">
           <mat-icon>arrow_back</mat-icon>
         </button>
-        
+
         <div class="header-info">
           <h1>{{ detail.contractor?.companyName }} - {{ detail.project?.name }}</h1>
           <div class="header-meta">
@@ -129,8 +132,12 @@ interface ContractorProjectDetail {
               <mat-icon>payments</mat-icon>
             </div>
             <div class="metric-info">
-              <div class="metric-value">R{{ (detail.contractorProject.totalPaymentMade / 1000).toFixed(0) }}K</div>
-              <div class="metric-label">Paid ({{ getPaymentPercentage(detail.contractorProject) }}%)</div>
+              <div class="metric-value">
+                R{{ (detail.contractorProject.totalPaymentMade / 1000).toFixed(0) }}K
+              </div>
+              <div class="metric-label">
+                Paid ({{ getPaymentPercentage(detail.contractorProject) }}%)
+              </div>
             </div>
           </mat-card-content>
         </mat-card>
@@ -141,7 +148,9 @@ interface ContractorProjectDetail {
               <mat-icon>star</mat-icon>
             </div>
             <div class="metric-info">
-              <div class="metric-value">{{ detail.contractorProject.performance.overallRating.toFixed(1) }}</div>
+              <div class="metric-value">
+                {{ detail.contractorProject.performance.overallRating.toFixed(1) }}
+              </div>
               <div class="metric-label">Performance Rating</div>
             </div>
           </mat-card-content>
@@ -157,11 +166,15 @@ interface ContractorProjectDetail {
           <div class="summary-grid">
             <div class="summary-item">
               <span class="label">Contract Value</span>
-              <span class="value">R{{ (detail.contractorProject.contractValue / 1000000).toFixed(2) }}M</span>
+              <span class="value"
+                >R{{ (detail.contractorProject.contractValue / 1000000).toFixed(2) }}M</span
+              >
             </div>
             <div class="summary-item">
               <span class="label">Start Date</span>
-              <span class="value">{{ formatDate(detail.contractorProject.expectedStartDate) }}</span>
+              <span class="value">{{
+                formatDate(detail.contractorProject.expectedStartDate)
+              }}</span>
             </div>
             <div class="summary-item">
               <span class="label">End Date</span>
@@ -169,7 +182,11 @@ interface ContractorProjectDetail {
             </div>
             <div class="summary-item">
               <span class="label">Retention</span>
-              <span class="value">{{ detail.contractorProject.retentionPercentage }}% (R{{ (detail.contractorProject.retentionAmount / 1000).toFixed(0) }}K)</span>
+              <span class="value"
+                >{{ detail.contractorProject.retentionPercentage }}% (R{{
+                  (detail.contractorProject.retentionAmount / 1000).toFixed(0)
+                }}K)</span
+              >
             </div>
           </div>
 
@@ -187,37 +204,37 @@ interface ContractorProjectDetail {
       <!-- Tabs -->
       <mat-tab-group class="content-tabs">
         <mat-tab label="Team Allocation">
-          <app-team-allocation-tab 
+          <app-team-allocation-tab
             [contractorProject]="detail.contractorProject"
           ></app-team-allocation-tab>
         </mat-tab>
 
         <mat-tab label="Work Progress">
-          <app-work-progress-tab 
+          <app-work-progress-tab
             [contractorProject]="detail.contractorProject"
           ></app-work-progress-tab>
         </mat-tab>
 
         <mat-tab label="Materials Needed">
-          <app-materials-needed-tab 
+          <app-materials-needed-tab
             [contractorProject]="detail.contractorProject"
           ></app-materials-needed-tab>
         </mat-tab>
 
         <mat-tab label="Materials Used">
-          <app-materials-used-tab 
+          <app-materials-used-tab
             [contractorProject]="detail.contractorProject"
           ></app-materials-used-tab>
         </mat-tab>
 
         <mat-tab label="Payment Requested">
-          <app-payment-requested-tab 
+          <app-payment-requested-tab
             [contractorProject]="detail.contractorProject"
           ></app-payment-requested-tab>
         </mat-tab>
 
         <mat-tab label="Payment Made">
-          <app-payment-made-tab 
+          <app-payment-made-tab
             [contractorProject]="detail.contractorProject"
           ></app-payment-made-tab>
         </mat-tab>
@@ -229,217 +246,219 @@ interface ContractorProjectDetail {
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </div>
   `,
-  styles: [`
-    .contractor-project-detail-container {
-      padding: 24px;
-      max-width: 1600px;
-      margin: 0 auto;
-    }
-
-    .detail-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .back-button {
-      flex-shrink: 0;
-    }
-
-    .header-info {
-      flex: 1;
-    }
-
-    .header-info h1 {
-      margin: 0;
-      font-size: 28px;
-      font-weight: 500;
-    }
-
-    .header-meta {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-top: 8px;
-      font-size: 14px;
-      color: #666;
-    }
-
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .metric-card {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .metric-card mat-card-content {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 24px;
-    }
-
-    .metric-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .metric-icon mat-icon {
-      font-size: 32px;
-      width: 32px;
-      height: 32px;
-      color: white;
-    }
-
-    .metric-icon.progress {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
-
-    .metric-icon.teams {
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    }
-
-    .metric-icon.payment {
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    }
-
-    .metric-icon.performance {
-      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-    }
-
-    .metric-info {
-      flex: 1;
-    }
-
-    .metric-value {
-      font-size: 28px;
-      font-weight: 600;
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-
-    .metric-label {
-      font-size: 14px;
-      color: #666;
-    }
-
-    .contract-summary {
-      margin-bottom: 24px;
-    }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 24px;
-      margin-bottom: 24px;
-    }
-
-    .summary-item {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .summary-item .label {
-      font-size: 12px;
-      color: #666;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .summary-item .value {
-      font-size: 16px;
-      font-weight: 500;
-    }
-
-    .scope-section {
-      margin-top: 24px;
-    }
-
-    .scope-section h4 {
-      margin: 0 0 12px 0;
-      font-size: 16px;
-      font-weight: 500;
-    }
-
-    .scope-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .content-tabs {
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .content-tabs ::ng-deep .mat-tab-body-wrapper {
-      min-height: 400px;
-    }
-
-    .loading-container {
-      padding: 40px;
-    }
-
-    .danger-item {
-      color: #dc3545;
-    }
-
-    mat-chip {
-      font-size: 12px;
-    }
-
-    .status-pending {
-      background-color: #fff3cd !important;
-      color: #856404 !important;
-    }
-
-    .status-active {
-      background-color: #d4edda !important;
-      color: #155724 !important;
-    }
-
-    .status-on_hold {
-      background-color: #f8d7da !important;
-      color: #721c24 !important;
-    }
-
-    .status-completed {
-      background-color: #cce5ff !important;
-      color: #004085 !important;
-    }
-
-    .status-terminated {
-      background-color: #d1d1d1 !important;
-      color: #333 !important;
-    }
-
-    @media (max-width: 768px) {
-      .metrics-grid {
-        grid-template-columns: 1fr;
+  styles: [
+    `
+      .contractor-project-detail-container {
+        padding: 24px;
+        max-width: 1600px;
+        margin: 0 auto;
       }
 
       .detail-header {
-        flex-wrap: wrap;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .back-button {
+        flex-shrink: 0;
+      }
+
+      .header-info {
+        flex: 1;
       }
 
       .header-info h1 {
-        font-size: 20px;
+        margin: 0;
+        font-size: 28px;
+        font-weight: 500;
       }
-    }
-  `]
+
+      .header-meta {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-top: 8px;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .metric-card {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .metric-card mat-card-content {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 24px;
+      }
+
+      .metric-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .metric-icon mat-icon {
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+        color: white;
+      }
+
+      .metric-icon.progress {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .metric-icon.teams {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      }
+
+      .metric-icon.payment {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      }
+
+      .metric-icon.performance {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      }
+
+      .metric-info {
+        flex: 1;
+      }
+
+      .metric-value {
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 1;
+        margin-bottom: 4px;
+      }
+
+      .metric-label {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .contract-summary {
+        margin-bottom: 24px;
+      }
+
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+
+      .summary-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .summary-item .label {
+        font-size: 12px;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .summary-item .value {
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .scope-section {
+        margin-top: 24px;
+      }
+
+      .scope-section h4 {
+        margin: 0 0 12px 0;
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .scope-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .content-tabs {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .content-tabs ::ng-deep .mat-tab-body-wrapper {
+        min-height: 400px;
+      }
+
+      .loading-container {
+        padding: 40px;
+      }
+
+      .danger-item {
+        color: #dc3545;
+      }
+
+      mat-chip {
+        font-size: 12px;
+      }
+
+      .status-pending {
+        background-color: #fff3cd !important;
+        color: #856404 !important;
+      }
+
+      .status-active {
+        background-color: #d4edda !important;
+        color: #155724 !important;
+      }
+
+      .status-on_hold {
+        background-color: #f8d7da !important;
+        color: #721c24 !important;
+      }
+
+      .status-completed {
+        background-color: #cce5ff !important;
+        color: #004085 !important;
+      }
+
+      .status-terminated {
+        background-color: #d1d1d1 !important;
+        color: #333 !important;
+      }
+
+      @media (max-width: 768px) {
+        .metrics-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .detail-header {
+          flex-wrap: wrap;
+        }
+
+        .header-info h1 {
+          font-size: 20px;
+        }
+      }
+    `,
+  ],
 })
 export class ContractorProjectDetailPageComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -451,33 +470,33 @@ export class ContractorProjectDetailPageComponent implements OnInit {
   contractorProjectDetail$!: Observable<ContractorProjectDetail>;
 
   ngOnInit() {
-    this.contractorProjectDetail$ = this.route.params.pipe(
-      switchMap(params => {
-        const contractorId = params['contractorId'];
-        const projectId = params['projectId'];
-        
+    this.contractorProjectDetail$ = this.route.paramMap.pipe(
+      switchMap((params) => {
+        const contractorId = params.get('contractorId') || '';
+        const projectId = params.get('projectId') || '';
+
         // Find the contractor-project relationship
         return this.contractorProjectService.getContractorProjectsByContractor(contractorId).pipe(
-          map(contractorProjects => contractorProjects.find(cp => cp.projectId === projectId)),
-          switchMap(contractorProject => {
+          map((contractorProjects) => contractorProjects.find((cp) => cp.projectId === projectId)),
+          switchMap((contractorProject) => {
             if (!contractorProject) {
               throw new Error('Contractor project relationship not found');
             }
-            
+
             // Load contractor and project details
             return combineLatest({
               contractor: this.contractorService.getContractor(contractorId),
-              project: this.projectService.getProject(projectId)
+              project: this.projectService.getProject(projectId),
             }).pipe(
               map(({ contractor, project }) => ({
                 contractorProject,
                 contractor,
-                project
-              }))
+                project,
+              })),
             );
-          })
+          }),
         );
-      })
+      }),
     );
   }
 
@@ -486,7 +505,7 @@ export class ContractorProjectDetailPageComponent implements OnInit {
   }
 
   formatStatus(status: string): string {
-    return status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    return status.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
   }
 
   formatDate(date: any): string {
@@ -496,7 +515,7 @@ export class ContractorProjectDetailPageComponent implements OnInit {
   }
 
   getActiveTeamsCount(contractorProject: ContractorProject): number {
-    return contractorProject.allocatedTeams?.filter(team => team.isActive).length || 0;
+    return contractorProject.allocatedTeams?.filter((team) => team.isActive).length || 0;
   }
 
   getPaymentPercentage(contractorProject: ContractorProject): number {

@@ -28,90 +28,98 @@
   </mat-card>
 
   <!-- Current User Info -->
-  <mat-card class="user-card" *ngIf="currentUser">
-    <mat-card-header>
-      <mat-card-title>Current User</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <pre>{{ currentUser | json }}</pre>
-    </mat-card-content>
-  </mat-card>
+  @if (currentUser) {
+    <mat-card class="user-card">
+      <mat-card-header>
+        <mat-card-title>Current User</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <pre>{{ currentUser | json }}</pre>
+      </mat-card-content>
+    </mat-card>
+  }
 
   <!-- User Profile -->
-  <mat-card class="profile-card" *ngIf="currentProfile">
-    <mat-card-header>
-      <mat-card-title>User Profile</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="profile-info">
-        <p><strong>Email:</strong> {{ currentProfile.email }}</p>
-        <p><strong>Display Name:</strong> {{ currentProfile.displayName }}</p>
-        <p>
-          <strong>User Group:</strong>
-          <mat-chip color="accent" selected>{{ currentProfile.userGroup }}</mat-chip>
-        </p>
-        <p><strong>Active:</strong> {{ currentProfile.isActive ? 'Yes' : 'No' }}</p>
-      </div>
+  @if (currentProfile) {
+    <mat-card class="profile-card">
+      <mat-card-header>
+        <mat-card-title>User Profile</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="profile-info">
+          <p><strong>Email:</strong> {{ currentProfile.email }}</p>
+          <p><strong>Display Name:</strong> {{ currentProfile.displayName }}</p>
+          <p>
+            <strong>User Group:</strong>
+            <mat-chip color="accent" selected>{{ currentProfile.userGroup }}</mat-chip>
+          </p>
+          <p><strong>Active:</strong> {{ currentProfile.isActive ? 'Yes' : 'No' }}</p>
+        </div>
 
-      <mat-divider></mat-divider>
+        <mat-divider></mat-divider>
 
-      <h3>Test Different User Groups</h3>
-      <div class="group-buttons">
-        <button
-          mat-stroked-button
-          (click)="changeUserGroup('admin')"
-          [color]="currentProfile.userGroup === 'admin' ? 'primary' : undefined"
-        >
-          admin
-        </button>
-        <button
-          mat-stroked-button
-          (click)="changeUserGroup('project-manager')"
-          [color]="currentProfile.userGroup === 'project-manager' ? 'primary' : undefined"
-        >
-          project-manager
-        </button>
-        <button
-          mat-stroked-button
-          (click)="changeUserGroup('technician')"
-          [color]="currentProfile.userGroup === 'technician' ? 'primary' : undefined"
-        >
-          technician
-        </button>
-        <button
-          mat-stroked-button
-          (click)="changeUserGroup('supplier')"
-          [color]="currentProfile.userGroup === 'supplier' ? 'primary' : undefined"
-        >
-          supplier
-        </button>
-        <button
-          mat-stroked-button
-          (click)="changeUserGroup('client')"
-          [color]="currentProfile.userGroup === 'client' ? 'primary' : undefined"
-        >
-          client
-        </button>
-      </div>
-    </mat-card-content>
-  </mat-card>
+        <h3>Test Different User Groups</h3>
+        <div class="group-buttons">
+          <button
+            mat-stroked-button
+            (click)="changeUserGroup('admin')"
+            [color]="currentProfile.userGroup === 'admin' ? 'primary' : undefined"
+          >
+            admin
+          </button>
+          <button
+            mat-stroked-button
+            (click)="changeUserGroup('project-manager')"
+            [color]="currentProfile.userGroup === 'project-manager' ? 'primary' : undefined"
+          >
+            project-manager
+          </button>
+          <button
+            mat-stroked-button
+            (click)="changeUserGroup('technician')"
+            [color]="currentProfile.userGroup === 'technician' ? 'primary' : undefined"
+          >
+            technician
+          </button>
+          <button
+            mat-stroked-button
+            (click)="changeUserGroup('supplier')"
+            [color]="currentProfile.userGroup === 'supplier' ? 'primary' : undefined"
+          >
+            supplier
+          </button>
+          <button
+            mat-stroked-button
+            (click)="changeUserGroup('client')"
+            [color]="currentProfile.userGroup === 'client' ? 'primary' : undefined"
+          >
+            client
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
 
   <!-- Permissions -->
-  <mat-card class="permissions-card" *ngIf="permissions">
-    <mat-card-header>
-      <mat-card-title>Current Permissions</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="permission-grid">
-        <div class="permission-item" *ngFor="let permission of permissions | keyvalue">
-          <span>{{ permission.key }}:</span>
-          <mat-icon [color]="permission.value ? 'primary' : 'warn'">
-            {{ permission.value ? 'check_circle' : 'cancel' }}
-          </mat-icon>
+  @if (permissions) {
+    <mat-card class="permissions-card">
+      <mat-card-header>
+        <mat-card-title>Current Permissions</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="permission-grid">
+          @for (permission of permissions | keyvalue; track permission.key) {
+            <div class="permission-item">
+              <span>{{ permission.key }}:</span>
+              <mat-icon [color]="permission.value ? 'primary' : 'warn'">
+                {{ permission.value ? 'check_circle' : 'cancel' }}
+              </mat-icon>
+            </div>
+          }
         </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
+      </mat-card-content>
+    </mat-card>
+  }
 
   <!-- Role Checks -->
   <mat-card class="role-check-card">
