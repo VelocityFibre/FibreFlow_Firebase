@@ -41,13 +41,13 @@ interface DialogData {
         <div class="instructions">
           <p>Upload a CSV file containing BOQ items. The file should include columns for:</p>
           <ul>
-            <li>Item Code (or Code)</li>
-            <li>Description (or Item Description)</li>
-            <li>Quantity (or Required Quantity)</li>
-            <li>Unit Price (or Price)</li>
-            <li>Unit (optional)</li>
-            <li>Specification (optional)</li>
-            <li>Needs Quote (optional, true/false)</li>
+            <li><strong>Item Code</strong> - Unique identifier for the item</li>
+            <li><strong>Description</strong> - Item description</li>
+            <li><strong>Quantity</strong> - Required quantity</li>
+            <li><strong>Item Rate</strong> - Unit price (can include R prefix)</li>
+            <li><strong>UoM</strong> - Unit of measure (e.g., Each, Meters)</li>
+            <li><strong>Item Category</strong> (optional) - Used as specification</li>
+            <li><strong>Supplier</strong> (optional) - For reference</li>
           </ul>
         </div>
 
@@ -133,6 +133,7 @@ interface DialogData {
         border-radius: 8px;
         padding: 16px;
         margin-bottom: 24px;
+        overflow-x: auto;
       }
 
       .instructions p {
@@ -141,13 +142,22 @@ interface DialogData {
       }
 
       .instructions ul {
-        margin: 8px 0 0 24px;
-        padding: 0;
+        margin: 8px 0 0 0;
+        padding-left: 20px;
       }
 
       .instructions li {
-        margin-bottom: 4px;
+        margin-bottom: 6px;
         color: #666;
+        word-break: break-word;
+        line-height: 1.4;
+        font-size: 13px;
+      }
+      
+      .instructions strong {
+        color: #333;
+        display: inline-block;
+        min-width: 100px;
       }
 
       .project-field {

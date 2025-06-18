@@ -24,6 +24,7 @@ import { BOQItem, BOQStatus, BOQSummary } from '../../models/boq.model';
 import { Project } from '../../../../core/models/project.model';
 import { BOQFormDialogComponent } from '../boq-form-dialog/boq-form-dialog.component';
 import { BOQImportDialogComponent } from '../boq-import-dialog/boq-import-dialog.component';
+import { BOQImportExcelDialogComponent } from '../boq-import-excel-dialog/boq-import-excel-dialog.component';
 
 @Component({
   selector: 'app-boq-list',
@@ -746,8 +747,11 @@ export class BOQListComponent implements OnInit, OnDestroy {
   }
 
   openImportDialog() {
-    const dialogRef = this.dialog.open(BOQImportDialogComponent, {
-      width: '800px',
+    // Use Excel import dialog
+    const dialogRef = this.dialog.open(BOQImportExcelDialogComponent, {
+      width: '95vw',
+      maxWidth: '1200px',
+      maxHeight: '90vh',
       data: {
         projects: this.projects,
         selectedProjectId: this.selectedProjectId !== 'all' ? this.selectedProjectId : null,
@@ -755,8 +759,10 @@ export class BOQListComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
+      if (result && result.success) {
         this.loadData();
+        // Show success message
+        console.log(`Successfully imported ${result.itemCount} BOQ items`);
       }
     });
   }

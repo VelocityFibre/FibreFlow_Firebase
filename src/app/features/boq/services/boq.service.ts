@@ -12,6 +12,7 @@ import {
   where,
   orderBy,
   CollectionReference,
+  serverTimestamp,
 } from '@angular/fire/firestore';
 import { Observable, from, map, catchError, of, switchMap } from 'rxjs';
 import { BOQItem, BOQSummary } from '../models/boq.model';
@@ -173,23 +174,53 @@ export class BOQService {
 
   // Import BOQ items from CSV data
   importBOQItems(projectId: string, csvData: Record<string, string>[]): Observable<void> {
-    const items: Omit<BOQItem, 'id'>[] = csvData.map((row, index) => ({
-      projectId,
-      itemCode: row['Item Code'] || row['Code'] || `ITEM-${index + 1}`,
-      description: row['Description'] || row['Item Description'] || '',
-      specification: row['Specification'] || row['Spec'] || '',
-      unit: row['Unit'] || row['UOM'] || 'Each',
-      requiredQuantity: parseInt(row['Quantity'] || row['Required Quantity'] || '0') || 0,
-      allocatedQuantity: 0,
-      remainingQuantity: parseInt(row['Quantity'] || row['Required Quantity'] || '0') || 0,
-      unitPrice: parseFloat(row['Unit Price'] || row['Price'] || '0') || 0,
-      totalPrice: 0,
-      status: 'Planned',
-      needsQuote:
-        row['Needs Quote']?.toLowerCase() === 'true' || row['RFQ']?.toLowerCase() === 'true',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }));
+    // Filter and map valid rows only
+    const validItems: Omit<BOQItem, 'id'>[] = [];
+    
+    csvData.forEach((row, index) => {
+      // Get and trim the item code
+      const itemCode = (row['Item Code'] || row['Code'] || '').trim();
+      const description = (row['Description'] || row['Item Description'] || '').trim();
+      
+      // Skip rows without item code AND description
+      if (!itemCode && !description) {
+        console.log(`Skipping empty row ${index + 1}`);
+        return;
+      }
+      
+      // Skip header/category rows (like "Cable")
+      if (!itemCode && description && !row['Quantity'] && !row['Item Rate']) {
+        console.log(`Skipping category row: ${description}`);
+        return;
+      }
+      
+      const item: Omit<BOQItem, 'id'> = {
+        projectId,
+        itemCode: itemCode || `ITEM-${validItems.length + 1}`,
+        description: description,
+        specification: (row['Specification'] || row['Spec'] || row['Item Category'] || '').trim(),
+        unit: (row['UoM'] || row['Unit'] || row['UOM'] || 'Each').trim(),
+        requiredQuantity: parseInt(row['Quantity'] || row['Required Quantity'] || '0') || 0,
+        allocatedQuantity: 0,
+        remainingQuantity: parseInt(row['Quantity'] || row['Required Quantity'] || '0') || 0,
+        unitPrice: this.parsePrice(row['Item Rate'] || row['Unit Price'] || row['Price'] || '0'),
+        totalPrice: 0,
+        status: 'Planned',
+        needsQuote:
+          row['Needs Quote']?.toLowerCase() === 'true' || 
+          row['RFQ']?.toLowerCase() === 'true' || 
+          !row['Item Rate'] || 
+          row['Item Rate'] === '0' ||
+          this.parsePrice(row['Item Rate'] || '0') === 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      
+      validItems.push(item);
+    });
+    
+    console.log(`Importing ${validItems.length} valid items out of ${csvData.length} total rows`);
+    const items = validItems;
 
     // Calculate total prices
     items.forEach((item) => {
@@ -205,6 +236,51 @@ export class BOQService {
         throw error;
       }),
     );
+  }
+
+  // Direct import method for pre-parsed BOQ items
+  importBOQItemsDirect(projectId: string, items: Omit<BOQItem, 'id'>[]): Observable<void> {
+    console.log(`Starting import of ${items.length} BOQ items for project ${projectId}`);
+    
+    // Batch imports to avoid overwhelming Firestore
+    const batchSize = 50;
+    const batches: Promise<any>[] = [];
+    
+    for (let i = 0; i < items.length; i += batchSize) {
+      const batch = items.slice(i, i + batchSize);
+      const batchPromises = batch.map((item) => addDoc(this.boqCollection, {
+        ...item,
+        projectId, // Ensure projectId is set
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      }));
+      
+      // Add batch to sequential processing
+      batches.push(Promise.all(batchPromises).then(() => {
+        console.log(`Imported batch ${Math.floor(i/batchSize) + 1} of ${Math.ceil(items.length/batchSize)}`);
+      }));
+    }
+    
+    // Process batches sequentially to avoid rate limits
+    return from(
+      batches.reduce((promise, batch) => promise.then(() => batch), Promise.resolve())
+    ).pipe(
+      map(() => {
+        console.log('Import completed successfully');
+        return void 0;
+      }),
+      catchError((error) => {
+        console.error('Error importing BOQ items:', error);
+        throw error;
+      }),
+    );
+  }
+
+  // Helper method to parse price strings (handles "R123.45" format)
+  private parsePrice(priceStr: string): number {
+    // Remove currency symbols and spaces
+    const cleanPrice = priceStr.replace(/[R$£€\s]/g, '').trim();
+    return parseFloat(cleanPrice) || 0;
   }
 
   // Export BOQ items to CSV format
