@@ -88,14 +88,14 @@ import {
               <div class="metric">
                 <mat-icon>groups</mat-icon>
                 <div class="metric-content">
-                  <span class="value">{{ cp.allocatedTeams?.length || 0 }}</span>
+                  <span class="value">{{ cp.allocatedTeams.length || 0 }}</span>
                   <span class="label">Teams</span>
                 </div>
               </div>
               <div class="metric">
                 <mat-icon>task_alt</mat-icon>
                 <div class="metric-content">
-                  <span class="value">{{ cp.workProgress?.totalTasksCompleted || 0 }}</span>
+                  <span class="value">{{ cp.workProgress.totalTasksCompleted || 0 }}</span>
                   <span class="label">Tasks Done</span>
                 </div>
               </div>
@@ -103,7 +103,7 @@ import {
                 <mat-icon>star</mat-icon>
                 <div class="metric-content">
                   <span class="value">{{
-                    cp.performance?.overallRating?.toFixed(1) || '0.0'
+                    cp.performance.overallRating ? cp.performance.overallRating.toFixed(1) : '0.0'
                   }}</span>
                   <span class="label">Rating</span>
                 </div>

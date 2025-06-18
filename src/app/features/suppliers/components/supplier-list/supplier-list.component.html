@@ -114,7 +114,7 @@
                 <mat-icon>phone</mat-icon>
                 {{ supplier.primaryPhone }}
               </div>
-              @if (supplier.address?.city) {
+              @if (supplier.address.city) {
                 <div class="contact-detail">
                   <mat-icon>location_on</mat-icon>
                   {{ supplier.address.city }}, {{ supplier.address.country }}
