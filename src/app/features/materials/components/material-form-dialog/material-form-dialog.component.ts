@@ -277,7 +277,9 @@ export class MaterialFormDialogComponent implements OnInit {
             id: this.data.material.id,
             formValue,
           });
-          await firstValueFrom(this.materialService.updateMaterial(this.data.material.id, formValue));
+          await firstValueFrom(
+            this.materialService.updateMaterial(this.data.material.id, formValue),
+          );
         } else {
           await this.logger.info('Creating new material', 'MaterialFormDialog', formValue);
           const result = await this.materialService.addMaterial(formValue);

@@ -20,6 +20,8 @@ import { DateFormatService } from '../../../../core/services/date-format.service
 import { ProjectPhasesComponent } from '../../components/phases/project-phases.component';
 import { ProjectTasksComponent } from '../../components/tasks/project-tasks.component';
 import { ProjectStockComponent } from '../../components/stock/project-stock.component';
+import { ProjectStepsComponent } from '../../components/steps/project-steps.component';
+import { ProjectContractorsComponent } from '../../components/contractors/project-contractors.component';
 import { PhaseService } from '../../../../core/services/phase.service';
 import { TaskService } from '../../../../core/services/task.service';
 import { Task } from '../../../../core/models/task.model';
@@ -47,6 +49,8 @@ import { BOQSummary } from '../../../boq/models/boq.model';
     ProjectPhasesComponent,
     ProjectTasksComponent,
     ProjectStockComponent,
+    ProjectStepsComponent,
+    ProjectContractorsComponent,
   ],
   template: `
     <div class="ff-page-container" *ngIf="project$ | async as project">
@@ -458,6 +462,13 @@ import { BOQSummary } from '../../../boq/models/boq.model';
           </div>
         </mat-tab>
 
+        <!-- Steps Tab -->
+        <mat-tab label="Steps">
+          <div class="tab-content">
+            <app-project-steps [projectId]="project.id!"></app-project-steps>
+          </div>
+        </mat-tab>
+
         <!-- Tasks Tab -->
         <mat-tab label="Tasks">
           <div class="tab-content tasks-tab-content">
@@ -481,10 +492,10 @@ import { BOQSummary } from '../../../boq/models/boq.model';
           </div>
         </mat-tab>
 
-        <!-- Documents Tab -->
-        <mat-tab label="Documents" [disabled]="true">
+        <!-- Contractors Tab -->
+        <mat-tab label="Contractors">
           <div class="tab-content">
-            <p>Document management coming soon...</p>
+            <app-project-contractors [projectId]="project.id!"></app-project-contractors>
           </div>
         </mat-tab>
       </mat-tab-group>

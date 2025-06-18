@@ -51,7 +51,7 @@ export class SentryErrorHandlerService implements ErrorHandler {
         context: appError.context,
         timestamp: appError.timestamp.toISOString(),
       });
-      
+
       // Send to Sentry
       Sentry.captureException(error);
     });
@@ -197,7 +197,7 @@ export class SentryErrorHandlerService implements ErrorHandler {
   logError(message: string, error?: unknown): void {
     console.error(message, error);
     const errorObj = error instanceof Error ? error : new Error(message);
-    
+
     // Add context for manually logged errors
     Sentry.withScope((scope) => {
       scope.setTag('errorSource', 'manual');
@@ -207,7 +207,7 @@ export class SentryErrorHandlerService implements ErrorHandler {
       });
       Sentry.captureException(errorObj);
     });
-    
+
     this.handleError(errorObj);
   }
 

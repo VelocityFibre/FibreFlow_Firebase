@@ -15,7 +15,16 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Observable, Subject, debounceTime, distinctUntilChanged, startWith, switchMap, merge, of } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  debounceTime,
+  distinctUntilChanged,
+  startWith,
+  switchMap,
+  merge,
+  of,
+} from 'rxjs';
 
 import { MasterMaterial, MaterialFilter, MaterialCategory } from '../../models/material.model';
 import { MaterialService } from '../../services/material.service';
@@ -91,113 +100,113 @@ import { LoadingService } from '../../../../core/services/loading.service';
 
       <div class="table-container" *ngIf="!(loading$ | async); else loadingTemplate">
         <table mat-table [dataSource]="(materials$ | async) || []" class="materials-table">
-            <!-- Item Code Column -->
-            <ng-container matColumnDef="itemCode">
-              <th mat-header-cell *matHeaderCellDef>Item Code</th>
-              <td mat-cell *matCellDef="let material" class="code-cell">
-                <span class="item-code">{{ material.itemCode }}</span>
-              </td>
-            </ng-container>
+          <!-- Item Code Column -->
+          <ng-container matColumnDef="itemCode">
+            <th mat-header-cell *matHeaderCellDef>Item Code</th>
+            <td mat-cell *matCellDef="let material" class="code-cell">
+              <span class="item-code">{{ material.itemCode }}</span>
+            </td>
+          </ng-container>
 
-            <!-- Description Column -->
-            <ng-container matColumnDef="description">
-              <th mat-header-cell *matHeaderCellDef>Description</th>
-              <td mat-cell *matCellDef="let material">
-                <div class="description-cell">
-                  <span class="description">{{ material.description }}</span>
-                  <span class="specifications" *ngIf="material.specifications">
-                    {{ material.specifications }}
-                  </span>
-                </div>
-              </td>
-            </ng-container>
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef>Description</th>
+            <td mat-cell *matCellDef="let material">
+              <div class="description-cell">
+                <span class="description">{{ material.description }}</span>
+                <span class="specifications" *ngIf="material.specifications">
+                  {{ material.specifications }}
+                </span>
+              </div>
+            </td>
+          </ng-container>
 
-            <!-- Category Column -->
-            <ng-container matColumnDef="category">
-              <th mat-header-cell *matHeaderCellDef>Category</th>
-              <td mat-cell *matCellDef="let material">
-                <mat-chip class="category-chip" [ngClass]="getCategoryClass(material.category)">
-                  {{ material.category }}
-                </mat-chip>
-              </td>
-            </ng-container>
+          <!-- Category Column -->
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef>Category</th>
+            <td mat-cell *matCellDef="let material">
+              <mat-chip class="category-chip" [ngClass]="getCategoryClass(material.category)">
+                {{ material.category }}
+              </mat-chip>
+            </td>
+          </ng-container>
 
-            <!-- UoM Column -->
-            <ng-container matColumnDef="unitOfMeasure">
-              <th mat-header-cell *matHeaderCellDef>UoM</th>
-              <td mat-cell *matCellDef="let material" class="uom-cell">
-                <span class="uom-badge">{{ material.unitOfMeasure }}</span>
-              </td>
-            </ng-container>
+          <!-- UoM Column -->
+          <ng-container matColumnDef="unitOfMeasure">
+            <th mat-header-cell *matHeaderCellDef>UoM</th>
+            <td mat-cell *matCellDef="let material" class="uom-cell">
+              <span class="uom-badge">{{ material.unitOfMeasure }}</span>
+            </td>
+          </ng-container>
 
-            <!-- Unit Cost Column -->
-            <ng-container matColumnDef="unitCost">
-              <th mat-header-cell *matHeaderCellDef class="number-header">Unit Cost</th>
-              <td mat-cell *matCellDef="let material" class="number-cell">
-                {{ formatCurrency(material.unitCost) }}
-              </td>
-            </ng-container>
+          <!-- Unit Cost Column -->
+          <ng-container matColumnDef="unitCost">
+            <th mat-header-cell *matHeaderCellDef class="number-header">Unit Cost</th>
+            <td mat-cell *matCellDef="let material" class="number-cell">
+              {{ formatCurrency(material.unitCost) }}
+            </td>
+          </ng-container>
 
-            <!-- Stock Levels Column -->
-            <ng-container matColumnDef="stockLevels">
-              <th mat-header-cell *matHeaderCellDef>Stock Levels</th>
-              <td mat-cell *matCellDef="let material">
-                <div class="stock-levels">
-                  <span class="min-stock" *ngIf="material.minimumStockLevel">
-                    Min: {{ material.minimumStockLevel }}
-                  </span>
-                  <span class="reorder-point" *ngIf="material.reorderPoint">
-                    Reorder: {{ material.reorderPoint }}
-                  </span>
-                </div>
-              </td>
-            </ng-container>
+          <!-- Stock Levels Column -->
+          <ng-container matColumnDef="stockLevels">
+            <th mat-header-cell *matHeaderCellDef>Stock Levels</th>
+            <td mat-cell *matCellDef="let material">
+              <div class="stock-levels">
+                <span class="min-stock" *ngIf="material.minimumStockLevel">
+                  Min: {{ material.minimumStockLevel }}
+                </span>
+                <span class="reorder-point" *ngIf="material.reorderPoint">
+                  Reorder: {{ material.reorderPoint }}
+                </span>
+              </div>
+            </td>
+          </ng-container>
 
-            <!-- Actions Column -->
-            <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let material">
-                <button mat-icon-button [matMenuTriggerFor]="menu">
-                  <mat-icon>more_vert</mat-icon>
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let material">
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="editMaterial(material)">
+                  <mat-icon>edit</mat-icon>
+                  <span>Edit</span>
                 </button>
-                <mat-menu #menu="matMenu">
-                  <button mat-menu-item (click)="editMaterial(material)">
-                    <mat-icon>edit</mat-icon>
-                    <span>Edit</span>
-                  </button>
-                  <button mat-menu-item (click)="viewStock(material)">
-                    <mat-icon>inventory</mat-icon>
-                    <span>View Stock</span>
-                  </button>
-                  <button mat-menu-item (click)="duplicateMaterial(material)">
-                    <mat-icon>content_copy</mat-icon>
-                    <span>Duplicate</span>
-                  </button>
-                  <button mat-menu-item (click)="deleteMaterial(material)" class="delete-option">
-                    <mat-icon>delete</mat-icon>
-                    <span>Delete</span>
-                  </button>
-                </mat-menu>
-              </td>
-            </ng-container>
+                <button mat-menu-item (click)="viewStock(material)">
+                  <mat-icon>inventory</mat-icon>
+                  <span>View Stock</span>
+                </button>
+                <button mat-menu-item (click)="duplicateMaterial(material)">
+                  <mat-icon>content_copy</mat-icon>
+                  <span>Duplicate</span>
+                </button>
+                <button mat-menu-item (click)="deleteMaterial(material)" class="delete-option">
+                  <mat-icon>delete</mat-icon>
+                  <span>Delete</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
-            <!-- No data row -->
-            <tr class="mat-row" *matNoDataRow>
-              <td class="mat-cell no-data" [attr.colspan]="displayedColumns.length">
-                <div class="empty-state">
-                  <mat-icon>inventory_2</mat-icon>
-                  <p>No materials found</p>
-                  <button mat-raised-button color="primary" (click)="openMaterialDialog()">
-                    <mat-icon>add</mat-icon>
-                    Add First Material
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </table>
+          <!-- No data row -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell no-data" [attr.colspan]="displayedColumns.length">
+              <div class="empty-state">
+                <mat-icon>inventory_2</mat-icon>
+                <p>No materials found</p>
+                <button mat-raised-button color="primary" (click)="openMaterialDialog()">
+                  <mat-icon>add</mat-icon>
+                  Add First Material
+                </button>
+              </div>
+            </td>
+          </tr>
+        </table>
       </div>
 
       <ng-template #loadingTemplate>
@@ -434,7 +443,7 @@ export class MaterialListComponent implements OnInit {
     // Merge search control changes with refresh trigger
     this.materials$ = merge(
       this.searchControl.valueChanges.pipe(startWith('')),
-      this.refreshSubject
+      this.refreshSubject,
     ).pipe(
       debounceTime(300),
       distinctUntilChanged(),

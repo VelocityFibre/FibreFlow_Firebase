@@ -1,4 +1,4 @@
-import { Timestamp } from '@angular/fire/firestore';
+import { Timestamp, FieldValue } from '@angular/fire/firestore';
 
 export interface Contractor {
   id?: string;
@@ -51,6 +51,18 @@ export interface Contractor {
     paymentTerms: number; // days
     creditLimit?: number;
   };
+
+  // Project Information
+  projects?: {
+    activeProjectIds: string[];
+    completedProjectIds: string[];
+    totalProjectsCount: number;
+    currentContractValue: number;
+    totalContractValue: number;
+  };
+
+  // Teams
+  teams?: ContractorTeam[];
 
   // Status
   status: ContractorStatus;
@@ -111,8 +123,8 @@ export interface ContractorTeam {
   completedProjects: number;
 
   isActive: boolean;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: Timestamp | FieldValue;
+  updatedAt: Timestamp | FieldValue;
 }
 
 export interface TeamMember {
@@ -120,6 +132,7 @@ export interface TeamMember {
   role: 'technician' | 'helper' | 'driver' | 'supervisor';
   skills: string[];
 }
+
 
 // Form helpers
 export const CONTRACTOR_SERVICES: { value: ContractorService; label: string }[] = [

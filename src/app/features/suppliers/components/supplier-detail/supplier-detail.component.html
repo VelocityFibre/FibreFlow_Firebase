@@ -16,6 +16,10 @@
       </div>
     </div>
     <div class="header-actions">
+      <button mat-button color="primary" (click)="createQuoteRequest()">
+        <mat-icon>request_quote</mat-icon>
+        Request Quote
+      </button>
       <button mat-button [routerLink]="['/suppliers', supplier.id, 'edit']">
         <mat-icon>edit</mat-icon>
         Edit
@@ -46,8 +50,60 @@
   </div>
 
   <mat-tab-group>
+    <!-- Overview Tab -->
     <mat-tab label="Overview">
       <div class="tab-content">
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+          <mat-card class="summary-card">
+            <mat-card-content>
+              <div class="summary-icon">
+                <mat-icon>shopping_cart</mat-icon>
+              </div>
+              <div class="summary-details">
+                <h3>{{ supplier.activePurchaseOrders || 0 }}</h3>
+                <p>Active Orders</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="summary-card">
+            <mat-card-content>
+              <div class="summary-icon">
+                <mat-icon>inventory_2</mat-icon>
+              </div>
+              <div class="summary-details">
+                <h3>{{ supplier.productCount || 0 }}</h3>
+                <p>Products</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="summary-card">
+            <mat-card-content>
+              <div class="summary-icon">
+                <mat-icon>schedule</mat-icon>
+              </div>
+              <div class="summary-details">
+                <h3>{{ supplier.performanceMetrics?.onTimeDeliveryRate || 0 }}%</h3>
+                <p>On-Time Delivery</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="summary-card">
+            <mat-card-content>
+              <div class="summary-icon">
+                <mat-icon>star</mat-icon>
+              </div>
+              <div class="summary-details">
+                <h3>{{ supplier.performanceMetrics?.averageRating || 'N/A' }}</h3>
+                <p>Average Rating</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
         <div class="info-grid">
           <mat-card>
             <mat-card-header>
@@ -158,6 +214,215 @@
       </div>
     </mat-tab>
 
+    <!-- Contacts Tab -->
+    <mat-tab label="Contacts" [matBadge]="(contacts$ | async)?.length || 0" matBadgeColor="primary">
+      <div class="tab-content">
+        <div class="contacts-header">
+          <h2>Contacts</h2>
+          <button
+            mat-raised-button
+            color="primary"
+            [routerLink]="['/suppliers', supplier.id, 'contacts']"
+          >
+            <mat-icon>add</mat-icon>
+            Manage Contacts
+          </button>
+        </div>
+
+        <mat-list class="contacts-list">
+          <mat-list-item *ngFor="let contact of contacts$ | async">
+            <mat-icon matListItemIcon>person</mat-icon>
+            <div matListItemTitle>
+              {{ contact.name }}
+              <mat-chip *ngIf="contact.isPrimary" class="primary-chip">Primary</mat-chip>
+            </div>
+            <div matListItemLine>{{ contact.position }}</div>
+            <div matListItemLine>
+              <mat-icon inline>email</mat-icon> {{ contact.email }} |
+              <mat-icon inline>phone</mat-icon> {{ contact.phone }}
+            </div>
+            <div matListItemMeta>
+              <mat-icon *ngIf="contact.canAccessPortal" matTooltip="Can access supplier portal">
+                vpn_key
+              </mat-icon>
+            </div>
+          </mat-list-item>
+
+          <mat-list-item *ngIf="(contacts$ | async)?.length === 0">
+            <div class="no-contacts">
+              <mat-icon>person_outline</mat-icon>
+              <p>No contacts added yet</p>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </mat-tab>
+
+    <!-- Materials/Products Tab -->
+    <mat-tab label="Materials">
+      <div class="tab-content">
+        <div class="materials-header">
+          <h2>Materials & Products</h2>
+          <button mat-raised-button color="primary">
+            <mat-icon>add</mat-icon>
+            Add Material
+          </button>
+        </div>
+
+        <div class="coming-soon">
+          <mat-icon>inventory_2</mat-icon>
+          <h3>Material Catalog Management</h3>
+          <p>Manage supplier's material catalog, pricing, and specifications</p>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Quotes Tab -->
+    <mat-tab label="Quotes">
+      <div class="tab-content">
+        <div class="quotes-header">
+          <h2>Quote Requests</h2>
+          <button mat-raised-button color="primary" (click)="createQuoteRequest()">
+            <mat-icon>request_quote</mat-icon>
+            New Quote Request
+          </button>
+        </div>
+
+        <div class="coming-soon">
+          <mat-icon>request_quote</mat-icon>
+          <h3>Quote Management</h3>
+          <p>View and manage quote requests and responses from this supplier</p>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Purchase Orders Tab -->
+    <mat-tab label="Purchase Orders">
+      <div class="tab-content">
+        <div class="po-header">
+          <h2>Purchase Orders</h2>
+          <button mat-raised-button color="primary">
+            <mat-icon>add_shopping_cart</mat-icon>
+            Create PO
+          </button>
+        </div>
+
+        <div class="coming-soon">
+          <mat-icon>shopping_cart</mat-icon>
+          <h3>Purchase Order History</h3>
+          <p>Track all purchase orders, deliveries, and invoices</p>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Performance Tab -->
+    <mat-tab label="Performance">
+      <div class="tab-content">
+        <h2>Performance Metrics</h2>
+
+        <div class="performance-grid">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Delivery Performance</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="metric-item">
+                <span class="metric-label">On-Time Delivery Rate</span>
+                <div class="metric-value-container">
+                  <mat-progress-bar
+                    mode="determinate"
+                    [value]="supplier.performanceMetrics?.onTimeDeliveryRate || 0"
+                    [color]="
+                      getPerformanceColor(supplier.performanceMetrics?.onTimeDeliveryRate || 0)
+                    "
+                  >
+                  </mat-progress-bar>
+                  <span class="metric-value"
+                    >{{ supplier.performanceMetrics?.onTimeDeliveryRate || 0 }}%</span
+                  >
+                </div>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">Average Lead Time</span>
+                <span class="metric-value"
+                  >{{ supplier.performanceMetrics?.averageLeadTime || 0 }} days</span
+                >
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Quality Metrics</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="metric-item">
+                <span class="metric-label">Quality Score</span>
+                <div class="metric-value-container">
+                  <mat-progress-bar
+                    mode="determinate"
+                    [value]="supplier.performanceMetrics?.qualityScore || 0"
+                    [color]="getPerformanceColor(supplier.performanceMetrics?.qualityScore || 0)"
+                  >
+                  </mat-progress-bar>
+                  <span class="metric-value"
+                    >{{ supplier.performanceMetrics?.qualityScore || 0 }}%</span
+                  >
+                </div>
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">Defect Rate</span>
+                <span class="metric-value"
+                  >{{ supplier.performanceMetrics?.defectRate || 0 }}%</span
+                >
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Communication & Support</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="metric-item">
+                <span class="metric-label">Response Time</span>
+                <span class="metric-value"
+                  >{{ supplier.performanceMetrics?.averageResponseTime || 0 }} hours</span
+                >
+              </div>
+              <div class="metric-item">
+                <span class="metric-label">Average Rating</span>
+                <span class="metric-value">
+                  <mat-icon>star</mat-icon>
+                  {{ supplier.performanceMetrics?.averageRating || 'N/A' }}
+                </span>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Documents Tab -->
+    <mat-tab label="Documents">
+      <div class="tab-content">
+        <div class="documents-header">
+          <h2>Documents</h2>
+          <button mat-raised-button color="primary">
+            <mat-icon>upload_file</mat-icon>
+            Upload Document
+          </button>
+        </div>
+
+        <div class="coming-soon">
+          <mat-icon>folder</mat-icon>
+          <h3>Document Management</h3>
+          <p>Store contracts, certificates, insurance documents, and other files</p>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- Financial Tab -->
     <mat-tab label="Financial">
       <div class="tab-content">
         <div class="info-grid">
@@ -210,59 +475,26 @@
               </div>
             </mat-card-content>
           </mat-card>
-        </div>
-      </div>
-    </mat-tab>
 
-    <mat-tab label="Contacts" [matBadge]="(contacts$ | async)?.length || 0" matBadgeColor="primary">
-      <div class="tab-content">
-        <div class="contacts-header">
-          <h2>Contacts</h2>
-          <button
-            mat-raised-button
-            color="primary"
-            [routerLink]="['/suppliers', supplier.id, 'contacts']"
-          >
-            <mat-icon>add</mat-icon>
-            Manage Contacts
-          </button>
-        </div>
-
-        <mat-list class="contacts-list">
-          <mat-list-item *ngFor="let contact of contacts$ | async">
-            <mat-icon matListItemIcon>person</mat-icon>
-            <div matListItemTitle>
-              {{ contact.name }}
-              <mat-chip *ngIf="contact.isPrimary" class="primary-chip">Primary</mat-chip>
-            </div>
-            <div matListItemLine>{{ contact.position }}</div>
-            <div matListItemLine>
-              <mat-icon inline>email</mat-icon> {{ contact.email }} |
-              <mat-icon inline>phone</mat-icon> {{ contact.phone }}
-            </div>
-            <div matListItemMeta>
-              <mat-icon *ngIf="contact.canAccessPortal" matTooltip="Can access supplier portal">
-                vpn_key
-              </mat-icon>
-            </div>
-          </mat-list-item>
-
-          <mat-list-item *ngIf="(contacts$ | async)?.length === 0">
-            <div class="no-contacts">
-              <mat-icon>person_outline</mat-icon>
-              <p>No contacts added yet</p>
-            </div>
-          </mat-list-item>
-        </mat-list>
-      </div>
-    </mat-tab>
-
-    <mat-tab label="Activity">
-      <div class="tab-content">
-        <div class="coming-soon">
-          <mat-icon>timeline</mat-icon>
-          <h3>Activity Timeline</h3>
-          <p>Purchase orders, communications, and payments history coming soon</p>
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Transaction Summary</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="info-item">
+                <label>Total Orders</label>
+                <p>{{ supplier.totalPurchaseOrders || 0 }}</p>
+              </div>
+              <div class="info-item">
+                <label>Total Spend</label>
+                <p>{{ formatCurrency(supplier.totalSpend || 0) }}</p>
+              </div>
+              <div class="info-item">
+                <label>Outstanding Invoices</label>
+                <p>{{ supplier.outstandingInvoices || 0 }}</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
         </div>
       </div>
     </mat-tab>

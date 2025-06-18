@@ -1,4 +1,9 @@
-import { ApplicationConfig, provideZoneChangeDetection, ErrorHandler, APP_INITIALIZER } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideZoneChangeDetection,
+  ErrorHandler,
+  APP_INITIALIZER,
+} from '@angular/core';
 import { provideRouter, withPreloading, withViewTransitions, Router } from '@angular/router';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import {

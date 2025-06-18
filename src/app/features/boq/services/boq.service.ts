@@ -176,24 +176,24 @@ export class BOQService {
   importBOQItems(projectId: string, csvData: Record<string, string>[]): Observable<void> {
     // Filter and map valid rows only
     const validItems: Omit<BOQItem, 'id'>[] = [];
-    
+
     csvData.forEach((row, index) => {
       // Get and trim the item code
       const itemCode = (row['Item Code'] || row['Code'] || '').trim();
       const description = (row['Description'] || row['Item Description'] || '').trim();
-      
+
       // Skip rows without item code AND description
       if (!itemCode && !description) {
         console.log(`Skipping empty row ${index + 1}`);
         return;
       }
-      
+
       // Skip header/category rows (like "Cable")
       if (!itemCode && description && !row['Quantity'] && !row['Item Rate']) {
         console.log(`Skipping category row: ${description}`);
         return;
       }
-      
+
       const item: Omit<BOQItem, 'id'> = {
         projectId,
         itemCode: itemCode || `ITEM-${validItems.length + 1}`,
@@ -207,18 +207,18 @@ export class BOQService {
         totalPrice: 0,
         status: 'Planned',
         needsQuote:
-          row['Needs Quote']?.toLowerCase() === 'true' || 
-          row['RFQ']?.toLowerCase() === 'true' || 
-          !row['Item Rate'] || 
+          row['Needs Quote']?.toLowerCase() === 'true' ||
+          row['RFQ']?.toLowerCase() === 'true' ||
+          !row['Item Rate'] ||
           row['Item Rate'] === '0' ||
           this.parsePrice(row['Item Rate'] || '0') === 0,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      
+
       validItems.push(item);
     });
-    
+
     console.log(`Importing ${validItems.length} valid items out of ${csvData.length} total rows`);
     const items = validItems;
 
@@ -241,29 +241,35 @@ export class BOQService {
   // Direct import method for pre-parsed BOQ items
   importBOQItemsDirect(projectId: string, items: Omit<BOQItem, 'id'>[]): Observable<void> {
     console.log(`Starting import of ${items.length} BOQ items for project ${projectId}`);
-    
+
     // Batch imports to avoid overwhelming Firestore
     const batchSize = 50;
     const batches: Promise<any>[] = [];
-    
+
     for (let i = 0; i < items.length; i += batchSize) {
       const batch = items.slice(i, i + batchSize);
-      const batchPromises = batch.map((item) => addDoc(this.boqCollection, {
-        ...item,
-        projectId, // Ensure projectId is set
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
-      }));
-      
+      const batchPromises = batch.map((item) =>
+        addDoc(this.boqCollection, {
+          ...item,
+          projectId, // Ensure projectId is set
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+        }),
+      );
+
       // Add batch to sequential processing
-      batches.push(Promise.all(batchPromises).then(() => {
-        console.log(`Imported batch ${Math.floor(i/batchSize) + 1} of ${Math.ceil(items.length/batchSize)}`);
-      }));
+      batches.push(
+        Promise.all(batchPromises).then(() => {
+          console.log(
+            `Imported batch ${Math.floor(i / batchSize) + 1} of ${Math.ceil(items.length / batchSize)}`,
+          );
+        }),
+      );
     }
-    
+
     // Process batches sequentially to avoid rate limits
     return from(
-      batches.reduce((promise, batch) => promise.then(() => batch), Promise.resolve())
+      batches.reduce((promise, batch) => promise.then(() => batch), Promise.resolve()),
     ).pipe(
       map(() => {
         console.log('Import completed successfully');

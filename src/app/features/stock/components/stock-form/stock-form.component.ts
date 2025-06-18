@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -11,7 +12,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { Observable, map, startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { Observable, startWith, debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs';
 
 import { StockService } from '../../services/stock.service';
 import {
@@ -22,6 +23,8 @@ import {
 } from '../../models/stock-item.model';
 import { MaterialService } from '../../../materials/services/material.service';
 import { MasterMaterial } from '../../../materials/models/material.model';
+import { ProjectService } from '../../../../core/services/project.service';
+import { Project } from '../../../../core/models/project.model';
 
 @Component({
   selector: 'app-stock-form',
@@ -52,13 +55,18 @@ import { MasterMaterial } from '../../../materials/models/material.model';
           <div class="form-row">
             <mat-form-field appearance="outline">
               <mat-label>Item Code / Search Material</mat-label>
-              <input 
-                matInput 
-                formControlName="itemCode" 
+              <input
+                matInput
+                formControlName="itemCode"
                 placeholder="Type to search materials or enter custom code"
-                [matAutocomplete]="auto" />
+                [matAutocomplete]="auto"
+              />
               <mat-icon matSuffix *ngIf="selectedMaterial" class="material-linked">link</mat-icon>
-              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMaterial" (optionSelected)="onMaterialSelected($event)">
+              <mat-autocomplete
+                #auto="matAutocomplete"
+                [displayWith]="displayMaterial"
+                (optionSelected)="onMaterialSelected($event)"
+              >
                 <mat-option *ngFor="let material of filteredMaterials$ | async" [value]="material">
                   <div class="material-option">
                     <span class="material-code">{{ material.itemCode }}</span>
@@ -150,6 +158,19 @@ import { MasterMaterial } from '../../../materials/models/material.model';
                 <mat-option [value]="StockItemStatus.INACTIVE">Inactive</mat-option>
                 <mat-option [value]="StockItemStatus.DISCONTINUED">Discontinued</mat-option>
               </mat-select>
+            </mat-form-field>
+          </div>
+
+          <!-- Project Information (if applicable) -->
+          <div class="form-row" *ngIf="data.projectId">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Project</mat-label>
+              <mat-select formControlName="projectId" [disabled]="true">
+                <mat-option *ngFor="let project of projects$ | async" [value]="project.id">
+                  {{ project.name }}
+                </mat-option>
+              </mat-select>
+              <mat-hint>This stock item will be associated with the selected project</mat-hint>
             </mat-form-field>
           </div>
         </div>
@@ -389,13 +410,17 @@ export class StockFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private stockService = inject(StockService);
   private materialService = inject(MaterialService);
+  private projectService = inject(ProjectService);
   public dialogRef = inject(MatDialogRef<StockFormComponent>);
-  public data = inject<{ mode: 'add' | 'edit'; item?: StockItem }>(MAT_DIALOG_DATA);
+  public data = inject<{ mode: 'add' | 'edit'; item?: StockItem; projectId?: string }>(
+    MAT_DIALOG_DATA,
+  );
 
   stockForm!: FormGroup;
   loading = false;
   selectedMaterial: MasterMaterial | null = null;
   filteredMaterials$!: Observable<MasterMaterial[]>;
+  projects$!: Observable<Project[]>;
 
   // Expose enums to template
   StockCategory = StockCategory;
@@ -405,6 +430,10 @@ export class StockFormComponent implements OnInit {
   ngOnInit() {
     this.initializeForm();
     this.setupMaterialAutocomplete();
+
+    if (this.data.projectId) {
+      this.projects$ = this.projectService.getProjects();
+    }
 
     if (this.data.mode === 'edit' && this.data.item) {
       this.stockForm.patchValue(this.data.item);
@@ -416,13 +445,13 @@ export class StockFormComponent implements OnInit {
       startWith(''),
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap(value => {
+      switchMap((value) => {
         const searchTerm = typeof value === 'string' ? value : value?.itemCode || '';
-        return this.materialService.getMaterials({ 
+        return this.materialService.getMaterials({
           searchTerm: searchTerm,
-          isActive: true 
+          isActive: true,
         });
-      })
+      }),
     );
   }
 
@@ -430,10 +459,10 @@ export class StockFormComponent implements OnInit {
     return material ? material.itemCode : '';
   }
 
-  onMaterialSelected(event: any) {
+  onMaterialSelected(event: MatAutocompleteSelectedEvent) {
     const material = event.option.value as MasterMaterial;
     this.selectedMaterial = material;
-    
+
     // Auto-populate form fields from material
     this.stockForm.patchValue({
       itemCode: material.itemCode,
@@ -455,12 +484,12 @@ export class StockFormComponent implements OnInit {
   mapMaterialUoMToStockUoM(materialUoM: string): UnitOfMeasure {
     // Map material UoM to stock UoM
     const mapping: Record<string, UnitOfMeasure> = {
-      'each': UnitOfMeasure.UNITS,
-      'meters': UnitOfMeasure.METERS,
-      'feet': UnitOfMeasure.METERS, // Convert feet to meters
-      'units': UnitOfMeasure.UNITS,
-      'rolls': UnitOfMeasure.ROLLS,
-      'boxes': UnitOfMeasure.BOXES,
+      each: UnitOfMeasure.UNITS,
+      meters: UnitOfMeasure.METERS,
+      feet: UnitOfMeasure.METERS, // Convert feet to meters
+      units: UnitOfMeasure.UNITS,
+      rolls: UnitOfMeasure.ROLLS,
+      boxes: UnitOfMeasure.BOXES,
     };
     return mapping[materialUoM] || UnitOfMeasure.UNITS;
   }
@@ -501,6 +530,10 @@ export class StockFormComponent implements OnInit {
       // Quality tracking
       batchTracking: [false],
       expiryTracking: [false],
+
+      // Project fields
+      projectId: [this.data.projectId || null],
+      isProjectSpecific: [!!this.data.projectId],
     });
   }
 

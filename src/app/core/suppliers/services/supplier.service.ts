@@ -85,6 +85,11 @@ export class SupplierService {
     );
   }
 
+  // Alias for getSupplierById for compatibility
+  getSupplier(id: string): Observable<Supplier | undefined> {
+    return this.getSupplierById(id);
+  }
+
   async createSupplier(
     supplier: Omit<Supplier, 'id' | 'createdAt' | 'updatedAt'>,
   ): Promise<string> {

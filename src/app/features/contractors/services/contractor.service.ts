@@ -12,9 +12,11 @@ import {
   where,
   orderBy,
   serverTimestamp,
+  getDocs,
 } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
-import { Contractor, ContractorStatus } from '../models/contractor.model';
+import { take } from 'rxjs/operators';
+import { Contractor, ContractorStatus, ContractorTeam } from '../models/contractor.model';
 
 @Injectable({
   providedIn: 'root',
@@ -170,7 +172,152 @@ export class ContractorService {
       updatedAt: serverTimestamp(),
     });
   }
-}
 
-// Import getDocs for the checkRegistrationExists method
-import { getDocs } from '@angular/fire/firestore';
+  // Project-related methods
+
+  // Update contractor project information
+  async updateContractorProjects(
+    contractorId: string,
+    projectId: string,
+    action: 'add' | 'complete',
+    contractValue?: number,
+  ): Promise<void> {
+    const contractor = await this.getContractor(contractorId).pipe(take(1)).toPromise();
+    if (!contractor) throw new Error('Contractor not found');
+
+    const projects = contractor.projects || {
+      activeProjectIds: [],
+      completedProjectIds: [],
+      totalProjectsCount: 0,
+      currentContractValue: 0,
+      totalContractValue: 0,
+    };
+
+    if (action === 'add') {
+      // Add to active projects
+      if (!projects.activeProjectIds.includes(projectId)) {
+        projects.activeProjectIds.push(projectId);
+        projects.totalProjectsCount++;
+        if (contractValue) {
+          projects.currentContractValue += contractValue;
+          projects.totalContractValue += contractValue;
+        }
+      }
+    } else if (action === 'complete') {
+      // Move from active to completed
+      const index = projects.activeProjectIds.indexOf(projectId);
+      if (index > -1) {
+        projects.activeProjectIds.splice(index, 1);
+        if (!projects.completedProjectIds.includes(projectId)) {
+          projects.completedProjectIds.push(projectId);
+        }
+        // Update current contract value (subtract completed project value)
+        // Note: In a real scenario, we'd need to fetch the project value
+      }
+    }
+
+    const contractorDoc = doc(this.firestore, 'contractors', contractorId);
+    await updateDoc(contractorDoc, {
+      projects,
+      updatedAt: serverTimestamp(),
+    });
+  }
+
+  // Get contractors with projects
+  getContractorsWithProjects(): Observable<Contractor[]> {
+    const q = query(
+      this.contractorsCollection,
+      where('projects.totalProjectsCount', '>', 0),
+      orderBy('projects.totalProjectsCount', 'desc'),
+    );
+
+    return collectionData(q, { idField: 'id' }) as Observable<Contractor[]>;
+  }
+
+  // Get available contractors for a project
+  getAvailableContractors(requiredServices: string[]): Observable<Contractor[]> {
+    // Get active contractors that have all required services
+    const q = query(
+      this.contractorsCollection,
+      where('status', '==', 'active'),
+      where('capabilities.services', 'array-contains-any', requiredServices),
+      orderBy('companyName'),
+    );
+
+    return collectionData(q, { idField: 'id' }).pipe(
+      map((contractors: any[]) =>
+        // Further filter to ensure all required services are present
+        contractors.filter((contractor) =>
+          requiredServices.every((service) => contractor.capabilities?.services?.includes(service)),
+        ),
+      ),
+    ) as Observable<Contractor[]>;
+  }
+
+  // Add team to contractor
+  async addTeamToContractor(contractorId: string, team: ContractorTeam): Promise<void> {
+    const contractor = await this.getContractor(contractorId).pipe(take(1)).toPromise();
+    if (!contractor) throw new Error('Contractor not found');
+
+    const teams = contractor.teams || [];
+    const teamWithId = {
+      ...team,
+      id: doc(collection(this.firestore, 'temp')).id,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    };
+    teams.push(teamWithId);
+
+    const contractorDoc = doc(this.firestore, 'contractors', contractorId);
+    await updateDoc(contractorDoc, {
+      teams,
+      updatedAt: serverTimestamp(),
+    });
+  }
+
+  // Update contractor team
+  async updateContractorTeam(
+    contractorId: string,
+    teamId: string,
+    updates: Partial<ContractorTeam>,
+  ): Promise<void> {
+    const contractor = await this.getContractor(contractorId).pipe(take(1)).toPromise();
+    if (!contractor) throw new Error('Contractor not found');
+
+    const teams = contractor.teams || [];
+    const teamIndex = teams.findIndex((t) => t.id === teamId);
+
+    if (teamIndex === -1) throw new Error('Team not found');
+
+    teams[teamIndex] = {
+      ...teams[teamIndex],
+      ...updates,
+      updatedAt: serverTimestamp(),
+    };
+
+    const contractorDoc = doc(this.firestore, 'contractors', contractorId);
+    await updateDoc(contractorDoc, {
+      teams,
+      updatedAt: serverTimestamp(),
+    });
+  }
+
+  // Get contractor teams
+  getContractorTeams(contractorId: string): Observable<ContractorTeam[]> {
+    return this.getContractor(contractorId).pipe(map((contractor) => contractor?.teams || []));
+  }
+
+  // Get available teams for a contractor
+  getAvailableTeams(contractorId: string): Observable<ContractorTeam[]> {
+    return this.getContractorTeams(contractorId).pipe(
+      map((teams) =>
+        teams.filter(
+          (team) =>
+            team.isActive &&
+            (!team.currentProjectId ||
+              (team.availableFrom && team.availableFrom <= serverTimestamp())),
+        ),
+      ),
+    );
+  }
+}

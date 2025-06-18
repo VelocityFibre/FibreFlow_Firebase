@@ -16,6 +16,7 @@ FibreFlow is an Angular-based project management application for fiber optic ins
 
 ### 📦 Modules
 - [Dashboard](dashboard-implementation-plan.md) - Main dashboard features
+- [Projects & Steps](PROJECT_MATERIAL_WORKFLOW.md) - Project hierarchy with phases, steps, and tasks
 - [Contractors](contractor-implementation-plan.md) - Contractor management
 - [Staff Module](../src/app/features/staff/README.md) - Staff management system
 - [Suppliers](../src/app/core/suppliers/docs/suppliers-module-plan.md) - Supplier management
@@ -33,9 +34,11 @@ FibreFlow is an Angular-based project management application for fiber optic ins
 |--------|--------|---------------|
 | Authentication | ✅ Implemented | [Auth Plan](auth-implementation-plan.md) |
 | Dashboard | ✅ Implemented | [Dashboard Plan](dashboard-implementation-plan.md) |
+| Projects & Steps | ✅ Implemented | [Project Workflow](PROJECT_MATERIAL_WORKFLOW.md) |
 | Staff Management | ✅ Implemented | [Staff README](../src/app/features/staff/README.md) |
-| Suppliers | 🔄 In Progress | [Suppliers Plan](../src/app/core/suppliers/docs/suppliers-module-plan.md) |
-| Contractors | 📋 Planned | [Contractors Plan](contractor-implementation-plan.md) |
+| Suppliers | ✅ Implemented | [Suppliers Plan](../src/app/core/suppliers/docs/suppliers-module-plan.md) |
+| Contractors | ✅ Implemented | [Contractors Plan](contractor-implementation-plan.md) |
+| Stock Management | ✅ Implemented | [Stock Integration](STOCK_BOQ_INTEGRATION_GUIDE.md) |
 | Theme System | ✅ Implemented | [Theme Guide](theme-system-guide.md) |
 
 ## Key Features

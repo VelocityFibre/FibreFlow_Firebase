@@ -88,6 +88,11 @@ export class ProjectService {
     return docData(projectDoc, { idField: 'id' });
   }
 
+  // Alias for getProjectById for compatibility
+  getProject(id: string): Observable<Project | undefined> {
+    return this.getProjectById(id);
+  }
+
   // Get a single project (for non-observable use)
   async getProjectOnce(id: string): Promise<Project | undefined> {
     const projectDoc = doc(this.projectsCollection, id);

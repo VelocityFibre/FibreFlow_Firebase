@@ -153,7 +153,7 @@ interface DialogData {
         line-height: 1.4;
         font-size: 13px;
       }
-      
+
       .instructions strong {
         color: #333;
         display: inline-block;

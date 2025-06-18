@@ -39,6 +39,13 @@ export const routes: Routes = [
     path: 'phases',
     loadChildren: () => import('./features/phases/phases.routes').then((m) => m.phasesRoutes),
   },
+  {
+    path: 'steps',
+    loadComponent: () =>
+      import('./features/projects/pages/steps-page/steps-page.component').then(
+        (m) => m.StepsPageComponent,
+      ),
+  },
   // Dashboard-linked routes
   {
     path: 'materials',

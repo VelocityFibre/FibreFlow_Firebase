@@ -102,6 +102,13 @@
       <ng-container *ngTemplateOutlet="phasesTab"></ng-container>
     </mat-tab>
 
+    <!-- Steps Tab -->
+    <mat-tab label="Steps">
+      <div class="tab-content">
+        <app-project-steps [projectId]="project.id!"></app-project-steps>
+      </div>
+    </mat-tab>
+
     <!-- Tasks Tab -->
     <mat-tab label="Tasks">
       <ng-container *ngTemplateOutlet="tasksTab; context: { project: project }"></ng-container>
@@ -114,10 +121,10 @@
       </div>
     </mat-tab>
 
-    <!-- Documents Tab -->
-    <mat-tab label="Documents" [disabled]="true">
+    <!-- Contractors Tab -->
+    <mat-tab label="Contractors">
       <div class="tab-content">
-        <p>Document management coming soon...</p>
+        <app-project-contractors [projectId]="project.id!"></app-project-contractors>
       </div>
     </mat-tab>
   </mat-tab-group>

@@ -13,6 +13,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatCardModule } from '@angular/material/card';
+import { MatRippleModule } from '@angular/material/core';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { SupplierService } from '../../../../core/suppliers/services/supplier.service';
 import {
@@ -41,6 +45,10 @@ import { Observable } from 'rxjs';
     MatTooltipModule,
     MatMenuModule,
     MatBadgeModule,
+    MatCardModule,
+    MatRippleModule,
+    MatProgressBarModule,
+    MatDividerModule,
   ],
   templateUrl: './supplier-list.component.html',
   styleUrls: ['./supplier-list.component.scss'],
@@ -65,6 +73,7 @@ export class SupplierListComponent implements OnInit {
   supplierCategories = Object.values(SupplierCategory);
 
   loading = false;
+  viewMode: 'card' | 'table' = 'card'; // Default to card view
 
   ngOnInit(): void {
     this.loadSuppliers();
@@ -135,5 +144,19 @@ export class SupplierListComponent implements OnInit {
         console.error('Error deleting supplier:', error);
       }
     }
+  }
+
+  getPerformanceColor(value: number): string {
+    if (value >= 90) return 'primary';
+    if (value >= 70) return 'accent';
+    return 'warn';
+  }
+
+  createQuoteRequest(supplier: Supplier, event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+    // TODO: Navigate to quote request creation with supplier preselected
+    console.log('Create quote request for:', supplier.companyName);
   }
 }

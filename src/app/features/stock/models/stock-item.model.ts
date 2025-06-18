@@ -3,7 +3,13 @@ import { Timestamp } from '@angular/fire/firestore';
 export interface StockItem {
   id?: string;
   itemCode: string; // This links to MasterMaterial.itemCode
-  
+
+  // Project information
+  projectId?: string; // If set, this stock item belongs to a specific project
+  projectName?: string;
+  isProjectSpecific?: boolean; // true for project-specific stock, false/undefined for global stock
+  globalStockItemId?: string; // Reference to global stock item if this is a project-specific item
+
   // Material details (populated from MasterMaterial)
   materialDetails?: {
     name: string;
@@ -12,7 +18,7 @@ export interface StockItem {
     specifications?: string;
     unitOfMeasure: string;
   };
-  
+
   // Legacy fields (to be deprecated)
   name: string; // Will be replaced by materialDetails.name
   description?: string; // Will be replaced by materialDetails.description
@@ -30,11 +36,12 @@ export interface StockItem {
   // Cost information
   standardCost: number;
   lastPurchasePrice?: number;
+  unitCost?: number; // Alias for standardCost
 
   // Storage information
   warehouseLocation?: string;
   storageRequirements?: string;
-  
+
   // Batch/Lot tracking
   batchNumber?: string;
   expiryDate?: Timestamp;

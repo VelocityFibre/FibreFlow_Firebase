@@ -19,7 +19,7 @@ import {
   getDoc,
 } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
-import { Observable, map, switchMap, of, combineLatest, firstValueFrom } from 'rxjs';
+import { Observable, map, switchMap, of, combineLatest } from 'rxjs';
 import {
   StockItem,
   StockAllocation,
@@ -29,7 +29,7 @@ import {
 } from '../models/stock-item.model';
 import {
   StockMovement,
-  // MovementType,
+  MovementType,
   isIncomingMovement,
   isOutgoingMovement,
 } from '../models/stock-movement.model';
@@ -57,7 +57,47 @@ export class StockService {
   ) as CollectionReference<StockAllocation>;
 
   // Stock Items CRUD
-  getStockItems(): Observable<StockItem[]> {
+  getStockItems(projectId?: string): Observable<StockItem[]> {
+    let q;
+    if (projectId) {
+      // Get project-specific stock items
+      q = query(this.stockItemsCollection, where('projectId', '==', projectId), orderBy('name'));
+    } else {
+      // Get global stock items (no projectId)
+      q = query(this.stockItemsCollection, where('isProjectSpecific', '!=', true), orderBy('name'));
+    }
+
+    return collectionData(q, { idField: 'id' }).pipe(
+      switchMap((items) => this.enrichStockItemsWithMaterialData(items)),
+      map((items) =>
+        items.map((item) => ({
+          ...item,
+          availableStock: item.currentStock - item.allocatedStock,
+        })),
+      ),
+    );
+  }
+
+  // Get stock items by project
+  getStockItemsByProject(projectId: string): Observable<StockItem[]> {
+    const q = query(
+      this.stockItemsCollection,
+      where('projectId', '==', projectId),
+      orderBy('name'),
+    );
+    return collectionData(q, { idField: 'id' }).pipe(
+      switchMap((items) => this.enrichStockItemsWithMaterialData(items)),
+      map((items) =>
+        items.map((item) => ({
+          ...item,
+          availableStock: item.currentStock - item.allocatedStock,
+        })),
+      ),
+    );
+  }
+
+  // Get all stock items (both global and project-specific)
+  getAllStockItems(): Observable<StockItem[]> {
     const q = query(this.stockItemsCollection, orderBy('name'));
     return collectionData(q, { idField: 'id' }).pipe(
       switchMap((items) => this.enrichStockItemsWithMaterialData(items)),
@@ -73,26 +113,22 @@ export class StockService {
   // Helper method to enrich stock items with material data
   private enrichStockItemsWithMaterialData(stockItems: StockItem[]): Observable<StockItem[]> {
     if (stockItems.length === 0) return of([]);
-    
+
     // Get unique item codes
-    const itemCodes = [...new Set(stockItems.map(item => item.itemCode))];
-    
+    const itemCodes = [...new Set(stockItems.map((item) => item.itemCode))];
+
     // Fetch material data for all item codes
-    const materialObservables = itemCodes.map(code => 
-      this.materialService.getMaterialByCode(code).pipe(
-        map(material => ({ code, material }))
-      )
+    const materialObservables = itemCodes.map((code) =>
+      this.materialService.getMaterialByCode(code).pipe(map((material) => ({ code, material }))),
     );
-    
+
     return combineLatest(materialObservables).pipe(
-      map(materialsData => {
+      map((materialsData) => {
         // Create a map for quick lookup
-        const materialMap = new Map(
-          materialsData.map(({ code, material }) => [code, material])
-        );
-        
+        const materialMap = new Map(materialsData.map(({ code, material }) => [code, material]));
+
         // Enrich stock items with material data
-        return stockItems.map(item => {
+        return stockItems.map((item) => {
           const material = materialMap.get(item.itemCode);
           if (material) {
             return {
@@ -103,12 +139,12 @@ export class StockService {
                 category: material.category,
                 specifications: material.specifications,
                 unitOfMeasure: material.unitOfMeasure,
-              }
+              },
             };
           }
           return item;
         });
-      })
+      }),
     );
   }
 
@@ -117,7 +153,7 @@ export class StockService {
     return docData(docRef, { idField: 'id' }).pipe(
       switchMap((item) => {
         if (!item) return of(undefined);
-        
+
         // Enrich with material data
         return this.materialService.getMaterialByCode(item.itemCode).pipe(
           map((material) => {
@@ -125,7 +161,7 @@ export class StockService {
               ...item,
               availableStock: item.currentStock - item.allocatedStock,
             };
-            
+
             if (material) {
               enrichedItem.materialDetails = {
                 name: material.description,
@@ -135,9 +171,9 @@ export class StockService {
                 unitOfMeasure: material.unitOfMeasure,
               };
             }
-            
+
             return enrichedItem;
-          })
+          }),
         );
       }),
     );
@@ -181,6 +217,7 @@ export class StockService {
       ...(stockItem as StockItem),
       allocatedStock: 0,
       status: stockItem.status || StockItemStatus.ACTIVE,
+      isProjectSpecific: !!stockItem.projectId, // Set based on projectId presence
       createdAt: serverTimestamp() as Timestamp,
       createdBy: user?.uid || 'system',
       updatedAt: serverTimestamp() as Timestamp,
@@ -188,6 +225,61 @@ export class StockService {
     };
 
     await setDoc(docRef, newItem);
+    return docRef.id;
+  }
+
+  // Create project-specific stock item from global stock
+  async createProjectStockItem(
+    globalStockItemId: string,
+    projectId: string,
+    projectName: string,
+    quantity: number,
+  ): Promise<string> {
+    const globalItem = await this.getStockItemOnce(globalStockItemId);
+    if (!globalItem) {
+      throw new Error('Global stock item not found');
+    }
+
+    const docRef = doc(this.stockItemsCollection);
+    const user = this.auth.currentUser;
+
+    const projectItem: StockItem = {
+      ...globalItem,
+      id: undefined, // New ID will be generated
+      projectId,
+      projectName,
+      isProjectSpecific: true,
+      globalStockItemId,
+      currentStock: quantity,
+      allocatedStock: 0,
+      createdAt: serverTimestamp() as Timestamp,
+      createdBy: user?.uid || 'system',
+      updatedAt: serverTimestamp() as Timestamp,
+      updatedBy: user?.uid || 'system',
+    };
+
+    await setDoc(docRef, projectItem);
+
+    // Create a movement record for this allocation
+    await this.createStockMovement({
+      itemId: globalStockItemId,
+      itemCode: globalItem.itemCode,
+      itemName: globalItem.name,
+      movementType: MovementType.ALLOCATION,
+      quantity,
+      unitOfMeasure: globalItem.unitOfMeasure,
+      unitCost: globalItem.unitCost || globalItem.standardCost || 0,
+      totalCost: (globalItem.unitCost || globalItem.standardCost || 0) * quantity,
+      previousStock: globalItem.currentStock,
+      newStock: globalItem.currentStock - quantity,
+      movementDate: serverTimestamp() as Timestamp,
+      toProjectId: projectId,
+      toProjectName: projectName,
+      notes: `Allocated to project ${projectName}`,
+      performedBy: user?.uid || 'system',
+      performedByName: user?.displayName || 'System',
+    });
+
     return docRef.id;
   }
 
@@ -295,6 +387,13 @@ export class StockService {
     const docRef = doc(this.stockItemsCollection, stockItemId);
     const snapshot = await getDoc(docRef);
     return snapshot.data()?.currentStock || 0;
+  }
+
+  // Generate item code
+  generateItemCode(category: string): string {
+    const prefix = category.substring(0, 3).toUpperCase();
+    const timestamp = Date.now().toString().slice(-6);
+    return `${prefix}-${timestamp}`;
   }
 
   // Stock Allocations
@@ -414,12 +513,6 @@ export class StockService {
     return this.getStockItems();
   }
 
-  // Utility methods
-  generateItemCode(category: string): string {
-    const prefix = category.substring(0, 3).toUpperCase();
-    const timestamp = Date.now().toString().slice(-6);
-    return `${prefix}-${timestamp}`;
-  }
 
   checkStockAvailability(stockItemId: string, requiredQuantity: number): Observable<boolean> {
     return this.getStockItemById(stockItemId).pipe(

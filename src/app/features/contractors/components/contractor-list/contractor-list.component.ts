@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
@@ -11,11 +12,15 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatDividerModule } from '@angular/material/divider';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { ContractorService } from '../../services/contractor.service';
+import { ContractorProjectService } from '../../services/contractor-project.service';
 import { Contractor, ContractorStatus, CONTRACTOR_SERVICES } from '../../models/contractor.model';
+import { ContractorProjectSummary } from '../../models/contractor-project.model';
 import { ContractorFormComponent } from '../contractor-form/contractor-form.component';
 
 @Component({
@@ -24,6 +29,7 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
   imports: [
     CommonModule,
     MatTableModule,
+    MatCardModule,
     MatButtonModule,
     MatIconModule,
     MatChipsModule,
@@ -34,13 +40,15 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
     MatMenuModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
+    MatBadgeModule,
+    MatDividerModule,
     FormsModule,
   ],
   template: `
     <div class="contractor-list-container">
       <!-- Header -->
       <div class="header">
-        <h1>Contractors</h1>
+        <h1>Contractors (NEW CARD VIEW)</h1>
         <button mat-raised-button color="primary" (click)="openAddDialog()">
           <mat-icon>add</mat-icon>
           Add Contractor
@@ -80,122 +88,173 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
             </mat-option>
           </mat-select>
         </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Projects</mat-label>
+          <mat-select [(ngModel)]="projectFilter" (ngModelChange)="applyFilter()">
+            <mat-option value="">All</mat-option>
+            <mat-option value="with-projects">With Projects</mat-option>
+            <mat-option value="without-projects">Without Projects</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
 
-      <!-- Table -->
-      <div class="table-container" *ngIf="!loading(); else loadingTemplate">
-        <table mat-table [dataSource]="filteredContractors()" class="contractor-table">
-          <!-- Company Column -->
-          <ng-container matColumnDef="company">
-            <th mat-header-cell *matHeaderCellDef>Company</th>
-            <td mat-cell *matCellDef="let contractor">
-              <div class="company-info">
-                <strong>{{ contractor.companyName }}</strong>
-                <small>{{ contractor.registrationNumber }}</small>
-              </div>
-            </td>
-          </ng-container>
-
-          <!-- Contact Column -->
-          <ng-container matColumnDef="contact">
-            <th mat-header-cell *matHeaderCellDef>Primary Contact</th>
-            <td mat-cell *matCellDef="let contractor">
-              <div class="contact-info">
-                <div>{{ contractor.primaryContact.name }}</div>
-                <small>{{ contractor.primaryContact.phone }}</small>
-              </div>
-            </td>
-          </ng-container>
-
-          <!-- Services Column -->
-          <ng-container matColumnDef="services">
-            <th mat-header-cell *matHeaderCellDef>Services</th>
-            <td mat-cell *matCellDef="let contractor">
-              <mat-chip-set>
-                <mat-chip *ngFor="let service of contractor.capabilities.services">
-                  {{ getServiceLabel(service) }}
-                </mat-chip>
-              </mat-chip-set>
-            </td>
-          </ng-container>
-
-          <!-- Teams Column -->
-          <ng-container matColumnDef="teams">
-            <th mat-header-cell *matHeaderCellDef>Teams</th>
-            <td mat-cell *matCellDef="let contractor">
-              <span class="teams-count">{{ contractor.capabilities.maxTeams || 0 }}</span>
-            </td>
-          </ng-container>
-
-          <!-- Status Column -->
-          <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Status</th>
-            <td mat-cell *matCellDef="let contractor">
-              <mat-chip [ngClass]="'status-' + contractor.status">
-                {{ formatStatus(contractor.status) }}
+      <!-- Cards Grid -->
+      <div class="cards-container" *ngIf="!loading(); else loadingTemplate">
+        <mat-card
+          *ngFor="let summary of filteredContractorSummaries()"
+          class="contractor-card"
+          [ngClass]="'status-' + getContractorStatus(summary)"
+          (click)="viewContractorProjects(summary.contractorId)"
+        >
+          <!-- Card Header -->
+          <mat-card-header>
+            <mat-card-title>
+              {{ summary.contractorName }}
+              <mat-chip class="status-chip" [ngClass]="'status-' + getContractorStatus(summary)">
+                {{ formatStatus(getContractorStatus(summary)) }}
               </mat-chip>
-            </td>
-          </ng-container>
+            </mat-card-title>
+            <mat-card-subtitle>
+              <div class="contractor-metrics">
+                <span class="metric">
+                  <mat-icon inline>star</mat-icon>
+                  {{ summary.overallPerformanceRating.toFixed(1) }}/5
+                </span>
+                <span class="metric">
+                  <mat-icon inline>folder</mat-icon>
+                  {{ summary.activeProjects.length + summary.completedProjects.length }} Projects
+                </span>
+                <span class="metric">
+                  <mat-icon inline>attach_money</mat-icon>
+                  R{{ (summary.totalContractValue / 1000000).toFixed(1) }}M
+                </span>
+              </div>
+            </mat-card-subtitle>
+          </mat-card-header>
 
-          <!-- Actions Column -->
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>Actions</th>
-            <td mat-cell *matCellDef="let contractor">
-              <button mat-icon-button [matMenuTriggerFor]="menu">
-                <mat-icon>more_vert</mat-icon>
+          <!-- Card Content -->
+          <mat-card-content>
+            <!-- Active Projects Section -->
+            <div class="projects-section" *ngIf="summary.activeProjects.length > 0">
+              <h3 class="section-title" 
+                  [matBadge]="summary.activeProjects.length"
+                  matBadgeColor="accent">
+                Active Projects
+              </h3>
+              <div class="projects-list">
+                <div
+                  *ngFor="let project of summary.activeProjects.slice(0, 3)"
+                  class="project-item"
+                  (click)="navigateToProject($event, project.projectId)"
+                >
+                  <div class="project-info">
+                    <span class="project-code">{{ project.projectCode }}</span>
+                    <span class="project-name">{{ project.projectName }}</span>
+                  </div>
+                  <div class="project-metrics">
+                    <mat-progress-spinner
+                      [diameter]="40"
+                      [value]="project.progress"
+                      mode="determinate"
+                    ></mat-progress-spinner>
+                    <span class="progress-text">{{ project.progress }}%</span>
+                  </div>
+                </div>
+                <div *ngIf="summary.activeProjects.length > 3" class="more-projects">
+                  +{{ summary.activeProjects.length - 3 }} more projects
+                </div>
+              </div>
+            </div>
+
+            <!-- Completed Projects Section -->
+            <div class="projects-section" *ngIf="summary.completedProjects.length > 0">
+              <h3 class="section-title"
+                  [matBadge]="summary.completedProjects.length"
+                  matBadgeColor="primary">
+                Completed Projects
+              </h3>
+              <div class="completed-projects-summary">
+                <mat-chip-set>
+                  <mat-chip *ngFor="let project of summary.completedProjects.slice(0, 2)">
+                    {{ project.projectCode }}
+                  </mat-chip>
+                  <mat-chip *ngIf="summary.completedProjects.length > 2">
+                    +{{ summary.completedProjects.length - 2 }} more
+                  </mat-chip>
+                </mat-chip-set>
+              </div>
+            </div>
+
+            <!-- No Projects Message -->
+            <div
+              class="no-projects"
+              *ngIf="summary.activeProjects.length === 0 && summary.completedProjects.length === 0"
+            >
+              <mat-icon>info_outline</mat-icon>
+              <span>No projects assigned yet</span>
+            </div>
+
+            <!-- Financial Summary -->
+            <mat-divider></mat-divider>
+            <div class="financial-summary">
+              <div class="financial-item">
+                <span class="label">Contract Value</span>
+                <span class="value">R{{ (summary.totalContractValue / 1000).toFixed(0) }}K</span>
+              </div>
+              <div class="financial-item">
+                <span class="label">Paid</span>
+                <span class="value">R{{ (summary.totalPaymentsMade / 1000).toFixed(0) }}K</span>
+              </div>
+              <div class="financial-item">
+                <span class="label">Payment %</span>
+                <span class="value">
+                  {{
+                    summary.totalContractValue > 0
+                      ? ((summary.totalPaymentsMade / summary.totalContractValue) * 100).toFixed(0)
+                      : 0
+                  }}%
+                </span>
+              </div>
+            </div>
+          </mat-card-content>
+
+          <!-- Card Actions -->
+          <mat-card-actions>
+            <button
+              mat-button
+              color="primary"
+              (click)="viewContractorProjects($event, summary.contractorId)"
+            >
+              <mat-icon>visibility</mat-icon>
+              View Details
+            </button>
+            <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="handleEdit(summary.contractorId)">
+                <mat-icon>edit</mat-icon>
+                <span>Edit Contractor</span>
               </button>
-              <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="viewDetails(contractor.id)">
-                  <mat-icon>visibility</mat-icon>
-                  <span>View Details</span>
-                </button>
-                <button mat-menu-item (click)="openEditDialog(contractor)">
-                  <mat-icon>edit</mat-icon>
-                  <span>Edit</span>
-                </button>
-                <button
-                  mat-menu-item
-                  *ngIf="contractor.status === 'pending_approval'"
-                  (click)="approveContractor(contractor)"
-                >
-                  <mat-icon>check_circle</mat-icon>
-                  <span>Approve</span>
-                </button>
-                <button
-                  mat-menu-item
-                  *ngIf="contractor.status === 'active'"
-                  (click)="suspendContractor(contractor)"
-                >
-                  <mat-icon>pause_circle</mat-icon>
-                  <span>Suspend</span>
-                </button>
-                <button
-                  mat-menu-item
-                  *ngIf="contractor.status === 'suspended'"
-                  (click)="activateContractor(contractor)"
-                >
-                  <mat-icon>play_circle</mat-icon>
-                  <span>Activate</span>
-                </button>
-              </mat-menu>
-            </td>
-          </ng-container>
+              <button mat-menu-item (click)="assignToProject(summary.contractorId)">
+                <mat-icon>add_task</mat-icon>
+                <span>Assign to Project</span>
+              </button>
+              <button mat-menu-item (click)="manageTeams(summary.contractorId)">
+                <mat-icon>groups</mat-icon>
+                <span>Manage Teams</span>
+              </button>
+            </mat-menu>
+          </mat-card-actions>
+        </mat-card>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr
-            mat-row
-            *matRowDef="let row; columns: displayedColumns"
-            class="contractor-row"
-            [class.pending]="row.status === 'pending_approval'"
-          ></tr>
-
-          <!-- No data row -->
-          <tr class="mat-row no-data-row" *matNoDataRow>
-            <td class="mat-cell" [attr.colspan]="displayedColumns.length">
-              <p>No contractors found</p>
-            </td>
-          </tr>
-        </table>
+        <!-- No contractors message -->
+        <div class="no-contractors" *ngIf="filteredContractorSummaries().length === 0">
+          <mat-icon>business</mat-icon>
+          <h3>No contractors found</h3>
+          <p>Try adjusting your filters or add a new contractor</p>
+        </div>
       </div>
 
       <ng-template #loadingTemplate>
@@ -209,7 +268,7 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
     `
       .contractor-list-container {
         padding: 24px;
-        max-width: 1400px;
+        max-width: 1600px;
         margin: 0 auto;
       }
 
@@ -237,77 +296,216 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
         min-width: 200px;
       }
 
-      .table-container {
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
+      .cards-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 24px;
       }
 
-      .contractor-table {
-        width: 100%;
-      }
-
-      .company-info {
+      .contractor-card {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        height: 100%;
         display: flex;
         flex-direction: column;
       }
 
-      .company-info small {
-        color: #666;
-        margin-top: 2px;
+      .contractor-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
       }
 
-      .contact-info {
+      .contractor-card mat-card-header {
+        padding-bottom: 8px;
+      }
+
+      .contractor-card mat-card-title {
         display: flex;
-        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 20px;
+        margin-bottom: 8px;
       }
 
-      .contact-info small {
+      .status-chip {
+        font-size: 12px;
+        height: 24px;
+        line-height: 24px;
+        padding: 0 12px;
+      }
+
+      .contractor-metrics {
+        display: flex;
+        gap: 16px;
+        font-size: 14px;
         color: #666;
-        margin-top: 2px;
       }
 
-      .teams-count {
+      .contractor-metrics .metric {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .contractor-metrics mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        color: #999;
+      }
+
+      .projects-section {
+        margin: 16px 0;
+      }
+
+      .section-title {
+        font-size: 14px;
         font-weight: 500;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #666;
+      }
+
+      .projects-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .project-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        background: #f5f5f5;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .project-item:hover {
+        background: #e8e8e8;
+      }
+
+      .project-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        flex: 1;
+      }
+
+      .project-code {
+        font-weight: 500;
+        font-size: 12px;
         color: #1976d2;
       }
 
-      mat-chip {
+      .project-name {
         font-size: 12px;
+        color: #666;
       }
 
-      .status-pending_approval {
-        background-color: #fff3cd !important;
-        color: #856404 !important;
+      .project-metrics {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        position: relative;
       }
 
-      .status-active {
-        background-color: #d4edda !important;
-        color: #155724 !important;
+      .progress-text {
+        position: absolute;
+        font-size: 10px;
+        font-weight: 500;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
       }
 
-      .status-suspended {
-        background-color: #f8d7da !important;
-        color: #721c24 !important;
+      .more-projects {
+        text-align: center;
+        padding: 8px;
+        font-size: 12px;
+        color: #999;
+        font-style: italic;
       }
 
-      .status-blacklisted {
-        background-color: #d1d1d1 !important;
-        color: #333 !important;
+      .completed-projects-summary {
+        padding: 8px 0;
       }
 
-      .contractor-row.pending {
-        background-color: #fffbf0;
+      .no-projects {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 24px;
+        color: #999;
+        font-size: 14px;
       }
 
-      .no-data-row {
-        height: 200px;
+      .financial-summary {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 16px;
+        padding-top: 16px;
       }
 
-      .no-data-row td {
+      .financial-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .financial-item .label {
+        font-size: 12px;
+        color: #666;
+      }
+
+      .financial-item .value {
+        font-size: 16px;
+        font-weight: 500;
+        color: #333;
+      }
+
+      mat-card-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 16px;
+        margin-top: auto;
+      }
+
+      .no-contractors {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 40px;
         text-align: center;
         color: #666;
+      }
+
+      .no-contractors mat-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        color: #ddd;
+        margin-bottom: 16px;
+      }
+
+      .no-contractors h3 {
+        margin: 0 0 8px 0;
+        font-size: 20px;
+        font-weight: 400;
+      }
+
+      .no-contractors p {
+        margin: 0;
+        font-size: 14px;
       }
 
       .loading-container {
@@ -316,49 +514,118 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
         align-items: center;
         height: 400px;
       }
+
+      /* Status colors */
+      .status-chip.status-pending_approval {
+        background-color: #fff3cd !important;
+        color: #856404 !important;
+      }
+
+      .status-chip.status-active {
+        background-color: #d4edda !important;
+        color: #155724 !important;
+      }
+
+      .status-chip.status-suspended {
+        background-color: #f8d7da !important;
+        color: #721c24 !important;
+      }
+
+      .status-chip.status-blacklisted {
+        background-color: #d1d1d1 !important;
+        color: #333 !important;
+      }
+
+      /* Card status borders */
+      .contractor-card.status-pending_approval {
+        border-left: 4px solid #ffc107;
+      }
+
+      .contractor-card.status-active {
+        border-left: 4px solid #28a745;
+      }
+
+      .contractor-card.status-suspended {
+        border-left: 4px solid #dc3545;
+      }
+
+      .contractor-card.status-blacklisted {
+        border-left: 4px solid #6c757d;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .cards-container {
+          grid-template-columns: 1fr;
+        }
+
+        .filters {
+          flex-direction: column;
+        }
+
+        .filters mat-form-field {
+          width: 100%;
+        }
+      }
     `,
   ],
 })
 export class ContractorListComponent implements OnInit {
   private contractorService = inject(ContractorService);
+  private contractorProjectService = inject(ContractorProjectService);
   private dialog = inject(MatDialog);
   private router = inject(Router);
 
   contractors = signal<Contractor[]>([]);
+  contractorSummaries = signal<ContractorProjectSummary[]>([]);
   loading = signal(true);
   searchTerm = '';
   statusFilter = '';
   serviceFilter = '';
+  projectFilter = '';
   services = CONTRACTOR_SERVICES;
 
   displayedColumns = ['company', 'contact', 'services', 'teams', 'status', 'actions'];
 
-  filteredContractors = computed(() => {
-    let filtered = this.contractors();
+  filteredContractorSummaries = computed(() => {
+    let filtered = this.contractorSummaries();
+    
+    console.log('Contractor summaries:', filtered); // Debug log
 
     // Apply search filter
     if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(
-        (c) =>
-          c.companyName.toLowerCase().includes(term) ||
-          c.registrationNumber?.toLowerCase().includes(term) ||
-          c.primaryContact.name.toLowerCase().includes(term),
-      );
+      filtered = filtered.filter((cs) => cs.contractorName.toLowerCase().includes(term));
     }
 
     // Apply status filter
     if (this.statusFilter) {
-      filtered = filtered.filter((c) => c.status === this.statusFilter);
+      filtered = filtered.filter((cs) => {
+        const c = this.contractors().find((contractor) => contractor.id === cs.contractorId);
+        return c?.status === this.statusFilter;
+      });
     }
 
     // Apply service filter
     if (this.serviceFilter) {
-      filtered = filtered.filter((c) =>
-        c.capabilities.services.includes(this.serviceFilter as any),
+      filtered = filtered.filter((cs) => {
+        const contractor = this.contractors().find((c) => c.id === cs.contractorId);
+        return contractor?.capabilities.services.includes(this.serviceFilter as any);
+      });
+    }
+
+    // Apply project filter
+    if (this.projectFilter === 'with-projects') {
+      filtered = filtered.filter(
+        (cs) => cs.activeProjects.length > 0 || cs.completedProjects.length > 0,
+      );
+    } else if (this.projectFilter === 'without-projects') {
+      filtered = filtered.filter(
+        (cs) => cs.activeProjects.length === 0 && cs.completedProjects.length === 0,
       );
     }
 
+    console.log('Filtered contractor summaries:', filtered); // Debug log
     return filtered;
   });
 
@@ -368,10 +635,37 @@ export class ContractorListComponent implements OnInit {
 
   loadContractors() {
     this.loading.set(true);
+
+    // Load contractors first
     this.contractorService.getContractors().subscribe({
       next: (contractors) => {
         this.contractors.set(contractors);
+
+        // Always create summaries for all contractors (with or without projects)
+        const emptySummaries = contractors.map((c) => ({
+          contractorId: c.id!,
+          contractorName: c.companyName,
+          activeProjects: [],
+          completedProjects: [],
+          totalContractValue: 0,
+          totalPaymentsMade: 0,
+          overallPerformanceRating: 0,
+        }));
+        console.log('Created contractor summaries:', emptySummaries);
+        this.contractorSummaries.set(emptySummaries);
         this.loading.set(false);
+
+        // Try to load project summaries in the background (optional)
+        this.contractorProjectService.getAllContractorSummaries().subscribe({
+          next: (summaries) => {
+            if (summaries.length > 0) {
+              this.contractorSummaries.set(summaries);
+            }
+          },
+          error: (error) => {
+            console.log('No contractor projects found yet - showing contractors without project data');
+          },
+        });
       },
       error: (error) => {
         console.error('Error loading contractors:', error);
@@ -410,8 +704,52 @@ export class ContractorListComponent implements OnInit {
     });
   }
 
+  handleEdit(contractorId: string) {
+    const contractor = this.getContractor(contractorId);
+    if (contractor) {
+      this.openEditDialog(contractor);
+    }
+  }
+
   viewDetails(id: string) {
     this.router.navigate(['/contractors', id]);
+  }
+
+  viewContractorProjects(event: Event | string, contractorId?: string) {
+    // Handle both event and direct ID calls
+    if (typeof event === 'string') {
+      contractorId = event;
+    } else {
+      event.stopPropagation();
+    }
+
+    if (contractorId) {
+      this.router.navigate(['/contractors', contractorId]);
+    }
+  }
+
+  navigateToProject(event: Event, projectId: string) {
+    event.stopPropagation();
+    this.router.navigate(['/projects', projectId]);
+  }
+
+  getContractor(contractorId: string): Contractor | undefined {
+    return this.contractors().find((c) => c.id === contractorId);
+  }
+
+  getContractorStatus(summary: ContractorProjectSummary): ContractorStatus {
+    const contractor = this.getContractor(summary.contractorId);
+    return contractor?.status || ('active' as ContractorStatus);
+  }
+
+  assignToProject(contractorId: string) {
+    // TODO: Implement project assignment dialog
+    console.log('Assign contractor to project:', contractorId);
+  }
+
+  manageTeams(contractorId: string) {
+    // TODO: Implement team management dialog
+    console.log('Manage teams for contractor:', contractorId);
   }
 
   async approveContractor(contractor: Contractor) {

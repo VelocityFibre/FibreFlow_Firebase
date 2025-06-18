@@ -274,6 +274,7 @@ npm run deploy     # Deploy with pre-checks
 ### Main Routes
 - `/dashboard` - Role-based dashboard
 - `/projects` - Project list and management
+  - **NEW: Steps Management** - Intermediate layer between phases and tasks in project detail view
 - `/tasks` - Task board (Kanban/Gantt)
 - `/roles` - Role management
 - `/stock-movements` - Stock tracking

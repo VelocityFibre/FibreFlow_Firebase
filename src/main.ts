@@ -7,10 +7,7 @@ import * as Sentry from '@sentry/angular';
 // Initialize Sentry
 Sentry.init({
   dsn: environment.sentry.dsn,
-  integrations: [
-    Sentry.browserTracingIntegration(),
-    Sentry.replayIntegration(),
-  ],
+  integrations: [Sentry.browserTracingIntegration(), Sentry.replayIntegration()],
   // Performance Monitoring
   tracesSampleRate: environment.production ? 0.1 : 1.0, // 10% in production, 100% in development
   // Session Replay
@@ -21,7 +18,7 @@ Sentry.init({
   beforeSend(event, hint) {
     // Filter out certain errors if needed
     if (event.exception && environment.production) {
-      const error = hint.originalException;
+      const _error = hint.originalException;
       // You can filter errors here
     }
     return event;

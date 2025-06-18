@@ -30,6 +30,27 @@ export interface Supplier {
 
   portalEnabled: boolean;
   lastLogin?: Timestamp | Date;
+
+  // Performance metrics
+  performanceMetrics?: PerformanceMetrics;
+
+  // Related counts
+  activePurchaseOrders?: number;
+  productCount?: number;
+  activeProjects?: number;
+  totalSpend?: number;
+  outstandingInvoices?: number;
+  totalPurchaseOrders?: number;
+}
+
+export interface PerformanceMetrics {
+  onTimeDeliveryRate: number;
+  qualityScore: number;
+  averageResponseTime?: number;
+  completedOrders?: number;
+  averageRating?: number;
+  averageLeadTime?: number;
+  defectRate?: number;
 }
 
 export interface Address {

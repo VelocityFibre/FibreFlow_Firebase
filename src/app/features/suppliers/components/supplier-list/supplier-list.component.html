@@ -46,19 +46,187 @@
       <mat-icon>clear</mat-icon>
       Clear Filters
     </button>
+
+    <div class="view-toggle">
+      <button
+        mat-icon-button
+        [class.active]="viewMode === 'card'"
+        (click)="viewMode = 'card'"
+        matTooltip="Card View"
+      >
+        <mat-icon>grid_view</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        [class.active]="viewMode === 'table'"
+        (click)="viewMode = 'table'"
+        matTooltip="Table View"
+      >
+        <mat-icon>view_list</mat-icon>
+      </button>
+    </div>
   </div>
 
-  <div class="table-container">
-    <div *ngIf="loading" class="loading-spinner">
-      <mat-spinner></mat-spinner>
-    </div>
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-spinner">
+    <mat-spinner></mat-spinner>
+  </div>
 
-    <table
-      mat-table
-      [dataSource]="(suppliers$ | async) || []"
-      class="suppliers-table"
-      *ngIf="!loading"
+  <!-- Card View -->
+  <div *ngIf="!loading && viewMode === 'card'" class="suppliers-grid">
+    <mat-card
+      *ngFor="let supplier of (suppliers$ | async) || []"
+      class="supplier-card"
+      [routerLink]="['/suppliers', supplier.id]"
+      matRipple
     >
+      <!-- Card Header -->
+      <mat-card-header>
+        <div mat-card-avatar class="supplier-avatar">
+          <mat-icon>business</mat-icon>
+        </div>
+        <mat-card-title>{{ supplier.companyName }}</mat-card-title>
+        <mat-card-subtitle>
+          <span class="status-badge" [ngClass]="getStatusClass(supplier.status)">
+            {{ supplier.status | titlecase }}
+          </span>
+          <span
+            class="verification-badge"
+            [ngClass]="getVerificationClass(supplier.verificationStatus)"
+            *ngIf="supplier.verificationStatus === 'verified'"
+          >
+            <mat-icon>verified</mat-icon>
+            Verified
+          </span>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <!-- Card Content -->
+      <mat-card-content>
+        <!-- Contact Info -->
+        <div class="card-section contact-section">
+          <div class="contact-detail">
+            <mat-icon>email</mat-icon>
+            {{ supplier.primaryEmail }}
+          </div>
+          <div class="contact-detail">
+            <mat-icon>phone</mat-icon>
+            {{ supplier.primaryPhone }}
+          </div>
+          <div class="contact-detail" *ngIf="supplier.address?.city">
+            <mat-icon>location_on</mat-icon>
+            {{ supplier.address.city }}, {{ supplier.address.country }}
+          </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="card-section categories-section">
+          <mat-chip-set>
+            <mat-chip *ngFor="let category of supplier.categories.slice(0, 3)">
+              {{ getCategoryLabel(category) }}
+            </mat-chip>
+            <mat-chip *ngIf="supplier.categories.length > 3" class="more-chip">
+              +{{ supplier.categories.length - 3 }}
+            </mat-chip>
+          </mat-chip-set>
+        </div>
+
+        <!-- Stats -->
+        <div class="card-section stats-section">
+          <div class="stat">
+            <span class="stat-value">{{ supplier.activePurchaseOrders || 0 }}</span>
+            <span class="stat-label">Active Orders</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">{{ supplier.productCount || 0 }}</span>
+            <span class="stat-label">Products</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">{{ supplier.activeProjects || 0 }}</span>
+            <span class="stat-label">Projects</span>
+          </div>
+        </div>
+
+        <!-- Performance Indicators -->
+        <div class="card-section performance-section" *ngIf="supplier.performanceMetrics">
+          <div class="performance-item">
+            <span class="performance-label">On-Time Delivery</span>
+            <mat-progress-bar
+              mode="determinate"
+              [value]="supplier.performanceMetrics.onTimeDeliveryRate || 0"
+              [color]="getPerformanceColor(supplier.performanceMetrics.onTimeDeliveryRate)"
+            >
+            </mat-progress-bar>
+            <span class="performance-value"
+              >{{ supplier.performanceMetrics.onTimeDeliveryRate || 0 }}%</span
+            >
+          </div>
+          <div class="performance-item">
+            <span class="performance-label">Quality Score</span>
+            <mat-progress-bar
+              mode="determinate"
+              [value]="supplier.performanceMetrics.qualityScore || 0"
+              [color]="getPerformanceColor(supplier.performanceMetrics.qualityScore)"
+            >
+            </mat-progress-bar>
+            <span class="performance-value"
+              >{{ supplier.performanceMetrics.qualityScore || 0 }}%</span
+            >
+          </div>
+        </div>
+      </mat-card-content>
+
+      <!-- Card Actions -->
+      <mat-card-actions>
+        <button mat-button color="primary" [routerLink]="['/suppliers', supplier.id]">
+          <mat-icon>visibility</mat-icon>
+          View Details
+        </button>
+        <button mat-button (click)="createQuoteRequest(supplier, $event)">
+          <mat-icon>request_quote</mat-icon>
+          Request Quote
+        </button>
+        <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item [routerLink]="['/suppliers', supplier.id, 'edit']">
+            <mat-icon>edit</mat-icon>
+            <span>Edit</span>
+          </button>
+          <button mat-menu-item [routerLink]="['/suppliers', supplier.id, 'contacts']">
+            <mat-icon>contacts</mat-icon>
+            <span>Manage Contacts</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="deleteSupplier(supplier)" class="delete-action">
+            <mat-icon>delete</mat-icon>
+            <span>Delete</span>
+          </button>
+        </mat-menu>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Empty State for Card View -->
+    <div *ngIf="((suppliers$ | async) || []).length === 0" class="empty-state">
+      <mat-icon>business_center</mat-icon>
+      <h3>No suppliers found</h3>
+      <p *ngIf="searchQuery || filter.status || filter.categories?.length">
+        Try adjusting your filters
+      </p>
+      <p *ngIf="!searchQuery && !filter.status && !filter.categories?.length">
+        Get started by adding your first supplier
+      </p>
+      <button mat-raised-button color="primary" routerLink="/suppliers/new">
+        <mat-icon>add</mat-icon>
+        Add Supplier
+      </button>
+    </div>
+  </div>
+
+  <!-- Table View -->
+  <div class="table-container" *ngIf="!loading && viewMode === 'table'">
+    <table mat-table [dataSource]="(suppliers$ | async) || []" class="suppliers-table">
       <ng-container matColumnDef="companyName">
         <th mat-header-cell *matHeaderCellDef>Company Name</th>
         <td mat-cell *matCellDef="let supplier">

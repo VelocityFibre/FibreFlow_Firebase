@@ -35,17 +35,19 @@ import * as Sentry from '@sentry/angular';
       </mat-card-content>
     </mat-card>
   `,
-  styles: [`
-    .sentry-test-card {
-      margin: 20px;
-      max-width: 600px;
-    }
-    .button-group {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-  `]
+  styles: [
+    `
+      .sentry-test-card {
+        margin: 20px;
+        max-width: 600px;
+      }
+      .button-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+    `,
+  ],
 })
 export class SentryTestComponent {
   throwError(): void {
@@ -76,7 +78,7 @@ export class SentryTestComponent {
       scope.setContext('customData', {
         testType: 'manual',
         timestamp: new Date().toISOString(),
-        user: 'test-user'
+        user: 'test-user',
       });
       scope.setLevel('error');
       Sentry.captureException(error);

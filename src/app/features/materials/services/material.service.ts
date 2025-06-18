@@ -41,7 +41,7 @@ export class MaterialService {
   // Get all materials with optional filters
   getMaterials(filter?: MaterialFilter): Observable<MasterMaterial[]> {
     this.logger.debug('getMaterials called', 'MaterialService', filter);
-    
+
     // Start with a simple query - let's filter on client side for now
     let q = query(this.materialsCollection, orderBy('itemCode'));
 
@@ -62,22 +62,24 @@ export class MaterialService {
         this.logger.debug('Materials fetched from Firestore', 'MaterialService', {
           count: materials.length,
           filter,
-          sampleMaterials: materials.slice(0, 3).map(m => ({ id: m.id, itemCode: m.itemCode, isActive: m.isActive }))
+          sampleMaterials: materials
+            .slice(0, 3)
+            .map((m) => ({ id: m.id, itemCode: m.itemCode, isActive: m.isActive })),
         });
-        
+
         // Apply client-side filters
         let filtered = materials;
-        
+
         // Filter by isActive on client side if specified
         if (filter?.isActive !== undefined) {
-          filtered = filtered.filter(m => m.isActive === filter.isActive);
+          filtered = filtered.filter((m) => m.isActive === filter.isActive);
           this.logger.debug('Active filter applied', 'MaterialService', {
             isActive: filter.isActive,
             beforeCount: materials.length,
-            afterCount: filtered.length
+            afterCount: filtered.length,
           });
         }
-        
+
         // Apply search filter on client side
         if (filter?.searchTerm) {
           const searchLower = filter.searchTerm.toLowerCase();
@@ -90,10 +92,10 @@ export class MaterialService {
           this.logger.debug('Search filter applied', 'MaterialService', {
             searchTerm: filter.searchTerm,
             beforeCount: materials.length,
-            afterCount: filtered.length
+            afterCount: filtered.length,
           });
         }
-        
+
         return filtered;
       }),
       catchError((error) => {
@@ -129,7 +131,7 @@ export class MaterialService {
   // Check if item code exists
   async checkItemCodeExists(itemCode: string): Promise<boolean> {
     await this.logger.debug('Checking if item code exists', 'MaterialService', { itemCode });
-    
+
     try {
       const q = query(this.materialsCollection, where('itemCode', '==', itemCode), limit(1));
       const exists = await firstValueFrom(
@@ -138,15 +140,15 @@ export class MaterialService {
           catchError((error) => {
             this.logger.error('Error checking item code', 'MaterialService', error);
             return of(false);
-          })
-        )
+          }),
+        ),
       );
-      
-      await this.logger.debug('Item code check result', 'MaterialService', { 
-        itemCode, 
-        exists 
+
+      await this.logger.debug('Item code check result', 'MaterialService', {
+        itemCode,
+        exists,
       });
-      
+
       return exists;
     } catch (error: any) {
       await this.logger.logError(error, 'MaterialService', 'Failed to check item code');

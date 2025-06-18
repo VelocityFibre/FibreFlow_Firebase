@@ -6,12 +6,15 @@ A comprehensive project management system for fiber optic installations, built w
 
 ### Core Modules
 - **Projects** - Hierarchical project management with phases, steps, and tasks
+  - **NEW: Steps Management** - Intermediate layer between phases and tasks for better workflow organization
 - **Contractors** - Contractor management with onboarding, assignments, and performance tracking
 - **Suppliers** - Supplier relationship management with contact tracking and financial information
 - **Staff** - Employee management and role-based access control
+- **Stock Management** - Project-based inventory tracking and material management
 - **Dashboard** - Real-time project metrics and analytics
 
-### Contractors Module (Phase 1.1 Complete) 🆕
+### Contractors Module (Phase 2 Complete - June 18, 2025) ✨
+#### Phase 1 (Completed December 2024)
 - ✅ Contractor CRUD operations
 - ✅ Multi-step onboarding form
 - ✅ Service capabilities tracking
@@ -19,12 +22,33 @@ A comprehensive project management system for fiber optic installations, built w
 - ✅ Status management (pending, active, suspended)
 - ✅ Advanced search and filtering
 - ✅ South African localization (provinces, banks)
-- 🚧 Contractor details page (in progress)
-- 📋 Project assignments (planned)
-- 📋 Work targets and KPIs (planned)
-- 📋 Payment milestones (planned)
 
-### Suppliers Module (Phase 1 Complete)
+#### Phase 2 (Completed June 18, 2025)
+- ✅ **Contractor Project Management System**
+  - Card-based contractor overview with project summaries
+  - Active/completed project tracking per contractor
+  - Financial progress visualization
+  - Performance rating display
+- ✅ **Contractor-Project Detail Management**
+  - Dedicated management page for contractor-project relationships
+  - 6 comprehensive management tabs:
+    - **Team Allocation**: Assign and manage teams per project
+    - **Work Progress**: Track phase completion and task metrics
+    - **Materials Needed**: Plan material requirements
+    - **Materials Used**: Monitor usage and wastage
+    - **Payment Requested**: Manage payment requests and approvals
+    - **Payment Made**: Track payment history
+- ✅ **Project Integration**
+  - Replaced Documents tab with Contractors tab in project details
+  - Contractor summary cards in project view
+  - Direct navigation to contractor-project management
+- ✅ **Data Models & Services**
+  - Comprehensive ContractorProject relationship model
+  - ContractorProjectService for relationship management
+  - Team, material, and payment tracking structures
+
+### Suppliers Module (Phase 2 Complete - June 18, 2025) 🆕
+Phase 1 (Completed December 2024):
 - ✅ Supplier CRUD operations
 - ✅ Multiple contacts per supplier
 - ✅ Service area management
@@ -32,6 +56,42 @@ A comprehensive project management system for fiber optic installations, built w
 - ✅ Financial tracking (payment terms, credit limits)
 - ✅ Multi-step form interface
 - ✅ Advanced search and filtering
+
+Phase 2 (Completed June 18, 2025):
+- ✅ **Card-based supplier list view** with toggle between card/table views
+- ✅ **Enhanced supplier detail page** with 8 comprehensive tabs:
+  - Overview with summary metrics
+  - Contacts management
+  - Materials catalog (UI ready)
+  - Quotes management (UI ready)
+  - Purchase Orders (UI ready)
+  - Performance tracking with visualizations
+  - Document management (UI ready)
+  - Financial information
+- ✅ **Performance metrics visualization** with progress bars
+- ✅ **Quick actions** including "Request Quote" integration points
+- ✅ **Responsive design** optimized for all screen sizes
+
+Phase 3 (Planned):
+- 📋 RFQ (Request for Quote) system integrated with BOQ
+- 📋 Supplier material catalog management
+- 📋 Purchase order workflow
+- 📋 Supplier self-service portal
+- 📋 Automated performance tracking
+
+### Stock Management Module (June 18, 2025) 🆕
+- ✅ **Project-Based Stock Management** - Filter and manage stock by project
+- ✅ **Global vs Project Stock** - Support for both organization-wide and project-specific inventory
+- ✅ **Material Integration** - Auto-populate stock details from Master Materials catalog
+- ✅ **Stock Movements** - Track all stock allocations, transfers, and consumption
+- ✅ **Real-time Updates** - Live stock levels with allocation tracking
+- ✅ **Import/Export** - Bulk operations for stock items
+- ✅ **Advanced Filtering** - Search by code, name, category, and status
+- 📋 **Planned Features**:
+  - Stock allocation workflows
+  - Low stock alerts
+  - Reorder automation
+  - Stock valuation reports
 
 ### 🎨 Theme System (Complete)
 - **4 Themes Available**: Light, Dark, VelocityFibre (VF), FibreFlow
@@ -116,6 +176,10 @@ src/app/
 │   ├── dashboard/       # Dashboard module
 │   ├── projects/        # Projects module  
 │   ├── staff/          # Staff module
+│   ├── stock/          # Stock management module
+│   │   ├── components/ # Stock UI components
+│   │   ├── models/     # Stock data models
+│   │   └── services/   # Stock services
 │   └── suppliers/      # Suppliers module UI
 │       └── components/ # Supplier components
 └── layout/
@@ -134,8 +198,61 @@ The app uses Firestore with the following collections:
 - `suppliers` - Supplier information with contacts subcollection
 - `staff` - Employee records
 - `users` - User authentication data
+- `stockItems` - Inventory items (both global and project-specific)
+- `stockMovements` - Stock transaction history
+- `stockAllocations` - Project stock allocations
+- `masterMaterials` - Material catalog and specifications
+- `contractor-projects` - Contractor-project relationships with team and payment tracking
+- `steps` - Project steps linked to phases with progress tracking
 
 ## Recent Updates
+
+### Project Steps Management (January 2025) 🆕
+
+Added a new Steps management layer between Phases and Tasks for improved project workflow organization:
+
+- **Steps Tab in Project Details**: New dedicated tab for managing steps within project phases
+- **Hierarchical Structure**: Projects → Phases → Steps → Tasks
+- **Step Features**:
+  - Create, edit, and delete steps within each phase
+  - Track progress (0-100%) with visual progress bars
+  - Set start/end dates and estimated duration
+  - Assign team members to steps
+  - Define deliverables for each step
+  - Manage step dependencies and status (Pending, In Progress, Completed, Blocked, On Hold)
+- **Phase Overview**: Accordion view showing all steps grouped by phase with aggregate progress
+- **Real-time Updates**: Progress changes automatically update phase completion percentages
+
+### Contractor Project Management System (June 18, 2025)
+
+Completed Phase 2 of the Contractors module with comprehensive project management features:
+
+- **Project-Based Contractor Management**: New system for managing contractors per project with dedicated tracking pages
+- **Detailed Tracking Tabs**: 
+  - Team allocation and management
+  - Work progress monitoring by phase
+  - Material requirements and usage tracking
+  - Payment request and completion management
+- **Improved UI/UX**: Card-based layouts showing contractor performance across projects
+- **Integration**: Seamless integration with project details page - replaced Documents tab with Contractors tab
+- **Data Architecture**: New ContractorProject model linking contractors to projects with comprehensive tracking
+
+For implementation details, see contractor models and services in `/src/app/features/contractors/`
+
+### Stock Management - Project Integration (June 18, 2025)
+
+Implemented project-based stock management capabilities:
+
+- **Project Stock Filtering**: Added project dropdown selector to filter stock by specific projects
+- **Stock Item Model Updates**: Extended with `projectId`, `projectName`, `isProjectSpecific`, and `globalStockItemId` fields
+- **Service Enhancements**: 
+  - `getStockItems()` now accepts optional projectId parameter
+  - New `getStockItemsByProject()` method for project-specific queries
+  - `createProjectStockItem()` for allocating global stock to projects
+- **UI Improvements**:
+  - Project selector integrated into stock list view
+  - Auto-association of new stock items with selected project
+  - Project context preserved when creating new items
 
 ### Performance Improvements (January 13, 2025)
 

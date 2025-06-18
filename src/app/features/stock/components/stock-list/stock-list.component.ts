@@ -26,6 +26,8 @@ import { StockService } from '../../services/stock.service';
 import { StockItem, StockCategory, StockItemExport } from '../../models/stock-item.model';
 import { StockFormComponent } from '../stock-form/stock-form.component';
 import { StockImportDialogComponent } from '../stock-import-dialog/stock-import-dialog.component';
+import { ProjectService } from '../../../../core/services/project.service';
+import { Project } from '../../../../core/models/project.model';
 
 @Component({
   selector: 'app-stock-list',
@@ -74,6 +76,16 @@ import { StockImportDialogComponent } from '../stock-import-dialog/stock-import-
       </div>
 
       <div class="filters">
+        <mat-form-field appearance="outline" class="project-selector">
+          <mat-label>Project</mat-label>
+          <mat-select [(ngModel)]="selectedProjectId" (selectionChange)="onProjectChange()">
+            <mat-option value="">Global Stock</mat-option>
+            <mat-option *ngFor="let project of (projects$ | async) || []" [value]="project.id">
+              {{ project.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
         <mat-form-field appearance="outline">
           <mat-label>Search</mat-label>
           <input
@@ -145,11 +157,12 @@ import { StockImportDialogComponent } from '../stock-import-dialog/stock-import-
                   <small *ngIf="item.materialDetails?.description || item.description">
                     {{ item.materialDetails?.description || item.description }}
                   </small>
-                  <mat-icon 
-                    *ngIf="item.materialDetails" 
-                    class="material-linked-icon" 
-                    matTooltip="Linked to Master Material: {{item.itemCode}}"
-                    inline="true">
+                  <mat-icon
+                    *ngIf="item.materialDetails"
+                    class="material-linked-icon"
+                    matTooltip="Linked to Master Material: {{ item.itemCode }}"
+                    inline="true"
+                  >
                     link
                   </mat-icon>
                 </div>
@@ -343,6 +356,10 @@ import { StockImportDialogComponent } from '../stock-import-dialog/stock-import-
 
       .filters mat-form-field {
         min-width: 200px;
+      }
+
+      .project-selector {
+        min-width: 250px;
       }
 
       .loading {
@@ -564,6 +581,7 @@ export class StockListComponent implements OnInit {
   private stockService = inject(StockService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
+  private projectService = inject(ProjectService);
 
   stockItems$!: Observable<StockItem[]>;
   dataSource!: MatTableDataSource<StockItem>;
@@ -582,11 +600,14 @@ export class StockListComponent implements OnInit {
   searchTerm = '';
   selectedCategory = '';
   selectedStatus = '';
+  selectedProjectId = '';
 
   totalItems = 0;
   lowStockItems = 0;
   outOfStockItems = 0;
   totalValue = 0;
+
+  projects$: Observable<Project[]> = new Observable();
 
   // Virtual scrolling properties
   useVirtualScrolling = false;
@@ -606,12 +627,13 @@ export class StockListComponent implements OnInit {
   ];
 
   ngOnInit() {
+    this.projects$ = this.projectService.getProjects();
     this.loadStockItems();
   }
 
   loadStockItems() {
     this.loading = true;
-    this.stockItems$ = this.stockService.getStockItems();
+    this.stockItems$ = this.stockService.getStockItems(this.selectedProjectId || undefined);
 
     this.stockItems$.subscribe((items) => {
       this.dataSource = new MatTableDataSource(items);
@@ -669,14 +691,24 @@ export class StockListComponent implements OnInit {
   }
 
   hasActiveFilters(): boolean {
-    return !!this.searchTerm || !!this.selectedCategory || !!this.selectedStatus;
+    return (
+      !!this.searchTerm ||
+      !!this.selectedCategory ||
+      !!this.selectedStatus ||
+      !!this.selectedProjectId
+    );
   }
 
   clearFilters() {
     this.searchTerm = '';
     this.selectedCategory = '';
     this.selectedStatus = '';
-    this.applyFilter();
+    this.selectedProjectId = '';
+    this.loadStockItems();
+  }
+
+  onProjectChange() {
+    this.loadStockItems();
   }
 
   // TrackBy function for virtual scrolling performance
@@ -709,7 +741,10 @@ export class StockListComponent implements OnInit {
   openAddDialog() {
     const dialogRef = this.dialog.open(StockFormComponent, {
       width: '600px',
-      data: { mode: 'add' },
+      data: {
+        mode: 'add',
+        projectId: this.selectedProjectId || undefined,
+      },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
