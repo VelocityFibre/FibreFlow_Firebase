@@ -1,6 +1,6 @@
 # FibreFlow - Fiber Optic Project Management System
 
-A comprehensive project management system for fiber optic installations, built with Angular 19 and Firebase.
+A comprehensive project management system for fiber optic installations, built with Angular 20 and Firebase.
 
 ## Features
 
@@ -101,13 +101,14 @@ Phase 3 (Planned):
 - **Accessibility**: Proper contrast ratios maintained in all themes
 
 ### Tech Stack
-- Angular 19.2.15
-- Firebase/Firestore
-- Angular Material UI
-- RxJS for reactive programming
+- Angular 20.0.3
+- Firebase 11.9.1 / Firestore
+- Angular Material 20.0.3
+- RxJS 7.8.0 for reactive programming
+- TypeScript 5.8.3
 - Standalone components architecture
 - Centralized SCSS theme system
-- Sentry for error tracking and performance monitoring
+- Sentry 9.30.0 for error tracking and performance monitoring
 
 ## Development server
 

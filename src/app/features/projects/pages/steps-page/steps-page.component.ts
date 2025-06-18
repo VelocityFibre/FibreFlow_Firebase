@@ -58,15 +58,6 @@ interface FilteredStepsData {
                 </mat-select>
               </mat-form-field>
 
-              <mat-form-field appearance="outline">
-                <mat-label>Phase</mat-label>
-                <mat-select [(ngModel)]="selectedPhaseId" (ngModelChange)="onFiltersChange()">
-                  <mat-option value="">All Phases</mat-option>
-                  <mat-option *ngFor="let phase of filteredData()?.phases" [value]="phase.id">
-                    {{ phase.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
 
               <mat-form-field appearance="outline">
                 <mat-label>Status</mat-label>
@@ -429,7 +420,6 @@ export class StepsPageComponent implements OnInit {
   
   // Filter values
   selectedProjectId = '';
-  selectedPhaseId = '';
   selectedStatus = '';
   searchTerm = '';
 
@@ -445,9 +435,6 @@ export class StepsPageComponent implements OnInit {
       steps = steps.filter(step => step.projectId === this.selectedProjectId);
     }
 
-    if (this.selectedPhaseId) {
-      steps = steps.filter(step => step.phaseId === this.selectedPhaseId);
-    }
 
     if (this.selectedStatus) {
       steps = steps.filter(step => step.status === this.selectedStatus);
@@ -482,31 +469,29 @@ export class StepsPageComponent implements OnInit {
   loadData() {
     this.loading.set(true);
 
-    // Load all data concurrently
+    // Since phases are subcollections, we'll skip loading them globally for now
     combineLatest([
       this.stepService.getAllSteps(),
-      this.projectService.getProjects(),
-      this.stepService.getAllPhases()
+      this.projectService.getProjects()
     ]).subscribe({
-      next: ([steps, projects, phases]) => {
-        // Enrich steps with project and phase information
+      next: ([steps, projects]) => {
+        // Enrich steps with project information
         const enrichedSteps: StepWithProjectPhase[] = steps.map(step => {
           const project = projects.find(p => p.id === step.projectId);
-          const phase = phases.find(p => p.id === step.phaseId);
           
           return {
             ...step,
             projectName: project?.name,
             projectCode: project?.projectCode,
-            phaseName: phase?.name,
-            phaseStatus: phase?.status
+            phaseName: step.phaseName || 'Unknown Phase',
+            phaseStatus: step.phaseStatus
           };
         });
 
         this.filteredData.set({
           steps: enrichedSteps,
           projects,
-          phases
+          phases: [] // Empty for now since phases are subcollections
         });
         this.loading.set(false);
       },

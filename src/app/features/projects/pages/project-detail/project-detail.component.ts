@@ -12,7 +12,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { Observable, switchMap, combineLatest, map } from 'rxjs';
+import { Observable, switchMap, combineLatest, map, from } from 'rxjs';
 import { Project, ProjectStatus } from '../../../../core/models/project.model';
 import { Phase, PhaseStatus } from '../../../../core/models/phase.model';
 import { ProjectService } from '../../../../core/services/project.service';
@@ -1130,6 +1130,11 @@ export class ProjectDetailComponent implements OnInit {
 
     this.boqSummary$ = projectId$.pipe(switchMap((id) => this.boqService.getProjectSummary(id)));
 
+    // Ensure phases exist for this project
+    projectId$.pipe(
+      switchMap(projectId => from(this.phaseService.ensureProjectHasPhases(projectId)))
+    ).subscribe();
+
     this.phasesWithTasks$ = projectId$.pipe(
       switchMap((projectId) =>
         combineLatest([
@@ -1137,6 +1142,9 @@ export class ProjectDetailComponent implements OnInit {
           this.taskService.getTasksByProject(projectId),
         ]).pipe(
           map(([phases, tasks]) => {
+            console.log(`ProjectDetailComponent: Loaded ${phases.length} phases for project ${projectId}`);
+            console.log('Phases:', phases);
+            console.log(`ProjectDetailComponent: Loaded ${tasks.length} tasks for project ${projectId}`);
             return phases.map((phase) => ({
               phase,
               tasks: tasks

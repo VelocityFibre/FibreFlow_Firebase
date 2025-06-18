@@ -63,8 +63,9 @@ export class StockService {
       // Get project-specific stock items
       q = query(this.stockItemsCollection, where('projectId', '==', projectId), orderBy('name'));
     } else {
-      // Get global stock items (no projectId)
-      q = query(this.stockItemsCollection, where('isProjectSpecific', '!=', true), orderBy('name'));
+      // Get global stock items (no projectId or isProjectSpecific = false)
+      // Use == false instead of != true to avoid composite index requirement
+      q = query(this.stockItemsCollection, where('isProjectSpecific', '==', false), orderBy('name'));
     }
 
     return collectionData(q, { idField: 'id' }).pipe(
@@ -483,6 +484,7 @@ export class StockService {
           batchTracking: false,
           expiryTracking: false,
           status: StockItemStatus.ACTIVE,
+          isProjectSpecific: false, // Imported items are global by default
           createdAt: serverTimestamp() as Timestamp,
           createdBy: user?.uid || 'system',
           updatedAt: serverTimestamp() as Timestamp,

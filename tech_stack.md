@@ -10,11 +10,13 @@
 ## Core Stack
 
 ### Frontend
-- **Angular 19.2** (standalone components, signals)
-- **Angular Material 19.2** (UI components)
-- **AngularFire 19.2** (Firebase integration)
-- **RxJS 7.8** (Reactive programming)
-- **TypeScript 5.7**
+- **Angular 20.0.3** (standalone components, signals)
+- **Angular Material 20.0.3** (UI components)
+- **Angular CDK 20.0.3** (Component development kit)
+- **@angular/fire 19.2.0** (Firebase integration)
+- **RxJS 7.8.0** (Reactive programming)
+- **TypeScript 5.8.3**
+- **Zone.js 0.15.0** (Change detection)
 - **SCSS** (Custom theme system - 4 themes)
 
 ### Backend
@@ -26,11 +28,16 @@
 - **Firebase Functions** (Node.js - when needed)
 
 ### DevOps
-- **Angular CLI 19.2**
-- **ESLint + Prettier** (code quality)
-- **Karma + Jasmine** (testing)
+- **Angular CLI 20.0.3**
+- **Node.js 20.19.2** (minimum required)
+- **npm 10.8.2**
+- **ESLint 8.57.1 + Angular ESLint 20.0.0**
+- **Prettier 3.5.3** (code formatting)
+- **Karma 6.4.0 + Jasmine 5.6.0** (testing)
 - **Firebase CLI** (deployment)
-- **Sentry** (error tracking & monitoring)
+- **Sentry 9.30.0** (error tracking & monitoring)
+- **Husky 9.1.7** (Git hooks)
+- **Lint-staged 15.5.2** (Pre-commit checks)
 
 ## Key Features Implemented
 
@@ -75,9 +82,12 @@ src/app/
 └── styles/        # Theme system
 ```
 
+## Additional Libraries
+- **xlsx 0.18.5** (Excel import/export for BOQ)
+- **tslib 2.3.0** (TypeScript runtime library)
+
 ## Future Additions
 - ng2-charts (data visualization)
-- xlsx (Excel export)
 - jsPDF (PDF generation)
 - PWA service worker
 - Offline capabilities

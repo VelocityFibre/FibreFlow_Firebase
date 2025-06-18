@@ -40,10 +40,12 @@ export class PhaseService {
       this.firestore,
       `projects/${projectId}/phases`,
     ) as CollectionReference<Phase>;
-    // Query removed - using phasesRef directly with collectionData
-    // const phasesQuery = query(phasesRef, orderBy('orderNo'));
 
     return collectionData(phasesRef, { idField: 'id' }).pipe(
+      map(phases => {
+        // Sort phases by orderNo
+        return phases.sort((a, b) => (a.orderNo || 0) - (b.orderNo || 0));
+      }),
       switchMap((phases) => {
         // Populate user details for assigned phases
         if (phases.length === 0) {
@@ -95,31 +97,57 @@ export class PhaseService {
   async createProjectPhases(projectId: string, _createTasks: boolean = true): Promise<void> {
     // _createTasks parameter kept for backwards compatibility but not used
     // Tasks creation is now handled separately to avoid circular dependency
+    console.log(`PhaseService: Creating phases for project ${projectId}`);
+    console.log(`PhaseService: Number of default phases: ${DEFAULT_PHASES.length}`);
+    
     const batch = writeBatch(this.firestore);
-    const phaseIds: string[] = [];
-    const phasesData: Phase[] = [];
+    const phaseMap = new Map<string, string>(); // Map template phase IDs to actual Firestore IDs
+    const phasesToCreate: Array<{ ref: any; data: any; template: any; index: number }> = [];
 
+    // First, create all phase references and map IDs
     DEFAULT_PHASES.forEach((template, index) => {
       const phaseRef = doc(collection(this.firestore, `projects/${projectId}/phases`));
       const phaseId = phaseRef.id;
-      phaseIds.push(phaseId);
+      
+      // Map the template's logical ID to the actual Firestore ID
+      const templateId = template.name.toLowerCase().replace(/[()]/g, '').replace(/\s+/g, '-');
+      phaseMap.set(templateId, phaseId);
+      
+      phasesToCreate.push({ ref: phaseRef, data: null, template, index });
+    });
 
-      const phase: Phase = {
-        id: phaseId,
+    // Now create phase data with proper dependency references
+    phasesToCreate.forEach(({ ref, template, index }) => {
+      const phaseData = {
         name: template.name,
         description: template.description,
         orderNo: template.orderNo,
         status: PhaseStatus.PENDING,
-        dependencies: this.mapTemplateDependencies(template.defaultDependencies || [], index),
+        dependencies: (template.defaultDependencies || []).map((dep: any) => {
+          const mappedId = phaseMap.get(dep.phaseId);
+          if (mappedId) {
+            return {
+              phaseId: mappedId,
+              type: dep.type,
+            };
+          }
+          return null;
+        }).filter((dep: any) => dep !== null),
         createdAt: serverTimestamp() as Timestamp,
         updatedAt: serverTimestamp() as Timestamp,
       };
 
-      phasesData.push(phase);
-      batch.set(phaseRef, phase);
+      console.log(`PhaseService: Creating phase ${index + 1}/${DEFAULT_PHASES.length}: ${template.name}`);
+      batch.set(ref, phaseData);
     });
 
-    await batch.commit();
+    try {
+      await batch.commit();
+      console.log(`PhaseService: Successfully created ${phasesToCreate.length} phases for project ${projectId}`);
+    } catch (error) {
+      console.error(`PhaseService: Error creating phases for project ${projectId}:`, error);
+      throw error;
+    }
 
     // Tasks creation removed - handled separately to avoid circular dependency
   }
@@ -482,6 +510,19 @@ export class PhaseService {
   deletePhaseTemplate(templateId: string): Observable<void> {
     const templateRef = doc(this.firestore, 'phaseTemplates', templateId);
     return from(deleteDoc(templateRef));
+  }
+
+  // Check and create phases if missing for a project
+  async ensureProjectHasPhases(projectId: string): Promise<void> {
+    try {
+      const phases = await firstValueFrom(this.getProjectPhases(projectId));
+      if (!phases || phases.length === 0) {
+        console.log(`PhaseService: No phases found for project ${projectId}, creating default phases...`);
+        await this.createProjectPhases(projectId, true);
+      }
+    } catch (error) {
+      console.error(`PhaseService: Error ensuring phases for project ${projectId}:`, error);
+    }
   }
 
   // Initialize default phase templates (run once on first app load)

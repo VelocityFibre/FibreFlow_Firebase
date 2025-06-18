@@ -2,7 +2,13 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
+import { enableProdMode } from '@angular/core';
 import * as Sentry from '@sentry/angular';
+
+// Enable production mode to avoid dev-mode change detection issues
+if (environment.production) {
+  enableProdMode();
+}
 
 // Initialize Sentry
 Sentry.init({
@@ -37,14 +43,34 @@ window.addEventListener('error', (event) => {
   console.error('FibreFlow: Global error:', event.error);
 });
 
-bootstrapApplication(AppComponent, appConfig)
-  .then(() => console.log('FibreFlow: Application bootstrapped successfully'))
-  .catch((err) => {
-    console.error('FibreFlow: Bootstrap error:', err);
-    // Display error in the browser
-    document.body.innerHTML = `<div style="padding: 20px; color: red;">
-      <h1>Application Error</h1>
-      <p>Failed to start FibreFlow. Check browser console for details.</p>
-      <pre>${err}</pre>
-    </div>`;
-  });
+// Only bootstrap if we're in the browser
+if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+  bootstrapApplication(AppComponent, appConfig)
+    .then(() => {
+      console.log('FibreFlow: Application bootstrapped successfully');
+      // Log Angular version and environment
+      console.log('FibreFlow: Angular environment:', {
+        production: environment.production,
+        angularVersion: (window as any).ng?.VERSION?.full || 'Unknown',
+        hydrationEnabled: false,
+        platform: 'browser'
+      });
+    })
+    .catch((err) => {
+      console.error('FibreFlow: Bootstrap error:', err);
+      console.error('FibreFlow: Full error details:', {
+        message: err.message,
+        stack: err.stack,
+        name: err.name,
+        code: err.code
+      });
+      // Display error in the browser
+      document.body.innerHTML = `<div style="padding: 20px; color: red;">
+        <h1>Application Error</h1>
+        <p>Failed to start FibreFlow. Check browser console for details.</p>
+        <pre>${err}</pre>
+      </div>`;
+    });
+} else {
+  console.error('FibreFlow: Not in browser environment, skipping bootstrap');
+}

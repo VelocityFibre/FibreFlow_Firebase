@@ -82,6 +82,25 @@ export class SentryErrorHandlerService implements ErrorHandler {
           ? (window as any).Zone.current.name
           : 'Zone not available',
       );
+      
+      // Try to extract more information from the error
+      const errorString = error.toString();
+      const stackLines = error.stack?.split('\n') || [];
+      console.error('Error toString():', errorString);
+      console.error('Stack trace lines:', stackLines);
+      
+      // Log component information if available
+      if ((error as any).ngDebugContext) {
+        console.error('Angular debug context:', (error as any).ngDebugContext);
+      }
+      
+      // Log the specific expression that changed
+      const match = error.message?.match(/Previous value: '(.*)'\. Current value: '(.*)'/);
+      if (match) {
+        console.error('Expression that changed:');
+        console.error('  Previous value:', match[1]);
+        console.error('  Current value:', match[2]);
+      }
 
       // Add NG0200 specific context to Sentry
       Sentry.withScope((scope) => {

@@ -25,13 +25,16 @@ FibreFlow is an enterprise fiber optic project management system built with Angu
 
 ## Tech Stack
 > 📊 **See CODEBASE_REVIEW.md for comprehensive tech stack evaluation & industry-specific recommendations**
+> 📋 **See tech_stack.md for complete version details**
 
 ### Frontend
-- Angular 18+ (standalone components)
-- Angular Material + CDK
-- RxJS + Signals
+- Angular 20.0.3 (standalone components, signals)
+- Angular Material 20.0.3 + CDK 20.0.3
+- @angular/fire 19.2.0 (Firebase integration)
+- RxJS 7.8.0 + Signals
+- TypeScript 5.8.3
+- Zone.js 0.15.0
 - SCSS with Material theming
-- AngularFire
 - Logo: 110% scale in sidebar
 
 ### State Management
@@ -41,13 +44,19 @@ FibreFlow is an enterprise fiber optic project management system built with Angu
 - **No NgRx/Akita needed** - Firebase provides state sync
 
 ### Backend  
-- Firebase (serverless)
+- Firebase 11.9.1 (serverless)
 - Firestore + Auth + Storage
 - Hosting: https://fibreflow-73daf.web.app
 - Project ID: fibreflow-73daf
 
 ### DevOps
-- ESLint + Prettier (configured)
+- Angular CLI 20.0.3
+- Node.js 20.19.2 (minimum required)
+- npm 10.8.2
+- ESLint 8.57.1 + Angular ESLint 20.0.0
+- Prettier 3.5.3 (configured)
+- Karma 6.4.0 + Jasmine 5.6.0
+- Sentry 9.30.0 (error tracking)
 - Pre-deploy scripts with quality checks
 - Global error handling
 - TypeScript strict mode
