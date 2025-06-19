@@ -1,15 +1,11 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -25,15 +21,11 @@ import {
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
     MatChipsModule,
     MatExpansionModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
     MatBadgeModule,
     MatDividerModule,
     MatProgressSpinnerModule,
@@ -58,49 +50,12 @@ import {
         </div>
       </div>
 
-      <!-- Search and Filters -->
-      <div class="search-section">
-        <mat-card class="search-card">
-          <mat-card-content>
-            <div class="search-filters">
-              <mat-form-field appearance="outline" class="search-field">
-                <mat-label>Search tasks</mat-label>
-                <input
-                  matInput
-                  [(ngModel)]="searchTerm"
-                  (ngModelChange)="onSearchChange()"
-                  placeholder="Search across all tasks..."
-                />
-                <mat-icon matSuffix>search</mat-icon>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="filter-field">
-                <mat-label>Filter by phase</mat-label>
-                <mat-select [(ngModel)]="selectedPhase" (ngModelChange)="onFilterChange()">
-                  <mat-option value="">All Phases</mat-option>
-                  <mat-option *ngFor="let phase of allPhases()" [value]="phase.id">
-                    {{ phase.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-
-            <div class="search-stats" *ngIf="searchTerm || selectedPhase">
-              <span class="stats-item">
-                <mat-icon>search</mat-icon>
-                {{ getTotalFilteredTasks() }} tasks found
-              </span>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-
       <!-- Task Templates by Phase -->
       <div class="phases-section">
         <mat-accordion multi="true">
           <mat-expansion-panel
-            *ngFor="let phase of filteredPhases(); trackBy: trackByPhase"
-            [expanded]="shouldExpandPhase(phase)"
+            *ngFor="let phase of allPhases(); trackBy: trackByPhase"
+            [expanded]="false"
             class="phase-panel"
           >
             <mat-expansion-panel-header>
@@ -121,8 +76,8 @@ import {
               <!-- Steps within Phase -->
               <mat-accordion multi="true" class="steps-accordion">
                 <mat-expansion-panel
-                  *ngFor="let step of getFilteredStepsForPhase(phase); trackBy: trackByStep"
-                  [expanded]="shouldExpandStep(step)"
+                  *ngFor="let step of phase.steps; trackBy: trackByStep"
+                  [expanded]="false"
                   class="step-panel"
                 >
                   <mat-expansion-panel-header>
@@ -139,10 +94,7 @@ import {
 
                   <div class="step-content">
                     <div class="tasks-list">
-                      <div
-                        *ngFor="let task of getFilteredTasksForStep(step); trackBy: trackByTask"
-                        class="task-item"
-                      >
+                      <div *ngFor="let task of step.tasks; trackBy: trackByTask" class="task-item">
                         <div class="task-number">{{ task.orderNo }}</div>
                         <div class="task-details">
                           <span class="task-name">{{ task.name }}</span>
@@ -201,50 +153,6 @@ import {
         color: #6b7280;
         margin: 8px 0 0 0;
         font-size: 16px;
-      }
-
-      .search-section {
-        margin-bottom: 32px;
-      }
-
-      .search-card {
-        border-radius: 12px;
-      }
-
-      .search-filters {
-        display: flex;
-        gap: 16px;
-        align-items: center;
-        flex-wrap: wrap;
-      }
-
-      .search-field {
-        flex: 1;
-        min-width: 300px;
-      }
-
-      .filter-field {
-        min-width: 200px;
-      }
-
-      .search-stats {
-        margin-top: 16px;
-        padding-top: 16px;
-        border-top: 1px solid #e5e7eb;
-      }
-
-      .stats-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        color: #6b7280;
-        font-size: 14px;
-      }
-
-      .stats-item mat-icon {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
       }
 
       .phases-section {
@@ -386,17 +294,6 @@ import {
           font-size: 24px;
         }
 
-        .search-filters {
-          flex-direction: column;
-          align-items: stretch;
-        }
-
-        .search-field,
-        .filter-field {
-          min-width: unset;
-          width: 100%;
-        }
-
         .phase-header {
           flex-direction: column;
           align-items: flex-start;
@@ -419,112 +316,15 @@ import {
 export class TasksPageComponent implements OnInit {
   private router = inject(Router);
 
-  // Search and filter functionality
-  searchTerm = signal('');
-  selectedPhase = signal('');
-
   // All phases with their steps and tasks
   allPhases = signal<PhaseTemplate[]>(TASK_TEMPLATES);
-
-  // Filtered phases based on search and filters
-  filteredPhases = computed(() => {
-    const phases = this.allPhases();
-    const term = this.searchTerm().toLowerCase();
-    const phaseFilter = this.selectedPhase();
-
-    let filteredPhases = phases;
-
-    // Filter by selected phase
-    if (phaseFilter) {
-      filteredPhases = phases.filter((phase) => phase.id === phaseFilter);
-    }
-
-    // If there's a search term, filter phases and their content
-    if (term) {
-      filteredPhases = filteredPhases
-        .map((phase) => ({
-          ...phase,
-          steps: phase.steps
-            .map((step) => ({
-              ...step,
-              tasks: step.tasks.filter(
-                (task) =>
-                  task.name.toLowerCase().includes(term) ||
-                  task.description?.toLowerCase().includes(term),
-              ),
-            }))
-            .filter((step) => step.tasks.length > 0),
-        }))
-        .filter((phase) => phase.steps.length > 0);
-    }
-
-    return filteredPhases;
-  });
 
   ngOnInit() {
     // Component initialization
   }
 
-  onSearchChange() {
-    // Trigger computed signal recalculation
-  }
-
-  onFilterChange() {
-    // Trigger computed signal recalculation
-  }
-
   navigateHome() {
     this.router.navigate(['/']);
-  }
-
-  shouldExpandPhase(phase: PhaseTemplate): boolean {
-    // Expand if there's a search term or phase filter
-    return !!this.searchTerm() || !!this.selectedPhase();
-  }
-
-  shouldExpandStep(step: StepTemplate): boolean {
-    // Expand if there's a search term
-    return !!this.searchTerm();
-  }
-
-  getFilteredStepsForPhase(phase: PhaseTemplate): StepTemplate[] {
-    const filteredPhase = this.filteredPhases().find((p) => p.id === phase.id);
-    return filteredPhase?.steps || [];
-  }
-
-  getFilteredTasksForStep(step: StepTemplate): TaskTemplate[] {
-    const term = this.searchTerm().toLowerCase();
-    if (!term) {
-      return step.tasks;
-    }
-    return step.tasks.filter(
-      (task) =>
-        task.name.toLowerCase().includes(term) || task.description?.toLowerCase().includes(term),
-    );
-  }
-
-  getTotalPhases(): number {
-    return this.allPhases().length;
-  }
-
-  getTotalSteps(): number {
-    return this.allPhases().reduce((total, phase) => total + phase.stepCount, 0);
-  }
-
-  getTotalTasks(): number {
-    return this.allPhases().reduce((total, phase) => total + phase.totalTasks, 0);
-  }
-
-  getTotalFilteredTasks(): number {
-    return this.filteredPhases().reduce(
-      (total, phase) =>
-        total +
-        phase.steps.reduce(
-          (stepTotal, step) => stepTotal + this.getFilteredTasksForStep(step).length,
-          0,
-        ),
-      0,
-    );
   }
 
   trackByPhase(index: number, phase: PhaseTemplate): string {
