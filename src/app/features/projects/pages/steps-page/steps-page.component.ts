@@ -548,7 +548,9 @@ export class StepsPageComponent implements OnInit {
       data: {
         projectId: this.selectedProjectId || '', // Allow empty project ID
         projects: this.filteredData()?.projects || [], // Pass available projects
-        phases: this.selectedProjectId ? this.phaseService.getProjectPhases(this.selectedProjectId) : undefined,
+        phases: this.selectedProjectId
+          ? this.phaseService.getProjectPhases(this.selectedProjectId)
+          : undefined,
       },
     });
 

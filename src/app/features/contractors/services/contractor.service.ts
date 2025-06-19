@@ -249,7 +249,9 @@ export class ContractorService {
       map((contractors) =>
         // Further filter to ensure all required services are present
         contractors.filter((contractor) =>
-          requiredServices.every((service) => contractor['capabilities']?.services?.includes(service)),
+          requiredServices.every((service) =>
+            contractor['capabilities']?.services?.includes(service),
+          ),
         ),
       ),
     ) as Observable<Contractor[]>;

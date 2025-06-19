@@ -17,13 +17,13 @@
   color: #999;
   position: relative;
   min-height: 100px;
-  
+
   &::before {
     content: '🖼️';
     font-size: 2rem;
     opacity: 0.5;
   }
-  
+
   &::after {
     content: 'Image not available';
     position: absolute;
@@ -64,19 +64,19 @@
 .img-container {
   position: relative;
   overflow: hidden;
-  
+
   &.aspect-16-9 {
     aspect-ratio: 16 / 9;
   }
-  
+
   &.aspect-4-3 {
     aspect-ratio: 4 / 3;
   }
-  
+
   &.aspect-1-1 {
     aspect-ratio: 1 / 1;
   }
-  
+
   img {
     position: absolute;
     top: 0;

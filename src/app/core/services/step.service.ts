@@ -113,7 +113,7 @@ export class StepService {
 
   createStep(step: Omit<Step, 'id'>): Observable<string> {
     const stepsCollection = collection(this.firestore, this.collectionName);
-    
+
     // Build stepData object, filtering out undefined values
     const stepData: any = {
       projectId: step.projectId,
@@ -127,7 +127,7 @@ export class StepService {
       progress: step.progress || 0,
       status: step.status || StepStatus.PENDING,
     };
-    
+
     // Only add optional fields if they have values
     if (step.description && step.description.trim()) {
       stepData.description = step.description.trim();
@@ -150,12 +150,12 @@ export class StepService {
 
   updateStep(stepId: string, updates: Partial<Step>): Observable<void> {
     const stepDoc = doc(this.firestore, this.collectionName, stepId);
-    
+
     // Build updateData object, filtering out undefined values
     const updateData: any = {
       updatedAt: serverTimestamp(),
     };
-    
+
     // Only add fields that have values
     if (updates.name) updateData.name = updates.name;
     if (updates.description !== undefined) {
@@ -166,7 +166,8 @@ export class StepService {
     if (updates.orderNo !== undefined) updateData.orderNo = updates.orderNo;
     if (updates.status) updateData.status = updates.status;
     if (updates.progress !== undefined) updateData.progress = updates.progress;
-    if (updates.estimatedDuration !== undefined) updateData.estimatedDuration = updates.estimatedDuration;
+    if (updates.estimatedDuration !== undefined)
+      updateData.estimatedDuration = updates.estimatedDuration;
     if (updates.deliverables !== undefined) updateData.deliverables = updates.deliverables;
     if (updates.phaseId) updateData.phaseId = updates.phaseId;
     if (updates.projectId) updateData.projectId = updates.projectId;

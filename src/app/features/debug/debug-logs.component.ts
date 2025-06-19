@@ -261,7 +261,8 @@ export class DebugLogsComponent implements OnInit {
     const errorLogsQuery = query(logsCollection, orderBy('timestamp', 'desc'), limit(50));
     this.errorLogs$ = collectionData(errorLogsQuery, { idField: 'id' }).pipe(
       map(
-        (logs) => (logs as LogEntry[]).filter((log: LogEntry) => log.level === 'error') as LogEntry[],
+        (logs) =>
+          (logs as LogEntry[]).filter((log: LogEntry) => log.level === 'error') as LogEntry[],
       ),
     ) as Observable<LogEntry[]>;
   }

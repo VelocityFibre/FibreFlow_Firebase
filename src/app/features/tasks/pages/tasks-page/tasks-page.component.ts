@@ -13,7 +13,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { PhaseTemplate, StepTemplate, TaskTemplate, TASK_TEMPLATES } from '../../models/task-template.model';
+import {
+  PhaseTemplate,
+  StepTemplate,
+  TaskTemplate,
+  TASK_TEMPLATES,
+} from '../../models/task-template.model';
 
 @Component({
   selector: 'app-tasks-page',
@@ -93,7 +98,7 @@ import { PhaseTemplate, StepTemplate, TaskTemplate, TASK_TEMPLATES } from '../..
       <!-- Task Templates by Phase -->
       <div class="phases-section">
         <mat-accordion multi="true">
-          <mat-expansion-panel 
+          <mat-expansion-panel
             *ngFor="let phase of filteredPhases(); trackBy: trackByPhase"
             [expanded]="shouldExpandPhase(phase)"
             class="phase-panel"
@@ -115,7 +120,7 @@ import { PhaseTemplate, StepTemplate, TaskTemplate, TASK_TEMPLATES } from '../..
             <div class="phase-content">
               <!-- Steps within Phase -->
               <mat-accordion multi="true" class="steps-accordion">
-                <mat-expansion-panel 
+                <mat-expansion-panel
                   *ngFor="let step of getFilteredStepsForPhase(phase); trackBy: trackByStep"
                   [expanded]="shouldExpandStep(step)"
                   class="step-panel"
@@ -134,14 +139,16 @@ import { PhaseTemplate, StepTemplate, TaskTemplate, TASK_TEMPLATES } from '../..
 
                   <div class="step-content">
                     <div class="tasks-list">
-                      <div 
-                        *ngFor="let task of getFilteredTasksForStep(step); trackBy: trackByTask" 
+                      <div
+                        *ngFor="let task of getFilteredTasksForStep(step); trackBy: trackByTask"
                         class="task-item"
                       >
                         <div class="task-number">{{ task.orderNo }}</div>
                         <div class="task-details">
                           <span class="task-name">{{ task.name }}</span>
-                          <p *ngIf="task.description" class="task-description">{{ task.description }}</p>
+                          <p *ngIf="task.description" class="task-description">
+                            {{ task.description }}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -151,36 +158,6 @@ import { PhaseTemplate, StepTemplate, TaskTemplate, TASK_TEMPLATES } from '../..
             </div>
           </mat-expansion-panel>
         </mat-accordion>
-      </div>
-
-      <!-- Summary Footer -->
-      <div class="summary-footer">
-        <mat-card>
-          <mat-card-content>
-            <div class="summary-stats">
-              <div class="stat-item">
-                <mat-icon>flag</mat-icon>
-                <span class="stat-number">{{ getTotalPhases() }}</span>
-                <span class="stat-label">Phases</span>
-              </div>
-              <div class="stat-item">
-                <mat-icon>linear_scale</mat-icon>
-                <span class="stat-number">{{ getTotalSteps() }}</span>
-                <span class="stat-label">Steps</span>
-              </div>
-              <div class="stat-item">
-                <mat-icon>assignment</mat-icon>
-                <span class="stat-number">{{ getTotalTasks() }}</span>
-                <span class="stat-label">Total Tasks</span>
-              </div>
-              <div class="stat-item" *ngIf="searchTerm || selectedPhase">
-                <mat-icon>search</mat-icon>
-                <span class="stat-number">{{ getTotalFilteredTasks() }}</span>
-                <span class="stat-label">Found</span>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
       </div>
     </div>
   `,
@@ -399,44 +376,6 @@ import { PhaseTemplate, StepTemplate, TaskTemplate, TASK_TEMPLATES } from '../..
         line-height: 1.4;
       }
 
-      .summary-footer {
-        margin-top: 48px;
-      }
-
-      .summary-stats {
-        display: flex;
-        justify-content: center;
-        gap: 48px;
-      }
-
-      .stat-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-
-      .stat-item mat-icon {
-        font-size: 32px;
-        width: 32px;
-        height: 32px;
-        color: rgb(var(--ff-primary-rgb));
-        margin-bottom: 8px;
-      }
-
-      .stat-number {
-        font-size: 28px;
-        font-weight: 600;
-        color: #1f2937;
-        display: block;
-      }
-
-      .stat-label {
-        font-size: 14px;
-        color: #6b7280;
-        margin-top: 4px;
-      }
-
       /* Responsive */
       @media (max-width: 768px) {
         .task-templates-page {
@@ -458,27 +397,12 @@ import { PhaseTemplate, StepTemplate, TaskTemplate, TASK_TEMPLATES } from '../..
           width: 100%;
         }
 
-        .summary-stats {
-          gap: 24px;
-          flex-wrap: wrap;
-        }
-
-        .stat-item mat-icon {
-          font-size: 24px;
-          width: 24px;
-          height: 24px;
-        }
-
-        .stat-number {
-          font-size: 20px;
-        }
-
         .phase-header {
           flex-direction: column;
           align-items: flex-start;
           gap: 8px;
         }
-        
+
         .step-header {
           flex-direction: column;
           align-items: flex-start;
@@ -512,21 +436,26 @@ export class TasksPageComponent implements OnInit {
 
     // Filter by selected phase
     if (phaseFilter) {
-      filteredPhases = phases.filter(phase => phase.id === phaseFilter);
+      filteredPhases = phases.filter((phase) => phase.id === phaseFilter);
     }
 
     // If there's a search term, filter phases and their content
     if (term) {
-      filteredPhases = filteredPhases.map(phase => ({
-        ...phase,
-        steps: phase.steps.map(step => ({
-          ...step,
-          tasks: step.tasks.filter(task => 
-            task.name.toLowerCase().includes(term) ||
-            task.description?.toLowerCase().includes(term)
-          )
-        })).filter(step => step.tasks.length > 0)
-      })).filter(phase => phase.steps.length > 0);
+      filteredPhases = filteredPhases
+        .map((phase) => ({
+          ...phase,
+          steps: phase.steps
+            .map((step) => ({
+              ...step,
+              tasks: step.tasks.filter(
+                (task) =>
+                  task.name.toLowerCase().includes(term) ||
+                  task.description?.toLowerCase().includes(term),
+              ),
+            }))
+            .filter((step) => step.tasks.length > 0),
+        }))
+        .filter((phase) => phase.steps.length > 0);
     }
 
     return filteredPhases;
@@ -559,7 +488,7 @@ export class TasksPageComponent implements OnInit {
   }
 
   getFilteredStepsForPhase(phase: PhaseTemplate): StepTemplate[] {
-    const filteredPhase = this.filteredPhases().find(p => p.id === phase.id);
+    const filteredPhase = this.filteredPhases().find((p) => p.id === phase.id);
     return filteredPhase?.steps || [];
   }
 
@@ -568,9 +497,9 @@ export class TasksPageComponent implements OnInit {
     if (!term) {
       return step.tasks;
     }
-    return step.tasks.filter(task => 
-      task.name.toLowerCase().includes(term) ||
-      task.description?.toLowerCase().includes(term)
+    return step.tasks.filter(
+      (task) =>
+        task.name.toLowerCase().includes(term) || task.description?.toLowerCase().includes(term),
     );
   }
 
@@ -587,9 +516,15 @@ export class TasksPageComponent implements OnInit {
   }
 
   getTotalFilteredTasks(): number {
-    return this.filteredPhases().reduce((total, phase) => 
-      total + phase.steps.reduce((stepTotal, step) => 
-        stepTotal + this.getFilteredTasksForStep(step).length, 0), 0);
+    return this.filteredPhases().reduce(
+      (total, phase) =>
+        total +
+        phase.steps.reduce(
+          (stepTotal, step) => stepTotal + this.getFilteredTasksForStep(step).length,
+          0,
+        ),
+      0,
+    );
   }
 
   trackByPhase(index: number, phase: PhaseTemplate): string {

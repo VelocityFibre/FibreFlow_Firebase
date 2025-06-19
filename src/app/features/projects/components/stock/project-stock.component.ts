@@ -531,14 +531,14 @@ export class ProjectStockComponent implements OnInit {
       this.loading = false;
       return;
     }
-    
+
     this.project$ = this.projectService.getProjectById(this.projectId);
     this.loadStockItems();
   }
 
   loadStockItems() {
     this.loading = true;
-    
+
     // Set a timeout to prevent infinite loading
     const timeoutId = setTimeout(() => {
       if (this.loading) {
@@ -583,7 +583,7 @@ export class ProjectStockComponent implements OnInit {
         this.loading = false;
         this.dataSource = new MatTableDataSource<StockItem>([]);
         this.calculateStats([]);
-      }
+      },
     });
   }
 

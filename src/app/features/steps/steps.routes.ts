@@ -5,8 +5,8 @@ export const STEPS_ROUTES: Routes = [
     path: '',
     loadComponent: () =>
       import('./pages/all-steps-page/all-steps-page.component').then(
-        (m) => m.AllStepsPageComponent
+        (m) => m.AllStepsPageComponent,
       ),
-    title: 'All Steps - FibreFlow'
-  }
+    title: 'All Steps - FibreFlow',
+  },
 ];

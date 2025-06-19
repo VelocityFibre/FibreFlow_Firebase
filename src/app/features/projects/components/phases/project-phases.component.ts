@@ -429,7 +429,7 @@ export class ProjectPhasesComponent implements OnInit {
         console.log('ProjectPhasesComponent: Phases loaded:', phases);
         console.log('ProjectPhasesComponent: Number of phases:', phases.length);
         this.currentPhases = phases;
-        
+
         // Auto-create phases if none exist (for projects created before phase auto-creation was fixed)
         if (phases.length === 0) {
           console.log('ProjectPhasesComponent: No phases found, auto-creating default phases...');

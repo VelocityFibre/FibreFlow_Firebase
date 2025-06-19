@@ -207,7 +207,10 @@ export class DailyProgressService {
     const q = query(collection(this.firestore, this.collectionName), ...constraints);
     return collectionData(q, { idField: 'id' }).pipe(
       map((progressList) => {
-        const totalHours = progressList.reduce((sum, p) => sum + ((p as any)['hoursWorked'] || 0), 0);
+        const totalHours = progressList.reduce(
+          (sum, p) => sum + ((p as any)['hoursWorked'] || 0),
+          0,
+        );
         const uniqueDates = new Set(
           progressList.map((p) => {
             const date = (p as any)['date'];

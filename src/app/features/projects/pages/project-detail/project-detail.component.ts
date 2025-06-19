@@ -664,29 +664,29 @@ export class ProjectDetailComponent implements OnInit {
   private taskService = inject(TaskService);
 
   project$!: Observable<Project | undefined>;
-  phasesWithTasks$!: Observable<{phase: Phase, tasks: Task[]}[]>;
+  phasesWithTasks$!: Observable<{ phase: Phase; tasks: Task[] }[]>;
 
   ngOnInit() {
     const projectId$ = this.route.paramMap.pipe(map((params) => params.get('id') || ''));
 
     this.project$ = projectId$.pipe(switchMap((id) => this.projectService.getProjectById(id)));
-    
+
     // Initialize phasesWithTasks$ observable
     this.phasesWithTasks$ = projectId$.pipe(
       switchMap((projectId) => {
         if (!projectId) return of([]);
         return combineLatest([
           this.phaseService.getProjectPhases(projectId),
-          this.taskService.getTasksByProject(projectId)
+          this.taskService.getTasksByProject(projectId),
         ]).pipe(
           map(([phases, tasks]) => {
-            return phases.map(phase => ({
+            return phases.map((phase) => ({
               phase,
-              tasks: tasks.filter(task => task.phaseId === phase.id)
+              tasks: tasks.filter((task) => task.phaseId === phase.id),
             }));
-          })
+          }),
         );
-      })
+      }),
     );
   }
 
@@ -819,7 +819,6 @@ export class ProjectDetailComponent implements OnInit {
     }
   }
 
-
   async updatePhaseStatus(phase: Phase, newStatus: string): Promise<void> {
     try {
       const projectId = this.route.snapshot.params['id'];
@@ -857,7 +856,7 @@ export class ProjectDetailComponent implements OnInit {
     return task.id || index.toString();
   }
 
-  getTotalTaskCount(phasesWithTasks: {phase: Phase, tasks: Task[]}[]): number {
+  getTotalTaskCount(phasesWithTasks: { phase: Phase; tasks: Task[] }[]): number {
     return phasesWithTasks.reduce((total, phaseData) => total + phaseData.tasks.length, 0);
   }
 }

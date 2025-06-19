@@ -607,7 +607,7 @@ mat-chip.priority-critical {
 .action-card {
   cursor: pointer;
   transition: all 0.2s ease;
-  
+
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -630,7 +630,7 @@ mat-chip.priority-critical {
   justify-content: center;
   background-color: rgb(var(--ff-primary) / 0.1);
   color: rgb(var(--ff-primary));
-  
+
   mat-icon {
     font-size: 28px;
     width: 28px;
@@ -640,17 +640,17 @@ mat-chip.priority-critical {
 
 .boq-info {
   flex: 1;
-  
+
   .boq-description {
     margin: 0 0 8px 0;
     color: rgb(var(--ff-muted-foreground));
     font-size: 14px;
   }
-  
+
   .boq-stats {
     display: flex;
     gap: 16px;
-    
+
     .stat-item {
       font-size: 14px;
       font-weight: 600;

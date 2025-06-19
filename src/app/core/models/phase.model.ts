@@ -79,7 +79,8 @@ export interface PhaseNotification {
 export const DEFAULT_PHASES: Omit<PhaseTemplate, 'id'>[] = [
   {
     name: 'Planning',
-    description: 'Comprehensive project planning including commercial, technical, and resource planning',
+    description:
+      'Comprehensive project planning including commercial, technical, and resource planning',
     orderNo: 1,
     isDefault: true,
     defaultDependencies: [],

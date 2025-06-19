@@ -269,7 +269,10 @@ export class BOQService {
 
     // Process batches sequentially to avoid rate limits
     return from(
-      batches.reduce((promise: Promise<void>, batch: Promise<void>) => promise.then(() => batch), Promise.resolve()),
+      batches.reduce(
+        (promise: Promise<void>, batch: Promise<void>) => promise.then(() => batch),
+        Promise.resolve(),
+      ),
     ).pipe(
       map(() => {
         console.log('Import completed successfully');

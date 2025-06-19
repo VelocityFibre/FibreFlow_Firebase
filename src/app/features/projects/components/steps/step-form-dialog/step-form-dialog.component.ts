@@ -49,9 +49,17 @@ interface DialogData {
     <mat-dialog-content>
       <form [formGroup]="stepForm" class="step-form">
         <!-- Project Selection (only show if projects available and no project selected) -->
-        <mat-form-field appearance="outline" class="full-width" *ngIf="data.projects && data.projects.length > 0 && !data.projectId">
+        <mat-form-field
+          appearance="outline"
+          class="full-width"
+          *ngIf="data.projects && data.projects.length > 0 && !data.projectId"
+        >
           <mat-label>Project</mat-label>
-          <mat-select formControlName="projectId" required (selectionChange)="onProjectChange($event.value)">
+          <mat-select
+            formControlName="projectId"
+            required
+            (selectionChange)="onProjectChange($event.value)"
+          >
             <mat-option *ngFor="let project of data.projects" [value]="project.id">
               {{ project.projectCode }} - {{ project.name }}
             </mat-option>
@@ -63,7 +71,11 @@ interface DialogData {
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Phase</mat-label>
-          <mat-select formControlName="phaseId" required [disabled]="!data.projectId && !(stepForm.get('projectId')?.value)">
+          <mat-select
+            formControlName="phaseId"
+            required
+            [disabled]="!data.projectId && !stepForm.get('projectId')?.value"
+          >
             <mat-option *ngFor="let phase of phases$ | async" [value]="phase.id">
               {{ phase.name }}
             </mat-option>
@@ -71,7 +83,7 @@ interface DialogData {
           <mat-error *ngIf="stepForm.get('phaseId')?.hasError('required')">
             Please select a phase
           </mat-error>
-          <mat-hint *ngIf="!data.projectId && !(stepForm.get('projectId')?.value)">
+          <mat-hint *ngIf="!data.projectId && !stepForm.get('projectId')?.value">
             Select a project first to see available phases
           </mat-hint>
         </mat-form-field>
@@ -237,7 +249,12 @@ export class StepFormDialogComponent implements OnInit {
     this.phases$ = this.data.phases || of([]);
     // Initialize form in constructor to avoid template errors
     this.stepForm = this.fb.group({
-      projectId: [this.data.projectId || '', this.data.projects && this.data.projects.length > 0 && !this.data.projectId ? Validators.required : null],
+      projectId: [
+        this.data.projectId || '',
+        this.data.projects && this.data.projects.length > 0 && !this.data.projectId
+          ? Validators.required
+          : null,
+      ],
       phaseId: [this.data.phaseId || '', Validators.required],
       name: ['', Validators.required],
       description: [''],
@@ -254,7 +271,6 @@ export class StepFormDialogComponent implements OnInit {
       this.populateForm(this.data.step);
     }
   }
-
 
   populateForm(step: Step) {
     this.stepForm.patchValue({
