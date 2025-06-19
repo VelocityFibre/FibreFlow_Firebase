@@ -25,18 +25,21 @@ import { DEFAULT_PHASES, PhaseTemplate } from '../../../../core/models/phase.mod
   ],
   template: `
     <div class="phases-page">
+      <!-- Page Header -->
       <div class="page-header">
-        <div>
-          <h1>Phase Management</h1>
-          <p class="subtitle">Manage all available project phases</p>
+        <div class="header-content">
+          <h1 class="page-title">Phase Management</h1>
+          <p class="page-subtitle">Manage all available project phases</p>
         </div>
-        <button mat-raised-button color="primary" (click)="addPhase()">
-          <mat-icon>add</mat-icon>
-          Add Phase
-        </button>
+        <div class="header-actions">
+          <button mat-raised-button color="primary" (click)="addPhase()">
+            <mat-icon>add</mat-icon>
+            Add Phase
+          </button>
+        </div>
       </div>
 
-      <mat-card>
+      <mat-card class="phases-card">
         <mat-card-content>
           <table mat-table [dataSource]="phases" class="phases-table">
             <!-- Name Column -->
@@ -89,66 +92,196 @@ import { DEFAULT_PHASES, PhaseTemplate } from '../../../../core/models/phase.mod
   `,
   styles: [
     `
+      /* Container following theme standards */
       .phases-page {
-        padding: 24px;
-        max-width: 1200px;
+        max-width: 1280px;
         margin: 0 auto;
+        padding: 40px 24px;
       }
 
+      /* Page Header following ff-page-header pattern */
       .page-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 32px;
+        margin-bottom: 48px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid rgb(var(--ff-border));
       }
 
-      .page-header h1 {
+      .header-content {
+        flex: 1;
+      }
+
+      .page-title {
         font-size: 32px;
-        font-weight: 500;
+        font-weight: 300;
+        color: rgb(var(--ff-foreground));
+        margin: 0 0 8px 0;
+        letter-spacing: -0.02em;
+      }
+
+      .page-subtitle {
+        font-size: 18px;
+        color: rgb(var(--ff-muted-foreground));
+        font-weight: 400;
         margin: 0;
       }
 
-      .subtitle {
-        color: #666;
-        margin: 4px 0 0 0;
+      .header-actions {
+        display: flex;
+        gap: 16px;
       }
 
+      /* Card styling with improved spacing */
+      .phases-card {
+        background-color: rgb(var(--ff-card)) !important;
+        border: 1px solid rgb(var(--ff-border)) !important;
+        border-radius: var(--ff-radius) !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+      }
+
+      .phases-card mat-card-content {
+        padding: 0 !important;
+      }
+
+      /* Table styling with theme colors */
       .phases-table {
         width: 100%;
       }
 
+      .phases-table th {
+        font-size: 14px;
+        font-weight: 600;
+        color: rgb(var(--ff-muted-foreground));
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 20px 16px !important;
+        border-bottom: 2px solid rgb(var(--ff-border));
+      }
+
+      .phases-table td {
+        padding: 20px 16px !important;
+        font-size: 15px;
+        color: rgb(var(--ff-foreground));
+        border-bottom: 1px solid rgb(var(--ff-border));
+      }
+
+      .phases-table tr:hover {
+        background-color: rgb(var(--ff-muted) / 0.5);
+      }
+
+      /* Chip styling with theme colors */
       mat-chip {
-        font-size: 12px;
+        font-size: 12px !important;
+        font-weight: 500 !important;
+        padding: 4px 12px !important;
+        height: 28px !important;
+        border-radius: 14px !important;
       }
 
       .type-planning {
-        background-color: #e3f2fd !important;
-        color: #1976d2 !important;
+        background-color: rgb(var(--ff-info) / 0.1) !important;
+        color: rgb(var(--ff-info)) !important;
+        border: 1px solid rgb(var(--ff-info) / 0.2) !important;
       }
 
       .type-initiation {
-        background-color: #e8f5e9 !important;
-        color: #388e3c !important;
+        background-color: rgb(var(--ff-success) / 0.1) !important;
+        color: rgb(var(--ff-success)) !important;
+        border: 1px solid rgb(var(--ff-success) / 0.2) !important;
       }
 
       .type-execution {
-        background-color: #fff8e1 !important;
-        color: #f57c00 !important;
+        background-color: rgb(var(--ff-warning) / 0.1) !important;
+        color: rgb(var(--ff-warning)) !important;
+        border: 1px solid rgb(var(--ff-warning) / 0.2) !important;
       }
 
       .type-handover {
-        background-color: #fff3e0 !important;
-        color: #ff6f00 !important;
+        background-color: rgb(var(--ff-accent) / 0.1) !important;
+        color: rgb(var(--ff-accent)) !important;
+        border: 1px solid rgb(var(--ff-accent) / 0.2) !important;
       }
 
       .type-closure {
-        background-color: #f3e5f5 !important;
-        color: #7b1fa2 !important;
+        background-color: rgb(var(--ff-primary) / 0.1) !important;
+        color: rgb(var(--ff-primary)) !important;
+        border: 1px solid rgb(var(--ff-primary) / 0.2) !important;
       }
 
       .type-custom {
-        background-color: #f5f5f5 !important;
-        color: #616161 !important;
+        background-color: rgb(var(--ff-muted)) !important;
+        color: rgb(var(--ff-muted-foreground)) !important;
+        border: 1px solid rgb(var(--ff-border)) !important;
+      }
+
+      /* Button styling */
+      button[mat-raised-button] {
+        height: 48px;
+        padding: 0 24px;
+        font-size: 15px;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      button[mat-icon-button] {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+      }
+
+      button[mat-icon-button]:hover {
+        background-color: rgb(var(--ff-muted) / 0.5);
+      }
+
+      button[mat-icon-button]:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* Responsive following theme standards */
+      @media (max-width: 768px) {
+        .phases-page {
+          padding: 24px 16px;
+        }
+
+        .page-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
+        }
+
+        .page-title {
+          font-size: 24px;
+        }
+
+        .page-subtitle {
+          font-size: 16px;
+        }
+
+        .header-actions {
+          width: 100%;
+        }
+
+        button[mat-raised-button] {
+          width: 100%;
+        }
+
+        .phases-table {
+          font-size: 14px;
+        }
+
+        .phases-table th,
+        .phases-table td {
+          padding: 12px 8px !important;
+        }
+
+        /* Hide description column on mobile */
+        .mat-column-description {
+          display: none;
+        }
       }
     `,
   ],
