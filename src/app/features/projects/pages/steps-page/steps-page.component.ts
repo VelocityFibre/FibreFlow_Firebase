@@ -543,16 +543,12 @@ export class StepsPageComponent implements OnInit {
   }
 
   addStep() {
-    if (!this.selectedProjectId) {
-      alert('Please select a project first');
-      return;
-    }
-
     const dialogRef = this.dialog.open(StepFormDialogComponent, {
       width: '600px',
       data: {
-        projectId: this.selectedProjectId,
-        phases: this.phaseService.getByProject(this.selectedProjectId),
+        projectId: this.selectedProjectId || '', // Allow empty project ID
+        projects: this.filteredData()?.projects || [], // Pass available projects
+        phases: this.selectedProjectId ? this.phaseService.getProjectPhases(this.selectedProjectId) : undefined,
       },
     });
 
@@ -569,7 +565,7 @@ export class StepsPageComponent implements OnInit {
       data: {
         step,
         projectId: step.projectId,
-        phases: this.phaseService.getByProject(step.projectId),
+        phases: this.phaseService.getProjectPhases(step.projectId),
       },
     });
 

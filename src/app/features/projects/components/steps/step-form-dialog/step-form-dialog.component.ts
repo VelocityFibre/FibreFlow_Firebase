@@ -15,13 +15,15 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Step, StepStatus } from '../../../../../core/models/step.model';
 import { Phase } from '../../../../../core/models/phase.model';
 import { StepService } from '../../../../../core/services/step.service';
-import { Observable } from 'rxjs';
+import { PhaseService } from '../../../../../core/services/phase.service';
+import { Observable, of } from 'rxjs';
 
 interface DialogData {
   step?: Step;
   projectId: string;
   phaseId?: string;
-  phases: Observable<Phase[]>;
+  phases?: Observable<Phase[]>;
+  projects?: any[]; // Project list for selection
 }
 
 @Component({
@@ -46,9 +48,22 @@ interface DialogData {
 
     <mat-dialog-content>
       <form [formGroup]="stepForm" class="step-form">
+        <!-- Project Selection (only show if projects available and no project selected) -->
+        <mat-form-field appearance="outline" class="full-width" *ngIf="data.projects && data.projects.length > 0 && !data.projectId">
+          <mat-label>Project</mat-label>
+          <mat-select formControlName="projectId" required (selectionChange)="onProjectChange($event.value)">
+            <mat-option *ngFor="let project of data.projects" [value]="project.id">
+              {{ project.projectCode }} - {{ project.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="stepForm.get('projectId')?.hasError('required')">
+            Please select a project
+          </mat-error>
+        </mat-form-field>
+
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Phase</mat-label>
-          <mat-select formControlName="phaseId" required>
+          <mat-select formControlName="phaseId" required [disabled]="!data.projectId && !(stepForm.get('projectId')?.value)">
             <mat-option *ngFor="let phase of phases$ | async" [value]="phase.id">
               {{ phase.name }}
             </mat-option>
@@ -56,6 +71,9 @@ interface DialogData {
           <mat-error *ngIf="stepForm.get('phaseId')?.hasError('required')">
             Please select a phase
           </mat-error>
+          <mat-hint *ngIf="!data.projectId && !(stepForm.get('projectId')?.value)">
+            Select a project first to see available phases
+          </mat-hint>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
@@ -204,6 +222,7 @@ interface DialogData {
 export class StepFormDialogComponent implements OnInit {
   private fb = inject(FormBuilder);
   private stepService = inject(StepService);
+  private phaseService = inject(PhaseService);
   public dialogRef = inject(MatDialogRef<StepFormDialogComponent>);
   public data = inject<DialogData>(MAT_DIALOG_DATA);
 
@@ -215,9 +234,10 @@ export class StepFormDialogComponent implements OnInit {
   readonly StepStatus = StepStatus;
 
   constructor() {
-    this.phases$ = this.data.phases;
+    this.phases$ = this.data.phases || of([]);
     // Initialize form in constructor to avoid template errors
     this.stepForm = this.fb.group({
+      projectId: [this.data.projectId || '', this.data.projects && this.data.projects.length > 0 && !this.data.projectId ? Validators.required : null],
       phaseId: [this.data.phaseId || '', Validators.required],
       name: ['', Validators.required],
       description: [''],
@@ -265,13 +285,24 @@ export class StepFormDialogComponent implements OnInit {
     }
   }
 
+  onProjectChange(projectId: string) {
+    if (projectId) {
+      // Load phases for the selected project
+      this.phases$ = this.phaseService.getProjectPhases(projectId);
+      // Reset phase selection
+      this.stepForm.patchValue({ phaseId: '' });
+    } else {
+      this.phases$ = of([]);
+    }
+  }
+
   save() {
     if (this.stepForm.valid) {
       this.loading = true;
       const formValue = this.stepForm.value;
 
       const stepData: any = {
-        projectId: this.data.projectId,
+        projectId: formValue.projectId || this.data.projectId,
         phaseId: formValue.phaseId,
         name: formValue.name,
         orderNo: this.data.step?.orderNo || 999, // Will be properly set on backend
