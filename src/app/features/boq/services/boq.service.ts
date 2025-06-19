@@ -12,6 +12,7 @@ import {
   where,
   orderBy,
   CollectionReference,
+  DocumentReference,
   serverTimestamp,
 } from '@angular/fire/firestore';
 import { Observable, from, map, catchError, of, switchMap } from 'rxjs';
@@ -244,7 +245,7 @@ export class BOQService {
 
     // Batch imports to avoid overwhelming Firestore
     const batchSize = 50;
-    const batches: Promise<any>[] = [];
+    const batches: Promise<void>[] = [];
 
     for (let i = 0; i < items.length; i += batchSize) {
       const batch = items.slice(i, i + batchSize);
@@ -258,18 +259,17 @@ export class BOQService {
       );
 
       // Add batch to sequential processing
-      batches.push(
-        Promise.all(batchPromises).then(() => {
-          console.log(
-            `Imported batch ${Math.floor(i / batchSize) + 1} of ${Math.ceil(items.length / batchSize)}`,
-          );
-        }),
-      );
+      const batchPromise = Promise.all(batchPromises).then(() => {
+        console.log(
+          `Imported batch ${Math.floor(i / batchSize) + 1} of ${Math.ceil(items.length / batchSize)}`,
+        );
+      });
+      batches.push(batchPromise);
     }
 
     // Process batches sequentially to avoid rate limits
     return from(
-      batches.reduce((promise, batch) => promise.then(() => batch), Promise.resolve()),
+      batches.reduce((promise: Promise<void>, batch: Promise<void>) => promise.then(() => batch), Promise.resolve()),
     ).pipe(
       map(() => {
         console.log('Import completed successfully');

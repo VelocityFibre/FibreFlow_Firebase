@@ -215,10 +215,7 @@
                 <h3 class="section-title">Tags</h3>
                 <mat-chip-grid #chipGrid>
                   @for (tag of tags; track tag) {
-                    <mat-chip-row
-                      [removable]="true"
-                      (removed)="removeTag(tag)"
-                    >
+                    <mat-chip-row [removable]="true" (removed)="removeTag(tag)">
                       {{ tag }}
                       <mat-icon matChipRemove>cancel</mat-icon>
                     </mat-chip-row>
@@ -333,7 +330,11 @@
                           }
                         </div>
                       </div>
-                      <button mat-icon-button color="warn" (click)="removeAdditionalContact($index)">
+                      <button
+                        mat-icon-button
+                        color="warn"
+                        (click)="removeAdditionalContact($index)"
+                      >
                         <mat-icon>delete</mat-icon>
                       </button>
                     </div>
@@ -430,42 +431,42 @@
               tags.length > 0
             ) {
               <div class="review-card">
-              <h4 class="review-card-title">Business Information</h4>
-              <div class="review-grid">
-                @if (businessForm.get('registrationNumber')?.value) {
-                  <div class="review-item">
-                    <span class="review-label">Registration Number:</span>
-                    <span class="review-value">{{
-                      businessForm.get('registrationNumber')?.value
-                    }}</span>
-                  </div>
-                }
-                @if (businessForm.get('vatNumber')?.value) {
-                  <div class="review-item">
-                    <span class="review-label">VAT Number:</span>
-                    <span class="review-value">{{ businessForm.get('vatNumber')?.value }}</span>
-                  </div>
-                }
-                @if (tags.length > 0) {
-                  <div class="review-item full-width">
-                    <span class="review-label">Tags:</span>
-                    <div class="review-tags">
-                      <mat-chip-set>
-                        @for (tag of tags; track tag) {
-                          <mat-chip>{{ tag }}</mat-chip>
-                        }
-                      </mat-chip-set>
+                <h4 class="review-card-title">Business Information</h4>
+                <div class="review-grid">
+                  @if (businessForm.get('registrationNumber')?.value) {
+                    <div class="review-item">
+                      <span class="review-label">Registration Number:</span>
+                      <span class="review-value">{{
+                        businessForm.get('registrationNumber')?.value
+                      }}</span>
                     </div>
-                  </div>
-                }
-                @if (businessForm.get('notes')?.value) {
-                  <div class="review-item full-width">
-                    <span class="review-label">Notes:</span>
-                    <span class="review-value">{{ businessForm.get('notes')?.value }}</span>
-                  </div>
-                }
+                  }
+                  @if (businessForm.get('vatNumber')?.value) {
+                    <div class="review-item">
+                      <span class="review-label">VAT Number:</span>
+                      <span class="review-value">{{ businessForm.get('vatNumber')?.value }}</span>
+                    </div>
+                  }
+                  @if (tags.length > 0) {
+                    <div class="review-item full-width">
+                      <span class="review-label">Tags:</span>
+                      <div class="review-tags">
+                        <mat-chip-set>
+                          @for (tag of tags; track tag) {
+                            <mat-chip>{{ tag }}</mat-chip>
+                          }
+                        </mat-chip-set>
+                      </div>
+                    </div>
+                  }
+                  @if (businessForm.get('notes')?.value) {
+                    <div class="review-item full-width">
+                      <span class="review-label">Notes:</span>
+                      <span class="review-value">{{ businessForm.get('notes')?.value }}</span>
+                    </div>
+                  }
+                </div>
               </div>
-            </div>
             }
 
             <!-- Additional Contacts Review -->

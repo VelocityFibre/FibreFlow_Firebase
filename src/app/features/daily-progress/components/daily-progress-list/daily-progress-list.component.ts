@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  inject,
-  signal,
-  computed,
-  ChangeDetectionStrategy,
-} from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -20,7 +13,6 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable, switchMap } from 'rxjs';
 import { DailyProgress, DailyProgressFilter } from '../../models/daily-progress.model';
 import { DailyProgressService } from '../../services/daily-progress.service';
 import { ProjectService } from '../../../../core/services/project.service';
@@ -123,106 +115,98 @@ import { DateFormatService } from '../../../../core/services/date-format.service
 
       @if (progressReports$ | async; as reports) {
         <div class="table-container">
-        <table mat-table [dataSource]="reports">
-          <ng-container matColumnDef="date">
-            <th mat-header-cell *matHeaderCellDef>Date</th>
-            <td mat-cell *matCellDef="let report">
-              {{ formatDate(report.date) }}
-            </td>
-          </ng-container>
+          <table mat-table [dataSource]="reports">
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>Date</th>
+              <td mat-cell *matCellDef="let report">
+                {{ formatDate(report.date) }}
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="project">
-            <th mat-header-cell *matHeaderCellDef>Project</th>
-            <td mat-cell *matCellDef="let report">
-              {{ report.projectName || 'N/A' }}
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="project">
+              <th mat-header-cell *matHeaderCellDef>Project</th>
+              <td mat-cell *matCellDef="let report">
+                {{ report.projectName || 'N/A' }}
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="phase">
-            <th mat-header-cell *matHeaderCellDef>Phase</th>
-            <td mat-cell *matCellDef="let report">
-              {{ report.phaseName || '-' }}
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="phase">
+              <th mat-header-cell *matHeaderCellDef>Phase</th>
+              <td mat-cell *matCellDef="let report">
+                {{ report.phaseName || '-' }}
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="description">
-            <th mat-header-cell *matHeaderCellDef>Description</th>
-            <td mat-cell *matCellDef="let report" class="description-cell">
-              {{ report.description }}
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef>Description</th>
+              <td mat-cell *matCellDef="let report" class="description-cell">
+                {{ report.description }}
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="hours">
-            <th mat-header-cell *matHeaderCellDef>Hours</th>
-            <td mat-cell *matCellDef="let report">
-              {{ report.hoursWorked }}
-            </td>
-          </ng-container>
+            <ng-container matColumnDef="hours">
+              <th mat-header-cell *matHeaderCellDef>Hours</th>
+              <td mat-cell *matCellDef="let report">
+                {{ report.hoursWorked }}
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="staff">
-            <th mat-header-cell *matHeaderCellDef>Staff</th>
-            <td mat-cell *matCellDef="let report">
-              <mat-chip-set>
-                @for (name of report.staffNames; track name) {
-                  <mat-chip>
-                    {{ name }}
-                  </mat-chip>
+            <ng-container matColumnDef="staff">
+              <th mat-header-cell *matHeaderCellDef>Staff</th>
+              <td mat-cell *matCellDef="let report">
+                <mat-chip-set>
+                  @for (name of report.staffNames; track name) {
+                    <mat-chip>
+                      {{ name }}
+                    </mat-chip>
+                  }
+                </mat-chip-set>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let report">
+                <mat-chip [color]="getStatusColor(report.status)" selected>
+                  {{ report.status | titlecase }}
+                </mat-chip>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let report">
+                <button mat-icon-button [matTooltip]="'View Details'" (click)="viewDetails(report)">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                @if (report.status === 'draft') {
+                  <button mat-icon-button [matTooltip]="'Edit'" (click)="edit(report)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    [matTooltip]="'Submit for Approval'"
+                    (click)="submitForApproval(report)"
+                  >
+                    <mat-icon>send</mat-icon>
+                  </button>
                 }
-              </mat-chip-set>
-            </td>
-          </ng-container>
+                @if (report.status === 'submitted' && canApprove) {
+                  <button mat-icon-button [matTooltip]="'Approve'" (click)="approve(report)">
+                    <mat-icon>check_circle</mat-icon>
+                  </button>
+                }
+              </td>
+            </ng-container>
 
-          <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Status</th>
-            <td mat-cell *matCellDef="let report">
-              <mat-chip [color]="getStatusColor(report.status)" selected>
-                {{ report.status | titlecase }}
-              </mat-chip>
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>Actions</th>
-            <td mat-cell *matCellDef="let report">
-              <button mat-icon-button [matTooltip]="'View Details'" (click)="viewDetails(report)">
-                <mat-icon>visibility</mat-icon>
-              </button>
-              @if (report.status === 'draft') {
-                <button
-                  mat-icon-button
-                  [matTooltip]="'Edit'"
-                  (click)="edit(report)"
-                >
-                  <mat-icon>edit</mat-icon>
-                </button>
-                <button
-                  mat-icon-button
-                  [matTooltip]="'Submit for Approval'"
-                  (click)="submitForApproval(report)"
-                >
-                  <mat-icon>send</mat-icon>
-                </button>
-              }
-              @if (report.status === 'submitted' && canApprove) {
-                <button
-                  mat-icon-button
-                  [matTooltip]="'Approve'"
-                  (click)="approve(report)"
-                >
-                  <mat-icon>check_circle</mat-icon>
-                </button>
-              }
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr
-            mat-row
-            *matRowDef="let row; columns: displayedColumns"
-            [class.has-issues]="row.issuesEncountered"
-            (click)="viewDetails(row)"
-          ></tr>
-        </table>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns"
+              [class.has-issues]="row.issuesEncountered"
+              (click)="viewDetails(row)"
+            ></tr>
+          </table>
 
           @if (reports.length === 0) {
             <div class="no-data">
@@ -376,8 +360,9 @@ export class DailyProgressListComponent implements OnInit {
     this.filter.set({});
   }
 
-  formatDate(date: Date | any): string {
-    return this.dateFormatService.formatDate(date);
+  formatDate(date: Date | string | number): string {
+    const dateValue = typeof date === 'number' ? new Date(date) : date;
+    return this.dateFormatService.formatDate(dateValue);
   }
 
   getStatusColor(status: string): 'primary' | 'accent' | 'warn' {

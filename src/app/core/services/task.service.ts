@@ -14,10 +14,9 @@ import {
   serverTimestamp,
   writeBatch,
   getDoc,
-  getDocs,
   // DocumentReference,
   Query,
-  // Timestamp,
+  Timestamp,
   // collectionGroup,
 } from '@angular/fire/firestore';
 import { Observable, from, map, of, switchMap, firstValueFrom } from 'rxjs';
@@ -173,7 +172,7 @@ export class TaskService {
     const currentUser = await this.authService.getCurrentUser();
     const taskDoc = doc(this.firestore, 'tasks', taskId);
 
-    const updateData = {
+    const updateData: any = {
       ...updates,
       updatedAt: serverTimestamp(),
       updatedBy: currentUser?.uid,
@@ -181,7 +180,7 @@ export class TaskService {
 
     // If status is changing to completed, set completion date
     if (updates.status === TaskStatus.COMPLETED && !updates.completedDate) {
-      updateData.completedDate = serverTimestamp() as any;
+      updateData.completedDate = serverTimestamp();
       updateData.completionPercentage = 100;
     }
 
@@ -373,12 +372,14 @@ export class TaskService {
           completed: tasks.filter((t) => t.status === TaskStatus.COMPLETED).length,
           overdue: tasks.filter((t) => {
             if (!t.dueDate || t.status === TaskStatus.COMPLETED) return false;
-            const dueDate = t.dueDate instanceof Date ? t.dueDate : (t.dueDate as any).toDate();
+            const dueDate =
+              t.dueDate instanceof Date ? t.dueDate : (t.dueDate as Timestamp).toDate();
             return dueDate < now;
           }).length,
           todayDue: tasks.filter((t) => {
             if (!t.dueDate || t.status === TaskStatus.COMPLETED) return false;
-            const dueDate = t.dueDate instanceof Date ? t.dueDate : (t.dueDate as any).toDate();
+            const dueDate =
+              t.dueDate instanceof Date ? t.dueDate : (t.dueDate as Timestamp).toDate();
             return dueDate >= today && dueDate < tomorrow;
           }).length,
         };
@@ -387,12 +388,20 @@ export class TaskService {
   }
 
   // Helper method to get basic project info without circular dependency
-  private async getProjectBasicInfo(projectId: string): Promise<any> {
+  private async getProjectBasicInfo(
+    projectId: string,
+  ): Promise<{ id?: string; name?: string; projectCode?: string; clientName?: string } | null> {
     try {
       const projectDoc = doc(this.projectsCollection, projectId);
       const projectSnap = await getDoc(projectDoc);
       if (projectSnap.exists()) {
-        return { id: projectSnap.id, ...projectSnap.data() };
+        const data = projectSnap.data();
+        return {
+          id: projectSnap.id,
+          name: data['name'],
+          projectCode: data['projectCode'],
+          clientName: data['clientName'],
+        };
       }
       return null;
     } catch (error) {
@@ -416,14 +425,32 @@ export class TaskService {
   }
 
   // Get notes for a task
-  getTaskNotes(taskId: string): Observable<any[]> {
+  getTaskNotes(taskId: string): Observable<
+    Array<{
+      id?: string;
+      taskId: string;
+      note: string;
+      createdAt: Timestamp;
+      createdBy: string;
+      userName: string;
+    }>
+  > {
     const q = query(
       collection(this.firestore, 'taskNotes'),
       where('taskId', '==', taskId),
       orderBy('createdAt', 'desc'),
     );
 
-    return collectionData(q, { idField: 'id' });
+    return collectionData(q, { idField: 'id' }) as Observable<
+      Array<{
+        id?: string;
+        taskId: string;
+        note: string;
+        createdAt: Timestamp;
+        createdBy: string;
+        userName: string;
+      }>
+    >;
   }
 
   // Reassign a task

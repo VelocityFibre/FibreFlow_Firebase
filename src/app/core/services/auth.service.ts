@@ -1,4 +1,4 @@
-import { Injectable, signal, computed, inject } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { UserProfile } from '../models/user-profile';
 

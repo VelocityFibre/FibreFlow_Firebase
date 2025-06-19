@@ -87,8 +87,12 @@ import { Project } from '../../../../core/models/project.model';
       <div class="filters">
         <mat-form-field appearance="outline" class="project-selector">
           <mat-label>Project</mat-label>
-          <mat-select [(ngModel)]="selectedProjectId" (selectionChange)="onProjectChange()">
-            <mat-option value="">Global Stock</mat-option>
+          <mat-select
+            [(ngModel)]="selectedProjectId"
+            (selectionChange)="onProjectChange()"
+            required
+          >
+            <mat-option value="" disabled>Select a project</mat-option>
             <mat-option *ngFor="let project of (projects$ | async) || []" [value]="project.id">
               {{ project.name }}
             </mat-option>
@@ -642,8 +646,14 @@ export class StockListComponent implements OnInit {
   }
 
   loadStockItems() {
+    if (!this.selectedProjectId) {
+      this.dataSource = new MatTableDataSource<StockItem>([]);
+      this.loading = false;
+      return;
+    }
+
     this.loading = true;
-    this.stockItems$ = this.stockService.getStockItems(this.selectedProjectId || undefined);
+    this.stockItems$ = this.stockService.getStockItems(this.selectedProjectId);
 
     this.stockItems$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((items) => {
       this.dataSource = new MatTableDataSource(items);
@@ -701,20 +711,15 @@ export class StockListComponent implements OnInit {
   }
 
   hasActiveFilters(): boolean {
-    return (
-      !!this.searchTerm ||
-      !!this.selectedCategory ||
-      !!this.selectedStatus ||
-      !!this.selectedProjectId
-    );
+    return !!this.searchTerm || !!this.selectedCategory || !!this.selectedStatus;
   }
 
   clearFilters() {
     this.searchTerm = '';
     this.selectedCategory = '';
     this.selectedStatus = '';
-    this.selectedProjectId = '';
-    this.loadStockItems();
+    // Don't clear project selection
+    this.applyFilter();
   }
 
   onProjectChange() {
@@ -749,11 +754,18 @@ export class StockListComponent implements OnInit {
   }
 
   openAddDialog() {
+    if (!this.selectedProjectId) {
+      this.snackBar.open('Please select a project first', 'Close', {
+        duration: 3000,
+      });
+      return;
+    }
+
     const dialogRef = this.dialog.open(StockFormComponent, {
       width: '600px',
       data: {
         mode: 'add',
-        projectId: this.selectedProjectId || undefined,
+        projectId: this.selectedProjectId,
       },
     });
 
@@ -820,8 +832,16 @@ export class StockListComponent implements OnInit {
   }
 
   openImportDialog() {
+    if (!this.selectedProjectId) {
+      this.snackBar.open('Please select a project first', 'Close', {
+        duration: 3000,
+      });
+      return;
+    }
+
     const dialogRef = this.dialog.open(StockImportDialogComponent, {
       width: '800px',
+      data: { projectId: this.selectedProjectId },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -835,7 +855,14 @@ export class StockListComponent implements OnInit {
   }
 
   exportItems() {
-    this.stockService.exportStockItems().subscribe((items) => {
+    if (!this.selectedProjectId) {
+      this.snackBar.open('Please select a project first', 'Close', {
+        duration: 3000,
+      });
+      return;
+    }
+
+    this.stockService.exportStockItems(this.selectedProjectId).subscribe((items) => {
       const exportData: StockItemExport[] = items.map((item) => ({
         id: item.id!,
         itemCode: item.itemCode,

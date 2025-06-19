@@ -722,10 +722,10 @@ export class BOQImportExcelDialogComponent implements OnInit {
         success: true,
         itemCount: boqItems.length,
       });
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error importing BOQ items:', error);
       // Show more detailed error message
-      const errorMessage = error?.message || 'Unknown error occurred';
+      const errorMessage = (error as Error)?.message || 'Unknown error occurred';
       alert(`Failed to import BOQ items: ${errorMessage}`);
     } finally {
       this.importing = false;

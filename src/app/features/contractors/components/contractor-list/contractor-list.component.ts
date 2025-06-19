@@ -26,7 +26,7 @@ import { Router } from '@angular/router';
 
 import { ContractorService } from '../../services/contractor.service';
 import { ContractorProjectService } from '../../services/contractor-project.service';
-import { Contractor, ContractorStatus, CONTRACTOR_SERVICES } from '../../models/contractor.model';
+import { Contractor, ContractorStatus, ContractorService as ContractorServiceType, CONTRACTOR_SERVICES } from '../../models/contractor.model';
 import { ContractorProjectSummary } from '../../models/contractor-project.model';
 import { ContractorFormComponent } from '../contractor-form/contractor-form.component';
 
@@ -622,7 +622,7 @@ export class ContractorListComponent implements OnInit {
     if (this.serviceFilter) {
       filtered = filtered.filter((cs) => {
         const contractor = this.contractors().find((c) => c.id === cs.contractorId);
-        return contractor?.capabilities.services.includes(this.serviceFilter as any);
+        return contractor?.capabilities.services.includes(this.serviceFilter as ContractorServiceType);
       });
     }
 
@@ -674,7 +674,7 @@ export class ContractorListComponent implements OnInit {
               this.contractorSummaries.set(summaries);
             }
           },
-          error: (error) => {
+          error: (_error) => {
             console.log(
               'No contractor projects found yet - showing contractors without project data',
             );

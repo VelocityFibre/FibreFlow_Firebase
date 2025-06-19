@@ -10,14 +10,17 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { DailyProgress, MaterialUsage } from '../../models/daily-progress.model';
 import { ProjectService } from '../../../../core/services/project.service';
 import { PhaseService } from '../../../../core/services/phase.service';
+import { Phase } from '../../../../core/models/phase.model';
 import { TaskService } from '../../../../core/services/task.service';
+import { Task } from '../../../../core/models/task.model';
 import { StaffService } from '../../../staff/services/staff.service';
 import { ContractorService } from '../../../contractors/services/contractor.service';
 import { StockService } from '../../../stock/services/stock.service';
+import { StockItem } from '../../../stock/models/stock-item.model';
 
 @Component({
   selector: 'app-daily-progress-form',
@@ -72,7 +75,7 @@ import { StockService } from '../../../stock/services/stock.service';
         <mat-select formControlName="taskId">
           <mat-option value="">None</mat-option>
           <mat-option *ngFor="let task of tasks" [value]="task.id">
-            {{ task.title }}
+            {{ task.name }}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -240,11 +243,11 @@ export class DailyProgressFormComponent implements OnInit {
   isSubmitting = false;
 
   projects$ = this.projectService.getProjects();
-  phases$?: Observable<any[]>;
-  tasks$?: Observable<any[]>;
+  phases$?: Observable<Phase[]>;
+  tasks$?: Observable<Task[]>;
   staff$ = this.staffService.getStaff();
   contractors$ = this.contractorService.getContractors();
-  stockItems$ = this.stockService.getStockItems();
+  stockItems$: Observable<StockItem[]> = of([]);
 
   constructor() {
     this.progressForm = this.fb.group({
@@ -306,6 +309,7 @@ export class DailyProgressFormComponent implements OnInit {
   onProjectChange(projectId: string) {
     if (projectId) {
       this.phases$ = this.phaseService.getByProject(projectId);
+      this.stockItems$ = this.stockService.getStockItems(projectId);
       this.progressForm.patchValue({ phaseId: '', taskId: '' });
     }
   }
@@ -323,12 +327,14 @@ export class DailyProgressFormComponent implements OnInit {
       const formValue = this.progressForm.value;
 
       // Add material names
-      const materialsWithNames = formValue.materialsUsed.map((material: any) => {
-        return {
-          ...material,
-          materialName: material.materialName || '',
-        };
-      });
+      const materialsWithNames = formValue.materialsUsed.map(
+        (material: { materialId: string; quantity: number; materialName?: string }) => {
+          return {
+            ...material,
+            materialName: material.materialName || '',
+          };
+        },
+      );
 
       const progressData: Partial<DailyProgress> = {
         ...formValue,

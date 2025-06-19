@@ -242,7 +242,7 @@ interface ContractorProjectDetail {
     </div>
 
     <!-- Loading State -->
-    <div class="loading-container" *ngIf="!(contractorProjectDetail$ | async)">
+    <div class="loading-container" *ngIf="(contractorProjectDetail$ | async) === null">
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </div>
   `,
@@ -508,9 +508,12 @@ export class ContractorProjectDetailPageComponent implements OnInit {
     return status.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
   }
 
-  formatDate(date: any): string {
+  formatDate(date: Date | { toDate: () => Date } | string): string {
     if (!date) return 'N/A';
-    const d = date.toDate ? date.toDate() : new Date(date);
+    if (typeof date === 'string') {
+      return new Date(date).toLocaleDateString();
+    }
+    const d = 'toDate' in date ? date.toDate() : date;
     return d.toLocaleDateString();
   }
 

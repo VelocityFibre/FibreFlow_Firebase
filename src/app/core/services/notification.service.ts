@@ -23,6 +23,10 @@ export class NotificationService {
     this.show(message, action, 'error');
   }
 
+  showError(message: string, action?: string): void {
+    this.error(message, action);
+  }
+
   warning(message: string, action?: string): void {
     this.show(message, action, 'warning');
   }

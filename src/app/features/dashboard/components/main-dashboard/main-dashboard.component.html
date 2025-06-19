@@ -129,108 +129,109 @@
         </mat-card-content>
       </mat-card>
 
-    <!-- Analytics Card -->
-    <mat-card class="dashboard-card ff-card-analytics" routerLink="/analytics">
-      <div class="card-icon analytics-icon">
-        <mat-icon>analytics</mat-icon>
-      </div>
-      <mat-card-header>
-        <mat-card-title>Analytics</mat-card-title>
-        <mat-card-subtitle>Detailed reports and analytics</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="card-stats">
-          <div class="stat-item">
-            <span class="view-reports">View Reports</span>
-          </div>
-          <div class="action-link">
-            <span>Open →</span>
-          </div>
+      <!-- Analytics Card -->
+      <mat-card class="dashboard-card ff-card-analytics" routerLink="/analytics">
+        <div class="card-icon analytics-icon">
+          <mat-icon>analytics</mat-icon>
         </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-
-  <!-- Quick Summary Section -->
-  <div class="summary-section">
-    <h2>Quick Summary</h2>
-    <div class="summary-cards">
-      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-card-title>Analytics</mat-card-title>
+          <mat-card-subtitle>Detailed reports and analytics</mat-card-subtitle>
+        </mat-card-header>
         <mat-card-content>
-          <div class="summary-icon">
-            <mat-icon>trending_up</mat-icon>
-          </div>
-          <div class="summary-content">
-            <h3>Tasks Completed</h3>
-            <div class="summary-value">{{ dashboardStats().polesPlanted }}</div>
-            <div class="summary-detail">Across all projects</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="summary-card">
-        <mat-card-content>
-          <div class="summary-icon">
-            <mat-icon>construction</mat-icon>
-          </div>
-          <div class="summary-content">
-            <h3>Materials Needed</h3>
-            <div class="summary-value">{{ dashboardStats().materialsNeeded }}</div>
-            <div class="summary-detail">Below minimum stock</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="summary-card">
-        <mat-card-content>
-          <div class="summary-icon">
-            <mat-icon>folder_open</mat-icon>
-          </div>
-          <div class="summary-content">
-            <h3>Active Projects</h3>
-            <div class="summary-value">{{ dashboardStats().activeProjects }}</div>
-            <div class="summary-detail">Currently running</div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="summary-card">
-        <mat-card-content>
-          <div class="summary-icon">
-            <mat-icon>check_circle</mat-icon>
-          </div>
-          <div class="summary-content">
-            <h3>Completion Rate</h3>
-            <div class="summary-value">{{ dashboardStats().completionRate }}%</div>
-            <div class="summary-detail">Project completion</div>
+          <div class="card-stats">
+            <div class="stat-item">
+              <span class="view-reports">View Reports</span>
+            </div>
+            <div class="action-link">
+              <span>Open →</span>
+            </div>
           </div>
         </mat-card-content>
       </mat-card>
     </div>
-  </div>
 
-  <!-- Recent Activity -->
-  <div class="activity-section">
-    <h2>Recent Activity</h2>
-    <mat-card>
-      <mat-card-content>
-        <div class="activity-list">
-          <div class="activity-item">
-            <mat-icon class="activity-icon">check_circle</mat-icon>
-            <div class="activity-content">
-              <p><strong>Project "Fiber Installation - Downtown"</strong> completed Phase 2</p>
-              <span class="activity-time">5 hours ago</span>
+    <!-- Quick Summary Section -->
+    <div class="summary-section">
+      <h2>Quick Summary</h2>
+      <div class="summary-cards">
+        <mat-card class="summary-card">
+          <mat-card-content>
+            <div class="summary-icon">
+              <mat-icon>trending_up</mat-icon>
+            </div>
+            <div class="summary-content">
+              <h3>Tasks Completed</h3>
+              <div class="summary-value">{{ dashboardStats().polesPlanted }}</div>
+              <div class="summary-detail">Across all projects</div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="summary-card">
+          <mat-card-content>
+            <div class="summary-icon">
+              <mat-icon>construction</mat-icon>
+            </div>
+            <div class="summary-content">
+              <h3>Materials Needed</h3>
+              <div class="summary-value">{{ dashboardStats().materialsNeeded }}</div>
+              <div class="summary-detail">Below minimum stock</div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="summary-card">
+          <mat-card-content>
+            <div class="summary-icon">
+              <mat-icon>folder_open</mat-icon>
+            </div>
+            <div class="summary-content">
+              <h3>Active Projects</h3>
+              <div class="summary-value">{{ dashboardStats().activeProjects }}</div>
+              <div class="summary-detail">Currently running</div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="summary-card">
+          <mat-card-content>
+            <div class="summary-icon">
+              <mat-icon>check_circle</mat-icon>
+            </div>
+            <div class="summary-content">
+              <h3>Completion Rate</h3>
+              <div class="summary-value">{{ dashboardStats().completionRate }}%</div>
+              <div class="summary-detail">Project completion</div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="activity-section">
+      <h2>Recent Activity</h2>
+      <mat-card>
+        <mat-card-content>
+          <div class="activity-list">
+            <div class="activity-item">
+              <mat-icon class="activity-icon">check_circle</mat-icon>
+              <div class="activity-content">
+                <p><strong>Project "Fiber Installation - Downtown"</strong> completed Phase 2</p>
+                <span class="activity-time">5 hours ago</span>
+              </div>
+            </div>
+            <div class="activity-item">
+              <mat-icon class="activity-icon">warning</mat-icon>
+              <div class="activity-content">
+                <p>Low stock alert: Fiber Optic Cable (Single Mode)</p>
+                <span class="activity-time">1 day ago</span>
+              </div>
             </div>
           </div>
-          <div class="activity-item">
-            <mat-icon class="activity-icon">warning</mat-icon>
-            <div class="activity-content">
-              <p>Low stock alert: Fiber Optic Cable (Single Mode)</p>
-              <span class="activity-time">1 day ago</span>
-            </div>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-}
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>

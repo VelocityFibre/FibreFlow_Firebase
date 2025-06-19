@@ -10,10 +10,9 @@ import {
   where,
   orderBy,
   getDocs,
-  QueryConstraint,
   Timestamp,
   writeBatch,
-  getDoc,
+  serverTimestamp,
 } from '@angular/fire/firestore';
 import { Observable, from, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
@@ -52,10 +51,26 @@ export class StepService {
           (step) =>
             ({
               ...step,
-              startDate: step.startDate ? (step.startDate as any).toDate() : undefined,
-              endDate: step.endDate ? (step.endDate as any).toDate() : undefined,
-              createdAt: step.createdAt ? (step.createdAt as any).toDate() : undefined,
-              updatedAt: step.updatedAt ? (step.updatedAt as any).toDate() : undefined,
+              startDate: step.startDate
+                ? step.startDate instanceof Timestamp
+                  ? step.startDate.toDate()
+                  : step.startDate
+                : undefined,
+              endDate: step.endDate
+                ? step.endDate instanceof Timestamp
+                  ? step.endDate.toDate()
+                  : step.endDate
+                : undefined,
+              createdAt: step.createdAt
+                ? step.createdAt instanceof Timestamp
+                  ? step.createdAt.toDate()
+                  : step.createdAt
+                : undefined,
+              updatedAt: step.updatedAt
+                ? step.updatedAt instanceof Timestamp
+                  ? step.updatedAt.toDate()
+                  : step.updatedAt
+                : undefined,
             }) as StepWithPhase,
         );
       }),
@@ -121,7 +136,7 @@ export class StepService {
     const stepDoc = doc(this.firestore, this.collectionName, stepId);
     const updateData: any = {
       ...updates,
-      updatedAt: Timestamp.fromDate(new Date()),
+      updatedAt: serverTimestamp(),
     };
 
     if (updates.startDate) {
@@ -244,10 +259,26 @@ export class StepService {
           (step) =>
             ({
               ...step,
-              startDate: step.startDate ? (step.startDate as any).toDate() : undefined,
-              endDate: step.endDate ? (step.endDate as any).toDate() : undefined,
-              createdAt: step.createdAt ? (step.createdAt as any).toDate() : undefined,
-              updatedAt: step.updatedAt ? (step.updatedAt as any).toDate() : undefined,
+              startDate: step.startDate
+                ? step.startDate instanceof Timestamp
+                  ? step.startDate.toDate()
+                  : step.startDate
+                : undefined,
+              endDate: step.endDate
+                ? step.endDate instanceof Timestamp
+                  ? step.endDate.toDate()
+                  : step.endDate
+                : undefined,
+              createdAt: step.createdAt
+                ? step.createdAt instanceof Timestamp
+                  ? step.createdAt.toDate()
+                  : step.createdAt
+                : undefined,
+              updatedAt: step.updatedAt
+                ? step.updatedAt instanceof Timestamp
+                  ? step.updatedAt.toDate()
+                  : step.updatedAt
+                : undefined,
             }) as StepWithPhase,
         );
       }),

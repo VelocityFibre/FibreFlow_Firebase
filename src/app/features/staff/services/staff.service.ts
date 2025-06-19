@@ -15,6 +15,7 @@ import {
   serverTimestamp,
   DocumentReference,
   CollectionReference,
+  Timestamp,
 } from '@angular/fire/firestore';
 import { Observable, from, map, catchError, throwError, shareReplay, startWith } from 'rxjs';
 import { StaffMember, StaffFilter, StaffGroup, AvailabilityStatus } from '../models';
@@ -155,10 +156,10 @@ export class StaffService {
   createStaff(
     staffData: Omit<StaffMember, 'id' | 'createdAt' | 'updatedAt'>,
   ): Observable<DocumentReference> {
-    const newStaff: any = {
+    const newStaff: Omit<StaffMember, 'id'> = {
       ...staffData,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
+      createdAt: serverTimestamp() as Timestamp,
+      updatedAt: serverTimestamp() as Timestamp,
       activity: {
         lastLogin: null,
         lastActive: null,

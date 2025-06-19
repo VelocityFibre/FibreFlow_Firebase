@@ -173,9 +173,9 @@ export class StockMovementsComponent implements OnInit {
     this.loading.set(true);
 
     try {
-      // Load stock items for filter
-      const items = await firstValueFrom(this.stockService.getStockItems());
-      this.stockItems.set(items);
+      // Load stock items for filter - skip for now as we need projectId
+      // const items = await firstValueFrom(this.stockService.getStockItems());
+      this.stockItems.set([]);
 
       // Load projects for filter
       const projects = await firstValueFrom(this.projectService.getProjects());

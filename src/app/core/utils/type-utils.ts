@@ -112,7 +112,7 @@ export function createEnum<const T extends readonly string[]>(
 ): { readonly [K in T[number]]: K } {
   const result = {} as { [K in T[number]]: K };
   for (const value of values) {
-    (result as any)[value] = value;
+    (result as Record<string, string>)[value] = value;
   }
   return result;
 }

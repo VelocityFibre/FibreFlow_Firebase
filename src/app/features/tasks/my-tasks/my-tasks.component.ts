@@ -25,11 +25,23 @@ import { AuthService } from '../../../core/services/auth.service';
 import { DateFormatService } from '../../../core/services/date-format.service';
 import { StaffService } from '../../staff/services/staff.service';
 import { TaskDetailDialogComponent } from '../../projects/components/tasks/task-detail-dialog/task-detail-dialog.component';
+import { Project } from '../../../core/models/project.model';
+import { StaffMember } from '../../staff/models/staff.model';
+import { ProjectService } from '../../../core/services/project.service';
 
 interface _TaskFilter {
   status: TaskStatus | 'all';
   priority: TaskPriority | 'all';
   project: string | 'all';
+}
+
+interface TaskStats {
+  total: number;
+  pending: number;
+  inProgress: number;
+  completed: number;
+  overdue: number;
+  todayDue: number;
 }
 
 @Component({
@@ -184,7 +196,7 @@ interface _TaskFilter {
                 <mat-option value="all">All Assignees</mat-option>
                 <mat-option value="me">My Tasks</mat-option>
                 <mat-option *ngFor="let staff of staff$ | async" [value]="staff.id">
-                  {{ staff.firstName }} {{ staff.lastName }}
+                  {{ staff.name }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -708,14 +720,15 @@ export class MyTasksComponent implements OnInit {
   private authService = inject(AuthService);
   private dateFormat = inject(DateFormatService);
   private staffService = inject(StaffService);
+  private projectService = inject(ProjectService);
   private dialog = inject(MatDialog);
   private router = inject(Router);
 
   currentUserId: string | null = null;
   tasks$!: Observable<Task[]>;
-  taskStats$!: Observable<any>;
-  projects$!: Observable<any[]>;
-  staff$!: Observable<any[]>;
+  taskStats$!: Observable<TaskStats>;
+  projects$!: Observable<Project[]>;
+  staff$!: Observable<StaffMember[]>;
   activeTasks$!: Observable<Task[]>;
   completedTasks$!: Observable<Task[]>;
 
@@ -824,20 +837,7 @@ export class MyTasksComponent implements OnInit {
     );
 
     // Get unique projects for filter
-    this.projects$ = this.tasks$.pipe(
-      map((tasks) => {
-        const projectMap = new Map();
-        tasks.forEach((task) => {
-          if (!projectMap.has(task.projectId)) {
-            projectMap.set(task.projectId, {
-              id: task.projectId,
-              name: task.projectName || 'Unknown Project',
-            });
-          }
-        });
-        return Array.from(projectMap.values());
-      }),
-    );
+    this.projects$ = this.projectService.getProjects();
 
     // Active tasks (pending, in progress, blocked)
     this.activeTasks$ = this.tasks$.pipe(
@@ -854,13 +854,18 @@ export class MyTasksComponent implements OnInit {
     this.loadTasks();
   }
 
-  formatDate(date: any): string {
-    return this.dateFormat.formatDate(date);
+  formatDate(date: Date | string | number | { toDate: () => Date }): string {
+    // Convert number to Date if needed
+    const dateValue = typeof date === 'number' ? new Date(date) : date;
+    return this.dateFormat.formatDate(dateValue);
   }
 
   isOverdue(task: Task): boolean {
     if (!task.dueDate || task.status === TaskStatus.COMPLETED) return false;
-    const dueDate = task.dueDate instanceof Date ? task.dueDate : (task.dueDate as any).toDate();
+    const dueDate =
+      task.dueDate instanceof Date
+        ? task.dueDate
+        : (task.dueDate as { toDate: () => Date }).toDate();
     return dueDate < new Date();
   }
 
@@ -970,12 +975,14 @@ export class MyTasksComponent implements OnInit {
       completed: tasks.filter((t) => t.status === TaskStatus.COMPLETED).length,
       overdue: tasks.filter((t) => {
         if (!t.dueDate || t.status === TaskStatus.COMPLETED) return false;
-        const dueDate = t.dueDate instanceof Date ? t.dueDate : (t.dueDate as any).toDate();
+        const dueDate =
+          t.dueDate instanceof Date ? t.dueDate : (t.dueDate as { toDate: () => Date }).toDate();
         return dueDate < now;
       }).length,
       todayDue: tasks.filter((t) => {
         if (!t.dueDate || t.status === TaskStatus.COMPLETED) return false;
-        const dueDate = t.dueDate instanceof Date ? t.dueDate : (t.dueDate as any).toDate();
+        const dueDate =
+          t.dueDate instanceof Date ? t.dueDate : (t.dueDate as { toDate: () => Date }).toDate();
         return dueDate >= today && dueDate < tomorrow;
       }).length,
     };

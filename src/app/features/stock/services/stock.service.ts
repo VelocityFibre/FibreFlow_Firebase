@@ -31,7 +31,6 @@ import {
 } from '../models/stock-item.model';
 import {
   StockMovement,
-  MovementType,
   isIncomingMovement,
   isOutgoingMovement,
 } from '../models/stock-movement.model';
@@ -116,24 +115,20 @@ export class StockService {
     return unitMap[normalizedValue] || UnitOfMeasure.UNITS;
   }
 
-  // Stock Items CRUD
-  getStockItems(projectId?: string): Observable<StockItem[]> {
-    let q;
-    if (projectId) {
-      // Get project-specific stock items
-      q = query(this.stockItemsCollection, where('projectId', '==', projectId), orderBy('name'));
-    } else {
-      // Get global stock items (no projectId or isProjectSpecific = false)
-      // Use == false instead of != true to avoid composite index requirement
-      q = query(
-        this.stockItemsCollection,
-        where('isProjectSpecific', '==', false),
-        orderBy('name'),
-      );
+  // Stock Items CRUD - Project specific only
+  getStockItems(projectId: string): Observable<StockItem[]> {
+    if (!projectId) {
+      throw new Error('Project ID is required for stock management');
     }
 
+    const q = query(
+      this.stockItemsCollection,
+      where('projectId', '==', projectId),
+      orderBy('name'),
+    );
+
     return collectionData(q, { idField: 'id' }).pipe(
-      switchMap((items) => this.enrichStockItemsWithMaterialData(items)),
+      switchMap((items) => this.enrichStockItemsWithMaterialData(items as StockItem[])),
       map((items) =>
         items.map((item) => ({
           ...item,
@@ -151,7 +146,7 @@ export class StockService {
       orderBy('name'),
     );
     return collectionData(q, { idField: 'id' }).pipe(
-      switchMap((items) => this.enrichStockItemsWithMaterialData(items)),
+      switchMap((items) => this.enrichStockItemsWithMaterialData(items as StockItem[])),
       map((items) =>
         items.map((item) => ({
           ...item,
@@ -161,11 +156,11 @@ export class StockService {
     );
   }
 
-  // Get all stock items (both global and project-specific)
+  // Get all stock items for all projects (admin view)
   getAllStockItems(): Observable<StockItem[]> {
-    const q = query(this.stockItemsCollection, orderBy('name'));
+    const q = query(this.stockItemsCollection, orderBy('projectId'), orderBy('name'));
     return collectionData(q, { idField: 'id' }).pipe(
-      switchMap((items) => this.enrichStockItemsWithMaterialData(items)),
+      switchMap((items) => this.enrichStockItemsWithMaterialData(items as StockItem[])),
       map((items) =>
         items.map((item) => ({
           ...item,
@@ -275,6 +270,10 @@ export class StockService {
   }
 
   async createStockItem(stockItem: Partial<StockItem>): Promise<string> {
+    if (!stockItem.projectId) {
+      throw new Error('Project ID is required to create stock items');
+    }
+
     const docRef = doc(this.stockItemsCollection);
     const user = this.auth.currentUser;
 
@@ -282,7 +281,7 @@ export class StockService {
       ...(stockItem as StockItem),
       allocatedStock: 0,
       status: stockItem.status || StockItemStatus.ACTIVE,
-      isProjectSpecific: !!stockItem.projectId, // Set based on projectId presence
+      isProjectSpecific: true, // All items are project-specific
       createdAt: serverTimestamp() as Timestamp,
       createdBy: user?.uid || 'system',
       updatedAt: serverTimestamp() as Timestamp,
@@ -290,61 +289,6 @@ export class StockService {
     };
 
     await setDoc(docRef, newItem);
-    return docRef.id;
-  }
-
-  // Create project-specific stock item from global stock
-  async createProjectStockItem(
-    globalStockItemId: string,
-    projectId: string,
-    projectName: string,
-    quantity: number,
-  ): Promise<string> {
-    const globalItem = await this.getStockItemOnce(globalStockItemId);
-    if (!globalItem) {
-      throw new Error('Global stock item not found');
-    }
-
-    const docRef = doc(this.stockItemsCollection);
-    const user = this.auth.currentUser;
-
-    const projectItem: StockItem = {
-      ...globalItem,
-      id: undefined, // New ID will be generated
-      projectId,
-      projectName,
-      isProjectSpecific: true,
-      globalStockItemId,
-      currentStock: quantity,
-      allocatedStock: 0,
-      createdAt: serverTimestamp() as Timestamp,
-      createdBy: user?.uid || 'system',
-      updatedAt: serverTimestamp() as Timestamp,
-      updatedBy: user?.uid || 'system',
-    };
-
-    await setDoc(docRef, projectItem);
-
-    // Create a movement record for this allocation
-    await this.createStockMovement({
-      itemId: globalStockItemId,
-      itemCode: globalItem.itemCode,
-      itemName: globalItem.name,
-      movementType: MovementType.ALLOCATION,
-      quantity,
-      unitOfMeasure: globalItem.unitOfMeasure,
-      unitCost: globalItem.unitCost || globalItem.standardCost || 0,
-      totalCost: (globalItem.unitCost || globalItem.standardCost || 0) * quantity,
-      previousStock: globalItem.currentStock,
-      newStock: globalItem.currentStock - quantity,
-      movementDate: serverTimestamp() as Timestamp,
-      toProjectId: projectId,
-      toProjectName: projectName,
-      notes: `Allocated to project ${projectName}`,
-      performedBy: user?.uid || 'system',
-      performedByName: user?.displayName || 'System',
-    });
-
     return docRef.id;
   }
 
@@ -521,7 +465,15 @@ export class StockService {
   }
 
   // Import/Export functionality
-  async importStockItems(items: StockItemImport[]): Promise<{ success: number; errors: string[] }> {
+  async importStockItems(
+    items: StockItemImport[],
+    projectId: string,
+    projectName?: string,
+  ): Promise<{ success: number; errors: string[] }> {
+    if (!projectId) {
+      throw new Error('Project ID is required to import stock items');
+    }
+
     const batch = writeBatch(this.firestore);
     const user = this.auth.currentUser;
     const errors: string[] = [];
@@ -548,7 +500,9 @@ export class StockService {
           batchTracking: false,
           expiryTracking: false,
           status: StockItemStatus.ACTIVE,
-          isProjectSpecific: false, // Imported items are global by default
+          isProjectSpecific: true, // All items are project-specific
+          projectId,
+          projectName,
           createdAt: serverTimestamp() as Timestamp,
           createdBy: user?.uid || 'system',
           updatedAt: serverTimestamp() as Timestamp,
@@ -575,8 +529,8 @@ export class StockService {
     return { success: successCount, errors };
   }
 
-  exportStockItems(): Observable<StockItem[]> {
-    return this.getStockItems();
+  exportStockItems(projectId: string): Observable<StockItem[]> {
+    return this.getStockItems(projectId);
   }
 
   checkStockAvailability(stockItemId: string, requiredQuantity: number): Observable<boolean> {

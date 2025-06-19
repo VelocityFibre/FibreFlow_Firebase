@@ -139,6 +139,10 @@ import { PhaseAssignDialogComponent } from './phase-assign-dialog/phase-assign-d
         <mat-icon>timeline</mat-icon>
         <h3>No Phases Created</h3>
         <p>Project phases will appear here once created.</p>
+        <button mat-raised-button color="primary" (click)="createDefaultPhases()">
+          <mat-icon>add_circle</mat-icon>
+          Create Default Phases
+        </button>
       </div>
     </div>
   `,
@@ -403,18 +407,27 @@ export class ProjectPhasesComponent implements OnInit {
   private refreshPhases$ = new Subject<void>();
 
   ngOnInit() {
+    console.log('ProjectPhasesComponent initialized with projectId:', this.projectId);
     if (this.projectId) {
       this.loadPhases();
+    } else {
+      console.error('ProjectPhasesComponent: No projectId provided!');
     }
   }
 
   loadPhases() {
+    console.log('ProjectPhasesComponent: Loading phases for project:', this.projectId);
     // Initialize the observable with startWith to ensure initial load
     this.phases$ = this.refreshPhases$.pipe(
       startWith({}), // Trigger initial load
-      switchMap(() => this.phaseService.getProjectPhases(this.projectId)),
+      switchMap(() => {
+        console.log('ProjectPhasesComponent: Fetching phases from service...');
+        return this.phaseService.getProjectPhases(this.projectId);
+      }),
       tap((phases) => {
         // Phases loaded successfully
+        console.log('ProjectPhasesComponent: Phases loaded:', phases);
+        console.log('ProjectPhasesComponent: Number of phases:', phases.length);
         this.currentPhases = phases;
       }),
     );
@@ -748,5 +761,25 @@ export class ProjectPhasesComponent implements OnInit {
     //   width: '400px',
     //   data: { phase, projectId: this.projectId }
     // });
+  }
+
+  async createDefaultPhases() {
+    if (!this.projectId) {
+      console.error('No project ID available');
+      return;
+    }
+
+    if (confirm('This will create the default project phases. Continue?')) {
+      try {
+        console.log('Creating default phases for project:', this.projectId);
+        await this.phaseService.createProjectPhases(this.projectId, true);
+        console.log('Phases created successfully');
+        // Refresh the phases
+        this.refreshPhases$.next();
+      } catch (error) {
+        console.error('Error creating phases:', error);
+        alert('Failed to create phases. Please check console for details.');
+      }
+    }
   }
 }

@@ -16,9 +16,10 @@ import { PhaseService } from '../../../../core/services/phase.service';
 import { StaffService } from '../../../staff/services/staff.service';
 import { DestroyRef } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Phase } from '../../../../core/models/phase.model';
 
 interface TaskFormData {
-  task: any | null;
+  task: Task | null;
   isTemplate?: boolean;
   projectId?: string;
   phaseId?: string;
@@ -181,7 +182,7 @@ interface TaskFormData {
           </mat-form-field>
 
           <div class="half-width progress-section">
-            <label>Completion Percentage</label>
+            <span class="label">Completion Percentage</span>
             <div class="slider-container">
               <mat-slider min="0" max="100" step="5" showTickMarks discrete>
                 <input matSliderThumb formControlName="completionPercentage" />
@@ -276,7 +277,7 @@ export class TaskFormDialogComponent implements OnInit {
   public data = inject(MAT_DIALOG_DATA) as TaskFormData;
 
   projects$ = this.projectService.getProjects();
-  phases$: Observable<any[]> | null = null;
+  phases$: Observable<Phase[]> | null = null;
   staff$ = this.staffService.getStaff();
 
   ngOnInit() {
@@ -291,9 +292,9 @@ export class TaskFormDialogComponent implements OnInit {
       this.taskForm = this.fb.group({
         name: [task?.name || '', Validators.required],
         description: [task?.description || ''],
-        phaseType: [task?.phaseType || 'planning', Validators.required],
+        phaseType: ['planning', Validators.required],
         priority: [task?.priority || TaskPriority.MEDIUM],
-        estimatedDays: [task?.estimatedDays || 1, [Validators.required, Validators.min(1)]],
+        estimatedDays: [1, [Validators.required, Validators.min(1)]],
         notes: [task?.notes || ''],
       });
     } else {
@@ -308,9 +309,9 @@ export class TaskFormDialogComponent implements OnInit {
         assignedTo: [task?.assignedTo || ''],
         dueDate: [
           task?.dueDate
-            ? task.dueDate.toDate
-              ? task.dueDate.toDate()
-              : new Date(task.dueDate)
+            ? (task.dueDate as any).toDate
+              ? (task.dueDate as any).toDate()
+              : new Date(task.dueDate as string | Date)
             : null,
         ],
         estimatedHours: [task?.estimatedHours || null],

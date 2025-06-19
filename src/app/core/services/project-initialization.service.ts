@@ -1,5 +1,12 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, addDoc, writeBatch, doc, serverTimestamp, Timestamp } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  writeBatch,
+  doc,
+  serverTimestamp,
+  Timestamp,
+} from '@angular/fire/firestore';
 import { PhaseService } from './phase.service';
 import { TaskService } from './task.service';
 import { Phase, PhaseStatus } from '../models/phase.model';
@@ -38,7 +45,7 @@ export class ProjectInitializationService {
    * Create default phases for a project
    * Helper method to avoid duplication
    */
-  async createDefaultPhases(projectId: string): Promise<Phase[]> {
+  async createDefaultPhases(_projectId: string): Promise<Phase[]> {
     const defaultPhases = [
       { name: 'Planning', description: 'Initial planning and requirements gathering', order: 1 },
       { name: 'Design', description: 'Technical design and architecture', order: 2 },
@@ -61,8 +68,8 @@ export class ProjectInitializationService {
         startDate: Timestamp.now(),
         endDate: Timestamp.fromDate(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000 * (index + 1))), // 30 days per phase
         status: PhaseStatus.PENDING,
-        createdAt: serverTimestamp() as any,
-        updatedAt: serverTimestamp() as any,
+        createdAt: serverTimestamp() as Timestamp,
+        updatedAt: serverTimestamp() as Timestamp,
       };
 
       batch.set(phaseRef, phase);
@@ -113,7 +120,9 @@ export class ProjectInitializationService {
             actualHours: 0,
             completionPercentage: 0,
             startDate: (phase.startDate as Timestamp).toDate(),
-            dueDate: new Date((phase.startDate as Timestamp).toDate().getTime() + 7 * 24 * 60 * 60 * 1000), // 7 days
+            dueDate: new Date(
+              (phase.startDate as Timestamp).toDate().getTime() + 7 * 24 * 60 * 60 * 1000,
+            ), // 7 days
             createdAt: new Date(),
             updatedAt: new Date(),
           };

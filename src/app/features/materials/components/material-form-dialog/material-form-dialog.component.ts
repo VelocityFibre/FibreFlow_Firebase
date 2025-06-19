@@ -1,4 +1,4 @@
-import { Component, Inject, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -10,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { firstValueFrom } from 'rxjs';
 
-import { MasterMaterial, MaterialCategory, UnitOfMeasure } from '../../models/material.model';
+import { MasterMaterial } from '../../models/material.model';
 import { MaterialService } from '../../services/material.service';
 import { RemoteLoggerService } from '../../../../core/services/remote-logger.service';
 
@@ -225,6 +225,7 @@ export class MaterialFormDialogComponent implements OnInit {
   private materialService = inject(MaterialService);
   private dialogRef = inject(MatDialogRef<MaterialFormDialogComponent>);
   private logger = inject(RemoteLoggerService);
+  public data = inject<{ material?: MasterMaterial }>(MAT_DIALOG_DATA);
 
   materialForm!: FormGroup;
   isEditMode = false;
@@ -233,8 +234,8 @@ export class MaterialFormDialogComponent implements OnInit {
   categories = this.materialService.getCategories();
   unitsOfMeasure = this.materialService.getUnitsOfMeasure();
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { material?: MasterMaterial }) {
-    this.isEditMode = !!data?.material;
+  constructor() {
+    this.isEditMode = !!this.data?.material;
   }
 
   ngOnInit() {
@@ -288,22 +289,25 @@ export class MaterialFormDialogComponent implements OnInit {
           });
         }
         this.dialogRef.close(true);
-      } catch (error: any) {
-        await this.logger.logError(error, 'MaterialFormDialog', 'Failed to save material');
-        alert(error.message || 'Error saving material');
+      } catch (error) {
+        await this.logger.logError(error as Error, 'MaterialFormDialog', 'Failed to save material');
+        alert(error instanceof Error ? error.message : 'Error saving material');
       } finally {
         this.saving = false;
       }
     } else {
       await this.logger.warn('Form validation failed', 'MaterialFormDialog', {
         errors: this.materialForm.errors,
-        controlErrors: Object.keys(this.materialForm.controls).reduce((acc, key) => {
-          const control = this.materialForm.get(key);
-          if (control?.errors) {
-            acc[key] = control.errors;
-          }
-          return acc;
-        }, {} as any),
+        controlErrors: Object.keys(this.materialForm.controls).reduce(
+          (acc, key) => {
+            const control = this.materialForm.get(key);
+            if (control?.errors) {
+              acc[key] = control.errors;
+            }
+            return acc;
+          },
+          {} as Record<string, unknown>,
+        ),
       });
     }
   }

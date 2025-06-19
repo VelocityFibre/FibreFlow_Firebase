@@ -56,7 +56,7 @@ export class SentryTestComponent {
 
   throwTypeError(): void {
     // This will cause a type error
-    const obj: any = null;
+    const obj = null as unknown as { nonExistentMethod: () => void };
     obj.nonExistentMethod();
   }
 

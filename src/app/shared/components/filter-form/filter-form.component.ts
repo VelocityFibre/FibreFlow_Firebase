@@ -15,7 +15,7 @@ export interface FilterField {
   key: string;
   label: string;
   placeholder?: string;
-  options?: { value: any; label: string }[];
+  options?: { value: string | number | boolean; label: string }[];
   multiple?: boolean;
   appearance?: 'fill' | 'outline';
   width?: string;
@@ -164,7 +164,7 @@ export class FilterFormComponent {
   @Input() showApply: boolean = true;
 
   @Output() resetForm = new EventEmitter<void>();
-  @Output() applyFilters = new EventEmitter<any>();
+  @Output() applyFilters = new EventEmitter<Record<string, unknown>>();
 
   onReset() {
     this.formGroup.reset();

@@ -10,13 +10,15 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ContractorProjectService } from '../../../contractors/services/contractor-project.service';
+import { ProjectService } from '../../../../core/services/project.service';
 import {
   ContractorProject,
-  PaymentStatus,
   ContractorProjectStatus,
 } from '../../../contractors/models/contractor-project.model';
+import { ContractorAssignmentDialogComponent } from '../../../contractors/components/contractor-assignment-dialog/contractor-assignment-dialog.component';
 
 @Component({
   selector: 'app-project-contractors',
@@ -32,6 +34,7 @@ import {
     MatDividerModule,
     MatDialogModule,
     MatMenuModule,
+    MatSnackBarModule,
   ],
   template: `
     <div class="project-contractors-container">
@@ -432,14 +435,33 @@ export class ProjectContractorsComponent implements OnInit {
   @Input() projectId!: string;
 
   private contractorProjectService = inject(ContractorProjectService);
+  private projectService = inject(ProjectService);
   private router = inject(Router);
   private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
   contractorProjects = signal<ContractorProject[]>([]);
   loading = signal(true);
+  projectName = signal<string>('');
+  projectCode = signal<string>('');
 
   ngOnInit() {
+    this.loadProjectDetails();
     this.loadContractorProjects();
+  }
+
+  loadProjectDetails() {
+    this.projectService.getProject(this.projectId).subscribe({
+      next: (project) => {
+        if (project) {
+          this.projectName.set(project.name);
+          this.projectCode.set(project.projectCode);
+        }
+      },
+      error: (error) => {
+        console.error('Error loading project details:', error);
+      },
+    });
   }
 
   loadContractorProjects() {
@@ -489,33 +511,44 @@ export class ProjectContractorsComponent implements OnInit {
   }
 
   assignContractor() {
-    // TODO: Implement contractor assignment dialog
-    console.log('Assign contractor to project');
+    const dialogRef = this.dialog.open(ContractorAssignmentDialogComponent, {
+      width: '600px',
+      data: {
+        projectId: this.projectId,
+        projectName: this.projectName(),
+        projectCode: this.projectCode(),
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.snackBar.open('Contractor assigned successfully', 'Close', {
+          duration: 3000,
+          panelClass: ['success-snackbar'],
+        });
+        this.loadContractorProjects();
+      }
+    });
   }
 
-  manageTeams(event: Event, cp: ContractorProject) {
+  manageTeams(event: Event, _cp: ContractorProject) {
     event.stopPropagation();
     // TODO: Implement team management dialog
-    console.log('Manage teams for contractor:', cp.contractorId);
   }
 
-  recordPayment(cp: ContractorProject) {
+  recordPayment(_cp: ContractorProject) {
     // TODO: Implement payment recording dialog
-    console.log('Record payment for contractor:', cp.contractorId);
   }
 
-  updateProgress(cp: ContractorProject) {
+  updateProgress(_cp: ContractorProject) {
     // TODO: Implement progress update dialog
-    console.log('Update progress for contractor:', cp.contractorId);
   }
 
-  viewPerformance(cp: ContractorProject) {
+  viewPerformance(_cp: ContractorProject) {
     // TODO: Navigate to performance dashboard
-    console.log('View performance for contractor:', cp.contractorId);
   }
 
-  removeContractor(cp: ContractorProject) {
+  removeContractor(_cp: ContractorProject) {
     // TODO: Implement contractor removal with confirmation
-    console.log('Remove contractor from project:', cp.contractorId);
   }
 }

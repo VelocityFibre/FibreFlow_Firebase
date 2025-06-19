@@ -40,7 +40,7 @@ export class MaterialService {
 
   // Get all materials with optional filters
   getMaterials(filter?: MaterialFilter): Observable<MasterMaterial[]> {
-    this.logger.debug('getMaterials called', 'MaterialService', filter);
+    this.logger.debug('getMaterials called', 'MaterialService', filter as Record<string, unknown>);
 
     // Start with a simple query - let's filter on client side for now
     let q = query(this.materialsCollection, orderBy('itemCode'));
@@ -150,8 +150,8 @@ export class MaterialService {
       });
 
       return exists;
-    } catch (error: any) {
-      await this.logger.logError(error, 'MaterialService', 'Failed to check item code');
+    } catch (error) {
+      await this.logger.logError(error as Error, 'MaterialService', 'Failed to check item code');
       return false;
     }
   }
@@ -191,8 +191,8 @@ export class MaterialService {
       });
 
       return docRef.id;
-    } catch (error: any) {
-      await this.logger.logError(error, 'MaterialService', 'Failed to add material');
+    } catch (error) {
+      await this.logger.logError(error as Error, 'MaterialService', 'Failed to add material');
       throw error;
     }
   }

@@ -15,7 +15,7 @@ import {
 } from '@angular/fire/firestore';
 import { Observable, from, combineLatest, map, switchMap, of } from 'rxjs';
 import { StaffFacadeService } from '../../features/staff/public-api';
-import { ProjectService } from '../../features/projects/services/project.service';
+import { ProjectService } from './project.service';
 import {
   StaffAssignment,
   TaskAssignment,

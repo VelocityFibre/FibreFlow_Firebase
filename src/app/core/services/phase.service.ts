@@ -11,6 +11,7 @@ import {
   collectionData,
   docData,
   CollectionReference,
+  DocumentReference,
   Timestamp,
   serverTimestamp,
   writeBatch,
@@ -21,6 +22,7 @@ import {
   PhaseStatus,
   PhaseTemplate,
   PhaseNotification,
+  PhaseDependency,
   DEFAULT_PHASES,
   DependencyType,
 } from '../models/phase.model';
@@ -36,6 +38,7 @@ export class PhaseService {
 
   // Get all phases for a project
   getProjectPhases(projectId: string): Observable<Phase[]> {
+    console.log(`PhaseService: Getting phases for project ${projectId}`);
     const phasesRef = collection(
       this.firestore,
       `projects/${projectId}/phases`,
@@ -43,6 +46,9 @@ export class PhaseService {
 
     return collectionData(phasesRef, { idField: 'id' }).pipe(
       map((phases) => {
+        console.log(
+          `PhaseService: Retrieved ${phases.length} phases from Firestore for project ${projectId}`,
+        );
         // Sort phases by orderNo
         return phases.sort((a, b) => (a.orderNo || 0) - (b.orderNo || 0));
       }),
@@ -102,7 +108,11 @@ export class PhaseService {
 
     const batch = writeBatch(this.firestore);
     const phaseMap = new Map<string, string>(); // Map template phase IDs to actual Firestore IDs
-    const phasesToCreate: Array<{ ref: any; data: any; template: any; index: number }> = [];
+    const phasesToCreate: Array<{
+      ref: DocumentReference;
+      template: (typeof DEFAULT_PHASES)[0];
+      index: number;
+    }> = [];
 
     // First, create all phase references and map IDs
     DEFAULT_PHASES.forEach((template, index) => {
@@ -113,7 +123,7 @@ export class PhaseService {
       const templateId = template.name.toLowerCase().replace(/[()]/g, '').replace(/\s+/g, '-');
       phaseMap.set(templateId, phaseId);
 
-      phasesToCreate.push({ ref: phaseRef, data: null, template, index });
+      phasesToCreate.push({ ref: phaseRef, template, index });
     });
 
     // Now create phase data with proper dependency references
@@ -124,7 +134,7 @@ export class PhaseService {
         orderNo: template.orderNo,
         status: PhaseStatus.PENDING,
         dependencies: (template.defaultDependencies || [])
-          .map((dep: any) => {
+          .map((dep: PhaseDependency) => {
             const mappedId = phaseMap.get(dep.phaseId);
             if (mappedId) {
               return {
@@ -134,7 +144,7 @@ export class PhaseService {
             }
             return null;
           })
-          .filter((dep: any) => dep !== null),
+          .filter((dep: PhaseDependency | null) => dep !== null) as PhaseDependency[],
         createdAt: serverTimestamp() as Timestamp,
         updatedAt: serverTimestamp() as Timestamp,
       };
@@ -159,7 +169,10 @@ export class PhaseService {
   }
 
   // Map template dependencies to actual phase IDs
-  private mapTemplateDependencies(dependencies: any[], currentIndex: number): any[] {
+  private mapTemplateDependencies(
+    dependencies: PhaseDependency[],
+    currentIndex: number,
+  ): PhaseDependency[] {
     return dependencies
       .map((dep) => {
         // Map phase names to indices for default phases
@@ -181,7 +194,7 @@ export class PhaseService {
         }
         return null;
       })
-      .filter((dep) => dep !== null);
+      .filter((dep): dep is PhaseDependency => dep !== null);
   }
 
   // Update phase status
@@ -192,13 +205,13 @@ export class PhaseService {
     blockedReason?: string,
   ): Promise<void> {
     const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${phaseId}`);
-    const updateData: any = {
+    const updateData: Partial<Phase> = {
       status,
-      updatedAt: serverTimestamp(),
+      updatedAt: serverTimestamp() as Timestamp,
     };
 
     if (status === PhaseStatus.COMPLETED) {
-      updateData.completedAt = serverTimestamp();
+      updateData.completedAt = serverTimestamp() as Timestamp;
       // Check and update dependent phases
       await this.checkAndUpdateDependentPhases(projectId, phaseId);
     }
@@ -206,7 +219,7 @@ export class PhaseService {
     if (status === PhaseStatus.BLOCKED && blockedReason) {
       updateData.blockedReason = blockedReason;
     } else if (status !== PhaseStatus.BLOCKED) {
-      updateData.blockedReason = null;
+      updateData.blockedReason = undefined;
     }
 
     await updateDoc(phaseRef, updateData);
@@ -216,9 +229,9 @@ export class PhaseService {
   async assignPhase(projectId: string, phaseId: string, staffId: string | null): Promise<void> {
     try {
       const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${phaseId}`);
-      const updateData: any = {
-        assignedTo: staffId,
-        updatedAt: serverTimestamp(),
+      const updateData: Partial<Phase> = {
+        assignedTo: staffId || undefined,
+        updatedAt: serverTimestamp() as Timestamp,
       };
 
       if (staffId) {
@@ -243,7 +256,7 @@ export class PhaseService {
         }
       } else {
         // Unassigning - remove staff details
-        updateData.assignedToDetails = null;
+        updateData.assignedToDetails = undefined;
       }
 
       await updateDoc(phaseRef, updateData);
@@ -281,11 +294,12 @@ export class PhaseService {
 
           if (allDependenciesMet) {
             const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${phase.id}`);
-            batch.update(phaseRef, {
+            const updateData: Partial<Phase> = {
               status: PhaseStatus.PENDING,
-              blockedReason: null,
-              updatedAt: serverTimestamp(),
-            });
+              blockedReason: undefined,
+              updatedAt: serverTimestamp() as Timestamp,
+            };
+            batch.update(phaseRef, updateData);
           }
         }
       }
@@ -297,10 +311,11 @@ export class PhaseService {
   // Unassign phase
   async unassignPhase(projectId: string, phaseId: string): Promise<void> {
     const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${phaseId}`);
-    await updateDoc(phaseRef, {
-      assignedTo: null,
-      updatedAt: serverTimestamp(),
-    });
+    const updateData: Partial<Phase> = {
+      assignedTo: undefined,
+      updatedAt: serverTimestamp() as Timestamp,
+    };
+    await updateDoc(phaseRef, updateData);
   }
 
   // Update phase dates
@@ -311,8 +326,8 @@ export class PhaseService {
     endDate?: Date,
   ): Promise<void> {
     const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${phaseId}`);
-    const updateData: any = {
-      updatedAt: serverTimestamp(),
+    const updateData: Partial<Phase> = {
+      updatedAt: serverTimestamp() as Timestamp,
     };
 
     if (startDate) updateData.startDate = Timestamp.fromDate(startDate);
@@ -322,7 +337,7 @@ export class PhaseService {
   }
 
   // Get phases assigned to a user
-  getUserPhases(_userId: string): Observable<any[]> {
+  getUserPhases(_userId: string): Observable<Phase[]> {
     // This would need to query across all projects - implement based on your needs
     // For now, returning empty array
     return of([]);
@@ -370,7 +385,7 @@ export class PhaseService {
   }
 
   // Update all project phases (used by phase management dialog)
-  async updateProjectPhases(projectId: string, phases: any[]): Promise<void> {
+  async updateProjectPhases(projectId: string, phases: Phase[]): Promise<void> {
     const batch = writeBatch(this.firestore);
 
     // Get existing phases to delete any that were removed
@@ -436,7 +451,7 @@ export class PhaseService {
 
       if (phaseId && phase.dependencies && phase.dependencies.length > 0) {
         const dependencies = phase.dependencies
-          .map((dep: any) => {
+          .map((dep: PhaseDependency) => {
             let depPhaseId = dep.phaseId;
 
             // Map temporary IDs to real IDs
@@ -444,8 +459,8 @@ export class PhaseService {
               const tempIndex = parseInt(dep.phaseId.split('-')[1]);
               const targetPhase = phases[tempIndex];
               depPhaseId = targetPhase.id?.startsWith('temp-')
-                ? tempIdMap.get(targetPhase.id)
-                : targetPhase.id;
+                ? tempIdMap.get(targetPhase.id) || ''
+                : targetPhase.id || '';
             }
 
             return {
@@ -453,7 +468,7 @@ export class PhaseService {
               type: dep.type,
             };
           })
-          .filter((dep: any) => dep.phaseId); // Filter out any invalid dependencies
+          .filter((dep): dep is PhaseDependency => !!(dep as PhaseDependency).phaseId);
 
         const phaseRef = doc(this.firestore, `projects/${projectId}/phases/${phaseId}`);
         depBatch.update(phaseRef, {
@@ -521,12 +536,21 @@ export class PhaseService {
   // Check and create phases if missing for a project
   async ensureProjectHasPhases(projectId: string): Promise<void> {
     try {
+      console.log(`PhaseService: Ensuring project ${projectId} has phases...`);
       const phases = await firstValueFrom(this.getProjectPhases(projectId));
+      console.log(
+        `PhaseService: Current phases count for project ${projectId}:`,
+        phases?.length || 0,
+      );
+
       if (!phases || phases.length === 0) {
         console.log(
           `PhaseService: No phases found for project ${projectId}, creating default phases...`,
         );
         await this.createProjectPhases(projectId, true);
+        console.log(`PhaseService: Default phases created for project ${projectId}`);
+      } else {
+        console.log(`PhaseService: Project ${projectId} already has ${phases.length} phases`);
       }
     } catch (error) {
       console.error(`PhaseService: Error ensuring phases for project ${projectId}:`, error);

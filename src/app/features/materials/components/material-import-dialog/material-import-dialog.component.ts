@@ -4,8 +4,6 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MaterialService } from '../../services/material.service';
-import { MasterMaterial } from '../../models/material.model';
 
 @Component({
   selector: 'app-material-import-dialog',

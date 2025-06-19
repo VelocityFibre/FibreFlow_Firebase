@@ -367,7 +367,11 @@ export class DailyProgressDetailComponent implements OnInit {
 
   formatDate(date: Date | string | number): string {
     if (!date) return '';
-    return this.dateFormatService.formatDate(date as any);
+    // Convert to appropriate type for dateFormatService
+    if (typeof date === 'number') {
+      return this.dateFormatService.formatDate(new Date(date));
+    }
+    return this.dateFormatService.formatDate(date as Date | string);
   }
 
   getStatusColor(status: string): 'primary' | 'accent' | 'warn' {

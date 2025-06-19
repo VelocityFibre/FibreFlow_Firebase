@@ -64,8 +64,9 @@ export class SentryErrorHandlerService implements ErrorHandler {
       console.error('Error object:', error);
       console.error(
         'Angular zone state:',
-        typeof (window as any).Zone !== 'undefined'
-          ? (window as any).Zone.current.name
+        typeof (window as unknown as { Zone?: { current?: { name?: string } } }).Zone !==
+          'undefined'
+          ? (window as unknown as { Zone: { current: { name: string } } }).Zone.current.name
           : 'Zone not available',
       );
 
@@ -76,8 +77,11 @@ export class SentryErrorHandlerService implements ErrorHandler {
       console.error('Stack trace lines:', stackLines);
 
       // Log component information if available
-      if ((error as any).ngDebugContext) {
-        console.error('Angular debug context:', (error as any).ngDebugContext);
+      if ((error as unknown as { ngDebugContext?: unknown }).ngDebugContext) {
+        console.error(
+          'Angular debug context:',
+          (error as unknown as { ngDebugContext: unknown }).ngDebugContext,
+        );
       }
 
       // Log the specific expression that changed
@@ -90,7 +94,7 @@ export class SentryErrorHandlerService implements ErrorHandler {
 
       // Parse stack trace to find the component
       const componentMatch = error.stack?.match(/at\s+(\w+Component)/);
-      const componentName = componentMatch ? componentMatch[1] : 'Unknown Component';
+      const _componentName = componentMatch ? componentMatch[1] : 'Unknown Component';
 
       // Detailed error logging handled by Sentry with proper context
 
@@ -102,8 +106,9 @@ export class SentryErrorHandlerService implements ErrorHandler {
           errorName: error.name,
           url: this.router.url,
           zoneState:
-            typeof (window as any).Zone !== 'undefined'
-              ? (window as any).Zone.current.name
+            typeof (window as unknown as { Zone?: { current?: { name?: string } } }).Zone !==
+            'undefined'
+              ? (window as unknown as { Zone: { current: { name: string } } }).Zone.current.name
               : 'Zone not available',
         });
         Sentry.captureException(error);

@@ -162,7 +162,7 @@ export function toErrorState<T>(error: Error): Extract<LoadingState<T>, { status
 /**
  * Initial states
  */
-export const initialLoadingState: LoadingState<any> = { status: 'idle' };
+export const initialLoadingState: LoadingState<unknown> = { status: 'idle' };
 
 export const initialPaginationMeta: PaginationMeta = {
   currentPage: 1,

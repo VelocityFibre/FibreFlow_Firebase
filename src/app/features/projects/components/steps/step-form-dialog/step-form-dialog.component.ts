@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
@@ -10,7 +10,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
+import { MatChipsModule, MatChipInputEvent } from '@angular/material/chips';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Step, StepStatus } from '../../../../../core/models/step.model';
 import { Phase } from '../../../../../core/models/phase.model';
 import { StepService } from '../../../../../core/services/step.service';
@@ -116,24 +117,25 @@ interface DialogData {
         </mat-form-field>
 
         <div class="deliverables-section">
-          <label>Deliverables</label>
-          <mat-chip-grid #chipGrid>
+          <label for="deliverableInput">Deliverables</label>
+          <mat-chip-grid #chipGrid aria-label="Deliverables selection">
             <mat-chip-row
               *ngFor="let deliverable of deliverables"
               (removed)="removeDeliverable(deliverable)"
             >
               {{ deliverable }}
-              <button matChipRemove>
+              <button matChipRemove [attr.aria-label]="'remove ' + deliverable">
                 <mat-icon>cancel</mat-icon>
               </button>
             </mat-chip-row>
-            <input
-              placeholder="Add deliverable..."
-              [matChipInputFor]="chipGrid"
-              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-              (matChipInputTokenEnd)="addDeliverable($event)"
-            />
           </mat-chip-grid>
+          <input
+            id="deliverableInput"
+            placeholder="Add deliverable..."
+            [matChipInputFor]="chipGrid"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="addDeliverable($event)"
+          />
         </div>
       </form>
     </mat-dialog-content>
@@ -202,19 +204,18 @@ interface DialogData {
 export class StepFormDialogComponent implements OnInit {
   private fb = inject(FormBuilder);
   private stepService = inject(StepService);
+  public dialogRef = inject(MatDialogRef<StepFormDialogComponent>);
+  public data = inject<DialogData>(MAT_DIALOG_DATA);
 
   stepForm!: FormGroup;
   phases$: Observable<Phase[]>;
   loading = false;
   deliverables: string[] = [];
-  readonly separatorKeysCodes = [13, 188]; // Enter and comma
+  readonly separatorKeysCodes = [ENTER, COMMA];
   readonly StepStatus = StepStatus;
 
-  constructor(
-    public dialogRef: MatDialogRef<StepFormDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
-  ) {
-    this.phases$ = data.phases;
+  constructor() {
+    this.phases$ = this.data.phases;
   }
 
   ngOnInit() {
@@ -251,7 +252,7 @@ export class StepFormDialogComponent implements OnInit {
     this.deliverables = step.deliverables || [];
   }
 
-  addDeliverable(event: any) {
+  addDeliverable(event: MatChipInputEvent) {
     const value = (event.value || '').trim();
     if (value) {
       this.deliverables.push(value);
@@ -290,7 +291,7 @@ export class StepFormDialogComponent implements OnInit {
           next: () => {
             this.dialogRef.close(true);
           },
-          error: (error: any) => {
+          error: (error: unknown) => {
             console.error('Error saving step:', error);
             this.loading = false;
           },
@@ -300,7 +301,7 @@ export class StepFormDialogComponent implements OnInit {
           next: () => {
             this.dialogRef.close(true);
           },
-          error: (error: any) => {
+          error: (error: unknown) => {
             console.error('Error saving step:', error);
             this.loading = false;
           },

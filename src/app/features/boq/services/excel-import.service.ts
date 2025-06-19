@@ -4,7 +4,7 @@ import * as XLSX from 'xlsx';
 export interface ExcelSheet {
   name: string;
   rowCount: number;
-  preview: any[][];
+  preview: Array<Array<string | number | boolean | Date | null>>;
 }
 
 export interface BOQImportRow {
@@ -37,7 +37,9 @@ export class ExcelImportService {
             return {
               name: sheetName,
               rowCount: jsonData.length,
-              preview: jsonData.slice(0, 10) as any[][],
+              preview: jsonData.slice(0, 10) as Array<
+                Array<string | number | boolean | Date | null>
+              >,
             };
           });
 
@@ -68,7 +70,9 @@ export class ExcelImportService {
           }
 
           // Get all rows as array of arrays
-          const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as any[][];
+          const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as Array<
+            Array<string | number | boolean | Date | null>
+          >;
 
           // Find header row (contains "Item Code" or similar)
           let headerIndex = -1;
@@ -151,8 +155,16 @@ export class ExcelImportService {
     });
   }
 
-  private mapColumns(headers: string[]): any {
-    const map: any = {
+  private mapColumns(headers: string[]): {
+    itemCode: number;
+    description: number;
+    unit: number;
+    quantity: number;
+    price: number;
+    specification: number;
+    supplier: number;
+  } {
+    const map = {
       itemCode: -1,
       description: -1,
       unit: -1,
@@ -202,7 +214,7 @@ export class ExcelImportService {
     return map;
   }
 
-  private getCellValue(row: any[], index: number): string {
+  private getCellValue(row: Array<string | number | boolean | Date | null>, index: number): string {
     if (index < 0 || index >= row.length) return '';
     const value = row[index];
     // Handle undefined, null, or empty values
@@ -210,24 +222,24 @@ export class ExcelImportService {
     return String(value).trim();
   }
 
-  private parseNumber(value: string | number | undefined): number {
+  private parseNumber(value: string | number | boolean | Date | null | undefined): number {
     // Handle direct numbers from Excel
     if (typeof value === 'number') return value;
 
     // Handle string values
-    if (!value || value === '') return 0;
+    if (!value || value === '' || typeof value === 'boolean' || value instanceof Date) return 0;
 
     // Remove commas and parse
     const cleaned = String(value).replace(/,/g, '');
     return parseFloat(cleaned) || 0;
   }
 
-  private parsePrice(value: string | number | undefined): number {
+  private parsePrice(value: string | number | boolean | Date | null | undefined): number {
     // Handle direct numbers from Excel (Excel might parse "113.25" as number)
     if (typeof value === 'number') return value;
 
     // Handle string values
-    if (!value || value === '') return 0;
+    if (!value || value === '' || typeof value === 'boolean' || value instanceof Date) return 0;
 
     // Remove currency symbols, spaces, and commas
     const cleaned = String(value).replace(/[R$£€\s,]/g, '');

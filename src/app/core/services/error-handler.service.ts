@@ -64,8 +64,9 @@ export class ErrorHandlerService implements ErrorHandler {
       console.error('Error object:', error);
       console.error(
         'Angular zone state:',
-        typeof (window as any).Zone !== 'undefined'
-          ? (window as any).Zone.current.name
+        typeof (window as unknown as { Zone?: { current?: { name?: string } } }).Zone !==
+          'undefined'
+          ? (window as unknown as { Zone: { current: { name: string } } }).Zone.current.name
           : 'Zone not available',
       );
 
@@ -78,8 +79,9 @@ export class ErrorHandlerService implements ErrorHandler {
             url: this.router.url,
             stack: error.stack,
             zoneState:
-              typeof (window as any).Zone !== 'undefined'
-                ? (window as any).Zone.current.name
+              typeof (window as unknown as { Zone?: { current?: { name?: string } } }).Zone !==
+              'undefined'
+                ? (window as unknown as { Zone: { current: { name: string } } }).Zone.current.name
                 : 'Zone not available',
             timestamp: new Date().toISOString(),
           });

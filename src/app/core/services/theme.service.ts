@@ -1,4 +1,12 @@
-import { Injectable, signal, effect, computed, afterNextRender, Injector } from '@angular/core';
+import {
+  Injectable,
+  signal,
+  effect,
+  computed,
+  afterNextRender,
+  Injector,
+  EffectRef,
+} from '@angular/core';
 import { BrowserStorageService } from './browser-storage.service';
 
 export type Theme = 'light' | 'dark' | 'vf' | 'fibreflow';
@@ -9,7 +17,7 @@ export type Theme = 'light' | 'dark' | 'vf' | 'fibreflow';
 export class ThemeService {
   private theme = signal<Theme>('light');
   private storage?: BrowserStorageService;
-  private effectRef: any;
+  private effectRef: EffectRef | null = null;
   private initialized = false;
 
   constructor() {

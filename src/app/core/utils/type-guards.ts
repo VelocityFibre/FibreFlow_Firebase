@@ -27,7 +27,7 @@ export function isFirestoreTimestamp(value: unknown): value is Timestamp {
     typeof value === 'object' &&
     'seconds' in value &&
     'nanoseconds' in value &&
-    typeof (value as any).toDate === 'function'
+    typeof (value as { toDate?: unknown }).toDate === 'function'
   );
 }
 

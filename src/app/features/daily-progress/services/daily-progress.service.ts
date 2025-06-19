@@ -206,16 +206,20 @@ export class DailyProgressService {
 
     const q = query(collection(this.firestore, this.collectionName), ...constraints);
     return collectionData(q, { idField: 'id' }).pipe(
-      map((progressList: any[]) => {
-        const totalHours = progressList.reduce((sum, p) => sum + (p.hoursWorked || 0), 0);
+      map((progressList) => {
+        const totalHours = progressList.reduce((sum, p) => sum + ((p as any)['hoursWorked'] || 0), 0);
         const uniqueDates = new Set(
-          progressList.map((p) =>
-            p.date instanceof Date ? p.date.toDateString() : new Date(p.date).toDateString(),
-          ),
+          progressList.map((p) => {
+            const date = (p as any)['date'];
+            return date instanceof Date ? date.toDateString() : new Date(date).toDateString();
+          }),
         );
-        const issuesCount = progressList.filter((p) => p.issuesEncountered).length;
+        const issuesCount = progressList.filter((p) => (p as any)['issuesEncountered']).length;
 
-        const dates = progressList.map((p) => (p.date instanceof Date ? p.date : new Date(p.date)));
+        const dates = progressList.map((p) => {
+          const date = (p as any)['date'];
+          return date instanceof Date ? date : new Date(date);
+        });
         const periodStart =
           dates.length > 0 ? new Date(Math.min(...dates.map((d) => d.getTime()))) : new Date();
         const periodEnd =
@@ -223,10 +227,10 @@ export class DailyProgressService {
 
         return {
           projectId,
-          projectName: progressList[0]?.projectName || '',
+          projectName: progressList[0] ? (progressList[0] as any)['projectName'] || '' : '',
           totalHours,
           totalDays: uniqueDates.size,
-          completedTasks: progressList.filter((p) => p.taskId).length,
+          completedTasks: progressList.filter((p) => (p as any)['taskId']).length,
           issuesCount,
           periodStart,
           periodEnd,

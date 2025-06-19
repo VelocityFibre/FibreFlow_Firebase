@@ -14,15 +14,26 @@ export interface AppError {
 export class GlobalErrorHandler implements ErrorHandler {
   private notificationService = inject(NotificationService);
 
-  handleError(error: any): void {
+  handleError(error: unknown): void {
     const appError = this.parseError(error);
 
     // Log to console for development
     console.error('Global Error:', appError, error);
 
     // Log to Sentry in production
-    if (typeof window !== 'undefined' && (window as any).Sentry) {
-      (window as any).Sentry.captureException(error, {
+    if (
+      typeof window !== 'undefined' &&
+      (
+        window as unknown as {
+          Sentry?: { captureException: (error: unknown, options: object) => void };
+        }
+      ).Sentry
+    ) {
+      (
+        window as unknown as {
+          Sentry: { captureException: (error: unknown, options: object) => void };
+        }
+      ).Sentry.captureException(error, {
         contexts: {
           error: {
             message: appError.message,
@@ -38,7 +49,7 @@ export class GlobalErrorHandler implements ErrorHandler {
     this.showUserNotification(appError);
   }
 
-  private parseError(error: any): AppError {
+  private parseError(error: unknown): AppError {
     // Angular HTTP errors
     if (error?.status) {
       return {

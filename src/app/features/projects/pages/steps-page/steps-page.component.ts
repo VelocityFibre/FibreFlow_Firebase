@@ -16,11 +16,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { StepService } from '../../../../core/services/step.service';
 import { ProjectService } from '../../../../core/services/project.service';
 import { PhaseService } from '../../../../core/services/phase.service';
-import { Step, StepStatus, StepWithPhase } from '../../../../core/models/step.model';
+import { StepStatus, StepWithPhase } from '../../../../core/models/step.model';
 import { Project } from '../../../../core/models/project.model';
 import { Phase } from '../../../../core/models/phase.model';
 import { StepFormDialogComponent } from '../../components/steps/step-form-dialog/step-form-dialog.component';
-import { Observable, combineLatest, map, switchMap, of } from 'rxjs';
+import { combineLatest } from 'rxjs';
 
 interface StepWithProjectPhase extends StepWithPhase {
   projectName?: string;
@@ -527,6 +527,12 @@ export class StepsPageComponent implements OnInit {
       error: (error) => {
         console.error('Error loading steps data:', error);
         this.loading.set(false);
+        // Show error to user
+        this.filteredData.set({
+          steps: [],
+          projects: [],
+          phases: [],
+        });
       },
     });
   }
@@ -537,13 +543,16 @@ export class StepsPageComponent implements OnInit {
   }
 
   addStep() {
+    if (!this.selectedProjectId) {
+      alert('Please select a project first');
+      return;
+    }
+
     const dialogRef = this.dialog.open(StepFormDialogComponent, {
       width: '600px',
       data: {
-        projectId: this.selectedProjectId || '',
-        phases: this.selectedProjectId
-          ? this.phaseService.getByProject(this.selectedProjectId)
-          : of([]),
+        projectId: this.selectedProjectId,
+        phases: this.phaseService.getByProject(this.selectedProjectId),
       },
     });
 

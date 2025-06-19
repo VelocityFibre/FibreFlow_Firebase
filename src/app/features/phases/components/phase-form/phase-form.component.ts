@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { Phase } from '../../../../core/models/phase.model';
 
 @Component({
   selector: 'app-phase-form',
@@ -82,13 +83,13 @@ export class PhaseFormComponent {
   phaseForm: FormGroup;
   private fb = inject(FormBuilder);
   public dialogRef = inject(MatDialogRef<PhaseFormComponent>);
-  public data = inject<{ phase: any }>(MAT_DIALOG_DATA);
+  public data = inject<{ phase: Phase | null }>(MAT_DIALOG_DATA);
 
   constructor() {
     this.phaseForm = this.fb.group({
       name: [this.data.phase?.name || '', Validators.required],
       description: [this.data.phase?.description || ''],
-      type: [this.data.phase?.type || 'planning', Validators.required],
+      type: ['planning', Validators.required],
     });
   }
 

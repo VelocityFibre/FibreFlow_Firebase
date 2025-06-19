@@ -12,7 +12,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { StepService } from '../../../../core/services/step.service';
 import { PhaseService } from '../../../../core/services/phase.service';
-import { Step, StepStatus, StepWithPhase } from '../../../../core/models/step.model';
+import { Step, StepStatus } from '../../../../core/models/step.model';
 import { Phase } from '../../../../core/models/phase.model';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, combineLatest, map } from 'rxjs';

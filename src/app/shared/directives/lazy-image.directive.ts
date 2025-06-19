@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, OnInit } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit, inject } from '@angular/core';
 
 /**
  * Directive to automatically add lazy loading to images
@@ -13,7 +13,7 @@ export class LazyImageDirective implements OnInit {
   @Input() loadingClass = 'image-loading';
   @Input() errorClass = 'image-error';
 
-  constructor(private el: ElementRef<HTMLImageElement>) {}
+  private el = inject(ElementRef<HTMLImageElement>);
 
   ngOnInit() {
     const img = this.el.nativeElement;

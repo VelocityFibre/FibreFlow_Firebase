@@ -327,7 +327,12 @@ export class ProjectBOQSummaryComponent implements OnInit {
     return 'primary';
   }
 
-  getStatusChips(statusCounts: any): any[] {
+  getStatusChips(statusCounts: {
+    planned: number;
+    partiallyAllocated: number;
+    fullyAllocated: number;
+    purchased: number;
+  }): Array<{ count: number; label: string; class: string }> {
     const chips = [];
 
     if (statusCounts.planned > 0) {

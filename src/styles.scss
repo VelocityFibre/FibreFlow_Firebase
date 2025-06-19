@@ -562,3 +562,56 @@ h4 {
     overflow: hidden;
   }
 }
+
+// Fix for overlapping dialogs and error messages
+.cdk-overlay-container {
+  // Ensure proper stacking order
+  .cdk-overlay-pane {
+    // Error dialogs should appear on top
+    &.mat-dialog-container-error,
+    &.mat-snack-bar-container-error {
+      z-index: 9999 !important;
+    }
+  }
+  
+  // Fix for multiple overlapping backdrops
+  .cdk-overlay-backdrop {
+    &.cdk-overlay-backdrop-showing {
+      opacity: 0.48;
+    }
+    
+    // Only show the topmost backdrop
+    &:not(:last-of-type) {
+      display: none !important;
+    }
+  }
+}
+
+// Ensure error messages are always visible
+.mat-error, 
+.error-message,
+.mat-snack-bar-container.error-snackbar {
+  z-index: 10000 !important;
+  position: relative;
+}
+
+// Fix for any loading overlays blocking content
+.loading-overlay, 
+.loading-backdrop,
+.app-loading {
+  z-index: 900 !important;
+  pointer-events: none; // Allow clicking through if needed
+}
+
+// Ensure dialogs don't overlap incorrectly
+.mat-dialog-container {
+  // Stack dialogs properly
+  &:nth-of-type(1) { z-index: 1000; }
+  &:nth-of-type(2) { z-index: 1100; }
+  &:nth-of-type(3) { z-index: 1200; }
+  
+  // Error dialogs always on top
+  &.error-dialog {
+    z-index: 9999 !important;
+  }
+}

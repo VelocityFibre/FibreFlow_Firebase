@@ -12,7 +12,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { Observable, startWith, debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs';
+import { Observable, startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 
 import { StockService } from '../../services/stock.service';
 import {

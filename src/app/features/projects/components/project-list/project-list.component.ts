@@ -107,7 +107,7 @@ export class ProjectListComponent {
   }
 
   formatDate(date: unknown): string {
-    return this.dateFormat.formatShortDate(date as any);
+    return this.dateFormat.formatShortDate(date as Date | string | { toDate(): Date });
   }
 
   getBudgetPercentage(project: Project): number {

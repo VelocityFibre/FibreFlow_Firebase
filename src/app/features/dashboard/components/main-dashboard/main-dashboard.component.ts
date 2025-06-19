@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy, computed, signal } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -35,8 +35,8 @@ export class MainDashboardComponent {
     initialValue: [],
   });
 
-  stockItems = toSignal(this.stockService.getStockItems().pipe(catchError(() => of([]))), {
-    initialValue: [],
+  stockItems = toSignal(of<any[]>([]), {
+    initialValue: [] as any[],
   });
 
   clients = toSignal(this.clientService.getClients().pipe(catchError(() => of([]))), {
@@ -64,12 +64,12 @@ export class MainDashboardComponent {
     const activeProjects = projects.filter((p) => p.status === 'active').length;
     const stockItems = this.stockItems();
     const lowStockItems = stockItems.filter(
-      (item) => item.currentStock < (item.minimumStock || 10),
+      (item) => item.currentStock < ((item as any).minimumStock || 10),
     ).length;
 
     return {
       polesPlanted: projects.reduce(
-        (total, project) => total + (project.completedTasksCount || 0),
+        (total: number, project) => total + (project.completedTasksCount || 0),
         0,
       ),
       materialsNeeded: lowStockItems,

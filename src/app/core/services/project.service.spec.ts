@@ -60,7 +60,9 @@ describe('ProjectService', () => {
     const mockCollection = jasmine.createSpyObj('collection', ['add']);
     mockCollection.add.and.returnValue(Promise.resolve(mockDocRef));
 
-    firestoreMock.collection.and.returnValue(mockCollection as any);
+    firestoreMock.collection.and.returnValue(
+      mockCollection as unknown as ReturnType<typeof collection>,
+    );
 
     const newProject = { ...mockProject };
     delete newProject.id;
@@ -74,7 +76,7 @@ describe('ProjectService', () => {
     const mockDoc = jasmine.createSpyObj('doc', ['update']);
     mockDoc.update.and.returnValue(Promise.resolve());
 
-    firestoreMock.doc.and.returnValue(mockDoc as any);
+    firestoreMock.doc.and.returnValue(mockDoc as unknown as ReturnType<typeof doc>);
 
     await service.updateProjectProgress('1', 75);
 

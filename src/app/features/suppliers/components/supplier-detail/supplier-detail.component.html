@@ -517,15 +517,15 @@
               </mat-card-header>
               <mat-card-content>
                 <div class="info-item">
-                  <label>Total Orders</label>
+                  <span class="label">Total Orders</span>
                   <p>{{ supplier.totalPurchaseOrders || 0 }}</p>
                 </div>
                 <div class="info-item">
-                  <label>Total Spend</label>
+                  <span class="label">Total Spend</span>
                   <p>{{ formatCurrency(supplier.totalSpend || 0) }}</p>
                 </div>
                 <div class="info-item">
-                  <label>Outstanding Invoices</label>
+                  <span class="label">Outstanding Invoices</span>
                   <p>{{ supplier.outstandingInvoices || 0 }}</p>
                 </div>
               </mat-card-content>

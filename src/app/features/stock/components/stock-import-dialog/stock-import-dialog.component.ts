@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogRef, MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -417,6 +417,7 @@ interface ParsedItem extends StockItemImport {
 export class StockImportDialogComponent {
   private stockService = inject(StockService);
   public dialogRef = inject(MatDialogRef<StockImportDialogComponent>);
+  public data = inject<{ projectId: string }>(MAT_DIALOG_DATA);
 
   // File upload
   selectedFile: File | null = null;
@@ -648,11 +649,19 @@ EQP-001,Fiber Splice Closure,24 core splice closure,equipment,Closures,units,25,
   }
 
   async importItems() {
+    if (!this.data?.projectId) {
+      alert('Project ID is required to import items.');
+      return;
+    }
+
     this.importing = true;
 
     try {
       const itemsToImport = this.validItems.map(({ row: _row, errors: _errors, ...item }) => item);
-      this.importResult = await this.stockService.importStockItems(itemsToImport);
+      this.importResult = await this.stockService.importStockItems(
+        itemsToImport,
+        this.data.projectId,
+      );
       this.importComplete = true;
     } catch (error) {
       alert('Error importing items. Please try again.');

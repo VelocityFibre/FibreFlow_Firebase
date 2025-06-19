@@ -6,14 +6,11 @@ import {
 } from '@angular/core';
 import { provideRouter, withPreloading, withViewTransitions, Router } from '@angular/router';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import {
-  provideFirestore,
-  getFirestore,
-  enableIndexedDbPersistence,
-} from '@angular/fire/firestore';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideNativeDateAdapter } from '@angular/material/core';
 import * as Sentry from '@sentry/angular';
 
 import { routes } from './app.routes';
@@ -30,6 +27,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withPreloading(CustomPreloadingStrategy), withViewTransitions()),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([errorInterceptor, loadingInterceptor])),
+    provideNativeDateAdapter(),
     // Custom error handler that integrates Sentry
     { provide: ErrorHandler, useClass: SentryErrorHandlerService },
     // Sentry trace service for performance monitoring

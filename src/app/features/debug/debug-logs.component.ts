@@ -22,7 +22,7 @@ interface LogEntry {
   component?: string;
   url?: string;
   userAgent?: string;
-  timestamp?: any;
+  timestamp?: Date | { toDate: () => Date } | string | number;
   data?: string;
   stack?: string;
   sessionId: string;
@@ -260,7 +260,9 @@ export class DebugLogsComponent implements OnInit {
     // Error logs only - last 50 error entries
     const errorLogsQuery = query(logsCollection, orderBy('timestamp', 'desc'), limit(50));
     this.errorLogs$ = collectionData(errorLogsQuery, { idField: 'id' }).pipe(
-      map((logs: any[]) => logs.filter((log: any) => log.level === 'error') as LogEntry[]),
+      map(
+        (logs) => (logs as LogEntry[]).filter((log: LogEntry) => log.level === 'error') as LogEntry[],
+      ),
     ) as Observable<LogEntry[]>;
   }
 
@@ -268,16 +270,16 @@ export class DebugLogsComponent implements OnInit {
     this.loadLogs();
   }
 
-  formatTimestamp(timestamp: any): string {
+  formatTimestamp(timestamp: Date | { toDate: () => Date } | string | number | undefined): string {
     if (!timestamp) return 'N/A';
 
     let date: Date;
-    if (timestamp.toDate) {
-      date = timestamp.toDate();
-    } else if (timestamp.seconds) {
-      date = new Date(timestamp.seconds * 1000);
+    if ((timestamp as any).toDate) {
+      date = (timestamp as any).toDate();
+    } else if ((timestamp as any).seconds) {
+      date = new Date((timestamp as any).seconds * 1000);
     } else {
-      date = new Date(timestamp);
+      date = new Date(timestamp as string | number | Date);
     }
 
     return date.toLocaleString();

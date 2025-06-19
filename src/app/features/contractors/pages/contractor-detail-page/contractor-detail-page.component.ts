@@ -745,17 +745,19 @@ export class ContractorDetailPageComponent implements OnInit {
   // Date formatting
   formatDate(timestamp: unknown): string {
     if (!timestamp) return 'N/A';
-    const date = (timestamp as any).toDate
-      ? (timestamp as any).toDate()
-      : new Date(timestamp as any);
+    const timestampTyped = timestamp as Date | { toDate: () => Date } | string | number;
+    const date = (timestampTyped as { toDate: () => Date }).toDate
+      ? (timestampTyped as { toDate: () => Date }).toDate()
+      : new Date(timestampTyped as string | number);
     return date.toLocaleDateString('en-ZA');
   }
 
   isExpired(timestamp: unknown): boolean {
     if (!timestamp) return false;
-    const date = (timestamp as any).toDate
-      ? (timestamp as any).toDate()
-      : new Date(timestamp as any);
+    const timestampTyped = timestamp as Date | { toDate: () => Date } | string | number;
+    const date = (timestampTyped as { toDate: () => Date }).toDate
+      ? (timestampTyped as { toDate: () => Date }).toDate()
+      : new Date(timestampTyped as string | number);
     return date < new Date();
   }
 

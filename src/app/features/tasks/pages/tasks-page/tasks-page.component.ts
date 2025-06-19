@@ -284,9 +284,13 @@ export class TasksPageComponent implements OnInit {
     return statusNames[status] || status;
   }
 
-  formatDate(date: any): string {
+  formatDate(date: Date | string | number | { toDate: () => Date } | null | undefined): string {
     if (!date) return '';
-    const d = date.toDate ? date.toDate() : date instanceof Date ? date : new Date(date);
+    const d = (date as { toDate?: () => Date }).toDate
+      ? (date as { toDate: () => Date }).toDate()
+      : date instanceof Date
+        ? date
+        : new Date(date as string | number);
     return d.toLocaleDateString('en-ZA', {
       year: 'numeric',
       month: 'short',
@@ -299,9 +303,9 @@ export class TasksPageComponent implements OnInit {
     const dueDate =
       task.dueDate instanceof Date
         ? task.dueDate
-        : (task.dueDate as any).toDate
-          ? (task.dueDate as any).toDate()
-          : new Date(task.dueDate as any);
+        : (task.dueDate as { toDate?: () => Date }).toDate
+          ? (task.dueDate as { toDate: () => Date }).toDate()
+          : new Date(task.dueDate as string | number);
     return dueDate < new Date();
   }
 

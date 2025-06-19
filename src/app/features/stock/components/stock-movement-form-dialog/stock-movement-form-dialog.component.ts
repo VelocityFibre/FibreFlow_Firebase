@@ -444,7 +444,7 @@ export class StockMovementFormDialogComponent implements OnInit {
       this.isSubmitting = true;
 
       const formValue = this.movementForm.value;
-      const movement: any = {
+      const movement: Record<string, unknown> = {
         itemId: formValue.itemId,
         itemCode: this.selectedItem.itemCode,
         itemName: this.selectedItem.name,
@@ -464,21 +464,21 @@ export class StockMovementFormDialogComponent implements OnInit {
         const project = this.projects.find((p) => p.id === formValue.projectId);
         if (project) {
           if (this.isIncoming) {
-            movement.fromProjectId = project.id;
-            movement.fromProjectName = project.name;
+            movement['fromProjectId'] = project.id;
+            movement['fromProjectName'] = project.name;
           } else {
-            movement.toProjectId = project.id;
-            movement.toProjectName = project.name;
+            movement['toProjectId'] = project.id;
+            movement['toProjectName'] = project.name;
           }
         }
       }
 
       // Add location fields
       if (formValue.fromLocation) {
-        movement.fromLocation = formValue.fromLocation;
+        movement['fromLocation'] = formValue.fromLocation;
       }
       if (formValue.toLocation) {
-        movement.toLocation = formValue.toLocation;
+        movement['toLocation'] = formValue.toLocation;
       }
 
       this.dialogRef.close(movement);

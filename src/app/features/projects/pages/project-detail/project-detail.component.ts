@@ -25,8 +25,6 @@ import { ProjectContractorsComponent } from '../../components/contractors/projec
 import { PhaseService } from '../../../../core/services/phase.service';
 import { TaskService } from '../../../../core/services/task.service';
 import { Task } from '../../../../core/models/task.model';
-import { BOQService } from '../../../boq/services/boq.service';
-import { BOQSummary } from '../../../boq/models/boq.model';
 
 @Component({
   selector: 'app-project-detail',
@@ -275,6 +273,7 @@ import { BOQSummary } from '../../../boq/models/boq.model';
               </mat-card>
 
               <!-- BOQ Management Card -->
+              <!-- TODO: Implement BOQ functionality
               <mat-card class="ff-card-stock action-card" (click)="navigateToBOQ(project.id!)">
                 <mat-card-header>
                   <mat-card-title>BOQ Management</mat-card-title>
@@ -297,6 +296,7 @@ import { BOQSummary } from '../../../boq/models/boq.model';
                   </div>
                 </mat-card-content>
               </mat-card>
+              -->
             </div>
           </div>
         </mat-tab>
@@ -1117,18 +1117,14 @@ export class ProjectDetailComponent implements OnInit {
   private dialog = inject(MatDialog);
   private phaseService = inject(PhaseService);
   private taskService = inject(TaskService);
-  private boqService = inject(BOQService);
 
   project$!: Observable<Project | undefined>;
   phasesWithTasks$!: Observable<{ phase: Phase; tasks: Task[] }[]>;
-  boqSummary$!: Observable<BOQSummary | null>;
 
   ngOnInit() {
     const projectId$ = this.route.paramMap.pipe(map((params) => params.get('id') || ''));
 
     this.project$ = projectId$.pipe(switchMap((id) => this.projectService.getProjectById(id)));
-
-    this.boqSummary$ = projectId$.pipe(switchMap((id) => this.boqService.getProjectSummary(id)));
 
     // Ensure phases exist for this project
     projectId$
@@ -1186,7 +1182,7 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   formatDate(date: unknown): string {
-    return this.dateFormat.formatDate(date as any);
+    return this.dateFormat.formatDate(date as Date | string | { toDate(): Date });
   }
 
   getBudgetPercentage(project: Project): number {
@@ -1329,9 +1325,5 @@ export class ProjectDetailComponent implements OnInit {
 
   trackByTaskFn(index: number, task: Task): string {
     return task.id || index.toString();
-  }
-
-  navigateToBOQ(projectId: string): void {
-    this.router.navigate(['/projects', projectId, 'boq']);
   }
 }

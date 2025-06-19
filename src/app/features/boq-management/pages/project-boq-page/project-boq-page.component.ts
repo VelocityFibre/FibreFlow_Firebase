@@ -7,12 +7,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { Observable, switchMap, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 import { Project } from '../../../../core/models/project.model';
 import { ProjectService } from '../../../../core/services/project.service';
 import { BOQService } from '../../../boq/services/boq.service';
-import { BOQItem, BOQSummary } from '../../../boq/models/boq.model';
+import { BOQSummary } from '../../../boq/models/boq.model';
 import { BOQImportDialogComponent } from '../../../boq/components/boq-import-dialog/boq-import-dialog.component';
 import { SummaryCardsComponent } from '../../../../shared/components/summary-cards/summary-cards.component';
 
@@ -148,7 +148,7 @@ import { BOQTemplatesTabComponent } from '../../components/tabs/boq-templates-ta
     </div>
 
     <!-- Loading State -->
-    <div class="loading-container" *ngIf="!(project$ | async)">
+    <div class="loading-container" *ngIf="(project$ | async) === null">
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       <p>Loading BOQ data...</p>
     </div>

@@ -116,12 +116,16 @@ export class ServiceWorkerService {
    */
   public triggerSync(): void {
     if (this.swRegistration && 'sync' in window.ServiceWorkerRegistration.prototype) {
-      this.swRegistration.sync
+      (
+        this.swRegistration as ServiceWorkerRegistration & {
+          sync: { register: (tag: string) => Promise<void> };
+        }
+      ).sync
         .register('fibreflow-sync')
         .then(() => {
           console.log('FibreFlow: Background sync registered');
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           console.error('FibreFlow: Background sync registration failed:', error);
         });
     }
@@ -177,7 +181,7 @@ export class ServiceWorkerService {
     if (isPlatformBrowser(this.platformId)) {
       return (
         window.matchMedia('(display-mode: standalone)').matches ||
-        (window.navigator as any).standalone === true
+        (window.navigator as Navigator & { standalone?: boolean }).standalone === true
       );
     }
     return false;

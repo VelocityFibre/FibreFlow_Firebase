@@ -567,7 +567,7 @@ export class TaskListComponent {
       .join(' ');
   }
 
-  formatPriority(priority: any): string {
+  formatPriority(priority: string | TaskPriority): string {
     return String(priority).charAt(0).toUpperCase() + String(priority).slice(1);
   }
 

@@ -13,6 +13,7 @@ import {
   orderBy,
   serverTimestamp,
   getDocs,
+  Timestamp,
 } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -82,15 +83,15 @@ export class ContractorService {
     status: ContractorStatus,
     suspensionReason?: string,
   ): Promise<void> {
-    const updates: any = {
+    const updates: Partial<Contractor> = {
       status,
-      updatedAt: serverTimestamp(),
+      updatedAt: serverTimestamp() as Timestamp,
     };
 
     if (status === 'suspended' && suspensionReason) {
       updates.suspensionReason = suspensionReason;
     } else if (status === 'active') {
-      updates.suspensionReason = null;
+      updates.suspensionReason = undefined;
     }
 
     const contractorDoc = doc(this.firestore, 'contractors', id);
@@ -109,12 +110,12 @@ export class ContractorService {
     const q = query(this.contractorsCollection, orderBy('companyName'));
 
     return collectionData(q, { idField: 'id' }).pipe(
-      map((contractors: any[]) =>
+      map((contractors) =>
         contractors.filter(
           (contractor) =>
-            contractor.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            contractor.registrationNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            contractor.primaryContact?.name.toLowerCase().includes(searchTerm.toLowerCase()),
+            contractor['companyName'].toLowerCase().includes(searchTerm.toLowerCase()) ||
+            contractor['registrationNumber']?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            contractor['primaryContact']?.name.toLowerCase().includes(searchTerm.toLowerCase()),
         ),
       ),
     ) as Observable<Contractor[]>;
@@ -245,10 +246,10 @@ export class ContractorService {
     );
 
     return collectionData(q, { idField: 'id' }).pipe(
-      map((contractors: any[]) =>
+      map((contractors) =>
         // Further filter to ensure all required services are present
         contractors.filter((contractor) =>
-          requiredServices.every((service) => contractor.capabilities?.services?.includes(service)),
+          requiredServices.every((service) => contractor['capabilities']?.services?.includes(service)),
         ),
       ),
     ) as Observable<Contractor[]>;

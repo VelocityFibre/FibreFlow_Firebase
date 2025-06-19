@@ -59,29 +59,29 @@ export type AppRoute =
 /**
  * Route parameter extraction
  */
-export type RouteParams<T extends AppRoute> = T extends `/projects/${infer Id}`
+export type RouteParams<T extends AppRoute> = T extends `/projects/${infer _Id}`
   ? { projectId: ProjectId }
-  : T extends `/projects/${infer Id}/phases`
+  : T extends `/projects/${infer _Id}/phases`
     ? { projectId: ProjectId }
-    : T extends `/projects/${infer Id}/steps`
+    : T extends `/projects/${infer _Id}/steps`
       ? { projectId: ProjectId }
-      : T extends `/projects/${infer Id}/tasks`
+      : T extends `/projects/${infer _Id}/tasks`
         ? { projectId: ProjectId }
-        : T extends `/projects/${infer Id}/stock`
+        : T extends `/projects/${infer _Id}/stock`
           ? { projectId: ProjectId }
-          : T extends `/projects/${infer Id}/contractors`
+          : T extends `/projects/${infer _Id}/contractors`
             ? { projectId: ProjectId }
-            : T extends `/projects/${infer Id}/boq`
+            : T extends `/projects/${infer _Id}/boq`
               ? { projectId: ProjectId }
-              : T extends `/staff/${infer Id}`
+              : T extends `/staff/${infer _Id}`
                 ? { staffId: StaffId }
-                : T extends `/suppliers/${infer Id}`
+                : T extends `/suppliers/${infer _Id}`
                   ? { supplierId: SupplierId }
-                  : T extends `/clients/${infer Id}`
+                  : T extends `/clients/${infer _Id}`
                     ? { clientId: ClientId }
-                    : T extends `/contractors/${infer Id}`
+                    : T extends `/contractors/${infer _Id}`
                       ? { contractorId: ContractorId }
-                      : T extends `/tasks/${infer Id}`
+                      : T extends `/tasks/${infer _Id}`
                         ? { taskId: TaskId }
                         : never;
 
@@ -163,13 +163,13 @@ export function isValidAppRoute(path: string): path is AppRoute {
 
   // Parameterized routes
   const patterns = [
-    /^\/projects\/[^\/]+$/,
-    /^\/projects\/[^\/]+\/(phases|steps|tasks|stock|contractors|boq)$/,
-    /^\/staff\/[^\/]+$/,
-    /^\/suppliers\/[^\/]+$/,
-    /^\/clients\/[^\/]+$/,
-    /^\/contractors\/[^\/]+$/,
-    /^\/tasks\/[^\/]+$/,
+    /^\/projects\/[^/]+$/,
+    /^\/projects\/[^/]+\/(phases|steps|tasks|stock|contractors|boq)$/,
+    /^\/staff\/[^/]+$/,
+    /^\/suppliers\/[^/]+$/,
+    /^\/clients\/[^/]+$/,
+    /^\/contractors\/[^/]+$/,
+    /^\/tasks\/[^/]+$/,
   ];
 
   return patterns.some((pattern) => pattern.test(path));
@@ -179,32 +179,32 @@ export function isValidAppRoute(path: string): path is AppRoute {
  * Extract route parameters from a path
  */
 export function extractRouteParams<T extends AppRoute>(route: T): RouteParams<T> {
-  const projectMatch = route.match(/^\/projects\/([^\/]+)/);
+  const projectMatch = route.match(/^\/projects\/([^/]+)/);
   if (projectMatch) {
     return { projectId: projectMatch[1] as ProjectId } as RouteParams<T>;
   }
 
-  const staffMatch = route.match(/^\/staff\/([^\/]+)$/);
+  const staffMatch = route.match(/^\/staff\/([^/]+)$/);
   if (staffMatch) {
     return { staffId: staffMatch[1] as StaffId } as RouteParams<T>;
   }
 
-  const supplierMatch = route.match(/^\/suppliers\/([^\/]+)$/);
+  const supplierMatch = route.match(/^\/suppliers\/([^/]+)$/);
   if (supplierMatch) {
     return { supplierId: supplierMatch[1] as SupplierId } as RouteParams<T>;
   }
 
-  const clientMatch = route.match(/^\/clients\/([^\/]+)$/);
+  const clientMatch = route.match(/^\/clients\/([^/]+)$/);
   if (clientMatch) {
     return { clientId: clientMatch[1] as ClientId } as RouteParams<T>;
   }
 
-  const contractorMatch = route.match(/^\/contractors\/([^\/]+)$/);
+  const contractorMatch = route.match(/^\/contractors\/([^/]+)$/);
   if (contractorMatch) {
     return { contractorId: contractorMatch[1] as ContractorId } as RouteParams<T>;
   }
 
-  const taskMatch = route.match(/^\/tasks\/([^\/]+)$/);
+  const taskMatch = route.match(/^\/tasks\/([^/]+)$/);
   if (taskMatch) {
     return { taskId: taskMatch[1] as TaskId } as RouteParams<T>;
   }

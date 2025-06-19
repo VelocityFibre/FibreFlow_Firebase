@@ -5,6 +5,7 @@ import {
   addDoc,
   serverTimestamp,
   CollectionReference,
+  Timestamp,
 } from '@angular/fire/firestore';
 
 export interface LogEntry {
@@ -13,8 +14,8 @@ export interface LogEntry {
   component?: string;
   url?: string;
   userAgent?: string;
-  timestamp?: any;
-  data?: any;
+  timestamp?: Date | Timestamp;
+  data?: Record<string, unknown>;
   stack?: string;
   sessionId: string;
 }
@@ -45,7 +46,7 @@ export class RemoteLoggerService {
     level: LogEntry['level'],
     message: string,
     component?: string,
-    data?: any,
+    data?: Record<string, unknown>,
   ): Promise<void> {
     try {
       const logEntry: LogEntry = {
@@ -54,8 +55,8 @@ export class RemoteLoggerService {
         component,
         url: window.location.href,
         userAgent: navigator.userAgent,
-        timestamp: serverTimestamp(),
-        data: data ? JSON.stringify(data) : undefined,
+        timestamp: serverTimestamp() as any,
+        data: data || undefined,
         sessionId: this.sessionId,
       };
 
@@ -92,15 +93,15 @@ export class RemoteLoggerService {
         component,
         url: window.location.href,
         userAgent: navigator.userAgent,
-        timestamp: serverTimestamp(),
+        timestamp: serverTimestamp() as any,
         stack: error.stack,
-        data: JSON.stringify({
+        data: {
           name: error.name,
           context,
           isNG0200:
             error.message?.includes('NG0200') ||
             error.message?.includes('ExpressionChangedAfterItHasBeenCheckedError'),
-        }),
+        },
         sessionId: this.sessionId,
       };
 
@@ -120,19 +121,19 @@ export class RemoteLoggerService {
   }
 
   // Convenience methods
-  info(message: string, component?: string, data?: any): Promise<void> {
+  info(message: string, component?: string, data?: Record<string, unknown>): Promise<void> {
     return this.log('info', message, component, data);
   }
 
-  warn(message: string, component?: string, data?: any): Promise<void> {
+  warn(message: string, component?: string, data?: Record<string, unknown>): Promise<void> {
     return this.log('warn', message, component, data);
   }
 
-  error(message: string, component?: string, data?: any): Promise<void> {
+  error(message: string, component?: string, data?: Record<string, unknown>): Promise<void> {
     return this.log('error', message, component, data);
   }
 
-  debug(message: string, component?: string, data?: any): Promise<void> {
+  debug(message: string, component?: string, data?: Record<string, unknown>): Promise<void> {
     return this.log('debug', message, component, data);
   }
 

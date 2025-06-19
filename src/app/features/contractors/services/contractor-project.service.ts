@@ -11,7 +11,6 @@ import {
   query,
   where,
   orderBy,
-  DocumentReference,
   CollectionReference,
   Timestamp,
 } from '@angular/fire/firestore';
@@ -24,7 +23,6 @@ import {
   MaterialRequirement,
   MaterialUsage,
   PaymentRecord,
-  WorkProgress,
   PhaseProgress,
   ContractorPaymentSummary,
   ContractorMaterialSummary,

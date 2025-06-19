@@ -24,7 +24,7 @@ import { ProjectService } from '../../../../core/services/project.service';
 import { BOQItem, BOQStatus, BOQSummary } from '../../models/boq.model';
 import { Project } from '../../../../core/models/project.model';
 import { BOQFormDialogComponent } from '../boq-form-dialog/boq-form-dialog.component';
-import { BOQImportDialogComponent } from '../boq-import-dialog/boq-import-dialog.component';
+// import { BOQImportDialogComponent } from '../boq-import-dialog/boq-import-dialog.component';
 import { BOQImportExcelDialogComponent } from '../boq-import-excel-dialog/boq-import-excel-dialog.component';
 
 @Component({
@@ -197,7 +197,6 @@ import { BOQImportExcelDialogComponent } from '../boq-import-excel-dialog/boq-im
                 matSort
                 (matSortChange)="onSortChange($event)"
               >
-                <!-- Table columns remain the same -->
                 <!-- Project Column -->
                 <ng-container matColumnDef="project">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>Project</th>
@@ -208,7 +207,123 @@ import { BOQImportExcelDialogComponent } from '../boq-import-excel-dialog/boq-im
                     </div>
                   </td>
                 </ng-container>
-                <!-- Add other columns as needed -->
+
+                <!-- Item Code Column -->
+                <ng-container matColumnDef="itemCode">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Item Code</th>
+                  <td mat-cell *matCellDef="let item" class="code-cell">
+                    {{ item.itemCode || '-' }}
+                  </td>
+                </ng-container>
+
+                <!-- Description Column -->
+                <ng-container matColumnDef="description">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+                  <td mat-cell *matCellDef="let item">
+                    <div class="description-cell">
+                      <div class="description-text">{{ item.description }}</div>
+                      <div class="specification-text" *ngIf="item.specification">
+                        {{ item.specification }}
+                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <!-- Required Column -->
+                <ng-container matColumnDef="required">
+                  <th mat-header-cell *matHeaderCellDef class="number-header" mat-sort-header>
+                    Required
+                  </th>
+                  <td mat-cell *matCellDef="let item" class="number-cell">
+                    {{ item.requiredQuantity | number }}
+                  </td>
+                </ng-container>
+
+                <!-- Allocated Column -->
+                <ng-container matColumnDef="allocated">
+                  <th mat-header-cell *matHeaderCellDef class="number-header" mat-sort-header>
+                    Allocated
+                  </th>
+                  <td mat-cell *matCellDef="let item" class="number-cell">
+                    {{ item.allocatedQuantity | number }}
+                  </td>
+                </ng-container>
+
+                <!-- Remaining Column -->
+                <ng-container matColumnDef="remaining">
+                  <th mat-header-cell *matHeaderCellDef class="number-header" mat-sort-header>
+                    Remaining
+                  </th>
+                  <td mat-cell *matCellDef="let item" class="number-cell">
+                    {{ item.remainingQuantity | number }}
+                  </td>
+                </ng-container>
+
+                <!-- Unit Price Column -->
+                <ng-container matColumnDef="unitPrice">
+                  <th mat-header-cell *matHeaderCellDef class="number-header" mat-sort-header>
+                    Unit Price
+                  </th>
+                  <td mat-cell *matCellDef="let item" class="number-cell">
+                    R{{ item.unitPrice | number: '1.2-2' }}
+                  </td>
+                </ng-container>
+
+                <!-- Total Price Column -->
+                <ng-container matColumnDef="totalPrice">
+                  <th mat-header-cell *matHeaderCellDef class="number-header" mat-sort-header>
+                    Total Price
+                  </th>
+                  <td mat-cell *matCellDef="let item" class="number-cell">
+                    R{{ item.totalPrice | number: '1.2-2' }}
+                  </td>
+                </ng-container>
+
+                <!-- Status Column -->
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                  <td mat-cell *matCellDef="let item">
+                    <mat-chip [class]="'status-' + item.status.toLowerCase().replace(' ', '-')">
+                      {{ item.status }}
+                    </mat-chip>
+                  </td>
+                </ng-container>
+
+                <!-- Quote Column -->
+                <ng-container matColumnDef="quote">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Quote</th>
+                  <td mat-cell *matCellDef="let item">
+                    <mat-chip *ngIf="item.needsQuote" class="quote-chip">
+                      <mat-icon>description</mat-icon>
+                      RFQ
+                    </mat-chip>
+                    <span *ngIf="!item.needsQuote" class="no-quote">-</span>
+                  </td>
+                </ng-container>
+
+                <!-- Actions Column -->
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef>Actions</th>
+                  <td mat-cell *matCellDef="let item">
+                    <div class="action-buttons">
+                      <button
+                        mat-icon-button
+                        *ngIf="item.remainingQuantity > 0"
+                        matTooltip="Allocate Stock"
+                        (click)="allocateStock(item)"
+                      >
+                        <mat-icon>arrow_forward</mat-icon>
+                      </button>
+                      <button mat-icon-button matTooltip="Edit" (click)="editItem(item)">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button mat-icon-button matTooltip="Delete" (click)="deleteItem(item)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                  </td>
+                </ng-container>
+
                 <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
               </table>

@@ -99,7 +99,7 @@ import { LoadingService } from '../../../../core/services/loading.service';
         </button>
       </div>
 
-      <div class="table-container" *ngIf="!(loading$ | async); else loadingTemplate">
+      <div class="table-container" *ngIf="(loading$ | async) === false; else loadingTemplate">
         <table mat-table [dataSource]="(materials$ | async) || []" class="materials-table">
           <!-- Item Code Column -->
           <ng-container matColumnDef="itemCode">

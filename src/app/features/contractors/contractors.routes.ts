@@ -22,4 +22,11 @@ export const contractorsRoutes: Routes = [
         (m) => m.ContractorDetailPageComponent,
       ),
   },
+  {
+    path: ':id/edit',
+    loadComponent: () =>
+      import('./components/contractor-form/contractor-form.component').then(
+        (m) => m.ContractorFormComponent,
+      ),
+  },
 ];

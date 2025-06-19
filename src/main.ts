@@ -51,7 +51,9 @@ if (typeof window !== 'undefined' && typeof document !== 'undefined') {
       // Log Angular version and environment
       console.log('FibreFlow: Angular environment:', {
         production: environment.production,
-        angularVersion: (window as any).ng?.VERSION?.full || 'Unknown',
+        angularVersion:
+          (window as Window & { ng?: { VERSION?: { full?: string } } }).ng?.VERSION?.full ||
+          'Unknown',
         hydrationEnabled: false,
         platform: 'browser',
       });
