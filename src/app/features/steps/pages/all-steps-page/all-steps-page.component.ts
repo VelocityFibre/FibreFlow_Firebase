@@ -68,11 +68,10 @@ export interface PhaseWithSteps {
         </div>
       </div>
 
-
       <!-- Steps by Phase -->
       <div class="phases-section">
         <mat-accordion multi="true">
-          <mat-expansion-panel 
+          <mat-expansion-panel
             *ngFor="let phase of filteredPhases(); trackBy: trackByPhase"
             [expanded]="false"
             class="phase-panel"
@@ -80,17 +79,11 @@ export interface PhaseWithSteps {
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <div class="phase-header">
-                  <button 
-                    mat-button 
-                    class="phase-link"
-                    (click)="navigateToPhases($event)"
-                  >
+                  <button mat-button class="phase-link" (click)="navigateToPhases($event)">
                     <mat-icon>flag</mat-icon>
                     {{ phase.name }}
                   </button>
-                  <mat-chip class="step-count-chip">
-                    {{ phase.stepCount }} steps
-                  </mat-chip>
+                  <mat-chip class="step-count-chip"> {{ phase.stepCount }} steps </mat-chip>
                 </div>
               </mat-panel-title>
               <mat-panel-description>
@@ -100,10 +93,7 @@ export interface PhaseWithSteps {
 
             <div class="phase-content">
               <div class="steps-grid">
-                <div 
-                  *ngFor="let step of phase.steps; trackBy: trackByStep" 
-                  class="step-item"
-                >
+                <div *ngFor="let step of phase.steps; trackBy: trackByStep" class="step-item">
                   <div class="step-number">{{ step.orderNo }}</div>
                   <div class="step-details">
                     <h4 class="step-name">{{ step.name }}</h4>
@@ -115,7 +105,6 @@ export interface PhaseWithSteps {
           </mat-expansion-panel>
         </mat-accordion>
       </div>
-
     </div>
   `,
   styles: [
@@ -159,7 +148,6 @@ export interface PhaseWithSteps {
         margin: 8px 0 0 0;
         font-size: 16px;
       }
-
 
       .phases-section {
         margin-bottom: 32px;
@@ -258,7 +246,6 @@ export interface PhaseWithSteps {
         line-height: 1.5;
       }
 
-
       /* Responsive */
       @media (max-width: 768px) {
         .all-steps-page {
@@ -268,7 +255,6 @@ export interface PhaseWithSteps {
         .page-header h1 {
           font-size: 24px;
         }
-
 
         .phase-header {
           flex-direction: column;
@@ -290,22 +276,95 @@ export class AllStepsPageComponent implements OnInit {
     {
       id: 'planning',
       name: 'Planning',
-      description: 'Comprehensive project planning including commercial, technical, and resource planning',
+      description:
+        'Comprehensive project planning including commercial, technical, and resource planning',
       orderNo: 1,
       stepCount: 12,
       steps: [
-        { id: 'planning-1', name: 'Planning - Commercial', phaseId: 'planning', phaseName: 'Planning', orderNo: 1 },
-        { id: 'planning-2', name: 'Wayleave Secured', phaseId: 'planning', phaseName: 'Planning', orderNo: 2 },
-        { id: 'planning-3', name: 'BSS Signed', phaseId: 'planning', phaseName: 'Planning', orderNo: 3 },
-        { id: 'planning-4', name: 'MSS Signed', phaseId: 'planning', phaseName: 'Planning', orderNo: 4 },
-        { id: 'planning-5', name: 'PO Received', phaseId: 'planning', phaseName: 'Planning', orderNo: 5 },
-        { id: 'planning-6', name: 'Planning - HLD', phaseId: 'planning', phaseName: 'Planning', orderNo: 6 },
-        { id: 'planning-7', name: 'Planning - Splice Diagram', phaseId: 'planning', phaseName: 'Planning', orderNo: 7 },
-        { id: 'planning-8', name: 'Planning - Backhaul', phaseId: 'planning', phaseName: 'Planning', orderNo: 8 },
-        { id: 'planning-9', name: 'BOQ Finalized', phaseId: 'planning', phaseName: 'Planning', orderNo: 9 },
-        { id: 'planning-10', name: 'Warehousing', phaseId: 'planning', phaseName: 'Planning', orderNo: 10 },
-        { id: 'planning-11', name: 'Contractor Quotes', phaseId: 'planning', phaseName: 'Planning', orderNo: 11 },
-        { id: 'planning-12', name: 'Supplier Quotes', phaseId: 'planning', phaseName: 'Planning', orderNo: 12 },
+        {
+          id: 'planning-1',
+          name: 'Planning - Commercial',
+          phaseId: 'planning',
+          phaseName: 'Planning',
+          orderNo: 1,
+        },
+        {
+          id: 'planning-2',
+          name: 'Wayleave Secured',
+          phaseId: 'planning',
+          phaseName: 'Planning',
+          orderNo: 2,
+        },
+        {
+          id: 'planning-3',
+          name: 'BSS Signed',
+          phaseId: 'planning',
+          phaseName: 'Planning',
+          orderNo: 3,
+        },
+        {
+          id: 'planning-4',
+          name: 'MSS Signed',
+          phaseId: 'planning',
+          phaseName: 'Planning',
+          orderNo: 4,
+        },
+        {
+          id: 'planning-5',
+          name: 'PO Received',
+          phaseId: 'planning',
+          phaseName: 'Planning',
+          orderNo: 5,
+        },
+        {
+          id: 'planning-6',
+          name: 'Planning - HLD',
+          phaseId: 'planning',
+          phaseName: 'Planning',
+          orderNo: 6,
+        },
+        {
+          id: 'planning-7',
+          name: 'Planning - Splice Diagram',
+          phaseId: 'planning',
+          phaseName: 'Planning',
+          orderNo: 7,
+        },
+        {
+          id: 'planning-8',
+          name: 'Planning - Backhaul',
+          phaseId: 'planning',
+          phaseName: 'Planning',
+          orderNo: 8,
+        },
+        {
+          id: 'planning-9',
+          name: 'BOQ Finalized',
+          phaseId: 'planning',
+          phaseName: 'Planning',
+          orderNo: 9,
+        },
+        {
+          id: 'planning-10',
+          name: 'Warehousing',
+          phaseId: 'planning',
+          phaseName: 'Planning',
+          orderNo: 10,
+        },
+        {
+          id: 'planning-11',
+          name: 'Contractor Quotes',
+          phaseId: 'planning',
+          phaseName: 'Planning',
+          orderNo: 11,
+        },
+        {
+          id: 'planning-12',
+          name: 'Supplier Quotes',
+          phaseId: 'planning',
+          phaseName: 'Planning',
+          orderNo: 12,
+        },
       ],
     },
     {
@@ -315,12 +374,48 @@ export class AllStepsPageComponent implements OnInit {
       orderNo: 2,
       stepCount: 6,
       steps: [
-        { id: 'ip-1', name: 'IP1: Project Kickoff', phaseId: 'initiate-project', phaseName: 'Initiate Project (IP)', orderNo: 1 },
-        { id: 'ip-2', name: 'IP2: Resource Allocation', phaseId: 'initiate-project', phaseName: 'Initiate Project (IP)', orderNo: 2 },
-        { id: 'ip-3', name: 'IP3: Site Preparation', phaseId: 'initiate-project', phaseName: 'Initiate Project (IP)', orderNo: 3 },
-        { id: 'ip-4', name: 'IP4: Technical Validation', phaseId: 'initiate-project', phaseName: 'Initiate Project (IP)', orderNo: 4 },
-        { id: 'ip-5', name: 'IP5: Contractor Mobilization', phaseId: 'initiate-project', phaseName: 'Initiate Project (IP)', orderNo: 5 },
-        { id: 'ip-6', name: 'IP6: Quality Assurance Setup', phaseId: 'initiate-project', phaseName: 'Initiate Project (IP)', orderNo: 6 },
+        {
+          id: 'ip-1',
+          name: 'IP1: Project Kickoff',
+          phaseId: 'initiate-project',
+          phaseName: 'Initiate Project (IP)',
+          orderNo: 1,
+        },
+        {
+          id: 'ip-2',
+          name: 'IP2: Resource Allocation',
+          phaseId: 'initiate-project',
+          phaseName: 'Initiate Project (IP)',
+          orderNo: 2,
+        },
+        {
+          id: 'ip-3',
+          name: 'IP3: Site Preparation',
+          phaseId: 'initiate-project',
+          phaseName: 'Initiate Project (IP)',
+          orderNo: 3,
+        },
+        {
+          id: 'ip-4',
+          name: 'IP4: Technical Validation',
+          phaseId: 'initiate-project',
+          phaseName: 'Initiate Project (IP)',
+          orderNo: 4,
+        },
+        {
+          id: 'ip-5',
+          name: 'IP5: Contractor Mobilization',
+          phaseId: 'initiate-project',
+          phaseName: 'Initiate Project (IP)',
+          orderNo: 5,
+        },
+        {
+          id: 'ip-6',
+          name: 'IP6: Quality Assurance Setup',
+          phaseId: 'initiate-project',
+          phaseName: 'Initiate Project (IP)',
+          orderNo: 6,
+        },
       ],
     },
     {
@@ -330,12 +425,48 @@ export class AllStepsPageComponent implements OnInit {
       orderNo: 3,
       stepCount: 6,
       steps: [
-        { id: 'wip-1', name: 'WIP1: Site Mobilization', phaseId: 'work-in-progress', phaseName: 'Work in Progress (WIP)', orderNo: 1 },
-        { id: 'wip-2', name: 'WIP2: Infrastructure Installation', phaseId: 'work-in-progress', phaseName: 'Work in Progress (WIP)', orderNo: 2 },
-        { id: 'wip-3', name: 'WIP3: Network Configuration', phaseId: 'work-in-progress', phaseName: 'Work in Progress (WIP)', orderNo: 3 },
-        { id: 'wip-4', name: 'WIP4: Testing and Commissioning', phaseId: 'work-in-progress', phaseName: 'Work in Progress (WIP)', orderNo: 4 },
-        { id: 'wip-5', name: 'WIP5: Documentation', phaseId: 'work-in-progress', phaseName: 'Work in Progress (WIP)', orderNo: 5 },
-        { id: 'wip-6', name: 'WIP6: Quality Control', phaseId: 'work-in-progress', phaseName: 'Work in Progress (WIP)', orderNo: 6 },
+        {
+          id: 'wip-1',
+          name: 'WIP1: Site Mobilization',
+          phaseId: 'work-in-progress',
+          phaseName: 'Work in Progress (WIP)',
+          orderNo: 1,
+        },
+        {
+          id: 'wip-2',
+          name: 'WIP2: Infrastructure Installation',
+          phaseId: 'work-in-progress',
+          phaseName: 'Work in Progress (WIP)',
+          orderNo: 2,
+        },
+        {
+          id: 'wip-3',
+          name: 'WIP3: Network Configuration',
+          phaseId: 'work-in-progress',
+          phaseName: 'Work in Progress (WIP)',
+          orderNo: 3,
+        },
+        {
+          id: 'wip-4',
+          name: 'WIP4: Testing and Commissioning',
+          phaseId: 'work-in-progress',
+          phaseName: 'Work in Progress (WIP)',
+          orderNo: 4,
+        },
+        {
+          id: 'wip-5',
+          name: 'WIP5: Documentation',
+          phaseId: 'work-in-progress',
+          phaseName: 'Work in Progress (WIP)',
+          orderNo: 5,
+        },
+        {
+          id: 'wip-6',
+          name: 'WIP6: Quality Control',
+          phaseId: 'work-in-progress',
+          phaseName: 'Work in Progress (WIP)',
+          orderNo: 6,
+        },
       ],
     },
     {
@@ -345,12 +476,48 @@ export class AllStepsPageComponent implements OnInit {
       orderNo: 4,
       stepCount: 6,
       steps: [
-        { id: 'hoc-1', name: 'HOC1: Pre-Handover Testing', phaseId: 'handover', phaseName: 'Handover (HOC)', orderNo: 1 },
-        { id: 'hoc-2', name: 'HOC2: Documentation Handover', phaseId: 'handover', phaseName: 'Handover (HOC)', orderNo: 2 },
-        { id: 'hoc-3', name: 'HOC3: Knowledge Transfer', phaseId: 'handover', phaseName: 'Handover (HOC)', orderNo: 3 },
-        { id: 'hoc-4', name: 'HOC4: Site Cleanup', phaseId: 'handover', phaseName: 'Handover (HOC)', orderNo: 4 },
-        { id: 'hoc-5', name: 'HOC5: Formal Handover', phaseId: 'handover', phaseName: 'Handover (HOC)', orderNo: 5 },
-        { id: 'hoc-6', name: 'HOC6: Post-Handover Support', phaseId: 'handover', phaseName: 'Handover (HOC)', orderNo: 6 },
+        {
+          id: 'hoc-1',
+          name: 'HOC1: Pre-Handover Testing',
+          phaseId: 'handover',
+          phaseName: 'Handover (HOC)',
+          orderNo: 1,
+        },
+        {
+          id: 'hoc-2',
+          name: 'HOC2: Documentation Handover',
+          phaseId: 'handover',
+          phaseName: 'Handover (HOC)',
+          orderNo: 2,
+        },
+        {
+          id: 'hoc-3',
+          name: 'HOC3: Knowledge Transfer',
+          phaseId: 'handover',
+          phaseName: 'Handover (HOC)',
+          orderNo: 3,
+        },
+        {
+          id: 'hoc-4',
+          name: 'HOC4: Site Cleanup',
+          phaseId: 'handover',
+          phaseName: 'Handover (HOC)',
+          orderNo: 4,
+        },
+        {
+          id: 'hoc-5',
+          name: 'HOC5: Formal Handover',
+          phaseId: 'handover',
+          phaseName: 'Handover (HOC)',
+          orderNo: 5,
+        },
+        {
+          id: 'hoc-6',
+          name: 'HOC6: Post-Handover Support',
+          phaseId: 'handover',
+          phaseName: 'Handover (HOC)',
+          orderNo: 6,
+        },
       ],
     },
     {
@@ -360,12 +527,48 @@ export class AllStepsPageComponent implements OnInit {
       orderNo: 5,
       stepCount: 6,
       steps: [
-        { id: 'fac-1', name: 'FAC1: Acceptance Period Monitoring', phaseId: 'full-acceptance', phaseName: 'Full Acceptance (FAC)', orderNo: 1 },
-        { id: 'fac-2', name: 'FAC2: Final Testing', phaseId: 'full-acceptance', phaseName: 'Full Acceptance (FAC)', orderNo: 2 },
-        { id: 'fac-3', name: 'FAC3: Issue Resolution', phaseId: 'full-acceptance', phaseName: 'Full Acceptance (FAC)', orderNo: 3 },
-        { id: 'fac-4', name: 'FAC4: Documentation Finalization', phaseId: 'full-acceptance', phaseName: 'Full Acceptance (FAC)', orderNo: 4 },
-        { id: 'fac-5', name: 'FAC5: Financial Closure', phaseId: 'full-acceptance', phaseName: 'Full Acceptance (FAC)', orderNo: 5 },
-        { id: 'fac-6', name: 'FAC6: Project Closure', phaseId: 'full-acceptance', phaseName: 'Full Acceptance (FAC)', orderNo: 6 },
+        {
+          id: 'fac-1',
+          name: 'FAC1: Acceptance Period Monitoring',
+          phaseId: 'full-acceptance',
+          phaseName: 'Full Acceptance (FAC)',
+          orderNo: 1,
+        },
+        {
+          id: 'fac-2',
+          name: 'FAC2: Final Testing',
+          phaseId: 'full-acceptance',
+          phaseName: 'Full Acceptance (FAC)',
+          orderNo: 2,
+        },
+        {
+          id: 'fac-3',
+          name: 'FAC3: Issue Resolution',
+          phaseId: 'full-acceptance',
+          phaseName: 'Full Acceptance (FAC)',
+          orderNo: 3,
+        },
+        {
+          id: 'fac-4',
+          name: 'FAC4: Documentation Finalization',
+          phaseId: 'full-acceptance',
+          phaseName: 'Full Acceptance (FAC)',
+          orderNo: 4,
+        },
+        {
+          id: 'fac-5',
+          name: 'FAC5: Financial Closure',
+          phaseId: 'full-acceptance',
+          phaseName: 'Full Acceptance (FAC)',
+          orderNo: 5,
+        },
+        {
+          id: 'fac-6',
+          name: 'FAC6: Project Closure',
+          phaseId: 'full-acceptance',
+          phaseName: 'Full Acceptance (FAC)',
+          orderNo: 6,
+        },
       ],
     },
   ]);
@@ -379,13 +582,16 @@ export class AllStepsPageComponent implements OnInit {
       return phases;
     }
 
-    return phases.map(phase => ({
-      ...phase,
-      steps: phase.steps.filter(step => 
-        step.name.toLowerCase().includes(term) ||
-        step.description?.toLowerCase().includes(term)
-      )
-    })).filter(phase => phase.steps.length > 0);
+    return phases
+      .map((phase) => ({
+        ...phase,
+        steps: phase.steps.filter(
+          (step) =>
+            step.name.toLowerCase().includes(term) ||
+            step.description?.toLowerCase().includes(term),
+        ),
+      }))
+      .filter((phase) => phase.steps.length > 0);
   });
 
   ngOnInit() {
