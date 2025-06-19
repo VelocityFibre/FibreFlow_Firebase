@@ -1,146 +1,215 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { TaskFormDialogComponent } from '../../components/task-form-dialog/task-form-dialog.component';
-import { Task, TaskStatus } from '../../../../core/models/task.model';
-import { TaskService } from '../../../../core/services/task.service';
-import { ProjectService } from '../../../../core/services/project.service';
-import { StaffService } from '../../../staff/services/staff.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { DestroyRef } from '@angular/core';
-import { combineLatest } from 'rxjs';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { PhaseTemplate, StepTemplate, TaskTemplate, TASK_TEMPLATES } from '../../models/task-template.model';
 
 @Component({
   selector: 'app-tasks-page',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
+    FormsModule,
     MatCardModule,
-    MatTableModule,
     MatButtonModule,
     MatIconModule,
     MatChipsModule,
-    MatDialogModule,
-    MatSnackBarModule,
-    MatProgressBarModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatBadgeModule,
+    MatDividerModule,
+    MatProgressSpinnerModule,
   ],
   template: `
-    <div class="tasks-page">
-      <div class="page-header">
-        <div>
-          <h1>Task Management</h1>
-          <p class="subtitle">Manage all tasks across projects</p>
-        </div>
-        <button mat-raised-button color="primary" (click)="addTask()">
-          <mat-icon>add</mat-icon>
-          Add Task
+    <div class="task-templates-page">
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb">
+        <button mat-button (click)="navigateHome()">
+          <mat-icon>home</mat-icon>
+          Home
         </button>
+        <mat-icon class="breadcrumb-separator">chevron_right</mat-icon>
+        <span class="breadcrumb-current">Tasks</span>
+      </nav>
+
+      <!-- Header -->
+      <div class="page-header">
+        <div class="header-content">
+          <h1>Project Task Templates</h1>
+          <p class="subtitle">Complete overview of all Velocity project tasks organized by step</p>
+        </div>
       </div>
 
-      <mat-card>
-        <mat-card-content>
-          @if (loading) {
-            <div class="loading-container">
-              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-              <p>Loading tasks...</p>
+      <!-- Search and Filters -->
+      <div class="search-section">
+        <mat-card class="search-card">
+          <mat-card-content>
+            <div class="search-filters">
+              <mat-form-field appearance="outline" class="search-field">
+                <mat-label>Search tasks</mat-label>
+                <input
+                  matInput
+                  [(ngModel)]="searchTerm"
+                  (ngModelChange)="onSearchChange()"
+                  placeholder="Search across all tasks..."
+                />
+                <mat-icon matSuffix>search</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="filter-field">
+                <mat-label>Filter by phase</mat-label>
+                <mat-select [(ngModel)]="selectedPhase" (ngModelChange)="onFilterChange()">
+                  <mat-option value="">All Phases</mat-option>
+                  <mat-option *ngFor="let phase of allPhases()" [value]="phase.id">
+                    {{ phase.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
-          } @else {
-            <table mat-table [dataSource]="tasks" class="tasks-table">
-              <!-- Name Column -->
-              <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef>Task Name</th>
-                <td mat-cell *matCellDef="let task">{{ task.name }}</td>
-              </ng-container>
 
-              <!-- Project Column -->
-              <ng-container matColumnDef="project">
-                <th mat-header-cell *matHeaderCellDef>Project</th>
-                <td mat-cell *matCellDef="let task">{{ getProjectName(task.projectId) }}</td>
-              </ng-container>
+            <div class="search-stats" *ngIf="searchTerm || selectedPhase">
+              <span class="stats-item">
+                <mat-icon>search</mat-icon>
+                {{ getTotalFilteredTasks() }} tasks found
+              </span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
 
-              <!-- Status Column -->
-              <ng-container matColumnDef="status">
-                <th mat-header-cell *matHeaderCellDef>Status</th>
-                <td mat-cell *matCellDef="let task">
-                  <mat-chip [ngClass]="'status-' + task.status">
-                    {{ formatStatus(task.status) }}
+      <!-- Task Templates by Phase -->
+      <div class="phases-section">
+        <mat-accordion multi="true">
+          <mat-expansion-panel 
+            *ngFor="let phase of filteredPhases(); trackBy: trackByPhase"
+            [expanded]="shouldExpandPhase(phase)"
+            class="phase-panel"
+          >
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <div class="phase-header">
+                  <span class="phase-name">{{ phase.name }}</span>
+                  <mat-chip class="phase-stats">
+                    {{ phase.stepCount }} steps • {{ phase.totalTasks }} tasks
                   </mat-chip>
-                </td>
-              </ng-container>
+                </div>
+              </mat-panel-title>
+              <mat-panel-description>
+                {{ phase.description }}
+              </mat-panel-description>
+            </mat-expansion-panel-header>
 
-              <!-- Priority Column -->
-              <ng-container matColumnDef="priority">
-                <th mat-header-cell *matHeaderCellDef>Priority</th>
-                <td mat-cell *matCellDef="let task">
-                  <mat-chip [ngClass]="'priority-' + task.priority">
-                    {{ task.priority }}
-                  </mat-chip>
-                </td>
-              </ng-container>
+            <div class="phase-content">
+              <!-- Steps within Phase -->
+              <mat-accordion multi="true" class="steps-accordion">
+                <mat-expansion-panel 
+                  *ngFor="let step of getFilteredStepsForPhase(phase); trackBy: trackByStep"
+                  [expanded]="shouldExpandStep(step)"
+                  class="step-panel"
+                >
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <div class="step-header">
+                        <span class="step-name">{{ step.name }}</span>
+                        <mat-chip class="step-count">{{ step.taskCount }} tasks</mat-chip>
+                      </div>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      {{ step.description }}
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
 
-              <!-- Assignee Column -->
-              <ng-container matColumnDef="assignee">
-                <th mat-header-cell *matHeaderCellDef>Assignee</th>
-                <td mat-cell *matCellDef="let task">
-                  {{ task.assignedTo ? getAssigneeName(task.assignedTo) : '-' }}
-                </td>
-              </ng-container>
+                  <div class="step-content">
+                    <div class="tasks-list">
+                      <div 
+                        *ngFor="let task of getFilteredTasksForStep(step); trackBy: trackByTask" 
+                        class="task-item"
+                      >
+                        <div class="task-number">{{ task.orderNo }}</div>
+                        <div class="task-details">
+                          <span class="task-name">{{ task.name }}</span>
+                          <p *ngIf="task.description" class="task-description">{{ task.description }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
 
-              <!-- Due Date Column -->
-              <ng-container matColumnDef="dueDate">
-                <th mat-header-cell *matHeaderCellDef>Due Date</th>
-                <td mat-cell *matCellDef="let task">
-                  @if (task.dueDate) {
-                    <span [ngClass]="{ overdue: isOverdue(task) }">{{
-                      formatDate(task.dueDate)
-                    }}</span>
-                  } @else {
-                    <span>-</span>
-                  }
-                </td>
-              </ng-container>
-
-              <!-- Actions Column -->
-              <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef>Actions</th>
-                <td mat-cell *matCellDef="let task">
-                  <button mat-icon-button (click)="editTask(task)">
-                    <mat-icon>edit</mat-icon>
-                  </button>
-                  <button mat-icon-button (click)="deleteTask(task)">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </td>
-              </ng-container>
-
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-            </table>
-          }
-        </mat-card-content>
-      </mat-card>
+      <!-- Summary Footer -->
+      <div class="summary-footer">
+        <mat-card>
+          <mat-card-content>
+            <div class="summary-stats">
+              <div class="stat-item">
+                <mat-icon>flag</mat-icon>
+                <span class="stat-number">{{ getTotalPhases() }}</span>
+                <span class="stat-label">Phases</span>
+              </div>
+              <div class="stat-item">
+                <mat-icon>linear_scale</mat-icon>
+                <span class="stat-number">{{ getTotalSteps() }}</span>
+                <span class="stat-label">Steps</span>
+              </div>
+              <div class="stat-item">
+                <mat-icon>assignment</mat-icon>
+                <span class="stat-number">{{ getTotalTasks() }}</span>
+                <span class="stat-label">Total Tasks</span>
+              </div>
+              <div class="stat-item" *ngIf="searchTerm || selectedPhase">
+                <mat-icon>search</mat-icon>
+                <span class="stat-number">{{ getTotalFilteredTasks() }}</span>
+                <span class="stat-label">Found</span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
     </div>
   `,
   styles: [
     `
-      .tasks-page {
+      .task-templates-page {
         padding: 24px;
-        max-width: 1200px;
+        max-width: 1400px;
         margin: 0 auto;
       }
 
-      .page-header {
+      .breadcrumb {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        margin-bottom: 24px;
+        color: #6b7280;
+      }
+
+      .breadcrumb-separator {
+        margin: 0 8px;
+        font-size: 18px;
+      }
+
+      .breadcrumb-current {
+        font-weight: 500;
+        color: #1f2937;
+      }
+
+      .page-header {
         margin-bottom: 32px;
       }
 
@@ -148,266 +217,390 @@ import { combineLatest } from 'rxjs';
         font-size: 32px;
         font-weight: 500;
         margin: 0;
+        color: #1f2937;
       }
 
       .subtitle {
-        color: #666;
-        margin: 4px 0 0 0;
+        color: #6b7280;
+        margin: 8px 0 0 0;
+        font-size: 16px;
       }
 
-      .loading-container {
-        padding: 48px;
+      .search-section {
+        margin-bottom: 32px;
+      }
+
+      .search-card {
+        border-radius: 12px;
+      }
+
+      .search-filters {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .search-field {
+        flex: 1;
+        min-width: 300px;
+      }
+
+      .filter-field {
+        min-width: 200px;
+      }
+
+      .search-stats {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .stats-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #6b7280;
+        font-size: 14px;
+      }
+
+      .stats-item mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+
+      .phases-section {
+        margin-bottom: 32px;
+      }
+
+      .phase-panel {
+        border-radius: 12px !important;
+        margin-bottom: 16px;
+        border: 1px solid #e5e7eb !important;
+      }
+
+      .phase-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 16px;
+      }
+
+      .phase-name {
+        font-size: 16px;
+        font-weight: 500;
+        color: #1f2937;
+        flex: 1;
+      }
+
+      .phase-stats {
+        background-color: rgba(var(--ff-primary-rgb), 0.1) !important;
+        color: rgb(var(--ff-primary-rgb)) !important;
+        font-size: 12px !important;
+        font-weight: 500 !important;
+        flex-shrink: 0;
+      }
+
+      .phase-content {
+        padding: 16px 0;
+      }
+
+      .steps-accordion {
+        margin-left: 16px;
+      }
+
+      .step-panel {
+        border-radius: 8px !important;
+        margin-bottom: 12px;
+        border: 1px solid #f3f4f6 !important;
+        background-color: #fafafa !important;
+      }
+
+      .step-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 12px;
+      }
+
+      .step-name {
+        font-size: 14px;
+        font-weight: 500;
+        color: #374151;
+        flex: 1;
+      }
+
+      .step-count {
+        background-color: rgba(var(--ff-primary-rgb), 0.15) !important;
+        color: rgb(var(--ff-primary-rgb)) !important;
+        font-size: 11px !important;
+        font-weight: 500 !important;
+        flex-shrink: 0;
+      }
+
+      .step-content {
+        padding: 16px 0;
+      }
+
+      .tasks-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .task-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px;
+        background-color: #ffffff;
+        border-radius: 6px;
+        border: 1px solid #e5e7eb;
+        transition: all 0.2s ease;
+      }
+
+      .task-item:hover {
+        background-color: #f9fafb;
+        border-color: rgb(var(--ff-primary-rgb));
+        transform: translateX(2px);
+      }
+
+      .task-number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        background-color: rgb(var(--ff-primary-rgb));
+        color: white;
+        border-radius: 50%;
+        font-weight: 600;
+        font-size: 12px;
+        flex-shrink: 0;
+      }
+
+      .task-details {
+        flex: 1;
+      }
+
+      .task-name {
+        font-size: 14px;
+        font-weight: 500;
+        color: #1f2937;
+        line-height: 1.4;
+      }
+
+      .task-description {
+        margin: 4px 0 0 0;
+        color: #6b7280;
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+      .summary-footer {
+        margin-top: 48px;
+      }
+
+      .summary-stats {
+        display: flex;
+        justify-content: center;
+        gap: 48px;
+      }
+
+      .stat-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         text-align: center;
       }
 
-      .tasks-table {
-        width: 100%;
+      .stat-item mat-icon {
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+        color: rgb(var(--ff-primary-rgb));
+        margin-bottom: 8px;
       }
 
-      mat-chip {
-        font-size: 12px;
+      .stat-number {
+        font-size: 28px;
+        font-weight: 600;
+        color: #1f2937;
+        display: block;
       }
 
-      .status-pending {
-        background-color: #e3f2fd !important;
-        color: #1976d2 !important;
+      .stat-label {
+        font-size: 14px;
+        color: #6b7280;
+        margin-top: 4px;
       }
 
-      .status-in_progress {
-        background-color: #fff3e0 !important;
-        color: #f57c00 !important;
-      }
+      /* Responsive */
+      @media (max-width: 768px) {
+        .task-templates-page {
+          padding: 16px;
+        }
 
-      .status-completed {
-        background-color: #e8f5e9 !important;
-        color: #388e3c !important;
-      }
+        .page-header h1 {
+          font-size: 24px;
+        }
 
-      .status-blocked {
-        background-color: #ffebee !important;
-        color: #d32f2f !important;
-      }
+        .search-filters {
+          flex-direction: column;
+          align-items: stretch;
+        }
 
-      .priority-low {
-        background-color: #e8f5e9 !important;
-        color: #388e3c !important;
-      }
+        .search-field,
+        .filter-field {
+          min-width: unset;
+          width: 100%;
+        }
 
-      .priority-medium {
-        background-color: #fff3e0 !important;
-        color: #f57c00 !important;
-      }
+        .summary-stats {
+          gap: 24px;
+          flex-wrap: wrap;
+        }
 
-      .priority-high {
-        background-color: #ffebee !important;
-        color: #d32f2f !important;
-      }
+        .stat-item mat-icon {
+          font-size: 24px;
+          width: 24px;
+          height: 24px;
+        }
 
-      .overdue {
-        color: #d32f2f;
-        font-weight: 500;
+        .stat-number {
+          font-size: 20px;
+        }
+
+        .phase-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+        
+        .step-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+        }
+
+        .steps-accordion {
+          margin-left: 0;
+        }
       }
     `,
   ],
 })
 export class TasksPageComponent implements OnInit {
-  private dialog = inject(MatDialog);
-  private snackBar = inject(MatSnackBar);
-  private taskService = inject(TaskService);
-  private projectService = inject(ProjectService);
-  private staffService = inject(StaffService);
-  private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
 
-  displayedColumns = ['name', 'project', 'status', 'priority', 'assignee', 'dueDate', 'actions'];
-  tasks: Task[] = [];
-  projects$ = this.projectService.getProjects();
-  staff$ = this.staffService.getStaff();
-  projectsMap = new Map<string, string>();
-  staffMap = new Map<string, string>();
-  loading = true;
+  // Search and filter functionality
+  searchTerm = signal('');
+  selectedPhase = signal('');
+
+  // All phases with their steps and tasks
+  allPhases = signal<PhaseTemplate[]>(TASK_TEMPLATES);
+
+  // Filtered phases based on search and filters
+  filteredPhases = computed(() => {
+    const phases = this.allPhases();
+    const term = this.searchTerm().toLowerCase();
+    const phaseFilter = this.selectedPhase();
+
+    let filteredPhases = phases;
+
+    // Filter by selected phase
+    if (phaseFilter) {
+      filteredPhases = phases.filter(phase => phase.id === phaseFilter);
+    }
+
+    // If there's a search term, filter phases and their content
+    if (term) {
+      filteredPhases = filteredPhases.map(phase => ({
+        ...phase,
+        steps: phase.steps.map(step => ({
+          ...step,
+          tasks: step.tasks.filter(task => 
+            task.name.toLowerCase().includes(term) ||
+            task.description?.toLowerCase().includes(term)
+          )
+        })).filter(step => step.tasks.length > 0)
+      })).filter(phase => phase.steps.length > 0);
+    }
+
+    return filteredPhases;
+  });
 
   ngOnInit() {
-    this.loadData();
+    // Component initialization
   }
 
-  private loadData() {
-    // Load all data in parallel
-    combineLatest([this.taskService.getAllTasks(), this.projects$, this.staff$])
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(([tasks, projects, staff]) => {
-        this.tasks = tasks;
-
-        // Build maps for quick lookups
-        this.projectsMap.clear();
-        projects.forEach((p) => {
-          if (p.id) {
-            this.projectsMap.set(p.id, p.name);
-          }
-        });
-
-        this.staffMap.clear();
-        staff.forEach((s) => {
-          if (s.id) {
-            this.staffMap.set(s.id, s.name);
-          }
-        });
-
-        this.loading = false;
-      });
+  onSearchChange() {
+    // Trigger computed signal recalculation
   }
 
-  getProjectName(projectId: string): string {
-    return this.projectsMap.get(projectId) || 'Unknown Project';
+  onFilterChange() {
+    // Trigger computed signal recalculation
   }
 
-  getAssigneeName(assigneeId: string): string {
-    return this.staffMap.get(assigneeId) || 'Unknown';
+  navigateHome() {
+    this.router.navigate(['/']);
   }
 
-  getStatusIcon(status: TaskStatus): string {
-    const icons: Record<string, string> = {
-      pending: 'radio_button_unchecked',
-      in_progress: 'pending',
-      completed: 'check_circle',
-      blocked: 'block',
-    };
-    return icons[status] || 'help';
+  shouldExpandPhase(phase: PhaseTemplate): boolean {
+    // Expand if there's a search term or phase filter
+    return !!this.searchTerm() || !!this.selectedPhase();
   }
 
-  formatStatus(status: TaskStatus): string {
-    const statusNames: Record<string, string> = {
-      pending: 'Pending',
-      in_progress: 'In Progress',
-      completed: 'Completed',
-      blocked: 'Blocked',
-    };
-    return statusNames[status] || status;
+  shouldExpandStep(step: StepTemplate): boolean {
+    // Expand if there's a search term
+    return !!this.searchTerm();
   }
 
-  formatDate(date: Date | string | number | { toDate: () => Date } | null | undefined): string {
-    if (!date) return '';
-    const d = (date as { toDate?: () => Date }).toDate
-      ? (date as { toDate: () => Date }).toDate()
-      : date instanceof Date
-        ? date
-        : new Date(date as string | number);
-    return d.toLocaleDateString('en-ZA', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
+  getFilteredStepsForPhase(phase: PhaseTemplate): StepTemplate[] {
+    const filteredPhase = this.filteredPhases().find(p => p.id === phase.id);
+    return filteredPhase?.steps || [];
   }
 
-  isOverdue(task: Task): boolean {
-    if (!task.dueDate || task.status === TaskStatus.COMPLETED) return false;
-    const dueDate =
-      task.dueDate instanceof Date
-        ? task.dueDate
-        : (task.dueDate as { toDate?: () => Date }).toDate
-          ? (task.dueDate as { toDate: () => Date }).toDate()
-          : new Date(task.dueDate as string | number);
-    return dueDate < new Date();
-  }
-
-  addTask() {
-    const dialogRef = this.dialog.open(TaskFormDialogComponent, {
-      width: '600px',
-      data: { task: null, isTemplate: false },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.taskService
-          .createTask(result)
-          .then(() => {
-            this.snackBar.open('Task added successfully', 'Close', { duration: 3000 });
-          })
-          .catch((error) => {
-            console.error('Error adding task:', error);
-            this.snackBar.open('Error adding task', 'Close', { duration: 3000 });
-          });
-      }
-    });
-  }
-
-  editTask(task: Task) {
-    const dialogRef = this.dialog.open(TaskFormDialogComponent, {
-      width: '600px',
-      data: { task: { ...task }, isTemplate: false },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.taskService
-          .updateTask(task.id!, result)
-          .then(() => {
-            this.snackBar.open('Task updated successfully', 'Close', { duration: 3000 });
-          })
-          .catch((error) => {
-            console.error('Error updating task:', error);
-            this.snackBar.open('Error updating task', 'Close', { duration: 3000 });
-          });
-      }
-    });
-  }
-
-  updateTaskStatus(task: Task) {
-    const statuses: TaskStatus[] = [
-      TaskStatus.PENDING,
-      TaskStatus.IN_PROGRESS,
-      TaskStatus.COMPLETED,
-      TaskStatus.BLOCKED,
-    ];
-    const currentIndex = statuses.indexOf(task.status);
-    const nextStatus = statuses[(currentIndex + 1) % statuses.length];
-
-    this.taskService
-      .updateTask(task.id!, { status: nextStatus })
-      .then(() => {
-        this.snackBar.open(`Task status updated to ${this.formatStatus(nextStatus)}`, 'Close', {
-          duration: 3000,
-        });
-      })
-      .catch((error) => {
-        console.error('Error updating task status:', error);
-        this.snackBar.open('Error updating task status', 'Close', { duration: 3000 });
-      });
-  }
-
-  assignTask(task: Task) {
-    // For now, just cycle through available staff
-    const staffIds = Array.from(this.staffMap.keys());
-    const currentIndex = task.assignedTo ? staffIds.indexOf(task.assignedTo) : -1;
-    const nextAssignee =
-      currentIndex === -1
-        ? staffIds[0]
-        : currentIndex + 1 >= staffIds.length
-          ? undefined
-          : staffIds[currentIndex + 1];
-
-    this.taskService
-      .updateTask(task.id!, { assignedTo: nextAssignee })
-      .then(() => {
-        const assigneeName = nextAssignee ? this.getAssigneeName(nextAssignee) : 'Unassigned';
-        this.snackBar.open(`Task assigned to ${assigneeName}`, 'Close', { duration: 3000 });
-      })
-      .catch((error) => {
-        console.error('Error assigning task:', error);
-        this.snackBar.open('Error assigning task', 'Close', { duration: 3000 });
-      });
-  }
-
-  deleteTask(task: Task) {
-    if (confirm(`Are you sure you want to delete the task "${task.name}"?`)) {
-      this.taskService
-        .deleteTask(task.id!)
-        .then(() => {
-          this.snackBar.open('Task deleted successfully', 'Close', { duration: 3000 });
-        })
-        .catch((error) => {
-          console.error('Error deleting task:', error);
-          this.snackBar.open('Error deleting task', 'Close', { duration: 3000 });
-        });
+  getFilteredTasksForStep(step: StepTemplate): TaskTemplate[] {
+    const term = this.searchTerm().toLowerCase();
+    if (!term) {
+      return step.tasks;
     }
+    return step.tasks.filter(task => 
+      task.name.toLowerCase().includes(term) ||
+      task.description?.toLowerCase().includes(term)
+    );
+  }
+
+  getTotalPhases(): number {
+    return this.allPhases().length;
+  }
+
+  getTotalSteps(): number {
+    return this.allPhases().reduce((total, phase) => total + phase.stepCount, 0);
+  }
+
+  getTotalTasks(): number {
+    return this.allPhases().reduce((total, phase) => total + phase.totalTasks, 0);
+  }
+
+  getTotalFilteredTasks(): number {
+    return this.filteredPhases().reduce((total, phase) => 
+      total + phase.steps.reduce((stepTotal, step) => 
+        stepTotal + this.getFilteredTasksForStep(step).length, 0), 0);
+  }
+
+  trackByPhase(index: number, phase: PhaseTemplate): string {
+    return phase.id;
+  }
+
+  trackByStep(index: number, step: StepTemplate): string {
+    return step.id;
+  }
+
+  trackByTask(index: number, task: TaskTemplate): string {
+    return task.id;
   }
 }

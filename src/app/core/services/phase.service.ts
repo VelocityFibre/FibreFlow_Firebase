@@ -181,8 +181,7 @@ export class PhaseService {
           'initiate-project': 1,
           'work-in-progress': 2,
           handover: 3,
-          'handover-complete': 4,
-          'final-acceptance': 5,
+          'full-acceptance': 4,
         };
 
         const depIndex = phaseIndexMap[dep.phaseId];

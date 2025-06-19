@@ -1,4 +1,5 @@
-    <div *ngIf="project$ | async as project" class="project-detail-container">
+    <div class="ff-page-container">
+      <div *ngIf="project$ | async as project" class="project-detail-container">
       <!-- Header -->
       <div class="project-header">
         <div class="header-top">
@@ -392,17 +393,8 @@
 
         <!-- Tasks Tab -->
         <mat-tab label="Tasks">
-          <div class="tab-content tasks-tab-content">
+          <div class="tab-content">
             <app-project-tasks [projectId]="project.id!"></app-project-tasks>
-
-            <!-- Phases Summary Below Tasks -->
-            <div class="phases-summary-section">
-              <h3 class="summary-title">Project Phases Overview</h3>
-              <app-project-phases
-                [projectId]="project.id!"
-                class="phases-summary"
-              ></app-project-phases>
-            </div>
           </div>
         </mat-tab>
 
@@ -420,6 +412,7 @@
           </div>
         </mat-tab>
       </mat-tab-group>
+      </div>
     </div>
 
     <!-- Loading State -->

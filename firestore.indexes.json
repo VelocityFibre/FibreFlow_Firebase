@@ -97,6 +97,24 @@
       ]
     },
     {
+      "collectionGroup": "tasks",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "projectId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "phaseId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "orderNo",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
       "collectionGroup": "stockItems",
       "queryScope": "COLLECTION",
       "fields": [

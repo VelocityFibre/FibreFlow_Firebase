@@ -51,12 +51,12 @@ import { DEFAULT_PHASES, PhaseTemplate } from '../../../../core/models/phase.mod
               <td mat-cell *matCellDef="let phase">{{ phase.description }}</td>
             </ng-container>
 
-            <!-- Type Column -->
-            <ng-container matColumnDef="type">
-              <th mat-header-cell *matHeaderCellDef>Type</th>
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
               <td mat-cell *matCellDef="let phase">
-                <mat-chip [ngClass]="'type-' + phase.type">
-                  {{ phase.type }}
+                <mat-chip [ngClass]="getPhaseTypeClass(phase.name)">
+                  {{ getPhaseType(phase.name) }}
                 </mat-chip>
               </td>
             </ng-container>
@@ -126,19 +126,29 @@ import { DEFAULT_PHASES, PhaseTemplate } from '../../../../core/models/phase.mod
         color: #1976d2 !important;
       }
 
-      .type-execution {
+      .type-initiation {
         background-color: #e8f5e9 !important;
         color: #388e3c !important;
       }
 
-      .type-handover {
-        background-color: #fff3e0 !important;
+      .type-execution {
+        background-color: #fff8e1 !important;
         color: #f57c00 !important;
       }
 
-      .type-milestone {
+      .type-handover {
+        background-color: #fff3e0 !important;
+        color: #ff6f00 !important;
+      }
+
+      .type-closure {
         background-color: #f3e5f5 !important;
         color: #7b1fa2 !important;
+      }
+
+      .type-custom {
+        background-color: #f5f5f5 !important;
+        color: #616161 !important;
       }
     `,
   ],
@@ -148,7 +158,7 @@ export class PhasesPageComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
   private injector = inject(Injector);
 
-  displayedColumns = ['name', 'description', 'type', 'order', 'actions'];
+  displayedColumns = ['name', 'description', 'status', 'order', 'actions'];
   phases = [...DEFAULT_PHASES];
 
   ngOnInit() {
@@ -217,5 +227,23 @@ export class PhasesPageComponent implements OnInit {
 
   private savePhases() {
     localStorage.setItem('app-phases', JSON.stringify(this.phases));
+  }
+
+  getPhaseType(phaseName: string): string {
+    if (phaseName === 'Planning') return 'Planning';
+    if (phaseName === 'Initiate Project (IP)') return 'Initiation';
+    if (phaseName === 'Work in Progress (WIP)') return 'Execution';
+    if (phaseName === 'Handover (HOC)') return 'Handover';
+    if (phaseName === 'Full Acceptance (FAC)') return 'Closure';
+    return 'Custom';
+  }
+
+  getPhaseTypeClass(phaseName: string): string {
+    if (phaseName === 'Planning') return 'type-planning';
+    if (phaseName === 'Initiate Project (IP)') return 'type-initiation';
+    if (phaseName === 'Work in Progress (WIP)') return 'type-execution';
+    if (phaseName === 'Handover (HOC)') return 'type-handover';
+    if (phaseName === 'Full Acceptance (FAC)') return 'type-closure';
+    return 'type-custom';
   }
 }

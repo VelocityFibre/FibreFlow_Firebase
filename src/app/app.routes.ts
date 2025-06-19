@@ -41,10 +41,8 @@ export const routes: Routes = [
   },
   {
     path: 'steps',
-    loadComponent: () =>
-      import('./features/projects/pages/steps-page/steps-page.component').then(
-        (m) => m.StepsPageComponent,
-      ),
+    loadChildren: () => import('./features/steps/steps.routes').then((m) => m.STEPS_ROUTES),
+    title: 'All Steps - FibreFlow'
   },
   // Dashboard-linked routes
   {
