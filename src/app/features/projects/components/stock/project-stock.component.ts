@@ -526,37 +526,64 @@ export class ProjectStockComponent implements OnInit {
   ];
 
   ngOnInit() {
+    if (!this.projectId) {
+      console.error('ProjectStockComponent: projectId is required');
+      this.loading = false;
+      return;
+    }
+    
     this.project$ = this.projectService.getProjectById(this.projectId);
     this.loadStockItems();
   }
 
   loadStockItems() {
     this.loading = true;
+    
+    // Set a timeout to prevent infinite loading
+    const timeoutId = setTimeout(() => {
+      if (this.loading) {
+        console.warn('Stock items loading timed out');
+        this.loading = false;
+        this.dataSource = new MatTableDataSource<StockItem>([]);
+        this.calculateStats([]);
+      }
+    }, 10000); // 10 second timeout
+
     this.stockItems$ = this.stockService.getStockItemsByProject(this.projectId);
 
-    this.stockItems$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((items) => {
-      this.dataSource = new MatTableDataSource(items);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+    this.stockItems$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (items) => {
+        clearTimeout(timeoutId);
+        this.dataSource = new MatTableDataSource(items || []);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
 
-      // Set custom filter predicate
-      this.dataSource.filterPredicate = (data: StockItem, _filter: string) => {
-        const searchStr = (
-          data.itemCode +
-          data.name +
-          (data.description || '') +
-          data.category
-        ).toLowerCase();
+        // Set custom filter predicate
+        this.dataSource.filterPredicate = (data: StockItem, _filter: string) => {
+          const searchStr = (
+            data.itemCode +
+            data.name +
+            (data.description || '') +
+            data.category
+          ).toLowerCase();
 
-        const matchesSearch = searchStr.includes(this.searchTerm.toLowerCase());
-        const matchesCategory = !this.selectedCategory || data.category === this.selectedCategory;
+          const matchesSearch = searchStr.includes(this.searchTerm.toLowerCase());
+          const matchesCategory = !this.selectedCategory || data.category === this.selectedCategory;
 
-        return matchesSearch && matchesCategory;
-      };
+          return matchesSearch && matchesCategory;
+        };
 
-      this.calculateStats(items);
-      this.loading = false;
-      this.applyFilter();
+        this.calculateStats(items || []);
+        this.loading = false;
+        this.applyFilter();
+      },
+      error: (error) => {
+        clearTimeout(timeoutId);
+        console.error('Error loading stock items:', error);
+        this.loading = false;
+        this.dataSource = new MatTableDataSource<StockItem>([]);
+        this.calculateStats([]);
+      }
     });
   }
 

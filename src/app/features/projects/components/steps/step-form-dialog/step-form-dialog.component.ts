@@ -207,7 +207,7 @@ export class StepFormDialogComponent implements OnInit {
   public dialogRef = inject(MatDialogRef<StepFormDialogComponent>);
   public data = inject<DialogData>(MAT_DIALOG_DATA);
 
-  stepForm!: FormGroup;
+  stepForm: FormGroup;
   phases$: Observable<Phase[]>;
   loading = false;
   deliverables: string[] = [];
@@ -216,16 +216,7 @@ export class StepFormDialogComponent implements OnInit {
 
   constructor() {
     this.phases$ = this.data.phases;
-  }
-
-  ngOnInit() {
-    this.initForm();
-    if (this.data.step) {
-      this.populateForm(this.data.step);
-    }
-  }
-
-  initForm() {
+    // Initialize form in constructor to avoid template errors
     this.stepForm = this.fb.group({
       phaseId: [this.data.phaseId || '', Validators.required],
       name: ['', Validators.required],
@@ -237,6 +228,13 @@ export class StepFormDialogComponent implements OnInit {
       estimatedDuration: [null, Validators.min(1)],
     });
   }
+
+  ngOnInit() {
+    if (this.data.step) {
+      this.populateForm(this.data.step);
+    }
+  }
+
 
   populateForm(step: Step) {
     this.stepForm.patchValue({
@@ -272,19 +270,31 @@ export class StepFormDialogComponent implements OnInit {
       this.loading = true;
       const formValue = this.stepForm.value;
 
-      const stepData: Omit<Step, 'id'> = {
+      const stepData: any = {
         projectId: this.data.projectId,
         phaseId: formValue.phaseId,
         name: formValue.name,
-        description: formValue.description || undefined,
         orderNo: this.data.step?.orderNo || 999, // Will be properly set on backend
         status: formValue.status,
         progress: formValue.progress || 0,
-        startDate: formValue.startDate || undefined,
-        endDate: formValue.endDate || undefined,
-        estimatedDuration: formValue.estimatedDuration || undefined,
-        deliverables: this.deliverables.length > 0 ? this.deliverables : undefined,
       };
+
+      // Only add fields if they have values (avoid undefined)
+      if (formValue.description && formValue.description.trim()) {
+        stepData.description = formValue.description.trim();
+      }
+      if (formValue.startDate) {
+        stepData.startDate = formValue.startDate;
+      }
+      if (formValue.endDate) {
+        stepData.endDate = formValue.endDate;
+      }
+      if (formValue.estimatedDuration) {
+        stepData.estimatedDuration = formValue.estimatedDuration;
+      }
+      if (this.deliverables.length > 0) {
+        stepData.deliverables = this.deliverables;
+      }
 
       if (this.data.step) {
         this.stepService.updateStep(this.data.step.id!, stepData).subscribe({

@@ -113,8 +113,13 @@ export class StepService {
 
   createStep(step: Omit<Step, 'id'>): Observable<string> {
     const stepsCollection = collection(this.firestore, this.collectionName);
-    const stepData = {
-      ...step,
+    
+    // Build stepData object, filtering out undefined values
+    const stepData: any = {
+      projectId: step.projectId,
+      phaseId: step.phaseId,
+      name: step.name,
+      orderNo: step.orderNo,
       startDate: step.startDate ? Timestamp.fromDate(step.startDate) : null,
       endDate: step.endDate ? Timestamp.fromDate(step.endDate) : null,
       createdAt: Timestamp.fromDate(new Date()),
@@ -122,6 +127,17 @@ export class StepService {
       progress: step.progress || 0,
       status: step.status || StepStatus.PENDING,
     };
+    
+    // Only add optional fields if they have values
+    if (step.description && step.description.trim()) {
+      stepData.description = step.description.trim();
+    }
+    if (step.estimatedDuration) {
+      stepData.estimatedDuration = step.estimatedDuration;
+    }
+    if (step.deliverables && step.deliverables.length > 0) {
+      stepData.deliverables = step.deliverables;
+    }
 
     return from(addDoc(stepsCollection, stepData)).pipe(
       map((docRef) => docRef.id),
@@ -134,10 +150,26 @@ export class StepService {
 
   updateStep(stepId: string, updates: Partial<Step>): Observable<void> {
     const stepDoc = doc(this.firestore, this.collectionName, stepId);
+    
+    // Build updateData object, filtering out undefined values
     const updateData: any = {
-      ...updates,
       updatedAt: serverTimestamp(),
     };
+    
+    // Only add fields that have values
+    if (updates.name) updateData.name = updates.name;
+    if (updates.description !== undefined) {
+      if (updates.description && updates.description.trim()) {
+        updateData.description = updates.description.trim();
+      }
+    }
+    if (updates.orderNo !== undefined) updateData.orderNo = updates.orderNo;
+    if (updates.status) updateData.status = updates.status;
+    if (updates.progress !== undefined) updateData.progress = updates.progress;
+    if (updates.estimatedDuration !== undefined) updateData.estimatedDuration = updates.estimatedDuration;
+    if (updates.deliverables !== undefined) updateData.deliverables = updates.deliverables;
+    if (updates.phaseId) updateData.phaseId = updates.phaseId;
+    if (updates.projectId) updateData.projectId = updates.projectId;
 
     if (updates.startDate) {
       updateData.startDate = Timestamp.fromDate(updates.startDate);
@@ -145,8 +177,6 @@ export class StepService {
     if (updates.endDate) {
       updateData.endDate = Timestamp.fromDate(updates.endDate);
     }
-
-    delete updateData.id;
 
     return from(updateDoc(stepDoc, updateData)).pipe(
       catchError((error) => {
