@@ -171,6 +171,7 @@ export class StepService {
     if (updates.deliverables !== undefined) updateData.deliverables = updates.deliverables;
     if (updates.phaseId) updateData.phaseId = updates.phaseId;
     if (updates.projectId) updateData.projectId = updates.projectId;
+    if (updates.assignedTo !== undefined) updateData.assignedTo = updates.assignedTo;
 
     if (updates.startDate) {
       updateData.startDate = Timestamp.fromDate(updates.startDate);

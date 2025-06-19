@@ -12,15 +12,13 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { Observable, switchMap, combineLatest, map, from, of } from 'rxjs';
+import { Observable, switchMap, combineLatest, map, of } from 'rxjs';
 import { Project, ProjectStatus } from '../../../../core/models/project.model';
 import { Phase, PhaseStatus } from '../../../../core/models/phase.model';
 import { ProjectService } from '../../../../core/services/project.service';
 import { DateFormatService } from '../../../../core/services/date-format.service';
-import { ProjectPhasesComponent } from '../../components/phases/project-phases.component';
-import { ProjectTasksComponent } from '../../components/tasks/project-tasks.component';
+import { UnifiedTaskManagementComponent } from '../../components/unified-task-management/unified-task-management.component';
 import { ProjectStockComponent } from '../../components/stock/project-stock.component';
-import { ProjectStepsComponent } from '../../components/steps/project-steps.component';
 import { ProjectContractorsComponent } from '../../components/contractors/project-contractors.component';
 import { PhaseService } from '../../../../core/services/phase.service';
 import { TaskService } from '../../../../core/services/task.service';
@@ -44,10 +42,8 @@ import { Task } from '../../../../core/models/task.model';
     MatMenuModule,
     MatDialogModule,
     MatExpansionModule,
-    ProjectPhasesComponent,
-    ProjectTasksComponent,
+    UnifiedTaskManagementComponent,
     ProjectStockComponent,
-    ProjectStepsComponent,
     ProjectContractorsComponent,
   ],
   templateUrl: './project-detail.component.html',
