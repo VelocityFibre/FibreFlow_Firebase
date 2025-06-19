@@ -424,11 +424,24 @@ export class ProjectPhasesComponent implements OnInit {
         console.log('ProjectPhasesComponent: Fetching phases from service...');
         return this.phaseService.getProjectPhases(this.projectId);
       }),
-      tap((phases) => {
+      tap(async (phases) => {
         // Phases loaded successfully
         console.log('ProjectPhasesComponent: Phases loaded:', phases);
         console.log('ProjectPhasesComponent: Number of phases:', phases.length);
         this.currentPhases = phases;
+        
+        // Auto-create phases if none exist (for projects created before phase auto-creation was fixed)
+        if (phases.length === 0) {
+          console.log('ProjectPhasesComponent: No phases found, auto-creating default phases...');
+          try {
+            await this.phaseService.createProjectPhases(this.projectId, true);
+            console.log('ProjectPhasesComponent: Auto-created phases successfully');
+            // Trigger a refresh to load the new phases
+            setTimeout(() => this.refreshPhases$.next(), 1000);
+          } catch (error) {
+            console.error('ProjectPhasesComponent: Error auto-creating phases:', error);
+          }
+        }
       }),
     );
   }
