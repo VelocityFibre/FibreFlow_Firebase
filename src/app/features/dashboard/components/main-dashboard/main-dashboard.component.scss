@@ -1,224 +1,334 @@
-@use '../../../../../styles/spacing' as *;
+@use '../../../../../styles/component-theming' as theme;
 
-.dashboard-container {
-  padding: ff-spacing(2xl);
-  background-color: rgb(var(--ff-background));
-  min-height: 100vh;
+// Page container following theme standards
+.ff-page-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  
+  @media (max-width: 768px) {
+    padding: 24px 16px;
+  }
 }
 
-.dashboard-header {
-  margin-bottom: ff-spacing(3xl);
-
-  h1 {
-    font-size: 2.5rem;
-    font-weight: 600;
+// Page header pattern from theme standards
+.ff-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 48px;
+  
+  .header-content {
+    flex: 1;
+  }
+  
+  .page-title {
+    font-size: 32px;
+    font-weight: 300;
+    color: theme.ff-rgb(foreground);
+    margin: 0 0 8px 0;
+    letter-spacing: -0.02em;
+  }
+  
+  .page-subtitle {
+    font-size: 18px;
+    color: theme.ff-rgb(muted-foreground);
+    font-weight: 400;
     margin: 0;
-    color: rgb(var(--ff-foreground));
-  }
-
-  .welcome-text {
-    color: rgb(var(--ff-muted-foreground));
-    margin-top: ff-spacing(sm);
-    font-size: 1.1rem;
   }
 }
 
-// Main Dashboard Grid
+// Loading state
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  
+  .loading-card {
+    @include theme.card-theme();
+    padding: 48px;
+    text-align: center;
+    
+    .loading-content {
+      mat-icon {
+        font-size: 48px;
+        color: theme.ff-rgb(muted-foreground);
+        margin-bottom: 24px;
+      }
+      
+      p {
+        color: theme.ff-rgb(muted-foreground);
+        font-size: 16px;
+        margin: 0;
+      }
+    }
+  }
+}
+
+// Dashboard grid with improved card design
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: ff-spacing(xl);
-  margin-bottom: ff-spacing(3xl);
-
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 48px;
+  
   .dashboard-card {
+    @include theme.card-theme(interactive);
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgb(var(--ff-border));
-    background: rgb(var(--ff-card));
-    color: rgb(var(--ff-card-foreground));
-    padding: ff-spacing(xl);
-    border-radius: 16px;
-    position: relative;
-
+    transition: all 0.2s ease;
+    overflow: hidden;
+    
     &:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--ff-shadow-lg);
-      border-color: rgb(var(--ff-primary));
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     }
-
+    
+    mat-card-content {
+      padding: 24px !important;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    
     .card-icon {
-      position: absolute;
-      top: ff-spacing(lg);
-      right: ff-spacing(lg);
       width: 56px;
       height: 56px;
-      border-radius: 16px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-
+      flex-shrink: 0;
+      
       mat-icon {
         font-size: 28px;
+        width: 28px;
+        height: 28px;
         color: white;
       }
-
+      
       &.projects-icon {
-        background: rgb(var(--ff-info));
+        background: theme.ff-rgb(info);
       }
-
+      
       &.suppliers-icon {
-        background: rgb(var(--ff-success));
+        background: theme.ff-rgb(success);
       }
-
+      
       &.stock-icon {
-        background: rgb(var(--ff-primary));
+        background: theme.ff-rgb(primary);
       }
-
+      
       &.clients-icon {
-        background: rgb(var(--ff-warning));
+        background: theme.ff-rgb(warning);
       }
-
+      
       &.issues-icon {
-        background: rgb(var(--ff-destructive));
+        background: theme.ff-rgb(destructive);
       }
-
+      
       &.analytics-icon {
-        background: rgb(var(--ff-primary));
+        background: theme.ff-rgb(primary);
       }
     }
-
-    mat-card-header {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding-bottom: ff-spacing(lg);
-      padding-right: 80px; // Make room for the icon
-
-      mat-card-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin: 0;
-        letter-spacing: -0.02em;
+    
+    .card-details {
+      flex: 1;
+      
+      .card-title {
+        @include theme.heading-3();
+        margin: 0 0 4px 0;
       }
-
-      mat-card-subtitle {
-        font-size: 0.9rem;
-        color: rgb(var(--ff-muted-foreground));
-        margin: ff-spacing(xs) 0 0 0;
+      
+      .card-subtitle {
+        font-size: 14px;
+        color: theme.ff-rgb(muted-foreground);
+        margin: 0 0 16px 0;
         line-height: 1.4;
       }
-    }
-
-    mat-card-content {
-      padding-top: ff-spacing(lg);
-
+      
       .card-stats {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        .stat-item {
-          .stat-number {
-            font-size: 1.75rem;
-            font-weight: 700;
-            display: block;
-            color: rgb(var(--ff-primary));
-            letter-spacing: -0.03em;
-            margin-bottom: ff-spacing(xs);
-          }
-
-          .stat-label {
-            font-size: 0.9rem;
-            color: rgb(var(--ff-muted-foreground));
-            font-weight: 500;
-          }
+        .stat-number {
+          font-size: 28px;
+          font-weight: 600;
+          color: theme.ff-rgb(foreground);
+          display: block;
+          margin-bottom: 4px;
         }
-
-        .action-link {
-          color: rgb(var(--ff-primary));
+        
+        .stat-label {
+          font-size: 14px;
+          color: theme.ff-rgb(muted-foreground);
+        }
+        
+        .stat-action {
+          font-size: 16px;
           font-weight: 500;
-          display: flex;
-          align-items: center;
-          gap: ff-spacing(xs);
+          color: theme.ff-rgb(primary);
         }
       }
     }
   }
 }
 
-// Quick Summary Section
+// Summary section with theme-compliant styles
 .summary-section {
-  margin-bottom: ff-spacing(3xl);
-
-  h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: ff-spacing(xl);
-    color: rgb(var(--ff-foreground));
-    letter-spacing: -0.02em;
+  margin-bottom: 48px;
+  
+  .section-title {
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0 0 24px 0;
+    color: theme.ff-rgb(foreground);
   }
-
+  
   .summary-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: ff-spacing(lg);
-
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    
     .summary-card {
-      background: rgb(var(--ff-card));
-      color: rgb(var(--ff-card-foreground));
-      border: 1px solid rgb(var(--ff-border));
-      border-radius: 12px;
-      padding: ff-spacing(lg);
-      transition: all 0.2s ease;
-
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--ff-shadow);
-      }
-
+      @include theme.card-theme();
+      
       mat-card-content {
         display: flex;
         align-items: center;
-        gap: ff-spacing(lg);
+        gap: 16px;
+        padding: 24px !important;
+      }
+      
+      .card-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        
+        mat-icon {
+          font-size: 28px;
+          width: 28px;
+          height: 28px;
+        }
+        
+        &.success-icon {
+          background: theme.ff-rgba(success, 0.1);
+          mat-icon {
+            color: theme.ff-rgb(success);
+          }
+        }
+        
+        &.warning-icon {
+          background: theme.ff-rgba(warning, 0.1);
+          mat-icon {
+            color: theme.ff-rgb(warning);
+          }
+        }
+        
+        &.info-icon {
+          background: theme.ff-rgba(info, 0.1);
+          mat-icon {
+            color: theme.ff-rgb(info);
+          }
+        }
+        
+        &.primary-icon {
+          background: theme.ff-rgba(primary, 0.1);
+          mat-icon {
+            color: theme.ff-rgb(primary);
+          }
+        }
+      }
+      
+      .card-info {
+        flex: 1;
+        
+        .card-value {
+          font-size: 28px;
+          font-weight: 600;
+          line-height: 1;
+          color: theme.ff-rgb(foreground);
+          margin-bottom: 4px;
+        }
+        
+        .card-label {
+          font-size: 14px;
+          font-weight: 500;
+          color: theme.ff-rgb(muted-foreground);
+          margin-bottom: 2px;
+        }
+        
+        .card-detail {
+          font-size: 12px;
+          color: theme.ff-rgb(muted-foreground);
+        }
+      }
+    }
+  }
+}
 
-        .summary-icon {
-          width: 48px;
-          height: 48px;
-          border-radius: 12px;
-          background: rgb(var(--ff-primary) / 0.1);
+// Activity section with consistent styling
+.activity-section {
+  .section-title {
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0 0 24px 0;
+    color: theme.ff-rgb(foreground);
+  }
+  
+  mat-card {
+    @include theme.card-theme();
+    
+    .activity-list-container {
+      padding: 24px;
+    }
+    
+    .activity-list {
+      .activity-item {
+        display: flex;
+        gap: 16px;
+        padding: 16px 0;
+        
+        &:not(:last-child) {
+          border-bottom: 1px solid theme.ff-rgb(border);
+        }
+        
+        .activity-icon {
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
           display: flex;
           align-items: center;
           justify-content: center;
-
-          mat-icon {
-            color: rgb(var(--ff-primary));
-            font-size: 24px;
+          background: theme.ff-rgba(primary, 0.1);
+          flex-shrink: 0;
+          
+          &.mat-icon {
+            color: theme.ff-rgb(primary);
+            font-size: 20px;
           }
         }
-
-        .summary-content {
+        
+        .activity-content {
           flex: 1;
-
-          h3 {
-            font-size: 0.9rem;
-            font-weight: 500;
+          
+          p {
             margin: 0;
-            color: rgb(var(--ff-muted-foreground));
-            margin-bottom: ff-spacing(xs);
+            color: theme.ff-rgb(foreground);
+            font-size: 14px;
+            line-height: 1.5;
+            
+            strong {
+              font-weight: 600;
+            }
           }
-
-          .summary-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: rgb(var(--ff-card-foreground));
-            margin: ff-spacing(xs) 0;
-            letter-spacing: -0.03em;
-          }
-
-          .summary-detail {
-            font-size: 0.8rem;
-            color: rgb(var(--ff-muted-foreground));
-            font-weight: 500;
+          
+          .activity-time {
+            font-size: 12px;
+            color: theme.ff-rgb(muted-foreground);
+            margin-top: 4px;
+            display: inline-block;
           }
         }
       }
@@ -226,88 +336,40 @@
   }
 }
 
-// Recent Activity Section
-.activity-section {
-  h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: ff-spacing(xl);
-    color: rgb(var(--ff-foreground));
-    letter-spacing: -0.02em;
+// Material overrides to match theme standards
+:host ::ng-deep {
+  .mat-mdc-card {
+    border-radius: var(--ff-radius) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    border: 1px solid rgb(var(--ff-border)) !important;
+    background-color: rgb(var(--ff-card)) !important;
   }
-
-  mat-card {
-    background: rgb(var(--ff-card));
-    color: rgb(var(--ff-card-foreground));
-    border: 1px solid rgb(var(--ff-border));
-    border-radius: 12px;
-    padding: ff-spacing(lg);
-  }
-
-  .activity-list {
-    .activity-item {
-      display: flex;
-      gap: ff-spacing(lg);
-      padding: ff-spacing(lg) 0;
-
-      &:not(:last-child) {
-        border-bottom: 1px solid rgb(var(--ff-border));
-      }
-
-      .activity-icon {
-        color: rgb(var(--ff-primary));
-        font-size: 24px;
-        background: rgb(var(--ff-primary) / 0.1);
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .activity-content {
-        flex: 1;
-
-        p {
-          margin: 0;
-          color: rgb(var(--ff-card-foreground));
-          font-size: 0.95rem;
-          line-height: 1.5;
-        }
-
-        .activity-time {
-          font-size: 0.8rem;
-          color: rgb(var(--ff-muted-foreground));
-          margin-top: ff-spacing(xs);
-          display: inline-block;
-        }
-      }
-    }
+  
+  .mat-mdc-card-content {
+    padding: 0 !important;
   }
 }
 
 // Responsive adjustments
 @media (max-width: 768px) {
-  .dashboard-container {
-    padding: ff-spacing(lg);
-  }
-
-  .dashboard-header {
-    margin-bottom: ff-spacing(xl);
-
-    h1 {
-      font-size: 2rem;
+  .ff-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    
+    .page-title {
+      font-size: 28px;
+    }
+    
+    .page-subtitle {
+      font-size: 16px;
     }
   }
-
+  
   .dashboard-grid {
     grid-template-columns: 1fr;
-    gap: ff-spacing(lg);
   }
-
+  
   .summary-cards {
     grid-template-columns: 1fr;
-    gap: ff-spacing(md);
   }
 }

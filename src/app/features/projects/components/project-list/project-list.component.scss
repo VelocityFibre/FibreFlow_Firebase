@@ -1,96 +1,117 @@
+@use '../../../../../styles/component-theming' as theme;
+
+// Page container following theme standards
 .ff-page-container {
-  padding: 24px;
-  max-width: 1400px;
+  max-width: 1280px;
   margin: 0 auto;
-  background-color: var(--mat-sys-background);
+  padding: 40px 24px;
+  
+  @media (max-width: 768px) {
+    padding: 24px 16px;
+  }
 }
 
+// Page header pattern from theme standards
 .ff-page-header {
-  margin-bottom: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 48px;
+  
+  .header-content {
+    flex: 1;
+  }
+  
+  .page-title {
+    font-size: 32px;
+    font-weight: 300;
+    color: theme.ff-rgb(foreground);
+    margin: 0 0 8px 0;
+    letter-spacing: -0.02em;
+  }
+  
+  .page-subtitle {
+    font-size: 18px;
+    color: theme.ff-rgb(muted-foreground);
+    font-weight: 400;
+    margin: 0;
+  }
+  
+  .header-actions {
+    display: flex;
+    gap: 8px;
+  }
 }
 
-.ff-page-title {
-  font-size: 32px;
-  font-weight: 500;
-  margin: 0;
-  color: var(--mat-sys-on-surface);
-}
-
-.ff-page-subtitle {
-  color: var(--mat-sys-on-surface-variant);
-  margin-top: 4px;
-}
-
+// Section spacing
 .ff-section {
   margin-bottom: 32px;
 }
 
+// Virtual scroll viewport
 .project-viewport {
   height: calc(100vh - 250px);
   min-height: 600px;
 }
 
-.ff-button-primary {
-  background-color: var(--mat-sys-primary) !important;
-  color: var(--mat-sys-on-primary) !important;
-
-  &:hover:not(:disabled) {
-    opacity: 0.9;
-  }
-}
-
-.actions-bar {
-  margin-bottom: 32px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 16px;
-}
-
+// Project grid
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 20px;
   padding: 4px;
 }
 
+// Project card styling
 .project-card {
+  @include theme.card-theme(interactive);
   position: relative;
   cursor: pointer;
   transition: all 0.2s ease;
-
+  overflow: hidden;
+  
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--mat-sys-elevation-4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+  
+  // Priority ribbon
+  .priority-ribbon {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    
+    &.priority-high {
+      background-color: theme.ff-rgba(warning, 0.15);
+      color: theme.ff-rgb(warning);
+    }
+    
+    &.priority-critical {
+      background-color: theme.ff-rgba(destructive, 0.15);
+      color: theme.ff-rgb(destructive);
+    }
+    
+    mat-icon {
+      font-size: 16px !important;
+      width: 16px !important;
+      height: 16px !important;
+    }
   }
 }
 
-.priority-ribbon {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.priority-ribbon.priority-high {
-  background-color: rgba(255, 152, 0, 0.15);
-  color: #ff9800;
-}
-
-.priority-ribbon.priority-critical {
-  background-color: rgba(var(--mat-sys-error-rgb), 0.15);
-  color: var(--mat-sys-error);
-}
-
+// Card header styling
 mat-card-header {
-  background-color: var(--mat-sys-surface-variant);
-  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  background-color: theme.ff-rgba(muted, 0.3);
+  border-bottom: 1px solid theme.ff-rgb(border);
   padding: 16px 24px !important;
+  margin: -16px -16px 0 -16px !important;
 }
 
 .header-content {
@@ -106,83 +127,90 @@ mat-card-header {
 }
 
 mat-card-title {
-  font-size: 20px !important;
-  line-height: 1.3 !important;
+  @include theme.heading-3();
   margin-bottom: 4px !important;
-  color: var(--mat-sys-on-surface);
 }
 
 mat-card-subtitle {
   font-size: 14px !important;
-  color: var(--mat-sys-on-surface-variant);
+  color: theme.ff-rgb(muted-foreground);
 }
 
+// Status chip styling
 .status-chip {
   flex-shrink: 0;
   margin-left: 16px;
+  font-size: 12px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 12px;
+  
+  &.status-active {
+    background-color: theme.ff-rgba(success, 0.1);
+    color: theme.ff-rgb(success);
+  }
+  
+  &.status-planning {
+    background-color: theme.ff-rgba(info, 0.1);
+    color: theme.ff-rgb(info);
+  }
+  
+  &.status-on_hold {
+    background-color: theme.ff-rgba(warning, 0.1);
+    color: theme.ff-rgb(warning);
+  }
+  
+  &.status-completed {
+    background-color: theme.ff-rgba(success, 0.1);
+    color: theme.ff-rgb(success);
+  }
+  
+  &.status-cancelled {
+    background-color: theme.ff-rgba(destructive, 0.1);
+    color: theme.ff-rgb(destructive);
+  }
 }
 
-.status-chip.status-active {
-  background-color: rgba(34, 197, 94, 0.1);
-  color: #22c55e;
-}
-
-.status-chip.status-planning {
-  background-color: rgba(59, 130, 246, 0.1);
-  color: #3b82f6;
-}
-
-.status-chip.status-on_hold {
-  background-color: rgba(245, 158, 11, 0.1);
-  color: #f59e0b;
-}
-
-.status-chip.status-completed {
-  background-color: rgba(16, 185, 129, 0.1);
-  color: #10b981;
-}
-
-.status-chip.status-cancelled {
-  background-color: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-}
-
+// Card content
 mat-card-content {
   padding: 24px !important;
 }
 
+// Project meta information
 .project-meta {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   margin-bottom: 20px;
+  
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: theme.ff-rgb(muted-foreground);
+    font-size: 14px;
+    
+    mat-icon {
+      color: theme.ff-rgb(muted-foreground);
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+  
+  .project-type {
+    font-weight: 500;
+    color: theme.ff-rgb(foreground);
+  }
 }
 
-.meta-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--mat-sys-on-surface-variant);
-  font-size: 14px;
-}
-
-.meta-item mat-icon {
-  color: var(--mat-sys-on-surface-variant);
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
-}
-
-.project-type {
-  font-weight: 500;
-  color: var(--mat-sys-on-surface);
-}
-
+// Phase card
 .phase-card {
-  background: var(--mat-sys-surface-variant);
+  background: theme.ff-rgba(muted, 0.3);
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 16px;
+  border: 1px solid theme.ff-rgb(border);
 }
 
 .phase-header {
@@ -196,23 +224,24 @@ mat-card-content {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: var(--mat-sys-on-surface-variant);
+  color: theme.ff-rgb(muted-foreground);
   font-weight: 500;
 }
 
 .phase-progress {
   font-size: 14px;
   font-weight: 600;
-  color: var(--mat-sys-on-surface);
+  color: theme.ff-rgb(foreground);
 }
 
 .phase-name {
   font-size: 16px;
   font-weight: 500;
-  color: var(--mat-sys-on-surface);
+  color: theme.ff-rgb(foreground);
   margin-bottom: 8px;
 }
 
+// Progress section
 .progress-section {
   margin-bottom: 24px;
 }
@@ -226,16 +255,17 @@ mat-card-content {
 
 .progress-label {
   font-size: 14px;
-  color: var(--mat-sys-on-surface);
+  color: theme.ff-rgb(foreground);
   font-weight: 500;
 }
 
 .progress-value {
   font-size: 16px;
   font-weight: 600;
-  color: var(--mat-sys-on-surface);
+  color: theme.ff-rgb(foreground);
 }
 
+// Stats grid
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -243,26 +273,27 @@ mat-card-content {
 }
 
 .stat-card {
-  background: var(--mat-sys-surface-variant);
+  background: theme.ff-rgba(muted, 0.3);
   border-radius: 8px;
   padding: 12px;
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.stat-card mat-icon {
-  font-size: 24px !important;
-  width: 24px !important;
-  height: 24px !important;
-}
-
-.completed-icon {
-  color: #22c55e;
-}
-
-.budget-icon {
-  color: #3b82f6;
+  border: 1px solid theme.ff-rgb(border);
+  
+  mat-icon {
+    font-size: 24px !important;
+    width: 24px !important;
+    height: 24px !important;
+  }
+  
+  .completed-icon {
+    color: theme.ff-rgb(success);
+  }
+  
+  .budget-icon {
+    color: theme.ff-rgb(info);
+  }
 }
 
 .stat-content {
@@ -272,63 +303,64 @@ mat-card-content {
 .stat-value {
   font-size: 18px;
   font-weight: 600;
-  color: var(--mat-sys-on-surface);
+  color: theme.ff-rgb(foreground);
   line-height: 1;
 }
 
 .stat-label {
   font-size: 12px;
-  color: var(--mat-sys-on-surface-variant);
+  color: theme.ff-rgb(muted-foreground);
   margin-top: 2px;
 }
 
-/* Empty State */
+// Empty state
 .empty-state {
   text-align: center;
   padding: 80px 32px;
-  background: var(--mat-sys-surface-variant);
+  background: theme.ff-rgba(muted, 0.3);
   border-radius: 12px;
-  border: 2px dashed var(--mat-sys-outline-variant);
+  border: 2px dashed theme.ff-rgb(border);
+  grid-column: 1 / -1;
 }
 
 .empty-state-icon {
   width: 80px;
   height: 80px;
   margin: 0 auto 24px;
-  background: var(--mat-sys-surface);
+  background: theme.ff-rgb(muted);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.empty-state-icon mat-icon {
-  font-size: 40px !important;
-  width: 40px !important;
-  height: 40px !important;
-  color: var(--mat-sys-on-surface-variant);
+  
+  mat-icon {
+    font-size: 40px !important;
+    width: 40px !important;
+    height: 40px !important;
+    color: theme.ff-rgb(muted-foreground);
+  }
 }
 
 .empty-state h2 {
   font-size: 24px;
   font-weight: 500;
-  color: var(--mat-sys-on-surface);
+  color: theme.ff-rgb(foreground);
   margin: 0 0 8px 0;
 }
 
 .empty-state p {
   font-size: 16px;
-  color: var(--mat-sys-on-surface-variant);
+  color: theme.ff-rgb(muted-foreground);
   margin: 0 0 24px 0;
 }
 
-/* Loading State */
+// Loading state
 .loading-skeleton {
   background: linear-gradient(
     90deg,
-    var(--mat-sys-surface-variant) 25%,
-    var(--mat-sys-surface) 50%,
-    var(--mat-sys-surface-variant) 75%
+    theme.ff-rgba(muted, 0.5) 25%,
+    theme.ff-rgba(muted, 0.3) 50%,
+    theme.ff-rgba(muted, 0.5) 75%
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
@@ -345,14 +377,12 @@ mat-card-content {
 
 .loading-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 20px;
 }
 
 .loading-card {
-  background: var(--mat-sys-surface);
-  border: 1px solid var(--mat-sys-outline-variant);
-  border-radius: 12px;
+  @include theme.card-theme();
   padding: 24px;
   height: 400px;
 }
@@ -374,7 +404,7 @@ mat-card-content {
   border-radius: 8px;
 }
 
-/* Small icon helper */
+// Icon helpers
 .small-icon {
   font-size: 18px !important;
   width: 18px !important;
@@ -387,35 +417,84 @@ mat-card-content {
   height: 40px !important;
 }
 
-/* Responsive */
+// Material overrides
+:host ::ng-deep {
+  .mat-mdc-card {
+    border-radius: var(--ff-radius) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    border: 1px solid rgb(var(--ff-border)) !important;
+    background-color: rgb(var(--ff-card)) !important;
+  }
+  
+  .mat-mdc-raised-button {
+    border-radius: 6px !important;
+    text-transform: none !important;
+    font-weight: 500 !important;
+    letter-spacing: 0 !important;
+    padding: 0 16px !important;
+    height: 40px !important;
+  }
+  
+  .mat-mdc-progress-bar {
+    height: 6px !important;
+    border-radius: 3px !important;
+  }
+  
+  mat-chip {
+    font-size: 12px !important;
+    height: 24px !important;
+    padding: 0 8px !important;
+    border-radius: 12px !important;
+  }
+}
+
+// Responsive
 @media (max-width: 1200px) {
   .project-grid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
+  
+  .loading-grid {
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   }
 }
 
 @media (max-width: 768px) {
-  .ff-page-container {
-    padding: 16px;
+  .ff-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    
+    .page-title {
+      font-size: 28px;
+    }
+    
+    .page-subtitle {
+      font-size: 16px;
+    }
   }
-
+  
   .project-grid {
     grid-template-columns: 1fr;
   }
-
+  
+  .loading-grid {
+    grid-template-columns: 1fr;
+  }
+  
   .project-meta {
     grid-template-columns: 1fr;
   }
-
+  
   .stats-grid {
     grid-template-columns: 1fr;
   }
-
+  
   .header-content {
     flex-direction: column;
     gap: 12px;
   }
-
+  
   .status-chip {
     margin-left: 0;
   }

@@ -1,5 +1,8 @@
 # 🔧 Update Your Firebase Configuration
 
+**Firebase Account**: `louis@velocityfibreapp.com` (Google Workspace)  
+**Project ID**: `fibreflow-73daf`
+
 ## 1. Copy your Firebase config from the console
 
 ## 2. Update these files:
@@ -44,7 +47,7 @@ export const environment = {
 # Install Firebase CLI if you haven't
 npm install -g firebase-tools
 
-# Login to Firebase
+# Login to Firebase (use louis@velocityfibreapp.com)
 firebase login
 
 # Initialize (if needed)

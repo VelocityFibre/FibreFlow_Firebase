@@ -1,16 +1,16 @@
 <div class="ff-page-container">
   <!-- Header -->
   <div class="ff-page-header">
-    <h1 class="ff-page-title">Projects</h1>
-    <p class="ff-page-subtitle">Manage your fiber optic infrastructure deployments</p>
-  </div>
-
-  <!-- Actions Bar -->
-  <div class="actions-bar">
-    <button mat-raised-button class="ff-button-primary" (click)="createNewProject()">
-      <mat-icon>add</mat-icon>
-      New Project
-    </button>
+    <div class="header-content">
+      <h1 class="page-title">Projects</h1>
+      <p class="page-subtitle">Manage your fiber optic infrastructure deployments</p>
+    </div>
+    <div class="header-actions">
+      <button mat-raised-button color="primary" (click)="createNewProject()">
+        <mat-icon>add</mat-icon>
+        New Project
+      </button>
+    </div>
   </div>
 
   <!-- Loading State -->
@@ -147,7 +147,7 @@
               </div>
               <h2>No projects yet</h2>
               <p>Create your first fiber optic project to get started</p>
-              <button mat-raised-button class="ff-button-primary" (click)="createNewProject()">
+              <button mat-raised-button color="primary" (click)="createNewProject()">
                 <mat-icon>add</mat-icon>
                 Create Your First Project
               </button>

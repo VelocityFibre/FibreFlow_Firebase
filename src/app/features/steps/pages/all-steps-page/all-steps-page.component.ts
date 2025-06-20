@@ -109,17 +109,18 @@ export interface PhaseWithSteps {
   `,
   styles: [
     `
+      /* Container following theme standards */
       .all-steps-page {
-        padding: 24px;
-        max-width: 1200px;
+        max-width: 1280px;
         margin: 0 auto;
+        padding: 40px 24px;
       }
 
       .breadcrumb {
         display: flex;
         align-items: center;
         margin-bottom: 24px;
-        color: #6b7280;
+        color: rgb(var(--ff-muted-foreground));
       }
 
       .breadcrumb-separator {
@@ -129,39 +130,60 @@ export interface PhaseWithSteps {
 
       .breadcrumb-current {
         font-weight: 500;
-        color: #1f2937;
+        color: rgb(var(--ff-foreground));
       }
 
+      /* Page Header following ff-page-header pattern */
       .page-header {
-        margin-bottom: 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 48px;
+      }
+
+      .header-content {
+        flex: 1;
       }
 
       .page-header h1 {
         font-size: 32px;
-        font-weight: 500;
-        margin: 0;
-        color: #1f2937;
+        font-weight: 300;
+        color: rgb(var(--ff-foreground));
+        margin: 0 0 8px 0;
+        letter-spacing: -0.02em;
       }
 
       .subtitle {
-        color: #6b7280;
-        margin: 8px 0 0 0;
-        font-size: 16px;
+        font-size: 18px;
+        color: rgb(var(--ff-muted-foreground));
+        font-weight: 400;
+        margin: 0;
       }
 
+      /* Phases Section with improved spacing */
       .phases-section {
-        margin-bottom: 32px;
+        margin-bottom: 48px;
       }
 
+      /* Phase Panel with better vertical spacing */
       .phase-panel {
-        border-radius: 12px !important;
-        margin-bottom: 16px;
+        border-radius: var(--ff-radius) !important;
+        margin-bottom: 24px;
+        border: 1px solid rgb(var(--ff-border)) !important;
+        background-color: rgb(var(--ff-card)) !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+      }
+
+      .phase-panel ::ng-deep .mat-expansion-panel-header {
+        height: auto !important;
+        min-height: 80px !important;
+        padding: 20px 24px !important;
       }
 
       .phase-header {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 24px;
         width: 100%;
       }
 
@@ -169,97 +191,144 @@ export interface PhaseWithSteps {
         display: flex;
         align-items: center;
         gap: 8px;
-        font-size: 16px !important;
+        font-size: 18px !important;
         font-weight: 500 !important;
         text-transform: none !important;
         padding: 8px 16px !important;
         border-radius: 8px !important;
         transition: all 0.2s ease !important;
+        color: rgb(var(--ff-foreground)) !important;
       }
 
       .phase-link:hover {
-        background-color: rgba(var(--ff-primary-rgb), 0.1) !important;
-        color: rgb(var(--ff-primary-rgb)) !important;
+        background-color: rgb(var(--ff-muted) / 0.5) !important;
+        color: rgb(var(--ff-primary)) !important;
       }
 
       .step-count-chip {
-        background-color: rgba(var(--ff-primary-rgb), 0.1) !important;
-        color: rgb(var(--ff-primary-rgb)) !important;
+        background-color: rgb(var(--ff-muted)) !important;
+        color: rgb(var(--ff-muted-foreground)) !important;
+        font-size: 12px !important;
         font-weight: 500 !important;
+        height: 24px !important;
+        padding: 0 12px !important;
+        border-radius: 12px !important;
         margin-left: auto;
       }
 
-      .phase-content {
-        padding: 16px 0;
+      ::ng-deep .mat-expansion-panel-header-description {
+        color: rgb(var(--ff-muted-foreground));
+        font-size: 14px;
+        line-height: 1.5;
+        margin-top: 8px;
       }
 
+      .phase-content {
+        padding: 24px;
+        background-color: rgb(var(--ff-muted) / 0.3);
+      }
+
+      /* Steps with improved spacing */
       .steps-grid {
-        display: grid;
+        display: flex;
+        flex-direction: column;
         gap: 16px;
       }
 
       .step-item {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: 16px;
-        padding: 16px;
-        background-color: #f9fafb;
+        padding: 20px;
+        background-color: rgb(var(--ff-card));
         border-radius: 8px;
-        border-left: 4px solid rgb(var(--ff-primary-rgb));
+        border: 1px solid rgb(var(--ff-border));
+        border-left: 4px solid rgb(var(--ff-primary));
         transition: all 0.2s ease;
+        min-height: 80px;
       }
 
       .step-item:hover {
-        background-color: #f3f4f6;
+        background-color: rgb(var(--ff-muted) / 0.5);
         transform: translateX(4px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
       }
 
       .step-number {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 32px;
-        height: 32px;
-        background-color: rgb(var(--ff-primary-rgb));
-        color: white;
+        width: 40px;
+        height: 40px;
+        background-color: rgb(var(--ff-primary));
+        color: rgb(var(--ff-primary-foreground));
         border-radius: 50%;
         font-weight: 600;
-        font-size: 14px;
+        font-size: 16px;
         flex-shrink: 0;
       }
 
       .step-details {
         flex: 1;
+        min-width: 0;
       }
 
       .step-name {
-        margin: 0 0 8px 0;
+        margin: 0 0 4px 0;
         font-size: 16px;
         font-weight: 500;
-        color: #1f2937;
+        color: rgb(var(--ff-foreground));
+        line-height: 1.5;
       }
 
       .step-description {
         margin: 0;
-        color: #6b7280;
+        color: rgb(var(--ff-muted-foreground));
         font-size: 14px;
         line-height: 1.5;
       }
 
-      /* Responsive */
+      /* Responsive following theme standards */
       @media (max-width: 768px) {
         .all-steps-page {
-          padding: 16px;
+          padding: 24px 16px;
+        }
+
+        .page-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 16px;
         }
 
         .page-header h1 {
           font-size: 24px;
         }
 
+        .subtitle {
+          font-size: 16px;
+        }
+
         .phase-header {
           flex-direction: column;
           align-items: flex-start;
-          gap: 8px;
+          gap: 12px;
+        }
+
+        .step-count-chip {
+          margin-left: 0;
+        }
+
+        .step-item {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+          padding: 16px;
+        }
+
+        .step-number {
+          width: 36px;
+          height: 36px;
+          font-size: 14px;
         }
       }
     `,

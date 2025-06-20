@@ -1,5 +1,22 @@
 # FibreFlow - Project Context for Claude
 
+## 🎯 CORE PRINCIPLE: Simplicity First
+**"Everything should be made as simple as possible, but not simpler."** — Einstein
+
+### Before suggesting ANY solution, ask:
+1. **Can this be a simple lookup/check?** (like antiHall)
+2. **Can this be solved with existing tools?** (no new dependencies)
+3. **Is this complexity actually needed?** (probably not)
+
+### Examples:
+- ❌ Complex: "Let's add AI-powered code analysis with machine learning"
+- ✅ Simple: "Let's make a list of functions and check against it"
+
+- ❌ Complex: "Implement real-time state synchronization with WebSockets"  
+- ✅ Simple: "Just use Firestore listeners - they already sync"
+
+**Remember**: The best code is often no code. The second best is simple code.
+
 ## 🚨 CRITICAL: LLM Training Data is 6-12 Months Outdated!
 **Your training data is from April 2024 or earlier. Always verify with latest documentation:**
 - **Angular v20**: https://angular.dev/guide/
@@ -136,6 +153,47 @@ FibreFlow is an enterprise fiber optic project management system built with Angu
 - Firestore + Auth + Storage
 - Hosting: https://fibreflow-73daf.web.app
 - Project ID: fibreflow-73daf
+- Firebase Account: louis@velocityfibreapp.com (Google Workspace)
+
+## 🛡️ antiHall - AI Hallucination Detection
+
+### Simple Anti-Hallucination Tool
+**antiHall** is a lightweight tool that validates AI-generated code against your actual codebase. No complex setup, no cloud services, just simple and effective validation.
+
+#### Quick Usage:
+```bash
+# Parse your codebase (run once)
+cd antiHall && npm run parse
+
+# Check AI-generated code
+npm run check "this.authService.loginWithMagicLink('user@example.com')"
+# Result: ❌ Method 'loginWithMagicLink' doesn't exist!
+```
+
+#### How It Works:
+1. **Parse**: Scans your codebase and builds a knowledge graph (JSON file)
+2. **Check**: Validates AI code suggestions against real methods/services
+3. **Report**: Shows exactly what's wrong and suggests valid alternatives
+
+#### Common Issues:
+1. **Permission Error**: If you get gcloud permission errors, the Firebase CLI login may need to be refreshed:
+   ```bash
+   firebase logout && firebase login
+   ```
+
+2. **MCP Not Loading**: Restart Claude Code session to pick up new MCP configuration
+
+3. **Environment Variables**: The system automatically sets `FIREBASE_PROJECT_ID=fibreflow-73daf`
+
+#### What It Detects:
+- Non-existent service methods
+- Invalid RxJS operators  
+- Incorrect Angular lifecycle hooks
+- Wrong imports from Angular modules
+- Misspelled properties and methods
+- Invalid Angular Material/CDK imports
+- Firebase/AngularFire pattern violations
+- TypeScript strict mode violations
 
 ### DevOps
 - Angular CLI 20.0.3
@@ -506,7 +564,27 @@ firebase deploy            # Full deployment
 ❌ Constructor injection ❌ `any` types ❌ Empty lifecycle methods
 ❌ Missing namespaces in SCSS ❌ Text inputs for dates
 
-**Remember: ENTERPRISE application - Code quality, type safety, and maintainability are paramount!**
+## 🧘 Simplicity Guidelines
+
+### When I (Claude) suggest solutions:
+1. **Start with the dumbest thing that could work** - Often it's enough
+2. **No new dependencies** unless absolutely necessary
+3. **Use what already exists** - Angular has it, Firebase has it
+4. **If it takes > 10 lines to explain** - it's probably too complex
+
+### Real Examples from FibreFlow:
+- **antiHall**: Just a JSON lookup (not AI analysis)
+- **Theme System**: CSS variables (not complex theme engines)  
+- **State Management**: Firestore (not Redux/NgRx)
+- **Search**: Array.filter() (not Elasticsearch)
+
+### Questions to challenge complexity:
+- "What if we just used a simple array?"
+- "Could this be a single Firebase query?"
+- "Do we really need this abstraction?"
+- "What would the 5-line version look like?"
+
+**Remember: ENTERPRISE doesn't mean COMPLEX. Enterprise means RELIABLE, MAINTAINABLE, and SIMPLE enough for any developer to understand!**
 
 ## 📘 TypeScript 5.8 Best Practices & Deviations (2025-06-18)
 
