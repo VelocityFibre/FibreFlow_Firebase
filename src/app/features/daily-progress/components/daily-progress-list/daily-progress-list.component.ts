@@ -39,16 +39,21 @@ import { DateFormatService } from '../../../../core/services/date-format.service
     FormsModule,
   ],
   template: `
-    <div class="daily-progress-list-container">
-      <div class="header">
-        <h1>Daily Progress Reports</h1>
-        <button mat-raised-button color="primary" (click)="createNew()">
-          <mat-icon>add</mat-icon>
-          New Progress Report
-        </button>
+    <div class="ff-page-container">
+      <div class="ff-page-header">
+        <div class="header-content">
+          <h1 class="page-title">Daily Progress Reports</h1>
+          <p class="page-subtitle">Track and manage daily work progress across all projects</p>
+        </div>
+        <div class="header-actions">
+          <button mat-raised-button color="primary" (click)="createNew()">
+            <mat-icon>add</mat-icon>
+            New Progress Report
+          </button>
+        </div>
       </div>
 
-      <div class="filters">
+      <div class="filters-section">
         <mat-form-field appearance="outline">
           <mat-label>Project</mat-label>
           <mat-select [(ngModel)]="filter().projectId" (selectionChange)="applyFilter()">
@@ -167,7 +172,7 @@ import { DateFormatService } from '../../../../core/services/date-format.service
             <ng-container matColumnDef="status">
               <th mat-header-cell *matHeaderCellDef>Status</th>
               <td mat-cell *matCellDef="let report">
-                <mat-chip [color]="getStatusColor(report.status)" selected>
+                <mat-chip [class]="'status-' + report.status">
                   {{ report.status | titlecase }}
                 </mat-chip>
               </td>
@@ -209,9 +214,12 @@ import { DateFormatService } from '../../../../core/services/date-format.service
           </table>
 
           @if (reports.length === 0) {
-            <div class="no-data">
-              <mat-icon>assignment</mat-icon>
-              <p>No progress reports found</p>
+            <div class="empty-state">
+              <div class="empty-state-icon">
+                <mat-icon>assignment</mat-icon>
+              </div>
+              <h2>No progress reports found</h2>
+              <p>Create your first daily progress report to track work activities</p>
             </div>
           }
         </div>
@@ -222,105 +230,7 @@ import { DateFormatService } from '../../../../core/services/date-format.service
       }
     </div>
   `,
-  styles: [
-    `
-      .daily-progress-list-container {
-        padding: 24px;
-        max-width: 1400px;
-        margin: 0 auto;
-        background-color: var(--mat-sys-background);
-      }
-
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 24px;
-      }
-
-      h1 {
-        margin: 0;
-        font-size: 32px;
-        font-weight: 500;
-        color: var(--mat-sys-on-surface);
-      }
-
-      .filters {
-        display: flex;
-        gap: 16px;
-        margin-bottom: 24px;
-        flex-wrap: wrap;
-      }
-
-      .filters mat-form-field {
-        min-width: 200px;
-      }
-
-      .table-container {
-        background: var(--mat-sys-surface);
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: var(--mat-sys-elevation-1);
-        border: 1px solid var(--mat-sys-outline-variant);
-      }
-
-      table {
-        width: 100%;
-      }
-
-      .description-cell {
-        max-width: 300px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .mat-row {
-        cursor: pointer;
-      }
-
-      .mat-row:hover {
-        background-color: #f5f5f5;
-      }
-
-      .mat-row.has-issues {
-        border-left: 4px solid #ff9800;
-      }
-
-      .no-data {
-        text-align: center;
-        padding: 48px;
-        color: var(--mat-sys-on-surface-variant);
-      }
-
-      .no-data mat-icon {
-        font-size: 48px;
-        width: 48px;
-        height: 48px;
-        color: var(--mat-sys-outline);
-      }
-
-      .loading-container {
-        display: flex;
-        justify-content: center;
-        padding: 48px;
-      }
-
-      mat-chip-set {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 4px;
-      }
-
-      mat-chip {
-        font-size: 12px;
-      }
-
-      .mat-mdc-row:hover {
-        background-color: var(--mat-sys-surface-variant);
-      }
-    `,
-  ],
+  styleUrls: ['./daily-progress-list.component.scss'],
 })
 export class DailyProgressListComponent implements OnInit {
   private dailyProgressService = inject(DailyProgressService);

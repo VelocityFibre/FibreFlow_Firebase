@@ -26,6 +26,8 @@ import {
 import { StaffMember } from '../../../staff/models/staff.model';
 import { StaffService } from '../../../staff/services/staff.service';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { TaskService } from '../../../../core/services/task.service';
+import { TaskStatus } from '../../../../core/models/task.model';
 
 interface ExtendedTaskTemplate extends TaskTemplate {
   isCompleted?: boolean;
@@ -33,6 +35,7 @@ interface ExtendedTaskTemplate extends TaskTemplate {
   assignedTo?: string;
   assignedToName?: string;
   progress?: number;
+  taskId?: string; // Real task ID from database
 }
 
 interface ExtendedStepTemplate extends StepTemplate {
@@ -817,6 +820,7 @@ export class UnifiedTaskManagementComponent implements OnInit {
 
   private staffService = inject(StaffService);
   private notification = inject(NotificationService);
+  private taskService = inject(TaskService);
 
   staff$!: Observable<StaffMember[]>;
   staffMap = new Map<string, StaffMember>();
@@ -918,6 +922,9 @@ export class UnifiedTaskManagementComponent implements OnInit {
   ngOnInit() {
     this.loadStaff();
     this.loadTaskTemplates();
+    if (this.projectId) {
+      this.loadProjectTasks();
+    }
   }
 
   private loadStaff() {
@@ -955,6 +962,37 @@ export class UnifiedTaskManagementComponent implements OnInit {
     }));
 
     this.allPhases.set(extendedPhases);
+  }
+
+  private loadProjectTasks() {
+    // Load real tasks from the database
+    this.taskService.getTasksByProject(this.projectId).subscribe((tasks) => {
+      // Map real tasks to our template structure
+      const phasesWithTasks = this.allPhases();
+      
+      phasesWithTasks.forEach(phase => {
+        phase.steps.forEach(step => {
+          step.tasks.forEach(taskTemplate => {
+            // Find matching real task by name and phase
+            const realTask = tasks.find(t => 
+              t.name === taskTemplate.name && 
+              t.phaseName === phase.name
+            );
+            
+            if (realTask) {
+              // Map real task data to template
+              taskTemplate.taskId = realTask.id;
+              taskTemplate.isCompleted = realTask.status === TaskStatus.COMPLETED;
+              taskTemplate.progress = realTask.completionPercentage || 0;
+              taskTemplate.assignedTo = realTask.assignedTo;
+              taskTemplate.assignedToName = realTask.assignedToName;
+            }
+          });
+        });
+      });
+      
+      this.allPhases.set([...phasesWithTasks]);
+    });
   }
 
   setViewFilter(value: ViewFilter) {
@@ -1021,19 +1059,54 @@ export class UnifiedTaskManagementComponent implements OnInit {
   }
 
   updateAssignee(type: 'phase' | 'step' | 'task', item: any, assigneeId: string | null) {
+    const oldAssignee = item.assignedTo;
+    const oldAssigneeName = item.assignedToName;
+    
     item.assignedTo = assigneeId || undefined;
     item.assignedToName = assigneeId ? this.staffMap.get(assigneeId)?.name : undefined;
 
-    // In a real implementation, this would save to the database
-    this.notification.success(`${type} assignee updated`);
+    // Save to database if this is a real task
+    if (type === 'task' && item.taskId && assigneeId) {
+      this.taskService.assignTask(item.taskId, assigneeId).then(() => {
+        this.notification.success('Task assignee updated');
+      }).catch((error) => {
+        // Revert on error
+        item.assignedTo = oldAssignee;
+        item.assignedToName = oldAssigneeName;
+        this.notification.error('Failed to update task assignee');
+        console.error('Error updating task assignee:', error);
+      });
+    } else {
+      // For phases and steps, just show notification (no DB update yet)
+      this.notification.success(`${type} assignee updated`);
+    }
   }
 
   toggleComplete(type: 'phase' | 'step' | 'task', item: any) {
     item.isCompleted = !item.isCompleted;
     item.progress = item.isCompleted ? 100 : 0;
 
-    // In a real implementation, this would save to the database
-    this.notification.success(`${type} marked as ${item.isCompleted ? 'completed' : 'incomplete'}`);
+    // Save to database if this is a real task
+    if (type === 'task' && item.taskId) {
+      const updates = {
+        status: item.isCompleted ? TaskStatus.COMPLETED : TaskStatus.IN_PROGRESS,
+        completionPercentage: item.progress,
+        completedDate: item.isCompleted ? new Date() : undefined
+      };
+
+      this.taskService.updateTask(item.taskId, updates).then(() => {
+        this.notification.success(`Task marked as ${item.isCompleted ? 'completed' : 'incomplete'}`);
+      }).catch((error) => {
+        // Revert on error
+        item.isCompleted = !item.isCompleted;
+        item.progress = item.isCompleted ? 100 : 0;
+        this.notification.error('Failed to update task status');
+        console.error('Error updating task:', error);
+      });
+    } else {
+      // For phases and steps, just show notification (no DB update yet)
+      this.notification.success(`${type} marked as ${item.isCompleted ? 'completed' : 'incomplete'}`);
+    }
   }
 
   toggleFlag(type: 'phase' | 'step' | 'task', item: any) {

@@ -1,5 +1,7 @@
 # FibreFlow Theme System Guide
 
+*Last Updated: 2025-06-20*
+
 ## Overview
 
 FibreFlow uses a centralized theme system that supports 4 themes with instant switching. All components automatically adapt to theme changes without page reloads.
@@ -224,5 +226,28 @@ If you find components with hard-coded colors:
 - Suppliers (list, detail, form)
 - Stock (movements, form dialogs)
 - Staff, Tasks, Roles, and other components
+- Daily Progress (list, form, detail) - *Updated 2025-06-20*
 
-The theme system is now fully centralized and consistent across the entire application.
+### Recent Theme Compliance Updates (2025-06-20)
+
+The following pages have been updated to fully comply with the theme standards:
+
+1. **Dashboard** (`/dashboard`)
+   - Applied standard page layout with 1280px max-width container
+   - Updated typography to match standards (32px titles, 18px subtitles)
+   - Implemented theme-compliant card designs with proper spacing
+   - All colors now use theme functions (ff-rgb, ff-rgba)
+
+2. **Projects** (`/projects`)
+   - Standardized page header with proper title/subtitle styling
+   - Applied consistent card layouts with interactive hover effects
+   - Theme-aware status chips and progress indicators
+   - Responsive grid layout with proper breakpoints
+
+3. **Daily Progress** (`/daily-progress`)
+   - Updated to use standard page container and header patterns
+   - Applied theme-compliant table styling
+   - Proper filter section layout with consistent form field sizing
+   - Theme-aware empty states and loading indicators
+
+All pages now follow the theme standards document and maintain consistency across all 4 themes (light, dark, vf, fibreflow).

@@ -1,5 +1,7 @@
 # FibreFlow Theme Standards
 
+*Last Updated: 2025-06-20*
+
 Based on the stock-movements page design, this document defines the standardized theme, layout, and styling patterns to be applied across all pages in the FibreFlow application.
 
 ## Page Layout Structure
@@ -365,3 +367,29 @@ When updating a page to match these standards:
   </mat-card>
 </div>
 ```
+
+## Theme Standards Compliance Status (2025-06-20)
+
+### ✅ Fully Compliant Pages
+The following pages have been updated to match these theme standards:
+
+1. **Stock Movements** (`/stock-movements`) - Original reference page
+2. **Dashboard** (`/dashboard`)
+3. **Projects** (`/projects`)
+4. **Daily Progress** (`/daily-progress`)
+
+### 🔄 Pages Pending Update
+- Staff Management
+- Suppliers Detail Pages
+- BOQ Management
+- Contractors
+- Tasks/My Tasks
+- Roles Management
+- Client Management
+
+### Implementation Notes
+- All compliant pages use the `.ff-page-container` with 1280px max-width
+- Page headers follow the standard pattern with 32px/300 weight titles
+- All colors reference theme variables through `theme.ff-rgb()` functions
+- Consistent spacing: 48px header margin, 24px between sections
+- Responsive breakpoints properly implemented

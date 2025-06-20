@@ -1,0 +1,265 @@
+@use '../../../../../styles/component-theming' as theme;
+
+// Page container following theme standards
+.ff-page-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  
+  @media (max-width: 768px) {
+    padding: 24px 16px;
+  }
+}
+
+// Page header pattern from theme standards
+.ff-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 48px;
+  
+  .header-content {
+    flex: 1;
+  }
+  
+  .page-title {
+    font-size: 32px;
+    font-weight: 300;
+    color: theme.ff-rgb(foreground);
+    margin: 0 0 8px 0;
+    letter-spacing: -0.02em;
+  }
+  
+  .page-subtitle {
+    font-size: 18px;
+    color: theme.ff-rgb(muted-foreground);
+    font-weight: 400;
+    margin: 0;
+  }
+  
+  .header-actions {
+    display: flex;
+    gap: 8px;
+  }
+}
+
+// Filters section
+.filters-section {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  
+  mat-form-field {
+    flex: 1;
+    min-width: 200px;
+    max-width: 250px;
+  }
+  
+  button {
+    margin-top: 8px;
+  }
+}
+
+// Table container
+.table-container {
+  @include theme.card-theme();
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+// Table styling
+table {
+  width: 100%;
+  
+  th {
+    font-weight: 600;
+    color: theme.ff-rgb(foreground);
+    background-color: theme.ff-rgba(muted, 0.3);
+  }
+  
+  td {
+    color: theme.ff-rgb(foreground);
+  }
+  
+  .description-cell {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .mat-mdc-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+      background-color: theme.ff-rgba(muted, 0.5);
+    }
+    
+    &.has-issues {
+      border-left: 4px solid theme.ff-rgb(warning);
+    }
+  }
+}
+
+// Status chips
+mat-chip {
+  font-size: 12px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 12px;
+  
+  &.status-draft {
+    background-color: theme.ff-rgba(warning, 0.1);
+    color: theme.ff-rgb(warning);
+  }
+  
+  &.status-submitted {
+    background-color: theme.ff-rgba(info, 0.1);
+    color: theme.ff-rgb(info);
+  }
+  
+  &.status-approved {
+    background-color: theme.ff-rgba(success, 0.1);
+    color: theme.ff-rgb(success);
+  }
+}
+
+// Chip set
+mat-chip-set {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+// Empty state
+.empty-state {
+  text-align: center;
+  padding: 80px 32px;
+  background: theme.ff-rgba(muted, 0.3);
+  border-radius: 12px;
+  border: 2px dashed theme.ff-rgb(border);
+}
+
+.empty-state-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
+  background: theme.ff-rgb(muted);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  mat-icon {
+    font-size: 40px !important;
+    width: 40px !important;
+    height: 40px !important;
+    color: theme.ff-rgb(muted-foreground);
+  }
+}
+
+.empty-state h2 {
+  font-size: 24px;
+  font-weight: 500;
+  color: theme.ff-rgb(foreground);
+  margin: 0 0 8px 0;
+}
+
+.empty-state p {
+  font-size: 16px;
+  color: theme.ff-rgb(muted-foreground);
+  margin: 0;
+}
+
+// Loading state
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px;
+  
+  mat-spinner {
+    --mdc-circular-progress-active-indicator-color: theme.ff-rgb(primary);
+  }
+}
+
+// Material overrides
+:host ::ng-deep {
+  .mat-mdc-raised-button {
+    border-radius: 6px !important;
+    text-transform: none !important;
+    font-weight: 500 !important;
+    letter-spacing: 0 !important;
+    padding: 0 16px !important;
+    height: 40px !important;
+  }
+  
+  .mat-mdc-button {
+    text-transform: none !important;
+    font-weight: 500 !important;
+  }
+  
+  .mat-mdc-form-field {
+    font-size: 14px;
+  }
+  
+  .mat-mdc-table {
+    background-color: transparent !important;
+  }
+  
+  .mat-mdc-header-cell {
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  
+  .mat-mdc-cell {
+    font-size: 14px;
+  }
+  
+  .mdc-data-table__cell {
+    padding: 12px 16px;
+  }
+  
+  .mat-mdc-chip {
+    font-size: 12px !important;
+    height: 24px !important;
+    padding: 0 8px !important;
+    border-radius: 12px !important;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .ff-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    
+    .page-title {
+      font-size: 28px;
+    }
+    
+    .page-subtitle {
+      font-size: 16px;
+    }
+  }
+  
+  .filters-section {
+    mat-form-field {
+      min-width: 100%;
+      max-width: 100%;
+    }
+  }
+  
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  table {
+    min-width: 800px;
+  }
+}
