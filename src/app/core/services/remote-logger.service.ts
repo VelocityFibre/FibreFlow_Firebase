@@ -56,9 +56,13 @@ export class RemoteLoggerService {
         url: window.location.href,
         userAgent: navigator.userAgent,
         timestamp: serverTimestamp() as any,
-        data: data || undefined,
         sessionId: this.sessionId,
       };
+
+      // Only add data field if it exists
+      if (data && Object.keys(data).length > 0) {
+        logEntry.data = data;
+      }
 
       // Also log to console for immediate debugging
       const consoleMessage = `🟦 [${component || 'App'}] ${message}`;

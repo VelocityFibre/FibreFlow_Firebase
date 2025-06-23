@@ -1,4 +1,11 @@
-import { Component, inject, ChangeDetectionStrategy, computed } from '@angular/core';
+import {
+  Component,
+  inject,
+  ChangeDetectionStrategy,
+  computed,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,7 +16,8 @@ import { SupplierService } from '../../../../core/suppliers/services/supplier.se
 import { StockService } from '../../../stock/services/stock.service';
 import { ClientService } from '../../../clients/services/client.service';
 import { TaskService } from '../../../../core/services/task.service';
-import { catchError, of } from 'rxjs';
+import { TaskPriority } from '../../../../core/models/task.model';
+import { catchError, of, interval, Subject, takeUntil, switchMap, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-main-dashboard',
@@ -19,12 +27,14 @@ import { catchError, of } from 'rxjs';
   templateUrl: './main-dashboard.component.html',
   styleUrls: ['./main-dashboard.component.scss'],
 })
-export class MainDashboardComponent {
+export class MainDashboardComponent implements OnInit, OnDestroy {
   private projectService = inject(ProjectService);
   private supplierService = inject(SupplierService);
   private stockService = inject(StockService);
   private clientService = inject(ClientService);
   private taskService = inject(TaskService);
+  private destroy$ = new Subject<void>();
+  private refreshTrigger$ = new Subject<void>();
 
   // Signal-based state management for dashboard data
   projects = toSignal(this.projectService.getProjects().pipe(catchError(() => of([]))), {
@@ -43,6 +53,18 @@ export class MainDashboardComponent {
     initialValue: [],
   });
 
+  // Load all tasks to get flagged task count - with proper refresh mechanism
+  allTasks = toSignal(
+    this.refreshTrigger$.pipe(
+      startWith(null),
+      switchMap(() => this.taskService.getAllTasks()),
+      catchError(() => of([])),
+    ),
+    {
+      initialValue: [],
+    },
+  );
+
   // Computed signals for dashboard counts
   projectsCount = computed(() => this.projects().length);
   suppliersCount = computed(() => this.suppliers().length);
@@ -55,7 +77,8 @@ export class MainDashboardComponent {
       this.projects().length === 0 &&
       this.suppliers().length === 0 &&
       this.stockItems().length === 0 &&
-      this.clients().length === 0,
+      this.clients().length === 0 &&
+      this.allTasks().length === 0,
   );
 
   // Dashboard stats computed from real data
@@ -83,10 +106,66 @@ export class MainDashboardComponent {
     };
   });
 
-  // Flagged issues computed from project data
+  // Flagged issues computed from actual task data
   flaggedIssuesCount = computed(() => {
-    return this.projects().filter(
-      (project) => project.priorityLevel === 'critical' || project.priorityLevel === 'high',
-    ).length;
+    const tasks = this.allTasks();
+    console.log('=== DASHBOARD FLAGGED COUNT DEBUG ===');
+    console.log('Total tasks loaded:', tasks.length);
+
+    // Simply count tasks where isFlagged is true
+    const flaggedTasks = tasks.filter((task) => task.isFlagged === true);
+
+    console.log('Flagged tasks found:', flaggedTasks.length);
+    if (flaggedTasks.length > 0) {
+      console.log(
+        'Flagged task details:',
+        flaggedTasks.map((t) => ({
+          name: t.name,
+          isFlagged: t.isFlagged,
+          projectId: t.projectId,
+        })),
+      );
+    }
+    console.log('=== DASHBOARD DEBUG END ===');
+
+    return flaggedTasks.length;
   });
+
+  ngOnInit() {
+    // Initial log
+    console.log('Dashboard initialized. Starting auto-refresh cycle...');
+
+    // Auto-refresh every 10 seconds to catch task updates
+    interval(10000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        console.log('Dashboard: Auto-refreshing task data...');
+        this.refreshTrigger$.next();
+      });
+
+    // Also log whenever tasks are loaded
+    this.taskService.getAllTasks().subscribe((tasks) => {
+      console.log('=== DASHBOARD TASKS LOADED ===');
+      console.log('Total tasks:', tasks.length);
+      const flaggedTasks = tasks.filter((t) => t.isFlagged === true);
+      console.log('Flagged tasks:', flaggedTasks.length);
+      if (flaggedTasks.length > 0) {
+        console.log(
+          'Flagged task names:',
+          flaggedTasks.map((t) => t.name),
+        );
+      }
+      console.log('=== END DASHBOARD TASKS ===');
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  // Manual refresh method
+  refreshDashboard() {
+    this.refreshTrigger$.next();
+  }
 }

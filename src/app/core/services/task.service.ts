@@ -39,7 +39,7 @@ export class TaskService {
   private tasksCollection = collection(this.firestore, 'tasks');
 
   getAllTasks(): Observable<Task[]> {
-    const q = query(this.tasksCollection, orderBy('dueDate', 'asc'));
+    const q = query(this.tasksCollection);
 
     return (collectionData(q, { idField: 'id' }) as Observable<Task[]>).pipe(
       switchMap((tasks: Task[]) => {
@@ -76,6 +76,10 @@ export class TaskService {
 
     return (collectionData(q, { idField: 'id' }) as Observable<Task[]>).pipe(
       switchMap((tasks) => {
+        console.log(`TaskService: Loaded ${tasks.length} tasks for project ${projectId}`);
+        console.log('Tasks with ID:', tasks.filter((t) => t.id).length);
+        console.log('Tasks without ID:', tasks.filter((t) => !t.id).length);
+
         if (tasks.length === 0) return of([]);
 
         // Get unique user IDs for assigned tasks
@@ -169,8 +173,15 @@ export class TaskService {
   }
 
   async updateTask(taskId: string, updates: Partial<Task>): Promise<void> {
+    console.log('=== UPDATE TASK DEBUG ===');
+    console.log('Task ID:', taskId);
+    console.log('Updates:', updates);
+
     const currentUser = await this.authService.getCurrentUser();
+    console.log('Current user for update:', currentUser?.uid);
+
     const taskDoc = doc(this.firestore, 'tasks', taskId);
+    console.log('Task document reference:', taskDoc.path);
 
     const updateData: any = {
       ...updates,
@@ -184,7 +195,20 @@ export class TaskService {
       updateData.completionPercentage = 100;
     }
 
-    await updateDoc(taskDoc, updateData);
+    console.log('Final update data:', updateData);
+
+    try {
+      await updateDoc(taskDoc, updateData);
+      console.log('Task updated successfully in Firestore');
+    } catch (error) {
+      console.error('=== UPDATE TASK ERROR ===');
+      console.error('Error updating task:', error);
+      console.error('Error code:', (error as any)?.code);
+      console.error('Error message:', (error as any)?.message);
+      throw error;
+    }
+
+    console.log('=== UPDATE TASK COMPLETE ===');
   }
 
   async deleteTask(taskId: string): Promise<void> {
@@ -204,22 +228,45 @@ export class TaskService {
   }
 
   async assignTask(taskId: string, userId: string, notes?: string): Promise<void> {
+    console.log('Assigning task:', taskId, 'to user:', userId);
     const currentUser = await this.authService.getCurrentUser();
-    await this.updateTask(taskId, {
+
+    // Get the staff member details to include the name
+    console.log('Looking up staff member:', userId);
+    const staffMember = await firstValueFrom(this.staffService.getStaffById(userId));
+    console.log(
+      'Staff member found:',
+      staffMember
+        ? { id: staffMember.id, name: staffMember.name, employeeId: staffMember.employeeId }
+        : 'Not found',
+    );
+    const assignedToName = staffMember?.name;
+
+    const updateData = {
       assignedTo: userId,
+      assignedToName: assignedToName,
       status: TaskStatus.IN_PROGRESS,
-    });
+    };
+    console.log('Updating task with data:', updateData);
+
+    await this.updateTask(taskId, updateData);
 
     // Log the assignment
-    const assignmentLog = {
+    const assignmentLog: any = {
       taskId,
       userId,
       assignedDate: serverTimestamp(),
       assignedBy: currentUser?.uid,
-      notes,
     };
 
+    // Only add notes if it's provided
+    if (notes) {
+      assignmentLog.notes = notes;
+    }
+
+    console.log('Creating assignment log:', assignmentLog);
     await addDoc(collection(this.firestore, 'taskAssignments'), assignmentLog);
+    console.log('Task assignment completed successfully');
   }
 
   async updateTaskProgress(
@@ -321,13 +368,42 @@ export class TaskService {
 
   // Initialize tasks for a project if they don't exist
   async initializeProjectTasks(projectId: string): Promise<void> {
+    // Always use the new method that supports steps with proper templates
+    await this.initializeProjectTasksWithSteps(projectId);
+  }
+
+  // Initialize tasks with step support using the new template structure
+  async initializeProjectTasksWithSteps(projectId: string): Promise<void> {
+    const currentUser = await this.authService.getCurrentUser();
+
+    // Import the templates from the features module
+    const { TASK_TEMPLATES } = await import('../../features/tasks/models/task-template.model');
+
     // Check if tasks already exist
     const existingTasks = await firstValueFrom(this.getTasksByProject(projectId));
+    console.log(`Project ${projectId} currently has ${existingTasks.length} tasks`);
 
-    if (existingTasks.length > 0) {
-      console.log(`Project ${projectId} already has ${existingTasks.length} tasks`);
+    // Count total expected tasks from templates
+    let totalExpectedTasks = 0;
+    TASK_TEMPLATES.forEach((phase) => {
+      phase.steps.forEach((step) => {
+        totalExpectedTasks += step.tasks.length;
+      });
+    });
+
+    console.log(`Expected total tasks from templates: ${totalExpectedTasks}`);
+
+    if (existingTasks.length >= totalExpectedTasks) {
+      console.log(
+        `Project ${projectId} already has all expected tasks (${existingTasks.length}/${totalExpectedTasks})`,
+      );
       return;
     }
+
+    console.log(`Need to create ${totalExpectedTasks - existingTasks.length} missing tasks`);
+
+    // Create map of existing task names to avoid duplicates
+    const existingTaskNames = new Set(existingTasks.map((t) => t.name));
 
     // Get project phases
     const phases = await firstValueFrom(
@@ -341,12 +417,113 @@ export class TaskService {
     );
 
     if (phases.length === 0) {
-      console.log(`Project ${projectId} has no phases`);
+      console.log(`Project ${projectId} has no phases - initializing default phases`);
+      // Optionally initialize phases here
       return;
     }
 
-    // Create tasks for all phases
-    await this.createTasksForProject(projectId, phases);
+    // Create a mapping of phase names to phase IDs
+    const phaseMap = new Map<string, string>();
+    phases.forEach((phase) => {
+      // Map template phase names to actual phase names
+      const normalizedPhaseName = phase.name
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[()]/g, '');
+      phaseMap.set(normalizedPhaseName, phase.id!);
+
+      // Also try exact template ID mapping
+      if (phase.name === 'Planning' || phase.name === 'Planning Phase') {
+        phaseMap.set('planning', phase.id!);
+      } else if (phase.name === 'Initiate Project (IP)' || phase.name === 'IP') {
+        phaseMap.set('initiate-project-ip', phase.id!);
+        phaseMap.set('ip', phase.id!);
+      } else if (phase.name === 'Work in Progress (WIP)' || phase.name === 'WIP') {
+        phaseMap.set('work-in-progress-wip', phase.id!);
+        phaseMap.set('wip', phase.id!);
+      } else if (phase.name === 'Handover') {
+        phaseMap.set('handover', phase.id!);
+      } else if (phase.name === 'Completed') {
+        phaseMap.set('completed', phase.id!);
+      }
+    });
+
+    console.log('Phase mapping:', Array.from(phaseMap.entries()));
+
+    // Create all tasks in a batch
+    const batch = writeBatch(this.firestore);
+    let taskCount = 0;
+
+    // Process each phase template
+    for (const phaseTemplate of TASK_TEMPLATES) {
+      // Try multiple mappings to find the phase
+      let phaseId = phaseMap.get(phaseTemplate.id);
+
+      // If not found, try alternative mappings based on template ID
+      if (!phaseId) {
+        switch (phaseTemplate.id) {
+          case 'initiate-project':
+            phaseId = phaseMap.get('initiate-project-ip') || phaseMap.get('ip');
+            break;
+          case 'work-in-progress':
+            phaseId = phaseMap.get('work-in-progress-wip') || phaseMap.get('wip');
+            break;
+          case 'full-acceptance':
+            phaseId = phaseMap.get('completed') || phaseMap.get('full-acceptance');
+            break;
+        }
+      }
+
+      if (!phaseId) {
+        console.warn(
+          `No matching phase found for template: ${phaseTemplate.name} (id: ${phaseTemplate.id})`,
+        );
+        continue;
+      }
+
+      console.log(`Processing phase: ${phaseTemplate.name} -> ${phaseId}`);
+
+      // Process each step in the phase
+      for (const stepTemplate of phaseTemplate.steps) {
+        // Process each task in the step
+        for (const taskTemplate of stepTemplate.tasks) {
+          // Skip if task already exists
+          if (existingTaskNames.has(taskTemplate.name)) {
+            console.log(`Skipping existing task: ${taskTemplate.name}`);
+            continue;
+          }
+
+          const taskRef = doc(collection(this.firestore, 'tasks'));
+
+          const newTask = {
+            name: taskTemplate.name,
+            description: taskTemplate.description || '',
+            phaseId: phaseId,
+            projectId: projectId,
+            stepId: stepTemplate.id, // Include stepId
+            orderNo: taskTemplate.orderNo,
+            status: TaskStatus.PENDING,
+            priority: TaskPriority.MEDIUM,
+            estimatedHours: 8, // Default estimate
+            completionPercentage: 0,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+            createdBy: currentUser?.uid,
+          };
+
+          batch.set(taskRef, newTask);
+          taskCount++;
+          console.log(`Creating missing task: ${taskTemplate.name}`);
+        }
+      }
+    }
+
+    if (taskCount > 0) {
+      await batch.commit();
+      console.log(`Created ${taskCount} tasks for project ${projectId}`);
+    } else {
+      console.log('No tasks were created');
+    }
   }
 
   // Get task statistics for a user
@@ -484,5 +661,46 @@ export class TaskService {
       taskId,
       `Task reassigned from user ${previousAssignee} to user ${newUserId}. Reason: ${reason}`,
     );
+  }
+
+  // Migrate existing tasks to include stepId based on task templates
+  async migrateTasksWithStepIds(projectId: string): Promise<void> {
+    const { TASK_TEMPLATES } = await import('../../features/tasks/models/task-template.model');
+
+    // Get all tasks for the project
+    const tasks = await firstValueFrom(this.getTasksByProject(projectId));
+
+    // Create a mapping of task names to stepIds from templates
+    const taskNameToStepId = new Map<string, string>();
+    TASK_TEMPLATES.forEach((phase) => {
+      phase.steps.forEach((step) => {
+        step.tasks.forEach((task) => {
+          taskNameToStepId.set(task.name, step.id);
+        });
+      });
+    });
+
+    // Update tasks that don't have stepId
+    const batch = writeBatch(this.firestore);
+    let updateCount = 0;
+
+    tasks.forEach((task) => {
+      if (!task.stepId && task.id) {
+        const stepId = taskNameToStepId.get(task.name);
+        if (stepId) {
+          const taskDoc = doc(this.firestore, 'tasks', task.id);
+          batch.update(taskDoc, {
+            stepId: stepId,
+            updatedAt: serverTimestamp(),
+          });
+          updateCount++;
+        }
+      }
+    });
+
+    if (updateCount > 0) {
+      await batch.commit();
+      console.log(`Updated ${updateCount} tasks with stepIds for project ${projectId}`);
+    }
   }
 }

@@ -6,6 +6,11 @@
         Welcome to FibreFlow. Quick access to all your project management tools.
       </p>
     </div>
+    <div class="header-actions">
+      <button mat-icon-button (click)="refreshDashboard()" matTooltip="Refresh dashboard data">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
   </div>
 
   <!-- Loading State -->
@@ -97,10 +102,14 @@
           </div>
           <div class="card-details">
             <h3 class="card-title">Flagged Issues</h3>
-            <p class="card-subtitle">High priority projects requiring attention</p>
+            <p class="card-subtitle">High priority tasks requiring attention</p>
             <div class="card-stats">
               <span class="stat-number">{{ flaggedIssuesCount() }}</span>
-              <span class="stat-label">Priority Projects</span>
+              <span class="stat-label">Flagged Tasks</span>
+            </div>
+            <!-- Debug info (temporary) -->
+            <div style="font-size: 10px; color: #666; margin-top: 8px">
+              Total tasks: {{ allTasks().length }}
             </div>
           </div>
         </mat-card-content>
@@ -188,21 +197,21 @@
         <mat-card-content>
           <div class="activity-list-container">
             <div class="activity-list">
-            <div class="activity-item">
-              <mat-icon class="activity-icon">check_circle</mat-icon>
-              <div class="activity-content">
-                <p><strong>Project "Fiber Installation - Downtown"</strong> completed Phase 2</p>
-                <span class="activity-time">5 hours ago</span>
+              <div class="activity-item">
+                <mat-icon class="activity-icon">check_circle</mat-icon>
+                <div class="activity-content">
+                  <p><strong>Project "Fiber Installation - Downtown"</strong> completed Phase 2</p>
+                  <span class="activity-time">5 hours ago</span>
+                </div>
+              </div>
+              <div class="activity-item">
+                <mat-icon class="activity-icon">warning</mat-icon>
+                <div class="activity-content">
+                  <p>Low stock alert: Fiber Optic Cable (Single Mode)</p>
+                  <span class="activity-time">1 day ago</span>
+                </div>
               </div>
             </div>
-            <div class="activity-item">
-              <mat-icon class="activity-icon">warning</mat-icon>
-              <div class="activity-content">
-                <p>Low stock alert: Fiber Optic Cable (Single Mode)</p>
-                <span class="activity-time">1 day ago</span>
-              </div>
-            </div>
-          </div>
           </div>
         </mat-card-content>
       </mat-card>

@@ -35,6 +35,12 @@
             <mat-icon>contacts</mat-icon>
             <span>Manage Contacts</span>
           </button>
+          @if (supplier.verificationStatus !== 'verified') {
+            <button mat-menu-item (click)="verifySupplier(supplier.id!)">
+              <mat-icon>verified</mat-icon>
+              <span>Verify Supplier</span>
+            </button>
+          }
           <button mat-menu-item>
             <mat-icon>history</mat-icon>
             <span>View History</span>

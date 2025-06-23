@@ -109,12 +109,14 @@ export const routes: Routes = [
     loadChildren: () => import('./features/boq/boq.routes').then((m) => m.boqRoutes),
   },
   {
-    path: 'rfq',
-    loadComponent: () =>
-      import('./shared/components/placeholder-page/placeholder-page.component').then(
-        (m) => m.PlaceholderPageComponent,
-      ),
-    data: { title: 'RFQ Management' },
+    path: 'quotes',
+    loadChildren: () => import('./features/quotes/quotes.routes').then((m) => m.quotesRoutes),
+    data: { title: 'Quotes Management' },
+  },
+  {
+    path: 'emails',
+    loadChildren: () => import('./features/emails/emails.routes').then((m) => m.emailsRoutes),
+    data: { title: 'Email Management' },
   },
   {
     path: 'stock-movements',
@@ -147,18 +149,12 @@ export const routes: Routes = [
   },
   {
     path: 'settings',
-    loadComponent: () =>
-      import('./shared/components/placeholder-page/placeholder-page.component').then(
-        (m) => m.PlaceholderPageComponent,
-      ),
+    loadChildren: () => import('./features/settings/settings.routes').then((m) => m.settingsRoutes),
     data: { title: 'Settings' },
   },
   {
     path: 'audit-trail',
-    loadComponent: () =>
-      import('./shared/components/placeholder-page/placeholder-page.component').then(
-        (m) => m.PlaceholderPageComponent,
-      ),
+    loadChildren: () => import('./features/audit-trail/audit-trail.routes').then((m) => m.auditTrailRoutes),
     data: { title: 'Audit Trail' },
   },
   // Auth routes - temporary for testing

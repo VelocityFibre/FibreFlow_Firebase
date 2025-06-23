@@ -31,6 +31,7 @@ export class StaffService {
   private staffCache$?: Observable<StaffMember[]>;
 
   getStaff(filter?: StaffFilter): Observable<StaffMember[]> {
+    console.log('Fetching staff with filter:', filter);
     const constraints: QueryConstraint[] = [];
 
     if (filter) {
@@ -59,6 +60,14 @@ export class StaffService {
     ) {
       if (!this.staffCache$) {
         this.staffCache$ = collectionData(q, { idField: 'id' }).pipe(
+          map((staff) => {
+            console.log('Loaded staff members:', staff.length, 'members');
+            console.log(
+              'Staff IDs:',
+              staff.map((s) => ({ id: s.id, name: s.name, employeeId: s.employeeId })),
+            );
+            return staff;
+          }),
           shareReplay(1),
           catchError((error) => {
             console.error('Error fetching staff:', error);
@@ -73,14 +82,17 @@ export class StaffService {
     // For filtered queries, don't cache
     return collectionData(q, { idField: 'id' }).pipe(
       map((staff) => {
+        console.log('Loaded filtered staff members:', staff.length, 'members');
         if (filter?.searchTerm) {
           const term = filter.searchTerm.toLowerCase();
-          return staff.filter(
+          const filtered = staff.filter(
             (s) =>
               s.name.toLowerCase().includes(term) ||
               s.email.toLowerCase().includes(term) ||
               s.employeeId.toLowerCase().includes(term),
           );
+          console.log('After search filter:', filtered.length, 'members');
+          return filtered;
         }
         return staff;
       }),
@@ -97,10 +109,19 @@ export class StaffService {
   }
 
   getStaffById(id: string): Observable<StaffMember | undefined> {
+    console.log('Fetching staff member by ID:', id);
     const staffDoc = doc(this.staffCollection, id);
     return docData(staffDoc, { idField: 'id' }).pipe(
+      map((staff) => {
+        console.log(
+          'Staff member fetched:',
+          staff ? { id: staff.id, name: staff.name, employeeId: staff.employeeId } : 'Not found',
+        );
+        return staff;
+      }),
       catchError((error) => {
         console.error('Error fetching staff member:', error);
+        console.error('Staff ID that failed:', id);
         return throwError(() => new Error('Failed to fetch staff member'));
       }),
     );
@@ -156,6 +177,8 @@ export class StaffService {
   createStaff(
     staffData: Omit<StaffMember, 'id' | 'createdAt' | 'updatedAt'>,
   ): Observable<DocumentReference> {
+    console.log('Creating staff member with data:', staffData);
+
     const newStaff: Omit<StaffMember, 'id'> = {
       ...staffData,
       createdAt: serverTimestamp() as Timestamp,
@@ -171,13 +194,17 @@ export class StaffService {
       },
     };
 
+    console.log('Final staff data to be saved:', newStaff);
+
     return from(addDoc(this.staffCollection, newStaff)).pipe(
       map((result) => {
+        console.log('Staff member created successfully with ID:', result.id);
         this.clearCache(); // Clear cache after successful creation
         return result;
       }),
       catchError((error) => {
         console.error('Error creating staff member:', error);
+        console.error('Error details:', JSON.stringify(error, null, 2));
         return throwError(() => new Error('Failed to create staff member'));
       }),
     );

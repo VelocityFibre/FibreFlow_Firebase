@@ -155,38 +155,62 @@ FibreFlow is an enterprise fiber optic project management system built with Angu
 - Project ID: fibreflow-73daf
 - Firebase Account: louis@velocityfibreapp.com (Google Workspace)
 
-## 🛡️ antiHall - AI Hallucination Detection
+## 🛡️ antiHall - AI Hallucination Detection (100% Coverage)
 
 ### Simple Anti-Hallucination Tool
 **antiHall** is a lightweight tool that validates AI-generated code against your actual codebase. No complex setup, no cloud services, just simple and effective validation.
 
 #### Quick Usage:
 ```bash
-# Parse your codebase (run once)
-cd antiHall && npm run parse
+# Parse your codebase (two options)
+cd antiHall && npm run parse:improved  # RECOMMENDED - 100% coverage
 
 # Check AI-generated code
 npm run check "this.authService.loginWithMagicLink('user@example.com')"
 # Result: ❌ Method 'loginWithMagicLink' doesn't exist!
 ```
 
+#### Enhanced Parser Coverage (v2.0)
+The improved parser now captures **512 total entities** (vs 263 in basic):
+- ✅ 96 Components (with static methods)
+- ✅ 39 Services (including those without @Injectable)
+- ✅ 218 Interfaces (complete type coverage)
+- ✅ 69 Functions (exported utilities)
+- ✅ 2 Guards (authGuard, roleGuard)
+- ✅ 2 Interceptors (errorInterceptor, loadingInterceptor)
+- ✅ 37 Enums
+- ✅ 47 Type Aliases
+- ✅ 1 Directive
+- ✅ 1 Abstract Class
+
+#### Smart File Management
+Knowledge graphs are automatically split into chunks:
+```
+knowledge-graphs/
+├── index.json          # Quick lookup: name → chunk file
+├── summary.json        # Overview & statistics
+├── chunk-0-components.json    # ~200MB max per chunk
+├── chunk-1-services.json
+└── ...
+```
+
+#### For AI Assistants Using antiHall
+When Claude needs to verify code:
+1. Check `knowledge-graphs/summary.json` for overview
+2. Use `knowledge-graphs/index.json` to find entity location
+3. Load only the specific chunk needed
+
 #### How It Works:
-1. **Parse**: Scans your codebase and builds a knowledge graph (JSON file)
-2. **Check**: Validates AI code suggestions against real methods/services
-3. **Report**: Shows exactly what's wrong and suggests valid alternatives
-
-#### Common Issues:
-1. **Permission Error**: If you get gcloud permission errors, the Firebase CLI login may need to be refreshed:
-   ```bash
-   firebase logout && firebase login
-   ```
-
-2. **MCP Not Loading**: Restart Claude Code session to pick up new MCP configuration
-
-3. **Environment Variables**: The system automatically sets `FIREBASE_PROJECT_ID=fibreflow-73daf`
+1. **Parse**: Scans codebase with TypeScript AST parser
+2. **Split**: Automatically chunks large graphs under 200MB
+3. **Index**: Creates lookup tables for fast navigation
+4. **Check**: Validates AI code against real patterns
 
 #### What It Detects:
 - Non-existent service methods
+- Invalid functional guards/interceptors
+- Missing utility functions
+- Wrong static method calls
 - Invalid RxJS operators  
 - Incorrect Angular lifecycle hooks
 - Wrong imports from Angular modules
@@ -496,6 +520,155 @@ export NVM_DIR="$HOME/.nvm"
 - Fixed 5-Phase: Planning → Design → Implementation → Testing → Deployment
 - Parallel execution, complex dependencies, auto-assignment
 
+## 🗄️ Firestore Database Structure & Project Isolation
+
+### Database Architecture
+FibreFlow uses **ONE Firestore database** with hierarchical collections. Each project's data is completely isolated using unique IDs.
+
+### Hierarchical Structure
+```
+firestore-root/
+├── projects/ (collection)
+│   ├── {projectId}/ (document)
+│   │   ├── id: "kSFwvjb24zn1MgxS3VUU"
+│   │   ├── title: "Fiber Installation - Mall"
+│   │   ├── client: { id, name }
+│   │   ├── status: "active"
+│   │   ├── ...other project fields
+│   │   │
+│   │   ├── phases/ (subcollection)
+│   │   │   ├── {phaseId}/ (document)
+│   │   │   │   ├── name: "Planning Phase"
+│   │   │   │   ├── projectId: "kSFwvjb24zn1MgxS3VUU"
+│   │   │   │   └── ...phase fields
+│   │   │   └── {phaseId}/
+│   │   │
+│   │   └── steps/ (subcollection)
+│   │       ├── {stepId}/ (document)
+│   │       │   ├── name: "Site Survey"
+│   │       │   ├── phaseId: "{phaseId}"
+│   │       │   └── projectId: "kSFwvjb24zn1MgxS3VUU"
+│   │       └── {stepId}/
+│   │
+│   └── {projectId}/ (another project - completely separate)
+│
+├── tasks/ (collection - flat structure for queries)
+│   ├── {taskId}/ (document)
+│   │   ├── name: "Conduct site survey"
+│   │   ├── projectId: "kSFwvjb24zn1MgxS3VUU"  ← Links to project
+│   │   ├── phaseId: "{phaseId}"                ← Links to phase
+│   │   ├── stepId: "{stepId}"                  ← Links to step
+│   │   ├── status: "completed"
+│   │   ├── assignedTo: "{userId}"
+│   │   └── ...task fields
+│   └── {taskId}/
+│
+├── staff/ (collection - global)
+├── stock-items/ (collection - global)
+└── suppliers/ (collection - global)
+```
+
+### Project Data Isolation
+
+#### Key Principle: Project ID Links Everything
+Every project-specific document contains a `projectId` field that ensures complete data isolation:
+
+```typescript
+// Task model shows the linking
+interface Task {
+  id?: string;           // Unique task ID
+  projectId: string;     // Links to specific project
+  phaseId: string;       // Links to specific phase
+  stepId?: string;       // Links to specific step (if applicable)
+  name: string;
+  status: TaskStatus;
+  assignedTo?: string;
+  // ...other fields
+}
+```
+
+#### Querying Project-Specific Data
+```typescript
+// Get all tasks for a specific project
+taskService.getTasksByProject('kSFwvjb24zn1MgxS3VUU')
+// Returns ONLY tasks where projectId === 'kSFwvjb24zn1MgxS3VUU'
+
+// Get all phases for a specific project
+phaseService.getPhasesByProject('kSFwvjb24zn1MgxS3VUU')
+// Returns ONLY phases in that project's subcollection
+```
+
+### Important: Project Templates vs Project Data
+
+1. **Templates** (defined in code):
+   - `TASK_TEMPLATES` in `/tasks` page
+   - `PHASE_TEMPLATES` for standard phases
+   - `STEP_TEMPLATES` for standard steps
+   - These are blueprints, not actual data
+
+2. **Actual Project Data** (in Firestore):
+   - Created when project is initialized
+   - Each task/phase/step gets a unique database ID
+   - Status, assignments, completion tracked per project
+   - Changes are saved to specific project's documents
+
+### Example: Task Management Flow
+```typescript
+// 1. New project created
+const project = await projectService.createProject({
+  title: "New Fiber Installation",
+  client: clientData
+});
+// Creates: projects/{newProjectId}
+
+// 2. Initialize phases/steps/tasks from templates
+await taskService.initializeProjectTasks(project.id);
+// Creates: Multiple task documents with projectId = project.id
+
+// 3. User marks task complete
+await taskService.updateTask(taskId, {
+  status: TaskStatus.COMPLETED,
+  completedDate: new Date()
+});
+// Updates: Specific task document, only affects this project
+
+// 4. Query project tasks
+const tasks = await taskService.getTasksByProject(project.id);
+// Returns: Only tasks for this specific project
+```
+
+### Best Practices for Project Isolation
+
+1. **Always include projectId** in queries:
+   ```typescript
+   // ✅ Good - Project-specific
+   where('projectId', '==', projectId)
+   
+   // ❌ Bad - Returns all projects' data
+   collection(firestore, 'tasks')
+   ```
+
+2. **Use subcollections for hierarchical data**:
+   ```typescript
+   // ✅ Good - Natural hierarchy
+   doc(firestore, 'projects', projectId, 'phases', phaseId)
+   
+   // ❌ Avoid - Flat structure for hierarchical data
+   doc(firestore, 'phases', phaseId)
+   ```
+
+3. **Initialize project data from templates**:
+   ```typescript
+   // Templates → Project-specific data
+   TASK_TEMPLATES.forEach(template => {
+     createTask({
+       ...template,
+       projectId: newProjectId,  // Critical: Link to project
+       id: generateId()          // Unique ID for this instance
+     });
+   });
+   ```
+
 ## Firestore Schema (Core Models)
 
 ```typescript
@@ -512,12 +685,30 @@ interface Project {
 
 interface Task {
   id: string;
-  projectId: string;
-  phaseId: string;
+  projectId: string;    // Links to project
+  phaseId: string;      // Links to phase
+  stepId?: string;      // Links to step (optional)
   name: string;
   assigneeId: string;
   status: TaskStatus;
   dueDate: Timestamp;
+}
+
+interface Phase {
+  id: string;
+  projectId: string;    // Subcollection under project
+  name: string;
+  orderNo: number;
+  status: PhaseStatus;
+}
+
+interface Step {
+  id: string;
+  projectId: string;    // Links to project
+  phaseId: string;      // Links to phase
+  name: string;
+  orderNo: number;
+  status: StepStatus;
 }
 ```
 

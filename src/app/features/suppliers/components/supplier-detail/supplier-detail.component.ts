@@ -12,6 +12,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Observable, switchMap } from 'rxjs';
 
 import { SupplierService } from '../../../../core/suppliers/services/supplier.service';
@@ -34,6 +35,7 @@ import { Supplier, SupplierContact, SupplierStatus } from '../../../../core/supp
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatProgressBarModule,
+    MatSnackBarModule,
   ],
   templateUrl: './supplier-detail.component.html',
   styleUrls: ['./supplier-detail.component.scss'],
@@ -41,6 +43,7 @@ import { Supplier, SupplierContact, SupplierStatus } from '../../../../core/supp
 export class SupplierDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private supplierService = inject(SupplierService);
+  private snackBar = inject(MatSnackBar);
 
   supplier$!: Observable<Supplier | undefined>;
   contacts$!: Observable<SupplierContact[]>;
@@ -124,5 +127,19 @@ export class SupplierDetailComponent implements OnInit {
   createQuoteRequest(): void {
     // TODO: Navigate to quote request creation
     console.log('Create quote request');
+  }
+
+  async verifySupplier(supplierId: string): Promise<void> {
+    try {
+      await this.supplierService.updateVerificationStatus(supplierId, 'verified');
+      this.snackBar.open('Supplier verified successfully', 'Close', {
+        duration: 3000,
+      });
+    } catch (error) {
+      console.error('Error verifying supplier:', error);
+      this.snackBar.open('Error verifying supplier', 'Close', {
+        duration: 3000,
+      });
+    }
   }
 }

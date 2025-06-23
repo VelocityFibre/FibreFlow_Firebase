@@ -1,4 +1,11 @@
-import { Component, inject, ChangeDetectionStrategy, computed } from '@angular/core';
+import {
+  Component,
+  inject,
+  ChangeDetectionStrategy,
+  computed,
+  signal,
+  effect,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -11,10 +18,12 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatDividerModule } from '@angular/material/divider';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { catchError, of } from 'rxjs';
+import { catchError, of, firstValueFrom, forkJoin, map } from 'rxjs';
 import { Project, ProjectStatus, ProjectType } from '../../../../core/models/project.model';
 import { ProjectService } from '../../../../core/services/project.service';
 import { DateFormatService } from '../../../../core/services/date-format.service';
+import { TaskService } from '../../../../core/services/task.service';
+import { TaskStatus } from '../../../../core/models/task.model';
 
 @Component({
   selector: 'app-project-list',
@@ -40,8 +49,11 @@ export class ProjectListComponent {
   private projectService = inject(ProjectService);
   private dateFormat = inject(DateFormatService);
   private router = inject(Router);
+  private taskService = inject(TaskService);
 
   // Signal-based state management
+  projectTaskStats = signal<Record<string, any>>({});
+
   projects = toSignal(
     this.projectService.getProjects().pipe(
       catchError((error) => {
@@ -54,6 +66,16 @@ export class ProjectListComponent {
 
   // Computed loading state
   isLoading = computed(() => this.projects().length === 0);
+
+  constructor() {
+    // Load task statistics whenever projects change
+    effect(() => {
+      const projects = this.projects();
+      if (projects.length > 0) {
+        this.loadTaskStatistics();
+      }
+    });
+  }
 
   // Computed project stats for dashboard
   projectStats = computed(() => {
@@ -113,5 +135,57 @@ export class ProjectListComponent {
   getBudgetPercentage(project: Project): number {
     if (!project.budget || project.budget === 0) return 0;
     return Math.round((project.budgetUsed / project.budget) * 100);
+  }
+
+  async loadTaskStatistics() {
+    const projects = this.projects();
+    if (projects.length === 0) return;
+
+    const stats: Record<string, any> = {};
+
+    // Load tasks for each project
+    for (const project of projects) {
+      if (project.id) {
+        try {
+          const tasks = await firstValueFrom(this.taskService.getTasksByProject(project.id));
+
+          const totalTasks = tasks.length;
+          const completedTasks = tasks.filter((t) => t.status === TaskStatus.COMPLETED).length;
+          const inProgressTasks = tasks.filter((t) => t.status === TaskStatus.IN_PROGRESS).length;
+          const overallProgress =
+            totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+
+          stats[project.id] = {
+            totalTasks,
+            completedTasks,
+            inProgressTasks,
+            overallProgress,
+          };
+        } catch (error) {
+          console.error(`Error loading tasks for project ${project.id}:`, error);
+          stats[project.id] = {
+            totalTasks: 0,
+            completedTasks: 0,
+            inProgressTasks: 0,
+            overallProgress: 0,
+          };
+        }
+      }
+    }
+
+    this.projectTaskStats.set(stats);
+  }
+
+  getProjectTaskStats(projectId: string | undefined) {
+    if (!projectId)
+      return { totalTasks: 0, completedTasks: 0, inProgressTasks: 0, overallProgress: 0 };
+    return (
+      this.projectTaskStats()[projectId] || {
+        totalTasks: 0,
+        completedTasks: 0,
+        inProgressTasks: 0,
+        overallProgress: 0,
+      }
+    );
   }
 }

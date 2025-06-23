@@ -26,6 +26,9 @@ import { Project } from '../../../../core/models/project.model';
 import { BOQFormDialogComponent } from '../boq-form-dialog/boq-form-dialog.component';
 // import { BOQImportDialogComponent } from '../boq-import-dialog/boq-import-dialog.component';
 import { BOQImportExcelDialogComponent } from '../boq-import-excel-dialog/boq-import-excel-dialog.component';
+// Direct import of RFQ wizard to avoid dynamic loading issues
+import { RFQCreationWizardComponent } from '../../../quotes/components/rfq-creation-wizard/rfq-creation-wizard.component';
+import { RemoteLoggerService } from '../../../../core/services/remote-logger.service';
 
 @Component({
   selector: 'app-boq-list',
@@ -804,6 +807,7 @@ export class BOQListComponent implements OnInit, OnDestroy {
   private projectService = inject(ProjectService);
   private dialog = inject(MatDialog);
   private route = inject(ActivatedRoute);
+  private logger = inject(RemoteLoggerService);
 
   constructor() {}
 
@@ -992,17 +996,104 @@ export class BOQListComponent implements OnInit, OnDestroy {
   }
 
   generateRFQ() {
-    const itemsNeedingQuotes = this.filteredItems.filter(
-      (item) => item.needsQuote && item.remainingQuantity > 0,
-    );
+    this.logger.info('Generate RFQ clicked', 'BOQList', {
+      projectId: this.selectedProjectId,
+      totalItems: this.filteredItems.length,
+    });
+
+    const itemsNeedingQuotes = this.filteredItems.filter((item) => item.needsQuote);
+
+    this.logger.info('Items needing quotes filtered', 'BOQList', {
+      itemsNeedingQuotesCount: itemsNeedingQuotes.length,
+      sampleItems: itemsNeedingQuotes.slice(0, 3).map((item) => ({
+        id: item.id,
+        itemCode: item.itemCode,
+        description: item.description,
+      })),
+    });
 
     if (itemsNeedingQuotes.length === 0) {
+      this.logger.warn('No items requiring quotes found', 'BOQList', {
+        projectId: this.selectedProjectId,
+      });
       alert('No items requiring quotes found for this project.');
       return;
     }
 
-    // TODO: Navigate to RFQ creation with pre-filled data
-    alert(`Generated RFQ for ${itemsNeedingQuotes.length} items requiring quotes.`);
+    // Open RFQ creation dialog with selected items
+    this.openRFQCreationDialog(itemsNeedingQuotes);
+  }
+
+  private openRFQCreationDialog(boqItems: BOQItem[]) {
+    console.log('Opening RFQ creation wizard with', boqItems.length, 'items');
+    this.logger.info('Opening RFQ creation wizard', 'BOQList', {
+      boqItemsCount: boqItems.length,
+      projectId: this.selectedProjectId,
+      projectName: this.getProjectName(this.selectedProjectId),
+    });
+
+    try {
+      const dialogRef = this.dialog.open(RFQCreationWizardComponent, {
+        width: '95vw',
+        maxWidth: '1200px',
+        maxHeight: '95vh',
+        height: '90vh',
+        data: {
+          projectId: this.selectedProjectId,
+          projectName: this.getProjectName(this.selectedProjectId),
+          boqItems: boqItems,
+        },
+      });
+
+      this.logger.info('RFQ dialog opened successfully', 'BOQList');
+
+      dialogRef.afterClosed().subscribe((result) => {
+        this.logger.info('RFQ dialog closed', 'BOQList', {
+          hasResult: !!result,
+          success: result?.success,
+          rfqId: result?.rfqId,
+          shouldSendEmails: result?.shouldSendEmails,
+          recipientCount: result?.recipientCount
+        });
+
+        if (result && result.success) {
+          // RFQ created successfully
+          console.log('RFQ created with ID:', result.rfqId);
+          this.logger.info('RFQ creation confirmed', 'BOQList', {
+            rfqId: result.rfqId,
+            shouldSendEmails: result.shouldSendEmails,
+            recipientCount: result.recipientCount
+          });
+
+          // Check if emails should be sent
+          if (result.shouldSendEmails && result.recipientCount > 0) {
+            const confirmSend = confirm(
+              `RFQ created successfully!\n\n` +
+              `Would you like to send it to ${result.recipientCount} recipient(s) now?\n\n` +
+              `Click OK to send emails automatically, or Cancel to send later.`
+            );
+            
+            if (confirmSend) {
+              // Send emails automatically
+              this.sendRFQEmails(result.rfqId);
+            } else {
+              alert(`RFQ created successfully! You can send it to suppliers later from the RFQ detail page.`);
+            }
+          } else {
+            alert(`RFQ created successfully! RFQ ID: ${result.rfqId}`);
+          }
+
+          // Refresh the BOQ data to update any status changes
+          this.loadData();
+        }
+      });
+    } catch (error) {
+      this.logger.error('Failed to open RFQ dialog', 'BOQList', {
+        error: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+      console.error('Error opening RFQ dialog:', error);
+    }
   }
 
   exportToCSV() {
@@ -1061,5 +1152,25 @@ export class BOQListComponent implements OnInit, OnDestroy {
 
   private compare(a: number | string, b: number | string, isAsc: boolean): number {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  private async sendRFQEmails(rfqId: string): Promise<void> {
+    try {
+      console.log('Sending RFQ emails for:', rfqId);
+      this.logger.info('Sending RFQ emails automatically', 'BOQList', { rfqId });
+      
+      alert(`RFQ created successfully! Opening RFQ detail page to send emails...`);
+      // Open RFQ detail page where emails can be sent
+      window.open(`/quotes/rfq/${rfqId}`, '_blank');
+      
+    } catch (error) {
+      console.error('Error opening RFQ detail page:', error);
+      this.logger.error('Failed to open RFQ detail page', 'BOQList', { 
+        rfqId, 
+        error: error instanceof Error ? error.message : String(error)
+      });
+      
+      alert(`Error opening RFQ detail page: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   }
 }

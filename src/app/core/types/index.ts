@@ -17,3 +17,6 @@ export * from './route.types';
 
 // Environment types
 export * from './environment.types';
+
+// Firestore types
+export * from './firestore.types';

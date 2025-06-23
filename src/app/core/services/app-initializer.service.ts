@@ -1,5 +1,5 @@
 import { Injectable, inject, Injector, afterNextRender } from '@angular/core';
-import { getFirestore, enableIndexedDbPersistence } from '@angular/fire/firestore';
+import { Firestore, enableIndexedDbPersistence } from '@angular/fire/firestore';
 import { ThemeService } from './theme.service';
 
 @Injectable({
@@ -33,7 +33,7 @@ export class AppInitializerService {
 
   private initializeFirebasePersistence(): void {
     try {
-      const firestore = getFirestore();
+      const firestore = this.injector.get(Firestore);
       enableIndexedDbPersistence(firestore).catch((err) => {
         if (err.code === 'failed-precondition') {
           console.warn('Multiple tabs open, persistence can only be enabled in one tab at a time.');

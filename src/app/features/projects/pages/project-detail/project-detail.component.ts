@@ -20,6 +20,7 @@ import { DateFormatService } from '../../../../core/services/date-format.service
 import { UnifiedTaskManagementComponent } from '../../components/unified-task-management/unified-task-management.component';
 import { ProjectStockComponent } from '../../components/stock/project-stock.component';
 import { ProjectContractorsComponent } from '../../components/contractors/project-contractors.component';
+import { ProjectBOQComponent } from '../../components/boq/project-boq.component';
 import { PhaseService } from '../../../../core/services/phase.service';
 import { TaskService } from '../../../../core/services/task.service';
 import { Task } from '../../../../core/models/task.model';
@@ -45,6 +46,7 @@ import { Task } from '../../../../core/models/task.model';
     UnifiedTaskManagementComponent,
     ProjectStockComponent,
     ProjectContractorsComponent,
+    ProjectBOQComponent,
   ],
   templateUrl: './project-detail.component.html',
   styles: [

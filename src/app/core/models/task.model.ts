@@ -18,9 +18,11 @@ export interface Task {
   description?: string;
   phaseId: string;
   projectId: string;
+  stepId?: string;
   orderNo: number;
   status: TaskStatus;
   priority: TaskPriority;
+  isFlagged?: boolean; // Simple boolean flag
   assignedTo?: string;
   assignedToName?: string;
   estimatedHours?: number;
@@ -42,6 +44,7 @@ export interface Task {
   projectCode?: string;
   clientName?: string;
   phaseName?: string;
+  stepName?: string;
 }
 
 export interface TaskAssignment {

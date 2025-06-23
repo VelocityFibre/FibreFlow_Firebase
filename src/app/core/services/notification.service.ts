@@ -31,6 +31,10 @@ export class NotificationService {
     this.show(message, action, 'warning');
   }
 
+  warn(message: string, action?: string): void {
+    this.warning(message, action);
+  }
+
   info(message: string, action?: string): void {
     this.show(message, action, 'info');
   }

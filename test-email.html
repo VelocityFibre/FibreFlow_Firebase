@@ -1,0 +1,56 @@
+<\!DOCTYPE html>
+<html>
+<head>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+  <h1>Test Email Sender</h1>
+  <button onclick="sendEmail()">Send Test Email</button>
+  <div id="status"></div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBqT_PgqFfU2e3sTmuV1LKS3L0fXtopnKQ",
+      authDomain: "velocity-fibre.firebaseapp.com",
+      projectId: "velocity-fibre",
+      storageBucket: "velocity-fibre.appspot.com",
+      messagingSenderId: "400035355115",
+      appId: "1:400035355115:web:e16419b8498ab5d4dcaccc"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    async function sendEmail() {
+      const status = document.getElementById('status');
+      status.innerHTML = 'Sending email...';
+      
+      try {
+        const docRef = await db.collection('mail').add({
+          to: ['louisrdup@gmail.com'],
+          message: {
+            subject: 'Test Email from FibreFlow - Firebase Extension Working\!',
+            text: 'This is a test email from FibreFlow. The Firebase Email Extension is working correctly\!',
+            html: '<h2>Test Email from FibreFlow</h2><p>The Firebase Email Extension is <strong>working correctly</strong>\!</p><p>Sent at: ' + new Date().toLocaleString() + '</p>'
+          }
+        });
+        
+        status.innerHTML = 'Email queued\! Document ID: ' + docRef.id;
+        
+        // Monitor delivery
+        docRef.onSnapshot((doc) => {
+          const data = doc.data();
+          if (data.delivery) {
+            status.innerHTML += '<br>Delivery status: ' + JSON.stringify(data.delivery);
+          }
+        });
+        
+      } catch (error) {
+        status.innerHTML = 'Error: ' + error.message;
+      }
+    }
+  </script>
+</body>
+</html>
+EOF < /dev/null

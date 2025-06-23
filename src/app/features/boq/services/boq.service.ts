@@ -17,6 +17,8 @@ import {
 } from '@angular/fire/firestore';
 import { Observable, from, map, catchError, of, switchMap } from 'rxjs';
 import { BOQItem, BOQSummary } from '../models/boq.model';
+// import { toDate, TypedCollectionReference } from '@core/types';
+// import { handleErrorOperator } from '@core/utils/error-handling';
 
 @Injectable({
   providedIn: 'root',
@@ -36,24 +38,65 @@ export class BOQService {
 
   // Get all BOQ items
   getBOQItems(): Observable<BOQItem[]> {
-    const q = query(this.boqCollection, orderBy('createdAt', 'desc'));
-    return collectionData(q, { idField: 'id' }).pipe(
-      catchError((error) => {
-        console.error('Error fetching BOQ items:', error);
-        return of([]);
-      }),
-    );
+    try {
+      const q = query(this.boqCollection, orderBy('createdAt', 'desc'));
+      return collectionData(q, { idField: 'id' }).pipe(
+        catchError((error) => {
+          console.warn('Index not ready, using in-memory sorting:', error.message);
+          // Fallback to unordered query if index is not ready
+          return collectionData(this.boqCollection, { idField: 'id' }).pipe(
+            map((items) => {
+              // Sort in memory
+              return items.sort((a, b) => {
+                const dateA =
+                  a.createdAt instanceof Date
+                    ? a.createdAt
+                    : (a.createdAt as any)?.toDate?.() || new Date();
+                const dateB =
+                  b.createdAt instanceof Date
+                    ? b.createdAt
+                    : (b.createdAt as any)?.toDate?.() || new Date();
+                return dateB.getTime() - dateA.getTime();
+              });
+            }),
+          );
+        }),
+      );
+    } catch (error) {
+      return collectionData(this.boqCollection, { idField: 'id' }).pipe(
+        catchError((error) => {
+          console.error('Error in getBOQItems:', error);
+          return of([]);
+        }),
+      );
+    }
   }
 
   // Get BOQ items by project
   getBOQItemsByProject(projectId: string): Observable<BOQItem[]> {
-    const q = query(this.boqCollection, where('projectId', '==', projectId), orderBy('itemCode'));
-    return collectionData(q, { idField: 'id' }).pipe(
-      catchError((error) => {
-        console.error('Error fetching BOQ items by project:', error);
-        return of([]);
-      }),
-    );
+    try {
+      const q = query(this.boqCollection, where('projectId', '==', projectId), orderBy('itemCode'));
+      return collectionData(q, { idField: 'id' }).pipe(
+        catchError((error) => {
+          console.warn('Index not ready, using in-memory sorting:', error.message);
+          // Fallback to just projectId filter without ordering
+          const fallbackQuery = query(this.boqCollection, where('projectId', '==', projectId));
+          return collectionData(fallbackQuery, { idField: 'id' }).pipe(
+            map((items) => {
+              // Sort in memory by itemCode
+              return items.sort((a, b) => (a.itemCode || '').localeCompare(b.itemCode || ''));
+            }),
+          );
+        }),
+      );
+    } catch (error) {
+      return of([]).pipe(
+        catchError((error) => {
+          console.error('Error in getBOQItemsByProject:', error);
+          return of([]);
+        }),
+      );
+    }
   }
 
   // Get single BOQ item
@@ -61,9 +104,25 @@ export class BOQService {
     const docRef = doc(this.boqCollection, id);
     return docData(docRef, { idField: 'id' }).pipe(
       catchError((error) => {
-        console.error('Error fetching BOQ item:', error);
+        console.error('Error in getBOQItem:', error);
         return of(undefined);
       }),
+    );
+  }
+
+  // Get multiple BOQ items by their IDs
+  getBOQItemsByIds(ids: string[]): Observable<BOQItem[]> {
+    if (!ids || ids.length === 0) {
+      return of([]);
+    }
+
+    // Get all items and filter by IDs (simple approach for now)
+    return this.getBOQItems().pipe(
+      map(items => items.filter(item => item.id && ids.includes(item.id))),
+      catchError((error) => {
+        console.error('Error in getBOQItemsByIds:', error);
+        return of([]);
+      })
     );
   }
 
@@ -80,7 +139,7 @@ export class BOQService {
     return from(addDoc(this.boqCollection, newItem)).pipe(
       map((docRef) => docRef.id),
       catchError((error) => {
-        console.error('Error adding BOQ item:', error);
+        console.error('Error in addBOQItem:', error);
         throw error;
       }),
     );
@@ -109,7 +168,7 @@ export class BOQService {
 
     return from(updateDoc(docRef, updateData)).pipe(
       catchError((error) => {
-        console.error('Error updating BOQ item:', error);
+        console.error('Error in updateBOQItem:', error);
         throw error;
       }),
     );
@@ -120,7 +179,7 @@ export class BOQService {
     const docRef = doc(this.boqCollection, id);
     return from(deleteDoc(docRef)).pipe(
       catchError((error) => {
-        console.error('Error deleting BOQ item:', error);
+        console.error('Error in deleteBOQItem:', error);
         throw error;
       }),
     );
@@ -155,12 +214,30 @@ export class BOQService {
   getProjectSummary(projectId: string): Observable<BOQSummary> {
     return this.getBOQItemsByProject(projectId).pipe(
       map((items) => {
+        console.log(`BOQ Summary for project ${projectId}:`);
+        console.log(`Total items: ${items.length}`);
+
+        // Debug first few items
+        if (items.length > 0) {
+          console.log('Sample items:');
+          items.slice(0, 3).forEach((item, index) => {
+            console.log(`Item ${index + 1}:`, {
+              description: item.description,
+              requiredQuantity: item.requiredQuantity,
+              allocatedQuantity: item.allocatedQuantity,
+              unitPrice: item.unitPrice,
+              totalPrice: item.totalPrice,
+              needsQuote: item.needsQuote,
+            });
+          });
+        }
+
         const summary: BOQSummary = {
           projectId,
           totalItems: items.length,
-          totalValue: items.reduce((sum, item) => sum + item.totalPrice, 0),
+          totalValue: items.reduce((sum, item) => sum + (item.totalPrice || 0), 0),
           allocatedValue: items.reduce(
-            (sum, item) => sum + item.allocatedQuantity * item.unitPrice,
+            (sum, item) => sum + (item.allocatedQuantity || 0) * (item.unitPrice || 0),
             0,
           ),
           remainingValue: 0,
@@ -168,6 +245,9 @@ export class BOQService {
         };
 
         summary.remainingValue = summary.totalValue - summary.allocatedValue;
+
+        console.log('Calculated summary:', summary);
+
         return summary;
       }),
     );

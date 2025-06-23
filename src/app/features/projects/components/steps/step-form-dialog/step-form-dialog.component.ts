@@ -23,7 +23,7 @@ interface DialogData {
   projectId: string;
   phaseId?: string;
   phases?: Observable<Phase[]>;
-  projects?: any[]; // Project list for selection
+  projects?: Project[]; // Project list for selection
 }
 
 @Component({
@@ -317,7 +317,7 @@ export class StepFormDialogComponent implements OnInit {
       this.loading = true;
       const formValue = this.stepForm.value;
 
-      const stepData: any = {
+      const stepData: Partial<Step> = {
         projectId: formValue.projectId || this.data.projectId,
         phaseId: formValue.phaseId,
         name: formValue.name,

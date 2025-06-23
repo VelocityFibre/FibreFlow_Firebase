@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -17,6 +17,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatRippleModule } from '@angular/material/core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { SupplierService } from '../../../../core/suppliers/services/supplier.service';
 import {
@@ -25,12 +26,11 @@ import {
   SupplierStatus,
   SupplierCategory,
 } from '../../../../core/suppliers/models';
-import { Observable } from 'rxjs';
+import { Observable, map, catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-supplier-list',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     RouterModule,
@@ -50,14 +50,18 @@ import { Observable } from 'rxjs';
     MatRippleModule,
     MatProgressBarModule,
     MatDividerModule,
+    MatSnackBarModule,
   ],
   templateUrl: './supplier-list.component.html',
   styleUrls: ['./supplier-list.component.scss'],
 })
 export class SupplierListComponent implements OnInit {
   private supplierService = inject(SupplierService);
+  private cdr = inject(ChangeDetectorRef);
+  private snackBar = inject(MatSnackBar);
 
   suppliers$!: Observable<Supplier[]>;
+  suppliers: Supplier[] = [];
   displayedColumns: string[] = [
     'companyName',
     'categories',
@@ -73,7 +77,7 @@ export class SupplierListComponent implements OnInit {
   supplierStatuses = Object.values(SupplierStatus);
   supplierCategories = Object.values(SupplierCategory);
 
-  loading = false;
+  loading = true;
   viewMode: 'card' | 'table' = 'card'; // Default to card view
 
   ngOnInit(): void {
@@ -81,9 +85,26 @@ export class SupplierListComponent implements OnInit {
   }
 
   loadSuppliers(): void {
+    console.log('Loading suppliers with filter:', this.filter);
     this.loading = true;
+
+    this.supplierService.getSuppliers(this.filter).subscribe({
+      next: (suppliers) => {
+        console.log('Suppliers loaded:', suppliers);
+        this.suppliers = suppliers;
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Error loading suppliers:', error);
+        this.suppliers = [];
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+    });
+
+    // Also keep the observable for template compatibility
     this.suppliers$ = this.supplierService.getSuppliers(this.filter);
-    setTimeout(() => (this.loading = false), 500);
   }
 
   onSearch(): void {
@@ -159,5 +180,24 @@ export class SupplierListComponent implements OnInit {
     }
     // TODO: Navigate to quote request creation with supplier preselected
     console.log('Create quote request for:', supplier.companyName);
+  }
+
+  async verifySupplier(supplierId: string, event?: Event): Promise<void> {
+    if (event) {
+      event.stopPropagation();
+    }
+    
+    try {
+      await this.supplierService.updateVerificationStatus(supplierId, 'verified');
+      this.snackBar.open('Supplier verified successfully', 'Close', {
+        duration: 3000,
+      });
+      this.loadSuppliers(); // Reload to update the UI
+    } catch (error) {
+      console.error('Error verifying supplier:', error);
+      this.snackBar.open('Error verifying supplier', 'Close', {
+        duration: 3000,
+      });
+    }
   }
 }

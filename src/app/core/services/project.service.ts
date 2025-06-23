@@ -16,6 +16,7 @@ import {
   // DocumentReference,
   Timestamp,
   getDoc,
+  getDocs,
 } from '@angular/fire/firestore';
 import { Observable, /* from, */ map, combineLatest, switchMap } from 'rxjs';
 import {
@@ -35,6 +36,8 @@ import {
 } from '../models/project.model';
 import { ProjectInitializationService } from './project-initialization.service';
 import { PhaseService } from './phase.service';
+import { ClientService } from '../../features/clients/services/client.service';
+import { AuditTrailService } from './audit-trail.service';
 
 @Injectable({
   providedIn: 'root',
@@ -43,6 +46,8 @@ export class ProjectService {
   private firestore = inject(Firestore);
   private projectInitService = inject(ProjectInitializationService);
   private phaseService = inject(PhaseService);
+  private clientService = inject(ClientService);
+  private auditService = inject(AuditTrailService);
 
   // Collection references
   private projectsCollection = collection(
@@ -154,6 +159,21 @@ export class ProjectService {
 
     const docRef = await addDoc(this.projectsCollection, newProject);
 
+    // Log audit trail for project creation
+    try {
+      await this.auditService.logUserAction(
+        'project',
+        docRef.id,
+        project.name || 'Untitled Project',
+        'create',
+        undefined,
+        { ...newProject, id: docRef.id },
+        'success'
+      );
+    } catch (error) {
+      console.error('Error logging project creation audit trail:', error);
+    }
+
     // Create default phases and tasks from template
     try {
       // Initialize phases and tasks for the project
@@ -165,21 +185,128 @@ export class ProjectService {
       // Don't throw - project is already created
     }
 
+    // Update client metrics
+    if (newProject.clientId) {
+      try {
+        await this.updateClientMetricsForProject(newProject.clientId);
+      } catch (error) {
+        console.error('Error updating client metrics after project creation:', error);
+      }
+    }
+
     return docRef.id;
   }
 
   async updateProject(id: string, updates: Partial<Project>): Promise<void> {
-    const projectDoc = doc(this.projectsCollection, id);
-    await updateDoc(projectDoc, {
-      ...updates,
-      updatedAt: Timestamp.now(),
-    });
+    try {
+      // First get the current project to check clientId and for audit logging
+      const projectDoc = doc(this.projectsCollection, id);
+      const currentProject = await getDoc(projectDoc);
+      const currentData = currentProject.data() as Project;
+
+      const updatedData = {
+        ...updates,
+        updatedAt: Timestamp.now(),
+      };
+
+      await updateDoc(projectDoc, updatedData);
+
+      // Log audit trail for project update
+      try {
+        await this.auditService.logUserAction(
+          'project',
+          id,
+          currentData?.name || 'Untitled Project',
+          'update',
+          currentData,
+          { ...currentData, ...updatedData },
+          'success'
+        );
+      } catch (error) {
+        console.error('Error logging project update audit trail:', error);
+      }
+
+      // Update client metrics if clientId exists
+      const clientId = updates.clientId || currentData?.clientId;
+
+      if (clientId) {
+        try {
+          await this.updateClientMetricsForProject(clientId);
+        } catch (error) {
+          console.error('Error updating client metrics after project update:', error);
+        }
+      }
+    } catch (error) {
+      // Log failed update
+      try {
+        await this.auditService.logUserAction(
+          'project',
+          id,
+          'Unknown Project',
+          'update',
+          undefined,
+          updates,
+          'failed',
+          error instanceof Error ? error.message : 'Unknown error'
+        );
+      } catch (auditError) {
+        console.error('Error logging failed project update audit trail:', auditError);
+      }
+      throw error;
+    }
   }
 
   async deleteProject(id: string): Promise<void> {
-    // Note: In production, you'd want to delete all subcollections too
-    const projectDoc = doc(this.projectsCollection, id);
-    await deleteDoc(projectDoc);
+    try {
+      // First get the project to get clientId before deletion
+      const projectDoc = doc(this.projectsCollection, id);
+      const projectSnapshot = await getDoc(projectDoc);
+      const projectData = projectSnapshot.data() as Project;
+
+      // Note: In production, you'd want to delete all subcollections too
+      await deleteDoc(projectDoc);
+
+      // Log audit trail for project deletion
+      try {
+        await this.auditService.logUserAction(
+          'project',
+          id,
+          projectData?.name || 'Untitled Project',
+          'delete',
+          projectData,
+          undefined,
+          'success'
+        );
+      } catch (error) {
+        console.error('Error logging project deletion audit trail:', error);
+      }
+
+      // Update client metrics if clientId exists
+      if (projectData?.clientId) {
+        try {
+          await this.updateClientMetricsForProject(projectData.clientId);
+        } catch (error) {
+          console.error('Error updating client metrics after project deletion:', error);
+        }
+      }
+    } catch (error) {
+      // Log failed deletion
+      try {
+        await this.auditService.logUserAction(
+          'project',
+          id,
+          'Unknown Project',
+          'delete',
+          undefined,
+          undefined,
+          'failed',
+          error instanceof Error ? error.message : 'Unknown error'
+        );
+      } catch (auditError) {
+        console.error('Error logging failed project deletion audit trail:', auditError);
+      }
+      throw error;
+    }
   }
 
   // Phase CRUD Operations
@@ -308,5 +435,52 @@ export class ProjectService {
     // This would calculate based on completed tasks in phase
     // For now, returning a placeholder
     return 0;
+  }
+
+  // Client-Project Relationships
+  getProjectsByClient(clientId: string): Observable<Project[]> {
+    const q = query(
+      this.projectsCollection,
+      where('clientId', '==', clientId),
+      orderBy('createdAt', 'desc'),
+    );
+    return collectionData(q, { idField: 'id' }) as Observable<Project[]>;
+  }
+
+  async updateClientMetricsForProject(clientId: string): Promise<void> {
+    try {
+      // Get all projects for this client
+      const q = query(this.projectsCollection, where('clientId', '==', clientId));
+      const snapshot = await getDocs(q);
+
+      const projects = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Project[];
+
+      // Calculate metrics
+      const projectsCount = projects.length;
+      const activeProjectsCount = projects.filter((p) => p.status === ProjectStatus.ACTIVE).length;
+      const totalValue = projects.reduce((sum, project) => sum + (project.budget || 0), 0);
+      const lastProjectDate =
+        projects.length > 0
+          ? projects.reduce((latest, project) => {
+              const projectDate =
+                project.createdAt instanceof Timestamp
+                  ? project.createdAt
+                  : Timestamp.fromDate(project.createdAt as Date);
+              const latestDate =
+                latest instanceof Timestamp ? latest : Timestamp.fromDate(latest as Date);
+              return projectDate.toMillis() > latestDate.toMillis() ? projectDate : latestDate;
+            }, projects[0].createdAt)
+          : undefined;
+
+      // Update client metrics
+      await this.clientService.updateClientMetrics(clientId, {
+        projectsCount,
+        activeProjectsCount,
+        totalValue,
+        lastProjectDate: lastProjectDate as Timestamp,
+      });
+    } catch (error) {
+      console.error('Error updating client metrics:', error);
+    }
   }
 }

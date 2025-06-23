@@ -16,6 +16,7 @@ import { PhaseService } from '../../../../core/services/phase.service';
 import { StaffService } from '../../../staff/services/staff.service';
 import { DestroyRef } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Phase } from '../../../../core/models/phase.model';
 
 interface TaskFormData {
@@ -278,7 +279,16 @@ export class TaskFormDialogComponent implements OnInit {
 
   projects$ = this.projectService.getProjects();
   phases$: Observable<Phase[]> | null = null;
-  staff$ = this.staffService.getStaff();
+  staff$ = this.staffService.getStaff().pipe(
+    map((staff) => {
+      console.log('Staff loaded for task assignment:', staff.length, 'members');
+      console.log(
+        'Staff details:',
+        staff.map((s) => ({ id: s.id, name: s.name, employeeId: s.employeeId })),
+      );
+      return staff;
+    }),
+  );
 
   ngOnInit() {
     this.initializeForm();

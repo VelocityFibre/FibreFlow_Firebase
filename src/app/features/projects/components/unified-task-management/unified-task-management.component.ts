@@ -15,45 +15,43 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatInputModule } from '@angular/material/input';
 import { MatBadgeModule } from '@angular/material/badge';
-import { Observable, map } from 'rxjs';
+import { Observable, map, firstValueFrom, combineLatest } from 'rxjs';
 
-import {
-  PhaseTemplate,
-  StepTemplate,
-  TaskTemplate,
-  TASK_TEMPLATES,
-} from '../../../tasks/models/task-template.model';
 import { StaffMember } from '../../../staff/models/staff.model';
 import { StaffService } from '../../../staff/services/staff.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { TaskService } from '../../../../core/services/task.service';
-import { TaskStatus } from '../../../../core/models/task.model';
+import { TaskStatus, Task, TaskPriority } from '../../../../core/models/task.model';
+import { PhaseService } from '../../../../core/services/phase.service';
+import { Phase } from '../../../../core/models/phase.model';
+import {
+  TASK_TEMPLATES,
+  PhaseTemplate,
+  StepTemplate,
+  TaskTemplate,
+} from '../../../tasks/models/task-template.model';
 
-interface ExtendedTaskTemplate extends TaskTemplate {
-  isCompleted?: boolean;
-  isFlagged?: boolean;
+// Extended interfaces to include database data
+interface TaskWithTracking extends TaskTemplate {
+  dbTask?: Task; // The actual database task
+  isCompleted: boolean;
+  isFlagged: boolean;
   assignedTo?: string;
   assignedToName?: string;
-  progress?: number;
-  taskId?: string; // Real task ID from database
+  progress: number;
+  priority: TaskPriority;
 }
 
-interface ExtendedStepTemplate extends StepTemplate {
-  tasks: ExtendedTaskTemplate[];
-  isCompleted?: boolean;
-  isFlagged?: boolean;
-  assignedTo?: string;
-  assignedToName?: string;
-  progress?: number;
+interface StepWithTracking extends StepTemplate {
+  tasks: TaskWithTracking[];
+  completedCount: number;
+  progress: number;
 }
 
-interface ExtendedPhaseTemplate extends PhaseTemplate {
-  steps: ExtendedStepTemplate[];
-  isCompleted?: boolean;
-  isFlagged?: boolean;
-  assignedTo?: string;
-  assignedToName?: string;
-  progress?: number;
+interface PhaseWithTracking extends PhaseTemplate {
+  steps: StepWithTracking[];
+  completedCount: number;
+  progress: number;
 }
 
 type ViewFilter = 'all' | 'uncompleted' | 'flagged';
@@ -81,333 +79,373 @@ type ViewFilter = 'all' | 'uncompleted' | 'flagged';
   ],
   template: `
     <div class="unified-task-management">
-      <!-- Header -->
-      <div class="page-header">
-        <div class="header-content">
-          <h1>Task Management</h1>
-          <p class="subtitle">Manage all project phases, steps, and tasks in one place</p>
-        </div>
-      </div>
-
-      <!-- Filter Bar -->
-      <mat-card class="filter-card">
+      <!-- Header with filters -->
+      <mat-card class="filters-card">
         <div class="filters-container">
-          <div class="view-filters">
-            <mat-button-toggle-group [value]="viewFilter()" (change)="setViewFilter($event.value)">
+          <div class="filter-group">
+            <mat-form-field appearance="outline" class="search-field">
+              <mat-label>Search tasks</mat-label>
+              <input
+                matInput
+                [(ngModel)]="searchTerm"
+                placeholder="Search by name or description"
+              />
+              <mat-icon matPrefix>search</mat-icon>
+              @if (searchTerm()) {
+                <button mat-icon-button matSuffix (click)="searchTerm.set('')">
+                  <mat-icon>clear</mat-icon>
+                </button>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="phase-filter">
+              <mat-label>Filter by phase</mat-label>
+              <mat-select [(ngModel)]="selectedPhase">
+                <mat-option value="">All phases</mat-option>
+                @for (phase of phasesWithTracking(); track phase.id) {
+                  <mat-option [value]="phase.id">{{ phase.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="assignee-filter">
+              <mat-label>Filter by assignee</mat-label>
+              <mat-select [(ngModel)]="assigneeFilter">
+                <mat-option value="all">All assignees</mat-option>
+                <mat-option value="unassigned">Unassigned</mat-option>
+                @for (staff of staff$ | async; track staff.id) {
+                  <mat-option [value]="staff.id">{{ staff.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="filter-actions">
+            <mat-button-toggle-group [(ngModel)]="viewFilter" class="view-toggle">
               <mat-button-toggle value="all">
                 <mat-icon>list</mat-icon>
-                <span>All Items</span>
+                All Tasks
               </mat-button-toggle>
               <mat-button-toggle value="uncompleted">
-                <mat-icon>radio_button_unchecked</mat-icon>
-                <span>Uncompleted</span>
+                <mat-icon>pending</mat-icon>
+                Uncompleted
               </mat-button-toggle>
               <mat-button-toggle value="flagged">
                 <mat-icon>flag</mat-icon>
-                <span>Flagged</span>
+                Flagged
               </mat-button-toggle>
             </mat-button-toggle-group>
-          </div>
 
-          <mat-form-field appearance="outline" class="assignee-filter">
-            <mat-label>Filter by Assignee</mat-label>
-            <mat-select [value]="assigneeFilter()" (selectionChange)="setAssigneeFilter($event.value)">
-              <mat-option value="all">All Assignees</mat-option>
-              <mat-option value="unassigned">Unassigned</mat-option>
-              <mat-option *ngFor="let staff of staff$ | async" [value]="staff.id">
-                {{ staff.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+            <button mat-button (click)="refreshData()" class="refresh-button">
+              <mat-icon>refresh</mat-icon>
+              Refresh
+            </button>
+          </div>
         </div>
 
-        <div class="filter-stats">
-          <mat-icon>assessment</mat-icon>
-          <span>Showing {{ getTotalFilteredTasks() }} items</span>
+        <!-- Stats bar -->
+        <div class="stats-bar">
+          <div class="stat">
+            <span class="stat-value">{{ getTotalTasks() }}</span>
+            <span class="stat-label">Total Tasks</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">{{ getCompletedTasks() }}</span>
+            <span class="stat-label">Completed</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">{{ getInProgressTasks() }}</span>
+            <span class="stat-label">In Progress</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">{{ getOverallProgress() }}%</span>
+            <span class="stat-label">Progress</span>
+          </div>
         </div>
       </mat-card>
 
-      <!-- Task Templates by Phase -->
-      <div class="phases-section">
-        <mat-accordion multi="true" class="phases-accordion">
-          <mat-expansion-panel
-            *ngFor="let phase of filteredPhases(); trackBy: trackByPhase"
-            [expanded]="shouldExpandPhase(phase)"
-            class="phase-panel"
+      <!-- Loading state -->
+      @if (loading()) {
+        <mat-card class="loading-card">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          <p>Loading project tasks...</p>
+        </mat-card>
+      }
+
+      <!-- No tasks state -->
+      @if (!loading() && databaseTasks().length === 0) {
+        <mat-card class="empty-state-card">
+          <mat-icon class="empty-icon">assignment</mat-icon>
+          <h2>No tasks found</h2>
+          <p>This project doesn't have any tasks yet.</p>
+          <button mat-raised-button color="primary" (click)="initializeTasks()">
+            <mat-icon>add</mat-icon>
+            Initialize Project Tasks
+          </button>
+        </mat-card>
+      }
+
+      <!-- Debug button (temporary) -->
+      @if (!loading() && databaseTasks().length > 0) {
+        <div style="margin: 16px 0; text-align: right;">
+          <button mat-stroked-button (click)="debugTasks()" style="margin-right: 8px;">
+            <mat-icon>bug_report</mat-icon>
+            Debug Tasks
+          </button>
+          <button mat-stroked-button (click)="reinitializeTasks()" color="warn">
+            <mat-icon>refresh</mat-icon>
+            Reinitialize All Tasks
+          </button>
+          <button
+            mat-stroked-button
+            (click)="flagTestTasks()"
+            color="accent"
+            style="margin-left: 8px;"
           >
-            <mat-expansion-panel-header>
-              <div class="phase-panel-content">
-                <div class="phase-header">
-                  <div class="phase-info">
-                    <span class="phase-name">{{ phase.name }}</span>
-                    <mat-chip class="phase-stats">
-                      {{ phase.stepCount }} steps • {{ phase.totalTasks }} tasks
-                    </mat-chip>
-                  </div>
-                  <div class="phase-actions" (click)="$event.stopPropagation()">
-                    <mat-select
-                      [(ngModel)]="phase.assignedTo"
-                      (selectionChange)="updateAssignee('phase', phase, $event.value)"
-                      placeholder="Assign to"
-                      class="inline-select"
-                    >
-                      <mat-option [value]="null">Unassigned</mat-option>
-                      <mat-option *ngFor="let staff of staff$ | async" [value]="staff.id">
-                        {{ staff.name }}
-                      </mat-option>
-                    </mat-select>
-                    <button
-                      mat-icon-button
-                      (click)="toggleComplete('phase', phase)"
-                      [matTooltip]="phase.isCompleted ? 'Mark as incomplete' : 'Mark as complete'"
-                      class="action-button complete-button"
-                      [class.completed]="phase.isCompleted"
-                    >
-                      <mat-icon>{{ phase.isCompleted ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
-                    </button>
-                    <button
-                      mat-icon-button
-                      (click)="toggleFlag('phase', phase)"
-                      [matTooltip]="phase.isFlagged ? 'Remove flag' : 'Flag this item'"
-                      class="action-button flag-button"
-                      [class.flagged]="phase.isFlagged"
-                    >
-                      <mat-icon>{{ phase.isFlagged ? 'flag' : 'outlined_flag' }}</mat-icon>
-                    </button>
-                  </div>
-                </div>
-                <div class="phase-description">
-                  {{ phase.description }}
-                  <span class="assignee-badge" *ngIf="phase.assignedToName">
-                    <mat-icon>person</mat-icon>
-                    {{ phase.assignedToName }}
-                  </span>
-                </div>
-              </div>
-            </mat-expansion-panel-header>
+            <mat-icon>flag</mat-icon>
+            Flag Test Tasks
+          </button>
+          <button
+            mat-stroked-button
+            (click)="createMissingTasks()"
+            color="primary"
+            style="margin-left: 8px;"
+          >
+            <mat-icon>add_task</mat-icon>
+            Create Missing Tasks
+          </button>
+        </div>
+      }
 
-            <div class="phase-content">
-              <!-- Steps within Phase -->
-              <mat-accordion multi="true" class="steps-accordion">
-                <mat-expansion-panel
-                  *ngFor="let step of getFilteredStepsForPhase(phase); trackBy: trackByStep"
-                  [expanded]="shouldExpandStep(step)"
-                  class="step-panel"
-                >
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      <div class="step-header">
-                        <div class="step-info">
-                          <span class="step-name">{{ step.name }}</span>
-                          <mat-chip class="step-count">{{ step.taskCount }} tasks</mat-chip>
-                        </div>
-                        <div class="step-actions" (click)="$event.stopPropagation()">
-                          <mat-select
-                            [(ngModel)]="step.assignedTo"
-                            (selectionChange)="updateAssignee('step', step, $event.value)"
-                            placeholder="Assign"
-                            class="inline-select small"
-                          >
-                            <mat-option [value]="null">—</mat-option>
-                            <mat-option *ngFor="let staff of staff$ | async" [value]="staff.id">
-                              {{ staff.name }}
-                            </mat-option>
-                          </mat-select>
-                          <button
-                            mat-icon-button
-                            (click)="toggleComplete('step', step)"
-                            [matTooltip]="step.isCompleted ? 'Mark as incomplete' : 'Mark as complete'"
-                            class="action-button complete-button small"
-                            [class.completed]="step.isCompleted"
-                          >
-                            <mat-icon>{{ step.isCompleted ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
-                          </button>
-                          <button
-                            mat-icon-button
-                            (click)="toggleFlag('step', step)"
-                            [matTooltip]="step.isFlagged ? 'Remove flag' : 'Flag this item'"
-                            class="action-button flag-button small"
-                            [class.flagged]="step.isFlagged"
-                          >
-                            <mat-icon>{{ step.isFlagged ? 'flag' : 'outlined_flag' }}</mat-icon>
-                          </button>
-                        </div>
-                      </div>
-                    </mat-panel-title>
-                    <mat-panel-description class="step-description">
-                      <span>{{ step.description }}</span>
-                      <span class="assignee-badge small" *ngIf="step.assignedToName">
-                        <mat-icon>person_outline</mat-icon>
-                        {{ step.assignedToName }}
-                      </span>
-                    </mat-panel-description>
-                  </mat-expansion-panel-header>
-
-                  <div class="step-content">
-                    <div class="tasks-list">
-                      <div
-                        *ngFor="let task of getFilteredTasksForStep(step); trackBy: trackByTask"
-                        class="task-item"
-                      >
-                        <div class="task-number">{{ task.orderNo }}</div>
-                        <div class="task-details">
-                          <span class="task-name">{{ task.name }}</span>
-                          <p *ngIf="task.description" class="task-description">
-                            {{ task.description }}
-                          </p>
-                          <span class="assignee-badge tiny" *ngIf="task.assignedToName">
-                            <mat-icon>person</mat-icon>
-                            {{ task.assignedToName }}
-                          </span>
-                        </div>
-                        <div class="task-actions">
-                          <mat-select
-                            [(ngModel)]="task.assignedTo"
-                            (selectionChange)="updateAssignee('task', task, $event.value)"
-                            placeholder="Assign"
-                            class="inline-select tiny"
-                          >
-                            <mat-option [value]="null">—</mat-option>
-                            <mat-option *ngFor="let staff of staff$ | async" [value]="staff.id">
-                              {{ staff.name }}
-                            </mat-option>
-                          </mat-select>
-                          <button
-                            mat-icon-button
-                            (click)="toggleComplete('task', task)"
-                            [matTooltip]="task.isCompleted ? 'Mark as incomplete' : 'Mark as complete'"
-                            class="action-button complete-button tiny"
-                            [class.completed]="task.isCompleted"
-                          >
-                            <mat-icon>{{ task.isCompleted ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
-                          </button>
-                          <button
-                            mat-icon-button
-                            (click)="toggleFlag('task', task)"
-                            [matTooltip]="task.isFlagged ? 'Remove flag' : 'Flag this item'"
-                            class="action-button flag-button tiny"
-                            [class.flagged]="task.isFlagged"
-                          >
-                            <mat-icon>{{ task.isFlagged ? 'flag' : 'outlined_flag' }}</mat-icon>
-                          </button>
-                        </div>
-                      </div>
+      <!-- Phases with Steps and Tasks (matching tasks page structure) -->
+      @if (!loading() && databaseTasks().length > 0) {
+        <div class="phases-section">
+          <mat-accordion multi="true">
+            @for (phase of filteredPhases(); track phase.id) {
+              <mat-expansion-panel class="phase-panel" [expanded]="shouldExpandPhase(phase)">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <div class="phase-header">
+                      <span class="phase-name">{{ phase.name }}</span>
+                      <mat-chip class="phase-stats">
+                        {{ phase.completedCount }} / {{ phase.totalTasks }} tasks •
+                        {{ phase.progress }}%
+                      </mat-chip>
                     </div>
-                  </div>
-                </mat-expansion-panel>
-              </mat-accordion>
-            </div>
-          </mat-expansion-panel>
-        </mat-accordion>
-      </div>
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    {{ phase.description }}
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="phase-content">
+                  <!-- Steps Accordion -->
+                  <mat-accordion multi="true" class="steps-accordion">
+                    @for (step of phase.steps; track step.id) {
+                      <mat-expansion-panel class="step-panel" [expanded]="shouldExpandStep(step)">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>
+                            <div class="step-header">
+                              <span class="step-name">{{ step.name }}</span>
+                              <mat-chip class="step-count">
+                                {{ step.completedCount }} / {{ step.taskCount }} •
+                                {{ step.progress }}%
+                              </mat-chip>
+                            </div>
+                          </mat-panel-title>
+                          <mat-panel-description>
+                            {{ step.description }}
+                          </mat-panel-description>
+                        </mat-expansion-panel-header>
+
+                        <div class="step-content">
+                          <!-- Tasks List -->
+                          <div class="tasks-list">
+                            @for (task of getFilteredTasks(step.tasks); track task.id) {
+                              <div class="task-item" [class.completed]="task.isCompleted">
+                                <div class="task-number">{{ task.orderNo }}</div>
+                                <div class="task-details">
+                                  <span class="task-name">{{ task.name }}</span>
+                                  @if (task.description) {
+                                    <p class="task-description">{{ task.description }}</p>
+                                  }
+                                </div>
+                                <div class="task-actions">
+                                  <!-- Priority indicator -->
+                                  <mat-chip
+                                    class="priority-chip"
+                                    [class]="'priority-' + task.priority"
+                                  >
+                                    {{ task.priority }}
+                                  </mat-chip>
+
+                                  <!-- Assignee selector -->
+                                  <mat-form-field appearance="outline" class="assignee-select">
+                                    <mat-select
+                                      [value]="task.assignedTo"
+                                      (selectionChange)="updateAssignee(task, $event.value)"
+                                      placeholder="Assign to"
+                                    >
+                                      <mat-option [value]="null">
+                                        <span class="unassigned-text">Unassigned</span>
+                                      </mat-option>
+                                      @for (staff of staff$ | async; track staff.id) {
+                                        <mat-option [value]="staff.id">
+                                          {{ staff.name }}
+                                        </mat-option>
+                                      }
+                                    </mat-select>
+                                  </mat-form-field>
+
+                                  <!-- Action buttons -->
+                                  <button
+                                    mat-icon-button
+                                    (click)="toggleFlag(task)"
+                                    [matTooltip]="task.isFlagged ? 'Remove flag' : 'Flag task'"
+                                    class="action-button flag-button"
+                                    [class.flagged]="task.isFlagged"
+                                  >
+                                    <mat-icon>{{
+                                      task.isFlagged ? 'flag' : 'outlined_flag'
+                                    }}</mat-icon>
+                                  </button>
+
+                                  <button
+                                    mat-icon-button
+                                    (click)="toggleComplete(task)"
+                                    [matTooltip]="
+                                      task.isCompleted ? 'Mark as incomplete' : 'Mark as complete'
+                                    "
+                                    class="action-button complete-button"
+                                    [class.completed]="task.isCompleted"
+                                  >
+                                    <mat-icon>{{
+                                      task.isCompleted ? 'check_circle' : 'radio_button_unchecked'
+                                    }}</mat-icon>
+                                  </button>
+                                </div>
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      </mat-expansion-panel>
+                    }
+                  </mat-accordion>
+                </div>
+              </mat-expansion-panel>
+            }
+          </mat-accordion>
+        </div>
+      }
     </div>
   `,
   styles: [
     `
-      /* Container following theme standards */
       .unified-task-management {
-        max-width: 1280px;
+        display: block;
+        padding: 48px 32px;
+        max-width: 1400px;
         margin: 0 auto;
-        padding: 40px 24px;
       }
 
-      /* Page Header following ff-page-header pattern */
-      .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 48px;
-      }
-
-      .header-content {
-        flex: 1;
-      }
-
-      .page-header h1 {
-        font-size: 32px;
-        font-weight: 300;
-        color: rgb(var(--ff-foreground));
-        margin: 0 0 8px 0;
-        letter-spacing: -0.02em;
-      }
-
-      .subtitle {
-        font-size: 18px;
-        color: rgb(var(--ff-muted-foreground));
-        font-weight: 400;
-        margin: 0;
-      }
-
-      /* Filter Card following Material overrides */
-      .filter-card {
-        border-radius: var(--ff-radius) !important;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
-        border: 1px solid rgb(var(--ff-border)) !important;
-        background-color: rgb(var(--ff-card)) !important;
-        margin-bottom: 24px;
-        padding: 24px !important;
+      /* Filters Card */
+      .filters-card {
+        margin-bottom: 32px;
+        border-radius: var(--ff-radius-lg) !important;
+        padding: 24px;
       }
 
       .filters-container {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
         gap: 24px;
+        margin-bottom: 24px;
         flex-wrap: wrap;
       }
 
-      .view-filters {
-        flex: 1;
-      }
-
-      .view-filters mat-button-toggle-group {
-        border: 1px solid rgb(var(--ff-border));
-        border-radius: 6px;
-        background-color: rgb(var(--ff-background));
-      }
-
-      .view-filters mat-button-toggle {
-        border: none;
-        padding: 0 16px;
-        height: 40px;
-      }
-
-      .view-filters mat-button-toggle span {
-        margin-left: 8px;
-        font-weight: 500;
-      }
-
-      .assignee-filter {
-        width: 250px;
-      }
-
-      .filter-stats {
+      .filter-group {
         display: flex;
+        gap: 16px;
         align-items: center;
-        gap: 8px;
-        margin-top: 16px;
-        padding-top: 16px;
-        border-top: 1px solid rgb(var(--ff-border));
-        font-size: 14px;
+        flex: 1;
+        flex-wrap: wrap;
+      }
+
+      .search-field {
+        flex: 1;
+        min-width: 300px;
+      }
+
+      .phase-filter,
+      .assignee-filter {
+        width: 200px;
+      }
+
+      .filter-actions {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+      }
+
+      .view-toggle {
+        border: 1px solid rgb(var(--ff-border));
+        border-radius: var(--ff-radius);
+      }
+
+      .refresh-button {
         color: rgb(var(--ff-muted-foreground));
       }
 
-      .filter-stats mat-icon {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
+      /* Stats Bar */
+      .stats-bar {
+        display: flex;
+        gap: 48px;
+        padding-top: 24px;
+        border-top: 1px solid rgb(var(--ff-border));
       }
 
-      /* Phases Section - matching tasks-page */
+      .stat {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .stat-value {
+        font-size: 28px;
+        font-weight: 600;
+        color: rgb(var(--ff-foreground));
+      }
+
+      .stat-label {
+        font-size: 13px;
+        color: rgb(var(--ff-muted-foreground));
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      /* Loading & Empty States */
+      .loading-card,
+      .empty-state-card {
+        text-align: center;
+        padding: 64px;
+        border-radius: var(--ff-radius-lg) !important;
+      }
+
+      .empty-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 24px;
+        color: rgb(var(--ff-muted-foreground));
+      }
+
+      /* Phases Section - matching tasks page */
       .phases-section {
         margin-bottom: 48px;
       }
 
-      .phases-accordion {
-        display: block;
-      }
-
-      /* Phase Panel using theme variables */
+      /* Phase Panel */
       .phase-panel {
         border-radius: var(--ff-radius) !important;
         margin-bottom: 24px;
@@ -422,44 +460,19 @@ type ViewFilter = 'all' | 'uncompleted' | 'flagged';
         padding: 20px 24px !important;
       }
 
-      .phase-panel ::ng-deep .mat-expansion-panel-header-title {
-        margin: 0 !important;
-        flex: 1 !important;
-      }
-
-      .phase-panel ::ng-deep .mat-expansion-panel-header-description {
-        display: none !important;
-      }
-
-      .phase-panel-content {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-
       .phase-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
         width: 100%;
         gap: 24px;
-        padding: 8px 0;
-      }
-
-      .phase-info {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        flex: 1;
-        min-width: 0;
       }
 
       .phase-name {
         font-size: 18px;
         font-weight: 500;
         color: rgb(var(--ff-foreground));
-        white-space: nowrap;
+        flex: 1;
       }
 
       .phase-stats {
@@ -473,19 +486,11 @@ type ViewFilter = 'all' | 'uncompleted' | 'flagged';
         flex-shrink: 0;
       }
 
-      .phase-actions {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        flex-shrink: 0;
-      }
-
-      .phase-description {
+      ::ng-deep .mat-expansion-panel-header-description {
         color: rgb(var(--ff-muted-foreground));
         font-size: 14px;
         line-height: 1.5;
-        margin-top: 12px;
-        padding-right: 24px;
+        margin-top: 8px;
       }
 
       .phase-content {
@@ -493,7 +498,7 @@ type ViewFilter = 'all' | 'uncompleted' | 'flagged';
         background-color: rgb(var(--ff-muted) / 0.3);
       }
 
-      /* Steps Accordion - matching tasks-page */
+      /* Steps Accordion */
       .steps-accordion {
         margin-left: 0;
       }
@@ -516,20 +521,14 @@ type ViewFilter = 'all' | 'uncompleted' | 'flagged';
         align-items: center;
         justify-content: space-between;
         width: 100%;
-        gap: 12px;
-      }
-
-      .step-info {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        flex: 1;
+        gap: 16px;
       }
 
       .step-name {
         font-size: 16px;
         font-weight: 500;
         color: rgb(var(--ff-foreground));
+        flex: 1;
       }
 
       .step-count {
@@ -540,12 +539,7 @@ type ViewFilter = 'all' | 'uncompleted' | 'flagged';
         height: 20px !important;
         padding: 0 8px !important;
         border-radius: 10px !important;
-      }
-
-      .step-actions {
-        display: flex;
-        align-items: center;
-        gap: 4px;
+        flex-shrink: 0;
       }
 
       .step-content {
@@ -553,7 +547,7 @@ type ViewFilter = 'all' | 'uncompleted' | 'flagged';
         background-color: rgb(var(--ff-muted) / 0.2);
       }
 
-      /* Tasks List - matching tasks-page */
+      /* Tasks List */
       .tasks-list {
         display: flex;
         flex-direction: column;
@@ -570,12 +564,22 @@ type ViewFilter = 'all' | 'uncompleted' | 'flagged';
         border: 1px solid rgb(var(--ff-border));
         transition: all 0.2s ease;
         min-height: 80px;
-      }
 
-      .task-item:hover {
-        background-color: rgb(var(--ff-muted) / 0.5);
-        border-color: rgb(var(--ff-primary));
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        &:hover {
+          background-color: rgb(var(--ff-muted) / 0.5);
+          border-color: rgb(var(--ff-primary));
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        &.completed {
+          opacity: 0.7;
+          background-color: rgb(var(--ff-muted) / 0.3);
+
+          .task-name {
+            text-decoration: line-through;
+            color: rgb(var(--ff-muted-foreground));
+          }
+        }
       }
 
       .task-number {
@@ -594,6 +598,7 @@ type ViewFilter = 'all' | 'uncompleted' | 'flagged';
 
       .task-details {
         flex: 1;
+        min-width: 0;
       }
 
       .task-name {
@@ -614,153 +619,116 @@ type ViewFilter = 'all' | 'uncompleted' | 'flagged';
       .task-actions {
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 12px;
         flex-shrink: 0;
       }
 
-      /* Inline Select Fields */
-      .inline-select {
-        width: 140px;
-        height: 36px;
-        padding: 0 12px;
-        border: 1px solid rgb(var(--ff-border));
-        border-radius: 6px;
-        background-color: rgb(var(--ff-background));
-        font-size: 13px;
-        color: rgb(var(--ff-foreground));
-        cursor: pointer;
-        transition: all 0.2s ease;
+      /* Priority Chip */
+      .priority-chip {
+        height: 24px !important;
+        font-size: 11px !important;
+        padding: 0 10px !important;
+        font-weight: 500 !important;
+
+        &.priority-low {
+          background-color: rgb(var(--ff-success) / 0.1) !important;
+          color: rgb(var(--ff-success)) !important;
+        }
+
+        &.priority-medium {
+          background-color: rgb(var(--ff-warning) / 0.1) !important;
+          color: rgb(var(--ff-warning)) !important;
+        }
+
+        &.priority-high {
+          background-color: rgb(var(--ff-destructive) / 0.1) !important;
+          color: rgb(var(--ff-destructive)) !important;
+        }
+
+        &.priority-critical {
+          background-color: rgb(var(--ff-destructive)) !important;
+          color: rgb(var(--ff-destructive-foreground)) !important;
+        }
       }
 
-      .inline-select:hover {
-        border-color: rgb(var(--ff-primary));
+      /* Assignee Select */
+      .assignee-select {
+        width: 160px;
+
+        ::ng-deep .mat-mdc-form-field-wrapper {
+          padding: 0;
+        }
+
+        ::ng-deep .mat-mdc-form-field-infix {
+          padding: 8px 0;
+          min-height: auto;
+        }
+
+        ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+          display: none;
+        }
       }
 
-      .inline-select:focus {
-        outline: 2px solid rgb(var(--ff-ring));
-        outline-offset: 2px;
-      }
-
-      .inline-select.small {
-        width: 120px;
-        height: 32px;
-        font-size: 12px;
-      }
-
-      .inline-select.tiny {
-        width: 100px;
-        height: 28px;
-        font-size: 12px;
-        padding: 0 8px;
+      .unassigned-text {
+        color: rgb(var(--ff-muted-foreground));
+        font-style: italic;
       }
 
       /* Action Buttons */
       .action-button {
-        color: rgb(var(--ff-muted-foreground));
-        transition: all 0.2s ease;
         width: 36px;
         height: 36px;
+
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+
+        &.flag-button {
+          color: rgb(var(--ff-muted-foreground));
+
+          &.flagged {
+            color: rgb(var(--ff-warning));
+          }
+        }
+
+        &.complete-button {
+          color: rgb(var(--ff-muted-foreground));
+
+          &.completed {
+            color: rgb(var(--ff-success));
+          }
+        }
       }
 
-      .action-button:hover {
-        background-color: rgb(var(--ff-muted) / 0.5);
-      }
-
-      .action-button.small {
-        width: 32px;
-        height: 32px;
-      }
-
-      .action-button.tiny {
-        width: 28px;
-        height: 28px;
-      }
-
-      .action-button mat-icon {
-        font-size: 22px;
-        width: 22px;
-        height: 22px;
-      }
-
-      .action-button.small mat-icon {
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
-      }
-
-      .action-button.tiny mat-icon {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
-      }
-
-      .complete-button.completed {
-        color: rgb(var(--ff-success));
-      }
-
-      .flag-button.flagged {
-        color: rgb(var(--ff-destructive));
-      }
-
-      /* Assignee Badge */
-      .assignee-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        padding: 2px 8px;
-        background-color: rgb(var(--ff-muted));
-        border-radius: 12px;
-        font-size: 12px;
-        color: rgb(var(--ff-muted-foreground));
-      }
-
-      .assignee-badge mat-icon {
-        font-size: 14px;
-        width: 14px;
-        height: 14px;
-      }
-
-      .assignee-badge.small {
-        font-size: 11px;
-        padding: 1px 6px;
-      }
-
-      .assignee-badge.small mat-icon {
-        font-size: 12px;
-        width: 12px;
-        height: 12px;
-      }
-
-      .assignee-badge.tiny {
-        font-size: 11px;
-        padding: 0 6px;
-        margin-top: 4px;
-      }
-
-      .assignee-badge.tiny mat-icon {
-        font-size: 12px;
-        width: 12px;
-        height: 12px;
-      }
-
-      /* Responsive following theme standards */
+      /* Mobile Responsive */
       @media (max-width: 768px) {
         .unified-task-management {
           padding: 24px 16px;
         }
 
-        .page-header {
+        .filters-container {
           flex-direction: column;
-          align-items: flex-start;
           gap: 16px;
         }
 
-        .page-header h1 {
-          font-size: 24px;
+        .filter-group {
+          width: 100%;
         }
 
-        .subtitle {
-          font-size: 16px;
+        .search-field {
+          min-width: auto;
+        }
+
+        .phase-filter,
+        .assignee-filter {
+          width: 100%;
+        }
+
+        .stats-bar {
+          gap: 24px;
+          flex-wrap: wrap;
         }
 
         .phase-header {
@@ -775,36 +743,11 @@ type ViewFilter = 'all' | 'uncompleted' | 'flagged';
           gap: 8px;
         }
 
-        .steps-accordion {
-          margin-left: 0;
-        }
-
-        .filters-container {
-          flex-direction: column;
-          align-items: stretch;
-        }
-
-        .view-filters {
-          width: 100%;
-        }
-
-        .assignee-filter {
-          width: 100%;
-        }
-
-        .phase-actions {
-          width: 100%;
-          justify-content: flex-end;
-        }
-
-        .step-actions {
-          width: 100%;
-          justify-content: flex-end;
-        }
-
         .task-item {
           flex-direction: column;
+          align-items: flex-start;
           gap: 12px;
+          padding: 16px;
         }
 
         .task-actions {
@@ -821,110 +764,114 @@ export class UnifiedTaskManagementComponent implements OnInit {
   private staffService = inject(StaffService);
   private notification = inject(NotificationService);
   private taskService = inject(TaskService);
+  private phaseService = inject(PhaseService);
 
   staff$!: Observable<StaffMember[]>;
   staffMap = new Map<string, StaffMember>();
 
-  viewFilter = signal<ViewFilter>('all');
-  assigneeFilter = signal<string>('all');
-
-  // Search and filter functionality
+  // Signals for reactive state
   searchTerm = signal('');
   selectedPhase = signal('');
+  viewFilter = signal<ViewFilter>('all');
+  assigneeFilter = signal('all');
+  loading = signal(true);
 
-  // All phases with their steps and tasks - extended with our custom fields
-  allPhases = signal<ExtendedPhaseTemplate[]>([]);
+  // Data
+  databaseTasks = signal<Task[]>([]);
+  phasesWithTracking = signal<PhaseWithTracking[]>([]);
 
-  // Filtered phases based on search and filters
+  // Computed filtered phases
   filteredPhases = computed(() => {
-    let phases = this.allPhases();
+    let phases = this.phasesWithTracking();
     const term = this.searchTerm().toLowerCase();
     const phaseFilter = this.selectedPhase();
-    const viewFilterValue = this.viewFilter();
-    const assigneeFilterValue = this.assigneeFilter();
-
-    // Filter by view filter
-    if (viewFilterValue === 'uncompleted') {
-      phases = phases
-        .map((phase) => ({
-          ...phase,
-          steps: phase.steps
-            .map((step) => ({
-              ...step,
-              tasks: step.tasks.filter((task) => !task.isCompleted),
-            }))
-            .filter((step) => step.tasks.length > 0 || !step.isCompleted),
-        }))
-        .filter((phase) => phase.steps.length > 0 || !phase.isCompleted);
-    } else if (viewFilterValue === 'flagged') {
-      phases = phases
-        .map((phase) => ({
-          ...phase,
-          steps: phase.steps
-            .map((step) => ({
-              ...step,
-              tasks: step.tasks.filter((task) => task.isFlagged),
-            }))
-            .filter((step) => step.tasks.length > 0 || step.isFlagged),
-        }))
-        .filter((phase) => phase.steps.length > 0 || phase.isFlagged);
-    }
-
-    // Filter by assignee
-    if (assigneeFilterValue !== 'all') {
-      const checkAssignee = (item: any) => {
-        if (assigneeFilterValue === 'unassigned') {
-          return !item.assignedTo;
-        }
-        return item.assignedTo === assigneeFilterValue;
-      };
-
-      phases = phases
-        .map((phase) => ({
-          ...phase,
-          steps: phase.steps
-            .map((step) => ({
-              ...step,
-              tasks: step.tasks.filter((task) => checkAssignee(task)),
-            }))
-            .filter((step) => step.tasks.length > 0 || checkAssignee(step)),
-        }))
-        .filter((phase) => phase.steps.length > 0 || checkAssignee(phase));
-    }
+    const view = this.viewFilter();
+    const assignee = this.assigneeFilter();
 
     // Filter by selected phase
     if (phaseFilter) {
-      phases = phases.filter((phase) => phase.id === phaseFilter);
+      phases = phases.filter((p) => p.id === phaseFilter);
     }
 
-    // If there's a search term, filter phases and their content
-    if (term) {
-      phases = phases
-        .map((phase) => ({
-          ...phase,
-          steps: phase.steps
-            .map((step) => ({
-              ...step,
-              tasks: step.tasks.filter(
-                (task) =>
-                  task.name.toLowerCase().includes(term) ||
-                  task.description?.toLowerCase().includes(term),
-              ),
-            }))
-            .filter((step) => step.tasks.length > 0),
-        }))
-        .filter((phase) => phase.steps.length > 0);
+    // Filter tasks within phases
+    if (view !== 'all' || assignee !== 'all' || term) {
+      phases = phases.map((phase) => ({
+        ...phase,
+        steps: phase.steps.map((step) => ({
+          ...step,
+          tasks: step.tasks.filter((task) => {
+            // Search filter
+            if (
+              term &&
+              !task.name.toLowerCase().includes(term) &&
+              (!task.description || !task.description.toLowerCase().includes(term))
+            ) {
+              return false;
+            }
+
+            // View filter
+            if (view === 'uncompleted' && task.isCompleted) {
+              return false;
+            }
+            if (view === 'flagged') {
+              console.log(
+                `Filtering task ${task.name}: isFlagged=${task.isFlagged}, priority=${task.priority}`,
+              );
+              if (!task.isFlagged) {
+                return false;
+              }
+            }
+
+            // Assignee filter
+            if (assignee !== 'all') {
+              if (assignee === 'unassigned' && task.assignedTo) {
+                return false;
+              }
+              if (assignee !== 'unassigned' && task.assignedTo !== assignee) {
+                return false;
+              }
+            }
+
+            return true;
+          }),
+        })),
+      }));
     }
 
-    return phases;
+    // Recalculate counts after filtering
+    return phases.map((phase) => {
+      let phaseCompleted = 0;
+      let phaseTotal = 0;
+
+      const filteredSteps = phase.steps.map((step) => {
+        const filteredTasks = step.tasks;
+        const stepCompleted = filteredTasks.filter((t) => t.isCompleted).length;
+        const stepTotal = filteredTasks.length;
+
+        phaseCompleted += stepCompleted;
+        phaseTotal += stepTotal;
+
+        return {
+          ...step,
+          completedCount: stepCompleted,
+          taskCount: stepTotal,
+          progress: stepTotal > 0 ? Math.round((stepCompleted / stepTotal) * 100) : 0,
+        };
+      });
+
+      return {
+        ...phase,
+        steps: filteredSteps,
+        completedCount: phaseCompleted,
+        totalTasks: phaseTotal,
+        progress: phaseTotal > 0 ? Math.round((phaseCompleted / phaseTotal) * 100) : 0,
+      };
+    });
   });
 
   ngOnInit() {
     this.loadStaff();
-    this.loadTaskTemplates();
-    if (this.projectId) {
-      this.loadProjectTasks();
-    }
+    this.loadProjectData();
   }
 
   private loadStaff() {
@@ -934,185 +881,638 @@ export class UnifiedTaskManagementComponent implements OnInit {
     });
   }
 
-  private loadTaskTemplates() {
-    // Load TASK_TEMPLATES and extend with our custom fields
-    const extendedPhases: ExtendedPhaseTemplate[] = TASK_TEMPLATES.map((phase) => ({
-      ...phase,
-      isCompleted: false,
-      isFlagged: false,
-      assignedTo: undefined,
-      assignedToName: undefined,
-      progress: 0,
-      steps: phase.steps.map((step) => ({
-        ...step,
-        isCompleted: false,
-        isFlagged: false,
-        assignedTo: undefined,
-        assignedToName: undefined,
-        progress: 0,
-        tasks: step.tasks.map((task) => ({
-          ...task,
-          isCompleted: false,
-          isFlagged: false,
-          assignedTo: undefined,
-          assignedToName: undefined,
-          progress: 0,
-        })),
-      })),
-    }));
+  private async loadProjectData() {
+    this.loading.set(true);
 
-    this.allPhases.set(extendedPhases);
+    try {
+      // Load tasks from database
+      const tasks = await firstValueFrom(this.taskService.getTasksByProject(this.projectId));
+
+      // If no tasks exist, initialize them
+      if (tasks.length === 0) {
+        await this.initializeTasks();
+        return;
+      }
+
+      // Check if any tasks are missing stepId and migrate them
+      let finalTasks = tasks;
+      const tasksWithoutStepId = tasks.filter((t) => !t.stepId);
+      if (tasksWithoutStepId.length > 0) {
+        console.log(`Found ${tasksWithoutStepId.length} tasks without stepId. Migrating...`);
+        await this.taskService.migrateTasksWithStepIds(this.projectId);
+        // Reload tasks after migration
+        finalTasks = await firstValueFrom(this.taskService.getTasksByProject(this.projectId));
+      }
+
+      console.log(`Project ${this.projectId} has ${finalTasks.length} total tasks`);
+      console.log('Tasks by stepId:', finalTasks.filter((t) => t.stepId).length);
+      console.log('Tasks without stepId:', finalTasks.filter((t) => !t.stepId).length);
+
+      this.databaseTasks.set(finalTasks);
+
+      // Create a map of database tasks by stepId for proper organization
+      const tasksByStepId = new Map<string, Task[]>();
+      const unmappedTasks: Task[] = [];
+
+      finalTasks.forEach((task) => {
+        if (task.stepId) {
+          const stepTasks = tasksByStepId.get(task.stepId) || [];
+          stepTasks.push(task);
+          tasksByStepId.set(task.stepId, stepTasks);
+        } else {
+          // Tasks without stepId - we'll try to map them by name
+          unmappedTasks.push(task);
+        }
+      });
+
+      // Map TASK_TEMPLATES to include database data
+      const phasesWithTracking: PhaseWithTracking[] = TASK_TEMPLATES.map((phaseTemplate) => {
+        let phaseCompleted = 0;
+        let phaseTotal = 0;
+
+        const stepsWithTracking: StepWithTracking[] = phaseTemplate.steps.map((stepTemplate) => {
+          let stepCompleted = 0;
+
+          // Get all database tasks for this step
+          const dbTasksForStep = tasksByStepId.get(stepTemplate.id) || [];
+
+          // If no tasks with stepId, try to find by name matching
+          if (dbTasksForStep.length === 0 && unmappedTasks.length > 0) {
+            stepTemplate.tasks.forEach((taskTemplate) => {
+              const matchingTask = unmappedTasks.find((t) => t.name === taskTemplate.name);
+              if (matchingTask) {
+                dbTasksForStep.push(matchingTask);
+              }
+            });
+          }
+
+          // Build tasks list for this step
+          let tasksWithTracking: TaskWithTracking[];
+
+          if (dbTasksForStep.length > 0) {
+            // Use actual database tasks
+            console.log(`Step ${stepTemplate.name} has ${dbTasksForStep.length} database tasks`);
+            tasksWithTracking = dbTasksForStep
+              .map((dbTask) => {
+                const isCompleted = dbTask.status === TaskStatus.COMPLETED;
+                if (isCompleted) {
+                  stepCompleted++;
+                }
+
+                // Find matching template to get the orderNo and other template data
+                const matchingTemplate = stepTemplate.tasks.find((t) => t.name === dbTask.name);
+
+                const taskWithTracking = {
+                  id: dbTask.id || matchingTemplate?.id || '',
+                  name: dbTask.name,
+                  description: dbTask.description || matchingTemplate?.description,
+                  stepId: dbTask.stepId || stepTemplate.id,
+                  phaseId: dbTask.phaseId,
+                  orderNo: dbTask.orderNo || matchingTemplate?.orderNo || 1,
+                  dbTask,
+                  isCompleted,
+                  isFlagged: dbTask.isFlagged === true,
+                  assignedTo: dbTask.assignedTo,
+                  assignedToName: dbTask.assignedToName,
+                  progress: dbTask.completionPercentage || 0,
+                  priority: dbTask.priority || TaskPriority.MEDIUM,
+                };
+
+                if (!dbTask.id) {
+                  console.warn('Task missing ID:', dbTask.name);
+                }
+
+                return taskWithTracking;
+              })
+              .sort((a, b) => a.orderNo - b.orderNo);
+          } else {
+            // Use template tasks as placeholders (no database tasks yet)
+            console.log(
+              `Step ${stepTemplate.name} has no database tasks, using ${stepTemplate.tasks.length} template tasks`,
+            );
+            tasksWithTracking = stepTemplate.tasks.map((taskTemplate) => ({
+              ...taskTemplate,
+              dbTask: undefined,
+              isCompleted: false,
+              isFlagged: false,
+              assignedTo: undefined,
+              assignedToName: undefined,
+              progress: 0,
+              priority: TaskPriority.MEDIUM,
+            }));
+          }
+
+          const actualTaskCount = tasksWithTracking.length;
+          phaseCompleted += stepCompleted;
+          phaseTotal += actualTaskCount;
+
+          return {
+            ...stepTemplate,
+            tasks: tasksWithTracking,
+            taskCount: actualTaskCount,
+            completedCount: stepCompleted,
+            progress: actualTaskCount > 0 ? Math.round((stepCompleted / actualTaskCount) * 100) : 0,
+          };
+        });
+
+        return {
+          ...phaseTemplate,
+          steps: stepsWithTracking,
+          completedCount: phaseCompleted,
+          totalTasks: phaseTotal,
+          progress: phaseTotal > 0 ? Math.round((phaseCompleted / phaseTotal) * 100) : 0,
+        };
+      });
+
+      this.phasesWithTracking.set(phasesWithTracking);
+    } catch (error) {
+      console.error('Error loading project data:', error);
+      this.notification.error('Failed to load project data');
+    } finally {
+      this.loading.set(false);
+    }
   }
 
-  private loadProjectTasks() {
-    // Load real tasks from the database
-    this.taskService.getTasksByProject(this.projectId).subscribe((tasks) => {
-      // Map real tasks to our template structure
-      const phasesWithTasks = this.allPhases();
-      
-      phasesWithTasks.forEach(phase => {
-        phase.steps.forEach(step => {
-          step.tasks.forEach(taskTemplate => {
-            // Find matching real task by name and phase
-            const realTask = tasks.find(t => 
-              t.name === taskTemplate.name && 
-              t.phaseName === phase.name
-            );
-            
-            if (realTask) {
-              // Map real task data to template
-              taskTemplate.taskId = realTask.id;
-              taskTemplate.isCompleted = realTask.status === TaskStatus.COMPLETED;
-              taskTemplate.progress = realTask.completionPercentage || 0;
-              taskTemplate.assignedTo = realTask.assignedTo;
-              taskTemplate.assignedToName = realTask.assignedToName;
+  async initializeTasks() {
+    try {
+      this.loading.set(true);
+      await this.taskService.initializeProjectTasks(this.projectId);
+      this.notification.success('Project tasks initialized successfully');
+      await this.loadProjectData();
+    } catch (error) {
+      console.error('Error initializing tasks:', error);
+      this.notification.error('Failed to initialize tasks');
+      this.loading.set(false);
+    }
+  }
+
+  refreshData() {
+    this.loadProjectData();
+  }
+
+  shouldExpandPhase(phase: PhaseWithTracking): boolean {
+    return !!this.searchTerm() || !!this.selectedPhase();
+  }
+
+  shouldExpandStep(step: StepWithTracking): boolean {
+    return !!this.searchTerm();
+  }
+
+  getFilteredTasks(tasks: TaskWithTracking[]): TaskWithTracking[] {
+    // Tasks are already filtered in the computed signal
+    return tasks;
+  }
+
+  getTotalTasks(): number {
+    return this.databaseTasks().length;
+  }
+
+  getCompletedTasks(): number {
+    return this.databaseTasks().filter((t) => t.status === TaskStatus.COMPLETED).length;
+  }
+
+  getInProgressTasks(): number {
+    return this.databaseTasks().filter((t) => t.status === TaskStatus.IN_PROGRESS).length;
+  }
+
+  getOverallProgress(): number {
+    const total = this.getTotalTasks();
+    const completed = this.getCompletedTasks();
+    return total > 0 ? Math.round((completed / total) * 100) : 0;
+  }
+
+  async updateAssignee(task: TaskWithTracking, assigneeId: string | null) {
+    console.log('🎯 ASSIGNMENT EVENT TRIGGERED!');
+    console.log('=== ASSIGNMENT DEBUG START ===');
+    console.log('Task:', task.name);
+    console.log('Task DB ID:', task.dbTask?.id);
+    console.log('Assignee ID:', assigneeId);
+    console.log('Staff Map:', this.staffMap);
+
+    if (!task.dbTask) {
+      console.error('No dbTask found for:', task.name);
+      console.error('This task exists only as template, not in database');
+      this.notification.error(
+        `Task "${task.name}" needs to be initialized first. Creating missing tasks...`,
+      );
+
+      // Try to create the missing tasks
+      try {
+        await this.taskService.initializeProjectTasksWithSteps(this.projectId);
+        this.notification.success('Missing tasks created. Please try assigning again.');
+        // Reload the data to include the new tasks
+        await this.loadProjectData();
+        return;
+      } catch (error) {
+        console.error('Failed to create missing tasks:', error);
+        this.notification.error('Failed to create missing tasks');
+        return;
+      }
+    }
+
+    if (!task.dbTask.id) {
+      console.error('Task missing ID:', task.dbTask);
+      this.notification.error('Task missing ID, cannot assign');
+      return;
+    }
+
+    const oldAssignee = task.assignedTo;
+    const oldAssigneeName = task.assignedToName;
+
+    // Update locally for immediate feedback
+    task.assignedTo = assigneeId || undefined;
+    task.assignedToName = assigneeId ? this.staffMap.get(assigneeId)?.name : undefined;
+
+    console.log('Old assignment:', { oldAssignee, oldAssigneeName });
+    console.log('New assignment:', { assigneeId, assigneeName: task.assignedToName });
+
+    try {
+      if (assigneeId) {
+        console.log('Calling assignTask with:', task.dbTask.id, assigneeId);
+        await this.taskService.assignTask(task.dbTask.id!, assigneeId);
+        console.log('AssignTask completed successfully');
+      } else {
+        console.log('Clearing assignment with updateTask');
+        await this.taskService.updateTask(task.dbTask.id!, {
+          assignedTo: undefined,
+          assignedToName: undefined,
+        });
+        console.log('Clear assignment completed successfully');
+      }
+
+      // Update the database task reference
+      task.dbTask.assignedTo = task.assignedTo;
+      task.dbTask.assignedToName = task.assignedToName;
+
+      console.log('Assignment successful, updated dbTask:', {
+        assignedTo: task.dbTask.assignedTo,
+        assignedToName: task.dbTask.assignedToName,
+      });
+
+      this.notification.success('Task assignee updated');
+    } catch (error) {
+      console.error('=== ASSIGNMENT ERROR ===');
+      console.error('Error details:', error);
+      console.error('Error message:', (error as any)?.message);
+      console.error('Error code:', (error as any)?.code);
+
+      // Revert on error
+      task.assignedTo = oldAssignee;
+      task.assignedToName = oldAssigneeName;
+      this.notification.error('Failed to update task assignee: ' + (error as any)?.message);
+    }
+
+    console.log('=== ASSIGNMENT DEBUG END ===');
+  }
+
+  async toggleComplete(task: TaskWithTracking) {
+    if (!task.dbTask || !task.dbTask.id) {
+      console.error('Cannot toggle complete: task has no database record', task);
+      this.notification.error('This task needs to be initialized first. Please refresh the page.');
+      return;
+    }
+
+    const wasCompleted = task.isCompleted;
+    const oldStatus = task.dbTask.status;
+    const oldPercentage = task.dbTask.completionPercentage;
+
+    // Update locally for immediate feedback
+    task.isCompleted = !wasCompleted;
+    task.progress = task.isCompleted ? 100 : 0;
+    task.dbTask.status = task.isCompleted ? TaskStatus.COMPLETED : TaskStatus.IN_PROGRESS;
+    task.dbTask.completionPercentage = task.progress;
+
+    try {
+      const updates = {
+        status: task.dbTask.status,
+        completionPercentage: task.progress,
+        completedDate: task.isCompleted ? new Date() : undefined,
+      };
+
+      await this.taskService.updateTask(task.dbTask.id!, updates);
+      this.notification.success(`Task marked as ${task.isCompleted ? 'completed' : 'incomplete'}`);
+
+      // Recalculate progress
+      this.updateProgress();
+    } catch (error) {
+      // Revert on error
+      task.isCompleted = wasCompleted;
+      task.progress = wasCompleted ? 100 : 0;
+      task.dbTask.status = oldStatus;
+      task.dbTask.completionPercentage = oldPercentage;
+      this.notification.error('Failed to update task status');
+      console.error('Error updating task:', error);
+    }
+  }
+
+  async toggleFlag(task: TaskWithTracking) {
+    if (!task.dbTask) return;
+
+    const wasFlagged = task.isFlagged;
+
+    // Toggle flag state
+    task.isFlagged = !wasFlagged;
+
+    try {
+      // Update only isFlagged
+      await this.taskService.updateTask(task.dbTask.id!, {
+        isFlagged: task.isFlagged,
+      });
+
+      // Update the database task reference
+      task.dbTask.isFlagged = task.isFlagged;
+
+      this.notification.success(`Task ${task.isFlagged ? 'flagged' : 'unflagged'}`);
+
+      // Update the database tasks signal with the new data
+      const updatedTasks = this.databaseTasks().map((t) =>
+        t.id === task.dbTask?.id ? { ...t, isFlagged: task.isFlagged } : t,
+      );
+      this.databaseTasks.set(updatedTasks);
+
+      // Trigger reactivity by updating the phases signal
+      this.updateProgress();
+    } catch (error) {
+      // Revert on error
+      task.isFlagged = wasFlagged;
+      this.notification.error('Failed to update task flag');
+      console.error('Error updating task flag:', error);
+    }
+  }
+
+  private updateProgress() {
+    // Trigger recomputation of the signal by completely reloading the data
+    // This ensures that all isFlagged properties are recalculated from database
+    const currentTasks = this.databaseTasks();
+    console.log('Updating progress - current tasks:', currentTasks.length);
+
+    // Force a complete rebuild of the phases structure
+    this.loadProjectDataFromTasks(currentTasks);
+  }
+
+  private loadProjectDataFromTasks(tasks: any[]) {
+    // This is the same logic from loadProjectData but split out for reuse
+    const tasksByStepId = new Map<string, any[]>();
+    const unmappedTasks: any[] = [];
+
+    tasks.forEach((task) => {
+      if (task.stepId) {
+        const stepTasks = tasksByStepId.get(task.stepId) || [];
+        stepTasks.push(task);
+        tasksByStepId.set(task.stepId, stepTasks);
+      } else {
+        unmappedTasks.push(task);
+      }
+    });
+
+    // Use the already imported templates
+    const phasesWithTracking: PhaseWithTracking[] = TASK_TEMPLATES.map((phaseTemplate: any) => {
+      let phaseCompleted = 0;
+      let phaseTotal = 0;
+
+      const stepsWithTracking: StepWithTracking[] = phaseTemplate.steps.map((stepTemplate: any) => {
+        let stepCompleted = 0;
+
+        const dbTasksForStep = tasksByStepId.get(stepTemplate.id) || [];
+
+        if (dbTasksForStep.length === 0 && unmappedTasks.length > 0) {
+          stepTemplate.tasks.forEach((taskTemplate: any) => {
+            const matchingTask = unmappedTasks.find((t) => t.name === taskTemplate.name);
+            if (matchingTask) {
+              dbTasksForStep.push(matchingTask);
+            }
+          });
+        }
+
+        let tasksWithTracking: TaskWithTracking[];
+
+        if (dbTasksForStep.length > 0) {
+          tasksWithTracking = dbTasksForStep
+            .map((dbTask) => {
+              const isCompleted = dbTask.status === 'completed';
+              if (isCompleted) {
+                stepCompleted++;
+              }
+
+              const matchingTemplate = stepTemplate.tasks.find((t: any) => t.name === dbTask.name);
+
+              // Use isFlagged from database
+              const isFlagged = dbTask.isFlagged === true;
+
+              console.log(`Task ${dbTask.name}: isFlagged=${isFlagged}`);
+
+              return {
+                id: dbTask.id || matchingTemplate?.id || '',
+                name: dbTask.name,
+                description: dbTask.description || matchingTemplate?.description,
+                stepId: dbTask.stepId || stepTemplate.id,
+                phaseId: dbTask.phaseId,
+                orderNo: dbTask.orderNo || matchingTemplate?.orderNo || 1,
+                dbTask,
+                isCompleted,
+                isFlagged,
+                assignedTo: dbTask.assignedTo,
+                assignedToName: dbTask.assignedToName,
+                progress: dbTask.completionPercentage || 0,
+                priority: dbTask.priority || 'medium',
+              };
+            })
+            .sort((a, b) => a.orderNo - b.orderNo);
+        } else {
+          tasksWithTracking = stepTemplate.tasks.map((taskTemplate: any) => ({
+            ...taskTemplate,
+            dbTask: undefined,
+            isCompleted: false,
+            isFlagged: false,
+            assignedTo: undefined,
+            assignedToName: undefined,
+            progress: 0,
+            priority: 'medium' as any,
+          }));
+        }
+
+        const actualTaskCount = tasksWithTracking.length;
+        phaseCompleted += stepCompleted;
+        phaseTotal += actualTaskCount;
+
+        return {
+          ...stepTemplate,
+          tasks: tasksWithTracking,
+          taskCount: actualTaskCount,
+          completedCount: stepCompleted,
+          progress: actualTaskCount > 0 ? Math.round((stepCompleted / actualTaskCount) * 100) : 0,
+        };
+      });
+
+      return {
+        ...phaseTemplate,
+        steps: stepsWithTracking,
+        completedCount: phaseCompleted,
+        totalTasks: phaseTotal,
+        progress: phaseTotal > 0 ? Math.round((phaseCompleted / phaseTotal) * 100) : 0,
+      };
+    });
+
+    this.phasesWithTracking.set(phasesWithTracking);
+    console.log('Updated phases with tracking:', phasesWithTracking);
+  }
+
+  debugTasks() {
+    const dbTasks = this.databaseTasks();
+    console.log('=== TASK DEBUG INFO ===');
+    console.log('Total database tasks:', dbTasks.length);
+    console.log('Tasks with ID:', dbTasks.filter((t) => t.id).length);
+    console.log('Tasks without ID:', dbTasks.filter((t) => !t.id).length);
+    console.log('Tasks with stepId:', dbTasks.filter((t) => t.stepId).length);
+    console.log('Tasks without stepId:', dbTasks.filter((t) => !t.stepId).length);
+
+    // Show priority distribution
+    const priorityCounts = dbTasks.reduce(
+      (acc, task) => {
+        acc[task.priority || 'undefined'] = (acc[task.priority || 'undefined'] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+    console.log('Priority distribution:', priorityCounts);
+
+    // Show flagged tasks
+    const flaggedTasks = dbTasks.filter((t) => t.priority === 'high' || t.priority === 'critical');
+    console.log('Flagged tasks (HIGH/CRITICAL priority):', flaggedTasks.length);
+
+    if (flaggedTasks.length > 0) {
+      console.log(
+        'Flagged task details:',
+        flaggedTasks.map((t) => ({ name: t.name, priority: t.priority })),
+      );
+    }
+
+    // Show current phase structure with flagged count
+    const phases = this.phasesWithTracking();
+    let totalFlagged = 0;
+    phases.forEach((phase) => {
+      phase.steps.forEach((step) => {
+        step.tasks.forEach((task) => {
+          if (task.isFlagged) totalFlagged++;
+        });
+      });
+    });
+    console.log('Total flagged tasks in UI:', totalFlagged);
+
+    // Test filter functionality
+    const currentFilter = this.viewFilter();
+    console.log('Current view filter:', currentFilter);
+
+    if (currentFilter === 'flagged') {
+      console.log('Flagged filter is active - checking visible tasks...');
+      const filteredPhases = this.filteredPhases();
+      let visibleFlaggedCount = 0;
+      filteredPhases.forEach((phase) => {
+        phase.steps.forEach((step) => {
+          step.tasks.forEach((task) => {
+            if (task.isFlagged) visibleFlaggedCount++;
+          });
+        });
+      });
+      console.log('Visible flagged tasks after filter:', visibleFlaggedCount);
+    }
+  }
+
+  async reinitializeTasks() {
+    const confirmDialog = confirm(
+      'This will delete all existing tasks and recreate them from templates. Are you sure?',
+    );
+    if (!confirmDialog) return;
+
+    try {
+      this.loading.set(true);
+
+      // Delete all existing tasks for this project
+      const existingTasks = await firstValueFrom(
+        this.taskService.getTasksByProject(this.projectId),
+      );
+      console.log(`Deleting ${existingTasks.length} existing tasks...`);
+
+      for (const task of existingTasks) {
+        if (task.id) {
+          await this.taskService.deleteTask(task.id);
+        }
+      }
+
+      // Reinitialize tasks from templates
+      await this.taskService.initializeProjectTasksWithSteps(this.projectId);
+
+      this.notification.success('Tasks reinitialized successfully');
+
+      // Reload the data
+      await this.loadProjectData();
+    } catch (error) {
+      console.error('Error reinitializing tasks:', error);
+      this.notification.error('Failed to reinitialize tasks');
+      this.loading.set(false);
+    }
+  }
+
+  async flagTestTasks() {
+    try {
+      const phases = this.phasesWithTracking();
+      let flaggedCount = 0;
+
+      // Flag the first task in each of the first 3 phases
+      for (let phaseIndex = 0; phaseIndex < Math.min(3, phases.length); phaseIndex++) {
+        const phase = phases[phaseIndex];
+        if (phase.steps.length > 0 && phase.steps[0].tasks.length > 0) {
+          const task = phase.steps[0].tasks[0];
+          if (task.dbTask && !task.isFlagged) {
+            await this.toggleFlag(task);
+            flaggedCount++;
+          }
+        }
+      }
+
+      this.notification.success(`Flagged ${flaggedCount} test tasks`);
+      console.log(`Flagged ${flaggedCount} test tasks for filter testing`);
+    } catch (error) {
+      console.error('Error flagging test tasks:', error);
+      this.notification.error('Failed to flag test tasks');
+    }
+  }
+
+  async createMissingTasks() {
+    try {
+      this.loading.set(true);
+      console.log('Creating missing tasks for project:', this.projectId);
+
+      // Count tasks without database records
+      const phases = this.phasesWithTracking();
+      let missingCount = 0;
+      phases.forEach((phase) => {
+        phase.steps.forEach((step) => {
+          step.tasks.forEach((task) => {
+            if (!task.dbTask) {
+              missingCount++;
             }
           });
         });
       });
-      
-      this.allPhases.set([...phasesWithTasks]);
-    });
-  }
 
-  setViewFilter(value: ViewFilter) {
-    this.viewFilter.set(value);
-  }
+      console.log(`Found ${missingCount} tasks without database records`);
 
-  setAssigneeFilter(value: string) {
-    this.assigneeFilter.set(value);
-  }
+      if (missingCount === 0) {
+        this.notification.info('All tasks already exist in database');
+        return;
+      }
 
-  refreshData() {
-    // In a real implementation, this would reload from the database
-    this.notification.info('Data refreshed');
-  }
+      await this.taskService.initializeProjectTasksWithSteps(this.projectId);
+      this.notification.success(`Created ${missingCount} missing tasks`);
 
-  shouldExpandPhase(phase: ExtendedPhaseTemplate): boolean {
-    // Expand if there's a search term or phase filter
-    return !!this.searchTerm() || !!this.selectedPhase();
-  }
-
-  shouldExpandStep(step: ExtendedStepTemplate): boolean {
-    // Expand if there's a search term
-    return !!this.searchTerm();
-  }
-
-  getFilteredStepsForPhase(phase: ExtendedPhaseTemplate): ExtendedStepTemplate[] {
-    const filteredPhase = this.filteredPhases().find((p) => p.id === phase.id);
-    return filteredPhase?.steps || [];
-  }
-
-  getFilteredTasksForStep(step: ExtendedStepTemplate): ExtendedTaskTemplate[] {
-    const term = this.searchTerm().toLowerCase();
-    if (!term) {
-      return step.tasks;
+      // Reload the data to include the new tasks
+      await this.loadProjectData();
+    } catch (error) {
+      console.error('Error creating missing tasks:', error);
+      this.notification.error('Failed to create missing tasks');
+    } finally {
+      this.loading.set(false);
     }
-    return step.tasks.filter(
-      (task) =>
-        task.name.toLowerCase().includes(term) || task.description?.toLowerCase().includes(term),
-    );
-  }
-
-  getTotalFilteredTasks(): number {
-    return this.filteredPhases().reduce(
-      (total, phase) =>
-        total +
-        phase.steps.reduce(
-          (stepTotal, step) => stepTotal + this.getFilteredTasksForStep(step).length,
-          0,
-        ),
-      0,
-    );
-  }
-
-  trackByPhase(index: number, phase: ExtendedPhaseTemplate): string {
-    return phase.id;
-  }
-
-  trackByStep(index: number, step: ExtendedStepTemplate): string {
-    return step.id;
-  }
-
-  trackByTask(index: number, task: ExtendedTaskTemplate): string {
-    return task.id;
-  }
-
-  updateAssignee(type: 'phase' | 'step' | 'task', item: any, assigneeId: string | null) {
-    const oldAssignee = item.assignedTo;
-    const oldAssigneeName = item.assignedToName;
-    
-    item.assignedTo = assigneeId || undefined;
-    item.assignedToName = assigneeId ? this.staffMap.get(assigneeId)?.name : undefined;
-
-    // Save to database if this is a real task
-    if (type === 'task' && item.taskId && assigneeId) {
-      this.taskService.assignTask(item.taskId, assigneeId).then(() => {
-        this.notification.success('Task assignee updated');
-      }).catch((error) => {
-        // Revert on error
-        item.assignedTo = oldAssignee;
-        item.assignedToName = oldAssigneeName;
-        this.notification.error('Failed to update task assignee');
-        console.error('Error updating task assignee:', error);
-      });
-    } else {
-      // For phases and steps, just show notification (no DB update yet)
-      this.notification.success(`${type} assignee updated`);
-    }
-  }
-
-  toggleComplete(type: 'phase' | 'step' | 'task', item: any) {
-    item.isCompleted = !item.isCompleted;
-    item.progress = item.isCompleted ? 100 : 0;
-
-    // Save to database if this is a real task
-    if (type === 'task' && item.taskId) {
-      const updates = {
-        status: item.isCompleted ? TaskStatus.COMPLETED : TaskStatus.IN_PROGRESS,
-        completionPercentage: item.progress,
-        completedDate: item.isCompleted ? new Date() : undefined
-      };
-
-      this.taskService.updateTask(item.taskId, updates).then(() => {
-        this.notification.success(`Task marked as ${item.isCompleted ? 'completed' : 'incomplete'}`);
-      }).catch((error) => {
-        // Revert on error
-        item.isCompleted = !item.isCompleted;
-        item.progress = item.isCompleted ? 100 : 0;
-        this.notification.error('Failed to update task status');
-        console.error('Error updating task:', error);
-      });
-    } else {
-      // For phases and steps, just show notification (no DB update yet)
-      this.notification.success(`${type} marked as ${item.isCompleted ? 'completed' : 'incomplete'}`);
-    }
-  }
-
-  toggleFlag(type: 'phase' | 'step' | 'task', item: any) {
-    item.isFlagged = !item.isFlagged;
-
-    // In a real implementation, this would save to the database
-    this.notification.info(`${type} ${item.isFlagged ? 'flagged' : 'unflagged'}`);
   }
 }

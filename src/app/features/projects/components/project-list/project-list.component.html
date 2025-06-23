@@ -100,12 +100,16 @@
                 <div class="progress-section">
                   <div class="progress-header">
                     <span class="progress-label">Overall Progress</span>
-                    <span class="progress-value">{{ project.overallProgress }}%</span>
+                    <span class="progress-value"
+                      >{{ getProjectTaskStats(project.id).overallProgress }}%</span
+                    >
                   </div>
                   <mat-progress-bar
                     mode="determinate"
-                    [value]="project.overallProgress"
-                    [color]="project.overallProgress === 100 ? 'accent' : 'primary'"
+                    [value]="getProjectTaskStats(project.id).overallProgress"
+                    [color]="
+                      getProjectTaskStats(project.id).overallProgress === 100 ? 'accent' : 'primary'
+                    "
                   >
                   </mat-progress-bar>
                 </div>
@@ -115,14 +119,18 @@
                   <div class="stat-card">
                     <mat-icon color="primary">assignment</mat-icon>
                     <div class="stat-content">
-                      <div class="stat-value">{{ project.activeTasksCount }}</div>
+                      <div class="stat-value">
+                        {{ getProjectTaskStats(project.id).inProgressTasks }}
+                      </div>
                       <div class="stat-label">Active Tasks</div>
                     </div>
                   </div>
                   <div class="stat-card">
                     <mat-icon class="completed-icon">check_circle</mat-icon>
                     <div class="stat-content">
-                      <div class="stat-value">{{ project.completedTasksCount }}</div>
+                      <div class="stat-value">
+                        {{ getProjectTaskStats(project.id).completedTasks }}
+                      </div>
                       <div class="stat-label">Completed</div>
                     </div>
                   </div>

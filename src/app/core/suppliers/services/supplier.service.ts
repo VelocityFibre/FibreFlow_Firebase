@@ -37,6 +37,7 @@ export class SupplierService {
   ) as CollectionReference<Supplier>;
 
   getSuppliers(filter?: SupplierFilter): Observable<Supplier[]> {
+    console.log('SupplierService.getSuppliers called with filter:', filter);
     const constraints: QueryConstraint[] = [];
 
     if (filter?.status) {
@@ -54,17 +55,21 @@ export class SupplierService {
     constraints.push(orderBy('companyName', 'asc'));
 
     const q = query(this.suppliersCollection, ...constraints);
+    console.log('Executing Firestore query with constraints:', constraints.length);
 
     return collectionData(q, { idField: 'id' }).pipe(
       map((suppliers) => {
+        console.log('Raw suppliers from Firestore:', suppliers);
         if (filter?.searchQuery) {
           const search = filter.searchQuery.toLowerCase();
-          return suppliers.filter(
+          const filtered = suppliers.filter(
             (supplier) =>
               supplier.companyName.toLowerCase().includes(search) ||
               supplier.primaryEmail.toLowerCase().includes(search) ||
               supplier.primaryPhone.includes(search),
           );
+          console.log('Filtered suppliers:', filtered);
+          return filtered;
         }
         return suppliers;
       }),
@@ -254,5 +259,21 @@ export class SupplierService {
 
   getSupplierBalance(supplierId: string): Observable<number> {
     return this.getSupplierById(supplierId).pipe(map((supplier) => supplier?.currentBalance || 0));
+  }
+
+  async updateVerificationStatus(
+    supplierId: string,
+    verificationStatus: 'verified' | 'pending' | 'unverified',
+  ): Promise<void> {
+    try {
+      const supplierDoc = doc(this.firestore, 'suppliers', supplierId);
+      await updateDoc(supplierDoc, {
+        verificationStatus,
+        updatedAt: serverTimestamp(),
+      });
+    } catch (error) {
+      console.error('Error updating verification status:', error);
+      throw new Error('Failed to update verification status');
+    }
   }
 }

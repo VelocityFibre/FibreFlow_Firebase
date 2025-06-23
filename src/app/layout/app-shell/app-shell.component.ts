@@ -396,6 +396,8 @@ export class AppShellComponent {
     { label: 'Steps', icon: 'linear_scale', route: '/steps', badge: 0 },
     { label: 'All Tasks', icon: 'task_alt', route: '/tasks' },
     { label: 'Daily Progress', icon: 'assignment_turned_in', route: '/daily-progress' },
+    { label: 'Daily KPIs', icon: 'analytics', route: '/daily-progress/kpis' },
+    { label: 'KPI Dashboard', icon: 'dashboard', route: '/daily-progress/kpis-summary' },
   ];
 
   // Stock Management category items
@@ -405,13 +407,14 @@ export class AppShellComponent {
     { label: 'Stock Movements', icon: 'swap_horiz', route: '/stock-movements' },
     { label: 'Stock Allocations', icon: 'assignment', route: '/stock/allocations' },
     { label: 'BOQ Management', icon: 'receipt_long', route: '/boq' },
-    { label: 'RFQ Management', icon: 'request_quote', route: '/rfq' },
+    { label: 'RFQ Management', icon: 'request_quote', route: '/quotes/rfq' },
     { label: 'Stock Analysis', icon: 'analytics', route: '/stock-analysis' },
   ];
 
   // Suppliers category items
   supplierItems: NavItem[] = [
     { label: 'Suppliers', icon: 'local_shipping', route: '/suppliers' },
+    { label: 'Email History', icon: 'email', route: '/emails/history' },
     { label: 'Supplier Portal', icon: 'web', route: '/supplier-portal' },
   ];
 
@@ -423,6 +426,7 @@ export class AppShellComponent {
 
   // Settings category items
   settingsItems: NavItem[] = [
+    { label: 'Company Info', icon: 'business', route: '/settings/company' },
     { label: 'Settings', icon: 'settings', route: '/settings' },
     { label: 'Audit Trail', icon: 'history', route: '/audit-trail' },
     { label: 'Debug Logs', icon: 'bug_report', route: '/debug-logs' },

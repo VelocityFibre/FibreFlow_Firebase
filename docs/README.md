@@ -31,6 +31,7 @@ TypeScript 5.8 improvements and best practices:
 
 ### [🔧 Technical](./technical/)
 Technical guides, setup instructions, and system documentation:
+- [Database Structure & Project Isolation](./technical/DATABASE_STRUCTURE.md) 🆕
 - [Tech Stack Overview](./technical/tech_stack.md)
 - [Sentry Setup Guide](./technical/SENTRY_SETUP.md)
 - [Theme Standardization](./technical/THEME_STANDARDIZATION_ISSUE.md)
