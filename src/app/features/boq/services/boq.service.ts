@@ -118,11 +118,11 @@ export class BOQService {
 
     // Get all items and filter by IDs (simple approach for now)
     return this.getBOQItems().pipe(
-      map(items => items.filter(item => item.id && ids.includes(item.id))),
+      map((items) => items.filter((item) => item.id && ids.includes(item.id))),
       catchError((error) => {
         console.error('Error in getBOQItemsByIds:', error);
         return of([]);
-      })
+      }),
     );
   }
 

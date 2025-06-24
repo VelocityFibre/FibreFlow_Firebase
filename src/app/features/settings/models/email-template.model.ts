@@ -15,7 +15,7 @@ export enum EmailTemplateType {
   RFQ = 'rfq',
   QUOTE_RESPONSE = 'quote_response',
   PURCHASE_ORDER = 'purchase_order',
-  GENERAL = 'general'
+  GENERAL = 'general',
 }
 
 export interface TemplateVariable {
@@ -33,8 +33,12 @@ export const RFQ_TEMPLATE_VARIABLES: TemplateVariable[] = [
   { key: '{{contactPerson}}', description: 'Your contact person name', example: 'John Doe' },
   { key: '{{contactEmail}}', description: 'Your contact email', example: 'john@velocityfibre.com' },
   { key: '{{contactPhone}}', description: 'Your contact phone', example: '+27 11 123 4567' },
-  { key: '{{itemsTable}}', description: 'Table of requested items', example: '(Auto-generated table)' },
-  { key: '{{termsAndConditions}}', description: 'Terms and conditions', example: '(Your terms)' }
+  {
+    key: '{{itemsTable}}',
+    description: 'Table of requested items',
+    example: '(Auto-generated table)',
+  },
+  { key: '{{termsAndConditions}}', description: 'Terms and conditions', example: '(Your terms)' },
 ];
 
 export const DEFAULT_RFQ_TEMPLATE: Partial<EmailTemplate> = {
@@ -79,5 +83,5 @@ Best regards,
 {{contactPerson}}
 {{companyName}}`,
   variables: RFQ_TEMPLATE_VARIABLES,
-  isActive: true
+  isActive: true,
 };

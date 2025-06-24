@@ -34,6 +34,7 @@ import {
 } from '../../models/contractor.model';
 import { ContractorProjectSummary } from '../../models/contractor-project.model';
 import { ContractorFormComponent } from '../contractor-form/contractor-form.component';
+import { ContractorImportComponent } from '../contractor-import/contractor-import.component';
 
 @Component({
   selector: 'app-contractor-list',
@@ -62,10 +63,16 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
       <!-- Header -->
       <div class="header">
         <h1>Contractors (NEW CARD VIEW)</h1>
-        <button mat-raised-button color="primary" (click)="openAddDialog()">
-          <mat-icon>add</mat-icon>
-          Add Contractor
-        </button>
+        <div class="header-actions">
+          <button mat-raised-button color="accent" (click)="openImportDialog()">
+            <mat-icon>upload</mat-icon>
+            Import Contractors
+          </button>
+          <button mat-raised-button color="primary" (click)="openAddDialog()">
+            <mat-icon>add</mat-icon>
+            Add Contractor
+          </button>
+        </div>
       </div>
 
       <!-- Filters -->
@@ -302,6 +309,11 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
         font-weight: 500;
       }
 
+      .header-actions {
+        display: flex;
+        gap: 12px;
+      }
+
       .filters {
         display: flex;
         gap: 16px;
@@ -325,6 +337,8 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
         height: 100%;
         display: flex;
         flex-direction: column;
+        background-color: white !important;
+        border: 1px solid #e5e7eb !important; /* Override any global border colors */
       }
 
       .contractor-card:hover {
@@ -342,6 +356,7 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
         align-items: center;
         font-size: 20px;
         margin-bottom: 8px;
+        color: #333 !important; /* Ensure title text is dark */
       }
 
       .status-chip {
@@ -355,7 +370,7 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
         display: flex;
         gap: 16px;
         font-size: 14px;
-        color: #666;
+        color: #666 !important; /* Ensure metrics text is visible */
       }
 
       .contractor-metrics .metric {
@@ -532,23 +547,23 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
         height: 400px;
       }
 
-      /* Status colors */
-      .status-chip.status-pending_approval {
+      /* Status colors - More specific selectors to override global styles */
+      .contractor-card .status-chip.status-pending_approval {
         background-color: #fff3cd !important;
         color: #856404 !important;
       }
 
-      .status-chip.status-active {
-        background-color: #d4edda !important;
-        color: #155724 !important;
+      .contractor-card .status-chip.status-active {
+        background-color: #e3f2fd !important;
+        color: #1976d2 !important;
       }
 
-      .status-chip.status-suspended {
+      .contractor-card .status-chip.status-suspended {
         background-color: #f8d7da !important;
         color: #721c24 !important;
       }
 
-      .status-chip.status-blacklisted {
+      .contractor-card .status-chip.status-blacklisted {
         background-color: #d1d1d1 !important;
         color: #333 !important;
       }
@@ -559,7 +574,7 @@ import { ContractorFormComponent } from '../contractor-form/contractor-form.comp
       }
 
       .contractor-card.status-active {
-        border-left: 4px solid #28a745;
+        border-left: 4px solid #1976d2;
       }
 
       .contractor-card.status-suspended {
@@ -813,5 +828,18 @@ export class ContractorListComponent implements OnInit {
 
   formatStatus(status: ContractorStatus): string {
     return status.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+  }
+
+  openImportDialog() {
+    const dialogRef = this.dialog.open(ContractorImportComponent, {
+      width: '600px',
+      disableClose: false
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadContractors();
+      }
+    });
   }
 }

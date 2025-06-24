@@ -83,15 +83,30 @@
 // Dashboard grid with improved card design
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   margin-bottom: 48px;
+  
+  @media (max-width: 1280px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  @media (max-width: 968px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
   
   .dashboard-card {
     @include theme.card-theme(interactive);
     cursor: pointer;
     transition: all 0.2s ease;
     overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     
     &:hover {
       transform: translateY(-2px);
@@ -103,6 +118,7 @@
       display: flex;
       align-items: flex-start;
       gap: 16px;
+      flex: 1;
     }
     
     .card-icon {
@@ -137,17 +153,27 @@
         background: theme.ff-rgb(warning);
       }
       
-      &.issues-icon {
-        background: theme.ff-rgb(destructive);
+      &.staff-icon {
+        background: #fb923c; // Orange-400 to match the staff card border color
       }
       
-      &.analytics-icon {
-        background: theme.ff-rgb(primary);
+      &.contractors-icon {
+        background: #1976d2; // Blue to match the contractors card border color
+      }
+      
+      &.poles-icon {
+        background: #10b981; // Emerald-500 for pole tracker
+      }
+      
+      &.issues-icon {
+        background: theme.ff-rgb(destructive);
       }
     }
     
     .card-details {
       flex: 1;
+      display: flex;
+      flex-direction: column;
       
       .card-title {
         @include theme.heading-3();
@@ -159,9 +185,12 @@
         color: theme.ff-rgb(muted-foreground);
         margin: 0 0 16px 0;
         line-height: 1.4;
+        min-height: 40px; // Ensures consistent height across cards
       }
       
       .card-stats {
+        margin-top: auto; // Push stats to bottom of card
+        
         .stat-number {
           font-size: 28px;
           font-weight: 600;

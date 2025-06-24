@@ -1,6 +1,12 @@
 import { Component, inject, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -17,7 +23,10 @@ import { RFQService } from '../../services/rfq.service';
 import { SupplierService } from '../../../../core/suppliers/services/supplier.service';
 import { BOQService } from '../../../boq/services/boq.service';
 import { NotificationService } from '../../../../core/services/notification.service';
-import { SupplierStatus, VerificationStatus } from '../../../../core/suppliers/models/supplier.model';
+import {
+  SupplierStatus,
+  VerificationStatus,
+} from '../../../../core/suppliers/models/supplier.model';
 
 export interface RFQEmailDialogData {
   rfq: RFQ;
@@ -54,7 +63,9 @@ export interface RFQEmailDialogData {
               matInput
               formControlName="emailAddresses"
               placeholder="Enter email addresses separated by commas"
-              [class.error]="emailForm.get('emailAddresses')?.invalid && emailForm.get('emailAddresses')?.touched"
+              [class.error]="
+                emailForm.get('emailAddresses')?.invalid && emailForm.get('emailAddresses')?.touched
+              "
             />
             <mat-hint>Separate multiple email addresses with commas</mat-hint>
             <mat-error *ngIf="emailForm.get('emailAddresses')?.hasError('required')">
@@ -78,11 +89,7 @@ export interface RFQEmailDialogData {
           <!-- Subject (read-only preview) -->
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Subject</mat-label>
-            <input
-              matInput
-              [value]="emailSubject"
-              readonly
-            />
+            <input matInput [value]="emailSubject" readonly />
           </mat-form-field>
 
           <!-- Preview Section -->
@@ -118,12 +125,10 @@ export interface RFQEmailDialogData {
       </mat-dialog-content>
 
       <mat-dialog-actions align="end">
-        <button mat-button type="button" (click)="cancel()">
-          Cancel
-        </button>
-        <button 
-          mat-raised-button 
-          color="primary" 
+        <button mat-button type="button" (click)="cancel()">Cancel</button>
+        <button
+          mat-raised-button
+          color="primary"
           type="submit"
           [disabled]="emailForm.invalid || sending"
         >
@@ -214,8 +219,12 @@ export interface RFQEmailDialogData {
       }
 
       @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
       }
 
       mat-dialog-content {
@@ -246,7 +255,7 @@ export class RFQEmailDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<RFQEmailDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: RFQEmailDialogData
+    @Inject(MAT_DIALOG_DATA) public data: RFQEmailDialogData,
   ) {
     this.emailForm = this.fb.group({
       emailAddresses: ['', [Validators.required, this.emailValidator]],
@@ -267,12 +276,15 @@ export class RFQEmailDialogComponent {
 
   private emailValidator = (control: any) => {
     if (!control.value) return null;
-    
-    const emails = control.value.split(',').map((e: string) => e.trim()).filter((e: string) => e);
+
+    const emails = control.value
+      .split(',')
+      .map((e: string) => e.trim())
+      .filter((e: string) => e);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
+
     const invalidEmails = emails.filter((email: string) => !emailRegex.test(email));
-    
+
     return invalidEmails.length > 0 ? { invalidEmails: true } : null;
   };
 
@@ -282,9 +294,12 @@ export class RFQEmailDialogComponent {
       return;
     }
 
-    const emails = value.split(',').map((e: string) => e.trim()).filter((e: string) => e);
+    const emails = value
+      .split(',')
+      .map((e: string) => e.trim())
+      .filter((e: string) => e);
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
+
     this.validEmails = emails.filter((email: string) => emailRegex.test(email));
   }
 
@@ -296,7 +311,10 @@ export class RFQEmailDialogComponent {
 
   removeEmail(email: string) {
     const currentValue = this.emailForm.get('emailAddresses')?.value || '';
-    const emails = currentValue.split(',').map((e: string) => e.trim()).filter((e: string) => e);
+    const emails = currentValue
+      .split(',')
+      .map((e: string) => e.trim())
+      .filter((e: string) => e);
     const updatedEmails = emails.filter((e: string) => e !== email);
     this.emailForm.get('emailAddresses')?.setValue(updatedEmails.join(', '));
   }
@@ -309,62 +327,65 @@ export class RFQEmailDialogComponent {
     this.sending = true;
 
     // Get BOQ items and send email
-    this.boqService.getBOQItemsByIds(this.data.rfq.boqItemIds).pipe(
-      take(1),
-      switchMap((items) => {
-        // Create temporary suppliers from email addresses
-        const tempSuppliers = this.validEmails.map((email, index) => ({
-          id: `temp_${index}`,
-          companyName: email.split('@')[0], // Use email prefix as company name
-          primaryEmail: email,
-          primaryPhone: '',
-          address: {
-            street: '',
-            city: '',
-            state: '',
-            postalCode: '',
-            country: 'South Africa'
-          },
-          categories: [],
-          products: [],
-          serviceAreas: [],
-          paymentTerms: {
-            termDays: 30,
-            termType: 'NET' as const
-          },
-          status: SupplierStatus.ACTIVE,
-          verificationStatus: VerificationStatus.UNVERIFIED,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          createdBy: 'system',
-          portalEnabled: false
-        }));
+    this.boqService
+      .getBOQItemsByIds(this.data.rfq.boqItemIds)
+      .pipe(
+        take(1),
+        switchMap((items) => {
+          // Create temporary suppliers from email addresses
+          const tempSuppliers = this.validEmails.map((email, index) => ({
+            id: `temp_${index}`,
+            companyName: email.split('@')[0], // Use email prefix as company name
+            primaryEmail: email,
+            primaryPhone: '',
+            address: {
+              street: '',
+              city: '',
+              state: '',
+              postalCode: '',
+              country: 'South Africa',
+            },
+            categories: [],
+            products: [],
+            serviceAreas: [],
+            paymentTerms: {
+              termDays: 30,
+              termType: 'NET' as const,
+            },
+            status: SupplierStatus.ACTIVE,
+            verificationStatus: VerificationStatus.UNVERIFIED,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            createdBy: 'system',
+            portalEnabled: false,
+          }));
 
-        return this.rfqFirebaseEmailService.sendRFQToSuppliers(
-          this.data.rfq,
-          tempSuppliers,
-          items,
-          false // Don't require confirmation for manual emails
-        );
-      })
-    ).subscribe({
-      next: (success) => {
-        this.sending = false;
-        if (success) {
-          this.notificationService.success(
-            `RFQ emailed successfully to ${this.validEmails.length} recipient(s)`
+          return this.rfqFirebaseEmailService.sendRFQToSuppliers(
+            this.data.rfq,
+            tempSuppliers,
+            items,
+            false, // Don't require confirmation for manual emails
           );
-          this.dialogRef.close(true);
-        } else {
+        }),
+      )
+      .subscribe({
+        next: (success) => {
+          this.sending = false;
+          if (success) {
+            this.notificationService.success(
+              `RFQ emailed successfully to ${this.validEmails.length} recipient(s)`,
+            );
+            this.dialogRef.close(true);
+          } else {
+            this.notificationService.error('Failed to send RFQ email');
+          }
+        },
+        error: (error) => {
+          this.sending = false;
+          console.error('Error sending RFQ email:', error);
           this.notificationService.error('Failed to send RFQ email');
-        }
-      },
-      error: (error) => {
-        this.sending = false;
-        console.error('Error sending RFQ email:', error);
-        this.notificationService.error('Failed to send RFQ email');
-      }
-    });
+        },
+      });
   }
 
   cancel() {

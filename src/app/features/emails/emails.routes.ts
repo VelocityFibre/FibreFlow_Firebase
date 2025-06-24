@@ -8,7 +8,7 @@ export const emailsRoutes: Routes = [
         path: 'history',
         loadComponent: () =>
           import('./components/email-history/email-history.component').then(
-            (m) => m.EmailHistoryComponent
+            (m) => m.EmailHistoryComponent,
           ),
       },
       {

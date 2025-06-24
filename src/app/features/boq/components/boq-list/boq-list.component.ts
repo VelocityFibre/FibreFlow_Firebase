@@ -1053,7 +1053,7 @@ export class BOQListComponent implements OnInit, OnDestroy {
           success: result?.success,
           rfqId: result?.rfqId,
           shouldSendEmails: result?.shouldSendEmails,
-          recipientCount: result?.recipientCount
+          recipientCount: result?.recipientCount,
         });
 
         if (result && result.success) {
@@ -1062,22 +1062,24 @@ export class BOQListComponent implements OnInit, OnDestroy {
           this.logger.info('RFQ creation confirmed', 'BOQList', {
             rfqId: result.rfqId,
             shouldSendEmails: result.shouldSendEmails,
-            recipientCount: result.recipientCount
+            recipientCount: result.recipientCount,
           });
 
           // Check if emails should be sent
           if (result.shouldSendEmails && result.recipientCount > 0) {
             const confirmSend = confirm(
               `RFQ created successfully!\n\n` +
-              `Would you like to send it to ${result.recipientCount} recipient(s) now?\n\n` +
-              `Click OK to send emails automatically, or Cancel to send later.`
+                `Would you like to send it to ${result.recipientCount} recipient(s) now?\n\n` +
+                `Click OK to send emails automatically, or Cancel to send later.`,
             );
-            
+
             if (confirmSend) {
               // Send emails automatically
               this.sendRFQEmails(result.rfqId);
             } else {
-              alert(`RFQ created successfully! You can send it to suppliers later from the RFQ detail page.`);
+              alert(
+                `RFQ created successfully! You can send it to suppliers later from the RFQ detail page.`,
+              );
             }
           } else {
             alert(`RFQ created successfully! RFQ ID: ${result.rfqId}`);
@@ -1158,19 +1160,20 @@ export class BOQListComponent implements OnInit, OnDestroy {
     try {
       console.log('Sending RFQ emails for:', rfqId);
       this.logger.info('Sending RFQ emails automatically', 'BOQList', { rfqId });
-      
+
       alert(`RFQ created successfully! Opening RFQ detail page to send emails...`);
       // Open RFQ detail page where emails can be sent
       window.open(`/quotes/rfq/${rfqId}`, '_blank');
-      
     } catch (error) {
       console.error('Error opening RFQ detail page:', error);
-      this.logger.error('Failed to open RFQ detail page', 'BOQList', { 
-        rfqId, 
-        error: error instanceof Error ? error.message : String(error)
+      this.logger.error('Failed to open RFQ detail page', 'BOQList', {
+        rfqId,
+        error: error instanceof Error ? error.message : String(error),
       });
-      
-      alert(`Error opening RFQ detail page: ${error instanceof Error ? error.message : 'Unknown error'}`);
+
+      alert(
+        `Error opening RFQ detail page: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
     }
   }
 }

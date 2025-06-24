@@ -28,20 +28,26 @@ export class RFQFirebaseEmailService {
   private emailTemplateService = inject(EmailTemplateService);
   private companyService = inject(CompanyService);
 
-  sendRFQToSuppliers(rfq: RFQ, suppliers: Supplier[], items: BOQItem[], requireConfirmation = false): Observable<boolean> {
+  sendRFQToSuppliers(
+    rfq: RFQ,
+    suppliers: Supplier[],
+    items: BOQItem[],
+    requireConfirmation = false,
+  ): Observable<boolean> {
     // First get the email template and company info
     return forkJoin([
       this.emailTemplateService.getTemplateByType(EmailTemplateType.RFQ).pipe(take(1)),
-      this.companyService.getCompanyInfo().pipe(take(1))
+      this.companyService.getCompanyInfo().pipe(take(1)),
     ]).pipe(
       switchMap(([template, companyInfo]) => {
         // Generate PDF
         const pdfDoc = this.rfqPDFService.generateRFQPDF(rfq, items, suppliers);
         const pdfBase64 = this.rfqPDFService.getPDFAsBase64(pdfDoc);
-        
+
         const currentUser = this.authService.getCurrentUser();
         const fromEmail = currentUser?.email || companyInfo.email || 'procurement@fibreflow.com';
-        const fromName = currentUser?.displayName || companyInfo.companyName || 'FibreFlow Procurement';
+        const fromName =
+          currentUser?.displayName || companyInfo.companyName || 'FibreFlow Procurement';
 
         // Create email log entries for each supplier
         const emailLogPromises = suppliers.map((supplier) => {
@@ -50,102 +56,119 @@ export class RFQFirebaseEmailService {
             '{{supplierName}}': supplier.companyName,
             '{{rfqNumber}}': rfq.rfqNumber,
             '{{projectName}}': rfq.projectName,
-            '{{dueDate}}': new Date(rfq.deadline).toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' }),
-            '{{contactPerson}}': currentUser?.displayName || companyInfo.companyName || 'Procurement Team',
+            '{{dueDate}}': new Date(rfq.deadline).toLocaleDateString('en-ZA', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            }),
+            '{{contactPerson}}':
+              currentUser?.displayName || companyInfo.companyName || 'Procurement Team',
             '{{contactEmail}}': fromEmail,
             '{{contactPhone}}': companyInfo.phone || '',
             '{{itemsTable}}': this.generateItemsTable(items),
-            '{{termsAndConditions}}': rfq.specialRequirements || 'Standard terms and conditions apply.'
+            '{{termsAndConditions}}':
+              rfq.specialRequirements || 'Standard terms and conditions apply.',
           };
 
           // Process template or use defaults
           let emailSubject = template?.subject || `RFQ ${rfq.rfqNumber} - ${rfq.title}`;
           let emailHtml = template?.body || this.generateHTMLEmail(rfq, supplier, items);
-          
+
           // Replace variables in template
           Object.entries(templateData).forEach(([key, value]) => {
             emailSubject = emailSubject.replace(new RegExp(key, 'g'), value);
             emailHtml = emailHtml.replace(new RegExp(key, 'g'), value);
           });
-          
+
           // Convert to HTML format if template is plain text
           emailHtml = this.formatEmailAsHTML(emailHtml, companyInfo);
           const emailText = this.htmlToPlainText(emailHtml);
-      
-      const emailLog: EmailLog = {
-        to: [supplier.primaryEmail],
-        from: fromEmail,
-        fromName: fromName,
-        subject: emailSubject,
-        text: emailText,
-        html: emailHtml,
-        status: requireConfirmation ? 'pending_confirmation' : 'draft',
-        confirmationRequired: requireConfirmation,
-        attachments: [
-          {
-            filename: `${rfq.rfqNumber}.pdf`,
-            content: pdfBase64,
-            encoding: 'base64',
-          },
-        ],
-        type: 'rfq' as const,
-        relatedId: rfq.id,
-        relatedType: 'rfq',
-        projectId: rfq.projectId,
-        projectName: rfq.projectName,
-        createdBy: currentUser?.uid || 'system',
-        createdByName: currentUser?.displayName || 'System',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-      
+
+          const emailLog: EmailLog = {
+            to: [supplier.primaryEmail],
+            from: fromEmail,
+            fromName: fromName,
+            subject: emailSubject,
+            text: emailText,
+            html: emailHtml,
+            status: requireConfirmation ? 'pending_confirmation' : 'draft',
+            confirmationRequired: requireConfirmation,
+            attachments: [
+              {
+                filename: `${rfq.rfqNumber}.pdf`,
+                content: pdfBase64,
+                encoding: 'base64',
+              },
+            ],
+            type: 'rfq' as const,
+            relatedId: rfq.id,
+            relatedType: 'rfq',
+            projectId: rfq.projectId,
+            projectName: rfq.projectName,
+            createdBy: currentUser?.uid || 'system',
+            createdByName: currentUser?.displayName || 'System',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          };
+
           return this.emailLogService.createEmailLog(emailLog);
         });
 
-    // Create all email logs first
-    return from(Promise.all(emailLogPromises)).pipe(
-      switchMap((emailLogIds) => {
-        if (requireConfirmation) {
-          // If confirmation required, don't send immediately
-          this.notificationService.info(
-            `${suppliers.length} email(s) prepared for review. Please confirm before sending.`,
-          );
-          return of(true);
-        } else {
-          // Send all emails
-          const sendPromises = emailLogIds.map(logId => 
-            this.emailLogService.getEmailLog(logId).toPromise().then(emailLog => {
-              if (emailLog) {
-                return this.emailLogService.sendEmail(emailLog);
-              }
-              throw new Error('Email log not found');
-            })
-          );
-          
-          return from(Promise.all(sendPromises)).pipe(
-            switchMap(() => {
-              // Update RFQ status to 'sent'
-              return this.rfqService.updateRFQ(rfq.id!, {
-                status: 'sent',
-                sentAt: new Date(),
-              } as Partial<RFQ>);
-            }),
-            map(() => {
-              this.notificationService.success(
-                `RFQ sent to ${suppliers.length} supplier(s). Check email history for status.`,
+        // Create all email logs first
+        return from(Promise.all(emailLogPromises)).pipe(
+          switchMap((emailLogIds) => {
+            if (requireConfirmation) {
+              // If confirmation required, don't send immediately
+              this.notificationService.info(
+                `${suppliers.length} email(s) prepared for review. Please confirm before sending.`,
               );
-              return true;
-            }),
-          );
-        }
+              return of(true);
+            } else {
+              // Send all emails
+              const sendPromises = emailLogIds.map((logId) =>
+                this.emailLogService
+                  .getEmailLog(logId)
+                  .pipe(take(1))
+                  .toPromise()
+                  .then((emailLog) => {
+                    if (emailLog) {
+                      console.log('Sending email for log ID:', logId);
+                      return this.emailLogService.sendEmail(emailLog);
+                    }
+                    throw new Error('Email log not found for ID: ' + logId);
+                  }),
+              );
+
+              return from(Promise.all(sendPromises)).pipe(
+                switchMap((results) => {
+                  console.log('All emails queued successfully:', results.length);
+                  // Update RFQ status to 'sent' (queued, not delivered)
+                  return this.rfqService.updateRFQ(rfq.id!, {
+                    status: 'sent',
+                    sentAt: new Date(),
+                  } as Partial<RFQ>);
+                }),
+                map(() => {
+                  this.notificationService.success(
+                    `RFQ queued for delivery to ${suppliers.length} supplier(s). Check email history for delivery status.`,
+                  );
+                  return true;
+                }),
+                catchError((error) => {
+                  console.error('Error queuing emails:', error);
+                  this.notificationService.error('Failed to queue emails for delivery');
+                  return of(false);
+                }),
+              );
+            }
+          }),
+          catchError((error) => {
+            console.error('Error processing RFQ emails:', error);
+            this.notificationService.error('Failed to process RFQ emails');
+            return of(false);
+          }),
+        );
       }),
-      catchError((error) => {
-        console.error('Error processing RFQ emails:', error);
-        this.notificationService.error('Failed to process RFQ emails');
-        return of(false);
-      }),
-    );
-      })
     );
   }
 
@@ -436,8 +459,8 @@ This is an automated email from FibreFlow Construction Management System
         </tr>
       </thead>
       <tbody>`;
-    
-    items.forEach(item => {
+
+    items.forEach((item) => {
       table += `
         <tr>
           <td style="border: 1px solid #ddd; padding: 8px;">${item.itemCode}</td>
@@ -446,7 +469,7 @@ This is an automated email from FibreFlow Construction Management System
           <td style="border: 1px solid #ddd; padding: 8px;">${item.unit}</td>
         </tr>`;
     });
-    
+
     table += `</tbody></table>`;
     return table;
   }

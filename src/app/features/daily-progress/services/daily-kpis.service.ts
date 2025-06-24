@@ -205,7 +205,11 @@ export class DailyKpisService {
   /**
    * Get daily KPIs for a date range and project
    */
-  getKPIsByProjectAndDateRange(projectId: string, startDate: Date, endDate: Date): Observable<DailyKPIs[]> {
+  getKPIsByProjectAndDateRange(
+    projectId: string,
+    startDate: Date,
+    endDate: Date,
+  ): Observable<DailyKPIs[]> {
     const kpisCollection = this.getKpisCollection(projectId);
     const startOfRange = new Date(startDate);
     startOfRange.setHours(0, 0, 0, 0);

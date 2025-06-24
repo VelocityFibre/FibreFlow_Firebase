@@ -1,42 +1,42 @@
-import { Injectable, inject } from '@angular/core';
-import { 
-  Firestore, 
-  collection, 
-  doc, 
-  writeBatch, 
-  query, 
-  orderBy, 
-  limit, 
+import { Injectable, inject, OnDestroy } from '@angular/core';
+import {
+  Firestore,
+  collection,
+  doc,
+  writeBatch,
+  query,
+  orderBy,
+  limit,
   startAfter,
   where,
   getDocs,
   DocumentSnapshot,
   serverTimestamp,
-  Timestamp
+  Timestamp,
 } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
-import { 
-  AuditLog, 
-  EntityType, 
-  AuditAction, 
-  ActionType, 
+import {
+  AuditLog,
+  EntityType,
+  AuditAction,
+  ActionType,
   ActionStatus,
   FieldChange,
   BulkOperation,
   AuditFilters,
   PaginatedAuditResult,
-  UnifiedAuditLog
+  UnifiedAuditLog,
 } from '../models/audit-log.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class AuditTrailService {
+export class AuditTrailService implements OnDestroy {
   private firestore = inject(Firestore);
   private authService = inject(AuthService);
   private logQueue: AuditLog[] = [];
-  private readonly BATCH_SIZE = 50;
-  private readonly FLUSH_INTERVAL = 5000; // 5 seconds
+  private readonly BATCH_SIZE = 10; // Reduced for faster flushing
+  private readonly FLUSH_INTERVAL = 2000; // 2 seconds instead of 5
   private flushTimer?: number;
 
   constructor() {
@@ -55,10 +55,18 @@ export class AuditTrailService {
     newData?: any,
     status: ActionStatus = 'success',
     errorMessage?: string,
-    metadata?: Record<string, any>
+    metadata?: Record<string, any>,
   ): Promise<void> {
+    console.log('🎯 AuditTrailService.logUserAction called:', {
+      entityType,
+      entityId,
+      entityName,
+      action,
+      status,
+    });
+
     const changes = this.calculateFieldChanges(oldData, newData);
-    
+
     const auditLog: AuditLog = {
       id: '', // Will be auto-generated
       entityType,
@@ -75,10 +83,16 @@ export class AuditTrailService {
       timestamp: serverTimestamp() as Timestamp,
       sessionId: this.generateSessionId(),
       metadata,
-      source: 'audit'
+      source: 'audit',
     };
 
+    console.log('📋 Created audit log object:', auditLog);
     this.addToQueue(auditLog);
+    console.log('✅ Added audit log to queue');
+
+    // Force immediate flush for testing
+    console.log('⚡ Forcing immediate flush...');
+    this.flushLogs();
   }
 
   /**
@@ -90,7 +104,7 @@ export class AuditTrailService {
     entityName: string,
     action: AuditAction,
     description: string,
-    metadata?: Record<string, any>
+    metadata?: Record<string, any>,
   ): Promise<void> {
     const auditLog: AuditLog = {
       id: '',
@@ -106,9 +120,9 @@ export class AuditTrailService {
       timestamp: serverTimestamp() as Timestamp,
       metadata: {
         description,
-        ...metadata
+        ...metadata,
       },
-      source: 'audit'
+      source: 'audit',
     };
 
     this.addToQueue(auditLog);
@@ -121,7 +135,7 @@ export class AuditTrailService {
     entityType: EntityType,
     operation: BulkOperation,
     status: ActionStatus = 'success',
-    errorMessage?: string
+    errorMessage?: string,
   ): Promise<void> {
     const auditLog: AuditLog = {
       id: '',
@@ -140,9 +154,9 @@ export class AuditTrailService {
       metadata: {
         bulkOperation: operation,
         affectedEntityIds: operation.entityIds.slice(0, 100), // Limit to prevent doc size issues
-        totalAffected: operation.entityCount
+        totalAffected: operation.entityCount,
       },
-      source: 'audit'
+      source: 'audit',
     };
 
     this.addToQueue(auditLog);
@@ -154,13 +168,15 @@ export class AuditTrailService {
   async getAuditLogs(
     filters: AuditFilters = {},
     pageLimit: number = 50,
-    lastDocument?: DocumentSnapshot
+    lastDocument?: DocumentSnapshot,
   ): Promise<PaginatedAuditResult> {
     try {
+      console.log('🔍 Querying audit-logs collection with filters:', filters);
+
       let q = query(
         collection(this.firestore, 'audit-logs'),
         orderBy('timestamp', 'desc'),
-        limit(pageLimit)
+        limit(pageLimit),
       );
 
       // Apply filters
@@ -198,30 +214,42 @@ export class AuditTrailService {
       }
 
       const snapshot = await getDocs(q);
-      const logs = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as AuditLog[];
+      console.log('📊 Firestore query result:', snapshot.docs.length, 'documents found');
+
+      const logs = snapshot.docs.map((doc) => {
+        const data = { id: doc.id, ...doc.data() } as AuditLog;
+        console.log('📄 Audit log document:', data);
+        return data;
+      });
 
       // Apply text search filter if provided (client-side for now)
       let filteredLogs = logs;
       if (filters.searchText) {
         const searchTerm = filters.searchText.toLowerCase();
-        filteredLogs = logs.filter(log =>
-          log.entityName.toLowerCase().includes(searchTerm) ||
-          log.userEmail.toLowerCase().includes(searchTerm) ||
-          log.action.toLowerCase().includes(searchTerm) ||
-          log.entityType.toLowerCase().includes(searchTerm)
+        filteredLogs = logs.filter(
+          (log) =>
+            log.entityName.toLowerCase().includes(searchTerm) ||
+            log.userEmail.toLowerCase().includes(searchTerm) ||
+            log.action.toLowerCase().includes(searchTerm) ||
+            log.entityType.toLowerCase().includes(searchTerm),
         );
+        console.log('🔎 After text search filter:', filteredLogs.length, 'logs');
       }
+
+      console.log(
+        '✅ Final audit logs result:',
+        filteredLogs.length,
+        'logs, hasMore:',
+        snapshot.docs.length === pageLimit,
+      );
 
       return {
         logs: filteredLogs,
         hasMore: snapshot.docs.length === pageLimit,
-        lastDocument: snapshot.docs[snapshot.docs.length - 1]
+        lastDocument: snapshot.docs[snapshot.docs.length - 1],
       };
     } catch (error) {
-      console.error('Error fetching audit logs:', error);
+      console.error('❌ Error fetching audit logs:', error);
       return { logs: [], hasMore: false };
     }
   }
@@ -232,7 +260,7 @@ export class AuditTrailService {
   async getEntityAuditHistory(
     entityType: EntityType,
     entityId: string,
-    pageLimit: number = 20
+    pageLimit: number = 20,
   ): Promise<AuditLog[]> {
     try {
       const q = query(
@@ -240,13 +268,13 @@ export class AuditTrailService {
         where('entityType', '==', entityType),
         where('entityId', '==', entityId),
         orderBy('timestamp', 'desc'),
-        limit(pageLimit)
+        limit(pageLimit),
       );
 
       const snapshot = await getDocs(q);
-      return snapshot.docs.map(doc => ({
+      return snapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as AuditLog[];
     } catch (error) {
       console.error('Error fetching entity audit history:', error);
@@ -261,8 +289,8 @@ export class AuditTrailService {
     // For now, just return main audit logs
     // TODO: Integrate with email and stock logs when needed
     const result = await this.getAuditLogs(filters);
-    
-    return result.logs.map(log => ({
+
+    return result.logs.map((log) => ({
       id: log.id,
       source: log.source || 'audit',
       entityType: log.entityType,
@@ -274,7 +302,7 @@ export class AuditTrailService {
       details: this.formatLogDetails(log),
       status: log.status,
       errorMessage: log.errorMessage,
-      metadata: log.metadata
+      metadata: log.metadata,
     }));
   }
 
@@ -285,25 +313,37 @@ export class AuditTrailService {
     const user = this.authService.currentUser;
     const adminEmails = [
       'louisrdup@gmail.com', // Louis - Primary admin
-      'dev@test.com',        // Development user
-      'admin@fibreflow.com'  // Backup admin email
+      'dev@test.com', // Development user
+      'admin@fibreflow.com', // Backup admin email
     ];
-    
+
     return user()?.email ? adminEmails.includes(user()!.email) : false;
+  }
+
+  /**
+   * Force immediate flush of audit logs (useful for testing)
+   */
+  async forceFlush(): Promise<void> {
+    console.log('⚡ Force flushing audit logs...');
+    await this.flushLogs();
   }
 
   // Private helper methods
 
   private addToQueue(log: AuditLog): void {
     this.logQueue.push(log);
-    
+    console.log('📌 Current queue size:', this.logQueue.length);
+
     if (this.logQueue.length >= this.BATCH_SIZE) {
+      console.log('🔄 Queue size reached batch limit, flushing...');
       this.flushLogs();
     }
   }
 
   private startPeriodicFlush(): void {
+    console.log('⏰ Starting periodic flush with interval:', this.FLUSH_INTERVAL, 'ms');
     this.flushTimer = window.setInterval(() => {
+      console.log('⏰ Periodic flush timer triggered');
       this.flushLogs();
     }, this.FLUSH_INTERVAL);
   }
@@ -312,20 +352,25 @@ export class AuditTrailService {
     if (this.logQueue.length === 0) return;
 
     try {
+      console.log('🚀 Flushing audit logs to Firestore:', this.logQueue.length, 'logs');
+
       const batch = writeBatch(this.firestore);
       const logsToFlush = this.logQueue.splice(0, this.BATCH_SIZE);
 
-      logsToFlush.forEach(log => {
+      logsToFlush.forEach((log) => {
         const docRef = doc(collection(this.firestore, 'audit-logs'));
-        batch.set(docRef, {
+        const logData = {
           ...log,
-          id: docRef.id
-        });
+          id: docRef.id,
+        };
+        console.log('📝 Writing audit log:', logData);
+        batch.set(docRef, logData);
       });
 
       await batch.commit();
+      console.log('✅ Successfully flushed audit logs to Firestore');
     } catch (error) {
-      console.error('Error flushing audit logs:', error);
+      console.error('❌ Error flushing audit logs:', error);
       // Re-add failed logs to queue for retry
       this.logQueue.unshift(...this.logQueue.splice(0));
     }
@@ -337,7 +382,7 @@ export class AuditTrailService {
     const changes: FieldChange[] = [];
     const allKeys = new Set([...Object.keys(oldData), ...Object.keys(newData)]);
 
-    allKeys.forEach(key => {
+    allKeys.forEach((key) => {
       const oldValue = oldData[key];
       const newValue = newData[key];
 
@@ -348,7 +393,7 @@ export class AuditTrailService {
           newValue,
           dataType: this.getDataType(newValue),
           displayOldValue: this.formatDisplayValue(oldValue),
-          displayNewValue: this.formatDisplayValue(newValue)
+          displayNewValue: this.formatDisplayValue(newValue),
         });
       }
     });
@@ -387,18 +432,19 @@ export class AuditTrailService {
   private formatLogDetails(log: AuditLog): string {
     const action = log.action.replace('_', ' ');
     const entity = log.entityType;
-    
+
     if (log.changes?.length) {
-      const changedFields = log.changes.map(c => c.field).join(', ');
+      const changedFields = log.changes.map((c) => c.field).join(', ');
       return `${action} ${entity} "${log.entityName}" - Changed: ${changedFields}`;
     }
-    
+
     return `${action} ${entity} "${log.entityName}"`;
   }
 
   private generateSessionId(): string {
-    return Math.random().toString(36).substring(2, 15) + 
-           Math.random().toString(36).substring(2, 15);
+    return (
+      Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+    );
   }
 
   ngOnDestroy(): void {

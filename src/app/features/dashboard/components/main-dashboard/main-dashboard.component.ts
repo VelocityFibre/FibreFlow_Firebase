@@ -17,6 +17,10 @@ import { StockService } from '../../../stock/services/stock.service';
 import { ClientService } from '../../../clients/services/client.service';
 import { TaskService } from '../../../../core/services/task.service';
 import { TaskPriority } from '../../../../core/models/task.model';
+import { RFQService } from '../../../quotes/services/rfq.service';
+import { StaffService } from '../../../staff/services/staff.service';
+import { ContractorService } from '../../../contractors/services/contractor.service';
+import { PoleTrackerService } from '../../../pole-tracker/services/pole-tracker.service';
 import { catchError, of, interval, Subject, takeUntil, switchMap, startWith } from 'rxjs';
 
 @Component({
@@ -33,6 +37,10 @@ export class MainDashboardComponent implements OnInit, OnDestroy {
   private stockService = inject(StockService);
   private clientService = inject(ClientService);
   private taskService = inject(TaskService);
+  private rfqService = inject(RFQService);
+  private staffService = inject(StaffService);
+  private contractorService = inject(ContractorService);
+  private poleTrackerService = inject(PoleTrackerService);
   private destroy$ = new Subject<void>();
   private refreshTrigger$ = new Subject<void>();
 
@@ -53,6 +61,22 @@ export class MainDashboardComponent implements OnInit, OnDestroy {
     initialValue: [],
   });
 
+  rfqs = toSignal(this.rfqService.getRFQs().pipe(catchError(() => of([]))), {
+    initialValue: [],
+  });
+
+  staff = toSignal(this.staffService.getStaff().pipe(catchError(() => of([]))), {
+    initialValue: [],
+  });
+
+  contractors = toSignal(this.contractorService.getContractors().pipe(catchError(() => of([]))), {
+    initialValue: [],
+  });
+
+  poleTrackers = toSignal(this.poleTrackerService.getPoleTrackers().pipe(catchError(() => of([]))), {
+    initialValue: [],
+  });
+
   // Load all tasks to get flagged task count - with proper refresh mechanism
   allTasks = toSignal(
     this.refreshTrigger$.pipe(
@@ -70,6 +94,11 @@ export class MainDashboardComponent implements OnInit, OnDestroy {
   suppliersCount = computed(() => this.suppliers().length);
   stockItemsCount = computed(() => this.stockItems().length);
   clientsCount = computed(() => this.clients().length);
+  rfqsCount = computed(() => this.rfqs().length);
+  staffCount = computed(() => this.staff().length);
+  contractorsCount = computed(() => this.contractors().length);
+  polesInstalledCount = computed(() => this.poleTrackers().length);
+  polesQualityCheckedCount = computed(() => this.poleTrackers().filter(p => p.qualityChecked).length);
 
   // Loading state computed from all data sources
   isLoading = computed(

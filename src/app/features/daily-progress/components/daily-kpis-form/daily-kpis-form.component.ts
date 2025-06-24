@@ -19,6 +19,8 @@ import { DailyKpisService } from '../../services/daily-kpis.service';
 import { ProjectService } from '../../../../core/services/project.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Project } from '../../../../core/models/project.model';
+import { ContractorService } from '../../../contractors/services/contractor.service';
+import { Contractor } from '../../../contractors/models/contractor.model';
 
 @Component({
   selector: 'app-daily-kpis-form',
@@ -66,6 +68,16 @@ import { Project } from '../../../../core/models/project.model';
                   <mat-select formControlName="projectId" required>
                     @for (project of projects(); track project.id) {
                       <mat-option [value]="project.id">{{ project.name }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Contractor</mat-label>
+                  <mat-select formControlName="contractorId">
+                    <mat-option value="">None</mat-option>
+                    @for (contractor of contractors(); track contractor.id) {
+                      <mat-option [value]="contractor.id">{{ contractor.companyName }}</mat-option>
                     }
                   </mat-select>
                 </mat-form-field>
@@ -423,10 +435,12 @@ import { Project } from '../../../../core/models/project.model';
         gap: 16px;
         margin-bottom: 24px;
         align-items: flex-start;
+        flex-wrap: wrap;
       }
 
       .form-header mat-form-field {
         flex: 1;
+        min-width: 200px;
       }
 
       .kpis-sections {
@@ -567,12 +581,15 @@ export class DailyKpisFormComponent implements OnInit {
   private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
   private router = inject(Router);
+  private contractorService = inject(ContractorService);
 
   // Signals
   projects = signal<Project[]>([]);
   projectsLoaded = signal(false);
   loading = signal(false);
   selectedDate = signal(new Date());
+  contractors = signal<Contractor[]>([]);
+  contractorsLoaded = signal(false);
 
   // Form and data
   kpiForm!: FormGroup;
@@ -585,11 +602,13 @@ export class DailyKpisFormComponent implements OnInit {
   ngOnInit() {
     this.initializeForm();
     this.loadProjects();
+    this.loadContractors();
   }
 
   private initializeForm() {
     const formControls: any = {
       projectId: ['', Validators.required],
+      contractorId: [''],
       date: [new Date(), Validators.required],
       comments: [''],
     };
@@ -658,6 +677,21 @@ export class DailyKpisFormComponent implements OnInit {
         this.snackBar.open('Error loading projects', 'Close', { duration: 3000 });
         // Fallback to test project for development
         this.projects.set([{ id: 'test', name: 'Test Project (Fallback)' } as Project]);
+      },
+    });
+  }
+
+  private loadContractors() {
+    this.contractorService.getActiveContractors().subscribe({
+      next: (contractors) => {
+        // console.log('Loaded contractors:', contractors);
+        this.contractors.set(contractors);
+        this.contractorsLoaded.set(true);
+      },
+      error: (error) => {
+        // console.error('Error loading contractors:', error);
+        this.contractorsLoaded.set(true); // Show form even on error
+        this.snackBar.open('Error loading contractors', 'Close', { duration: 3000 });
       },
     });
   }
@@ -801,6 +835,7 @@ export class DailyKpisFormComponent implements OnInit {
     // Load all KPI values
     const formValues: any = {
       projectId: currentProjectId,
+      contractorId: kpi.contractorId || '',
       date: currentDate,
       comments: kpi.comments || '',
       riskFlag: kpi.riskFlag || false,
@@ -830,6 +865,7 @@ export class DailyKpisFormComponent implements OnInit {
 
     const resetValues: any = {
       projectId: currentProjectId,
+      contractorId: '',
       date: currentDate,
       comments: '',
       riskFlag: false,
@@ -922,8 +958,11 @@ export class DailyKpisFormComponent implements OnInit {
     if (this.currentKPI && this.currentKPI.id) {
       // Update existing KPI - only save today values and metadata
       const formValues = this.kpiForm.value;
+      const selectedContractor = this.contractors().find((c) => c.id === formValues.contractorId);
       const updates: any = {
         projectId: formValues.projectId,
+        contractorId: formValues.contractorId || '',
+        contractorName: selectedContractor?.companyName || '',
         date: formValues.date,
         comments: formValues.comments || '',
         riskFlag: formValues.riskFlag || false,
@@ -968,8 +1007,11 @@ export class DailyKpisFormComponent implements OnInit {
     } else {
       // Create new KPI - only save today values and metadata
       const formValues = this.kpiForm.value;
+      const selectedContractor = this.contractors().find((c) => c.id === formValues.contractorId);
       const kpiData: any = {
         projectId: formValues.projectId,
+        contractorId: formValues.contractorId || '',
+        contractorName: selectedContractor?.companyName || '',
         date: formValues.date,
         comments: formValues.comments || '',
         riskFlag: formValues.riskFlag || false,

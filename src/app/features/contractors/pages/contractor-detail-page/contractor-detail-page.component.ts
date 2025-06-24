@@ -12,7 +12,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Observable, switchMap, of } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ContractorService } from '../../services/contractor.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import {
   Contractor,
   ContractorStatus,
@@ -71,6 +73,7 @@ import {
             mat-raised-button
             color="primary"
             *ngIf="contractor.status === 'pending_approval'"
+            (click)="approveContractor()"
           >
             <mat-icon>check_circle</mat-icon>
             Approve
@@ -96,26 +99,31 @@ import {
                   <div class="info-grid">
                     <div class="info-item">
                       <span class="info-label">Name</span>
-                      <span class="info-value">{{ contractor.primaryContact.name }}</span>
+                      <span class="info-value">{{ contractor.primaryContact?.name || 'N/A' }}</span>
                     </div>
                     <div class="info-item">
                       <span class="info-label">Role</span>
-                      <span class="info-value">{{ contractor.primaryContact.role }}</span>
+                      <span class="info-value">{{ contractor.primaryContact?.role || 'N/A' }}</span>
                     </div>
                     <div class="info-item">
                       <span class="info-label">Email</span>
                       <a
                         class="info-value link"
-                        [href]="'mailto:' + contractor.primaryContact.email"
+                        [href]="'mailto:' + (contractor.primaryContact?.email || '')"
+                        *ngIf="contractor.primaryContact?.email"
                       >
-                        {{ contractor.primaryContact.email }}
+                        {{ contractor.primaryContact?.email }}
                       </a>
+                      <span class="info-value" *ngIf="!contractor.primaryContact?.email">N/A</span>
                     </div>
                     <div class="info-item">
                       <span class="info-label">Phone</span>
-                      <a class="info-value link" [href]="'tel:' + contractor.primaryContact.phone">
-                        {{ contractor.primaryContact.phone }}
+                      <a class="info-value link" 
+                         [href]="'tel:' + (contractor.primaryContact?.phone || '')"
+                         *ngIf="contractor.primaryContact?.phone">
+                        {{ contractor.primaryContact?.phone }}
                       </a>
+                      <span class="info-value" *ngIf="!contractor.primaryContact?.phone">N/A</span>
                     </div>
                   </div>
                 </mat-card-content>
@@ -131,12 +139,12 @@ import {
                 </mat-card-header>
                 <mat-card-content>
                   <div class="address">
-                    <p>{{ contractor.physicalAddress.street }}</p>
+                    <p>{{ contractor.physicalAddress?.street || 'N/A' }}</p>
                     <p>
-                      {{ contractor.physicalAddress.city }},
-                      {{ contractor.physicalAddress.province }}
+                      {{ contractor.physicalAddress?.city || 'N/A' }},
+                      {{ contractor.physicalAddress?.province || 'N/A' }}
                     </p>
-                    <p>{{ contractor.physicalAddress.postalCode }}</p>
+                    <p>{{ contractor.physicalAddress?.postalCode || 'N/A' }}</p>
                   </div>
                 </mat-card-content>
               </mat-card>
@@ -155,7 +163,7 @@ import {
                       <h4>Services</h4>
                       <div class="chips-container">
                         <mat-chip
-                          *ngFor="let service of contractor.capabilities.services"
+                          *ngFor="let service of contractor.capabilities?.services || []"
                           class="service-chip"
                         >
                           {{ getServiceLabel(service) }}
@@ -166,7 +174,7 @@ import {
                     <div class="capability-group">
                       <h4>Equipment</h4>
                       <div class="chips-container">
-                        <mat-chip *ngFor="let equipment of contractor.capabilities.equipment">
+                        <mat-chip *ngFor="let equipment of contractor.capabilities?.equipment || []">
                           {{ equipment }}
                         </mat-chip>
                       </div>
@@ -176,7 +184,7 @@ import {
                       <h4>Team Capacity</h4>
                       <div class="stat-value">
                         <mat-icon>groups</mat-icon>
-                        {{ contractor.capabilities.maxTeams }} Teams
+                        {{ contractor.capabilities?.maxTeams || 'N/A' }} Teams
                       </div>
                     </div>
                   </div>
@@ -203,19 +211,19 @@ import {
                     <mat-icon class="compliance-icon">security</mat-icon>
                     <div class="compliance-content">
                       <h4>Insurance</h4>
-                      <p *ngIf="contractor.compliance.insurancePolicy">
-                        Policy: {{ contractor.compliance.insurancePolicy }}
+                      <p *ngIf="contractor.compliance?.insurancePolicy">
+                        Policy: {{ contractor.compliance?.insurancePolicy }}
                       </p>
                       <p
-                        *ngIf="contractor.compliance.insuranceExpiry"
-                        [class.expired]="isExpired(contractor.compliance.insuranceExpiry)"
+                        *ngIf="contractor.compliance?.insuranceExpiry"
+                        [class.expired]="isExpired(contractor.compliance?.insuranceExpiry)"
                       >
-                        Expires: {{ formatDate(contractor.compliance.insuranceExpiry) }}
+                        Expires: {{ formatDate(contractor.compliance?.insuranceExpiry) }}
                       </p>
                       <button
                         mat-stroked-button
                         size="small"
-                        *ngIf="contractor.compliance.insuranceDocUrl"
+                        *ngIf="contractor.compliance?.insuranceDocUrl"
                       >
                         <mat-icon>description</mat-icon>
                         View Document
@@ -228,13 +236,13 @@ import {
                     <mat-icon class="compliance-icon">business_center</mat-icon>
                     <div class="compliance-content">
                       <h4>BBBEE Status</h4>
-                      <p *ngIf="contractor.compliance.bbbeeLevel">
-                        Level {{ contractor.compliance.bbbeeLevel }}
+                      <p *ngIf="contractor.compliance?.bbbeeLevel">
+                        Level {{ contractor.compliance?.bbbeeLevel }}
                       </p>
                       <button
                         mat-stroked-button
                         size="small"
-                        *ngIf="contractor.compliance.bbbeeDocUrl"
+                        *ngIf="contractor.compliance?.bbbeeDocUrl"
                       >
                         <mat-icon>description</mat-icon>
                         View Certificate
@@ -247,14 +255,14 @@ import {
                     <mat-icon class="compliance-icon">health_and_safety</mat-icon>
                     <div class="compliance-content">
                       <h4>Safety Rating</h4>
-                      <div class="rating" *ngIf="contractor.compliance.safetyRating">
+                      <div class="rating" *ngIf="contractor.compliance?.safetyRating">
                         <mat-icon
-                          *ngFor="let star of getStars(contractor.compliance.safetyRating)"
+                          *ngFor="let star of getStars(contractor.compliance?.safetyRating || 0)"
                           class="star-icon"
                         >
                           star
                         </mat-icon>
-                        <span>{{ contractor.compliance.safetyRating }}/5</span>
+                        <span>{{ contractor.compliance?.safetyRating }}/5</span>
                       </div>
                     </div>
                   </div>
@@ -265,7 +273,7 @@ import {
                     <div class="compliance-content">
                       <h4>Certifications</h4>
                       <mat-list>
-                        <mat-list-item *ngFor="let cert of contractor.capabilities.certifications">
+                        <mat-list-item *ngFor="let cert of contractor.capabilities?.certifications || []">
                           <mat-icon matListItemIcon>verified</mat-icon>
                           <div matListItemTitle>{{ cert.name }}</div>
                           <div matListItemMeta>
@@ -295,32 +303,32 @@ import {
                 <div class="info-grid">
                   <div class="info-item">
                     <span class="info-label">Bank Name</span>
-                    <span class="info-value">{{ contractor.financial.bankName }}</span>
+                    <span class="info-value">{{ contractor.financial?.bankName || 'N/A' }}</span>
                   </div>
                   <div class="info-item">
                     <span class="info-label">Account Type</span>
                     <span class="info-value">{{
-                      contractor.financial.accountType | titlecase
+                      (contractor.financial?.accountType | titlecase) || 'N/A'
                     }}</span>
                   </div>
                   <div class="info-item">
                     <span class="info-label">Account Number</span>
                     <span class="info-value">{{
-                      maskAccountNumber(contractor.financial.accountNumber)
+                      contractor.financial?.accountNumber ? maskAccountNumber(contractor.financial?.accountNumber || '') : 'N/A'
                     }}</span>
                   </div>
                   <div class="info-item">
                     <span class="info-label">Branch Code</span>
-                    <span class="info-value">{{ contractor.financial.branchCode }}</span>
+                    <span class="info-value">{{ contractor.financial?.branchCode || 'N/A' }}</span>
                   </div>
                   <div class="info-item">
                     <span class="info-label">Payment Terms</span>
-                    <span class="info-value">{{ contractor.financial.paymentTerms }} days</span>
+                    <span class="info-value">{{ contractor.financial?.paymentTerms || 'N/A' }} days</span>
                   </div>
-                  <div class="info-item" *ngIf="contractor.financial.creditLimit">
+                  <div class="info-item" *ngIf="contractor.financial?.creditLimit">
                     <span class="info-label">Credit Limit</span>
                     <span class="info-value">{{
-                      formatCurrency(contractor.financial.creditLimit)
+                      formatCurrency(contractor.financial?.creditLimit || 0)
                     }}</span>
                   </div>
                 </div>
@@ -703,8 +711,11 @@ export class ContractorDetailPageComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private contractorService = inject(ContractorService);
+  private authService = inject(AuthService);
+  private snackBar = inject(MatSnackBar);
 
   contractor$!: Observable<Contractor | null | undefined>;
+  currentContractor: Contractor | null = null;
 
   ngOnInit() {
     this.contractor$ = this.route.paramMap.pipe(
@@ -716,6 +727,11 @@ export class ContractorDetailPageComponent implements OnInit {
         return of(undefined);
       }),
     );
+
+    // Subscribe to store the current contractor
+    this.contractor$.subscribe((contractor) => {
+      this.currentContractor = contractor || null;
+    });
   }
 
   // Status helpers
@@ -783,5 +799,40 @@ export class ContractorDetailPageComponent implements OnInit {
     return Array(5)
       .fill(0)
       .map((_, i) => (i < rating ? 1 : 0));
+  }
+
+  // Approve contractor
+  approveContractor() {
+    if (!this.currentContractor || !this.currentContractor.id) {
+      this.snackBar.open('Error: No contractor to approve', 'Close', { duration: 3000 });
+      return;
+    }
+
+    const user = this.authService.getCurrentUser();
+    if (!user) {
+      this.snackBar.open('Error: You must be logged in to approve contractors', 'Close', { duration: 3000 });
+      return;
+    }
+
+    const contractorId = this.currentContractor.id;
+    const contractorName = this.currentContractor.companyName;
+
+    // Show confirmation
+    if (!confirm(`Are you sure you want to approve ${contractorName}?`)) {
+      return;
+    }
+
+    // Call the service to approve
+    this.contractorService.approveContractor(contractorId, user.uid).then(
+      () => {
+        this.snackBar.open(`${contractorName} has been approved successfully!`, 'Close', { duration: 3000 });
+        // Reload the page to show updated status
+        window.location.reload();
+      },
+      (error) => {
+        // console.error('Error approving contractor:', error);
+        this.snackBar.open('Error approving contractor. Please try again.', 'Close', { duration: 5000 });
+      }
+    );
   }
 }

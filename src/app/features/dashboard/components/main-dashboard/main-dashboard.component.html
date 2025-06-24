@@ -60,18 +60,18 @@
         </mat-card-content>
       </mat-card>
 
-      <!-- Stock Card -->
-      <mat-card class="dashboard-card" routerLink="/stock">
+      <!-- RFQ Card (formerly Stock Card) -->
+      <mat-card class="dashboard-card" routerLink="/quotes/rfq">
         <mat-card-content>
           <div class="card-icon stock-icon">
-            <mat-icon>inventory_2</mat-icon>
+            <mat-icon>request_quote</mat-icon>
           </div>
           <div class="card-details">
-            <h3 class="card-title">Stock</h3>
-            <p class="card-subtitle">Inventory and stock management</p>
+            <h3 class="card-title">RFQ's</h3>
+            <p class="card-subtitle">Request for Quotations</p>
             <div class="card-stats">
-              <span class="stat-number">{{ stockItemsCount() }}</span>
-              <span class="stat-label">Stock Items</span>
+              <span class="stat-number">{{ rfqsCount() }}</span>
+              <span class="stat-label">Active RFQs</span>
             </div>
           </div>
         </mat-card-content>
@@ -94,6 +94,57 @@
         </mat-card-content>
       </mat-card>
 
+      <!-- Staff Card -->
+      <mat-card class="dashboard-card" routerLink="/staff">
+        <mat-card-content>
+          <div class="card-icon staff-icon">
+            <mat-icon>badge</mat-icon>
+          </div>
+          <div class="card-details">
+            <h3 class="card-title">Staff</h3>
+            <p class="card-subtitle">Staff members and management</p>
+            <div class="card-stats">
+              <span class="stat-number">{{ staffCount() }}</span>
+              <span class="stat-label">Total Staff</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Contractors Card -->
+      <mat-card class="dashboard-card" routerLink="/contractors">
+        <mat-card-content>
+          <div class="card-icon contractors-icon">
+            <mat-icon>engineering</mat-icon>
+          </div>
+          <div class="card-details">
+            <h3 class="card-title">Contractors</h3>
+            <p class="card-subtitle">Contractor management and projects</p>
+            <div class="card-stats">
+              <span class="stat-number">{{ contractorsCount() }}</span>
+              <span class="stat-label">Total Contractors</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Pole Tracker Card -->
+      <mat-card class="dashboard-card" routerLink="/pole-tracker">
+        <mat-card-content>
+          <div class="card-icon poles-icon">
+            <mat-icon>cell_tower</mat-icon>
+          </div>
+          <div class="card-details">
+            <h3 class="card-title">Poles Installed</h3>
+            <p class="card-subtitle">Fiber optic pole installation tracking</p>
+            <div class="card-stats">
+              <span class="stat-number">{{ polesInstalledCount() }}</span>
+              <span class="stat-label">Poles Installed</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
       <!-- Flagged Issues Card -->
       <mat-card class="dashboard-card" routerLink="/projects">
         <mat-card-content>
@@ -107,29 +158,10 @@
               <span class="stat-number">{{ flaggedIssuesCount() }}</span>
               <span class="stat-label">Flagged Tasks</span>
             </div>
-            <!-- Debug info (temporary) -->
-            <div style="font-size: 10px; color: #666; margin-top: 8px">
-              Total tasks: {{ allTasks().length }}
-            </div>
           </div>
         </mat-card-content>
       </mat-card>
 
-      <!-- Analytics Card -->
-      <mat-card class="dashboard-card" routerLink="/analytics">
-        <mat-card-content>
-          <div class="card-icon analytics-icon">
-            <mat-icon>analytics</mat-icon>
-          </div>
-          <div class="card-details">
-            <h3 class="card-title">Analytics</h3>
-            <p class="card-subtitle">Detailed reports and analytics</p>
-            <div class="card-stats">
-              <span class="stat-action">View Reports →</span>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
     </div>
 
     <!-- Quick Summary Section -->

@@ -79,15 +79,25 @@ interface ProjectTotals {
                   } @else {
                     <mat-form-field appearance="outline">
                       <mat-label>Start Date</mat-label>
-                      <input matInput [matDatepicker]="startPicker" [formControl]="startDateControl" />
-                      <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+                      <input
+                        matInput
+                        [matDatepicker]="startPicker"
+                        [formControl]="startDateControl"
+                      />
+                      <mat-datepicker-toggle
+                        matIconSuffix
+                        [for]="startPicker"
+                      ></mat-datepicker-toggle>
                       <mat-datepicker #startPicker></mat-datepicker>
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
                       <mat-label>End Date</mat-label>
                       <input matInput [matDatepicker]="endPicker" [formControl]="endDateControl" />
-                      <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+                      <mat-datepicker-toggle
+                        matIconSuffix
+                        [for]="endPicker"
+                      ></mat-datepicker-toggle>
                       <mat-datepicker #endPicker></mat-datepicker>
                     </mat-form-field>
                   }
@@ -102,7 +112,11 @@ interface ProjectTotals {
                     </mat-select>
                   </mat-form-field>
 
-                  <button mat-button (click)="toggleDateRangeMode()" [color]="dateRangeMode() ? 'primary' : 'basic'">
+                  <button
+                    mat-button
+                    (click)="toggleDateRangeMode()"
+                    [color]="dateRangeMode() ? 'primary' : 'basic'"
+                  >
                     <mat-icon>{{ dateRangeMode() ? 'date_range' : 'today' }}</mat-icon>
                     {{ dateRangeMode() ? 'Date Range' : 'Single Date' }}
                   </button>
@@ -133,9 +147,13 @@ interface ProjectTotals {
                     @if (!dateRangeMode()) {
                       {{ dateControl.value | date: 'fullDate' }}
                     } @else {
-                      {{ startDateControl.value | date: 'shortDate' }} - {{ endDateControl.value | date: 'shortDate' }}
+                      {{ startDateControl.value | date: 'shortDate' }} -
+                      {{ endDateControl.value | date: 'shortDate' }}
                     }
                     - {{ selectedProjectName() }}
+                    @if (selectedContractorName()) {
+                      <span class="contractor-info"> | {{ selectedContractorName() }}</span>
+                    }
                   </mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
@@ -461,6 +479,11 @@ interface ProjectTotals {
           margin: 8px 0;
         }
       }
+
+      .contractor-info {
+        color: var(--mat-sys-secondary);
+        font-weight: 500;
+      }
     `,
   ],
 })
@@ -482,6 +505,8 @@ export class DailyKpisSummaryComponent implements OnInit {
   projectTotals = signal<ProjectTotals[]>([]);
   loadingDaily = signal(false);
   loadingProjects = signal(false);
+  selectedContractorName = signal<string>('');
+  currentKpis = signal<DailyKPIs[]>([]);
 
   // Table columns
   displayedColumns = ['metric', 'today', 'total', 'unit'];
@@ -527,9 +552,15 @@ export class DailyKpisSummaryComponent implements OnInit {
 
     if (this.dateRangeMode()) {
       // Load for date range
-      const startDate = this.startDateControl.value instanceof Date ? this.startDateControl.value : new Date(this.startDateControl.value || new Date());
-      const endDate = this.endDateControl.value instanceof Date ? this.endDateControl.value : new Date(this.endDateControl.value || new Date());
-      
+      const startDate =
+        this.startDateControl.value instanceof Date
+          ? this.startDateControl.value
+          : new Date(this.startDateControl.value || new Date());
+      const endDate =
+        this.endDateControl.value instanceof Date
+          ? this.endDateControl.value
+          : new Date(this.endDateControl.value || new Date());
+
       if (projectId) {
         // Load for specific project in date range
         this.kpisService.getKPIsByProjectAndDateRange(projectId, startDate, endDate).subscribe({
@@ -564,7 +595,8 @@ export class DailyKpisSummaryComponent implements OnInit {
     } else {
       // Load for single date
       const dateValue = this.dateControl.value;
-      const selectedDate = dateValue instanceof Date ? dateValue : new Date(dateValue || new Date());
+      const selectedDate =
+        dateValue instanceof Date ? dateValue : new Date(dateValue || new Date());
 
       if (projectId) {
         // Load for specific project
@@ -605,7 +637,24 @@ export class DailyKpisSummaryComponent implements OnInit {
 
     if (!kpis || kpis.length === 0) {
       this.dailySummary.set([]);
+      this.selectedContractorName.set('');
       return;
+    }
+
+    // Store the current KPIs
+    this.currentKpis.set(kpis);
+
+    // Extract contractor name if available
+    const contractorNames = kpis
+      .map(kpi => kpi.contractorName)
+      .filter(name => name && name.trim() !== '');
+    
+    if (contractorNames.length > 0) {
+      // If multiple contractors, join them
+      const uniqueContractors = [...new Set(contractorNames)];
+      this.selectedContractorName.set(uniqueContractors.join(', '));
+    } else {
+      this.selectedContractorName.set('');
     }
 
     // Aggregate data if multiple entries
@@ -674,13 +723,13 @@ export class DailyKpisSummaryComponent implements OnInit {
         0,
       );
       result['homeSignupsTotal'] = result['homeSignupsToday'];
-      
+
       result['homeDropsToday'] = kpis.reduce(
         (sum, kpi) => sum + ((kpi.homeDropsToday as number) || 0),
         0,
       );
       result['homeDropsTotal'] = result['homeDropsToday'];
-      
+
       result['homesConnectedToday'] = kpis.reduce(
         (sum, kpi) => sum + ((kpi.homesConnectedToday as number) || 0),
         0,

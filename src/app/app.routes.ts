@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
+import { demoConfig } from './config/demo.config';
 
-export const routes: Routes = [
+const allRoutes: Routes = [
   {
     path: '',
     redirectTo: 'dashboard',
@@ -43,6 +44,11 @@ export const routes: Routes = [
     path: 'steps',
     loadChildren: () => import('./features/steps/steps.routes').then((m) => m.STEPS_ROUTES),
     title: 'All Steps - FibreFlow',
+  },
+  {
+    path: 'pole-tracker',
+    loadChildren: () => import('./features/pole-tracker/pole-tracker.routes').then((m) => m.poleTrackerRoutes),
+    data: { preload: true },
   },
   // Dashboard-linked routes
   {
@@ -154,7 +160,8 @@ export const routes: Routes = [
   },
   {
     path: 'audit-trail',
-    loadChildren: () => import('./features/audit-trail/audit-trail.routes').then((m) => m.auditTrailRoutes),
+    loadChildren: () =>
+      import('./features/audit-trail/audit-trail.routes').then((m) => m.auditTrailRoutes),
     data: { title: 'Audit Trail' },
   },
   // Auth routes - temporary for testing
@@ -181,3 +188,8 @@ export const routes: Routes = [
       import('./features/debug/sentry-test.component').then((m) => m.SentryTestComponent),
   },
 ];
+
+// Filter routes based on demo configuration
+export const routes: Routes = demoConfig.isDemo 
+  ? allRoutes.filter(route => !demoConfig.hiddenRoutes.includes('/' + route.path))
+  : allRoutes;

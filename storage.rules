@@ -1,0 +1,21 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Allow read access to all users (for viewing images)
+    match /{allPaths=**} {
+      allow read: if true;
+    }
+    
+    // TEMPORARY: Allow all uploads to pole-tracker folder during development
+    // TODO: Change back to require auth when real authentication is implemented
+    match /pole-tracker/{poleId}/{fileName} {
+      allow write: if request.resource.size < 10 * 1024 * 1024 // 10MB limit
+        && request.resource.contentType.matches('image/.*'); // Images only
+    }
+    
+    // Allow authenticated users to manage their own uploads
+    match /users/{userId}/{allPaths=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}

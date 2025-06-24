@@ -186,7 +186,7 @@ export class SupplierListComponent implements OnInit {
     if (event) {
       event.stopPropagation();
     }
-    
+
     try {
       await this.supplierService.updateVerificationStatus(supplierId, 'verified');
       this.snackBar.open('Supplier verified successfully', 'Close', {

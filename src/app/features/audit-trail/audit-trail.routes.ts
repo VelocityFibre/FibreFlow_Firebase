@@ -5,7 +5,7 @@ export const auditTrailRoutes: Routes = [
     path: '',
     loadComponent: () =>
       import('./pages/audit-trail-page/audit-trail-page.component').then(
-        (m) => m.AuditTrailPageComponent
+        (m) => m.AuditTrailPageComponent,
       ),
     data: { title: 'Audit Trail' },
   },

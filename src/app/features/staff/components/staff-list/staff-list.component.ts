@@ -24,11 +24,13 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { StaffService } from '../../services/staff.service';
 import { StaffMember, StaffGroup, AvailabilityStatus } from '../../models';
 import { LoadingSkeletonComponent } from '../../../../shared/components/loading-skeleton/loading-skeleton.component';
+import { StaffImportComponent } from '../staff-import/staff-import.component';
 
 @Component({
   selector: 'app-staff-list',
@@ -51,16 +53,23 @@ import { LoadingSkeletonComponent } from '../../../../shared/components/loading-
     MatTooltipModule,
     MatMenuModule,
     MatDividerModule,
+    MatDialogModule,
     LoadingSkeletonComponent,
   ],
   template: `
     <div class="staff-list-container">
       <div class="header">
         <h1>Staff Management</h1>
-        <button mat-raised-button color="primary" routerLink="new">
-          <mat-icon>add</mat-icon>
-          Add Staff Member
-        </button>
+        <div class="header-actions">
+          <button mat-raised-button color="accent" (click)="openImportDialog()">
+            <mat-icon>upload</mat-icon>
+            Import Staff
+          </button>
+          <button mat-raised-button color="primary" routerLink="new">
+            <mat-icon>add</mat-icon>
+            Add Staff Member
+          </button>
+        </div>
       </div>
 
       <div class="filters">
@@ -254,6 +263,11 @@ import { LoadingSkeletonComponent } from '../../../../shared/components/loading-
         color: var(--mat-sys-on-surface);
       }
 
+      .header-actions {
+        display: flex;
+        gap: 12px;
+      }
+
       .filters {
         display: flex;
         gap: 16px;
@@ -381,6 +395,7 @@ import { LoadingSkeletonComponent } from '../../../../shared/components/loading-
 export class StaffListComponent implements OnInit, AfterViewInit {
   private staffService = inject(StaffService);
   private destroyRef = inject(DestroyRef);
+  private dialog = inject(MatDialog);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -548,5 +563,18 @@ export class StaffListComponent implements OnInit, AfterViewInit {
   formatLastActive(_timestamp: unknown): string {
     // TODO: Implement proper date formatting
     return 'Recently';
+  }
+
+  openImportDialog() {
+    const dialogRef = this.dialog.open(StaffImportComponent, {
+      width: '600px',
+      disableClose: false
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadStaff();
+      }
+    });
   }
 }

@@ -269,7 +269,8 @@ interface RFQFormData {
               <div class="manual-email-section">
                 <h4>Add Custom Email Recipients</h4>
                 <p class="section-description">
-                  Enter email addresses manually (one per line) for recipients not in your supplier list
+                  Enter email addresses manually (one per line) for recipients not in your supplier
+                  list
                 </p>
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>Email Addresses</mat-label>
@@ -284,7 +285,11 @@ interface RFQFormData {
 
                 <div class="manual-emails-preview" *ngIf="manualEmailsList.length > 0">
                   <mat-chip-set aria-label="Manual email addresses">
-                    <mat-chip *ngFor="let email of manualEmailsList" [removable]="true" (removed)="removeManualEmail(email)">
+                    <mat-chip
+                      *ngFor="let email of manualEmailsList"
+                      [removable]="true"
+                      (removed)="removeManualEmail(email)"
+                    >
                       {{ email }}
                       <mat-icon matChipRemove>cancel</mat-icon>
                     </mat-chip>
@@ -296,16 +301,23 @@ interface RFQFormData {
 
               <div class="suppliers-header">
                 <h4>Select from Existing Suppliers</h4>
-                <button mat-icon-button (click)="refreshSuppliers()" matTooltip="Refresh supplier list">
+                <button
+                  mat-icon-button
+                  (click)="refreshSuppliers()"
+                  matTooltip="Refresh supplier list"
+                >
                   <mat-icon>refresh</mat-icon>
                 </button>
               </div>
-              
+
               <!-- Supplier filter by category -->
               <div class="supplier-filters">
                 <mat-form-field appearance="outline" class="category-filter">
                   <mat-label>Filter by Category</mat-label>
-                  <mat-select formControlName="categoryFilter" (selectionChange)="onSupplierCategoryChange()">
+                  <mat-select
+                    formControlName="categoryFilter"
+                    (selectionChange)="onSupplierCategoryChange()"
+                  >
                     <mat-option value="">All Categories</mat-option>
                     <mat-option value="ELECTRICAL">Electrical</mat-option>
                     <mat-option value="CIVIL">Civil</mat-option>
@@ -342,9 +354,13 @@ interface RFQFormData {
                       <div class="supplier-name">{{ supplier.companyName }}</div>
                       <div class="verification-status">
                         @if (supplier.verificationStatus === 'verified') {
-                          <mat-icon class="verified-icon" matTooltip="Verified Supplier">verified</mat-icon>
+                          <mat-icon class="verified-icon" matTooltip="Verified Supplier"
+                            >verified</mat-icon
+                          >
                         } @else {
-                          <mat-icon class="unverified-icon" matTooltip="Unverified Supplier">warning</mat-icon>
+                          <mat-icon class="unverified-icon" matTooltip="Unverified Supplier"
+                            >warning</mat-icon
+                          >
                         }
                       </div>
                     </div>
@@ -360,14 +376,23 @@ interface RFQFormData {
                   </div>
                 </div>
 
-                <div *ngIf="filteredSuppliers.length === 0 && suppliers.length === 0" class="no-suppliers">
+                <div
+                  *ngIf="filteredSuppliers.length === 0 && suppliers.length === 0"
+                  class="no-suppliers"
+                >
                   <mat-icon>business</mat-icon>
                   <p>No suppliers found. Please add suppliers to your system first.</p>
                 </div>
-                
-                <div *ngIf="filteredSuppliers.length === 0 && suppliers.length > 0" class="no-suppliers">
+
+                <div
+                  *ngIf="filteredSuppliers.length === 0 && suppliers.length > 0"
+                  class="no-suppliers"
+                >
                   <mat-icon>filter_list</mat-icon>
-                  <p>No suppliers match the selected category. Try selecting a different category or "All Categories".</p>
+                  <p>
+                    No suppliers match the selected category. Try selecting a different category or
+                    "All Categories".
+                  </p>
                 </div>
               </div>
             </div>
@@ -868,8 +893,8 @@ export class RFQCreationWizardComponent implements OnInit {
     if (!selectedCategory) {
       this.filteredSuppliers = [...this.suppliers];
     } else {
-      this.filteredSuppliers = this.suppliers.filter(supplier =>
-        supplier.categories.includes(selectedCategory as any)
+      this.filteredSuppliers = this.suppliers.filter((supplier) =>
+        supplier.categories.includes(selectedCategory as any),
       );
     }
   }
@@ -972,7 +997,7 @@ export class RFQCreationWizardComponent implements OnInit {
     const emailsList = currentEmails.split('\n').map((e: string) => e.trim());
     const updatedEmails = emailsList.filter((e: string) => e !== email);
     this.supplierSelectionForm.patchValue({
-      manualEmails: updatedEmails.join('\n')
+      manualEmails: updatedEmails.join('\n'),
     });
   }
 
@@ -1055,14 +1080,15 @@ export class RFQCreationWizardComponent implements OnInit {
             projectId: this.data.projectId,
           });
           this.creating = false;
-          
+
           // Include info about whether emails should be sent
-          const shouldSendEmails = this.selectedSupplierIds.size > 0 || this.manualEmailsList.length > 0;
-          this.dialogRef.close({ 
-            success: true, 
+          const shouldSendEmails =
+            this.selectedSupplierIds.size > 0 || this.manualEmailsList.length > 0;
+          this.dialogRef.close({
+            success: true,
             rfqId,
             shouldSendEmails,
-            recipientCount: this.selectedSupplierIds.size + this.manualEmailsList.length
+            recipientCount: this.selectedSupplierIds.size + this.manualEmailsList.length,
           });
         },
         error: (error) => {

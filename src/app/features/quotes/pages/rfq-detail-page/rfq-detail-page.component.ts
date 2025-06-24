@@ -17,11 +17,11 @@ import { BOQService } from '../../../boq/services/boq.service';
 import { SupplierService } from '../../../../core/suppliers/services/supplier.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { RFQPDFService } from '../../services/rfq-pdf.service';
-import { RFQFirebaseEmailService } from '../../services/rfq-firebase-email.service';
+import { RFQFirebaseEmailImprovedService } from '../../services/rfq-firebase-email-improved.service';
 import { RFQ, RFQItem } from '../../models/rfq.model';
 import { BOQItem } from '../../../boq/models/boq.model';
 import { Supplier } from '../../../../core/suppliers/models/supplier.model';
-import { Observable, combineLatest, map, switchMap, of, catchError } from 'rxjs';
+import { Observable, combineLatest, map, switchMap, of, catchError, take, finalize } from 'rxjs';
 
 @Component({
   selector: 'app-rfq-detail-page',
@@ -56,10 +56,10 @@ import { Observable, combineLatest, map, switchMap, of, catchError } from 'rxjs'
             <button
               mat-menu-item
               (click)="sendToSuppliers()"
-              [disabled]="(rfq$ | async)?.status !== 'draft'"
+              [disabled]="(rfq$ | async)?.status !== 'draft' || isSending"
             >
-              <mat-icon>send</mat-icon>
-              Send to Suppliers
+              <mat-icon>{{ isSending ? 'hourglass_empty' : 'send' }}</mat-icon>
+              {{ isSending ? 'Sending...' : 'Send to Suppliers' }}
             </button>
             <button mat-menu-item (click)="exportToPDF()">
               <mat-icon>picture_as_pdf</mat-icon>
@@ -199,7 +199,9 @@ import { Observable, combineLatest, map, switchMap, of, catchError } from 'rxjs'
         <!-- Suppliers Card -->
         <mat-card class="suppliers-card">
           <mat-card-header>
-            <mat-card-title>Recipients ({{ suppliers.length + (rfq.manualEmails?.length || 0) }})</mat-card-title>
+            <mat-card-title
+              >Recipients ({{ suppliers.length + (rfq.manualEmails?.length || 0) }})</mat-card-title
+            >
           </mat-card-header>
           <mat-card-content>
             <div class="suppliers-grid" *ngIf="suppliers.length > 0">
@@ -219,8 +221,11 @@ import { Observable, combineLatest, map, switchMap, of, catchError } from 'rxjs'
                 </div>
               </div>
             </div>
-            
-            <div class="manual-emails-section" *ngIf="rfq.manualEmails && rfq.manualEmails.length > 0">
+
+            <div
+              class="manual-emails-section"
+              *ngIf="rfq.manualEmails && rfq.manualEmails.length > 0"
+            >
               <h4>Manual Email Recipients:</h4>
               <div class="manual-emails-grid">
                 <mat-chip *ngFor="let email of rfq.manualEmails" class="email-chip">
@@ -473,7 +478,7 @@ export class RFQDetailPageComponent implements OnInit {
   private notificationService = inject(NotificationService);
   private dialog = inject(MatDialog);
   private rfqPDFService = inject(RFQPDFService);
-  private emailService = inject(RFQFirebaseEmailService);
+  private emailService = inject(RFQFirebaseEmailImprovedService);
 
   rfq$!: Observable<RFQ | undefined>;
   items: BOQItem[] = [];
@@ -583,63 +588,96 @@ export class RFQDetailPageComponent implements OnInit {
     return termsMap[terms] || terms;
   }
 
+  isSending = false;
+
   sendToSuppliers() {
-    this.rfq$.subscribe((rfq) => {
+    // Prevent multiple clicks
+    if (this.isSending) {
+      this.notificationService.warning('Already sending emails. Please wait...');
+      return;
+    }
+
+    this.rfq$.pipe(take(1)).subscribe((rfq) => {
       if (rfq) {
-        // Combine regular suppliers with manual email recipients
-        const allSuppliers = [...this.suppliers];
-        
-        // Create temporary supplier objects for manual emails
-        if (rfq.manualEmails && rfq.manualEmails.length > 0) {
-          rfq.manualEmails.forEach((email, index) => {
-            allSuppliers.push({
-              id: `manual-${index}`,
-              companyName: email, // Use email as company name
-              primaryEmail: email,
-              primaryPhone: '',
-              categories: [],
-              status: 'active',
-              // Required fields with default values
-              address: '',
-              products: [],
-              serviceAreas: [],
-              paymentTerms: [],
-              registrationNumber: '',
-              taxNumber: '',
-              bankingDetails: null,
-              primaryContactName: email,
-              secondaryContactName: '',
-              secondaryEmail: '',
-              secondaryPhone: '',
-              createdAt: new Date(),
-              updatedAt: new Date()
-            } as unknown as Supplier);
-          });
-        }
-        
-        if (allSuppliers.length > 0) {
-          // Use the new email service with confirmation required
-          this.emailService.sendRFQToSuppliers(rfq, allSuppliers, this.items, true).subscribe({
-            next: (success) => {
-              if (success) {
-                // Navigate to email history to review and confirm emails
-                this.router.navigate(['/emails/history'], {
-                  queryParams: { 
-                    filter: 'pending_confirmation',
-                    rfqId: rfq.id 
-                  }
+        // Check if already being sent
+        this.emailService
+          .isRFQBeingSent(rfq.id!)
+          .pipe(take(1))
+          .subscribe((isBeingSent) => {
+            if (isBeingSent) {
+              this.notificationService.warning('This RFQ is already being sent. Please wait...');
+              return;
+            }
+
+            // Combine regular suppliers with manual email recipients
+            const allSuppliers = [...this.suppliers];
+
+            // Create temporary supplier objects for manual emails
+            if (rfq.manualEmails && rfq.manualEmails.length > 0) {
+              rfq.manualEmails.forEach((email, index) => {
+                allSuppliers.push({
+                  id: `manual-${index}`,
+                  companyName: email, // Use email as company name
+                  primaryEmail: email,
+                  primaryPhone: '',
+                  categories: [],
+                  status: 'active',
+                  // Required fields with default values
+                  address: '',
+                  products: [],
+                  serviceAreas: [],
+                  paymentTerms: [],
+                  registrationNumber: '',
+                  taxNumber: '',
+                  bankingDetails: null,
+                  primaryContactName: email,
+                  secondaryContactName: '',
+                  secondaryEmail: '',
+                  secondaryPhone: '',
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                } as unknown as Supplier);
+              });
+            }
+
+            if (allSuppliers.length > 0) {
+              this.isSending = true;
+
+              // Monitor delivery status
+              const statusSub = this.emailService.getDeliveryStatus(rfq.id!).subscribe((status) => {
+                if (status.status === 'sending') {
+                  const progress = Math.round((status.sent / status.totalEmails) * 100);
+                  console.log(
+                    `Sending progress: ${progress}% (${status.sent}/${status.totalEmails})`,
+                  );
+                }
+              });
+
+              // Send emails
+              this.emailService
+                .sendRFQToSuppliers(rfq, allSuppliers, this.items)
+                .pipe(
+                  finalize(() => {
+                    this.isSending = false;
+                    statusSub.unsubscribe();
+                  }),
+                )
+                .subscribe({
+                  next: (success) => {
+                    if (success) {
+                      // Reload RFQ to show updated status
+                      this.ngOnInit();
+                    }
+                  },
+                  error: (error) => {
+                    console.error('Error sending RFQ emails:', error);
+                    this.notificationService.error('Failed to send RFQ emails');
+                  },
                 });
-                this.notificationService.info('Emails prepared for review. Please confirm before sending.');
-              }
-            },
-            error: (error) => {
-              console.error('Error preparing RFQ emails:', error);
-              this.notificationService.error('Failed to prepare RFQ emails');
-            },
+            } else {
+              this.notificationService.warning('No suppliers or email addresses to send RFQ to');
+            }
           });
-        } else {
-          this.notificationService.warning('No suppliers or email addresses to send RFQ to');
-        }
       }
     });
   }

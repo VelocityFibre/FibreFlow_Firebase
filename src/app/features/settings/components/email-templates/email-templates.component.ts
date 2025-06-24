@@ -14,7 +14,11 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { EmailTemplateService } from '../../services/email-template.service';
-import { EmailTemplate, EmailTemplateType, RFQ_TEMPLATE_VARIABLES } from '../../models/email-template.model';
+import {
+  EmailTemplate,
+  EmailTemplateType,
+  RFQ_TEMPLATE_VARIABLES,
+} from '../../models/email-template.model';
 import { NotificationService } from '../../../../core/services/notification.service';
 
 @Component({
@@ -34,16 +38,18 @@ import { NotificationService } from '../../../../core/services/notification.serv
     MatChipsModule,
     MatTabsModule,
     MatDialogModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   template: `
     <div class="email-templates-container">
       <mat-card>
         <mat-card-header>
           <mat-card-title>Email Templates</mat-card-title>
-          <mat-card-subtitle>Customize email templates for RFQs and other communications</mat-card-subtitle>
+          <mat-card-subtitle
+            >Customize email templates for RFQs and other communications</mat-card-subtitle
+          >
         </mat-card-header>
-        
+
         <mat-card-content>
           <mat-tab-group>
             <mat-tab label="RFQ Template">
@@ -52,23 +58,26 @@ import { NotificationService } from '../../../../core/services/notification.serv
                   <!-- Template Name -->
                   <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Template Name</mat-label>
-                    <input matInput formControlName="name" required>
+                    <input matInput formControlName="name" required />
                   </mat-form-field>
 
                   <!-- Subject Line -->
                   <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Email Subject</mat-label>
-                    <input matInput formControlName="subject" required>
-                    <mat-hint>You can use variables like {{'{{rfqNumber}}'}}, {{'{{projectName}}'}}</mat-hint>
+                    <input matInput formControlName="subject" required />
+                    <mat-hint
+                      >You can use variables like {{'{{rfqNumber}}'}},
+                      {{'{{projectName}}'}}</mat-hint
+                    >
                   </mat-form-field>
 
                   <!-- Email Body -->
                   <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Email Body</mat-label>
-                    <textarea 
-                      matInput 
-                      formControlName="body" 
-                      rows="20" 
+                    <textarea
+                      matInput
+                      formControlName="body"
+                      rows="20"
                       required
                       placeholder="Enter your email template here..."
                     ></textarea>
@@ -77,11 +86,14 @@ import { NotificationService } from '../../../../core/services/notification.serv
                   <!-- Available Variables -->
                   <div class="variables-section">
                     <h4>Available Variables</h4>
-                    <p class="hint-text">Click on any variable to copy it. These will be replaced with actual values when sending emails.</p>
+                    <p class="hint-text">
+                      Click on any variable to copy it. These will be replaced with actual values
+                      when sending emails.
+                    </p>
                     <div class="variables-grid">
                       <mat-chip-listbox>
-                        <mat-chip-option 
-                          *ngFor="let variable of templateVariables" 
+                        <mat-chip-option
+                          *ngFor="let variable of templateVariables"
                           (click)="copyVariable(variable.key)"
                           [matTooltip]="variable.description + ' - Example: ' + variable.example"
                         >
@@ -98,8 +110,8 @@ import { NotificationService } from '../../../../core/services/notification.serv
                   <div class="preview-section">
                     <h4>
                       Preview
-                      <button 
-                        mat-icon-button 
+                      <button
+                        mat-icon-button
                         type="button"
                         (click)="togglePreview()"
                         matTooltip="Toggle preview"
@@ -120,7 +132,12 @@ import { NotificationService } from '../../../../core/services/notification.serv
                     <button mat-button type="button" (click)="resetForm()" [disabled]="isLoading">
                       Reset
                     </button>
-                    <button mat-raised-button color="primary" type="submit" [disabled]="!rfqTemplateForm.valid || isLoading">
+                    <button
+                      mat-raised-button
+                      color="primary"
+                      type="submit"
+                      [disabled]="!rfqTemplateForm.valid || isLoading"
+                    >
                       <mat-icon *ngIf="!isLoading">save</mat-icon>
                       <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
                       {{ isLoading ? 'Saving...' : 'Save Template' }}
@@ -140,111 +157,113 @@ import { NotificationService } from '../../../../core/services/notification.serv
       </mat-card>
     </div>
   `,
-  styles: [`
-    .email-templates-container {
-      padding: 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+  styles: [
+    `
+      .email-templates-container {
+        padding: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
 
-    .tab-content {
-      padding: 24px 0;
-    }
+      .tab-content {
+        padding: 24px 0;
+      }
 
-    .full-width {
-      width: 100%;
-    }
+      .full-width {
+        width: 100%;
+      }
 
-    mat-form-field {
-      margin-bottom: 16px;
-    }
+      mat-form-field {
+        margin-bottom: 16px;
+      }
 
-    textarea {
-      font-family: 'Courier New', monospace;
-      line-height: 1.5;
-    }
+      textarea {
+        font-family: 'Courier New', monospace;
+        line-height: 1.5;
+      }
 
-    .variables-section {
-      margin: 24px 0;
-      padding: 16px;
-      background-color: #f5f5f5;
-      border-radius: 8px;
-    }
+      .variables-section {
+        margin: 24px 0;
+        padding: 16px;
+        background-color: #f5f5f5;
+        border-radius: 8px;
+      }
 
-    .variables-section h4 {
-      margin-top: 0;
-      color: rgba(0, 0, 0, 0.87);
-    }
+      .variables-section h4 {
+        margin-top: 0;
+        color: rgba(0, 0, 0, 0.87);
+      }
 
-    .hint-text {
-      color: rgba(0, 0, 0, 0.6);
-      font-size: 14px;
-      margin-bottom: 16px;
-    }
+      .hint-text {
+        color: rgba(0, 0, 0, 0.6);
+        font-size: 14px;
+        margin-bottom: 16px;
+      }
 
-    .variables-grid {
-      margin-top: 8px;
-    }
+      .variables-grid {
+        margin-top: 8px;
+      }
 
-    mat-chip-option {
-      cursor: pointer;
-      margin: 4px;
-    }
+      mat-chip-option {
+        cursor: pointer;
+        margin: 4px;
+      }
 
-    mat-chip-option:hover {
-      background-color: #e0e0e0;
-    }
+      mat-chip-option:hover {
+        background-color: #e0e0e0;
+      }
 
-    .preview-section {
-      margin: 24px 0;
-      padding: 16px;
-      background-color: #fafafa;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-    }
+      .preview-section {
+        margin: 24px 0;
+        padding: 16px;
+        background-color: #fafafa;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+      }
 
-    .preview-section h4 {
-      margin-top: 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+      .preview-section h4 {
+        margin-top: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
-    .preview-content {
-      margin-top: 16px;
-      padding: 16px;
-      background-color: white;
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
-    }
+      .preview-content {
+        margin-top: 16px;
+        padding: 16px;
+        background-color: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+      }
 
-    .preview-subject {
-      margin-bottom: 16px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid #e0e0e0;
-    }
+      .preview-subject {
+        margin-bottom: 16px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #e0e0e0;
+      }
 
-    .preview-body {
-      white-space: pre-wrap;
-      line-height: 1.6;
-    }
+      .preview-body {
+        white-space: pre-wrap;
+        line-height: 1.6;
+      }
 
-    mat-divider {
-      margin: 24px 0;
-    }
+      mat-divider {
+        margin: 24px 0;
+      }
 
-    .form-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 16px;
-      margin-top: 24px;
-    }
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+        margin-top: 24px;
+      }
 
-    mat-spinner {
-      display: inline-block;
-      margin-right: 8px;
-    }
-  `]
+      mat-spinner {
+        display: inline-block;
+        margin-right: 8px;
+      }
+    `,
+  ],
 })
 export class EmailTemplatesComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -266,7 +285,7 @@ export class EmailTemplatesComponent implements OnInit {
     this.rfqTemplateForm = this.fb.group({
       name: ['', Validators.required],
       subject: ['', Validators.required],
-      body: ['', Validators.required]
+      body: ['', Validators.required],
     });
   }
 
@@ -279,7 +298,7 @@ export class EmailTemplatesComponent implements OnInit {
           this.rfqTemplateForm.patchValue({
             name: template.name,
             subject: template.subject,
-            body: template.body
+            body: template.body,
           });
         }
         this.isLoading = false;
@@ -288,7 +307,7 @@ export class EmailTemplatesComponent implements OnInit {
         console.error('Error loading RFQ template:', error);
         this.notificationService.error('Failed to load email template');
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -301,7 +320,7 @@ export class EmailTemplatesComponent implements OnInit {
           id: this.currentTemplate?.id,
           type: EmailTemplateType.RFQ,
           variables: this.templateVariables,
-          isActive: true
+          isActive: true,
         };
 
         await this.emailTemplateService.saveTemplate(templateData);
@@ -320,11 +339,14 @@ export class EmailTemplatesComponent implements OnInit {
   }
 
   copyVariable(variable: string) {
-    navigator.clipboard.writeText(variable).then(() => {
-      this.notificationService.success(`Copied ${variable} to clipboard`);
-    }).catch(err => {
-      console.error('Failed to copy:', err);
-    });
+    navigator.clipboard
+      .writeText(variable)
+      .then(() => {
+        this.notificationService.success(`Copied ${variable} to clipboard`);
+      })
+      .catch((err) => {
+        console.error('Failed to copy:', err);
+      });
   }
 
   togglePreview() {
@@ -344,9 +366,11 @@ export class EmailTemplatesComponent implements OnInit {
 
   private replaceVariables(text: string): string {
     let result = text;
-    this.templateVariables.forEach(variable => {
-      result = result.replace(new RegExp(variable.key.replace(/[{}]/g, '\\$&'), 'g'), 
-        `<span style="background-color: #e3f2fd; padding: 2px 4px; border-radius: 3px;">${variable.example}</span>`);
+    this.templateVariables.forEach((variable) => {
+      result = result.replace(
+        new RegExp(variable.key.replace(/[{}]/g, '\\$&'), 'g'),
+        `<span style="background-color: #e3f2fd; padding: 2px 4px; border-radius: 3px;">${variable.example}</span>`,
+      );
     });
     return result;
   }

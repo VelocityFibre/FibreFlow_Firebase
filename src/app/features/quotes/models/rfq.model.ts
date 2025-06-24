@@ -20,6 +20,8 @@ export interface RFQ {
   updatedAt: Date;
   sentAt?: Date;
   closedAt?: Date;
+  lastSentCount?: number; // Number of emails sent in last batch
+  totalSentCount?: number; // Total number of emails sent for this RFQ
 }
 
 export interface RFQSummary {

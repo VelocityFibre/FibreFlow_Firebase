@@ -15,9 +15,10 @@ import {
   Timestamp,
   QueryConstraint,
 } from '@angular/fire/firestore';
-import { Observable, from, map } from 'rxjs';
+import { Observable, from, map, take } from 'rxjs';
 import { EmailLog, EmailSettings } from '../models/email.model';
 import { AuthService } from '../../../core/services/auth.service';
+import { AuditTrailService } from '../../../core/services/audit-trail.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,7 @@ import { AuthService } from '../../../core/services/auth.service';
 export class EmailLogService {
   private firestore = inject(Firestore);
   private authService = inject(AuthService);
+  private auditService = inject(AuditTrailService);
 
   private emailLogsCollection = 'emailLogs';
   private emailSettingsDoc = 'emailSettings';
@@ -135,67 +137,144 @@ export class EmailLogService {
 
   // Create and send email to mail collection
   async sendEmail(emailLog: EmailLog): Promise<string> {
-    // Create the email document for the Firebase Email Extension
-    const emailDoc = {
-      to: emailLog.to,
-      cc: emailLog.cc,
-      bcc: emailLog.bcc,
-      from: `${emailLog.fromName} <${emailLog.from}>`,
-      message: {
-        subject: emailLog.subject,
-        text: emailLog.text,
-        html: emailLog.html,
-        attachments: emailLog.attachments,
-      },
-    };
+    try {
+      // Create the email document for the Firebase Email Extension
+      const emailDoc: any = {
+        to: emailLog.to,
+        from: `${emailLog.fromName} <${emailLog.from}>`,
+        message: {
+          subject: emailLog.subject,
+          text: emailLog.text,
+          html: emailLog.html,
+          attachments: emailLog.attachments,
+        },
+      };
 
-    // Add to mail collection
-    const mailDocRef = await addDoc(collection(this.firestore, 'mail'), emailDoc);
+      // Only include cc and bcc if they have values - DO NOT include undefined
+      if (emailLog.cc && Array.isArray(emailLog.cc) && emailLog.cc.length > 0) {
+        emailDoc.cc = emailLog.cc;
+      }
+      if (emailLog.bcc && Array.isArray(emailLog.bcc) && emailLog.bcc.length > 0) {
+        emailDoc.bcc = emailLog.bcc;
+      }
 
-    // Update email log with mail document ID
-    await this.updateEmailStatus(emailLog.id!, {
-      status: 'sending',
-      mailDocumentId: mailDocRef.id,
-      sentAt: new Date(),
-    });
+      // Remove any undefined properties
+      Object.keys(emailDoc).forEach((key) => {
+        if (emailDoc[key] === undefined) {
+          delete emailDoc[key];
+        }
+      });
 
-    // Monitor delivery status
-    this.monitorEmailDelivery(emailLog.id!, mailDocRef.id);
+      console.log('Creating email document in mail collection...', emailDoc);
 
-    return mailDocRef.id;
+      // Add to mail collection
+      const mailDocRef = await addDoc(collection(this.firestore, 'mail'), emailDoc);
+      console.log('Email document created with ID:', mailDocRef.id);
+
+      // Log audit trail for email send
+      try {
+        console.log('📧 Logging email send to audit trail...');
+        await this.auditService.logUserAction(
+          'email',
+          emailLog.id!,
+          `Email to ${emailLog.to.join(', ')}`,
+          'send',
+          null, // Use null instead of undefined for changes
+          {
+            to: emailLog.to,
+            subject: emailLog.subject,
+            mailDocumentId: mailDocRef.id,
+            status: 'sending',
+          },
+          'success',
+        );
+        console.log('✅ Email send logged to audit trail');
+      } catch (auditError) {
+        console.error('Failed to log email send to audit trail:', auditError);
+      }
+
+      // Update email log with mail document ID
+      await this.updateEmailStatus(emailLog.id!, {
+        status: 'sending',
+        mailDocumentId: mailDocRef.id,
+        sentAt: new Date(),
+      });
+
+      // Monitor delivery status (non-blocking)
+      this.monitorEmailDelivery(emailLog.id!, mailDocRef.id);
+
+      return mailDocRef.id;
+    } catch (error) {
+      console.error('Error sending email:', error);
+      await this.updateEmailStatus(emailLog.id!, {
+        status: 'failed',
+        failedAt: new Date(),
+        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+      });
+      throw error;
+    }
   }
 
   // Monitor email delivery status
   private monitorEmailDelivery(emailLogId: string, mailDocId: string): void {
-    const unsubscribe = onSnapshot(doc(this.firestore, 'mail', mailDocId), async (snapshot) => {
-      const data = snapshot.data();
+    console.log('Starting email delivery monitoring for:', emailLogId, mailDocId);
 
-      if (data?.['delivery']) {
-        if (data['delivery'].state === 'SUCCESS') {
-          await this.updateEmailStatus(emailLogId, {
-            status: 'sent',
-            deliveredAt: new Date(),
-          });
-          unsubscribe();
-        } else if (data['delivery'].state === 'ERROR') {
-          await this.updateEmailStatus(emailLogId, {
-            status: 'failed',
-            failedAt: new Date(),
-            errorMessage: data['delivery'].error,
-            attempts: data['delivery'].attempts || 1,
-          });
+    const unsubscribe = onSnapshot(
+      doc(this.firestore, 'mail', mailDocId),
+      async (snapshot) => {
+        try {
+          const data = snapshot.data();
+          console.log('Email delivery status update:', data?.['delivery']?.state || 'PENDING');
+
+          if (data?.['delivery']) {
+            if (data['delivery'].state === 'SUCCESS') {
+              console.log('Email delivered successfully:', emailLogId);
+              await this.updateEmailStatus(emailLogId, {
+                status: 'sent',
+                deliveredAt: new Date(),
+              });
+              unsubscribe();
+            } else if (data['delivery'].state === 'ERROR') {
+              console.error('Email delivery failed:', data['delivery'].error);
+              await this.updateEmailStatus(emailLogId, {
+                status: 'failed',
+                failedAt: new Date(),
+                errorMessage: data['delivery'].error,
+                attempts: data['delivery'].attempts || 1,
+              });
+              unsubscribe();
+            }
+          }
+        } catch (error) {
+          console.error('Error in email delivery monitoring:', error);
           unsubscribe();
         }
-      }
-    });
+      },
+      (error) => {
+        console.error('Snapshot listener error:', error);
+        // Try to update status on listener error
+        this.updateEmailStatus(emailLogId, {
+          status: 'failed',
+          failedAt: new Date(),
+          errorMessage: 'Monitoring failed: ' + error.message,
+        }).catch(console.error);
+        unsubscribe();
+      },
+    );
 
     // Stop monitoring after 5 minutes
-    setTimeout(() => unsubscribe(), 5 * 60 * 1000);
+    setTimeout(
+      () => {
+        console.log('Email delivery monitoring timeout for:', emailLogId);
+        unsubscribe();
+      },
+      5 * 60 * 1000,
+    );
   }
 
   // Resend email
   async resendEmail(originalEmailId: string): Promise<string> {
-    const originalEmail = await this.getEmailLog(originalEmailId).toPromise();
+    const originalEmail = await this.getEmailLog(originalEmailId).pipe(take(1)).toPromise();
 
     if (!originalEmail) {
       throw new Error('Original email not found');

@@ -146,6 +146,8 @@ export class ProjectService {
   }
 
   async createProject(project: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+    console.log('🏗️ ProjectService.createProject called with:', project);
+
     const now = Timestamp.now();
     const newProject: Omit<Project, 'id'> = {
       ...project,
@@ -157,10 +159,13 @@ export class ProjectService {
       updatedAt: now,
     };
 
+    console.log('📦 Prepared project data:', newProject);
+
     const docRef = await addDoc(this.projectsCollection, newProject);
 
     // Log audit trail for project creation
     try {
+      console.log('📝 Attempting to log audit trail for project creation...');
       await this.auditService.logUserAction(
         'project',
         docRef.id,
@@ -168,10 +173,11 @@ export class ProjectService {
         'create',
         undefined,
         { ...newProject, id: docRef.id },
-        'success'
+        'success',
       );
+      console.log('✅ Audit trail logged successfully for project creation');
     } catch (error) {
-      console.error('Error logging project creation audit trail:', error);
+      console.error('❌ Error logging project creation audit trail:', error);
     }
 
     // Create default phases and tasks from template
@@ -220,7 +226,7 @@ export class ProjectService {
           'update',
           currentData,
           { ...currentData, ...updatedData },
-          'success'
+          'success',
         );
       } catch (error) {
         console.error('Error logging project update audit trail:', error);
@@ -247,7 +253,7 @@ export class ProjectService {
           undefined,
           updates,
           'failed',
-          error instanceof Error ? error.message : 'Unknown error'
+          error instanceof Error ? error.message : 'Unknown error',
         );
       } catch (auditError) {
         console.error('Error logging failed project update audit trail:', auditError);
@@ -275,7 +281,7 @@ export class ProjectService {
           'delete',
           projectData,
           undefined,
-          'success'
+          'success',
         );
       } catch (error) {
         console.error('Error logging project deletion audit trail:', error);
@@ -300,7 +306,7 @@ export class ProjectService {
           undefined,
           undefined,
           'failed',
-          error instanceof Error ? error.message : 'Unknown error'
+          error instanceof Error ? error.message : 'Unknown error',
         );
       } catch (auditError) {
         console.error('Error logging failed project deletion audit trail:', auditError);

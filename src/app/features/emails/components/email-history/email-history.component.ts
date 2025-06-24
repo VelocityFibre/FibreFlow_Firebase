@@ -102,8 +102,8 @@ import { NotificationService } from '../../../../core/services/notification.serv
             <ng-container matColumnDef="status">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
               <td mat-cell *matCellDef="let email">
-                <mat-chip [class]="'status-' + email.status">
-                  <mat-icon>{{ getStatusIcon(email.status) }}</mat-icon>
+                <mat-chip [class]="'status-' + (email.status || 'unknown')">
+                  <mat-icon>{{ getStatusIcon(email.status || 'unknown') }}</mat-icon>
                   {{ email.status ? (email.status | titlecase) : 'Unknown' }}
                 </mat-chip>
               </td>
@@ -164,7 +164,9 @@ import { NotificationService } from '../../../../core/services/notification.serv
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
               <td mat-cell *matCellDef="let email">
                 <div class="date-cell">
-                  <span>{{ getRelevantDate(email) ? (getRelevantDate(email) | date: 'short') : 'No date' }}</span>
+                  <span>{{
+                    getRelevantDate(email) ? (getRelevantDate(email) | date: 'short') : 'No date'
+                  }}</span>
                   @if (email.resendCount) {
                     <mat-chip class="resend-chip">
                       <mat-icon>replay</mat-icon>
@@ -398,9 +400,9 @@ export class EmailHistoryComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.loadEmails();
     this.setupFilters();
-    
+
     // Handle query parameters
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       if (params['filter']) {
         this.statusControl.setValue(params['filter']);
       }

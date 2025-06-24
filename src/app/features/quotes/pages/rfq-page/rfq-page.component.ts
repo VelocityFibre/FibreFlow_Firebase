@@ -583,10 +583,10 @@ export class RFQPageComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(RFQEmailDialogComponent, {
       width: '600px',
       maxWidth: '90vw',
-      data: { rfq }
+      data: { rfq },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         // Email was sent successfully, no need to reload data
         console.log('RFQ email sent successfully');

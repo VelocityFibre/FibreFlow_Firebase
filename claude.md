@@ -978,3 +978,106 @@ import {
   pick, omit, tuple, createEnum
 } from '@app/core/types';
 ```
+
+## 📧 Email System Documentation
+
+### Overview
+FibreFlow uses Firebase Email Extension for email delivery. The system evolved from a complex logging-based approach to a simplified direct-sending approach for better reliability.
+
+### Email Services
+1. **EmailLogService** (`/src/app/features/emails/services/email-log.service.ts`)
+   - Original service with comprehensive logging and confirmation flow
+   - Creates email logs for tracking and history
+   - Handles cc/bcc fields with proper undefined checking
+
+2. **RFQFirebaseEmailSimpleService** (`/src/app/features/quotes/services/rfq-firebase-email-simple.service.ts`)
+   - Simplified service for direct RFQ email sending
+   - Bypasses complex logging for immediate delivery
+   - Monitors delivery status in real-time
+
+### Common Issues & Solutions
+
+#### Issue: "Unsupported field value: undefined"
+**Cause**: Firebase doesn't accept undefined values in documents
+**Solution**: Remove undefined fields before sending
+```typescript
+// Remove any undefined properties
+Object.keys(emailDoc).forEach(key => {
+  if (emailDoc[key] === undefined) {
+    delete emailDoc[key];
+  }
+});
+```
+
+#### Issue: Emails stuck spinning/sending
+**Cause**: Complex logging flow or browser cache issues
+**Solution**: 
+1. Use simplified email service
+2. Hard refresh browser (Ctrl+Shift+R)
+3. Clear pending emails using fix script
+
+#### Issue: Large PDF attachments
+**Cause**: Base64 encoding increases size by ~33%
+**Solution**: Check PDF size before attaching, use links for large files
+
+### Email Document Structure
+```typescript
+{
+  to: string[],              // Required: recipient emails
+  from: string,              // Required: sender email (use simple format)
+  message: {
+    subject: string,         // Required
+    text: string,            // Required: plain text
+    html: string,            // Optional: HTML version
+    attachments?: [{         // Optional
+      filename: string,
+      content: string,       // Base64 encoded
+      encoding: 'base64'
+    }]
+  },
+  cc?: string[],            // Optional: Only include if has values
+  bcc?: string[]            // Optional: Only include if has values
+}
+```
+
+### Testing & Debugging
+
+#### Test Email from Console
+```javascript
+const { getFirestore, collection, addDoc } = await import('https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js');
+const db = getFirestore();
+
+const emailDoc = {
+  to: ['test@example.com'],
+  from: 'noreply@velocityfibre.com',
+  message: {
+    subject: 'Test Email',
+    text: 'This is a test',
+    html: '<p>This is a test</p>'
+  }
+};
+
+const docRef = await addDoc(collection(db, 'mail'), emailDoc);
+console.log('Email sent:', docRef.id);
+```
+
+#### Debug Scripts
+- `/scripts/fix-pending-emails.js` - Cancel stuck emails
+- `/scripts/test-rfq-email-simple.js` - Test RFQ email sending
+- `/scripts/debug-rfq-email.js` - Analyze email issues
+
+### Best Practices
+1. **Always handle undefined values** - Check before adding to documents
+2. **Use simple from addresses** - Avoid complex formatting
+3. **Monitor attachment sizes** - Keep under 10MB
+4. **Clear browser cache** - When updates don't appear
+5. **Use appropriate service** - Simple for RFQ, LogService for tracking
+
+### Key Files Reference
+- Email services: `/src/app/features/emails/services/`
+- RFQ email services: `/src/app/features/quotes/services/`
+- Email models: `/src/app/features/emails/models/email.model.ts`
+- Debug scripts: `/scripts/*email*.js`
+
+### For more details, see:
+- `/docs/EMAIL_SYSTEM_DOCUMENTATION.md` - Comprehensive email system guide

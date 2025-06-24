@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatBadgeModule } from '@angular/material/badge';
 import { AuthService } from '../../core/services/auth.service';
+import { demoConfig } from '../../config/demo.config';
 
 interface NavItem {
   label: string;
@@ -377,31 +378,52 @@ export class AppShellComponent {
   private authService = inject(AuthService);
 
   pendingTasksCount = 0;
+  
+  // Helper method to filter items based on demo config
+  private filterItems(items: NavItem[]): NavItem[] {
+    if (!demoConfig.isDemo) {
+      return items;
+    }
+    return items.filter(item => {
+      // Check if the route itself is hidden
+      if (demoConfig.hiddenRoutes.includes(item.route)) {
+        return false;
+      }
+      // Check if the route starts with any hidden parent route
+      return !demoConfig.hiddenRoutes.some(hiddenRoute => 
+        item.route.startsWith(hiddenRoute + '/')
+      );
+    });
+  }
+
   // Main category items
-  mainItems: NavItem[] = [{ label: 'Dashboard', icon: 'dashboard', route: '/dashboard' }];
+  mainItems: NavItem[] = this.filterItems([
+    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' }
+  ]);
 
   // Staff category items
-  staffItems: NavItem[] = [
+  staffItems: NavItem[] = this.filterItems([
     { label: 'Staff Overview', icon: 'people', route: '/staff' },
     { label: 'My Tasks', icon: 'assignment_ind', route: '/tasks/my-tasks' },
     { label: 'Roles & Permissions', icon: 'admin_panel_settings', route: '/roles' },
     { label: 'Attendance', icon: 'event_available', route: '/attendance' },
     { label: 'Performance', icon: 'trending_up', route: '/performance' },
-  ];
+  ]);
 
   // Project Management category items
-  projectItems: NavItem[] = [
+  projectItems: NavItem[] = this.filterItems([
     { label: 'Projects', icon: 'folder', route: '/projects' },
+    { label: 'Pole Tracker', icon: 'cell_tower', route: '/pole-tracker' },
     { label: 'Phases', icon: 'timeline', route: '/phases' },
     { label: 'Steps', icon: 'linear_scale', route: '/steps', badge: 0 },
     { label: 'All Tasks', icon: 'task_alt', route: '/tasks' },
     { label: 'Daily Progress', icon: 'assignment_turned_in', route: '/daily-progress' },
     { label: 'Daily KPIs', icon: 'analytics', route: '/daily-progress/kpis' },
     { label: 'KPI Dashboard', icon: 'dashboard', route: '/daily-progress/kpis-summary' },
-  ];
+  ]);
 
   // Stock Management category items
-  stockItems: NavItem[] = [
+  stockItems: NavItem[] = this.filterItems([
     { label: 'Master Materials', icon: 'category', route: '/materials' },
     { label: 'Stock Items', icon: 'inventory_2', route: '/stock' },
     { label: 'Stock Movements', icon: 'swap_horiz', route: '/stock-movements' },
@@ -409,26 +431,26 @@ export class AppShellComponent {
     { label: 'BOQ Management', icon: 'receipt_long', route: '/boq' },
     { label: 'RFQ Management', icon: 'request_quote', route: '/quotes/rfq' },
     { label: 'Stock Analysis', icon: 'analytics', route: '/stock-analysis' },
-  ];
+  ]);
 
   // Suppliers category items
-  supplierItems: NavItem[] = [
+  supplierItems: NavItem[] = this.filterItems([
     { label: 'Suppliers', icon: 'local_shipping', route: '/suppliers' },
     { label: 'Email History', icon: 'email', route: '/emails/history' },
     { label: 'Supplier Portal', icon: 'web', route: '/supplier-portal' },
-  ];
+  ]);
 
   // Clients category items
-  clientItems: NavItem[] = [
+  clientItems: NavItem[] = this.filterItems([
     { label: 'Clients', icon: 'business', route: '/clients' },
     { label: 'Contractors', icon: 'engineering', route: '/contractors' },
-  ];
+  ]);
 
   // Settings category items
-  settingsItems: NavItem[] = [
+  settingsItems: NavItem[] = this.filterItems([
     { label: 'Company Info', icon: 'business', route: '/settings/company' },
     { label: 'Settings', icon: 'settings', route: '/settings' },
     { label: 'Audit Trail', icon: 'history', route: '/audit-trail' },
     { label: 'Debug Logs', icon: 'bug_report', route: '/debug-logs' },
-  ];
+  ]);
 }

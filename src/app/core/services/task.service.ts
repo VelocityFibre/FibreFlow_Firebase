@@ -26,6 +26,7 @@ import { AuthService } from './auth.service';
 import { StaffService } from '../../features/staff/services/staff.service';
 import { DEFAULT_TASK_TEMPLATES, PHASE_NAME_MAPPING } from '../models/task-templates.model';
 import { Phase } from '../models/phase.model';
+import { AuditTrailService } from './audit-trail.service';
 
 @Injectable({
   providedIn: 'root',
@@ -37,6 +38,7 @@ export class TaskService {
   private projectsCollection = collection(this.firestore, 'projects');
   private staffService = inject(StaffService);
   private tasksCollection = collection(this.firestore, 'tasks');
+  private auditService = inject(AuditTrailService);
 
   getAllTasks(): Observable<Task[]> {
     const q = query(this.tasksCollection);
@@ -183,6 +185,16 @@ export class TaskService {
     const taskDoc = doc(this.firestore, 'tasks', taskId);
     console.log('Task document reference:', taskDoc.path);
 
+    // Get current task data for audit logging
+    let currentTaskData: Task | undefined;
+    try {
+      const currentTaskSnapshot = await getDoc(taskDoc);
+      currentTaskData = currentTaskSnapshot.data() as Task;
+      console.log('📋 Current task data for audit:', currentTaskData?.name);
+    } catch (error) {
+      console.warn('Could not fetch current task data for audit:', error);
+    }
+
     const updateData: any = {
       ...updates,
       updatedAt: serverTimestamp(),
@@ -200,11 +212,45 @@ export class TaskService {
     try {
       await updateDoc(taskDoc, updateData);
       console.log('Task updated successfully in Firestore');
+
+      // Log audit trail for task update
+      try {
+        console.log('📝 Attempting to log audit trail for task update...');
+        await this.auditService.logUserAction(
+          'task',
+          taskId,
+          currentTaskData?.name || 'Unknown Task',
+          'update',
+          currentTaskData,
+          { ...currentTaskData, ...updateData },
+          'success',
+        );
+        console.log('✅ Audit trail logged successfully for task update');
+      } catch (error) {
+        console.error('❌ Error logging task update audit trail:', error);
+      }
     } catch (error) {
       console.error('=== UPDATE TASK ERROR ===');
       console.error('Error updating task:', error);
       console.error('Error code:', (error as any)?.code);
       console.error('Error message:', (error as any)?.message);
+
+      // Log failed task update
+      try {
+        await this.auditService.logUserAction(
+          'task',
+          taskId,
+          currentTaskData?.name || 'Unknown Task',
+          'update',
+          currentTaskData,
+          updates,
+          'failed',
+          error instanceof Error ? error.message : 'Unknown error',
+        );
+      } catch (auditError) {
+        console.error('Error logging failed task update audit trail:', auditError);
+      }
+
       throw error;
     }
 

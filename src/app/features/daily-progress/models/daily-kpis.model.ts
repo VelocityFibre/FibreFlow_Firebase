@@ -2,6 +2,8 @@ export interface DailyKPIs {
   id?: string;
   projectId: string;
   projectName?: string;
+  contractorId?: string;
+  contractorName?: string;
   date: Date;
 
   // Permissions
