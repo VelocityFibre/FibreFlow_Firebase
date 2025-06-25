@@ -4,7 +4,6 @@ export const demoConfig = {
   hiddenRoutes: [
     '/phases',
     '/steps',
-    '/tasks',
     '/materials',
     '/stock',
     '/stock/allocations',

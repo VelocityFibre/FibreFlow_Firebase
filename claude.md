@@ -712,17 +712,41 @@ interface Step {
 }
 ```
 
-## Development Commands
+## 🚀 Development Workflow (as at 2025-06-25)
+
+### Current Status: DEVELOPMENT PHASE
+**Workflow**: Single branch (main) development until LIVE deployment
+**Switch to branch workflow**: When marked as LIVE in this document
+
+### Development Commands
 
 ```bash
 # Development
 ng serve                    # Dev server (http://localhost:4200)
 
-# Build & Deploy
+# Build & Deploy (Development Phase)
 npm run build              # Production build
-firebase deploy            # Full deployment
+firebase deploy            # Direct deploy to main
 ./DEPLOY_NOW.sh           # Quick deploy (if available)
+
+# When LIVE (Future Branch Workflow)
+./validate-deploy.sh       # Pre-deployment validation
+./deploy.sh preview branch-name 7d  # Preview deployment
+./deploy.sh prod           # Production deployment
 ```
+
+### 📋 Development Phase Benefits (Current Approach)
+- **Speed**: Single deploy cycle cuts development time in half
+- **Real testing**: Testing happens against actual production data
+- **No environment drift**: Same codebase = same behavior
+- **Rapid iteration**: Faster feedback loops for development
+
+### 🔄 Future: Branch Workflow (When LIVE)
+**Activate when ready**: Change status above from "DEVELOPMENT PHASE" to "LIVE"
+- Risk isolation for production users
+- Preview URLs for stakeholder review
+- Clean rollbacks for specific features
+- Production stability protection
 
 ### Live URLs
 - Production: https://fibreflow-73daf.web.app

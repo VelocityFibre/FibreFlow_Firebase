@@ -41,27 +41,36 @@ export class TaskService {
   private auditService = inject(AuditTrailService);
 
   getAllTasks(): Observable<Task[]> {
+    console.log('TaskService.getAllTasks() called');
     const q = query(this.tasksCollection);
 
     return (collectionData(q, { idField: 'id' }) as Observable<Task[]>).pipe(
       switchMap((tasks: Task[]) => {
-        if (tasks.length === 0) return of([]);
+        console.log('TaskService: Firestore returned', tasks.length, 'tasks');
+        if (tasks.length === 0) {
+          console.log('TaskService: No tasks found, returning empty array');
+          return of([]);
+        }
 
         // Get unique project IDs
         const projectIds = [...new Set(tasks.map((t) => t.projectId))];
+        console.log('TaskService: Found', projectIds.length, 'unique project IDs:', projectIds);
 
         // Fetch project details directly from Firestore
         return from(Promise.all(projectIds.map((id) => this.getProjectBasicInfo(id)))).pipe(
           map((projects) => {
+            console.log('TaskService: Fetched project info for', projects.filter(p => p).length, 'projects');
             const projectMap = new Map(projects.filter((p) => p).map((p) => [p!.id!, p!]));
 
             // Enhance tasks with project information
-            return tasks.map((task) => ({
+            const enhancedTasks = tasks.map((task) => ({
               ...task,
               projectName: projectMap.get(task.projectId)?.name,
               projectCode: projectMap.get(task.projectId)?.projectCode,
               clientName: projectMap.get(task.projectId)?.clientName,
             }));
+            console.log('TaskService: Returning', enhancedTasks.length, 'enhanced tasks');
+            return enhancedTasks;
           }),
         );
       }),
