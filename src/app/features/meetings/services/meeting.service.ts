@@ -16,7 +16,7 @@ import {
   Timestamp,
 } from '@angular/fire/firestore';
 import { Observable, from, map } from 'rxjs';
-import { Meeting, MeetingStatus, ActionItem } from '../models/meeting.model';
+import { Meeting, ActionItem } from '../models/meeting.model';
 
 @Injectable({
   providedIn: 'root',
@@ -28,11 +28,24 @@ export class MeetingService {
   getMeetings(constraints: QueryConstraint[] = []): Observable<Meeting[]> {
     const q = query(
       this.meetingsCollection,
-      orderBy('date', 'desc'),
+      orderBy('dateTime', 'desc'),
       ...constraints
     );
     return collectionData(q, { idField: 'id' }).pipe(
       map((meetings) => meetings.map((m) => this.convertFromFirestore(m)))
+    );
+  }
+
+  getAll(): Observable<Meeting[]> {
+    return this.getMeetings();
+  }
+
+  getById(id: string): Observable<Meeting> {
+    return this.getMeetingById(id).pipe(
+      map(meeting => {
+        if (!meeting) throw new Error('Meeting not found');
+        return meeting;
+      })
     );
   }
 
@@ -57,18 +70,17 @@ export class MeetingService {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
     return this.getMeetings([
-      where('date', '>=', Timestamp.fromDate(startDate)),
+      where('dateTime', '>=', startDate.toISOString()),
       limit(50)
     ]);
   }
 
   getMeetingsWithPendingActions(): Observable<Meeting[]> {
     return this.getMeetings([
-      where('actionItems', '!=', []),
-      where('status', '==', MeetingStatus.PROCESSED)
+      where('actionItems', '!=', [])
     ]).pipe(
       map(meetings => meetings.filter(m => 
-        m.actionItems.some(a => !a.completed && !a.convertedToTaskId && !a.convertedToPersonalTodoId)
+        m.actionItems?.some(a => !a.completed && !a.convertedToTaskId && !a.convertedToPersonalTodoId)
       ))
     );
   }
@@ -77,10 +89,10 @@ export class MeetingService {
     const now = new Date();
     const meetingData = {
       ...meeting,
-      createdAt: Timestamp.fromDate(now),
-      updatedAt: Timestamp.fromDate(now),
-      date: Timestamp.fromDate(meeting.date as Date),
-      processedAt: meeting.processedAt ? Timestamp.fromDate(meeting.processedAt as Date) : null,
+      createdAt: now.toISOString(),
+      updatedAt: now.toISOString(),
+      dateTime: meeting.dateTime || now.toISOString(),
+      processedAt: meeting.processedAt || null,
     };
     const docRef = await addDoc(this.meetingsCollection, meetingData);
     return docRef.id;
@@ -90,40 +102,33 @@ export class MeetingService {
     const meetingDoc = doc(this.firestore, 'meetings', id);
     const updateData: any = {
       ...updates,
-      updatedAt: Timestamp.fromDate(new Date()),
+      updatedAt: new Date().toISOString(),
     };
-    
-    if (updates.date) {
-      updateData.date = Timestamp.fromDate(updates.date as Date);
-    }
-    if (updates.processedAt) {
-      updateData.processedAt = Timestamp.fromDate(updates.processedAt as Date);
-    }
     
     await updateDoc(meetingDoc, updateData);
   }
 
-  async updateActionItem(meetingId: string, actionItemId: string, updates: Partial<ActionItem>): Promise<void> {
+  async updateActionItem(meetingId: string, actionItemIndex: number, updates: Partial<ActionItem>): Promise<void> {
     const meeting = await this.getMeetingById(meetingId).toPromise();
     if (!meeting) throw new Error('Meeting not found');
 
-    const actionItems = meeting.actionItems.map(item =>
-      item.id === actionItemId ? { ...item, ...updates } : item
-    );
+    const actionItems = meeting.actionItems?.map((item, index) =>
+      index === actionItemIndex ? { ...item, ...updates } : item
+    ) || [];
 
     await this.updateMeeting(meetingId, { actionItems });
   }
 
-  async convertActionItemToTask(meetingId: string, actionItemId: string, taskId: string): Promise<void> {
-    await this.updateActionItem(meetingId, actionItemId, {
+  async convertActionItemToTask(meetingId: string, actionItemIndex: number, taskId: string): Promise<void> {
+    await this.updateActionItem(meetingId, actionItemIndex, {
       convertedToTaskId: taskId,
       completed: true,
-      completedAt: new Date()
+      completedAt: new Date().toISOString()
     });
   }
 
-  async convertActionItemToPersonalTodo(meetingId: string, actionItemId: string, todoId: string): Promise<void> {
-    await this.updateActionItem(meetingId, actionItemId, {
+  async convertActionItemToPersonalTodo(meetingId: string, actionItemIndex: number, todoId: string): Promise<void> {
+    await this.updateActionItem(meetingId, actionItemIndex, {
       convertedToPersonalTodoId: todoId
     });
   }
@@ -136,14 +141,14 @@ export class MeetingService {
   private convertFromFirestore(data: any): Meeting {
     return {
       ...data,
-      date: data.date?.toDate() || new Date(),
-      createdAt: data.createdAt?.toDate() || new Date(),
-      updatedAt: data.updatedAt?.toDate() || new Date(),
-      processedAt: data.processedAt?.toDate(),
+      dateTime: data.dateTime || data.date?.toDate()?.toISOString() || new Date().toISOString(),
+      createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : data.createdAt || new Date().toISOString(),
+      updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate().toISOString() : data.updatedAt || new Date().toISOString(),
+      processedAt: data.processedAt?.toDate ? data.processedAt.toDate().toISOString() : data.processedAt,
       actionItems: data.actionItems?.map((item: any) => ({
         ...item,
-        dueDate: item.dueDate?.toDate(),
-        completedAt: item.completedAt?.toDate(),
+        dueDate: item.dueDate?.toDate ? item.dueDate.toDate().toISOString() : item.dueDate,
+        completedAt: item.completedAt?.toDate ? item.completedAt.toDate().toISOString() : item.completedAt,
       })) || [],
     };
   }

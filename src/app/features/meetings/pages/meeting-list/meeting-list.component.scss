@@ -1,0 +1,212 @@
+@import '../../../../../styles/variables';
+
+:host {
+  display: block;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  gap: 24px;
+
+  mat-spinner {
+    --mdc-circular-progress-active-indicator-color: rgb(var(--ff-primary));
+  }
+
+  p {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgb(var(--ff-muted-foreground));
+  }
+}
+
+.table-card {
+  background: rgb(var(--ff-card));
+  border: 1px solid rgb(var(--ff-border));
+  border-radius: var(--ff-radius);
+  margin-top: 48px;
+
+  .table-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+}
+
+.meetings-table {
+  width: 100%;
+  min-width: 800px;
+
+  th.mat-mdc-header-cell {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgb(var(--ff-foreground));
+    background: rgb(var(--ff-muted) / 0.3);
+  }
+
+  td.mat-mdc-cell {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgb(var(--ff-foreground));
+  }
+
+  .meeting-row:hover {
+    background: rgb(var(--ff-muted) / 0.1);
+  }
+
+  // Title column
+  .meeting-title {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .title-link {
+      color: rgb(var(--ff-primary));
+      text-decoration: none;
+      font-weight: 500;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .organizer {
+      font-size: 12px;
+      color: rgb(var(--ff-muted-foreground));
+    }
+  }
+
+  // Date/Time column
+  .datetime-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    .date {
+      font-weight: 500;
+    }
+
+    .time {
+      font-size: 12px;
+      color: rgb(var(--ff-muted-foreground));
+    }
+  }
+
+  // Participants column
+  .participants-cell {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .participant-avatars {
+      display: flex;
+      position: relative;
+
+      .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgb(var(--ff-primary));
+        color: rgb(var(--ff-primary-foreground));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 500;
+        border: 2px solid rgb(var(--ff-background));
+        position: relative;
+        margin-left: -8px;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        &.more {
+          background: rgb(var(--ff-muted));
+          color: rgb(var(--ff-muted-foreground));
+        }
+      }
+    }
+
+    .participant-count {
+      font-size: 13px;
+      color: rgb(var(--ff-muted-foreground));
+    }
+  }
+
+  // Action items column
+  .action-items-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      color: rgb(var(--ff-muted-foreground));
+
+      &.has-items {
+        color: rgb(var(--ff-info));
+      }
+
+      &.has-pending {
+        color: rgb(var(--ff-warning));
+      }
+    }
+
+    span {
+      font-size: 13px;
+    }
+  }
+
+  // Duration chips
+  .mat-mdc-chip {
+    height: 24px;
+    font-size: 12px;
+    background: rgb(var(--ff-primary) / 0.1);
+    color: rgb(var(--ff-primary));
+    border: none;
+  }
+}
+
+// Empty state
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px;
+  text-align: center;
+  gap: 24px;
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: rgb(var(--ff-border));
+  }
+
+  h3 {
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0;
+  }
+
+  p {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgb(var(--ff-muted-foreground));
+    margin: 0;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .table-card {
+    margin: 24px -24px 0;
+    border-radius: 0;
+  }
+}

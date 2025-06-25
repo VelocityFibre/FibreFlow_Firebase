@@ -1,39 +1,43 @@
 export interface Meeting {
-  id?: string;
-  firefliesToId: string;
+  id: string;
+  firefliesId?: string;
   title: string;
-  date: Date;
+  dateTime: string;
   duration: number;
+  organizer?: string;
   participants: MeetingParticipant[];
-  summary: string;
-  actionItems: ActionItem[];
-  insights: Insight[];
-  transcriptUrl?: string;
+  summary?: string;
+  actionItems?: ActionItem[];
+  insights?: MeetingInsights;
+  meetingUrl?: string;
+  recordingUrl?: string;
+  transcript?: string;
   transcriptStorageUrl?: string;
   vectorEmbeddingId?: string;
   projectId?: string;
-  createdAt: Date;
-  updatedAt: Date;
-  processedAt?: Date;
-  status: MeetingStatus;
+  createdAt: string;
+  updatedAt: string;
+  processedAt?: string;
+  status?: MeetingStatus;
 }
 
 export interface MeetingParticipant {
   email: string;
   name: string;
-  isSpeaker: boolean;
+  isSpeaker?: boolean;
   speakingDuration?: number;
 }
 
 export interface ActionItem {
-  id: string;
+  id?: string;
   text: string;
+  assignee?: string;
   assigneeEmail?: string;
   assigneeName?: string;
-  dueDate?: Date;
+  dueDate?: string;
   priority: 'high' | 'medium' | 'low';
   completed: boolean;
-  completedAt?: Date;
+  completedAt?: string;
   convertedToTaskId?: string;
   convertedToPersonalTodoId?: string;
   context?: string;
@@ -90,4 +94,16 @@ export interface TranscriptSegment {
   text: string;
   timestamp: number;
   duration: number;
+}
+
+export interface MeetingInsights {
+  keyTopics?: string[];
+  sentiment?: 'positive' | 'neutral' | 'negative';
+  speakerStats?: {
+    [name: string]: {
+      duration: number;
+      percentage: number;
+    };
+  };
+  insights?: Insight[];
 }

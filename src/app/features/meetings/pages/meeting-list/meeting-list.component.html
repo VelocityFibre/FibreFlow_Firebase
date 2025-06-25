@@ -1,0 +1,175 @@
+<div class="ff-page-container">
+  <!-- Page Header -->
+  <app-page-header
+    title="Meetings"
+    subtitle="Manage and track all your meetings from Fireflies"
+    [actions]="headerActions"
+  ></app-page-header>
+
+  <!-- Summary Cards -->
+  <app-summary-cards [cards]="summaryCards()"></app-summary-cards>
+
+  <!-- Filters -->
+  <app-filter-form
+    [formGroup]="filterForm"
+    [fields]="filterFields"
+    (apply)="onFiltersApply($event)"
+  ></app-filter-form>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading()">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading meetings...</p>
+  </div>
+
+  <!-- Table -->
+  <mat-card class="table-card" *ngIf="!loading()">
+    <mat-card-content>
+      <div class="table-container">
+        <table mat-table [dataSource]="filteredMeetings()" class="meetings-table">
+          
+          <!-- Selection Column -->
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-checkbox
+                [checked]="selectedMeetings().size === filteredMeetings().length && filteredMeetings().length > 0"
+                [indeterminate]="selectedMeetings().size > 0 && selectedMeetings().size < filteredMeetings().length"
+                (change)="selectAll()"
+              ></mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let meeting">
+              <mat-checkbox
+                [checked]="isSelected(meeting.id)"
+                (change)="toggleSelection(meeting.id)"
+              ></mat-checkbox>
+            </td>
+          </ng-container>
+
+          <!-- Title Column -->
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef>Meeting Title</th>
+            <td mat-cell *matCellDef="let meeting">
+              <div class="meeting-title">
+                <a [routerLink]="['/meetings', meeting.id]" class="title-link">
+                  {{ meeting.title }}
+                </a>
+                <span class="organizer">by {{ meeting.organizer }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Date/Time Column -->
+          <ng-container matColumnDef="dateTime">
+            <th mat-header-cell *matHeaderCellDef>Date & Time</th>
+            <td mat-cell *matCellDef="let meeting">
+              <div class="datetime-cell">
+                <span class="date">{{ formatDate(meeting.dateTime) }}</span>
+                <span class="time">{{ formatTime(meeting.dateTime) }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Duration Column -->
+          <ng-container matColumnDef="duration">
+            <th mat-header-cell *matHeaderCellDef>Duration</th>
+            <td mat-cell *matCellDef="let meeting">
+              <mat-chip-listbox>
+                <mat-chip>{{ formatDuration(meeting.duration) }}</mat-chip>
+              </mat-chip-listbox>
+            </td>
+          </ng-container>
+
+          <!-- Participants Column -->
+          <ng-container matColumnDef="participants">
+            <th mat-header-cell *matHeaderCellDef>Participants</th>
+            <td mat-cell *matCellDef="let meeting">
+              <div class="participants-cell">
+                <div class="participant-avatars">
+                  <div 
+                    *ngFor="let participant of meeting.participants.slice(0, 3); let i = index" 
+                    class="avatar"
+                    [style.z-index]="3-i"
+                    [matTooltip]="participant.name"
+                  >
+                    {{ getInitials(participant.name) }}
+                  </div>
+                  <div 
+                    *ngIf="meeting.participants.length > 3" 
+                    class="avatar more"
+                    [matTooltip]="getRemainingParticipantsTooltip(meeting)"
+                  >
+                    +{{ meeting.participants.length - 3 }}
+                  </div>
+                </div>
+                <span class="participant-count">{{ meeting.participants.length }} people</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Action Items Column -->
+          <ng-container matColumnDef="actionItems">
+            <th mat-header-cell *matHeaderCellDef>Action Items</th>
+            <td mat-cell *matCellDef="let meeting">
+              <div class="action-items-cell" [matTooltip]="getActionItemsTooltip(meeting)">
+                <mat-icon 
+                  [class.has-items]="hasActionItems(meeting)"
+                  [class.has-pending]="hasPendingActionItems(meeting)"
+                >
+                  {{ hasActionItems(meeting) ? 'task_alt' : 'check_circle' }}
+                </mat-icon>
+                <span *ngIf="hasActionItems(meeting)">
+                  {{ getPendingActionItemsCount(meeting) }} / {{ meeting.actionItems.length }}
+                </span>
+                <span *ngIf="!meeting.actionItems || meeting.actionItems.length === 0">
+                  None
+                </span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let meeting">
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="viewMeeting(meeting)">
+                  <mat-icon>visibility</mat-icon>
+                  View Details
+                </button>
+                <button mat-menu-item *ngIf="meeting.recordingUrl" [disabled]="true">
+                  <mat-icon>videocam</mat-icon>
+                  View Recording
+                </button>
+                <button mat-menu-item *ngIf="meeting.actionItems && meeting.actionItems.length > 0" [disabled]="true">
+                  <mat-icon>checklist</mat-icon>
+                  Create Todos
+                </button>
+                <button mat-menu-item [disabled]="true">
+                  <mat-icon>share</mat-icon>
+                  Share
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="meeting-row"></tr>
+        </table>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="filteredMeetings().length === 0">
+          <mat-icon>groups_off</mat-icon>
+          <h3>No meetings found</h3>
+          <p>Try adjusting your filters or sync with Fireflies to load meetings.</p>
+          <button mat-raised-button color="primary" (click)="syncMeetings()">
+            <mat-icon>sync</mat-icon>
+            Sync Meetings
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
