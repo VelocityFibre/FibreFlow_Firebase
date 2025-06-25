@@ -1,0 +1,179 @@
+@use '../../../../styles/component-theming' as theme;
+
+.hello-world-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: theme.ff-rem(24);
+}
+
+.hello-world-card {
+  @include theme.card-theme(elevated);
+  max-width: 600px;
+  width: 100%;
+  
+  mat-card-content {
+    padding: theme.ff-rem(32) !important;
+  }
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: theme.ff-rem(20);
+  margin-bottom: theme.ff-rem(32);
+  
+  .card-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: theme.ff-rem(16);
+    background: theme.ff-rgba(primary, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    
+    mat-icon {
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+      color: theme.ff-rgb(primary);
+    }
+  }
+  
+  .card-title-section {
+    flex: 1;
+    
+    .card-title {
+      @include theme.heading-2();
+      margin: 0 0 theme.ff-rem(8) 0;
+      color: theme.ff-rgb(foreground);
+    }
+    
+    .card-subtitle {
+      @include theme.body-text();
+      color: theme.ff-rgb(muted-foreground);
+      margin: 0;
+      line-height: 1.6;
+    }
+  }
+}
+
+.card-content {
+  .info-section {
+    margin-bottom: theme.ff-rem(32);
+    
+    .info-title {
+      @include theme.heading-3();
+      margin: 0 0 theme.ff-rem(20) 0;
+      color: theme.ff-rgb(foreground);
+    }
+    
+    .status-items {
+      display: flex;
+      flex-direction: column;
+      gap: theme.ff-rem(12);
+      
+      .status-item {
+        display: flex;
+        align-items: center;
+        gap: theme.ff-rem(12);
+        padding: theme.ff-rem(8);
+        border-radius: theme.ff-rem(8);
+        background: theme.ff-rgba(success, 0.05);
+        border: 1px solid theme.ff-rgba(success, 0.1);
+        
+        .success-icon {
+          color: theme.ff-rgb(success);
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+        
+        span {
+          @include theme.body-text();
+          color: theme.ff-rgb(foreground);
+          font-weight: 500;
+        }
+      }
+    }
+  }
+  
+  .actions-section {
+    display: flex;
+    justify-content: center;
+    
+    button {
+      @include theme.button-theme(primary);
+      
+      mat-icon {
+        margin-right: theme.ff-rem(8);
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .hello-world-container {
+    padding: theme.ff-rem(16);
+    min-height: 300px;
+  }
+  
+  .hello-world-card {
+    mat-card-content {
+      padding: theme.ff-rem(24) !important;
+    }
+  }
+  
+  .card-header {
+    gap: theme.ff-rem(16);
+    margin-bottom: theme.ff-rem(24);
+    
+    .card-icon {
+      width: 56px;
+      height: 56px;
+      
+      mat-icon {
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+      }
+    }
+    
+    .card-title-section {
+      .card-title {
+        font-size: theme.ff-rem(24);
+      }
+    }
+  }
+  
+  .card-content {
+    .info-section {
+      margin-bottom: theme.ff-rem(24);
+      
+      .status-items {
+        gap: theme.ff-rem(10);
+        
+        .status-item {
+          padding: theme.ff-rem(6);
+          gap: theme.ff-rem(10);
+        }
+      }
+    }
+  }
+}
+
+// Material overrides to ensure theme compliance
+:host ::ng-deep {
+  .mat-mdc-card {
+    border-radius: var(--ff-radius) !important;
+    background-color: rgb(var(--ff-card)) !important;
+    border: 1px solid rgb(var(--ff-border)) !important;
+  }
+  
+  .mat-mdc-raised-button {
+    border-radius: theme.ff-rem(8) !important;
+  }
+}
