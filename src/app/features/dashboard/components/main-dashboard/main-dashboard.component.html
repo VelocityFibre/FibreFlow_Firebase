@@ -179,6 +179,23 @@
         </mat-card-content>
       </mat-card>
 
+      <!-- Meetings Card -->
+      <mat-card class="dashboard-card" routerLink="/meetings">
+        <mat-card-content>
+          <div class="card-icon meetings-icon">
+            <mat-icon>video_call</mat-icon>
+          </div>
+          <div class="card-details">
+            <h3 class="card-title">Today's Meetings</h3>
+            <p class="card-subtitle">Meeting management and tracking</p>
+            <div class="card-stats">
+              <span class="stat-number">{{ todaysMeetingsCount() }}</span>
+              <span class="stat-label">Today</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
     </div>
 
     <!-- Quick Summary Section -->

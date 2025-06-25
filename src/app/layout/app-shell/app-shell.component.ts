@@ -398,7 +398,8 @@ export class AppShellComponent {
 
   // Main category items
   mainItems: NavItem[] = this.filterItems([
-    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' }
+    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
+    { label: 'Meetings', icon: 'groups', route: '/meetings' }
   ]);
 
   // Staff category items
@@ -406,7 +407,6 @@ export class AppShellComponent {
     { label: 'Staff Overview', icon: 'people', route: '/staff' },
     { label: 'My Tasks', icon: 'assignment_ind', route: '/tasks/my-tasks' },
     { label: 'Personal Todos', icon: 'checklist_rtl', route: '/personal-todos' },
-    { label: 'Meetings', icon: 'groups', route: '/meetings' },
     { label: 'Roles & Permissions', icon: 'admin_panel_settings', route: '/roles' },
     { label: 'Attendance', icon: 'event_available', route: '/attendance' },
     { label: 'Performance', icon: 'trending_up', route: '/performance' },
