@@ -41,7 +41,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - uses: claudeai/claude-code@v1
+      - uses: anthropics/claude-code-action@main
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           # Optional: Specify a specific model (defaults to claude-3-5-sonnet)
