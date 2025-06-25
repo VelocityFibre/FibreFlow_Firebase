@@ -1,0 +1,46 @@
+<div class="hello-world-container">
+  <mat-card class="hello-world-card">
+    <mat-card-content>
+      <div class="card-header">
+        <div class="card-icon">
+          <mat-icon>waving_hand</mat-icon>
+        </div>
+        <div class="card-title-section">
+          <h2 class="card-title">{{ message }}</h2>
+          <p class="card-subtitle">{{ description }}</p>
+        </div>
+      </div>
+      
+      <div class="card-content">
+        <div class="info-section">
+          <h3 class="info-title">Integration Test Status</h3>
+          <div class="status-items">
+            <div class="status-item">
+              <mat-icon class="success-icon">check_circle</mat-icon>
+              <span>Angular v20 Standalone Component</span>
+            </div>
+            <div class="status-item">
+              <mat-icon class="success-icon">check_circle</mat-icon>
+              <span>FibreFlow Theme Variables</span>
+            </div>
+            <div class="status-item">
+              <mat-icon class="success-icon">check_circle</mat-icon>
+              <span>Material Design Components</span>
+            </div>
+            <div class="status-item">
+              <mat-icon class="success-icon">check_circle</mat-icon>
+              <span>Claude Code GitHub Actions</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="actions-section">
+          <button mat-raised-button color="primary" (click)="onTestClick()">
+            <mat-icon>rocket_launch</mat-icon>
+            Test Component
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
