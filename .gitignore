@@ -47,3 +47,5 @@ antiHall/
 .env.local
 .env.*.local
 *.env
+**/node_modules
+**/.angular
