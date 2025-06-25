@@ -45,6 +45,7 @@ jobs:
       - uses: anthropics/claude-code-action@main
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           # Optional: Specify a specific model (defaults to claude-3-5-sonnet)
           # model: claude-3-5-sonnet
           # Optional: Set max tokens for response
