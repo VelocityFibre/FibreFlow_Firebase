@@ -19,7 +19,7 @@ reviews:
     ignore_draft_prs: true
     
   # Review thoroughness
-  review_profile: "assertive"  # Options: chill, balanced, assertive
+  profile: "assertive"  # Options: chill, assertive
   
   # Show high-level summary
   high_level_summary: true
@@ -104,17 +104,9 @@ reviews:
 
 # Tool integrations
 tools:
-  # GitHub Actions integration
-  github-actions:
-    enabled: true
-    
   # Enable security scanning
-  ripsecrets:
+  gitleaks:
     enabled: true
-    
-  # Jira integration (if needed later)
-  jira:
-    enabled: false
 
 # GitHub integrations
 integrations:
@@ -138,20 +130,5 @@ knowledge_base:
 # Custom prompts for FibreFlow context
 early_access: false
 
-# Anti-patterns specific to FibreFlow
-anti_patterns:
-  - name: "Hardcoded theme values"
-    pattern: "color:|font-size:|margin:|padding:"
-    message: "Use CSS variables (--ff-*) instead of hardcoded values"
-    
-  - name: "Constructor dependency injection"
-    pattern: "constructor\\s*\\([^)]*\\s+private\\s+"
-    message: "Use inject() function instead of constructor injection (Angular v20)"
-    
-  - name: "Any type usage"
-    pattern: ": any"
-    message: "Use specific types instead of 'any'"
-    
-  - name: "Direct Firestore access"
-    pattern: "collection\\(['\"](?!audit-trail)"
-    message: "Use service methods instead of direct Firestore access"
+# Note: Anti-patterns are checked via path_instructions above
+# CodeRabbit will enforce these through the specific module instructions
