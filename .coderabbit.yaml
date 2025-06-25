@@ -1,0 +1,157 @@
+# FibreFlow CodeRabbit Configuration
+# AI-Powered Code Review Assistant
+
+# Language settings
+language: "en-US"
+
+# Review settings
+reviews:
+  # Automatically review PRs
+  auto_review:
+    enabled: true
+    # Review these branches
+    branches:
+      - "feature/*"
+      - "fix/*"
+      - "hotfix/*"
+      - "test/*"
+    # Skip drafts
+    ignore_draft_prs: true
+    
+  # Review thoroughness
+  review_profile: "assertive"  # Options: chill, balanced, assertive
+  
+  # Show high-level summary
+  high_level_summary: true
+  
+  # Enable sequence diagrams for complex flows
+  sequence_diagrams:
+    enabled: true
+    
+  # Path-specific instructions for FibreFlow modules
+  path_instructions:
+    # BOQ Module - Critical calculations
+    - path: "src/app/modules/boq/**"
+      instructions: |
+        Pay special attention to:
+        - Material calculation accuracy (quantities, prices, totals)
+        - Null checks on all numeric operations
+        - TypeScript branded types (BoqId, MaterialId, etc.)
+        - Integration with stock allocation
+        - Firestore transaction safety
+    
+    # RFQ/Suppliers Module - Email and security
+    - path: "src/app/modules/suppliers/**"
+      instructions: |
+        Critical checks:
+        - Email validation and sanitization
+        - Firebase security rules compliance
+        - RFQ workflow state management
+        - Supplier data privacy
+        - PDF generation memory usage
+    
+    - path: "src/app/modules/quotes/**"
+      instructions: |
+        Focus on:
+        - Quote comparison logic accuracy
+        - Currency formatting (must use R not $)
+        - Date handling (SA format)
+        - Email template validation
+    
+    # Projects Module - Complex hierarchies
+    - path: "src/app/modules/projects/**"
+      instructions: |
+        Verify:
+        - Phase/Step/Task hierarchy integrity
+        - Progress calculation accuracy
+        - Circular dependency prevention
+        - Status transition logic
+    
+    # Theme Compliance - Strict standards
+    - path: "src/app/**/*.scss"
+      instructions: |
+        MUST enforce:
+        - Only CSS variables allowed (--ff-*)
+        - No hardcoded colors, fonts, or spacing
+        - Use theme mixins and functions
+        - Responsive breakpoint compliance
+    
+    - path: "src/app/**/*.html"
+      instructions: |
+        Check for:
+        - Theme class usage (ff-page-container, ff-card)
+        - No inline styles
+        - Proper Angular Material component usage
+        - Accessibility attributes
+    
+    # Security-sensitive files
+    - path: "**/*.rules"
+      instructions: |
+        Security critical:
+        - Validate all Firestore security rules
+        - Check for data exposure risks
+        - Ensure proper authentication checks
+        - Verify role-based access
+    
+    # Test files
+    - path: "**/*.spec.ts"
+      instructions: |
+        Ensure:
+        - Comprehensive test coverage
+        - Proper async handling
+        - Mock usage correctness
+        - Edge case testing
+
+# Tool integrations
+tools:
+  # GitHub Actions integration
+  github-actions:
+    enabled: true
+    
+  # Enable security scanning
+  ripsecrets:
+    enabled: true
+    
+  # Jira integration (if needed later)
+  jira:
+    enabled: false
+
+# GitHub integrations
+integrations:
+  # Auto-link GitHub issues
+  github_issues:
+    enabled: true
+    auto_link: true
+
+# Chat settings
+chat:
+  # AI responds to questions
+  auto_reply: true
+
+# Knowledge base instructions
+knowledge_base:
+  learnings:
+    enabled: true
+  issues:
+    enabled: true
+
+# Custom prompts for FibreFlow context
+early_access: false
+
+# Anti-patterns specific to FibreFlow
+anti_patterns:
+  - name: "Hardcoded theme values"
+    pattern: "color:|font-size:|margin:|padding:"
+    message: "Use CSS variables (--ff-*) instead of hardcoded values"
+    
+  - name: "Constructor dependency injection"
+    pattern: "constructor\\s*\\([^)]*\\s+private\\s+"
+    message: "Use inject() function instead of constructor injection (Angular v20)"
+    
+  - name: "Any type usage"
+    pattern: ": any"
+    message: "Use specific types instead of 'any'"
+    
+  - name: "Direct Firestore access"
+    pattern: "collection\\(['\"](?!audit-trail)"
+    message: "Use service methods instead of direct Firestore access"
