@@ -168,6 +168,10 @@
       &.issues-icon {
         background: theme.ff-rgb(destructive);
       }
+      
+      &.tasks-icon {
+        background: #6366f1; // Indigo-500 for tasks
+      }
     }
     
     .card-details {

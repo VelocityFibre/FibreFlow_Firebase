@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { demoConfig } from './config/demo.config';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 const allRoutes: Routes = [
   {
@@ -102,6 +104,55 @@ const allRoutes: Routes = [
     data: { title: 'Performance' },
   },
   {
+    path: 'task-management-test',
+    loadComponent: () => {
+      console.log('FibreFlow: Loading TaskManagementTestComponent...');
+      return import('./features/tasks/pages/task-management/task-management-test.component').then(
+        (m) => {
+          console.log('FibreFlow: TaskManagementTestComponent module loaded:', m);
+          return m.TaskManagementTestComponent;
+        },
+      );
+    },
+    data: { title: 'Task Management Test' },
+  },
+  {
+    path: 'task-management',
+    loadComponent: () => {
+      console.log('FibreFlow: Loading TaskManagementComponent...');
+      return import('./features/tasks/pages/task-management/task-management.component').then(
+        (m) => {
+          console.log('FibreFlow: TaskManagementComponent module loaded:', m);
+          return m.TaskManagementComponent;
+        },
+      ).catch((error) => {
+        console.error('FibreFlow: Error loading TaskManagementComponent:', error);
+        throw error;
+      });
+    },
+    canActivate: [() => {
+      console.log('FibreFlow: Checking access to /task-management route');
+      const router = inject(Router);
+      console.log('FibreFlow: Current URL:', router.url);
+      return true;
+    }],
+    data: { title: 'Task Management' },
+  },
+  {
+    path: 'personal-todos',
+    loadComponent: () =>
+      import('./features/personal-todos/pages/todo-management/todo-management.component').then(
+        (m) => m.TodoManagementComponent
+      ),
+    data: { title: 'Personal Todos' },
+  },
+  {
+    path: 'meetings',
+    loadChildren: () =>
+      import('./features/meetings/meetings.routes').then((m) => m.meetingsRoutes),
+    data: { title: 'Meetings' },
+  },
+  {
     path: 'tasks',
     loadChildren: () => import('./features/tasks/tasks.routes').then((m) => m.tasksRoutes),
   },
@@ -163,6 +214,12 @@ const allRoutes: Routes = [
     loadChildren: () =>
       import('./features/audit-trail/audit-trail.routes').then((m) => m.auditTrailRoutes),
     data: { title: 'Audit Trail' },
+  },
+  {
+    path: 'reports',
+    loadChildren: () =>
+      import('./features/reports/reports.routes').then((m) => m.REPORTS_ROUTES),
+    data: { title: 'Reports', preload: true },
   },
   // Auth routes - temporary for testing
   {

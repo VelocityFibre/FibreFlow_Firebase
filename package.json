@@ -17,7 +17,16 @@
     "deploy": "firebase deploy",
     "deploy:hosting": "firebase deploy --only hosting",
     "deploy:functions": "firebase deploy --only functions",
-    "deploy:rules": "firebase deploy --only firestore:rules"
+    "deploy:rules": "firebase deploy --only firestore:rules",
+    "build:prod": "ng build --configuration production",
+    "deploy:main": "./deploy-worktree.sh main",
+    "deploy:boq": "./deploy-worktree.sh boq",
+    "deploy:rfq": "./deploy-worktree.sh rfq",
+    "deploy:tasks": "./deploy-worktree.sh tasks",
+    "deploy:reports": "./deploy-worktree.sh reports",
+    "deploy:hotfix": "./deploy-worktree.sh hotfix",
+    "deploy:perf": "./deploy-worktree.sh perf",
+    "worktree:status": "git worktree list"
   },
   "private": true,
   "dependencies": {

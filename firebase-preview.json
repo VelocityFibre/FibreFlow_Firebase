@@ -1,0 +1,48 @@
+{
+  "hosting": [
+    {
+      "target": "production",
+      "site": "fibreflow-73daf",
+      "public": "dist/fibreflow/browser",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
+      "target": "preview",
+      "site": "fibreflow-preview",
+      "public": "dist/fibreflow/browser",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ],
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "functions": {
+    "source": "functions",
+    "runtime": "nodejs20"
+  },
+  "storage": [{
+    "rules": "storage.rules"
+  }],
+  "extensions": {}
+}

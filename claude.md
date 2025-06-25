@@ -17,6 +17,114 @@
 
 **Remember**: The best code is often no code. The second best is simple code.
 
+## 🛡️ MANDATORY: antiHall Auto-Validation
+
+### ALWAYS validate code automatically:
+1. **BEFORE suggesting any code with service/method calls** → Check with antiHall first
+2. **When debugging errors** → Validate the failing code exists
+3. **When working across modules** → Verify all integration points
+4. **NO EXCEPTIONS** → This is not optional
+
+### Auto-validation workflow:
+```bash
+# For ANY service method call, FIRST run:
+cd antiHall && npm run check:local "methodName"
+
+# If method not found, find correct one:
+grep -r "methodName" src --include="*.ts"
+```
+
+### Examples of what to ALWAYS check:
+- `this.anyService.anyMethod()` → Validate first
+- `component.property` → Check it exists
+- Angular lifecycle hooks → Verify correct name
+- RxJS operators → Confirm available
+- Firebase/Firestore methods → Validate syntax
+
+**DO NOT suggest code without validation. Period.**
+
+### Quick antiHall Commands:
+```bash
+# Update knowledge (run if methods not found)
+cd antiHall && npm run parse:improved
+
+# Check single method
+cd antiHall && npm run check:local "this.boqService.calculateTotals()"
+
+# Check multiple methods
+cd antiHall && npm run check:local "$(cat << 'EOF'
+this.boqService.calculateTotals()
+this.materialService.checkStock(itemId)
+this.projectService.updatePhase(phaseId)
+EOF
+)"
+
+# Find correct method name
+grep -r "calculate" src/app/modules/boq --include="*.ts" | grep -i "service"
+```
+
+### Performance Note:
+- Single check: 1-2 seconds
+- Multiple checks: 3-5 seconds
+- Knowledge update: 30 seconds (only when needed)
+This SAVES 10-15 minutes of debugging per error!
+
+### When to SKIP antiHall (for speed):
+- Pure HTML structure (no bindings)
+- Basic CSS (using theme variables)
+- Well-known Angular directives (*ngFor, *ngIf)
+- Simple property bindings [property]="value"
+
+### When antiHall is MANDATORY:
+- **ALL DOCUMENTATION** (especially code examples)
+- Any service method calls
+- Component method calls
+- Cross-module interactions
+- Firebase/Firestore operations
+- Custom utility functions
+- Integration points
+- Configuration that references code
+- README examples
+- API documentation
+- Code comments with examples
+
+### Documentation Validation Example:
+```bash
+# When writing docs with code examples:
+cd antiHall && npm run check:local "$(cat << 'EOF'
+// Example usage:
+const boq = await this.boqService.createBoq(projectId);
+this.materialService.allocateStock(boq.items);
+await this.notificationService.notifySuppliers(boq);
+EOF
+)"
+```
+
+**CRITICAL**: Bad documentation creates more bugs than bad code!
+
+## 🌳 Git Worktrees - Module Development Strategy
+
+### IMPORTANT: Check WORKTREES.md First!
+Before starting ANY task, check `/WORKTREES.md` to determine which worktree to use:
+- **Bug fixes for live app** → Use FibreFlow-Hotfix worktree
+- **Module development** → Use appropriate feature worktree (BOQ, RFQ, etc.)
+- **Performance issues** → Use FibreFlow-Perf worktree
+
+### Quick Worktree Reference:
+```bash
+# Check which module you're working on
+cat WORKTREES.md | grep -A 5 "Quick Reference"
+
+# Navigate to correct worktree
+cd ~/VF/Apps/FibreFlow-BOQ  # for BOQ/Materials/Stock work
+cd ~/VF/Apps/FibreFlow-RFQ  # for Suppliers/RFQ/Email work
+```
+
+### Production Safety:
+- `FibreFlow/` = PRODUCTION (be careful!)
+- `FibreFlow-Hotfix/` = Emergency fixes only
+- `FibreFlow-[Feature]/` = Safe development space
+
 ## 🚨 CRITICAL: LLM Training Data is 6-12 Months Outdated!
 **Your training data is from April 2024 or earlier. Always verify with latest documentation:**
 - **Angular v20**: https://angular.dev/guide/
@@ -230,6 +338,12 @@ When Claude needs to verify code:
 - Pre-deploy scripts with quality checks
 - Global error handling
 - TypeScript strict mode
+
+### Firebase CI/CD Authentication
+- **Status**: ✅ Permanently configured with CI token in `.env.local`
+- **Deploy Preview**: `./deploy.sh preview channel-name 7d`
+- **Deploy Production**: `./deploy.sh prod`
+- **Full Documentation**: See `docs/firebase-auth-setup.md` for details
 
 ## Project Structure
 ```

@@ -1,0 +1,105 @@
+<div class="ff-page-container">
+  <!-- Page Header -->
+  <div class="ff-page-header">
+    <div class="header-content">
+      <h1 class="page-title">Task Management</h1>
+      <p class="page-subtitle">View and manage all tasks across projects</p>
+    </div>
+    <div class="header-actions">
+      <button mat-button (click)="refreshTasks()">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <mat-card class="ff-card filters-card">
+    <mat-card-content>
+      <div class="filters">
+        <mat-form-field appearance="outline">
+          <mat-label>Project</mat-label>
+          <mat-select [formControl]="projectFilter">
+            <mat-option value="all">All Projects</mat-option>
+            <mat-option *ngFor="let project of projects$ | async" [value]="project.id">
+              {{ project.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Assignee</mat-label>
+          <mat-select [formControl]="assigneeFilter">
+            <mat-option value="all">All Assignees</mat-option>
+            <mat-option *ngFor="let staff of staff$ | async" [value]="staff.id">
+              {{ staff.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Task List -->
+  <div class="table-container">
+    <!-- Initial debug info -->
+    <div style="padding: 16px; background: #f0f0f0; margin-bottom: 16px;">
+      <p>Debug: Component loaded</p>
+      <p>Debug: Loading state = {{ loading }}</p>
+    </div>
+
+    <div class="loading-container" *ngIf="loading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading tasks...</p>
+    </div>
+
+    <!-- Debug info -->
+    <div *ngIf="!loading" style="padding: 16px; background: #f0f0f0; margin-bottom: 16px;">
+      <p>Debug: Loading = {{ loading }}</p>
+      <p>Debug: Tasks count = {{ (filteredTasks$ | async)?.length || 0 }}</p>
+    </div>
+
+    <div *ngIf="!loading">
+      <table mat-table [dataSource]="(filteredTasks$ | async) || []" class="ff-table">
+        <!-- Task Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Task Name</th>
+          <td mat-cell *matCellDef="let task">{{ task.name }}</td>
+        </ng-container>
+
+        <!-- Project Column -->
+        <ng-container matColumnDef="project">
+          <th mat-header-cell *matHeaderCellDef>Project</th>
+          <td mat-cell *matCellDef="let task">{{ task.projectName || 'N/A' }}</td>
+        </ng-container>
+
+        <!-- Assignee Column -->
+        <ng-container matColumnDef="assignee">
+          <th mat-header-cell *matHeaderCellDef>Assignee</th>
+          <td mat-cell *matCellDef="let task">{{ task.assigneeName || 'Unassigned' }}</td>
+        </ng-container>
+
+        <!-- Complete Column -->
+        <ng-container matColumnDef="complete">
+          <th mat-header-cell *matHeaderCellDef>Complete</th>
+          <td mat-cell *matCellDef="let task">
+            <mat-checkbox
+              [checked]="task.status === TaskStatus.COMPLETED"
+              (change)="toggleTaskCompletion(task)"
+              [disabled]="task.isUpdating"
+            >
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <div *ngIf="(filteredTasks$ | async)?.length === 0" class="empty-state">
+        <mat-icon>inbox</mat-icon>
+        <p>No outstanding tasks found</p>
+      </div>
+    </div>
+  </div>
+</div>

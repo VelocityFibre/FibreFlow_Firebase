@@ -405,6 +405,8 @@ export class AppShellComponent {
   staffItems: NavItem[] = this.filterItems([
     { label: 'Staff Overview', icon: 'people', route: '/staff' },
     { label: 'My Tasks', icon: 'assignment_ind', route: '/tasks/my-tasks' },
+    { label: 'Personal Todos', icon: 'checklist_rtl', route: '/personal-todos' },
+    { label: 'Meetings', icon: 'groups', route: '/meetings' },
     { label: 'Roles & Permissions', icon: 'admin_panel_settings', route: '/roles' },
     { label: 'Attendance', icon: 'event_available', route: '/attendance' },
     { label: 'Performance', icon: 'trending_up', route: '/performance' },
@@ -417,9 +419,12 @@ export class AppShellComponent {
     { label: 'Phases', icon: 'timeline', route: '/phases' },
     { label: 'Steps', icon: 'linear_scale', route: '/steps', badge: 0 },
     { label: 'All Tasks', icon: 'task_alt', route: '/tasks' },
+    { label: 'Task Management', icon: 'checklist', route: '/task-management' },
     { label: 'Daily Progress', icon: 'assignment_turned_in', route: '/daily-progress' },
     { label: 'Daily KPIs', icon: 'analytics', route: '/daily-progress/kpis' },
+    { label: 'Enhanced KPIs', icon: 'insights', route: '/daily-progress/kpis-enhanced' },
     { label: 'KPI Dashboard', icon: 'dashboard', route: '/daily-progress/kpis-summary' },
+    { label: 'Reports', icon: 'description', route: '/reports' },
   ]);
 
   // Stock Management category items

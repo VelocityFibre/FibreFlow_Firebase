@@ -58,6 +58,74 @@ export interface DailyKPIs {
   // Status Flags
   riskFlag: boolean;
 
+  // Weather & Environmental
+  weatherConditions?: 'sunny' | 'cloudy' | 'rainy' | 'stormy' | 'windy' | 'foggy';
+  weatherImpact?: number; // 0-10 scale (0 = no impact, 10 = work stopped)
+  temperatureRange?: {
+    min: number;
+    max: number;
+  };
+
+  // Safety & Compliance
+  safetyIncidents?: number;
+  nearMisses?: number;
+  toolboxTalks?: number;
+  safetyObservations?: number;
+  complianceScore?: number; // 0-100 percentage
+
+  // Quality Metrics
+  qualityIssues?: number;
+  reworkRequired?: number;
+  inspectionsPassed?: number;
+  inspectionsFailed?: number;
+  defectRate?: number; // percentage
+
+  // Resource Utilization
+  teamSize?: number;
+  teamMembers?: {
+    id: string;
+    name: string;
+    role: string;
+    hoursWorked: number;
+  }[];
+  regularHours?: number;
+  overtimeHours?: number;
+  equipmentUtilization?: number; // percentage
+  vehiclesUsed?: number;
+
+  // Material Tracking
+  materialWastage?: {
+    type: string;
+    quantity: number;
+    unit: string;
+    reason?: string;
+  }[];
+  materialsUsed?: {
+    type: string;
+    quantity: number;
+    unit: string;
+    cost?: number;
+  }[];
+
+  // Financial Tracking (Basic - detailed in separate model)
+  laborCostToday?: number;
+  materialCostToday?: number;
+  equipmentCostToday?: number;
+  totalCostToday?: number;
+  
+  // Productivity Metrics
+  productivityScore?: number; // 0-100 percentage
+  plannedVsActual?: {
+    planned: number;
+    actual: number;
+    variance: number; // percentage
+  };
+  
+  // Customer Impact
+  customerComplaints?: number;
+  customerCompliments?: number;
+  serviceInterruptions?: number;
+
   // Optional fields
   comments?: string;
   submittedBy: string;
