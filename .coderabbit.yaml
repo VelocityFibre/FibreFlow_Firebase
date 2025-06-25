@@ -6,18 +6,6 @@ language: "en-US"
 
 # Review settings
 reviews:
-  # Automatically review PRs
-  auto_review:
-    enabled: true
-    # Review these branches
-    branches:
-      - "feature/*"
-      - "fix/*"
-      - "hotfix/*"
-      - "test/*"
-    # Skip drafts
-    ignore_draft_prs: true
-    
   # Review thoroughness
   profile: "assertive"  # Options: chill, assertive
   
@@ -102,19 +90,6 @@ reviews:
         - Mock usage correctness
         - Edge case testing
 
-# Tool integrations
-tools:
-  # Enable security scanning
-  gitleaks:
-    enabled: true
-
-# GitHub integrations
-integrations:
-  # Auto-link GitHub issues
-  github_issues:
-    enabled: true
-    auto_link: true
-
 # Chat settings
 chat:
   # AI responds to questions
@@ -124,11 +99,6 @@ chat:
 knowledge_base:
   learnings:
     enabled: true
-  issues:
-    enabled: true
-
-# Custom prompts for FibreFlow context
-early_access: false
 
 # Note: Anti-patterns are checked via path_instructions above
 # CodeRabbit will enforce these through the specific module instructions
