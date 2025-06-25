@@ -13,4 +13,10 @@ export const tasksRoutes: Routes = [
     loadComponent: () => import('./my-tasks/my-tasks.component').then((m) => m.MyTasksComponent),
     canActivate: [authGuard],
   },
+  {
+    path: 'management',
+    loadComponent: () =>
+      import('./pages/task-management/task-management.component').then((m) => m.TaskManagementComponent),
+    canActivate: [authGuard],
+  },
 ];

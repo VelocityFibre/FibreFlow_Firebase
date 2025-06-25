@@ -162,6 +162,23 @@
         </mat-card-content>
       </mat-card>
 
+      <!-- Tasks Card -->
+      <mat-card class="dashboard-card" routerLink="/tasks/management">
+        <mat-card-content>
+          <div class="card-icon tasks-icon">
+            <mat-icon>task_alt</mat-icon>
+          </div>
+          <div class="card-details">
+            <h3 class="card-title">Tasks</h3>
+            <p class="card-subtitle">Manage and track all tasks</p>
+            <div class="card-stats">
+              <span class="stat-number">{{ outstandingTasksCount() }}</span>
+              <span class="stat-label">Outstanding</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
     </div>
 
     <!-- Quick Summary Section -->

@@ -105,6 +105,20 @@ const allRoutes: Routes = [
     path: 'tasks',
     loadChildren: () => import('./features/tasks/tasks.routes').then((m) => m.tasksRoutes),
   },
+  // {
+  //   path: 'personal-todos',
+  //   loadComponent: () =>
+  //     import('./features/personal-todos/pages/todo-management/todo-management.component').then(
+  //       (m) => m.TodoManagementComponent
+  //     ),
+  //   data: { title: 'Personal Todos' },
+  // },
+  // {
+  //   path: 'meetings',
+  //   loadChildren: () =>
+  //     import('./features/meetings/meetings.routes').then((m) => m.meetingsRoutes),
+  //   data: { title: 'Meetings' },
+  // },
   {
     path: 'stock',
     loadChildren: () => import('./features/stock/stock.routes').then((m) => m.stockRoutes),

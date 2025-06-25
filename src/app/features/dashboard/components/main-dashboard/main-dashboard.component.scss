@@ -168,6 +168,10 @@
       &.issues-icon {
         background: theme.ff-rgb(destructive);
       }
+      
+      &.tasks-icon {
+        background: theme.ff-rgb(tertiary);
+      }
     }
     
     .card-details {

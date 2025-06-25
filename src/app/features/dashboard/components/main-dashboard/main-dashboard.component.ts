@@ -160,6 +160,13 @@ export class MainDashboardComponent implements OnInit, OnDestroy {
     return flaggedTasks.length;
   });
 
+  // Outstanding tasks computed from actual task data
+  outstandingTasksCount = computed(() => {
+    const tasks = this.allTasks();
+    const outstandingTasks = tasks.filter((task) => task.status !== 'completed');
+    return outstandingTasks.length;
+  });
+
   ngOnInit() {
     // Initial log
     console.log('Dashboard initialized. Starting auto-refresh cycle...');
