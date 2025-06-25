@@ -1081,3 +1081,120 @@ console.log('Email sent:', docRef.id);
 
 ### For more details, see:
 - `/docs/EMAIL_SYSTEM_DOCUMENTATION.md` - Comprehensive email system guide
+
+## 🤖 Claude Code GitHub Actions Integration
+
+### Overview
+FibreFlow uses Claude Code GitHub Actions alongside CodeRabbit for a comprehensive development workflow:
+- **Claude Code**: Automated code generation from issues/PRs
+- **CodeRabbit**: Automated code review and standards enforcement
+
+### Setup Requirements
+1. **Install Claude GitHub App**: https://github.com/apps/claude-code
+2. **Add API Key**: Repository Settings → Secrets → `ANTHROPIC_API_KEY`
+3. **Workflow File**: `.github/workflows/claude-code.yml` (already configured)
+
+### How to Use Claude Code
+1. **In Issues**: Include `@claude` in issue description
+2. **In PR Comments**: Mention `@claude` to request implementation
+3. **Claude will**: Create a PR with the implementation
+
+### Workflow Integration
+```
+Issue → @claude implements → PR created → CodeRabbit reviews → Human approval
+```
+
+### Claude Code Standards for FibreFlow
+When @claude implements features, it should follow these patterns:
+
+#### 1. Angular v20 Patterns
+```typescript
+// Always use standalone components
+@Component({
+  selector: 'app-feature',
+  standalone: true,
+  imports: [CommonModule, SharedMaterialModule],
+  templateUrl: './feature.component.html',
+  styleUrl: './feature.component.scss'
+})
+export class FeatureComponent {
+  private firestore = inject(Firestore);
+  private router = inject(Router);
+  
+  // Use signals for state
+  items = signal<Item[]>([]);
+  loading = signal(false);
+  
+  // Use afterNextRender for DOM operations
+  constructor() {
+    afterNextRender(() => {
+      this.loadData();
+    }, { injector: inject(Injector) });
+  }
+}
+```
+
+#### 2. Theme Compliance
+```scss
+@use '../../../styles/component-theming' as theme;
+
+.component {
+  @include theme.card-theme();
+  color: theme.ff-rgb(foreground);
+  padding: theme.ff-spacing(md);
+}
+```
+
+#### 3. Firestore Patterns
+```typescript
+// Real-time listeners for shared data
+items$ = collectionData(
+  collection(this.firestore, 'items'),
+  { idField: 'id' }
+);
+
+// Always include projectId for isolation
+tasks$ = collectionData(
+  query(
+    collection(this.firestore, 'tasks'),
+    where('projectId', '==', this.projectId)
+  )
+);
+```
+
+#### 4. Error Handling
+```typescript
+try {
+  await this.performOperation();
+} catch (error) {
+  console.error('Operation failed:', error);
+  this.snackBar.open('Operation failed. Please try again.', 'Close', {
+    duration: 5000
+  });
+}
+```
+
+### Best Practices for Claude Code
+1. **Simple Solutions First**: Avoid over-engineering
+2. **Use Existing Patterns**: Follow established FibreFlow patterns
+3. **Theme Variables Only**: Never hardcode colors or spacing
+4. **Project Isolation**: Always filter by projectId
+5. **Type Safety**: No `any` types, use proper TypeScript
+6. **Test Considerations**: Include basic tests when implementing features
+
+### Common Claude Tasks
+- **Feature Implementation**: "Implement a dashboard widget showing project progress"
+- **Bug Fixes**: "Fix the issue where tasks don't update in real-time"
+- **UI Components**: "Create a reusable card component for displaying metrics"
+- **Service Methods**: "Add a method to calculate project completion percentage"
+
+### Integration with CodeRabbit
+After Claude creates a PR, CodeRabbit will automatically:
+- Check theme compliance (--ff-* variables)
+- Verify module-specific rules
+- Run security scans
+- Ensure South African localization
+- Validate TypeScript types
+
+### For detailed integration plan, see:
+- `/CLAUDE_AND_CODERABBIT_GITHUB_ACTIONS.md` - Full integration documentation

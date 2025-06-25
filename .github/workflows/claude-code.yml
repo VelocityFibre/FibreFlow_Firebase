@@ -1,0 +1,52 @@
+name: Claude Code
+
+on:
+  issues:
+    types: [opened, edited]
+  issue_comment:
+    types: [created, edited]
+  pull_request:
+    types: [opened, synchronize]
+  pull_request_review_comment:
+    types: [created, edited]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  claude:
+    if: |
+      (
+        (
+          github.event_name == 'issues' &&
+          contains(github.event.issue.body, '@claude')
+        ) ||
+        (
+          github.event_name == 'issue_comment' &&
+          contains(github.event.comment.body, '@claude')
+        ) ||
+        (
+          github.event_name == 'pull_request' &&
+          contains(github.event.pull_request.body, '@claude')
+        ) ||
+        (
+          github.event_name == 'pull_request_review_comment' &&
+          contains(github.event.comment.body, '@claude')
+        )
+      ) &&
+      github.event.sender.login != 'claude-code[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: claudeai/claude-code@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Optional: Specify a specific model (defaults to claude-3-5-sonnet)
+          # model: claude-3-5-sonnet
+          # Optional: Set max tokens for response
+          # max_tokens: 4096
+          # Optional: Temperature for randomness (0-1)
+          # temperature: 0.7
