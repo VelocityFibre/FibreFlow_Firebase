@@ -43,7 +43,7 @@ import { switchMap, tap } from 'rxjs';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatCheckboxModule,
-    ImageUploadComponent
+    ImageUploadComponent,
   ],
   template: `
     <div class="page-container">
@@ -72,7 +72,7 @@ import { switchMap, tap } from 'rxjs';
                 <!-- VF Pole ID (Auto-generated) -->
                 <mat-form-field appearance="outline">
                   <mat-label>VF Pole ID</mat-label>
-                  <input matInput formControlName="vfPoleId" readonly>
+                  <input matInput formControlName="vfPoleId" readonly />
                   <mat-hint>Auto-generated</mat-hint>
                 </mat-form-field>
 
@@ -89,13 +89,13 @@ import { switchMap, tap } from 'rxjs';
                 <!-- Alternative Pole ID -->
                 <mat-form-field appearance="outline">
                   <mat-label>Alternative Pole ID (if pole # not found)</mat-label>
-                  <input matInput formControlName="alternativePoleId">
+                  <input matInput formControlName="alternativePoleId" />
                 </mat-form-field>
 
                 <!-- Group Number -->
                 <mat-form-field appearance="outline">
                   <mat-label>Group Number (if grouped)</mat-label>
-                  <input matInput formControlName="groupNumber">
+                  <input matInput formControlName="groupNumber" />
                 </mat-form-field>
               </div>
             </mat-card-content>
@@ -111,7 +111,12 @@ import { switchMap, tap } from 'rxjs';
                 <!-- Date Installed -->
                 <mat-form-field appearance="outline">
                   <mat-label>Date Installed</mat-label>
-                  <input matInput [matDatepicker]="picker" formControlName="dateInstalled" required>
+                  <input
+                    matInput
+                    [matDatepicker]="picker"
+                    formControlName="dateInstalled"
+                    required
+                  />
                   <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
@@ -119,8 +124,14 @@ import { switchMap, tap } from 'rxjs';
                 <!-- Location -->
                 <mat-form-field appearance="outline">
                   <mat-label>Location (GPS or Address)</mat-label>
-                  <input matInput formControlName="location" required>
-                  <button mat-icon-button matSuffix type="button" (click)="getCurrentLocation()" matTooltip="Get current location">
+                  <input matInput formControlName="location" required />
+                  <button
+                    mat-icon-button
+                    matSuffix
+                    type="button"
+                    (click)="getCurrentLocation()"
+                    matTooltip="Get current location"
+                  >
                     <mat-icon>my_location</mat-icon>
                   </button>
                 </mat-form-field>
@@ -149,7 +160,7 @@ import { switchMap, tap } from 'rxjs';
                 <!-- Working Team -->
                 <mat-form-field appearance="outline">
                   <mat-label>Working Team</mat-label>
-                  <input matInput formControlName="workingTeam" required>
+                  <input matInput formControlName="workingTeam" required />
                 </mat-form-field>
               </div>
             </mat-card-content>
@@ -169,7 +180,8 @@ import { switchMap, tap } from 'rxjs';
                   uploadType="before"
                   [currentUpload]="currentPole()?.uploads?.before"
                   (uploadComplete)="onImageUploaded('before', $event)"
-                  (uploadError)="onUploadError($event)">
+                  (uploadError)="onUploadError($event)"
+                >
                 </app-image-upload>
 
                 <app-image-upload
@@ -178,7 +190,8 @@ import { switchMap, tap } from 'rxjs';
                   uploadType="front"
                   [currentUpload]="currentPole()?.uploads?.front"
                   (uploadComplete)="onImageUploaded('front', $event)"
-                  (uploadError)="onUploadError($event)">
+                  (uploadError)="onUploadError($event)"
+                >
                 </app-image-upload>
 
                 <app-image-upload
@@ -187,7 +200,8 @@ import { switchMap, tap } from 'rxjs';
                   uploadType="side"
                   [currentUpload]="currentPole()?.uploads?.side"
                   (uploadComplete)="onImageUploaded('side', $event)"
-                  (uploadError)="onUploadError($event)">
+                  (uploadError)="onUploadError($event)"
+                >
                 </app-image-upload>
 
                 <app-image-upload
@@ -196,7 +210,8 @@ import { switchMap, tap } from 'rxjs';
                   uploadType="depth"
                   [currentUpload]="currentPole()?.uploads?.depth"
                   (uploadComplete)="onImageUploaded('depth', $event)"
-                  (uploadError)="onUploadError($event)">
+                  (uploadError)="onUploadError($event)"
+                >
                 </app-image-upload>
 
                 <app-image-upload
@@ -205,7 +220,8 @@ import { switchMap, tap } from 'rxjs';
                   uploadType="concrete"
                   [currentUpload]="currentPole()?.uploads?.concrete"
                   (uploadComplete)="onImageUploaded('concrete', $event)"
-                  (uploadError)="onUploadError($event)">
+                  (uploadError)="onUploadError($event)"
+                >
                 </app-image-upload>
 
                 <app-image-upload
@@ -214,7 +230,8 @@ import { switchMap, tap } from 'rxjs';
                   uploadType="compaction"
                   [currentUpload]="currentPole()?.uploads?.compaction"
                   (uploadComplete)="onImageUploaded('compaction', $event)"
-                  (uploadError)="onUploadError($event)">
+                  (uploadError)="onUploadError($event)"
+                >
                 </app-image-upload>
               </div>
             </mat-card-content>
@@ -230,7 +247,7 @@ import { switchMap, tap } from 'rxjs';
                 <mat-checkbox formControlName="qualityChecked">
                   Mark as Quality Checked
                 </mat-checkbox>
-                
+
                 @if (poleForm.get('qualityChecked')?.value) {
                   <mat-form-field appearance="outline" class="full-width mt-3">
                     <mat-label>Quality Check Notes</mat-label>
@@ -244,88 +261,91 @@ import { switchMap, tap } from 'rxjs';
           <!-- Form Actions -->
           <div class="form-actions">
             <button mat-button type="button" routerLink="/pole-tracker">Cancel</button>
-            <button 
-              mat-raised-button 
-              color="primary" 
+            <button
+              mat-raised-button
+              color="primary"
               type="submit"
-              [disabled]="!poleForm.valid || saving()">
+              [disabled]="!poleForm.valid || saving()"
+            >
               <mat-icon *ngIf="saving()">sync</mat-icon>
-              {{ saving() ? 'Saving...' : (isEditMode ? 'Update' : 'Create') }}
+              {{ saving() ? 'Saving...' : isEditMode ? 'Update' : 'Create' }}
             </button>
           </div>
         </form>
       }
     </div>
   `,
-  styles: [`
-    .page-container {
-      padding: 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-
-    .page-header h1 {
-      margin: 0;
-      font-size: 32px;
-      font-weight: 500;
-    }
-
-    .loading-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 400px;
-    }
-
-    .form-section {
-      margin-bottom: 24px;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 16px;
-    }
-
-    .upload-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 16px;
-    }
-
-    mat-form-field {
-      width: 100%;
-    }
-
-    .full-width {
-      width: 100%;
-    }
-
-    .mt-3 {
-      margin-top: 16px;
-    }
-
-    .form-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 16px;
-      margin-top: 24px;
-    }
-
-    @media (max-width: 600px) {
-      .form-grid,
-      .upload-grid {
-        grid-template-columns: 1fr;
+  styles: [
+    `
+      .page-container {
+        padding: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
       }
-    }
-  `]
+
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .page-header h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 500;
+      }
+
+      .loading-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 400px;
+      }
+
+      .form-section {
+        margin-bottom: 24px;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 16px;
+      }
+
+      .upload-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 16px;
+      }
+
+      mat-form-field {
+        width: 100%;
+      }
+
+      .full-width {
+        width: 100%;
+      }
+
+      .mt-3 {
+        margin-top: 16px;
+      }
+
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+        margin-top: 24px;
+      }
+
+      @media (max-width: 600px) {
+        .form-grid,
+        .upload-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    `,
+  ],
 })
 export class PoleTrackerFormComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -358,14 +378,14 @@ export class PoleTrackerFormComponent implements OnInit {
     contractorId: ['', Validators.required],
     workingTeam: ['', Validators.required],
     qualityChecked: [false],
-    qualityCheckNotes: ['']
+    qualityCheckNotes: [''],
   });
   isEditMode = false;
   poleId: string = '';
 
   ngOnInit() {
     // Check if edit mode
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       if (params['id']) {
         this.isEditMode = true;
         this.poleId = params['id'];
@@ -378,7 +398,7 @@ export class PoleTrackerFormComponent implements OnInit {
     });
 
     // Watch for project changes to generate VF Pole ID
-    this.poleForm.get('projectId')?.valueChanges.subscribe(projectId => {
+    this.poleForm.get('projectId')?.valueChanges.subscribe((projectId) => {
       if (projectId && !this.isEditMode) {
         this.generateVFPoleId(projectId);
       }
@@ -389,17 +409,17 @@ export class PoleTrackerFormComponent implements OnInit {
 
   loadFormData() {
     // Load projects
-    this.projectService.getProjects().subscribe(projects => {
+    this.projectService.getProjects().subscribe((projects) => {
       this.projects.set(projects);
     });
 
     // Load contractors
-    this.contractorService.getContractors().subscribe(contractors => {
+    this.contractorService.getContractors().subscribe((contractors) => {
       this.contractors.set(contractors);
     });
 
     // Load staff
-    this.staffService.getStaff().subscribe(staff => {
+    this.staffService.getStaff().subscribe((staff) => {
       this.staff.set(staff);
     });
   }
@@ -420,7 +440,7 @@ export class PoleTrackerFormComponent implements OnInit {
             contractorId: pole.contractorId,
             workingTeam: pole.workingTeam,
             qualityChecked: pole.qualityChecked || false,
-            qualityCheckNotes: pole.qualityCheckNotes || ''
+            qualityCheckNotes: pole.qualityCheckNotes || '',
           });
         }
         this.loading.set(false);
@@ -429,13 +449,13 @@ export class PoleTrackerFormComponent implements OnInit {
         console.error('Error loading pole:', error);
         this.snackBar.open('Error loading pole data', 'Close', { duration: 3000 });
         this.loading.set(false);
-      }
+      },
     });
   }
 
   async generateVFPoleId(projectId: string) {
     try {
-      const project = this.projects().find(p => p.id === projectId);
+      const project = this.projects().find((p) => p.id === projectId);
       if (!project) return;
 
       // For now, just show the format - actual generation happens on save
@@ -457,7 +477,7 @@ export class PoleTrackerFormComponent implements OnInit {
         (error) => {
           console.error('Error getting location:', error);
           this.snackBar.open('Could not get location', 'Close', { duration: 3000 });
-        }
+        },
       );
     } else {
       this.snackBar.open('Geolocation not supported', 'Close', { duration: 3000 });
@@ -474,7 +494,7 @@ export class PoleTrackerFormComponent implements OnInit {
         error: (error) => {
           console.error('Error updating image:', error);
           this.snackBar.open('Failed to update image', 'Close', { duration: 3000 });
-        }
+        },
       });
     }
   }
@@ -493,11 +513,11 @@ export class PoleTrackerFormComponent implements OnInit {
     // Prepare pole data
     const poleData: Partial<PoleTracker> = {
       ...formData,
-      projectCode: this.projects().find(p => p.id === formData.projectId)?.projectCode,
-      projectName: this.projects().find(p => p.id === formData.projectId)?.name,
-      contractorName: this.contractors().find(c => c.id === formData.contractorId)?.companyName,
+      projectCode: this.projects().find((p) => p.id === formData.projectId)?.projectCode,
+      projectName: this.projects().find((p) => p.id === formData.projectId)?.name,
+      contractorName: this.contractors().find((c) => c.id === formData.contractorId)?.companyName,
       updatedBy: currentUser?.uid || '',
-      updatedByName: currentUser?.displayName || currentUser?.email || ''
+      updatedByName: currentUser?.displayName || currentUser?.email || '',
     };
 
     if (this.isEditMode) {
@@ -511,13 +531,13 @@ export class PoleTrackerFormComponent implements OnInit {
           console.error('Error updating pole:', error);
           this.snackBar.open('Failed to update pole', 'Close', { duration: 3000 });
           this.saving.set(false);
-        }
+        },
       });
     } else {
       // Create new pole
       poleData.createdBy = currentUser?.uid || '';
       poleData.createdByName = currentUser?.displayName || currentUser?.email || '';
-      
+
       this.poleTrackerService.createPoleTracker(poleData).subscribe({
         next: (poleId) => {
           this.snackBar.open('Pole created successfully', 'Close', { duration: 3000 });
@@ -527,7 +547,7 @@ export class PoleTrackerFormComponent implements OnInit {
           console.error('Error creating pole:', error);
           this.snackBar.open('Failed to create pole', 'Close', { duration: 3000 });
           this.saving.set(false);
-        }
+        },
       });
     }
   }

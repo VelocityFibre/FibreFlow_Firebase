@@ -64,7 +64,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
             <!-- Search -->
             <mat-form-field appearance="outline">
               <mat-label>Search Pole ID</mat-label>
-              <input matInput [(ngModel)]="searchTerm" placeholder="e.g., LAW.P.A001">
+              <input matInput [(ngModel)]="searchTerm" placeholder="e.g., LAW.P.A001" />
               <mat-icon matPrefix>search</mat-icon>
             </mat-form-field>
 
@@ -136,7 +136,6 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
         <mat-card-content>
           <div class="table-container">
             <table mat-table [dataSource]="filteredPoles()" class="full-width-table">
-              
               <!-- VF Pole ID Column -->
               <ng-container matColumnDef="vfPoleId">
                 <th mat-header-cell *matHeaderCellDef>Pole ID</th>
@@ -157,7 +156,11 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
               <ng-container matColumnDef="dateInstalled">
                 <th mat-header-cell *matHeaderCellDef>Date Installed</th>
                 <td mat-cell *matCellDef="let pole">
-                  {{ pole.dateInstalled?.toDate ? pole.dateInstalled.toDate() : pole.dateInstalled | date }}
+                  {{
+                    pole.dateInstalled?.toDate
+                      ? pole.dateInstalled.toDate()
+                      : (pole.dateInstalled | date)
+                  }}
                 </td>
               </ng-container>
 
@@ -180,7 +183,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
               <!-- Contractor Column -->
               <ng-container matColumnDef="contractor">
                 <th mat-header-cell *matHeaderCellDef>Contractor</th>
-                <td mat-cell *matCellDef="let pole">{{ pole.contractorName || pole.contractorId }}</td>
+                <td mat-cell *matCellDef="let pole">
+                  {{ pole.contractorName || pole.contractorId }}
+                </td>
               </ng-container>
 
               <!-- Upload Progress Column -->
@@ -188,10 +193,11 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
                 <th mat-header-cell *matHeaderCellDef>Upload Progress</th>
                 <td mat-cell *matCellDef="let pole">
                   <div class="progress-container">
-                    <mat-progress-bar 
-                      mode="determinate" 
+                    <mat-progress-bar
+                      mode="determinate"
                       [value]="pole.uploadProgress"
-                      [color]="pole.uploadProgress === 100 ? 'primary' : 'accent'">
+                      [color]="pole.uploadProgress === 100 ? 'primary' : 'accent'"
+                    >
                     </mat-progress-bar>
                     <span class="progress-text">{{ pole.uploadProgress }}%</span>
                   </div>
@@ -202,9 +208,10 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
               <ng-container matColumnDef="qualityCheck">
                 <th mat-header-cell *matHeaderCellDef>QA Status</th>
                 <td mat-cell *matCellDef="let pole">
-                  <mat-icon 
+                  <mat-icon
                     [color]="pole.qualityChecked ? 'primary' : ''"
-                    [matTooltip]="pole.qualityChecked ? 'Quality Checked' : 'Pending QA'">
+                    [matTooltip]="pole.qualityChecked ? 'Quality Checked' : 'Pending QA'"
+                  >
                     {{ pole.qualityChecked ? 'check_circle' : 'pending' }}
                   </mat-icon>
                 </td>
@@ -214,142 +221,146 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
               <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef>Actions</th>
                 <td mat-cell *matCellDef="let pole">
-                  <a 
-                    mat-icon-button 
+                  <a
+                    mat-icon-button
                     [routerLink]="['/pole-tracker', pole.id, 'edit']"
-                    matTooltip="Edit">
+                    matTooltip="Edit"
+                  >
                     <mat-icon>edit</mat-icon>
                   </a>
-                  <button 
-                    mat-icon-button 
+                  <button
+                    mat-icon-button
                     (click)="deletePole(pole)"
                     matTooltip="Delete"
-                    color="warn">
+                    color="warn"
+                  >
                     <mat-icon>delete</mat-icon>
                   </button>
                 </td>
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
           </div>
         </mat-card-content>
       </mat-card>
     </div>
   `,
-  styles: [`
-    .page-container {
-      padding: 24px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
+  styles: [
+    `
+      .page-container {
+        padding: 24px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
 
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
+      .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+      }
 
-    .page-header h1 {
-      margin: 0;
-      font-size: 32px;
-      font-weight: 500;
-    }
+      .page-header h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 500;
+      }
 
-    .filters-card {
-      margin-bottom: 24px;
-    }
+      .filters-card {
+        margin-bottom: 24px;
+      }
 
-    .filters-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-    }
+      .filters-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+      }
 
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+      }
 
-    .stat-card {
-      text-align: center;
-    }
+      .stat-card {
+        text-align: center;
+      }
 
-    .stat-value {
-      font-size: 36px;
-      font-weight: 500;
-      color: #3f51b5;
-    }
+      .stat-value {
+        font-size: 36px;
+        font-weight: 500;
+        color: #3f51b5;
+      }
 
-    .stat-label {
-      font-size: 14px;
-      color: #666;
-      margin-top: 8px;
-    }
+      .stat-label {
+        font-size: 14px;
+        color: #666;
+        margin-top: 8px;
+      }
 
-    .table-container {
-      overflow-x: auto;
-    }
+      .table-container {
+        overflow-x: auto;
+      }
 
-    .full-width-table {
-      width: 100%;
-      min-width: 1000px;
-    }
+      .full-width-table {
+        width: 100%;
+        min-width: 1000px;
+      }
 
-    .pole-link {
-      color: #3f51b5;
-      text-decoration: none;
-      font-weight: 500;
-    }
+      .pole-link {
+        color: #3f51b5;
+        text-decoration: none;
+        font-weight: 500;
+      }
 
-    .pole-link:hover {
-      text-decoration: underline;
-    }
+      .pole-link:hover {
+        text-decoration: underline;
+      }
 
-    .progress-container {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+      .progress-container {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
-    .progress-container mat-progress-bar {
-      flex: 1;
-    }
+      .progress-container mat-progress-bar {
+        flex: 1;
+      }
 
-    .progress-text {
-      font-size: 12px;
-      color: #666;
-      min-width: 35px;
-    }
+      .progress-text {
+        font-size: 12px;
+        color: #666;
+        min-width: 35px;
+      }
 
-    mat-chip {
-      font-size: 12px;
-    }
+      mat-chip {
+        font-size: 12px;
+      }
 
-    mat-chip.type-wooden {
-      background-color: #8d6e63;
-      color: white;
-    }
+      mat-chip.type-wooden {
+        background-color: #8d6e63;
+        color: white;
+      }
 
-    mat-chip.type-concrete {
-      background-color: #616161;
-      color: white;
-    }
+      mat-chip.type-concrete {
+        background-color: #616161;
+        color: white;
+      }
 
-    mat-chip.type-steel {
-      background-color: #455a64;
-      color: white;
-    }
+      mat-chip.type-steel {
+        background-color: #455a64;
+        color: white;
+      }
 
-    mat-chip.type-composite {
-      background-color: #5d4037;
-      color: white;
-    }
-  `]
+      mat-chip.type-composite {
+        background-color: #5d4037;
+        color: white;
+      }
+    `,
+  ],
 })
 export class PoleTrackerListComponent implements OnInit {
   private poleTrackerService = inject(PoleTrackerService);
@@ -379,7 +390,7 @@ export class PoleTrackerListComponent implements OnInit {
     'contractor',
     'uploadProgress',
     'qualityCheck',
-    'actions'
+    'actions',
   ];
 
   // Computed values
@@ -389,15 +400,16 @@ export class PoleTrackerListComponent implements OnInit {
     // Apply search filter
     if (this.searchTerm) {
       const search = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(pole => 
-        pole.vfPoleId.toLowerCase().includes(search) ||
-        pole.location?.toLowerCase().includes(search)
+      filtered = filtered.filter(
+        (pole) =>
+          pole.vfPoleId.toLowerCase().includes(search) ||
+          pole.location?.toLowerCase().includes(search),
       );
     }
 
     // Apply upload status filter
     if (this.uploadStatusFilter !== 'all') {
-      filtered = filtered.filter(pole => {
+      filtered = filtered.filter((pole) => {
         const isComplete = pole.allUploadsComplete;
         return this.uploadStatusFilter === 'complete' ? isComplete : !isComplete;
       });
@@ -407,11 +419,9 @@ export class PoleTrackerListComponent implements OnInit {
   });
 
   totalPoles = computed(() => this.filteredPoles().length);
-  qualityCheckedCount = computed(() => 
-    this.filteredPoles().filter(p => p.qualityChecked).length
-  );
-  completeUploadsCount = computed(() => 
-    this.filteredPoles().filter(p => p.allUploadsComplete).length
+  qualityCheckedCount = computed(() => this.filteredPoles().filter((p) => p.qualityChecked).length);
+  completeUploadsCount = computed(
+    () => this.filteredPoles().filter((p) => p.allUploadsComplete).length,
   );
   installationProgress = computed(() => {
     const total = this.totalPoles();
@@ -426,12 +436,12 @@ export class PoleTrackerListComponent implements OnInit {
     this.loading.set(true);
 
     // Load projects
-    this.projectService.getProjects().subscribe(projects => {
+    this.projectService.getProjects().subscribe((projects) => {
       this.projects.set(projects);
     });
 
     // Load contractors
-    this.contractorService.getContractors().subscribe(contractors => {
+    this.contractorService.getContractors().subscribe((contractors) => {
       this.contractors.set(contractors);
     });
 
@@ -441,7 +451,7 @@ export class PoleTrackerListComponent implements OnInit {
 
   applyFilters() {
     const filter: PoleTrackerFilter = {};
-    
+
     if (this.selectedProjectId) {
       filter.projectId = this.selectedProjectId;
     }
@@ -457,7 +467,7 @@ export class PoleTrackerListComponent implements OnInit {
       error: (error) => {
         console.error('Error loading poles:', error);
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -467,25 +477,25 @@ export class PoleTrackerListComponent implements OnInit {
         title: 'Delete Pole Entry',
         message: `Are you sure you want to delete pole ${pole.vfPoleId}?`,
         confirmText: 'Delete',
-        confirmColor: 'warn'
-      }
+        confirmColor: 'warn',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.poleTrackerService.deletePoleTracker(pole.id!).subscribe({
           next: () => {
             this.snackBar.open('Pole entry deleted successfully', 'Close', {
-              duration: 3000
+              duration: 3000,
             });
             this.applyFilters();
           },
           error: (error) => {
             console.error('Error deleting pole:', error);
             this.snackBar.open('Error deleting pole entry', 'Close', {
-              duration: 3000
+              duration: 3000,
             });
-          }
+          },
         });
       }
     });

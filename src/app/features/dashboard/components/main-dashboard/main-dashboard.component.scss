@@ -170,7 +170,15 @@
       }
       
       &.tasks-icon {
-        background: theme.ff-rgb(tertiary);
+        background: #06b6d4; // Cyan-500 for tasks
+      }
+      
+      &.reports-icon {
+        background: theme.ff-rgb(info);
+      }
+      
+      &.meetings-icon {
+        background: #8b5cf6; // Purple for meetings
       }
     }
     

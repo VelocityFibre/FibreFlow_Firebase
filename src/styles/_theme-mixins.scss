@@ -124,6 +124,14 @@
   color: theme.ff-rgb(foreground);
 }
 
+/// Heading 5 typography
+@mixin heading-5() {
+  font-size: theme.ff-clamp(16, 1.5, 20);
+  font-weight: 600;
+  line-height: 1.4;
+  color: theme.ff-rgb(foreground);
+}
+
 /// Body text typography
 /// @param {string} $size [base] - Size variant (sm, base, lg)
 /// @example scss

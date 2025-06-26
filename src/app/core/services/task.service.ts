@@ -59,7 +59,11 @@ export class TaskService {
         // Fetch project details directly from Firestore
         return from(Promise.all(projectIds.map((id) => this.getProjectBasicInfo(id)))).pipe(
           map((projects) => {
-            console.log('TaskService: Fetched project info for', projects.filter(p => p).length, 'projects');
+            console.log(
+              'TaskService: Fetched project info for',
+              projects.filter((p) => p).length,
+              'projects',
+            );
             const projectMap = new Map(projects.filter((p) => p).map((p) => [p!.id!, p!]));
 
             // Enhance tasks with project information

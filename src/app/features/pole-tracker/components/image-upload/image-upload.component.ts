@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, signal, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, signal, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,20 +17,20 @@ import { ImageUpload } from '../../models/pole-tracker.model';
     MatButtonModule,
     MatIconModule,
     MatProgressBarModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   template: `
     <mat-card class="upload-card">
       <mat-card-header>
         <mat-card-title>{{ title }}</mat-card-title>
       </mat-card-header>
-      
+
       <mat-card-content>
         <!-- Preview or Upload Area -->
         <div class="upload-area" [class.has-image]="imageUrl()">
           @if (imageUrl()) {
             <div class="image-preview">
-              <img [src]="imageUrl()" [alt]="title" (click)="viewFullImage()">
+              <img [src]="imageUrl()" [alt]="title" (click)="viewFullImage()" />
               <div class="image-actions">
                 <button mat-icon-button matTooltip="View" (click)="viewFullImage()">
                   <mat-icon>visibility</mat-icon>
@@ -52,10 +52,11 @@ import { ImageUpload } from '../../models/pole-tracker.model';
         <!-- Upload Progress -->
         @if (uploadProgress()) {
           <div class="upload-progress">
-            <mat-progress-bar 
-              mode="determinate" 
+            <mat-progress-bar
+              mode="determinate"
               [value]="uploadProgress()!.progress"
-              [color]="uploadProgress()!.state === 'error' ? 'warn' : 'primary'">
+              [color]="uploadProgress()!.state === 'error' ? 'warn' : 'primary'"
+            >
             </mat-progress-bar>
             <span class="progress-text">
               @if (uploadProgress()!.state === 'uploading') {
@@ -68,21 +69,23 @@ import { ImageUpload } from '../../models/pole-tracker.model';
         }
 
         <!-- Hidden File Input -->
-        <input 
+        <input
           #fileInput
           type="file"
           accept="image/*"
           [attr.capture]="isMobile ? 'environment' : null"
           (change)="onFileSelected($event)"
-          style="display: none">
+          style="display: none"
+        />
 
         <!-- Upload Button (when no image) -->
         @if (!imageUrl()) {
-          <button 
-            mat-raised-button 
-            color="primary" 
+          <button
+            mat-raised-button
+            color="primary"
             (click)="fileInput.click()"
-            [disabled]="isUploading()">
+            [disabled]="isUploading()"
+          >
             <mat-icon>add_a_photo</mat-icon>
             {{ isMobile ? 'Take Photo' : 'Choose File' }}
           </button>
@@ -97,139 +100,141 @@ import { ImageUpload } from '../../models/pole-tracker.model';
             <mat-icon color="accent" matTooltip="Image approved">verified</mat-icon>
           }
           @if (uploadDate()) {
-            <span class="upload-date">Uploaded: {{ uploadDate() | date:'short' }}</span>
+            <span class="upload-date">Uploaded: {{ uploadDate() | date: 'short' }}</span>
           }
         </div>
       </mat-card-content>
     </mat-card>
   `,
-  styles: [`
-    .upload-card {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    mat-card-header {
-      background-color: #f5f5f5;
-      margin: -16px -16px 16px -16px;
-      padding: 12px 16px;
-    }
-
-    mat-card-title {
-      font-size: 16px;
-      margin: 0;
-    }
-
-    .upload-area {
-      min-height: 200px;
-      border: 2px dashed #ccc;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 16px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .upload-area:hover {
-      border-color: #3f51b5;
-      background-color: #f8f9fa;
-    }
-
-    .upload-area.has-image {
-      border-style: solid;
-      cursor: default;
-      padding: 0;
-    }
-
-    .upload-placeholder {
-      text-align: center;
-      padding: 24px;
-      color: #666;
-    }
-
-    .upload-icon {
-      font-size: 48px;
-      height: 48px;
-      width: 48px;
-      color: #999;
-      margin-bottom: 8px;
-    }
-
-    .file-hint {
-      font-size: 12px;
-      color: #999;
-      margin-top: 4px;
-    }
-
-    .image-preview {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      min-height: 200px;
-    }
-
-    .image-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .image-actions {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      display: flex;
-      gap: 4px;
-      background: rgba(0, 0, 0, 0.6);
-      border-radius: 4px;
-      padding: 4px;
-    }
-
-    .image-actions button {
-      width: 32px;
-      height: 32px;
-      color: white;
-    }
-
-    .upload-progress {
-      margin: 16px 0;
-    }
-
-    .progress-text {
-      font-size: 12px;
-      color: #666;
-      display: block;
-      margin-top: 4px;
-    }
-
-    .status-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 8px;
-      font-size: 12px;
-      color: #666;
-    }
-
-    .upload-date {
-      margin-left: auto;
-    }
-
-    @media (max-width: 600px) {
-      .upload-area {
-        min-height: 150px;
+  styles: [
+    `
+      .upload-card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
       }
-    }
-  `]
+
+      mat-card-header {
+        background-color: #f5f5f5;
+        margin: -16px -16px 16px -16px;
+        padding: 12px 16px;
+      }
+
+      mat-card-title {
+        font-size: 16px;
+        margin: 0;
+      }
+
+      .upload-area {
+        min-height: 200px;
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .upload-area:hover {
+        border-color: #3f51b5;
+        background-color: #f8f9fa;
+      }
+
+      .upload-area.has-image {
+        border-style: solid;
+        cursor: default;
+        padding: 0;
+      }
+
+      .upload-placeholder {
+        text-align: center;
+        padding: 24px;
+        color: #666;
+      }
+
+      .upload-icon {
+        font-size: 48px;
+        height: 48px;
+        width: 48px;
+        color: #999;
+        margin-bottom: 8px;
+      }
+
+      .file-hint {
+        font-size: 12px;
+        color: #999;
+        margin-top: 4px;
+      }
+
+      .image-preview {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-height: 200px;
+      }
+
+      .image-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      .image-actions {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        display: flex;
+        gap: 4px;
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 4px;
+        padding: 4px;
+      }
+
+      .image-actions button {
+        width: 32px;
+        height: 32px;
+        color: white;
+      }
+
+      .upload-progress {
+        margin: 16px 0;
+      }
+
+      .progress-text {
+        font-size: 12px;
+        color: #666;
+        display: block;
+        margin-top: 4px;
+      }
+
+      .status-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+        font-size: 12px;
+        color: #666;
+      }
+
+      .upload-date {
+        margin-left: auto;
+      }
+
+      @media (max-width: 600px) {
+        .upload-area {
+          min-height: 150px;
+        }
+      }
+    `,
+  ],
 })
-export class ImageUploadComponent {
+export class ImageUploadComponent implements OnInit {
   private imageUploadService = inject(ImageUploadService);
-  
+
   @Input() title: string = 'Image Upload';
   @Input() poleId?: string;
   @Input() uploadType: string = 'general';
@@ -240,7 +245,7 @@ export class ImageUploadComponent {
   imageUrl = signal<string>('');
   uploadProgress = signal<UploadProgress | null>(null);
   isUploading = signal(false);
-  
+
   isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
   ngOnInit() {
@@ -251,12 +256,15 @@ export class ImageUploadComponent {
 
   uploadDate() {
     if (!this.currentUpload?.uploadedAt) return null;
-    
+
     // Handle Firestore Timestamp
-    if (typeof this.currentUpload.uploadedAt === 'object' && 'toDate' in this.currentUpload.uploadedAt) {
+    if (
+      typeof this.currentUpload.uploadedAt === 'object' &&
+      'toDate' in this.currentUpload.uploadedAt
+    ) {
       return this.currentUpload.uploadedAt.toDate();
     }
-    
+
     return this.currentUpload.uploadedAt;
   }
 
@@ -265,7 +273,7 @@ export class ImageUploadComponent {
     if (!input.files?.length) return;
 
     const file = input.files[0];
-    
+
     // Validate file
     const validation = this.imageUploadService.validateImageFile(file);
     if (!validation.valid) {
@@ -284,36 +292,35 @@ export class ImageUploadComponent {
     }
 
     this.isUploading.set(true);
-    
-    this.imageUploadService.uploadPoleImage(file, this.poleId, this.uploadType)
-      .subscribe({
-        next: (progress) => {
-          this.uploadProgress.set(progress);
-          
-          if (progress.state === 'complete' && progress.downloadUrl) {
-            this.imageUrl.set(progress.downloadUrl);
-            this.isUploading.set(false);
-            
-            const uploadData: ImageUpload = {
-              url: progress.downloadUrl,
-              uploaded: true,
-              uploadedAt: new Date()
-            };
-            
-            this.uploadComplete.emit(uploadData);
-            
-            // Clear progress after a delay
-            setTimeout(() => {
-              this.uploadProgress.set(null);
-            }, 2000);
-          }
-        },
-        error: (error) => {
-          console.error('Upload error:', error);
+
+    this.imageUploadService.uploadPoleImage(file, this.poleId, this.uploadType).subscribe({
+      next: (progress) => {
+        this.uploadProgress.set(progress);
+
+        if (progress.state === 'complete' && progress.downloadUrl) {
+          this.imageUrl.set(progress.downloadUrl);
           this.isUploading.set(false);
-          this.uploadError.emit(error.message || 'Upload failed');
+
+          const uploadData: ImageUpload = {
+            url: progress.downloadUrl,
+            uploaded: true,
+            uploadedAt: new Date(),
+          };
+
+          this.uploadComplete.emit(uploadData);
+
+          // Clear progress after a delay
+          setTimeout(() => {
+            this.uploadProgress.set(null);
+          }, 2000);
         }
-      });
+      },
+      error: (error) => {
+        console.error('Upload error:', error);
+        this.isUploading.set(false);
+        this.uploadError.emit(error.message || 'Upload failed');
+      },
+    });
   }
 
   viewFullImage() {
@@ -329,14 +336,14 @@ export class ImageUploadComponent {
           next: () => {
             this.imageUrl.set('');
             const uploadData: ImageUpload = {
-              uploaded: false
+              uploaded: false,
             };
             this.uploadComplete.emit(uploadData);
           },
           error: (error) => {
             console.error('Delete error:', error);
             this.uploadError.emit('Failed to delete image');
-          }
+          },
         });
       }
     }

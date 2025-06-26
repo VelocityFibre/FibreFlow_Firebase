@@ -646,9 +646,9 @@ export class DailyKpisSummaryComponent implements OnInit {
 
     // Extract contractor name if available
     const contractorNames = kpis
-      .map(kpi => kpi.contractorName)
-      .filter(name => name && name.trim() !== '');
-    
+      .map((kpi) => kpi.contractorName)
+      .filter((name) => name && name.trim() !== '');
+
     if (contractorNames.length > 0) {
       // If multiple contractors, join them
       const uniqueContractors = [...new Set(contractorNames)];
@@ -859,7 +859,7 @@ export class DailyKpisSummaryComponent implements OnInit {
   }
 
   navigateToForm() {
-    this.router.navigate(['/daily-progress/kpis']);
+    this.router.navigate(['/daily-progress/kpis-enhanced']);
   }
 
   onTabChange(event: MatTabChangeEvent) {

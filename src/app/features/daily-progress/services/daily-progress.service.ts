@@ -33,37 +33,42 @@ export class DailyProgressService {
   private collectionName = 'dailyProgress';
 
   getAll(filter?: DailyProgressFilter): Observable<DailyProgress[]> {
-    const constraints: QueryConstraint[] = [orderBy('date', 'desc')];
+    try {
+      const constraints: QueryConstraint[] = [orderBy('date', 'desc')];
 
-    if (filter) {
-      if (filter.projectId) {
-        constraints.push(where('projectId', '==', filter.projectId));
+      if (filter) {
+        if (filter.projectId) {
+          constraints.push(where('projectId', '==', filter.projectId));
+        }
+        if (filter.phaseId) {
+          constraints.push(where('phaseId', '==', filter.phaseId));
+        }
+        if (filter.taskId) {
+          constraints.push(where('taskId', '==', filter.taskId));
+        }
+        if (filter.staffId) {
+          constraints.push(where('staffIds', 'array-contains', filter.staffId));
+        }
+        if (filter.contractorId) {
+          constraints.push(where('contractorId', '==', filter.contractorId));
+        }
+        if (filter.status) {
+          constraints.push(where('status', '==', filter.status));
+        }
+        if (filter.dateFrom) {
+          constraints.push(where('date', '>=', Timestamp.fromDate(filter.dateFrom)));
+        }
+        if (filter.dateTo) {
+          constraints.push(where('date', '<=', Timestamp.fromDate(filter.dateTo)));
+        }
       }
-      if (filter.phaseId) {
-        constraints.push(where('phaseId', '==', filter.phaseId));
-      }
-      if (filter.taskId) {
-        constraints.push(where('taskId', '==', filter.taskId));
-      }
-      if (filter.staffId) {
-        constraints.push(where('staffIds', 'array-contains', filter.staffId));
-      }
-      if (filter.contractorId) {
-        constraints.push(where('contractorId', '==', filter.contractorId));
-      }
-      if (filter.status) {
-        constraints.push(where('status', '==', filter.status));
-      }
-      if (filter.dateFrom) {
-        constraints.push(where('date', '>=', Timestamp.fromDate(filter.dateFrom)));
-      }
-      if (filter.dateTo) {
-        constraints.push(where('date', '<=', Timestamp.fromDate(filter.dateTo)));
-      }
+
+      const q = query(collection(this.firestore, this.collectionName), ...constraints);
+      return collectionData(q, { idField: 'id' }) as Observable<DailyProgress[]>;
+    } catch (error) {
+      console.error('Error in getAll daily progress:', error);
+      throw error;
     }
-
-    const q = query(collection(this.firestore, this.collectionName), ...constraints);
-    return collectionData(q, { idField: 'id' }) as Observable<DailyProgress[]>;
   }
 
   getById(id: string): Observable<DailyProgress | undefined> {

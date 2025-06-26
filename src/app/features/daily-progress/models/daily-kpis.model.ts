@@ -6,63 +6,77 @@ export interface DailyKPIs {
   contractorName?: string;
   date: Date;
 
-  // Permissions
+  // Production KPIs
+  kmSurveyed: number;
+  polesStaked: number;
+  makeReadyComplete: number;
+  polesScanned: number;
+  polesDelivered: number;
+  holesExcavated: number;
+  polesErected: number;
+  concretePouredM3: number;
+  backfillCompleted: number;
+  cableDeliveredKm: number;
+  cableStrungKm: number;
+  hangersBoltsInstalled: number;
+  ODFInstalled: number;
+  fatInstalled: number;
+
+  // Resources
+  staffOnSite: any[];
+  equipmentUsed: any[];
+
+  // Financial
+  expenses: any[];
+  totalExpenses: number;
+
+  // Quality & Safety
+  qualityChecks: any[];
+  safetyIncidents: any[];
+
+  // Issues & Comments
+  issues: any[];
+  tomorrowPlan: string;
+
+  // Legacy fields
   permissionsToday: number;
   permissionsTotal: number;
-
-  // Status Tracking
   missingStatusToday: number;
   missingStatusTotal: number;
-
-  // Pole Operations
   polesPlantedToday: number;
   polesPlantedTotal: number;
-
-  // Homes
   homeSignupsToday: number;
   homeSignupsTotal: number;
-
   homeDropsToday: number;
   homeDropsTotal: number;
-
   homesConnectedToday: number;
   homesConnectedTotal: number;
-
-  // Civils
   trenchingToday: number;
   trenchingTotal: number;
-
-  // Cable Stringing - Multiple Types
-  stringing24Today: number; // meters
-  stringing24Total: number; // meters
-
-  stringing48Today: number; // meters
-  stringing48Total: number; // meters
-
-  stringing96Today: number; // meters
-  stringing96Total: number; // meters
-
-  stringing144Today: number; // meters
-  stringing144Total: number; // meters
-
-  stringing288Today: number; // meters
-  stringing288Total: number; // meters
+  stringing24Today: number;
+  stringing24Total: number;
+  stringing48Today: number;
+  stringing48Total: number;
+  stringing96Today: number;
+  stringing96Total: number;
+  stringing144Today: number;
+  stringing144Total: number;
+  stringing288Today: number;
+  stringing288Total: number;
 
   // Reports & Documentation
-  reportFile?: string; // File attachment URL
+  reportFile?: string;
   weeklyReportDetails?: string;
   weeklyReportInsights?: string;
   monthlyReports?: string;
   keyIssuesSummary?: string;
 
   // Status Flags
-  riskFlag: boolean;
-
-  // Optional fields
-  comments?: string;
-  submittedBy: string;
-  submittedByName?: string;
   submittedAt: Date;
+  riskFlag: boolean;
+  weather: string;
+  comments: string;
+  submittedBy: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

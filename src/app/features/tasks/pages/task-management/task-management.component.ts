@@ -64,6 +64,17 @@ export class TaskManagementComponent implements OnInit {
   ngOnInit() {
     console.log('TaskManagementComponent initialized');
     this.loadData();
+
+    // Add debugging subscription after loadData creates the observables
+    setTimeout(() => {
+      if (this.filteredTasks$) {
+        this.filteredTasks$.subscribe({
+          next: (tasks) =>
+            console.log('🟢 filteredTasks$ emitted to template:', tasks?.length || 0, 'tasks'),
+          error: (err) => console.error('🔴 filteredTasks$ error:', err),
+        });
+      }
+    }, 100);
   }
 
   loadData() {
@@ -71,76 +82,93 @@ export class TaskManagementComponent implements OnInit {
     this.loading = true;
 
     // Load projects and staff for filters
-    this.projects$ = this.projectService.getProjects().pipe(
-      tap(projects => console.log('ProjectService.getProjects() emitted:', projects.length, 'projects'))
-    );
-    this.staff$ = this.staffService.getStaff().pipe(
-      tap(staff => console.log('StaffService.getStaff() emitted:', staff.length, 'staff'))
-    ); // Fixed: use getStaff()
+    this.projects$ = this.projectService
+      .getProjects()
+      .pipe(
+        tap((projects) =>
+          console.log('ProjectService.getProjects() emitted:', projects.length, 'projects'),
+        ),
+      );
+    this.staff$ = this.staffService
+      .getStaff()
+      .pipe(tap((staff) => console.log('StaffService.getStaff() emitted:', staff.length, 'staff'))); // Fixed: use getStaff()
 
     // Debug individual observables
     this.taskService.getAllTasks().subscribe({
-      next: (tasks) => console.log('TaskService.getAllTasks() emitted:', tasks?.length || 0, 'tasks'),
-      error: (err) => console.error('TaskService.getAllTasks() error:', err),
-      complete: () => console.log('TaskService.getAllTasks() completed')
+      next: (tasks) => {
+        console.log('📋 TaskService.getAllTasks() emitted:', tasks?.length || 0, 'tasks');
+        console.log('📋 Sample task:', tasks?.[0]);
+      },
+      error: (err) => console.error('❌ TaskService.getAllTasks() error:', err),
+      complete: () => console.log('✅ TaskService.getAllTasks() completed'),
     });
 
     this.projects$.subscribe({
-      next: (projects) => console.log('ProjectService.getProjects() emitted:', projects?.length || 0, 'projects'),
-      error: (err) => console.error('ProjectService.getProjects() error:', err),
-      complete: () => console.log('ProjectService.getProjects() completed')
+      next: (projects) => {
+        console.log('🏗️ ProjectService.getProjects() emitted:', projects?.length || 0, 'projects');
+        console.log('🏗️ Project IDs:', projects?.map((p) => p.id) || []);
+      },
+      error: (err) => console.error('❌ ProjectService.getProjects() error:', err),
+      complete: () => console.log('✅ ProjectService.getProjects() completed'),
     });
 
     this.staff$.subscribe({
-      next: (staff) => console.log('StaffService.getStaff() emitted:', staff?.length || 0, 'staff'),
-      error: (err) => console.error('StaffService.getStaff() error:', err),
-      complete: () => console.log('StaffService.getStaff() completed')
+      next: (staff) => {
+        console.log('👥 StaffService.getStaff() emitted:', staff?.length || 0, 'staff');
+        console.log('👥 Staff IDs:', staff?.map((s) => s.id) || []);
+      },
+      error: (err) => console.error('❌ StaffService.getStaff() error:', err),
+      complete: () => console.log('✅ StaffService.getStaff() completed'),
     });
 
     // Load all tasks and enhance with project/staff names
     this.tasks$ = combineLatest([
       this.taskService.getAllTasks().pipe(
-        catchError(err => {
+        catchError((err) => {
           console.error('Error loading tasks:', err);
           return of([]);
-        })
+        }),
       ),
       this.projects$.pipe(
-        catchError(err => {
+        catchError((err) => {
           console.error('Error loading projects:', err);
           return of([]);
-        })
+        }),
       ),
       this.staff$.pipe(
-        catchError(err => {
+        catchError((err) => {
           console.error('Error loading staff:', err);
           return of([]);
-        })
+        }),
       ),
     ]).pipe(
       tap(([tasks, projects, staff]) => {
         console.log('CombineLatest emitted with:', {
           tasks: tasks?.length || 0,
           projects: projects?.length || 0,
-          staff: staff?.length || 0
+          staff: staff?.length || 0,
         });
       }),
       map(([tasks, projects, staff]) => {
         console.log('TaskManagementComponent: Raw tasks loaded:', tasks.length);
         console.log('TaskManagementComponent: Projects loaded:', projects.length);
         console.log('TaskManagementComponent: Staff loaded:', staff.length);
-        
+
         // Get unique project IDs from tasks
-        const taskProjectIds = [...new Set(tasks.map(t => t.projectId))];
+        const taskProjectIds = [...new Set(tasks.map((t) => t.projectId))];
         console.log('Unique project IDs in tasks:', taskProjectIds.length);
-        console.log('Project IDs from ProjectService:', projects.map(p => p.id));
-        
+        console.log(
+          'Project IDs from ProjectService:',
+          projects.map((p) => p.id),
+        );
+
         return tasks.map((task) => {
           const project = projects.find((p) => p.id === task.projectId);
           const assignee = staff.find((s) => s.id === task.assignedTo);
 
           // Use projectName from task if project not found in projects list
-          const displayProjectName = project?.name || task.projectName || `Project ${task.projectId}`;
+          const displayProjectName =
+            project?.name || task.projectName || `Project ${task.projectId}`;
 
           return {
             ...task,
@@ -150,10 +178,10 @@ export class TaskManagementComponent implements OnInit {
           } as TaskDisplay;
         });
       }),
-      catchError(err => {
+      catchError((err) => {
         console.error('Error in combineLatest:', err);
         return of([]);
-      })
+      }),
     );
 
     // Apply filters
@@ -169,7 +197,7 @@ export class TaskManagementComponent implements OnInit {
         console.log('Project filter:', projectId);
         console.log('Assignee filter:', assigneeId);
         console.log('Show completed:', showCompleted);
-        
+
         let filtered = tasks;
 
         // Filter by project
@@ -189,14 +217,15 @@ export class TaskManagementComponent implements OnInit {
           const beforeStatusFilter = filtered.length;
           filtered = filtered.filter((t) => {
             const status = t.status?.toLowerCase();
-            const isCompleted = status === 'completed' || status === TaskStatus.COMPLETED.toLowerCase();
+            const isCompleted =
+              status === 'completed' || status === TaskStatus.COMPLETED.toLowerCase();
             return !isCompleted;
           });
-          
+
           console.log(`After status filter: ${beforeStatusFilter} -> ${filtered.length} tasks`);
           console.log('Removed completed tasks:', beforeStatusFilter - filtered.length);
         }
-        
+
         console.log('Final filtered tasks:', filtered.length);
         if (filtered.length === 0 && tasks.length > 0) {
           console.log('No tasks shown. Try checking "Show Completed Tasks" to see all tasks.');
@@ -207,6 +236,15 @@ export class TaskManagementComponent implements OnInit {
         return filtered;
       }),
     );
+
+    // Debug the tasks$ observable
+    this.tasks$.subscribe({
+      next: (tasks) => {
+        console.log('🔄 tasks$ emitted:', tasks?.length || 0, 'enhanced tasks');
+        console.log('🔄 Sample enhanced task:', tasks?.[0]);
+      },
+      error: (err) => console.error('❌ tasks$ error:', err),
+    });
   }
 
   async toggleTaskCompletion(task: TaskDisplay) {
@@ -222,7 +260,9 @@ export class TaskManagementComponent implements OnInit {
       });
 
       this.notification.success(
-        newStatus === TaskStatus.COMPLETED ? 'Task marked as complete' : 'Task marked as incomplete',
+        newStatus === TaskStatus.COMPLETED
+          ? 'Task marked as complete'
+          : 'Task marked as incomplete',
       );
 
       this.loadData();

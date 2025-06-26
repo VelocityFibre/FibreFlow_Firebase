@@ -5,7 +5,7 @@ export const poleTrackerRoutes: Routes = [
     path: '',
     loadComponent: () =>
       import('./pages/pole-tracker-list/pole-tracker-list.component').then(
-        (m) => m.PoleTrackerListComponent
+        (m) => m.PoleTrackerListComponent,
       ),
     title: 'Pole Tracker - FibreFlow',
   },
@@ -13,7 +13,7 @@ export const poleTrackerRoutes: Routes = [
     path: 'new',
     loadComponent: () =>
       import('./pages/pole-tracker-form/pole-tracker-form.component').then(
-        (m) => m.PoleTrackerFormComponent
+        (m) => m.PoleTrackerFormComponent,
       ),
     title: 'New Pole Entry - FibreFlow',
   },
@@ -21,7 +21,7 @@ export const poleTrackerRoutes: Routes = [
     path: ':id/edit',
     loadComponent: () =>
       import('./pages/pole-tracker-form/pole-tracker-form.component').then(
-        (m) => m.PoleTrackerFormComponent
+        (m) => m.PoleTrackerFormComponent,
       ),
     title: 'Edit Pole Entry - FibreFlow',
   },
@@ -29,7 +29,7 @@ export const poleTrackerRoutes: Routes = [
     path: ':id',
     loadComponent: () =>
       import('./pages/pole-tracker-detail/pole-tracker-detail.component').then(
-        (m) => m.PoleTrackerDetailComponent
+        (m) => m.PoleTrackerDetailComponent,
       ),
     title: 'Pole Details - FibreFlow',
   },

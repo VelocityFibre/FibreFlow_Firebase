@@ -8,7 +8,7 @@ describe('HelloWorldComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HelloWorldComponent, NoopAnimationsModule]
+      imports: [HelloWorldComponent, NoopAnimationsModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HelloWorldComponent);
@@ -44,7 +44,7 @@ describe('HelloWorldComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const statusItems = compiled.querySelectorAll('.status-item');
     expect(statusItems.length).toBe(4);
-    
+
     expect(statusItems[0]?.textContent).toContain('Angular v20 Standalone Component');
     expect(statusItems[1]?.textContent).toContain('FibreFlow Theme Variables');
     expect(statusItems[2]?.textContent).toContain('Material Design Components');

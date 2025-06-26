@@ -17,8 +17,13 @@ export interface SentryConfig {
   environment: 'development' | 'staging' | 'production';
 }
 
+export interface FirefliesConfig {
+  apiKey: string;
+}
+
 export interface Environment {
   production: boolean;
   firebase: FirebaseConfig;
   sentry: SentryConfig;
+  fireflies?: FirefliesConfig;
 }

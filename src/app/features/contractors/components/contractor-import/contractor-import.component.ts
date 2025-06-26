@@ -17,7 +17,7 @@ import { Contractor, ContractorStatus } from '../../models/contractor.model';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatCardModule,
-    MatDialogModule
+    MatDialogModule,
   ],
   template: `
     <mat-card>
@@ -25,39 +25,49 @@ import { Contractor, ContractorStatus } from '../../models/contractor.model';
         <mat-card-title>Import Contractors</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <p>Click the button below to import the predefined contractors from the Excel screenshot.</p>
-        <p>This will create 12 contractors with their registration details and contact information.</p>
+        <p>
+          Click the button below to import the predefined contractors from the Excel screenshot.
+        </p>
+        <p>
+          This will create 12 contractors with their registration details and contact information.
+        </p>
       </mat-card-content>
       <mat-card-actions>
-        <button 
-          mat-raised-button 
-          color="primary" 
+        <button
+          mat-raised-button
+          color="primary"
           (click)="importContractors()"
           [disabled]="importing"
         >
-          <mat-spinner *ngIf="importing" diameter="20" style="display: inline-block; margin-right: 8px;"></mat-spinner>
+          <mat-spinner
+            *ngIf="importing"
+            diameter="20"
+            style="display: inline-block; margin-right: 8px;"
+          ></mat-spinner>
           {{ importing ? 'Importing...' : 'Import Contractors' }}
         </button>
         <button mat-button (click)="dialogRef.close()" [disabled]="importing">Cancel</button>
       </mat-card-actions>
     </mat-card>
   `,
-  styles: [`
-    mat-card {
-      max-width: 600px;
-      margin: 20px auto;
-    }
-    mat-spinner {
-      display: inline-block;
-      margin-right: 8px;
-    }
-  `]
+  styles: [
+    `
+      mat-card {
+        max-width: 600px;
+        margin: 20px auto;
+      }
+      mat-spinner {
+        display: inline-block;
+        margin-right: 8px;
+      }
+    `,
+  ],
 })
 export class ContractorImportComponent {
   private contractorService = inject(ContractorService);
   private snackBar = inject(MatSnackBar);
   dialogRef = inject(MatDialogRef<ContractorImportComponent>);
-  
+
   importing = false;
 
   // Contractor data from the screenshot - simplified for compatibility
@@ -72,32 +82,32 @@ export class ContractorImportComponent {
         name: 'CMC Contact',
         email: 'info@cmc.co.za',
         phone: '011 123 4567',
-        position: 'Manager'
+        position: 'Manager',
       },
       physicalAddress: {
         street: '',
         city: 'Johannesburg',
         province: 'Gauteng',
-        postalCode: '2000'
+        postalCode: '2000',
       },
       capabilities: {
         services: [],
         maxTeams: 5,
         equipment: [],
-        certifications: []
+        certifications: [],
       },
       compliance: {
         bbbeeLevel: 4,
-        safetyRating: 4
+        safetyRating: 4,
       },
       financial: {
         bankName: '',
         accountNumber: '',
         branchCode: '',
         accountType: 'current',
-        paymentTerms: 30
+        paymentTerms: 30,
       },
-      teams: []
+      teams: [],
     },
     {
       companyName: 'Elevate',
@@ -109,32 +119,32 @@ export class ContractorImportComponent {
         name: 'Elevate Contact',
         email: 'info@elevate.co.za',
         phone: '011 234 5678',
-        position: 'Manager'
+        position: 'Manager',
       },
       physicalAddress: {
         street: '',
         city: 'Johannesburg',
         province: 'Gauteng',
-        postalCode: '2000'
+        postalCode: '2000',
       },
       capabilities: {
         services: [],
         maxTeams: 5,
         equipment: [],
-        certifications: []
+        certifications: [],
       },
       compliance: {
         bbbeeLevel: 4,
-        safetyRating: 4
+        safetyRating: 4,
       },
       financial: {
         bankName: '',
         accountNumber: '',
         branchCode: '',
         accountType: 'current',
-        paymentTerms: 30
+        paymentTerms: 30,
       },
-      teams: []
+      teams: [],
     },
     {
       companyName: 'Mafemani Lettle Nwamac',
@@ -146,32 +156,32 @@ export class ContractorImportComponent {
         name: 'Mafemani Contact',
         email: 'info@mafemani.co.za',
         phone: '011 345 6789',
-        position: 'Manager'
+        position: 'Manager',
       },
       physicalAddress: {
         street: '108 Chris Hani Rd, PO Chiawelo Extension 1',
         city: 'Soweto',
         province: 'Gauteng',
-        postalCode: '1818'
+        postalCode: '1818',
       },
       capabilities: {
         services: [],
         maxTeams: 5,
         equipment: [],
-        certifications: []
+        certifications: [],
       },
       compliance: {
         bbbeeLevel: 1,
-        safetyRating: 4
+        safetyRating: 4,
       },
       financial: {
         bankName: '',
         accountNumber: '',
         branchCode: '',
         accountType: 'current',
-        paymentTerms: 30
+        paymentTerms: 30,
       },
-      teams: []
+      teams: [],
     },
     {
       companyName: 'Al-Ragman Projects',
@@ -183,32 +193,32 @@ export class ContractorImportComponent {
         name: 'Al-Ragman Contact',
         email: 'info@alragman.co.za',
         phone: '011 456 7890',
-        position: 'Manager'
+        position: 'Manager',
       },
       physicalAddress: {
         street: '',
         city: 'Johannesburg',
         province: 'Gauteng',
-        postalCode: '2000'
+        postalCode: '2000',
       },
       capabilities: {
         services: [],
         maxTeams: 5,
         equipment: [],
-        certifications: []
+        certifications: [],
       },
       compliance: {
         bbbeeLevel: 2,
-        safetyRating: 4
+        safetyRating: 4,
       },
       financial: {
         bankName: '',
         accountNumber: '',
         branchCode: '',
         accountType: 'current',
-        paymentTerms: 30
+        paymentTerms: 30,
       },
-      teams: []
+      teams: [],
     },
     {
       companyName: 'Tumi Hirele Trading',
@@ -220,32 +230,32 @@ export class ContractorImportComponent {
         name: 'Tumi Contact',
         email: 'info@tumihirele.co.za',
         phone: '011 567 8901',
-        position: 'Manager'
+        position: 'Manager',
       },
       physicalAddress: {
         street: '',
         city: 'Johannesburg',
         province: 'Gauteng',
-        postalCode: '2000'
+        postalCode: '2000',
       },
       capabilities: {
         services: [],
         maxTeams: 5,
         equipment: [],
-        certifications: []
+        certifications: [],
       },
       compliance: {
         bbbeeLevel: 1,
-        safetyRating: 4
+        safetyRating: 4,
       },
       financial: {
         bankName: '',
         accountNumber: '',
         branchCode: '',
         accountType: 'current',
-        paymentTerms: 30
+        paymentTerms: 30,
       },
-      teams: []
+      teams: [],
     },
     {
       companyName: 'MKB AUTHENTIC PROJECTS',
@@ -257,32 +267,32 @@ export class ContractorImportComponent {
         name: 'MKB Contact',
         email: 'info@mkbprojects.co.za',
         phone: '011 678 9012',
-        position: 'Manager'
+        position: 'Manager',
       },
       physicalAddress: {
         street: '',
         city: 'Johannesburg',
         province: 'Gauteng',
-        postalCode: '2000'
+        postalCode: '2000',
       },
       capabilities: {
         services: [],
         maxTeams: 5,
         equipment: [],
-        certifications: []
+        certifications: [],
       },
       compliance: {
         bbbeeLevel: 1,
-        safetyRating: 4
+        safetyRating: 4,
       },
       financial: {
         bankName: '',
         accountNumber: '',
         branchCode: '',
         accountType: 'current',
-        paymentTerms: 30
+        paymentTerms: 30,
       },
-      teams: []
+      teams: [],
     },
     {
       companyName: 'Good hope security & Civil',
@@ -294,32 +304,32 @@ export class ContractorImportComponent {
         name: 'Good Hope Contact',
         email: 'info@goodhope.co.za',
         phone: '011 789 0123',
-        position: 'Manager'
+        position: 'Manager',
       },
       physicalAddress: {
         street: '',
         city: 'Johannesburg',
         province: 'Gauteng',
-        postalCode: '2000'
+        postalCode: '2000',
       },
       capabilities: {
         services: [],
         maxTeams: 5,
         equipment: [],
-        certifications: []
+        certifications: [],
       },
       compliance: {
         bbbeeLevel: 2,
-        safetyRating: 4
+        safetyRating: 4,
       },
       financial: {
         bankName: '',
         accountNumber: '',
         branchCode: '',
         accountType: 'current',
-        paymentTerms: 30
+        paymentTerms: 30,
       },
-      teams: []
+      teams: [],
     },
     {
       companyName: 'K2022530475(South Africa)',
@@ -331,32 +341,32 @@ export class ContractorImportComponent {
         name: 'K2022 Contact',
         email: 'info@k2022.co.za',
         phone: '011 890 1234',
-        position: 'Manager'
+        position: 'Manager',
       },
       physicalAddress: {
         street: '',
         city: 'Johannesburg',
         province: 'Gauteng',
-        postalCode: '2000'
+        postalCode: '2000',
       },
       capabilities: {
         services: [],
         maxTeams: 5,
         equipment: [],
-        certifications: []
+        certifications: [],
       },
       compliance: {
         bbbeeLevel: 1,
-        safetyRating: 4
+        safetyRating: 4,
       },
       financial: {
         bankName: '',
         accountNumber: '',
         branchCode: '',
         accountType: 'current',
-        paymentTerms: 30
+        paymentTerms: 30,
       },
-      teams: []
+      teams: [],
     },
     {
       companyName: 'Magraet Kondile Cleaning',
@@ -368,32 +378,32 @@ export class ContractorImportComponent {
         name: 'Magraet Contact',
         email: 'info@mkclean.co.za',
         phone: '011 901 2345',
-        position: 'Manager'
+        position: 'Manager',
       },
       physicalAddress: {
         street: '',
         city: 'Johannesburg',
         province: 'Gauteng',
-        postalCode: '2000'
+        postalCode: '2000',
       },
       capabilities: {
         services: [],
         maxTeams: 5,
         equipment: [],
-        certifications: []
+        certifications: [],
       },
       compliance: {
         bbbeeLevel: 1,
-        safetyRating: 4
+        safetyRating: 4,
       },
       financial: {
         bankName: '',
         accountNumber: '',
         branchCode: '',
         accountType: 'current',
-        paymentTerms: 30
+        paymentTerms: 30,
       },
-      teams: []
+      teams: [],
     },
     {
       companyName: 'Zizwe',
@@ -405,32 +415,32 @@ export class ContractorImportComponent {
         name: 'Zizwe Contact',
         email: 'info@zizwe.co.za',
         phone: '011 012 3456',
-        position: 'Manager'
+        position: 'Manager',
       },
       physicalAddress: {
         street: '',
         city: 'Johannesburg',
         province: 'Gauteng',
-        postalCode: '2000'
+        postalCode: '2000',
       },
       capabilities: {
         services: [],
         maxTeams: 5,
         equipment: [],
-        certifications: []
+        certifications: [],
       },
       compliance: {
         bbbeeLevel: 1,
-        safetyRating: 4
+        safetyRating: 4,
       },
       financial: {
         bankName: '',
         accountNumber: '',
         branchCode: '',
         accountType: 'current',
-        paymentTerms: 30
+        paymentTerms: 30,
       },
-      teams: []
+      teams: [],
     },
     {
       companyName: 'Kosetlamamotho (PTY) Ltd',
@@ -442,32 +452,32 @@ export class ContractorImportComponent {
         name: 'Kosetlamamotho Contact',
         email: 'info@kosetlamamotho.co.za',
         phone: '011 123 4567',
-        position: 'Manager'
+        position: 'Manager',
       },
       physicalAddress: {
         street: '',
         city: 'Johannesburg',
         province: 'Gauteng',
-        postalCode: '2000'
+        postalCode: '2000',
       },
       capabilities: {
         services: [],
         maxTeams: 5,
         equipment: [],
-        certifications: []
+        certifications: [],
       },
       compliance: {
         bbbeeLevel: 2,
-        safetyRating: 4
+        safetyRating: 4,
       },
       financial: {
         bankName: '',
         accountNumber: '',
         branchCode: '',
         accountType: 'current',
-        paymentTerms: 30
+        paymentTerms: 30,
       },
-      teams: []
+      teams: [],
     },
     {
       companyName: 'Sanzas Supplier',
@@ -479,33 +489,33 @@ export class ContractorImportComponent {
         name: 'Sanzas Contact',
         email: 'info@sanzas.co.za',
         phone: '011 234 5678',
-        position: 'Manager'
+        position: 'Manager',
       },
       physicalAddress: {
         street: '',
         city: 'Johannesburg',
         province: 'Gauteng',
-        postalCode: '2000'
+        postalCode: '2000',
       },
       capabilities: {
         services: [],
         maxTeams: 5,
         equipment: [],
-        certifications: []
+        certifications: [],
       },
       compliance: {
         bbbeeLevel: 1,
-        safetyRating: 4
+        safetyRating: 4,
       },
       financial: {
         bankName: '',
         accountNumber: '',
         branchCode: '',
         accountType: 'current',
-        paymentTerms: 30
+        paymentTerms: 30,
       },
-      teams: []
-    }
+      teams: [],
+    },
   ];
 
   async importContractors() {
@@ -524,22 +534,17 @@ export class ContractorImportComponent {
         }
       }
 
-      this.snackBar.open(
-        `Import completed! Created ${successCount} contractors.`,
-        'Close',
-        { duration: 5000 }
-      );
-      
+      this.snackBar.open(`Import completed! Created ${successCount} contractors.`, 'Close', {
+        duration: 5000,
+      });
+
       // Close dialog on success
       this.dialogRef.close(true);
-
     } catch (error) {
       console.error('Import error:', error);
-      this.snackBar.open(
-        'Error during import. Check console for details.',
-        'Close',
-        { duration: 5000 }
-      );
+      this.snackBar.open('Error during import. Check console for details.', 'Close', {
+        duration: 5000,
+      });
     } finally {
       this.importing = false;
     }

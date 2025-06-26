@@ -9,6 +9,13 @@ export const contractorsRoutes: Routes = [
       ),
   },
   {
+    path: 'daily-progress',
+    loadComponent: () =>
+      import('./pages/contractor-daily-progress/contractor-daily-progress.component').then(
+        (m) => m.ContractorDailyProgressComponent,
+      ),
+  },
+  {
     path: ':contractorId/projects/:projectId',
     loadComponent: () =>
       import(

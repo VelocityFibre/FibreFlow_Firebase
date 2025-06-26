@@ -320,23 +320,60 @@ Always organize imports in this order:
 - **Empty Folders**: Create folders ONLY when you have content to add
 - **Test Files**: Always create `.spec.ts` alongside components
 
-## 🚨 CRITICAL: Theme System Usage
+## 🚨 CRITICAL: Theme System Usage (NEVER VIOLATE)
 
-### Theme Implementation (ALWAYS USE THIS)
+### MANDATORY PRE-SCSS CHECKLIST - STOP AND VERIFY:
+**BEFORE ANY SCSS CHANGES - ANSWER THESE QUESTIONS:**
+1. ✅ Does this component import `@use '../../../styles/component-theming' as theme;`?
+2. ✅ Am I using `theme.ff-*()` functions instead of direct CSS variables?
+3. ✅ Have I checked existing patterns in similar components?
+4. ✅ Am I following the EXACT pattern shown below?
+
+**❌ IF ANY ANSWER IS NO, STOP AND FIX THE PATTERN FIRST ❌**
+
+### ❌ ABSOLUTELY FORBIDDEN PATTERNS (THESE WILL BREAK THE ARCHITECTURE):
+- `var(--mat-sys-primary)` → **MUST** use `theme.ff-rgb(primary)`
+- `var(--mat-sys-on-surface)` → **MUST** use `theme.ff-rgb(foreground)`
+- `ff-rgb()` without namespace → **MUST** use `theme.ff-rgb()`
+- Direct CSS variables → **MUST** use theme functions
+- Removing theme imports → **FORBIDDEN - NEVER SIMPLIFY THE THEME SYSTEM**
+- Hard-coded colors (`#ffffff`, `#333`) → **FORBIDDEN**
+
+### ✅ REQUIRED PATTERN (NO EXCEPTIONS - COPY THIS EXACTLY):
 ```scss
-// ✅ BEST - Use component-theming for everything
+// ✅ MANDATORY - This import is REQUIRED for ALL components
 @use '../../../styles/component-theming' as theme;
 
 .my-component {
-  @include theme.card-theme();         // Use mixins for patterns
-  color: theme.ff-rgb(foreground);     // Direct color access
-  padding: theme.ff-spacing(xl);       // Spacing functions
+  // ✅ REQUIRED - Use theme mixins for patterns
+  @include theme.card-theme();
+  
+  // ✅ REQUIRED - Use namespaced theme functions
+  color: theme.ff-rgb(foreground);     // NOT var(--mat-sys-on-surface)
+  background: theme.ff-rgb(card);      // NOT var(--mat-sys-surface)
+  padding: theme.ff-spacing(xl);       // NOT direct values
+  
+  // ✅ REQUIRED - Use theme functions for all colors
+  border: 1px solid theme.ff-rgb(border);
+  
+  &:hover {
+    background: theme.ff-rgba(primary, 0.1);
+  }
 }
 ```
 
+### 🚨 CRITICAL RULES (MEMORIZE THESE):
+1. **ALWAYS** import: `@use '../../../styles/component-theming' as theme;`
+2. **ALWAYS** use namespace: `theme.ff-rgb()` NOT `ff-rgb()`
+3. **NEVER** use direct CSS variables: `var(--mat-sys-*)` is FORBIDDEN
+4. **NEVER** remove or simplify theme imports - the system is designed this way
+5. **ALWAYS** test in all 4 themes: light, dark, vf, fibreflow
+
+### Theme Implementation (FOLLOW THIS EXACTLY)
 **MUST use namespace prefixes:**
 - `theme.ff-rgb()` NOT `ff-rgb()`
 - `theme.ff-spacing()` NOT `ff-spacing()`
+- `theme.ff-rgba()` NOT `ff-rgba()`
 
 ## Key Implementation Patterns
 

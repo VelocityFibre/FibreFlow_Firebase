@@ -1,0 +1,80 @@
+<div class="ff-page">
+  <!-- Page Header -->
+  <header class="ff-page-header">
+    <div class="ff-page-header-content">
+      <h1 class="ff-page-title">Meeting Notes</h1>
+      <p class="ff-page-subtitle">Your recorded meetings from Fireflies</p>
+    </div>
+  </header>
+
+  <!-- Meetings Grid -->
+  <div class="ff-meetings-grid" *ngIf="!loading; else loadingTemplate">
+    <article 
+      *ngFor="let meeting of meetings$ | async" 
+      class="ff-meeting-card"
+      [routerLink]="['/meetings', meeting.id]"
+      tabindex="0"
+      role="button"
+      [attr.aria-label]="'View ' + meeting.title">
+      
+      <!-- Card Header -->
+      <div class="ff-card-header">
+        <h2 class="ff-card-title">{{ meeting.title }}</h2>
+        <time class="ff-card-date" [dateTime]="meeting.dateTime">
+          <mat-icon class="ff-icon-sm">calendar_today</mat-icon>
+          {{ meeting.dateTime | date:'EEEE, MMM d, y' }}
+        </time>
+      </div>
+
+      <!-- Card Meta -->
+      <div class="ff-card-meta">
+        <span class="ff-meta-item">
+          <mat-icon class="ff-icon-sm">schedule</mat-icon>
+          {{ meeting.duration ? (meeting.duration | number:'1.0-0') : 0 }} min
+        </span>
+        <span class="ff-meta-item">
+          <mat-icon class="ff-icon-sm">group</mat-icon>
+          {{ meeting.participants.length }} participants
+        </span>
+      </div>
+
+      <!-- Card Summary -->
+      <div class="ff-card-summary">
+        <p>{{ meeting.summary || 'No summary available' }}</p>
+      </div>
+
+      <!-- Card Actions -->
+      <div class="ff-card-footer">
+        <div class="ff-action-badges">
+          <span class="ff-badge ff-badge-primary" *ngIf="meeting.actionItems && meeting.actionItems.length > 0">
+            <mat-icon class="ff-icon-xs">task_alt</mat-icon>
+            {{ meeting.actionItems.length }} Action Items
+          </span>
+          <span class="ff-badge ff-badge-secondary" *ngIf="meeting.status">
+            <mat-icon class="ff-icon-xs">cloud_done</mat-icon>
+            {{ meeting.status }}
+          </span>
+        </div>
+        
+        <button mat-icon-button class="ff-card-action">
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </article>
+
+    <!-- Empty State -->
+    <div class="ff-empty-state" *ngIf="(meetings$ | async)?.length === 0">
+      <mat-icon class="ff-empty-icon">videocam_off</mat-icon>
+      <h3 class="ff-empty-title">No meetings found</h3>
+      <p class="ff-empty-text">Your synced meetings will appear here</p>
+    </div>
+  </div>
+
+  <!-- Loading Template -->
+  <ng-template #loadingTemplate>
+    <div class="ff-loading">
+      <mat-progress-spinner mode="indeterminate" diameter="48"></mat-progress-spinner>
+      <p class="ff-loading-text">Loading meetings...</p>
+    </div>
+  </ng-template>
+</div>

@@ -21,6 +21,7 @@ import { RFQService } from '../../../quotes/services/rfq.service';
 import { StaffService } from '../../../staff/services/staff.service';
 import { ContractorService } from '../../../contractors/services/contractor.service';
 import { PoleTrackerService } from '../../../pole-tracker/services/pole-tracker.service';
+import { MeetingService } from '../../../meetings/services/meeting.service';
 import { catchError, of, interval, Subject, takeUntil, switchMap, startWith } from 'rxjs';
 
 @Component({
@@ -41,6 +42,7 @@ export class MainDashboardComponent implements OnInit, OnDestroy {
   private staffService = inject(StaffService);
   private contractorService = inject(ContractorService);
   private poleTrackerService = inject(PoleTrackerService);
+  private meetingService = inject(MeetingService);
   private destroy$ = new Subject<void>();
   private refreshTrigger$ = new Subject<void>();
 
@@ -73,7 +75,14 @@ export class MainDashboardComponent implements OnInit, OnDestroy {
     initialValue: [],
   });
 
-  poleTrackers = toSignal(this.poleTrackerService.getPoleTrackers().pipe(catchError(() => of([]))), {
+  poleTrackers = toSignal(
+    this.poleTrackerService.getPoleTrackers().pipe(catchError(() => of([]))),
+    {
+      initialValue: [],
+    },
+  );
+
+  meetings = toSignal(this.meetingService.getMeetings().pipe(catchError(() => of([]))), {
     initialValue: [],
   });
 
@@ -98,7 +107,10 @@ export class MainDashboardComponent implements OnInit, OnDestroy {
   staffCount = computed(() => this.staff().length);
   contractorsCount = computed(() => this.contractors().length);
   polesInstalledCount = computed(() => this.poleTrackers().length);
-  polesQualityCheckedCount = computed(() => this.poleTrackers().filter(p => p.qualityChecked).length);
+  polesQualityCheckedCount = computed(
+    () => this.poleTrackers().filter((p) => p.qualityChecked).length,
+  );
+  meetingsCount = computed(() => this.meetings().length);
 
   // Loading state computed from all data sources
   isLoading = computed(

@@ -25,6 +25,7 @@ See [Node.js Version Management Guide](./docs/NODEJS_VERSION_MANAGEMENT.md) for:
 - **Staff** - Employee management and role-based access control
 - **Stock Management** - Project-based inventory tracking and material management
 - **Dashboard** - Real-time project metrics and analytics
+- **Task Management** - Centralized task management system with filtering and completion tracking
 
 ### Contractors Module (Phase 2 Complete - 2025/06/18) ✨
 #### Phase 1 (Completed December 2024)
@@ -105,6 +106,17 @@ Phase 3 (Planned):
   - Low stock alerts
   - Reorder automation
   - Stock valuation reports
+
+### Task Management System (Complete - 2025/06/25) ✅
+- ✅ **Centralized Task Management**: Single interface to view and manage all tasks across projects
+- ✅ **Advanced Filtering**: Filter tasks by project, assignee, and completion status
+- ✅ **Task Overview**: View 910+ tasks from all projects in one unified interface
+- ✅ **Quick Actions**: Mark tasks as complete/incomplete directly from the management view
+- ✅ **Project Integration**: Seamless integration with existing project structures
+- ✅ **Real-time Updates**: Live task counts and status updates on dashboard
+- ✅ **Staff Assignment Tracking**: See assigned staff members for each task
+- ✅ **Fallback Handling**: Graceful handling of missing project/staff data
+- ✅ **Responsive Design**: Optimized for desktop and mobile interfaces
 
 ### 🎨 Theme System (Complete - Updated 2025-06-20)
 - **4 Themes Available**: Light, Dark, VelocityFibre (VF), FibreFlow
@@ -231,7 +243,148 @@ The app uses Firestore with the following collections:
 - `contractor-projects` - Contractor-project relationships with team and payment tracking
 - `steps` - Project steps linked to phases with progress tracking
 
+### Firebase Deployment (Updated June 25, 2025)
+
+**IMPORTANT**: Firebase CLI doesn't automatically read the `FIREBASE_TOKEN` from `.env.local`. Use the npm scripts instead of direct Firebase commands:
+
+```bash
+# Deploy everything
+npm run deploy
+
+# Deploy only hosting
+npm run deploy:hosting
+
+# Deploy only functions
+npm run deploy:functions
+
+# Deploy only Firestore rules
+npm run deploy:rules
+```
+
+The deployment scripts automatically export the Firebase token from `.env.local` before running Firebase commands. This prevents authentication issues during deployment.
+
+**DO NOT USE** `firebase deploy` directly - it will prompt for re-authentication even with a valid token in `.env.local`.
+
 ## Recent Updates
+
+### Meetings Module Implementation (June 26, 2025) 📅
+
+**Successfully implemented a complete meetings synchronization and management system!**
+
+**Implementation Details**:
+- ✅ **Fireflies API Integration**: Successfully integrated with Fireflies.ai GraphQL API for meeting data retrieval
+- ✅ **Local Sync Scripts**: Created Node.js scripts for syncing meetings from Fireflies to Firebase Firestore
+- ✅ **Meetings List Page**: Card-based view showing all synced meetings with title, date, duration, and action items count
+- ✅ **Meeting Detail Page**: Comprehensive detail view with sections for summary, participants, action items, and transcript links
+- ✅ **FibreFlow Theme Compliance**: All components follow established theme system with proper CSS custom properties
+- ✅ **Responsive Design**: Optimized for all screen sizes with mobile-first approach
+
+**Key Features**:
+- **Automatic Data Sync**: Local scripts fetch meetings from Fireflies API and store in Firestore
+- **Modern UI**: Clean, card-based interface with hover effects and smooth transitions
+- **Hierarchical Navigation**: Easy navigation from list to detail views with back button
+- **Action Items Tracking**: Visual count and detailed list of action items per meeting
+- **Participant Management**: Avatar-based participant display with names and emails
+- **Performance Optimized**: Direct Firestore queries for fast data loading
+
+**Technical Architecture**:
+- **Sync Script**: `/scripts/sync-and-save.js` - Fetches from Fireflies GraphQL API and saves to Firestore
+- **Components**: Simple standalone components with direct Firestore integration
+- **Routing**: Lazy-loaded routes for optimal performance
+- **Data Model**: Meetings stored in Firestore with full metadata including summaries and action items
+
+**Deployment**: Live at https://fibreflow-73daf.web.app/meetings
+
+### Claude Code GitHub Actions Integration (June 25, 2025) 🤖
+
+**Successfully integrated Claude Code with GitHub Actions for automated development workflows!**
+
+**Implementation Details**:
+- ✅ **GitHub Actions Workflow**: Created `.github/workflows/claude-code.yml` with proper permissions and authentication
+- ✅ **Anthropic API Integration**: Configured `ANTHROPIC_API_KEY` in repository secrets
+- ✅ **Claude GitHub App**: Installed and configured for repository access
+- ✅ **Trigger Configuration**: Responds to `@claude` mentions in issues, PRs, and comments
+- ✅ **Git Authentication**: Fixed OIDC token issues with `id-token: write` permission
+- ✅ **Local PR Creation**: Set up GitHub CLI with personal access token in `.env.local`
+
+**Key Features**:
+- **Automated Code Generation**: Claude responds to development requests in GitHub issues
+- **Branch Management**: Creates feature branches automatically (e.g., `claude/issue-2-20250625_154240`)
+- **Pull Request Creation**: Generates comprehensive PRs with detailed descriptions
+- **FibreFlow Standards Compliance**: Follows established coding standards and theme system
+- **Email Integration**: Full workflow can be managed via email notifications
+
+**Testing Results**:
+- ✅ **Integration Test**: Successfully created HelloWorld component via `@claude` mention
+- ✅ **Component Generation**: Created complete Angular component with TypeScript, HTML, SCSS, and tests
+- ✅ **Theme Compliance**: Used FibreFlow theme variables and Material Design patterns
+- ✅ **PR Generation**: [Pull Request #3](https://github.com/VelocityFibre/FibreFlow_Firebase/pull/3) created successfully
+
+**Usage**: Simply mention `@claude` in any GitHub issue or PR comment with your development request, and Claude will analyze the codebase and implement the solution following FibreFlow standards.
+
+**CodeRabbit Integration**: Works seamlessly with existing CodeRabbit AI code review workflows for comprehensive automated development pipeline.
+
+**Configuration Fix (June 25, 2025)**:
+- ✅ **Resolved YAML Parsing Errors**: Fixed deprecated settings in `.coderabbit.yaml`
+- ✅ **Maintained FibreFlow Standards**: Preserved all module-specific review instructions
+- ✅ **Clean Reviews**: CodeRabbit now provides error-free automated code reviews
+- ✅ **24/7 Operation**: Both Claude Code and CodeRabbit work continuously without configuration warnings
+
+### Enhanced Daily KPIs Route Fix (June 25, 2025) 🔧
+
+**Issue Resolved**: Fixed missing route `/daily-progress/kpis-enhanced` that was causing 404 errors.
+
+**Changes Made**:
+- ✅ Added missing route configuration in `daily-progress.routes.ts`
+- ✅ Fixed service imports from `KPIsService` to `DailyKpisService`
+- ✅ Corrected service method calls to include required `projectId` parameter
+- ✅ Removed missing service dependencies not present in main project
+- ✅ Fixed KPI data structure to match `DailyKPIs` model
+
+**Result**: Enhanced Daily KPIs form now loads successfully at `/daily-progress/kpis-enhanced`
+
+### Claude Code Theme System Compliance Enhancement (June 25, 2025) 🔧
+
+**Issue**: Claude Code was not consistently following the established FibreFlow theme system guidelines, resulting in pattern violations such as:
+- Using direct CSS variables (`var(--mat-sys-primary)`) instead of theme functions (`theme.ff-rgb(primary)`)
+- Removing theme imports to "simplify" SCSS files
+- Not using required namespace prefixes (`theme.ff-rgb()` vs `ff-rgb()`)
+
+**Solution Implemented**: Enhanced `claude.md` with emphatic, Claude Code-specific guidance:
+- ✅ **Mandatory Pre-SCSS Checklist**: Forces verification before any SCSS changes
+- ✅ **Forbidden Patterns Section**: Explicit examples of what NOT to do with direct mappings
+- ✅ **Required Pattern Examples**: Complete, copyable code examples with "NO EXCEPTIONS" language
+- ✅ **Critical Rules**: 5 key rules using emphatic language ("ALWAYS", "NEVER", "FORBIDDEN")
+- ✅ **Anti-Simplification Directive**: Explicitly forbids "simplifying" the theme system
+
+**Tracking**: This update addresses documented Claude Code pattern adherence limitations. Monitor future theme-related changes to measure effectiveness of these enhancements.
+
+**Documentation**: See updated theme compliance section in `claude.md` lines 323-376.
+
+### Task Management System Implementation (June 25, 2025) 🆕
+
+Implemented a comprehensive task management system for centralized task oversight:
+
+- **Unified Task Interface**: New `/tasks/management` route providing centralized access to all 910+ tasks across projects
+- **Smart Filtering System**: 
+  - Filter by project (with fallback for missing project data)
+  - Filter by assigned staff member
+  - Toggle between showing all tasks or hiding completed tasks
+- **Dashboard Integration**: Added "Tasks" card showing outstanding task count with navigation to management interface
+- **Data Enhancement**: 
+  - Robust handling of missing project/staff data with fallback display names
+  - Enhanced observables with proper error handling and debugging
+  - Real-time task status updates
+- **Technical Implementation**:
+  - New TaskManagementComponent with Angular Material table
+  - Enhanced TaskService with debugging capabilities
+  - Proper observable chain handling with combineLatest
+  - Route configuration and demo mode integration
+- **User Experience**:
+  - Loading states with spinner
+  - Empty state handling
+  - Responsive design for all screen sizes
+  - Intuitive checkbox interface for task completion
 
 ### Angular v20 Modernization (June 18, 2025) ⚡
 

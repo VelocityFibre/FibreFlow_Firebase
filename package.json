@@ -14,10 +14,10 @@
     "check": "npm run lint && npm run format:check && npm run build",
     "check:fix": "npm run lint:fix && npm run format",
     "predeploy": "npm run check",
-    "deploy": "firebase deploy",
-    "deploy:hosting": "firebase deploy --only hosting",
-    "deploy:functions": "firebase deploy --only functions",
-    "deploy:rules": "firebase deploy --only firestore:rules"
+    "deploy": "export FIREBASE_TOKEN=$(grep FIREBASE_TOKEN .env.local | cut -d'=' -f2) && firebase deploy",
+    "deploy:hosting": "export FIREBASE_TOKEN=$(grep FIREBASE_TOKEN .env.local | cut -d'=' -f2) && firebase deploy --only hosting",
+    "deploy:functions": "export FIREBASE_TOKEN=$(grep FIREBASE_TOKEN .env.local | cut -d'=' -f2) && firebase deploy --only functions",
+    "deploy:rules": "export FIREBASE_TOKEN=$(grep FIREBASE_TOKEN .env.local | cut -d'=' -f2) && firebase deploy --only firestore:rules"
   },
   "private": true,
   "dependencies": {
@@ -38,6 +38,7 @@
     "firebase": "^11.9.1",
     "jspdf": "^3.0.1",
     "jspdf-autotable": "^5.0.2",
+    "node-fetch": "^2.7.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "xlsx": "^0.18.5",

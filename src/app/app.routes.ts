@@ -47,7 +47,8 @@ const allRoutes: Routes = [
   },
   {
     path: 'pole-tracker',
-    loadChildren: () => import('./features/pole-tracker/pole-tracker.routes').then((m) => m.poleTrackerRoutes),
+    loadChildren: () =>
+      import('./features/pole-tracker/pole-tracker.routes').then((m) => m.poleTrackerRoutes),
     data: { preload: true },
   },
   // Dashboard-linked routes
@@ -72,6 +73,12 @@ const allRoutes: Routes = [
         (m) => m.PlaceholderPageComponent,
       ),
     data: { title: 'Analytics' },
+  },
+  {
+    path: 'meetings',
+    loadChildren: () =>
+      import('./features/meetings/meetings.routes').then((m) => m.meetingsRoutes),
+    data: { title: 'Meetings', preload: true },
   },
   {
     path: 'daily-progress',
@@ -105,20 +112,15 @@ const allRoutes: Routes = [
     path: 'tasks',
     loadChildren: () => import('./features/tasks/tasks.routes').then((m) => m.tasksRoutes),
   },
-  // {
-  //   path: 'personal-todos',
-  //   loadComponent: () =>
-  //     import('./features/personal-todos/pages/todo-management/todo-management.component').then(
-  //       (m) => m.TodoManagementComponent
-  //     ),
-  //   data: { title: 'Personal Todos' },
-  // },
-  // {
-  //   path: 'meetings',
-  //   loadChildren: () =>
-  //     import('./features/meetings/meetings.routes').then((m) => m.meetingsRoutes),
-  //   data: { title: 'Meetings' },
-  // },
+  {
+    path: 'personal-todos',
+    loadComponent: () =>
+      import('./features/personal-todos/pages/todo-management/todo-management.component').then(
+        (m) => m.TodoManagementComponent,
+      ),
+    data: { title: 'Personal Todos' },
+  },
+
   {
     path: 'stock',
     loadChildren: () => import('./features/stock/stock.routes').then((m) => m.stockRoutes),
@@ -137,6 +139,11 @@ const allRoutes: Routes = [
     path: 'emails',
     loadChildren: () => import('./features/emails/emails.routes').then((m) => m.emailsRoutes),
     data: { title: 'Email Management' },
+  },
+  {
+    path: 'reports',
+    loadChildren: () => import('./features/reports/reports.routes').then((m) => m.reportsRoutes),
+    data: { title: 'Reports' },
   },
   {
     path: 'stock-movements',
@@ -201,9 +208,18 @@ const allRoutes: Routes = [
     loadComponent: () =>
       import('./features/debug/sentry-test.component').then((m) => m.SentryTestComponent),
   },
+  // HelloWorld test component
+  {
+    path: 'hello-world',
+    loadComponent: () =>
+      import('./shared/components/hello-world/hello-world.component').then(
+        (m) => m.HelloWorldComponent,
+      ),
+    data: { title: 'Hello World Test' },
+  },
 ];
 
 // Filter routes based on demo configuration
-export const routes: Routes = demoConfig.isDemo 
-  ? allRoutes.filter(route => !demoConfig.hiddenRoutes.includes('/' + route.path))
+export const routes: Routes = demoConfig.isDemo
+  ? allRoutes.filter((route) => !demoConfig.hiddenRoutes.includes('/' + route.path))
   : allRoutes;

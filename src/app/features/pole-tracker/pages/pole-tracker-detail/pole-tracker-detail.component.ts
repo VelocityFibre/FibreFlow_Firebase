@@ -31,7 +31,7 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
     MatSnackBarModule,
     MatTooltipModule,
     MatCheckboxModule,
-    MatDialogModule
+    MatDialogModule,
   ],
   template: `
     <div class="page-container">
@@ -119,28 +119,40 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
           </mat-card-header>
           <mat-card-content>
             <div class="upload-status-grid">
-              <div class="upload-status" [class.uploaded]="pole()!.uploads.before?.uploaded">
-                <mat-icon>{{ pole()!.uploads.before?.uploaded ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+              <div class="upload-status" [class.uploaded]="pole()!.uploads.before.uploaded">
+                <mat-icon>{{
+                  pole()!.uploads.before.uploaded ? 'check_circle' : 'radio_button_unchecked'
+                }}</mat-icon>
                 <span>Before View</span>
               </div>
-              <div class="upload-status" [class.uploaded]="pole()!.uploads.front?.uploaded">
-                <mat-icon>{{ pole()!.uploads.front?.uploaded ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+              <div class="upload-status" [class.uploaded]="pole()!.uploads.front.uploaded">
+                <mat-icon>{{
+                  pole()!.uploads.front.uploaded ? 'check_circle' : 'radio_button_unchecked'
+                }}</mat-icon>
                 <span>Front View</span>
               </div>
-              <div class="upload-status" [class.uploaded]="pole()!.uploads.side?.uploaded">
-                <mat-icon>{{ pole()!.uploads.side?.uploaded ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+              <div class="upload-status" [class.uploaded]="pole()!.uploads.side.uploaded">
+                <mat-icon>{{
+                  pole()!.uploads.side.uploaded ? 'check_circle' : 'radio_button_unchecked'
+                }}</mat-icon>
                 <span>Side View</span>
               </div>
-              <div class="upload-status" [class.uploaded]="pole()!.uploads.depth?.uploaded">
-                <mat-icon>{{ pole()!.uploads.depth?.uploaded ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+              <div class="upload-status" [class.uploaded]="pole()!.uploads.depth.uploaded">
+                <mat-icon>{{
+                  pole()!.uploads.depth.uploaded ? 'check_circle' : 'radio_button_unchecked'
+                }}</mat-icon>
                 <span>Depth View</span>
               </div>
-              <div class="upload-status" [class.uploaded]="pole()!.uploads.concrete?.uploaded">
-                <mat-icon>{{ pole()!.uploads.concrete?.uploaded ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+              <div class="upload-status" [class.uploaded]="pole()!.uploads.concrete.uploaded">
+                <mat-icon>{{
+                  pole()!.uploads.concrete.uploaded ? 'check_circle' : 'radio_button_unchecked'
+                }}</mat-icon>
                 <span>Concrete View</span>
               </div>
-              <div class="upload-status" [class.uploaded]="pole()!.uploads.compaction?.uploaded">
-                <mat-icon>{{ pole()!.uploads.compaction?.uploaded ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+              <div class="upload-status" [class.uploaded]="pole()!.uploads.compaction.uploaded">
+                <mat-icon>{{
+                  pole()!.uploads.compaction.uploaded ? 'check_circle' : 'radio_button_unchecked'
+                }}</mat-icon>
                 <span>Compaction View</span>
               </div>
             </div>
@@ -166,20 +178,28 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
                   </div>
                   @if (getUploadData(uploadType)?.url) {
                     <div class="image-container">
-                      <img 
-                        [src]="getUploadData(uploadType)?.thumbnailUrl || getUploadData(uploadType)?.url" 
+                      <img
+                        [src]="
+                          getUploadData(uploadType)?.thumbnailUrl || getUploadData(uploadType)?.url
+                        "
                         [alt]="getUploadTitle(uploadType)"
                         (click)="viewFullImage(getUploadData(uploadType)?.url!)"
-                        class="thumbnail">
+                        class="thumbnail"
+                      />
                       <div class="image-overlay">
-                        <button mat-icon-button (click)="viewFullImage(getUploadData(uploadType)?.url!)">
+                        <button
+                          mat-icon-button
+                          (click)="viewFullImage(getUploadData(uploadType)?.url!)"
+                        >
                           <mat-icon>zoom_in</mat-icon>
                         </button>
                       </div>
                     </div>
                     @if (getUploadData(uploadType)?.uploadedAt) {
                       <div class="upload-info">
-                        <small>Uploaded: {{ formatDate(getUploadData(uploadType)?.uploadedAt!) }}</small>
+                        <small
+                          >Uploaded: {{ formatDate(getUploadData(uploadType)?.uploadedAt!) }}</small
+                        >
                       </div>
                     }
                   } @else {
@@ -203,9 +223,11 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
             <div class="quality-status">
               <div class="status-indicator" [class.checked]="pole()!.qualityChecked">
                 <mat-icon>{{ pole()!.qualityChecked ? 'verified' : 'pending' }}</mat-icon>
-                <span>{{ pole()!.qualityChecked ? 'Quality Checked' : 'Pending Quality Check' }}</span>
+                <span>{{
+                  pole()!.qualityChecked ? 'Quality Checked' : 'Pending Quality Check'
+                }}</span>
               </div>
-              
+
               @if (pole()!.qualityChecked) {
                 <div class="quality-details">
                   <div class="quality-info">
@@ -224,11 +246,12 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
                   }
                 </div>
               } @else {
-                <button 
-                  mat-raised-button 
-                  color="accent" 
+                <button
+                  mat-raised-button
+                  color="accent"
                   (click)="markQualityChecked()"
-                  [disabled]="!canMarkQualityChecked()">
+                  [disabled]="!canMarkQualityChecked()"
+                >
                   <mat-icon>verified</mat-icon>
                   Mark as Quality Checked
                 </button>
@@ -272,276 +295,278 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
       }
     </div>
   `,
-  styles: [`
-    .page-container {
-      padding: 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+  styles: [
+    `
+      .page-container {
+        padding: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
 
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 24px;
-    }
-
-    .header-left h1 {
-      margin: 0 0 8px 0;
-      font-size: 32px;
-      font-weight: 500;
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 12px;
-    }
-
-    .loading-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 400px;
-    }
-
-    .info-card,
-    .progress-card,
-    .gallery-card,
-    .quality-card,
-    .metadata-card {
-      margin-bottom: 24px;
-    }
-
-    .info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-    }
-
-    .info-item {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .info-item label {
-      font-weight: 500;
-      color: #666;
-      font-size: 14px;
-    }
-
-    .info-item .value {
-      font-size: 16px;
-    }
-
-    .progress-summary {
-      font-size: 14px;
-      color: #666;
-    }
-
-    .upload-status-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 16px;
-    }
-
-    .upload-status {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px;
-      border-radius: 8px;
-      background: #f5f5f5;
-    }
-
-    .upload-status.uploaded {
-      background: #e8f5e8;
-      color: #2e7d32;
-    }
-
-    .upload-status mat-icon {
-      color: inherit;
-    }
-
-    .image-gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 24px;
-    }
-
-    .image-item {
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .image-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px;
-      background: #f5f5f5;
-    }
-
-    .image-header h4 {
-      margin: 0;
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .image-container {
-      position: relative;
-      aspect-ratio: 1;
-    }
-
-    .thumbnail {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      cursor: pointer;
-    }
-
-    .image-overlay {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .image-container:hover .image-overlay {
-      opacity: 1;
-    }
-
-    .image-overlay button {
-      background: rgba(0, 0, 0, 0.7);
-      color: white;
-    }
-
-    .no-image {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      aspect-ratio: 1;
-      color: #999;
-      background: #f9f9f9;
-    }
-
-    .no-image mat-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
-      margin-bottom: 8px;
-    }
-
-    .upload-info {
-      padding: 8px 12px;
-      background: #f9f9f9;
-      border-top: 1px solid #e0e0e0;
-    }
-
-    .quality-status {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .status-indicator {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 16px;
-    }
-
-    .status-indicator.checked {
-      color: #2e7d32;
-    }
-
-    .quality-details {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      padding: 16px;
-      background: #f5f5f5;
-      border-radius: 8px;
-    }
-
-    .quality-info {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .quality-info.notes {
-      grid-column: 1 / -1;
-    }
-
-    .quality-info label {
-      font-weight: 500;
-      color: #666;
-      font-size: 14px;
-    }
-
-    .metadata-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-    }
-
-    .metadata-item {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .metadata-item label {
-      font-weight: 500;
-      color: #666;
-      font-size: 14px;
-    }
-
-    mat-chip.type-wooden {
-      background-color: #8d6e63;
-      color: white;
-    }
-
-    mat-chip.type-concrete {
-      background-color: #616161;
-      color: white;
-    }
-
-    mat-chip.type-steel {
-      background-color: #455a64;
-      color: white;
-    }
-
-    mat-chip.type-composite {
-      background-color: #5d4037;
-      color: white;
-    }
-
-    @media (max-width: 600px) {
       .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 24px;
+      }
+
+      .header-left h1 {
+        margin: 0 0 8px 0;
+        font-size: 32px;
+        font-weight: 500;
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 12px;
+      }
+
+      .loading-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 400px;
+      }
+
+      .info-card,
+      .progress-card,
+      .gallery-card,
+      .quality-card,
+      .metadata-card {
+        margin-bottom: 24px;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+      }
+
+      .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .info-item label {
+        font-weight: 500;
+        color: #666;
+        font-size: 14px;
+      }
+
+      .info-item .value {
+        font-size: 16px;
+      }
+
+      .progress-summary {
+        font-size: 14px;
+        color: #666;
+      }
+
+      .upload-status-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 16px;
+      }
+
+      .upload-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+        border-radius: 8px;
+        background: #f5f5f5;
+      }
+
+      .upload-status.uploaded {
+        background: #e8f5e8;
+        color: #2e7d32;
+      }
+
+      .upload-status mat-icon {
+        color: inherit;
+      }
+
+      .image-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 24px;
+      }
+
+      .image-item {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .image-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px;
+        background: #f5f5f5;
+      }
+
+      .image-header h4 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .image-container {
+        position: relative;
+        aspect-ratio: 1;
+      }
+
+      .thumbnail {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        cursor: pointer;
+      }
+
+      .image-overlay {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .image-container:hover .image-overlay {
+        opacity: 1;
+      }
+
+      .image-overlay button {
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+      }
+
+      .no-image {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        aspect-ratio: 1;
+        color: #999;
+        background: #f9f9f9;
+      }
+
+      .no-image mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        margin-bottom: 8px;
+      }
+
+      .upload-info {
+        padding: 8px 12px;
+        background: #f9f9f9;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      .quality-status {
+        display: flex;
         flex-direction: column;
         gap: 16px;
       }
 
-      .header-actions {
-        width: 100%;
-        justify-content: space-between;
+      .status-indicator {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 16px;
       }
 
-      .info-grid,
+      .status-indicator.checked {
+        color: #2e7d32;
+      }
+
+      .quality-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        padding: 16px;
+        background: #f5f5f5;
+        border-radius: 8px;
+      }
+
+      .quality-info {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .quality-info.notes {
+        grid-column: 1 / -1;
+      }
+
+      .quality-info label {
+        font-weight: 500;
+        color: #666;
+        font-size: 14px;
+      }
+
       .metadata-grid {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
       }
 
-      .image-gallery {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      .metadata-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
       }
-    }
-  `]
+
+      .metadata-item label {
+        font-weight: 500;
+        color: #666;
+        font-size: 14px;
+      }
+
+      mat-chip.type-wooden {
+        background-color: #8d6e63;
+        color: white;
+      }
+
+      mat-chip.type-concrete {
+        background-color: #616161;
+        color: white;
+      }
+
+      mat-chip.type-steel {
+        background-color: #455a64;
+        color: white;
+      }
+
+      mat-chip.type-composite {
+        background-color: #5d4037;
+        color: white;
+      }
+
+      @media (max-width: 600px) {
+        .page-header {
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .header-actions {
+          width: 100%;
+          justify-content: space-between;
+        }
+
+        .info-grid,
+        .metadata-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .image-gallery {
+          grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        }
+      }
+    `,
+  ],
 })
 export class PoleTrackerDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -560,7 +585,7 @@ export class PoleTrackerDetailComponent implements OnInit {
   uploadedCount = () => {
     const uploads = this.pole()?.uploads;
     if (!uploads) return 0;
-    return Object.values(uploads).filter(upload => upload.uploaded).length;
+    return Object.values(uploads).filter((upload) => upload.uploaded).length;
   };
 
   uploadProgress = () => {
@@ -569,7 +594,7 @@ export class PoleTrackerDetailComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       this.poleId = params['id'];
       this.loadPole();
     });
@@ -585,7 +610,7 @@ export class PoleTrackerDetailComponent implements OnInit {
         console.error('Error loading pole:', error);
         this.snackBar.open('Error loading pole details', 'Close', { duration: 3000 });
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -596,7 +621,7 @@ export class PoleTrackerDetailComponent implements OnInit {
       side: 'Side View',
       depth: 'Depth View',
       concrete: 'Concrete View',
-      compaction: 'Compaction View'
+      compaction: 'Compaction View',
     };
     return titles[uploadType] || uploadType;
   }
@@ -613,7 +638,7 @@ export class PoleTrackerDetailComponent implements OnInit {
 
   formatDate(date: any): string {
     if (!date) return 'N/A';
-    
+
     // Handle Firestore Timestamp
     if (typeof date === 'object' && 'toDate' in date) {
       return date.toDate().toLocaleDateString('en-US', {
@@ -621,10 +646,10 @@ export class PoleTrackerDetailComponent implements OnInit {
         month: 'short',
         day: 'numeric',
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
       });
     }
-    
+
     // Handle regular Date
     if (date instanceof Date) {
       return date.toLocaleDateString('en-US', {
@@ -632,32 +657,34 @@ export class PoleTrackerDetailComponent implements OnInit {
         month: 'short',
         day: 'numeric',
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
       });
     }
-    
+
     // Handle string dates
     return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 
   canMarkQualityChecked(): boolean {
     const pole = this.pole();
     if (!pole) return false;
-    
+
     // Check if all images are uploaded
-    return Object.values(pole.uploads).every(upload => upload.uploaded);
+    return Object.values(pole.uploads).every((upload) => upload.uploaded);
   }
 
   markQualityChecked() {
     const currentUser = this.authService.currentUser();
     if (!currentUser) {
-      this.snackBar.open('You must be logged in to mark quality check', 'Close', { duration: 3000 });
+      this.snackBar.open('You must be logged in to mark quality check', 'Close', {
+        duration: 3000,
+      });
       return;
     }
 
@@ -666,26 +693,28 @@ export class PoleTrackerDetailComponent implements OnInit {
         title: 'Mark Quality Checked',
         message: 'Are you sure you want to mark this pole as quality checked?',
         confirmText: 'Mark Checked',
-        confirmColor: 'primary'
-      }
+        confirmColor: 'primary',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.poleTrackerService.markQualityChecked(
-          this.poleId,
-          currentUser.uid,
-          currentUser.displayName || currentUser.email || 'Unknown User'
-        ).subscribe({
-          next: () => {
-            this.snackBar.open('Pole marked as quality checked', 'Close', { duration: 3000 });
-            this.loadPole(); // Reload to show updated status
-          },
-          error: (error) => {
-            console.error('Error marking quality check:', error);
-            this.snackBar.open('Failed to mark quality check', 'Close', { duration: 3000 });
-          }
-        });
+        this.poleTrackerService
+          .markQualityChecked(
+            this.poleId,
+            currentUser.uid,
+            currentUser.displayName || currentUser.email || 'Unknown User',
+          )
+          .subscribe({
+            next: () => {
+              this.snackBar.open('Pole marked as quality checked', 'Close', { duration: 3000 });
+              this.loadPole(); // Reload to show updated status
+            },
+            error: (error) => {
+              console.error('Error marking quality check:', error);
+              this.snackBar.open('Failed to mark quality check', 'Close', { duration: 3000 });
+            },
+          });
       }
     });
   }

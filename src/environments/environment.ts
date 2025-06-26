@@ -14,5 +14,8 @@ export const environment = {
   sentry: {
     dsn: 'https://6cff665ed0e4b1cdba0d84da3585c68f@o4508210707431424.ingest.us.sentry.io/4509515741200384',
     environment: 'development'
+  },
+  fireflies: {
+    apiKey: '894886b5-b232-4319-95c7-1296782e9ea6'
   }
 } satisfies Environment;

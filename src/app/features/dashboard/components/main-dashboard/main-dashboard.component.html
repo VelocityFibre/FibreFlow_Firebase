@@ -166,7 +166,7 @@
       <mat-card class="dashboard-card" routerLink="/tasks/management">
         <mat-card-content>
           <div class="card-icon tasks-icon">
-            <mat-icon>task_alt</mat-icon>
+            <mat-icon>assignment</mat-icon>
           </div>
           <div class="card-details">
             <h3 class="card-title">Tasks</h3>
@@ -179,6 +179,39 @@
         </mat-card-content>
       </mat-card>
 
+      <!-- Reports Card -->
+      <mat-card class="dashboard-card" routerLink="/reports">
+        <mat-card-content>
+          <div class="card-icon reports-icon">
+            <mat-icon>assessment</mat-icon>
+          </div>
+          <div class="card-details">
+            <h3 class="card-title">Reports</h3>
+            <p class="card-subtitle">Generate and view reports</p>
+            <div class="card-stats">
+              <span class="stat-number">📊</span>
+              <span class="stat-label">Analytics</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Meetings Card -->
+      <mat-card class="dashboard-card" routerLink="/meetings">
+        <mat-card-content>
+          <div class="card-icon meetings-icon">
+            <mat-icon>groups</mat-icon>
+          </div>
+          <div class="card-details">
+            <h3 class="card-title">Meetings</h3>
+            <p class="card-subtitle">Meeting notes and recordings</p>
+            <div class="card-stats">
+              <span class="stat-number">{{ meetingsCount() }}</span>
+              <span class="stat-label">Total Meetings</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
     </div>
 
     <!-- Quick Summary Section -->

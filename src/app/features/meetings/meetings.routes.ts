@@ -4,6 +4,13 @@ export const meetingsRoutes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./meetings.component').then((m) => m.MeetingsComponent),
+      import('./pages/meetings-simple/meetings-simple.component').then((m) => m.MeetingsSimpleComponent),
+  },
+  {
+    path: ':id',
+    loadComponent: () =>
+      import('./pages/meeting-detail-simple/meeting-detail-simple.component').then(
+        (m) => m.MeetingDetailSimpleComponent,
+      ),
   },
 ];

@@ -1,0 +1,222 @@
+      "id": "tblJKVbss1eljnAWB",
+      "name": "Staff",
+          "id": "flddmVKP0DPeYvnPU",
+          "name": "Name"
+                "id": "selZA5jHy9NY4tn4T",
+                "name": "Senior Management",
+                "id": "selgVe6SooKRdG0N3",
+                "name": "RPM",
+                "id": "selXL4zHH4gOFr2br",
+                "name": "PM",
+                "id": "selVEsss9UvVK9Hgh",
+                "name": "Admin",
+                "id": "selQjXYyP0DyNuu7S",
+                "name": "Site Supervisor",
+                "id": "sel1D6G9JfODfkG6B",
+                "name": "CLO",
+                "id": "selZbfRuje9xhMqAQ",
+                "name": "SHEQ",
+                "id": "selNA63GjEnwbJXxh",
+                "name": "Engineer",
+                "id": "selwlyYlFdtMnugwS",
+                "name": "Technician",
+          "id": "fldsnLuIBgysfh29X",
+          "name": "Role"
+          "id": "fldbCov30BOaD9bUH",
+          "name": "Phone Number"
+          "id": "fldjbOrR8CrihHSYr",
+          "name": "Email"
+          "id": "fldWagcgsb7Ao5BsE",
+          "name": "Assigned Projects"
+          "id": "fldLLK9MKOhoDVNhq",
+          "name": "Current Projects"
+          "id": "fldcrWBH05U78wDpN",
+          "name": "Total Assigned Projects"
+          "id": "fldWSuVFFqJ7I6Bzv",
+          "name": "Photo"
+          "id": "fldwNDCea0XbwaEfp",
+          "name": "Role Summary"
+          "id": "fldQ72qv8Rf9secQO",
+          "name": "Project Management Insights"
+          "id": "fldRuDQete3715Epn",
+          "name": "SHEQ"
+          "id": "fldAVaTjZv5B74kn7",
+          "name": "Phases"
+          "id": "fldynYm1lUyhy2eiR",
+          "name": "Issues and Risks"
+          "id": "fldTJXjPBz1W8TfHs",
+          "name": "Projects"
+          "id": "fldRAQdrdb3c5eMil",
+          "name": "Projects 2"
+          "id": "fldi2IDiivJ9oBxSZ",
+          "name": "Contacts"
+          "id": "fldINeLZIE5ZtjOSm",
+          "name": "Tasks (Assigned To)"
+          "id": "fldrWR0gcKlROhYug",
+          "name": "Tasks (Reported By)"
+          "id": "fldy4dPwep6nHUzej",
+          "name": "Stock Movements"
+          "id": "fld6mtvOoDHGF70FY",
+          "name": "Contractor On-Boarding"
+          "id": "fldHKIB6N3VSxs50z",
+          "name": "Poles Lawley"
+          "id": "fldz9iJh3kT0qwRYL",
+          "name": "Lawley Pole Tracker copy"
+          "id": "viwfM3FAXV0jFg6Bv",
+          "name": "Grid view",
+      "id": "tbl4UwjKR0VcrXYdS",
+      "name": "Contractors",
+          "id": "fld2zIPZPPeDNufPm",
+          "name": "Company Registered Name"
+          "id": "fldemXBl6z72t1kyD",
+          "name": "Trading Name (if different)"
+          "id": "fldRrSgnTSFtfXwzu",
+          "name": "Company Registration Number (CIPC)"
+          "id": "fldwet1oB9vCnTT28",
+          "name": "VAT Number"
+                "id": "selPPTbhBSpmGp16I",
+                "name": "(PTY) Ltd",
+                "id": "selGJ6b1DERwUHhIQ",
+                "name": "Close Corporation",
+                "id": "selgdIFHIaJMNBCAo",
+                "name": "Sole Proprietor",
+                "id": "selHr3ugyEqsfdM0W",
+                "name": "Trust",
+          "id": "fldLw6uu2oQYK3ogq",
+          "name": "Type of Entity (PTY LTD, CC, Sole Prop, etc.)"
+          "id": "fld1uAEzkvoXFujoX",
+          "name": "Street Address"
+          "id": "flda1cgWxwqCKiz48",
+          "name": "Street Address 2"
+          "id": "fldO8U0zMLheOujOl",
+          "name": "Suburb"
+          "id": "fldwmZ6cWjssnJP1U",
+          "name": "Town/City"
+          "id": "fldS3pIcptBgziJki",
+          "name": "Postal Code"
+          "id": "fld2Vtxo9ayhJPSLO",
+          "name": "Province"
+          "id": "fldrZ3gBfK9hKLVvw",
+          "name": "Region(s) of Operation"
+          "id": "fldVgXDlk7xnt13rr",
+          "name": "Main Contact"
+          "id": "fldEyKQY3JZuuCLE8",
+          "name": "Title/Job Description (from Designation/Title)"
+          "id": "fldC9LMPahJ74ARZM",
+          "name": "Phone Number (from Mobile Number)"
+          "id": "fldyV03n7XzplIfbV",
+          "name": "Office Number"
+          "id": "fldd4bWWBkGxql920",
+          "name": "Email Address"
+          "id": "fldeza8RvcgXdnS64",
+          "name": "CIPC Registration Certificate"
+          "id": "fldjbbznRdPMiWFhH",
+          "name": "ID's of all Directors"
+          "id": "fldY8Iu1TsgSplGW5",
+          "name": "VAT Registration Cetificate"
+          "id": "fldLKfsfHtsPc5OFn",
+          "name": "Valid SARS Tax Clearance Certificate"
+          "id": "fldVVBXAJfvUYwZYJ",
+          "name": "Valid B-BBEE Certificate or Affidavit"
+          "id": "fldWtfTileqQ9lTVV",
+          "name": "Proof of Bank Account (stamped letter or statement)"
+          "id": "fldNl4OxOcSanPPJa",
+          "name": "COID Registration & Letter of Good Standing"
+          "id": "fldIHr2BWvJKAA8Mm",
+          "name": "Public Liability Insurance (with coverage amount)"
+          "id": "fldkTfI5JpmxEwLb4",
+          "name": "SHEQ Documentation (SHE Plans, Safety Files, etc.)"
+                "id": "selmO6JWcNuNB2ZKw",
+                "name": "Civil",
+                "id": "selq9jKWWPDz5gbY5",
+                "name": "Optical",
+                "id": "selp8H87XzNQCbQX2",
+                "name": "SMME",
+                "id": "sel2bIRX5SXmYYVLx",
+                "name": "Marketing",
+          "id": "flddmjWo4AVuYFpic",
+          "name": "Type of Services Offered "
+          "id": "fldWHL5PAfd6L3uiS",
+          "name": "Total Number of Teams Available"
+          "id": "fld9KYa3BUl3FxRQx",
+          "name": "Optical Teams Available"
+          "id": "fldvZa81ThR1U1T95",
+          "name": "Daily Capacity - Trenching"
+          "id": "fldRDUrx8Goabejyd",
+          "name": "Daily Capacity - Poles Planted"
+          "id": "fldEw1SmOcctrqxQm",
+          "name": "Homes Connected per Day"
+          "id": "fldq6rPdYVkvEn5io",
+          "name": "Equipment Owned (e.g., augers, splicing machines, OTDRs)"
+          "id": "fldIrp1wT2R70VbLk",
+          "name": "Key Staff Credentials (CVs of Site Supervisors, PMs, Safety Officers)"
+          "id": "fldCKfHz5JIvG0A0F",
+          "name": "Past Project Experience (Summary Table)"
+          "id": "fldrOp6Xz0jEcEqoR",
+          "name": "Past Project Experience (Upload References)"
+          "id": "fldtq2cqAP79wInFw",
+          "name": "Account Name"
+          "id": "fldfW5a2JeXxOXqOe",
+          "name": "Bank Name"
+          "id": "fldnCbM6zN0WMZPsr",
+          "name": "Account Number"
+          "id": "fld2oSZMmsK7nCCMt",
+          "name": "Branch Code"
+          "id": "fldI53sZDaSiBBvWj",
+          "name": "Account Type"
+          "id": "fldqe62AMROwTl4WM",
+          "name": "Signed and stamped bank confirmation letter"
+          "id": "fld6gmTcFihhjLMGE",
+          "name": "Signed Master Services Agreement (MSA)"
+          "id": "fldT9qYcSFKNtC7OI",
+          "name": "NCNDA"
+          "id": "fldBUn23daBV16NbI",
+          "name": "Acceptance of Velocity Fibre’s Code of Conduct"
+          "id": "fldx9nSx5fZJ9aUCn",
+          "name": "Agreement to Health & Safety Policy"
+          "id": "fldvO3sWPoUc1HVOT",
+          "name": "Regional Induction Completed (Date & Location)"
+          "id": "fldiXmZRNvYHKjLHK",
+          "name": "PPE Checklist Issued and Signed"
+          "id": "fldDxYgAYb6yguyzn",
+          "name": "Project Zone(s) Allocated"
+          "id": "fldtaBPhssI9mYQCN",
+          "name": "Contact Added to Contractor WhatsApp Group (if used)"
+                "id": "selNQJZaHu7gdymuN",
+                "name": "Fortnite",
+                "id": "selP4LM1k5MUUhmGZ",
+                "name": "Monthly",
+                "id": "selRe77sy2Nnz4QmV",
+                "name": "30 Days",
+                "id": "selL2nTmDwBQY1E5t",
+                "name": "60 Days",
+          "id": "fldLky2wKVW58ZgHu",
+          "name": "Payment Terms Captured (e.g., 30 Days, Milestone-based)"
+          "id": "fldRJzbg5xE4MbpTo",
+          "name": "Contractor Performance"
+          "id": "fldUPazXF5F3ybAJV",
+          "name": "Field 64"
+          "id": "fldQU60Lo6foonJmz",
+          "name": "Province Name (from Province)"
+          "id": "fld86YD5zaj8g3miN",
+          "name": "Province Name (from Region(s) of Operation)"
+          "id": "fldIX70ICBar9G7dC",
+          "name": "Contact Name (from Main Contact)"
+          "id": "fldD8w2buQdfFMUuX",
+          "name": "Mobile Number"
+          "id": "fldncOSowxaliz1wC",
+          "name": "Name (from Assigned Velocity PM)"
+          "id": "fldLOLFooC3GRE4PL",
+          "name": "Contractor (from SHEQ Documentation (SHE Plans, Safety Files, etc.))"
+          "id": "fldsywgntUauOIm6O",
+          "name": "SHEQ"
+          "id": "fldak2BHHGTh6C6CK",
+          "name": "Daily Tracker"
+          "id": "fldsQQg3UemakwnNa",
+          "name": "Projects"
+          "id": "fld3XxZV3OkVZWnMV",
+          "name": "Poles Lawley"
+          "id": "fldVm776j5i3S09K7",
+          "name": "Lawley Pole Tracker copy"
+          "id": "viwlkGr7djleDGSnO",
+          "name": "Grid view",

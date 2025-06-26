@@ -1,0 +1,20 @@
+{
+  "test": {
+    "projectId": "fibreflow-test",
+    "projectName": "FibreFlow TEST Environment",
+    "serviceAccountFile": "./service-accounts/fibreflow-test-sa.json",
+    "webUrl": "https://fibreflow-test.firebaseapp.com",
+    "consoleUrl": "https://console.firebase.google.com/project/fibreflow-test",
+    "color": "yellow",
+    "emoji": "🧪"
+  },
+  "prod": {
+    "projectId": "fibreflow-prod",
+    "projectName": "FibreFlow PRODUCTION",
+    "serviceAccountFile": "./service-accounts/fibreflow-prod-sa.json",
+    "webUrl": "https://fibreflow.firebaseapp.com",
+    "consoleUrl": "https://console.firebase.google.com/project/fibreflow-prod",
+    "color": "red",
+    "emoji": "🚨"
+  }
+}

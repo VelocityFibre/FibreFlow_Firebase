@@ -16,12 +16,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Router } from '@angular/router';
 
-import { KPIsService } from '../../services/kpis.service';
+import { DailyKpisService } from '../../services/daily-kpis.service';
 import { DailyKPIs } from '../../models/daily-kpis.model';
-import { FinancialTracking } from '../../models/financial-tracking.model';
-import { QualityMetrics } from '../../models/quality-metrics.model';
-import { FinancialService } from '../../services/financial.service';
-import { QualityService } from '../../services/quality.service';
 import { ProjectService } from '../../../../core/services/project.service';
 import { Project } from '../../../../core/models/project.model';
 import { ContractorService } from '../../../contractors/services/contractor.service';
@@ -47,7 +43,7 @@ import { StaffMember } from '../../../staff/models/staff.model';
     MatSnackBarModule,
     MatTabsModule,
     MatExpansionModule,
-    MatCheckboxModule
+    MatCheckboxModule,
   ],
   template: `
     <div class="container">
@@ -72,7 +68,7 @@ import { StaffMember } from '../../../staff/models/staff.model';
                 <div class="form-grid">
                   <mat-form-field>
                     <mat-label>Date</mat-label>
-                    <input matInput [matDatepicker]="picker" formControlName="date" required>
+                    <input matInput [matDatepicker]="picker" formControlName="date" required />
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                   </mat-form-field>
@@ -90,7 +86,9 @@ import { StaffMember } from '../../../staff/models/staff.model';
                     <mat-label>Contractor</mat-label>
                     <mat-select formControlName="contractorId" required>
                       @for (contractor of contractors(); track contractor.id) {
-                        <mat-option [value]="contractor.id">{{ contractor.companyName }}</mat-option>
+                        <mat-option [value]="contractor.id">{{
+                          contractor.companyName
+                        }}</mat-option>
                       }
                     </mat-select>
                   </mat-form-field>
@@ -124,11 +122,12 @@ import { StaffMember } from '../../../staff/models/staff.model';
                             <mat-card-content>
                               <mat-form-field class="full-width">
                                 <mat-label>{{ kpiDef.unit }}</mat-label>
-                                <input 
-                                  matInput 
-                                  type="number" 
+                                <input
+                                  matInput
+                                  type="number"
                                   [formControlName]="kpiDef.key"
-                                  [placeholder]="'Enter ' + kpiDef.label.toLowerCase()">
+                                  [placeholder]="'Enter ' + kpiDef.label.toLowerCase()"
+                                />
                               </mat-form-field>
                             </mat-card-content>
                           </mat-card>
@@ -147,11 +146,12 @@ import { StaffMember } from '../../../staff/models/staff.model';
                             <mat-card-content>
                               <mat-form-field class="full-width">
                                 <mat-label>{{ kpiDef.unit }}</mat-label>
-                                <input 
-                                  matInput 
-                                  type="number" 
+                                <input
+                                  matInput
+                                  type="number"
                                   [formControlName]="kpiDef.key"
-                                  [placeholder]="'Enter ' + kpiDef.label.toLowerCase()">
+                                  [placeholder]="'Enter ' + kpiDef.label.toLowerCase()"
+                                />
                               </mat-form-field>
                             </mat-card-content>
                           </mat-card>
@@ -166,11 +166,12 @@ import { StaffMember } from '../../../staff/models/staff.model';
                   <div class="tab-content">
                     <div class="form-section">
                       <h3>👷 Staff on Site</h3>
-                      <button 
-                        mat-raised-button 
+                      <button
+                        mat-raised-button
                         type="button"
                         (click)="addStaffMember()"
-                        class="add-button">
+                        class="add-button"
+                      >
                         <mat-icon>add</mat-icon>
                         Add Staff Member
                       </button>
@@ -180,7 +181,10 @@ import { StaffMember } from '../../../staff/models/staff.model';
                           <div [formGroupName]="i" class="staff-entry">
                             <mat-form-field>
                               <mat-label>Staff Member</mat-label>
-                              <mat-select formControlName="staffId" (selectionChange)="onStaffSelected(i)">
+                              <mat-select
+                                formControlName="staffId"
+                                (selectionChange)="onStaffSelected(i)"
+                              >
                                 @for (member of staffMembers(); track member.id) {
                                   <mat-option [value]="member.id">{{ member.name }}</mat-option>
                                 }
@@ -189,24 +193,31 @@ import { StaffMember } from '../../../staff/models/staff.model';
 
                             <mat-form-field>
                               <mat-label>Name</mat-label>
-                              <input matInput formControlName="name" readonly>
+                              <input matInput formControlName="name" readonly />
                             </mat-form-field>
 
                             <mat-form-field>
                               <mat-label>Role</mat-label>
-                              <input matInput formControlName="role" readonly>
+                              <input matInput formControlName="role" readonly />
                             </mat-form-field>
 
                             <mat-form-field>
                               <mat-label>Hours Worked</mat-label>
-                              <input matInput type="number" formControlName="hoursWorked" min="0" max="24">
+                              <input
+                                matInput
+                                type="number"
+                                formControlName="hoursWorked"
+                                min="0"
+                                max="24"
+                              />
                             </mat-form-field>
 
-                            <button 
-                              mat-icon-button 
+                            <button
+                              mat-icon-button
                               type="button"
                               color="warn"
-                              (click)="removeStaffMember(i)">
+                              (click)="removeStaffMember(i)"
+                            >
                               <mat-icon>delete</mat-icon>
                             </button>
                           </div>
@@ -216,11 +227,12 @@ import { StaffMember } from '../../../staff/models/staff.model';
 
                     <div class="form-section">
                       <h3>🚛 Equipment Used</h3>
-                      <button 
-                        mat-raised-button 
+                      <button
+                        mat-raised-button
                         type="button"
                         (click)="addEquipment()"
-                        class="add-button">
+                        class="add-button"
+                      >
                         <mat-icon>add</mat-icon>
                         Add Equipment
                       </button>
@@ -230,24 +242,35 @@ import { StaffMember } from '../../../staff/models/staff.model';
                           <div [formGroupName]="i" class="equipment-entry">
                             <mat-form-field>
                               <mat-label>Equipment Type</mat-label>
-                              <input matInput formControlName="type" placeholder="e.g., Excavator, Crane">
+                              <input
+                                matInput
+                                formControlName="type"
+                                placeholder="e.g., Excavator, Crane"
+                              />
                             </mat-form-field>
 
                             <mat-form-field>
                               <mat-label>Equipment ID/Name</mat-label>
-                              <input matInput formControlName="name" placeholder="e.g., EX-001">
+                              <input matInput formControlName="name" placeholder="e.g., EX-001" />
                             </mat-form-field>
 
                             <mat-form-field>
                               <mat-label>Hours Used</mat-label>
-                              <input matInput type="number" formControlName="hoursUsed" min="0" max="24">
+                              <input
+                                matInput
+                                type="number"
+                                formControlName="hoursUsed"
+                                min="0"
+                                max="24"
+                              />
                             </mat-form-field>
 
-                            <button 
-                              mat-icon-button 
+                            <button
+                              mat-icon-button
                               type="button"
                               color="warn"
-                              (click)="removeEquipment(i)">
+                              (click)="removeEquipment(i)"
+                            >
                               <mat-icon>delete</mat-icon>
                             </button>
                           </div>
@@ -262,11 +285,12 @@ import { StaffMember } from '../../../staff/models/staff.model';
                   <div class="tab-content">
                     <div class="form-section">
                       <h3>💵 Daily Expenses</h3>
-                      <button 
-                        mat-raised-button 
+                      <button
+                        mat-raised-button
                         type="button"
                         (click)="addExpense()"
-                        class="add-button">
+                        class="add-button"
+                      >
                         <mat-icon>add</mat-icon>
                         Add Expense
                       </button>
@@ -288,24 +312,25 @@ import { StaffMember } from '../../../staff/models/staff.model';
 
                             <mat-form-field>
                               <mat-label>Description</mat-label>
-                              <input matInput formControlName="description">
+                              <input matInput formControlName="description" />
                             </mat-form-field>
 
                             <mat-form-field>
                               <mat-label>Amount (KES)</mat-label>
-                              <input matInput type="number" formControlName="amount" min="0">
+                              <input matInput type="number" formControlName="amount" min="0" />
                             </mat-form-field>
 
                             <mat-form-field>
                               <mat-label>Receipt No.</mat-label>
-                              <input matInput formControlName="receiptNumber">
+                              <input matInput formControlName="receiptNumber" />
                             </mat-form-field>
 
-                            <button 
-                              mat-icon-button 
+                            <button
+                              mat-icon-button
                               type="button"
                               color="warn"
-                              (click)="removeExpense(i)">
+                              (click)="removeExpense(i)"
+                            >
                               <mat-icon>delete</mat-icon>
                             </button>
                           </div>
@@ -313,7 +338,9 @@ import { StaffMember } from '../../../staff/models/staff.model';
                       </div>
 
                       <div class="total-section">
-                        <h4>Total Daily Expenses: KES {{ calculateTotalExpenses() | number:'1.2-2' }}</h4>
+                        <h4>
+                          Total Daily Expenses: KES {{ calculateTotalExpenses() | number: '1.2-2' }}
+                        </h4>
                       </div>
                     </div>
                   </div>
@@ -324,11 +351,12 @@ import { StaffMember } from '../../../staff/models/staff.model';
                   <div class="tab-content">
                     <div class="form-section">
                       <h3>🔍 Quality Checks</h3>
-                      <button 
-                        mat-raised-button 
+                      <button
+                        mat-raised-button
                         type="button"
                         (click)="addQualityCheck()"
-                        class="add-button">
+                        class="add-button"
+                      >
                         <mat-icon>add</mat-icon>
                         Add Quality Check
                       </button>
@@ -362,11 +390,12 @@ import { StaffMember } from '../../../staff/models/staff.model';
                               <textarea matInput formControlName="notes" rows="2"></textarea>
                             </mat-form-field>
 
-                            <button 
-                              mat-icon-button 
+                            <button
+                              mat-icon-button
                               type="button"
                               color="warn"
-                              (click)="removeQualityCheck(i)">
+                              (click)="removeQualityCheck(i)"
+                            >
                               <mat-icon>delete</mat-icon>
                             </button>
                           </div>
@@ -376,17 +405,22 @@ import { StaffMember } from '../../../staff/models/staff.model';
 
                     <div class="form-section">
                       <h3>⚠️ Safety Incidents</h3>
-                      <button 
-                        mat-raised-button 
+                      <button
+                        mat-raised-button
                         type="button"
                         (click)="addSafetyIncident()"
-                        class="add-button">
+                        class="add-button"
+                      >
                         <mat-icon>add</mat-icon>
                         Add Safety Incident
                       </button>
 
                       <div formArrayName="safetyIncidents" class="safety-incidents-list">
-                        @for (incident of safetyIncidentsArray.controls; track $index; let i = $index) {
+                        @for (
+                          incident of safetyIncidentsArray.controls;
+                          track $index;
+                          let i = $index
+                        ) {
                           <div [formGroupName]="i" class="safety-incident-entry">
                             <mat-form-field>
                               <mat-label>Incident Type</mat-label>
@@ -409,11 +443,12 @@ import { StaffMember } from '../../../staff/models/staff.model';
                               <textarea matInput formControlName="actionTaken" rows="2"></textarea>
                             </mat-form-field>
 
-                            <button 
-                              mat-icon-button 
+                            <button
+                              mat-icon-button
                               type="button"
                               color="warn"
-                              (click)="removeSafetyIncident(i)">
+                              (click)="removeSafetyIncident(i)"
+                            >
                               <mat-icon>delete</mat-icon>
                             </button>
                           </div>
@@ -428,11 +463,12 @@ import { StaffMember } from '../../../staff/models/staff.model';
                   <div class="tab-content">
                     <div class="form-section">
                       <h3>🚧 Issues & Challenges</h3>
-                      <button 
-                        mat-raised-button 
+                      <button
+                        mat-raised-button
                         type="button"
                         (click)="addIssue()"
-                        class="add-button">
+                        class="add-button"
+                      >
                         <mat-icon>add</mat-icon>
                         Add Issue
                       </button>
@@ -472,11 +508,12 @@ import { StaffMember } from '../../../staff/models/staff.model';
                               <textarea matInput formControlName="resolution" rows="2"></textarea>
                             </mat-form-field>
 
-                            <button 
-                              mat-icon-button 
+                            <button
+                              mat-icon-button
                               type="button"
                               color="warn"
-                              (click)="removeIssue(i)">
+                              (click)="removeIssue(i)"
+                            >
                               <mat-icon>delete</mat-icon>
                             </button>
                           </div>
@@ -487,11 +524,12 @@ import { StaffMember } from '../../../staff/models/staff.model';
                     <div class="form-section">
                       <mat-form-field class="full-width">
                         <mat-label>General Comments</mat-label>
-                        <textarea 
-                          matInput 
-                          formControlName="comments" 
+                        <textarea
+                          matInput
+                          formControlName="comments"
                           rows="4"
-                          placeholder="Any additional comments or observations for the day...">
+                          placeholder="Any additional comments or observations for the day..."
+                        >
                         </textarea>
                       </mat-form-field>
                     </div>
@@ -499,11 +537,12 @@ import { StaffMember } from '../../../staff/models/staff.model';
                     <div class="form-section">
                       <mat-form-field class="full-width">
                         <mat-label>Tomorrow's Plan</mat-label>
-                        <textarea 
-                          matInput 
-                          formControlName="tomorrowPlan" 
+                        <textarea
+                          matInput
+                          formControlName="tomorrowPlan"
                           rows="4"
-                          placeholder="Brief outline of activities planned for tomorrow...">
+                          placeholder="Brief outline of activities planned for tomorrow..."
+                        >
                         </textarea>
                       </mat-form-field>
                     </div>
@@ -513,20 +552,22 @@ import { StaffMember } from '../../../staff/models/staff.model';
 
               <!-- Form Actions -->
               <div class="form-actions">
-                <button 
-                  mat-raised-button 
+                <button
+                  mat-raised-button
                   type="button"
                   (click)="saveDraft()"
-                  [disabled]="loading()">
+                  [disabled]="loading()"
+                >
                   <mat-icon>save</mat-icon>
                   Save Draft
                 </button>
-                
-                <button 
-                  mat-raised-button 
+
+                <button
+                  mat-raised-button
                   color="primary"
                   type="submit"
-                  [disabled]="kpiForm.invalid || loading()">
+                  [disabled]="kpiForm.invalid || loading()"
+                >
                   <mat-icon>check_circle</mat-icon>
                   Submit KPIs
                 </button>
@@ -537,182 +578,182 @@ import { StaffMember } from '../../../staff/models/staff.model';
       </mat-card>
     </div>
   `,
-  styles: [`
-    .container {
-      padding: 20px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
+  styles: [
+    `
+      .container {
+        padding: 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
 
-    .form-card {
-      margin-bottom: 20px;
-    }
+      .form-card {
+        margin-bottom: 20px;
+      }
 
-    h1 {
-      margin: 0;
-      font-size: 28px;
-      color: #333;
-    }
+      h1 {
+        margin: 0;
+        font-size: 28px;
+        color: #333;
+      }
 
-    h2 {
-      color: #555;
-      margin-bottom: 20px;
-      font-size: 20px;
-    }
+      h2 {
+        color: #555;
+        margin-bottom: 20px;
+        font-size: 20px;
+      }
 
-    h3 {
-      color: #666;
-      margin-bottom: 15px;
-      font-size: 18px;
-    }
+      h3 {
+        color: #666;
+        margin-bottom: 15px;
+        font-size: 18px;
+      }
 
-    .loading-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px;
-    }
+      .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px;
+      }
 
-    .form-section {
-      margin-bottom: 30px;
-    }
+      .form-section {
+        margin-bottom: 30px;
+      }
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-bottom: 20px;
-    }
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 20px;
+      }
 
-    .tab-content {
-      padding: 20px 0;
-    }
+      .tab-content {
+        padding: 20px 0;
+      }
 
-    .kpi-section {
-      margin-bottom: 40px;
-    }
+      .kpi-section {
+        margin-bottom: 40px;
+      }
 
-    .section-title {
-      font-size: 18px;
-      font-weight: 500;
-      margin-bottom: 20px;
-      color: #555;
-    }
+      .section-title {
+        font-size: 18px;
+        font-weight: 500;
+        margin-bottom: 20px;
+        color: #555;
+      }
 
-    .kpis-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-    }
+      .kpis-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+      }
 
-    .kpi-card {
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
+      .kpi-card {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
 
-    .kpi-title {
-      font-size: 14px;
-      font-weight: 500;
-    }
+      .kpi-title {
+        font-size: 14px;
+        font-weight: 500;
+      }
 
-    .full-width {
-      width: 100%;
-    }
+      .full-width {
+        width: 100%;
+      }
 
-    .add-button {
-      margin-bottom: 15px;
-    }
+      .add-button {
+        margin-bottom: 15px;
+      }
 
-    .staff-list,
-    .equipment-list,
-    .expenses-list,
-    .quality-checks-list,
-    .safety-incidents-list,
-    .issues-list {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
+      .staff-list,
+      .equipment-list,
+      .expenses-list,
+      .quality-checks-list,
+      .safety-incidents-list,
+      .issues-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
 
-    .staff-entry,
-    .equipment-entry,
-    .expense-entry,
-    .quality-check-entry,
-    .safety-incident-entry,
-    .issue-entry {
-      display: flex;
-      gap: 15px;
-      align-items: flex-start;
-      padding: 15px;
-      background: #f5f5f5;
-      border-radius: 8px;
-      flex-wrap: wrap;
-    }
+      .staff-entry,
+      .equipment-entry,
+      .expense-entry,
+      .quality-check-entry,
+      .safety-incident-entry,
+      .issue-entry {
+        display: flex;
+        gap: 15px;
+        align-items: flex-start;
+        padding: 15px;
+        background: #f5f5f5;
+        border-radius: 8px;
+        flex-wrap: wrap;
+      }
 
-    .staff-entry mat-form-field,
-    .equipment-entry mat-form-field,
-    .expense-entry mat-form-field {
-      flex: 1;
-      min-width: 200px;
-    }
+      .staff-entry mat-form-field,
+      .equipment-entry mat-form-field,
+      .expense-entry mat-form-field {
+        flex: 1;
+        min-width: 200px;
+      }
 
-    .quality-check-entry mat-form-field,
-    .safety-incident-entry mat-form-field,
-    .issue-entry mat-form-field {
-      flex: 1;
-      min-width: 250px;
-    }
+      .quality-check-entry mat-form-field,
+      .safety-incident-entry mat-form-field,
+      .issue-entry mat-form-field {
+        flex: 1;
+        min-width: 250px;
+      }
 
-    .total-section {
-      margin-top: 20px;
-      padding: 15px;
-      background: #e3f2fd;
-      border-radius: 8px;
-      text-align: right;
-    }
+      .total-section {
+        margin-top: 20px;
+        padding: 15px;
+        background: #e3f2fd;
+        border-radius: 8px;
+        text-align: right;
+      }
 
-    .total-section h4 {
-      margin: 0;
-      font-size: 18px;
-      color: #1976d2;
-    }
+      .total-section h4 {
+        margin: 0;
+        font-size: 18px;
+        color: #1976d2;
+      }
 
-    .form-actions {
-      display: flex;
-      gap: 15px;
-      justify-content: flex-end;
-      margin-top: 30px;
-      padding-top: 20px;
-      border-top: 1px solid #e0e0e0;
-    }
+      .form-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: flex-end;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e0e0;
+      }
 
-    mat-tab-group {
-      margin-top: 30px;
-    }
+      mat-tab-group {
+        margin-top: 30px;
+      }
 
-    ::ng-deep .mat-mdc-tab-label {
-      font-size: 16px !important;
-      font-weight: 500 !important;
-    }
+      ::ng-deep .mat-mdc-tab-label {
+        font-size: 16px !important;
+        font-weight: 500 !important;
+      }
 
-    ::ng-deep .mat-mdc-form-field {
-      font-size: 14px;
-    }
+      ::ng-deep .mat-mdc-form-field {
+        font-size: 14px;
+      }
 
-    ::ng-deep .mat-mdc-card-header {
-      padding: 8px 16px;
-    }
+      ::ng-deep .mat-mdc-card-header {
+        padding: 8px 16px;
+      }
 
-    ::ng-deep .mat-mdc-card-content {
-      padding: 16px;
-    }
-  `]
+      ::ng-deep .mat-mdc-card-content {
+        padding: 16px;
+      }
+    `,
+  ],
 })
 export class DailyKpisEnhancedFormComponent implements OnInit {
   private fb = inject(FormBuilder);
-  private kpisService = inject(KPIsService);
-  private financialService = inject(FinancialService);
-  private qualityService = inject(QualityService);
+  private kpisService = inject(DailyKpisService);
   private projectService = inject(ProjectService);
   private contractorService = inject(ContractorService);
   private staffService = inject(StaffService);
@@ -724,20 +765,30 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
     // Surveying & Design
     { key: 'kmSurveyed', label: 'Kilometers Surveyed', unit: 'km', category: 'surveying' },
     { key: 'polesStaked', label: 'Poles Staked', unit: 'poles', category: 'surveying' },
-    { key: 'makeReadyComplete', label: 'Make Ready Complete', unit: 'poles', category: 'surveying' },
+    {
+      key: 'makeReadyComplete',
+      label: 'Make Ready Complete',
+      unit: 'poles',
+      category: 'surveying',
+    },
     { key: 'polesScanned', label: 'Poles Scanned', unit: 'poles', category: 'surveying' },
-    
+
     // Civils
     { key: 'polesDelivered', label: 'Poles Delivered', unit: 'poles', category: 'civils' },
     { key: 'holesExcavated', label: 'Holes Excavated', unit: 'holes', category: 'civils' },
     { key: 'polesErected', label: 'Poles Erected', unit: 'poles', category: 'civils' },
     { key: 'concretePouredM3', label: 'Concrete Poured', unit: 'm³', category: 'civils' },
     { key: 'backfillCompleted', label: 'Backfill Completed', unit: 'holes', category: 'civils' },
-    
+
     // Stringing
     { key: 'cableDeliveredKm', label: 'Cable Delivered', unit: 'km', category: 'stringing' },
     { key: 'cableStrungKm', label: 'Cable Strung', unit: 'km', category: 'stringing' },
-    { key: 'hangersBoltsInstalled', label: 'Hangers/Bolts Installed', unit: 'units', category: 'stringing' },
+    {
+      key: 'hangersBoltsInstalled',
+      label: 'Hangers/Bolts Installed',
+      unit: 'units',
+      category: 'stringing',
+    },
     { key: 'ODFInstalled', label: 'ODF Installed', unit: 'units', category: 'stringing' },
     { key: 'fatInstalled', label: 'FAT Installed', unit: 'units', category: 'stringing' },
   ];
@@ -762,7 +813,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
 
   initializeForm() {
     const kpiControls: any = {};
-    this.kpiDefinitions.forEach(def => {
+    this.kpiDefinitions.forEach((def) => {
       kpiControls[def.key] = [0, [Validators.required, Validators.min(0)]];
     });
 
@@ -790,7 +841,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
       // Issues & Comments
       issues: this.fb.array([]),
       comments: [''],
-      tomorrowPlan: ['']
+      tomorrowPlan: [''],
     });
   }
 
@@ -804,7 +855,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
       error: (error) => {
         console.error('Error loading projects:', error);
         this.snackBar.open('Error loading projects', 'Close', { duration: 3000 });
-      }
+      },
     });
   }
 
@@ -817,7 +868,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
       error: (error) => {
         console.error('Error loading contractors:', error);
         this.snackBar.open('Error loading contractors', 'Close', { duration: 3000 });
-      }
+      },
     });
   }
 
@@ -828,7 +879,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading staff:', error);
-      }
+      },
     });
   }
 
@@ -863,7 +914,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
       staffId: ['', Validators.required],
       name: [''],
       role: [''],
-      hoursWorked: [8, [Validators.required, Validators.min(0), Validators.max(24)]]
+      hoursWorked: [8, [Validators.required, Validators.min(0), Validators.max(24)]],
     });
     this.staffArray.push(staffGroup);
   }
@@ -875,13 +926,13 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
   onStaffSelected(index: number) {
     const memberGroup = this.staffArray.at(index);
     const staffId = memberGroup.get('staffId')?.value;
-    
+
     if (staffId) {
-      const staff = this.staffMembers().find(s => s.id === staffId);
+      const staff = this.staffMembers().find((s) => s.id === staffId);
       if (staff) {
-        memberGroup.patchValue({ 
+        memberGroup.patchValue({
           name: staff.name,
-          role: staff.primaryGroup 
+          role: staff.primaryGroup,
         });
       }
     }
@@ -892,7 +943,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
     const equipmentGroup = this.fb.group({
       type: ['', Validators.required],
       name: ['', Validators.required],
-      hoursUsed: [0, [Validators.required, Validators.min(0), Validators.max(24)]]
+      hoursUsed: [0, [Validators.required, Validators.min(0), Validators.max(24)]],
     });
     this.equipmentArray.push(equipmentGroup);
   }
@@ -907,7 +958,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
       category: ['', Validators.required],
       description: ['', Validators.required],
       amount: [0, [Validators.required, Validators.min(0)]],
-      receiptNumber: ['']
+      receiptNumber: [''],
     });
     this.expensesArray.push(expenseGroup);
   }
@@ -927,7 +978,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
     const checkGroup = this.fb.group({
       type: ['', Validators.required],
       result: ['', Validators.required],
-      notes: ['']
+      notes: [''],
     });
     this.qualityChecksArray.push(checkGroup);
   }
@@ -941,7 +992,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
     const incidentGroup = this.fb.group({
       type: ['', Validators.required],
       description: ['', Validators.required],
-      actionTaken: ['']
+      actionTaken: [''],
     });
     this.safetyIncidentsArray.push(incidentGroup);
   }
@@ -956,7 +1007,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
       category: ['', Validators.required],
       description: ['', Validators.required],
       impact: ['medium', Validators.required],
-      resolution: ['']
+      resolution: [''],
     });
     this.issuesArray.push(issueGroup);
   }
@@ -967,15 +1018,15 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
 
   // KPI Filter Methods
   getSurveyingKPIs() {
-    return this.kpiDefinitions.filter(kpi => kpi.category === 'surveying');
+    return this.kpiDefinitions.filter((kpi) => kpi.category === 'surveying');
   }
 
   getCivilsKPIs() {
-    return this.kpiDefinitions.filter(kpi => kpi.category === 'civils');
+    return this.kpiDefinitions.filter((kpi) => kpi.category === 'civils');
   }
 
   getStringingKPIs() {
-    return this.kpiDefinitions.filter(kpi => kpi.category === 'stringing');
+    return this.kpiDefinitions.filter((kpi) => kpi.category === 'stringing');
   }
 
   getAllCivilsAndStringingKPIs() {
@@ -989,39 +1040,109 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
     }
 
     this.loading.set(true);
-    const formValue = this.kpiForm.value;
+    const formValue = this.kpiForm.getRawValue();
+
+    const project = this.projects().find((p) => p.id === formValue.projectId);
+    const contractor = this.contractors().find((c) => c.id === formValue.contractorId);
+
+    if (!project || !contractor) {
+      this.snackBar.open('Project or Contractor not found!', 'Close', { duration: 3000 });
+      this.loading.set(false);
+      return;
+    }
 
     try {
-      // Create main KPI data
-      const kpiData: DailyKPIs = {
-        ...formValue,
-        createdAt: new Date(),
-        updatedAt: new Date()
+      const kpiData: Omit<DailyKPIs, 'id'> = {
+        projectId: formValue.projectId,
+        projectName: project.name,
+        contractorId: formValue.contractorId,
+        contractorName: contractor.companyName,
+        date: formValue.date ? new Date(formValue.date) : new Date(),
+        comments: formValue.comments,
+        submittedBy: 'current-user', // Replace with actual user
+        submittedAt: new Date(),
+        riskFlag: false,
+        weather: formValue.weather,
+
+        // Production KPIs
+        kmSurveyed: formValue.kmSurveyed,
+        polesStaked: formValue.polesStaked,
+        makeReadyComplete: formValue.makeReadyComplete,
+        polesScanned: formValue.polesScanned,
+        polesDelivered: formValue.polesDelivered,
+        holesExcavated: formValue.holesExcavated,
+        polesErected: formValue.polesErected,
+        concretePouredM3: formValue.concretePouredM3,
+        backfillCompleted: formValue.backfillCompleted,
+        cableDeliveredKm: formValue.cableDeliveredKm,
+        cableStrungKm: formValue.cableStrungKm,
+        hangersBoltsInstalled: formValue.hangersBoltsInstalled,
+        ODFInstalled: formValue.ODFInstalled,
+        fatInstalled: formValue.fatInstalled,
+
+        // Resources
+        staffOnSite: formValue.staffOnSite,
+        equipmentUsed: formValue.equipmentUsed,
+
+        // Financial
+        expenses: formValue.expenses,
+        totalExpenses: this.calculateTotalExpenses(),
+
+        // Quality & Safety
+        qualityChecks: formValue.qualityChecks,
+        safetyIncidents: formValue.safetyIncidents,
+
+        // Issues & Comments
+        issues: formValue.issues,
+        tomorrowPlan: formValue.tomorrowPlan,
+
+        // Legacy fields (initialize to 0 or empty)
+        permissionsToday: 0,
+        permissionsTotal: 0,
+        missingStatusToday: 0,
+        missingStatusTotal: 0,
+        polesPlantedToday: 0,
+        polesPlantedTotal: 0,
+        homeSignupsToday: 0,
+        homeSignupsTotal: 0,
+        homeDropsToday: 0,
+        homeDropsTotal: 0,
+        homesConnectedToday: 0,
+        homesConnectedTotal: 0,
+        trenchingToday: 0,
+        trenchingTotal: 0,
+        stringing24Today: 0,
+        stringing24Total: 0,
+        stringing48Today: 0,
+        stringing48Total: 0,
+        stringing96Today: 0,
+        stringing96Total: 0,
+        stringing144Today: 0,
+        stringing144Total: 0,
+        stringing288Today: 0,
+        stringing288Total: 0,
       };
 
-      // Add project and contractor names
-      const project = this.projects().find(p => p.id === formValue.projectId);
-      const contractor = this.contractors().find(c => c.id === formValue.contractorId);
-      
-      if (project) kpiData.projectName = project.name;
-      if (contractor) kpiData.contractorName = contractor.companyName;
-
-      this.kpisService.createKPI(kpiData).subscribe({
-        next: (result: any) => {
+      this.kpisService.createKPI(formValue.projectId, kpiData).subscribe({
+        next: () => {
           this.loading.set(false);
-          this.snackBar.open('KPIs saved successfully!', 'Close', { duration: 3000 });
+          this.snackBar.open('KPIs submitted successfully!', 'Close', { duration: 3000 });
           this.router.navigate(['/daily-progress/kpis-summary']);
         },
-        error: (error: any) => {
+        error: (error) => {
           this.loading.set(false);
-          console.error('Error saving KPIs:', error);
-          this.snackBar.open('Error saving KPIs', 'Close', { duration: 3000 });
-        }
+          console.error('Error submitting KPIs:', error);
+          this.snackBar.open('Failed to submit KPIs. Please try again.', 'Close', {
+            duration: 5000,
+          });
+        },
       });
     } catch (error) {
       this.loading.set(false);
-      console.error('Error:', error);
-      this.snackBar.open('Error saving data', 'Close', { duration: 3000 });
+      console.error('An unexpected error occurred:', error);
+      this.snackBar.open('An unexpected error occurred. Please contact support.', 'Close', {
+        duration: 5000,
+      });
     }
   }
 

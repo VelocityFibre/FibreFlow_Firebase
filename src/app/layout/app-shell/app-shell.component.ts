@@ -201,6 +201,30 @@ interface NavItem {
             </mat-nav-list>
           </div>
 
+          <!-- Contractors Category -->
+          <div class="nav-category">
+            <h3 class="category-title">Contractors</h3>
+            <mat-nav-list class="nav-list">
+              <a
+                mat-list-item
+                *ngFor="let item of contractorItems"
+                [routerLink]="item.route"
+                routerLinkActive="active-link"
+                class="nav-item"
+              >
+                <mat-icon
+                  matListItemIcon
+                  [matBadge]="item.badge"
+                  [matBadgeHidden]="!item.badge || item.badge === 0"
+                  matBadgeColor="warn"
+                  matBadgeSize="small"
+                  >{{ item.icon }}</mat-icon
+                >
+                <span matListItemTitle>{{ item.label }}</span>
+              </a>
+            </mat-nav-list>
+          </div>
+
           <!-- Settings Category -->
           <div class="nav-category">
             <h3 class="category-title">Settings</h3>
@@ -378,27 +402,29 @@ export class AppShellComponent {
   private authService = inject(AuthService);
 
   pendingTasksCount = 0;
-  
+
   // Helper method to filter items based on demo config
   private filterItems(items: NavItem[]): NavItem[] {
     if (!demoConfig.isDemo) {
       return items;
     }
-    return items.filter(item => {
+    return items.filter((item) => {
       // Check if the route itself is hidden
       if (demoConfig.hiddenRoutes.includes(item.route)) {
         return false;
       }
       // Check if the route starts with any hidden parent route
-      return !demoConfig.hiddenRoutes.some(hiddenRoute => 
-        item.route.startsWith(hiddenRoute + '/')
+      return !demoConfig.hiddenRoutes.some((hiddenRoute) =>
+        item.route.startsWith(hiddenRoute + '/'),
       );
     });
   }
 
   // Main category items
   mainItems: NavItem[] = this.filterItems([
-    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' }
+    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
+    { label: 'Meetings', icon: 'groups', route: '/meetings' },
+    { label: 'Reports', icon: 'assessment', route: '/reports' },
   ]);
 
   // Staff category items
@@ -406,7 +432,6 @@ export class AppShellComponent {
     { label: 'Staff Overview', icon: 'people', route: '/staff' },
     { label: 'My Tasks', icon: 'assignment_ind', route: '/tasks/my-tasks' },
     { label: 'Personal Todos', icon: 'checklist_rtl', route: '/personal-todos' },
-    { label: 'Meetings', icon: 'groups', route: '/meetings' },
     { label: 'Roles & Permissions', icon: 'admin_panel_settings', route: '/roles' },
     { label: 'Attendance', icon: 'event_available', route: '/attendance' },
     { label: 'Performance', icon: 'trending_up', route: '/performance' },
@@ -421,7 +446,7 @@ export class AppShellComponent {
     { label: 'All Tasks', icon: 'task_alt', route: '/tasks' },
     { label: 'Task Management', icon: 'checklist', route: '/tasks/management' },
     { label: 'Daily Progress', icon: 'assignment_turned_in', route: '/daily-progress' },
-    { label: 'Daily KPIs', icon: 'analytics', route: '/daily-progress/kpis' },
+    { label: 'Daily KPIs', icon: 'analytics', route: '/daily-progress/kpis-enhanced' },
     { label: 'KPI Dashboard', icon: 'dashboard', route: '/daily-progress/kpis-summary' },
   ]);
 
@@ -446,7 +471,16 @@ export class AppShellComponent {
   // Clients category items
   clientItems: NavItem[] = this.filterItems([
     { label: 'Clients', icon: 'business', route: '/clients' },
+  ]);
+
+  // Contractors category items
+  contractorItems: NavItem[] = this.filterItems([
     { label: 'Contractors', icon: 'engineering', route: '/contractors' },
+    {
+      label: 'Daily Progress Reports',
+      icon: 'assignment_turned_in',
+      route: '/contractors/daily-progress',
+    },
   ]);
 
   // Settings category items

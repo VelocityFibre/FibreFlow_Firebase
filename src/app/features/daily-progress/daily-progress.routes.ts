@@ -23,14 +23,6 @@ export const DAILY_PROGRESS_ROUTES: Routes = [
         data: { title: 'New Progress Report' },
       },
       {
-        path: 'kpis',
-        loadComponent: () =>
-          import('./components/daily-kpis-form/daily-kpis-form.component').then(
-            (m) => m.DailyKpisFormComponent,
-          ),
-        data: { title: 'Daily KPIs' },
-      },
-      {
         path: 'kpis-test',
         loadComponent: () =>
           import('./components/test-kpis.component').then((m) => m.TestKpisComponent),
@@ -51,6 +43,14 @@ export const DAILY_PROGRESS_ROUTES: Routes = [
             (m) => m.TestKpisDisplayComponent,
           ),
         data: { title: 'Test KPIs Display' },
+      },
+      {
+        path: 'kpis-enhanced',
+        loadComponent: () =>
+          import('./components/daily-kpis-enhanced-form/daily-kpis-enhanced-form.component').then(
+            (m) => m.DailyKpisEnhancedFormComponent,
+          ),
+        data: { title: 'Enhanced Daily KPIs' },
       },
       {
         path: ':id',

@@ -1,5 +1,11 @@
 import { Injectable, inject } from '@angular/core';
-import { Storage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from '@angular/fire/storage';
+import {
+  Storage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+} from '@angular/fire/storage';
 import { Observable, from, map, switchMap, BehaviorSubject } from 'rxjs';
 
 export interface UploadProgress {
@@ -22,7 +28,7 @@ export interface ImageMetadata {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ImageUploadService {
   private storage = inject(Storage);
@@ -33,23 +39,23 @@ export class ImageUploadService {
    * Compress image to specified quality or size
    */
   private async compressImage(
-    file: File, 
+    file: File,
     maxSizeMB: number = 2,
-    quality: number = 0.8
+    quality: number = 0.8,
   ): Promise<{ blob: Blob; metadata: Partial<ImageMetadata> }> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      
+
       reader.onload = (e) => {
         const img = new Image();
         img.onload = () => {
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d')!;
-          
+
           // Calculate new dimensions maintaining aspect ratio
           let { width, height } = img;
           const maxDimension = 1920; // Max width/height
-          
+
           if (width > maxDimension || height > maxDimension) {
             if (width > height) {
               height = (height / width) * maxDimension;
@@ -59,28 +65,28 @@ export class ImageUploadService {
               height = maxDimension;
             }
           }
-          
+
           canvas.width = width;
           canvas.height = height;
-          
+
           // Draw and compress
           ctx.drawImage(img, 0, 0, width, height);
-          
+
           canvas.toBlob(
             (blob) => {
               if (!blob) {
                 reject(new Error('Failed to compress image'));
                 return;
               }
-              
+
               const metadata: Partial<ImageMetadata> = {
                 originalSize: file.size,
                 compressedSize: blob.size,
                 width,
                 height,
-                mimeType: blob.type
+                mimeType: blob.type,
               };
-              
+
               // If still too large, reduce quality further
               if (blob.size > maxSizeMB * 1024 * 1024 && quality > 0.3) {
                 canvas.toBlob(
@@ -93,21 +99,21 @@ export class ImageUploadService {
                     }
                   },
                   'image/jpeg',
-                  quality - 0.1
+                  quality - 0.1,
                 );
               } else {
                 resolve({ blob, metadata });
               }
             },
             'image/jpeg',
-            quality
+            quality,
           );
         };
-        
+
         img.onerror = () => reject(new Error('Failed to load image'));
         img.src = e.target?.result as string;
       };
-      
+
       reader.onerror = () => reject(new Error('Failed to read file'));
       reader.readAsDataURL(file);
     });
@@ -119,27 +125,23 @@ export class ImageUploadService {
   private async generateThumbnail(file: File): Promise<Blob> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      
+
       reader.onload = (e) => {
         const img = new Image();
         img.onload = () => {
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d')!;
-          
+
           // Calculate crop for square thumbnail
           const size = Math.min(img.width, img.height);
           const x = (img.width - size) / 2;
           const y = (img.height - size) / 2;
-          
+
           canvas.width = this.thumbnailSize;
           canvas.height = this.thumbnailSize;
-          
-          ctx.drawImage(
-            img,
-            x, y, size, size,
-            0, 0, this.thumbnailSize, this.thumbnailSize
-          );
-          
+
+          ctx.drawImage(img, x, y, size, size, 0, 0, this.thumbnailSize, this.thumbnailSize);
+
           canvas.toBlob(
             (blob) => {
               if (blob) {
@@ -149,14 +151,14 @@ export class ImageUploadService {
               }
             },
             'image/jpeg',
-            0.7
+            0.7,
           );
         };
-        
+
         img.onerror = () => reject(new Error('Failed to load image for thumbnail'));
         img.src = e.target?.result as string;
       };
-      
+
       reader.onerror = () => reject(new Error('Failed to read file for thumbnail'));
       reader.readAsDataURL(file);
     });
@@ -165,7 +167,9 @@ export class ImageUploadService {
   /**
    * Extract GPS data from image EXIF (if available)
    */
-  private async extractGPSData(file: File): Promise<{ latitude: number; longitude: number } | null> {
+  private async extractGPSData(
+    file: File,
+  ): Promise<{ latitude: number; longitude: number } | null> {
     // This is a placeholder - in production you'd use a library like exif-js
     // For now, we'll return null
     return null;
@@ -174,14 +178,10 @@ export class ImageUploadService {
   /**
    * Upload image with compression and progress tracking
    */
-  uploadPoleImage(
-    file: File,
-    poleId: string,
-    uploadType: string
-  ): Observable<UploadProgress> {
+  uploadPoleImage(file: File, poleId: string, uploadType: string): Observable<UploadProgress> {
     const progressSubject = new BehaviorSubject<UploadProgress>({
       progress: 0,
-      state: 'pending'
+      state: 'pending',
     });
 
     // Start upload process
@@ -190,7 +190,7 @@ export class ImageUploadService {
         progressSubject.next({
           progress: 100,
           state: 'complete',
-          downloadUrl: result.downloadUrl
+          downloadUrl: result.downloadUrl,
         });
         progressSubject.complete();
       },
@@ -198,10 +198,10 @@ export class ImageUploadService {
         progressSubject.next({
           progress: 0,
           state: 'error',
-          error: error.message
+          error: error.message,
         });
         progressSubject.error(error);
-      }
+      },
     });
 
     return progressSubject.asObservable();
@@ -213,7 +213,7 @@ export class ImageUploadService {
   private async processAndUpload(
     file: File,
     poleId: string,
-    uploadType: string
+    uploadType: string,
   ): Promise<{ downloadUrl: string; thumbnailUrl: string; metadata: ImageMetadata }> {
     // Validate file type
     if (!file.type.startsWith('image/')) {
@@ -224,7 +224,7 @@ export class ImageUploadService {
     let uploadBlob: Blob = file;
     let metadata: Partial<ImageMetadata> = {
       originalSize: file.size,
-      mimeType: file.type
+      mimeType: file.type,
     };
 
     if (file.size > this.maxImageSize) {
@@ -257,7 +257,7 @@ export class ImageUploadService {
     return {
       downloadUrl,
       thumbnailUrl,
-      metadata: metadata as ImageMetadata
+      metadata: metadata as ImageMetadata,
     };
   }
 

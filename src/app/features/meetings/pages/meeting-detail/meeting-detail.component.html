@@ -1,0 +1,243 @@
+<div class="ff-page-container" *ngIf="meeting()">
+  <!-- Page Header -->
+  <app-page-header
+    [title]="meeting()!.title"
+    [subtitle]="formatDate(meeting()!.dateTime) + ' at ' + formatTime(meeting()!.dateTime)"
+    [actions]="headerActions"
+  ></app-page-header>
+
+  <!-- Meeting Overview Card -->
+  <mat-card class="overview-card">
+    <mat-card-content>
+      <div class="overview-grid">
+        <div class="overview-item">
+          <mat-icon>person</mat-icon>
+          <div class="overview-content">
+            <span class="label">Organizer</span>
+            <span class="value">{{ meeting()!.organizer }}</span>
+          </div>
+        </div>
+        <div class="overview-item">
+          <mat-icon>schedule</mat-icon>
+          <div class="overview-content">
+            <span class="label">Duration</span>
+            <span class="value">{{ formatDuration(meeting()!.duration) }}</span>
+          </div>
+        </div>
+        <div class="overview-item">
+          <mat-icon>groups</mat-icon>
+          <div class="overview-content">
+            <span class="label">Participants</span>
+            <span class="value">{{ meeting()!.participants.length }} people</span>
+          </div>
+        </div>
+        <div class="overview-item" *ngIf="meeting()!.insights">
+          <mat-icon [ngClass]="getSentimentColor(meeting()!.insights!.sentiment!)">
+            {{ getSentimentIcon(meeting()!.insights!.sentiment!) }}
+          </mat-icon>
+          <div class="overview-content">
+            <span class="label">Sentiment</span>
+            <span class="value">{{ meeting()!.insights!.sentiment | titlecase }}</span>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Content Tabs -->
+  <mat-card class="content-card">
+    <mat-card-content>
+      <mat-tab-group>
+        <!-- Summary Tab -->
+        <mat-tab label="Summary">
+          <div class="tab-content">
+            <section class="summary-section">
+              <h3>Meeting Summary</h3>
+              <p>{{ meeting()!.summary }}</p>
+
+              <div class="key-topics" *ngIf="meeting()!.insights?.keyTopics">
+                <h4>Key Topics Discussed</h4>
+                <mat-chip-listbox>
+                  <mat-chip *ngFor="let topic of meeting()!.insights!.keyTopics">
+                    <mat-icon>label</mat-icon>
+                    {{ topic }}
+                  </mat-chip>
+                </mat-chip-listbox>
+              </div>
+            </section>
+          </div>
+        </mat-tab>
+
+        <!-- Action Items Tab -->
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <span>Action Items</span>
+            <span class="tab-badge" *ngIf="pendingActionItems().length > 0">
+              {{ pendingActionItems().length }}
+            </span>
+          </ng-template>
+          <div class="tab-content">
+            <div class="action-items-header" *ngIf="selectedActionItems().size > 0">
+              <button mat-raised-button color="primary" (click)="createTodosFromSelected()">
+                <mat-icon>add_task</mat-icon>
+                Create {{ selectedActionItems().size }} Todo{{
+                  selectedActionItems().size > 1 ? 's' : ''
+                }}
+              </button>
+            </div>
+
+            <mat-accordion>
+              <!-- Pending Action Items -->
+              <mat-expansion-panel [expanded]="true" *ngIf="pendingActionItems().length > 0">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Pending Action Items ({{ pendingActionItems().length }})
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <mat-list>
+                  <mat-list-item
+                    *ngFor="let item of pendingActionItems(); let i = index"
+                    class="action-item"
+                  >
+                    <mat-checkbox
+                      matListItemIcon
+                      [checked]="selectedActionItems().has(i)"
+                      (change)="toggleActionItem(i)"
+                    ></mat-checkbox>
+
+                    <div matListItemTitle class="action-item-content">
+                      <span class="action-text">{{ item.text }}</span>
+                      <mat-chip [ngClass]="getPriorityColor(item.priority)" class="priority-chip">
+                        <mat-icon>{{ getPriorityIcon(item.priority) }}</mat-icon>
+                        {{ item.priority }}
+                      </mat-chip>
+                    </div>
+
+                    <div matListItemMeta class="action-meta">
+                      <div class="assignee">
+                        <mat-icon>person</mat-icon>
+                        {{ item.assignee }}
+                      </div>
+                      <div
+                        class="due-date"
+                        [class.overdue]="
+                          item.dueDate && formatDueDate(item.dueDate).includes('Overdue')
+                        "
+                      >
+                        <mat-icon>event</mat-icon>
+                        {{ item.dueDate ? formatDueDate(item.dueDate) : 'No due date' }}
+                      </div>
+                    </div>
+                  </mat-list-item>
+                </mat-list>
+              </mat-expansion-panel>
+
+              <!-- Completed Action Items -->
+              <mat-expansion-panel *ngIf="completedActionItems().length > 0">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Completed Action Items ({{ completedActionItems().length }})
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <mat-list>
+                  <mat-list-item
+                    *ngFor="let item of completedActionItems()"
+                    class="action-item completed"
+                  >
+                    <mat-icon matListItemIcon class="completed-icon">check_circle</mat-icon>
+
+                    <div matListItemTitle class="action-item-content">
+                      <span class="action-text">{{ item.text }}</span>
+                    </div>
+
+                    <div matListItemMeta class="action-meta">
+                      <div class="assignee">
+                        <mat-icon>person</mat-icon>
+                        {{ item.assignee }}
+                      </div>
+                    </div>
+                  </mat-list-item>
+                </mat-list>
+              </mat-expansion-panel>
+            </mat-accordion>
+
+            <div
+              class="empty-state"
+              *ngIf="!meeting()!.actionItems || meeting()!.actionItems!.length === 0"
+            >
+              <mat-icon>task_alt</mat-icon>
+              <h3>No Action Items</h3>
+              <p>This meeting has no action items recorded.</p>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Participants Tab -->
+        <mat-tab label="Participants">
+          <div class="tab-content">
+            <mat-list>
+              <mat-list-item
+                *ngFor="let participant of meeting()!.participants"
+                class="participant-item"
+              >
+                <div matListItemAvatar class="participant-avatar">
+                  {{ getInitials(participant.name) }}
+                </div>
+                <div matListItemTitle>{{ participant.name }}</div>
+                <div matListItemLine>{{ participant.email }}</div>
+              </mat-list-item>
+            </mat-list>
+
+            <!-- Speaker Statistics -->
+            <div class="speaker-stats" *ngIf="speakerStatsArray().length > 0">
+              <h4>Speaking Time Distribution</h4>
+              <div class="stats-list">
+                <div *ngFor="let speaker of speakerStatsArray()" class="speaker-stat">
+                  <div class="speaker-info">
+                    <span class="speaker-name">{{ speaker.name }}</span>
+                    <span class="speaker-time"
+                      >{{ speaker.duration }} min ({{ speaker.percentage }}%)</span
+                    >
+                  </div>
+                  <mat-progress-bar
+                    mode="determinate"
+                    [value]="speaker.percentage"
+                    color="primary"
+                  ></mat-progress-bar>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Transcript Tab -->
+        <mat-tab label="Transcript" *ngIf="meeting()!.transcript">
+          <div class="tab-content">
+            <div class="transcript-section">
+              <p class="transcript-text">{{ meeting()!.transcript }}</p>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- Loading State -->
+<div class="loading-container" *ngIf="loading()">
+  <mat-spinner diameter="40"></mat-spinner>
+  <p>Loading meeting details...</p>
+</div>
+
+<!-- Error State -->
+<div class="error-state" *ngIf="!loading() && !meeting()">
+  <mat-icon>error_outline</mat-icon>
+  <h3>Meeting Not Found</h3>
+  <p>The requested meeting could not be found.</p>
+  <button mat-raised-button color="primary" routerLink="/meetings">
+    <mat-icon>arrow_back</mat-icon>
+    Back to Meetings
+  </button>
+</div>
