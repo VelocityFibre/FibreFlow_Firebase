@@ -1,0 +1,35 @@
+name: Debug Airtable Sync
+
+on:
+  workflow_dispatch:
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check secrets
+      env:
+        AIRTABLE_PAT: ${{ secrets.AIRTABLE_PAT }}
+        AZURE_SQL_SERVER: ${{ secrets.AZURE_SQL_SERVER }}
+        AZURE_SQL_DATABASE: ${{ secrets.AZURE_SQL_DATABASE }}
+        AZURE_SQL_USER: ${{ secrets.AZURE_SQL_USER }}
+        AZURE_SQL_PASSWORD: ${{ secrets.AZURE_SQL_PASSWORD }}
+      run: |
+        echo "Checking environment variables..."
+        echo "AIRTABLE_PAT length: ${#AIRTABLE_PAT}"
+        echo "AIRTABLE_PAT first 10 chars: ${AIRTABLE_PAT:0:10}..."
+        echo "AZURE_SQL_SERVER: $AZURE_SQL_SERVER"
+        echo "AZURE_SQL_DATABASE: $AZURE_SQL_DATABASE"
+        echo "AZURE_SQL_USER: $AZURE_SQL_USER"
+        echo "AZURE_SQL_PASSWORD exists: $([ -n "$AZURE_SQL_PASSWORD" ] && echo 'yes' || echo 'no')"
+        
+    - name: Test Airtable connection
+      env:
+        AIRTABLE_PAT: ${{ secrets.AIRTABLE_PAT }}
+      run: |
+        # Test direct API call
+        echo "Testing Airtable API..."
+        curl -H "Authorization: Bearer $AIRTABLE_PAT" \
+             https://api.airtable.com/v0/appkYMgaK0cHVu4Zg/Projects?maxRecords=1 \
+             -w "\nHTTP Status: %{http_code}\n"
