@@ -1,0 +1,33 @@
+name: Sync Airtable to Azure SQL
+
+on:
+  schedule:
+    # Run every hour
+    - cron: '0 * * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    - name: Install dependencies
+      run: |
+        npm install airtable mssql dotenv
+    
+    - name: Run sync
+      env:
+        AIRTABLE_PAT: ${{ secrets.AIRTABLE_PAT }}
+        AZURE_SQL_SERVER: ${{ secrets.AZURE_SQL_SERVER }}
+        AZURE_SQL_DATABASE: ${{ secrets.AZURE_SQL_DATABASE }}
+        AZURE_SQL_USER: ${{ secrets.AZURE_SQL_USER }}
+        AZURE_SQL_PASSWORD: ${{ secrets.AZURE_SQL_PASSWORD }}
+      run: |
+        node airtable-to-sql-sync-fixed.js
