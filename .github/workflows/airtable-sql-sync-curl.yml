@@ -29,6 +29,15 @@ jobs:
       run: |
         echo "📥 Fetching projects from Airtable using curl..."
         
+        # Debug: Check if token is set
+        if [ -z "$AIRTABLE_PAT" ]; then
+          echo "❌ ERROR: AIRTABLE_PAT is not set!"
+          exit 1
+        fi
+        
+        echo "✅ AIRTABLE_PAT is set (length: ${#AIRTABLE_PAT})"
+        echo "🔍 Token starts with: ${AIRTABLE_PAT:0:10}..."
+        
         # Initialize variables
         ALL_RECORDS="[]"
         OFFSET=""
@@ -42,6 +51,7 @@ jobs:
             URL="https://api.airtable.com/v0/appkYMgaK0cHVu4Zg/Projects?pageSize=100&offset=$OFFSET"
           fi
           
+          echo "🔗 Calling: $URL"
           RESPONSE=$(curl -s "$URL" -H "Authorization: Bearer $AIRTABLE_PAT")
           
           # Check for errors
