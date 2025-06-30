@@ -31,12 +31,6 @@ jobs:
         echo "✅ All required secrets are configured"
     
     - name: Create and run sync script
-      env:
-        AIRTABLE_PAT: ${{ secrets.AIRTABLE_PAT }}
-        AZURE_SQL_SERVER: ${{ secrets.AZURE_SQL_SERVER }}
-        AZURE_SQL_DATABASE: ${{ secrets.AZURE_SQL_DATABASE }}
-        AZURE_SQL_USER: ${{ secrets.AZURE_SQL_USER }}
-        AZURE_SQL_PASSWORD: ${{ secrets.AZURE_SQL_PASSWORD }}
       run: |
         npm install airtable mssql
         
@@ -44,19 +38,14 @@ jobs:
         const Airtable = require('airtable');
         const sql = require('mssql');
 
-        // Log environment check (without exposing secrets)
-        console.log('Environment check:');
-        console.log('- AZURE_SQL_SERVER:', process.env.AZURE_SQL_SERVER ? '✓ Set' : '✗ Missing');
-        console.log('- AZURE_SQL_DATABASE:', process.env.AZURE_SQL_DATABASE ? '✓ Set' : '✗ Missing');
-        console.log('- AZURE_SQL_USER:', process.env.AZURE_SQL_USER ? '✓ Set' : '✗ Missing');
-        console.log('- AZURE_SQL_PASSWORD:', process.env.AZURE_SQL_PASSWORD ? '✓ Set' : '✗ Missing');
-        console.log('- AIRTABLE_PAT:', process.env.AIRTABLE_PAT ? '✓ Set' : '✗ Missing');
+        // Secrets are injected directly during workflow execution
+        console.log('Starting sync process...');
 
         const sqlConfig = {
-          server: process.env.AZURE_SQL_SERVER,
-          database: process.env.AZURE_SQL_DATABASE,
-          user: process.env.AZURE_SQL_USER,
-          password: process.env.AZURE_SQL_PASSWORD,
+          server: '${{ secrets.AZURE_SQL_SERVER }}',
+          database: '${{ secrets.AZURE_SQL_DATABASE }}',
+          user: '${{ secrets.AZURE_SQL_USER }}',
+          password: '${{ secrets.AZURE_SQL_PASSWORD }}',
           options: {
             encrypt: true,
             trustServerCertificate: false
@@ -64,7 +53,7 @@ jobs:
         };
 
         const base = new Airtable({
-          apiKey: process.env.AIRTABLE_PAT
+          apiKey: '${{ secrets.AIRTABLE_PAT }}'
         }).base('appkYMgaK0cHVu4Zg');
 
         async function sync() {
@@ -128,10 +117,5 @@ jobs:
 
         sync();
         EOF
-        
-        # Debug: Check if env vars are available
-        echo "Debug - Checking environment variables:"
-        echo "AIRTABLE_PAT is set: $([ -n "$AIRTABLE_PAT" ] && echo 'yes' || echo 'no')"
-        echo "AZURE_SQL_SERVER: $AZURE_SQL_SERVER"
         
         node sync.js
