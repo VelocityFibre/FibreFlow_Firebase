@@ -355,6 +355,37 @@ For implementation details, see:
 - [TypeScript Improvements Summary](./docs/typescript/TYPESCRIPT_IMPROVEMENTS_SUMMARY.md)
 - Type definitions in `/src/app/core/types/`
 
+## 🔄 Data Integration & Sync
+
+### Airtable to Azure SQL Sync (June 30, 2025) 🚀
+
+Automated hourly synchronization of project data from Airtable to Azure SQL Database for Power BI reporting:
+
+- **GitHub Actions Workflow**: Runs every hour at :00 (e.g., 14:00, 15:00, 16:00)
+- **Data Synced**: All project fields including Total Homes PO, progress metrics, and status
+- **Technology**: Uses curl-based export to handle Airtable API authentication reliably
+- **Tables Synced**: 
+  - `projects` - Complete project information with 30+ fields
+  - `customers` - Client data (when available)
+  - `staff` - Employee records (when available)
+  - `sync_log` - Audit trail of all sync operations
+
+**Key Features**:
+- ✅ Fully automated - no manual intervention required
+- ✅ Handles Airtable pagination for large datasets
+- ✅ Error handling and retry logic
+- ✅ Sync verification and logging
+- ✅ Power BI ready - direct connection to Azure SQL
+
+**Documentation**:
+- [Power BI Connection Guide](./docs/power-bi-connection-guide.md) - Connect Power BI to synced data
+- [GitHub Actions Secrets Setup](./docs/github-actions-secrets-setup.md) - Configure sync credentials
+- [Airtable Sync Workflow](./docs/airtable-sync-workflow.md) - Technical workflow details
+
+**Monitoring**:
+- View sync status: [GitHub Actions](https://github.com/VelocityFibre/FibreFlow_Firebase/actions)
+- Workflow file: `.github/workflows/airtable-sql-sync-curl.yml`
+
 ## 📚 Documentation & Organization
 
 All technical documentation and assets are organized in structured folders:
