@@ -1,0 +1,122 @@
+name: Sync Airtable to Azure SQL (curl method)
+
+on:
+  schedule:
+    # Run every hour
+    - cron: '0 * * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    - name: Install dependencies
+      run: |
+        npm install mssql dotenv
+    
+    - name: Export Airtable data using curl
+      run: |
+        echo "📥 Fetching projects from Airtable using curl..."
+        
+        # Initialize variables
+        ALL_RECORDS="[]"
+        OFFSET=""
+        TOTAL_COUNT=0
+        
+        # Fetch with pagination
+        while true; do
+          if [ -z "$OFFSET" ]; then
+            URL="https://api.airtable.com/v0/appkYMgaK0cHVu4Zg/Projects?pageSize=100"
+          else
+            URL="https://api.airtable.com/v0/appkYMgaK0cHVu4Zg/Projects?pageSize=100&offset=$OFFSET"
+          fi
+          
+          RESPONSE=$(curl -s "$URL" -H "Authorization: Bearer ${{ secrets.AIRTABLE_PAT }}")
+          
+          # Check for errors
+          if echo "$RESPONSE" | jq -e '.error' > /dev/null 2>&1; then
+            echo "❌ Airtable API error:"
+            echo "$RESPONSE" | jq '.error'
+            exit 1
+          fi
+          
+          # Extract records
+          RECORDS=$(echo "$RESPONSE" | jq -r '.records')
+          COUNT=$(echo "$RECORDS" | jq 'length')
+          TOTAL_COUNT=$((TOTAL_COUNT + COUNT))
+          
+          echo "  Fetched $COUNT records (total: $TOTAL_COUNT)"
+          
+          # Append records
+          ALL_RECORDS=$(echo "$ALL_RECORDS" "$RECORDS" | jq -s 'add')
+          
+          # Check for offset
+          OFFSET=$(echo "$RESPONSE" | jq -r '.offset // empty')
+          if [ -z "$OFFSET" ]; then
+            break
+          fi
+        done
+        
+        echo "✅ Total projects fetched: $TOTAL_COUNT"
+        
+        # Save to file
+        echo "$ALL_RECORDS" > airtable-projects-full.json
+        echo "💾 Saved data to airtable-projects-full.json"
+    
+    - name: Sync to Azure SQL
+      env:
+        AZURE_SQL_SERVER: ${{ secrets.AZURE_SQL_SERVER }}
+        AZURE_SQL_DATABASE: ${{ secrets.AZURE_SQL_DATABASE }}
+        AZURE_SQL_USER: ${{ secrets.AZURE_SQL_USER }}
+        AZURE_SQL_PASSWORD: ${{ secrets.AZURE_SQL_PASSWORD }}
+      run: |
+        node sync-all-project-fields-v2.js
+    
+    - name: Verify sync
+      env:
+        AZURE_SQL_SERVER: ${{ secrets.AZURE_SQL_SERVER }}
+        AZURE_SQL_DATABASE: ${{ secrets.AZURE_SQL_DATABASE }}
+        AZURE_SQL_USER: ${{ secrets.AZURE_SQL_USER }}
+        AZURE_SQL_PASSWORD: ${{ secrets.AZURE_SQL_PASSWORD }}
+      run: |
+        # Create a simple verification script
+        cat > verify-sync.js << 'EOF'
+        require('dotenv').config();
+        const sql = require('mssql');
+        
+        const sqlConfig = {
+          server: process.env.AZURE_SQL_SERVER,
+          database: process.env.AZURE_SQL_DATABASE,
+          user: process.env.AZURE_SQL_USER,
+          password: process.env.AZURE_SQL_PASSWORD,
+          options: {
+            encrypt: true,
+            trustServerCertificate: false
+          }
+        };
+        
+        async function verify() {
+          try {
+            const pool = await sql.connect(sqlConfig);
+            const result = await pool.request().query('SELECT COUNT(*) as count FROM projects');
+            console.log(`✅ Sync successful! ${result.recordset[0].count} projects in database`);
+            await pool.close();
+          } catch (err) {
+            console.error('❌ Verification failed:', err.message);
+            process.exit(1);
+          }
+        }
+        
+        verify();
+        EOF
+        
+        node verify-sync.js
