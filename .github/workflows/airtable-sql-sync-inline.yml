@@ -16,6 +16,20 @@ jobs:
       with:
         node-version: '18'
     
+    - name: Check required secrets
+      run: |
+        if [ -z "${{ secrets.AIRTABLE_PAT }}" ]; then
+          echo "❌ Error: AIRTABLE_PAT secret is not set"
+          echo "Please add it in Settings > Secrets and variables > Actions"
+          exit 1
+        fi
+        if [ -z "${{ secrets.AZURE_SQL_SERVER }}" ]; then
+          echo "❌ Error: AZURE_SQL_SERVER secret is not set"
+          echo "Please add it in Settings > Secrets and variables > Actions"
+          exit 1
+        fi
+        echo "✅ All required secrets are configured"
+    
     - name: Create and run sync script
       env:
         AIRTABLE_PAT: ${{ secrets.AIRTABLE_PAT }}
@@ -29,6 +43,14 @@ jobs:
         cat > sync.js << 'EOF'
         const Airtable = require('airtable');
         const sql = require('mssql');
+
+        // Log environment check (without exposing secrets)
+        console.log('Environment check:');
+        console.log('- AZURE_SQL_SERVER:', process.env.AZURE_SQL_SERVER ? '✓ Set' : '✗ Missing');
+        console.log('- AZURE_SQL_DATABASE:', process.env.AZURE_SQL_DATABASE ? '✓ Set' : '✗ Missing');
+        console.log('- AZURE_SQL_USER:', process.env.AZURE_SQL_USER ? '✓ Set' : '✗ Missing');
+        console.log('- AZURE_SQL_PASSWORD:', process.env.AZURE_SQL_PASSWORD ? '✓ Set' : '✗ Missing');
+        console.log('- AIRTABLE_PAT:', process.env.AIRTABLE_PAT ? '✓ Set' : '✗ Missing');
 
         const sqlConfig = {
           server: process.env.AZURE_SQL_SERVER,
@@ -89,7 +111,17 @@ jobs:
             console.log('✅ Sync completed!');
             await pool.close();
           } catch (error) {
-            console.error('❌ Sync failed:', error);
+            console.error('❌ Sync failed:', error.message);
+            console.error('Error details:');
+            console.error('- Name:', error.name);
+            console.error('- Code:', error.code);
+            if (error.code === 'ELOGIN') {
+              console.error('This is a login error. Check your SQL credentials.');
+            }
+            if (error.code === 'ETIMEOUT') {
+              console.error('Connection timeout. Check server name and firewall rules.');
+            }
+            console.error('Full error:', error);
             process.exit(1);
           }
         }
