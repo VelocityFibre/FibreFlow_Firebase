@@ -129,4 +129,9 @@ jobs:
         sync();
         EOF
         
+        # Debug: Check if env vars are available
+        echo "Debug - Checking environment variables:"
+        echo "AIRTABLE_PAT is set: $([ -n "$AIRTABLE_PAT" ] && echo 'yes' || echo 'no')"
+        echo "AZURE_SQL_SERVER: $AZURE_SQL_SERVER"
+        
         node sync.js
