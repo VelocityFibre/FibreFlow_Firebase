@@ -24,6 +24,8 @@ jobs:
         npm install mssql dotenv
     
     - name: Export Airtable data using curl
+      env:
+        AIRTABLE_PAT: ${{ secrets.AIRTABLE_PAT }}
       run: |
         echo "📥 Fetching projects from Airtable using curl..."
         
@@ -40,7 +42,7 @@ jobs:
             URL="https://api.airtable.com/v0/appkYMgaK0cHVu4Zg/Projects?pageSize=100&offset=$OFFSET"
           fi
           
-          RESPONSE=$(curl -s "$URL" -H "Authorization: Bearer ${{ secrets.AIRTABLE_PAT }}")
+          RESPONSE=$(curl -s "$URL" -H "Authorization: Bearer $AIRTABLE_PAT")
           
           # Check for errors
           if echo "$RESPONSE" | jq -e '.error' > /dev/null 2>&1; then
