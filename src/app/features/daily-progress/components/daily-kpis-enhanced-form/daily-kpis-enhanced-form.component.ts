@@ -219,7 +219,9 @@ import { StaffMember } from '../../../staff/models/staff.model';
                             <mat-slider min="0" max="10" step="1" discrete>
                               <input matSliderThumb formControlName="weatherImpact" />
                             </mat-slider>
-                            <span class="slider-value">{{ kpiForm.get('weatherImpact')?.value || 0 }}</span>
+                            <span class="slider-value">{{
+                              kpiForm.get('weatherImpact')?.value || 0
+                            }}</span>
                           </div>
 
                           <div class="temperature-range">
@@ -244,7 +246,12 @@ import { StaffMember } from '../../../staff/models/staff.model';
                           <div class="safety-grid">
                             <mat-form-field appearance="outline">
                               <mat-label>Safety Incidents</mat-label>
-                              <input matInput type="number" min="0" formControlName="safetyIncidents" />
+                              <input
+                                matInput
+                                type="number"
+                                min="0"
+                                formControlName="safetyIncidents"
+                              />
                             </mat-form-field>
                             <mat-form-field appearance="outline">
                               <mat-label>Near Misses</mat-label>
@@ -252,11 +259,21 @@ import { StaffMember } from '../../../staff/models/staff.model';
                             </mat-form-field>
                             <mat-form-field appearance="outline">
                               <mat-label>Toolbox Talks</mat-label>
-                              <input matInput type="number" min="0" formControlName="toolboxTalks" />
+                              <input
+                                matInput
+                                type="number"
+                                min="0"
+                                formControlName="toolboxTalks"
+                              />
                             </mat-form-field>
                             <mat-form-field appearance="outline">
                               <mat-label>Safety Observations</mat-label>
-                              <input matInput type="number" min="0" formControlName="safetyObservations" />
+                              <input
+                                matInput
+                                type="number"
+                                min="0"
+                                formControlName="safetyObservations"
+                              />
                             </mat-form-field>
                           </div>
 
@@ -265,7 +282,9 @@ import { StaffMember } from '../../../staff/models/staff.model';
                             <mat-slider min="0" max="100" step="5" discrete>
                               <input matSliderThumb formControlName="complianceScore" />
                             </mat-slider>
-                            <span class="slider-value">{{ kpiForm.get('complianceScore')?.value || 0 }}%</span>
+                            <span class="slider-value"
+                              >{{ kpiForm.get('complianceScore')?.value || 0 }}%</span
+                            >
                           </div>
                         </mat-card-content>
                       </mat-card>
@@ -286,19 +305,39 @@ import { StaffMember } from '../../../staff/models/staff.model';
                           <div class="quality-grid">
                             <mat-form-field appearance="outline">
                               <mat-label>Quality Issues</mat-label>
-                              <input matInput type="number" min="0" formControlName="qualityIssues" />
+                              <input
+                                matInput
+                                type="number"
+                                min="0"
+                                formControlName="qualityIssues"
+                              />
                             </mat-form-field>
                             <mat-form-field appearance="outline">
                               <mat-label>Rework Required</mat-label>
-                              <input matInput type="number" min="0" formControlName="reworkRequired" />
+                              <input
+                                matInput
+                                type="number"
+                                min="0"
+                                formControlName="reworkRequired"
+                              />
                             </mat-form-field>
                             <mat-form-field appearance="outline">
                               <mat-label>Inspections Passed</mat-label>
-                              <input matInput type="number" min="0" formControlName="inspectionsPassed" />
+                              <input
+                                matInput
+                                type="number"
+                                min="0"
+                                formControlName="inspectionsPassed"
+                              />
                             </mat-form-field>
                             <mat-form-field appearance="outline">
                               <mat-label>Inspections Failed</mat-label>
-                              <input matInput type="number" min="0" formControlName="inspectionsFailed" />
+                              <input
+                                matInput
+                                type="number"
+                                min="0"
+                                formControlName="inspectionsFailed"
+                              />
                             </mat-form-field>
                           </div>
                         </mat-card-content>
@@ -317,15 +356,30 @@ import { StaffMember } from '../../../staff/models/staff.model';
                             </mat-form-field>
                             <mat-form-field appearance="outline">
                               <mat-label>Regular Hours</mat-label>
-                              <input matInput type="number" min="0" formControlName="regularHours" />
+                              <input
+                                matInput
+                                type="number"
+                                min="0"
+                                formControlName="regularHours"
+                              />
                             </mat-form-field>
                             <mat-form-field appearance="outline">
                               <mat-label>Overtime Hours</mat-label>
-                              <input matInput type="number" min="0" formControlName="overtimeHours" />
+                              <input
+                                matInput
+                                type="number"
+                                min="0"
+                                formControlName="overtimeHours"
+                              />
                             </mat-form-field>
                             <mat-form-field appearance="outline">
                               <mat-label>Vehicles Used</mat-label>
-                              <input matInput type="number" min="0" formControlName="vehiclesUsed" />
+                              <input
+                                matInput
+                                type="number"
+                                min="0"
+                                formControlName="vehiclesUsed"
+                              />
                             </mat-form-field>
                           </div>
 
@@ -334,7 +388,9 @@ import { StaffMember } from '../../../staff/models/staff.model';
                             <mat-slider min="0" max="100" step="5" discrete>
                               <input matSliderThumb formControlName="equipmentUtilization" />
                             </mat-slider>
-                            <span class="slider-value">{{ kpiForm.get('equipmentUtilization')?.value || 0 }}%</span>
+                            <span class="slider-value"
+                              >{{ kpiForm.get('equipmentUtilization')?.value || 0 }}%</span
+                            >
                           </div>
                         </mat-card-content>
                       </mat-card>
@@ -353,22 +409,42 @@ import { StaffMember } from '../../../staff/models/staff.model';
                         <div class="financial-grid">
                           <mat-form-field appearance="outline">
                             <mat-label>Labor Cost Today</mat-label>
-                            <input matInput type="number" min="0" formControlName="laborCostToday" />
+                            <input
+                              matInput
+                              type="number"
+                              min="0"
+                              formControlName="laborCostToday"
+                            />
                             <span matPrefix>R&nbsp;</span>
                           </mat-form-field>
                           <mat-form-field appearance="outline">
                             <mat-label>Material Cost Today</mat-label>
-                            <input matInput type="number" min="0" formControlName="materialCostToday" />
+                            <input
+                              matInput
+                              type="number"
+                              min="0"
+                              formControlName="materialCostToday"
+                            />
                             <span matPrefix>R&nbsp;</span>
                           </mat-form-field>
                           <mat-form-field appearance="outline">
                             <mat-label>Equipment Cost Today</mat-label>
-                            <input matInput type="number" min="0" formControlName="equipmentCostToday" />
+                            <input
+                              matInput
+                              type="number"
+                              min="0"
+                              formControlName="equipmentCostToday"
+                            />
                             <span matPrefix>R&nbsp;</span>
                           </mat-form-field>
                           <mat-form-field appearance="outline">
                             <mat-label>Total Cost Today</mat-label>
-                            <input matInput type="number" formControlName="totalCostToday" readonly />
+                            <input
+                              matInput
+                              type="number"
+                              formControlName="totalCostToday"
+                              readonly
+                            />
                             <span matPrefix>R&nbsp;</span>
                             <mat-hint>Auto-calculated</mat-hint>
                           </mat-form-field>
@@ -383,7 +459,9 @@ import { StaffMember } from '../../../staff/models/staff.model';
                             <mat-slider min="0" max="100" step="5" discrete>
                               <input matSliderThumb formControlName="productivityScore" />
                             </mat-slider>
-                            <span class="slider-value">{{ kpiForm.get('productivityScore')?.value || 0 }}%</span>
+                            <span class="slider-value"
+                              >{{ kpiForm.get('productivityScore')?.value || 0 }}%</span
+                            >
                           </div>
                         </div>
                       </mat-card-content>
@@ -419,9 +497,19 @@ import { StaffMember } from '../../../staff/models/staff.model';
                               </mat-form-field>
                               <mat-form-field appearance="outline">
                                 <mat-label>Hours Worked</mat-label>
-                                <input matInput type="number" min="0" max="24" formControlName="hoursWorked" />
+                                <input
+                                  matInput
+                                  type="number"
+                                  min="0"
+                                  max="24"
+                                  formControlName="hoursWorked"
+                                />
                               </mat-form-field>
-                              <button mat-icon-button type="button" (click)="removeTeamMember($index)">
+                              <button
+                                mat-icon-button
+                                type="button"
+                                (click)="removeTeamMember($index)"
+                              >
                                 <mat-icon>delete</mat-icon>
                               </button>
                             </div>
@@ -458,12 +546,20 @@ import { StaffMember } from '../../../staff/models/staff.model';
 
                         <mat-form-field appearance="outline" class="full-width">
                           <mat-label>Weekly Report Details</mat-label>
-                          <textarea matInput formControlName="weeklyReportDetails" rows="3"></textarea>
+                          <textarea
+                            matInput
+                            formControlName="weeklyReportDetails"
+                            rows="3"
+                          ></textarea>
                         </mat-form-field>
 
                         <mat-form-field appearance="outline" class="full-width">
                           <mat-label>Weekly Report Insights</mat-label>
-                          <textarea matInput formControlName="weeklyReportInsights" rows="3"></textarea>
+                          <textarea
+                            matInput
+                            formControlName="weeklyReportInsights"
+                            rows="3"
+                          ></textarea>
                         </mat-form-field>
                       </mat-card-content>
                     </mat-card>
@@ -474,7 +570,12 @@ import { StaffMember } from '../../../staff/models/staff.model';
               <!-- Submit Buttons -->
               <div class="form-actions">
                 <button mat-raised-button type="button" (click)="cancel()">Cancel</button>
-                <button mat-raised-button color="primary" type="submit" [disabled]="loading() || kpiForm.invalid">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  type="submit"
+                  [disabled]="loading() || kpiForm.invalid"
+                >
                   @if (loading()) {
                     <mat-spinner diameter="20"></mat-spinner>
                   } @else {
@@ -726,26 +827,26 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
       contractorId: [''],
       date: [new Date(), Validators.required],
       comments: [''],
-      
+
       // Weather & Environmental
       weatherConditions: [''],
       weatherImpact: [0],
       temperatureMin: [null],
       temperatureMax: [null],
-      
+
       // Safety & Compliance
       safetyIncidents: [0, [Validators.min(0)]],
       nearMisses: [0, [Validators.min(0)]],
       toolboxTalks: [0, [Validators.min(0)]],
       safetyObservations: [0, [Validators.min(0)]],
       complianceScore: [100, [Validators.min(0), Validators.max(100)]],
-      
+
       // Quality Metrics
       qualityIssues: [0, [Validators.min(0)]],
       reworkRequired: [0, [Validators.min(0)]],
       inspectionsPassed: [0, [Validators.min(0)]],
       inspectionsFailed: [0, [Validators.min(0)]],
-      
+
       // Resource Utilization
       teamSize: [0, [Validators.min(0)]],
       teamMembers: this.fb.array([]),
@@ -753,16 +854,16 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
       overtimeHours: [0, [Validators.min(0)]],
       equipmentUtilization: [0, [Validators.min(0), Validators.max(100)]],
       vehiclesUsed: [0, [Validators.min(0)]],
-      
+
       // Financial Tracking
       laborCostToday: [0, [Validators.min(0)]],
       materialCostToday: [0, [Validators.min(0)]],
       equipmentCostToday: [0, [Validators.min(0)]],
       totalCostToday: [0, [Validators.min(0)]],
-      
+
       // Productivity Metrics
       productivityScore: [0, [Validators.min(0), Validators.max(100)]],
-      
+
       // Risk and Reports
       riskFlag: [false],
       weeklyReportDetails: [''],
@@ -790,14 +891,14 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
 
   private setupFormListeners() {
     // Calculate total cost when individual costs change
-    ['laborCostToday', 'materialCostToday', 'equipmentCostToday'].forEach(field => {
+    ['laborCostToday', 'materialCostToday', 'equipmentCostToday'].forEach((field) => {
       this.kpiForm.get(field)?.valueChanges.subscribe(() => {
         this.calculateTotalCost();
       });
     });
 
     // Temperature range
-    this.kpiForm.get('temperatureMin')?.valueChanges.subscribe(min => {
+    this.kpiForm.get('temperatureMin')?.valueChanges.subscribe((min) => {
       if (min !== null && min !== undefined) {
         const max = this.kpiForm.get('temperatureMax')?.value;
         if (max !== null && min > max) {
@@ -807,8 +908,9 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
     });
 
     // Watch for date/project changes
-    this.kpiForm.get('date')?.valueChanges
-      .pipe(debounceTime(500))
+    this.kpiForm
+      .get('date')
+      ?.valueChanges.pipe(debounceTime(500))
       .subscribe(() => {
         this.updateSelectedDate();
         if (!this.isLoadingData) {
@@ -816,8 +918,9 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
         }
       });
 
-    this.kpiForm.get('projectId')?.valueChanges
-      .pipe(debounceTime(500))
+    this.kpiForm
+      .get('projectId')
+      ?.valueChanges.pipe(debounceTime(500))
       .subscribe(() => {
         if (!this.isLoadingData) {
           this.loadExistingKPIData();
@@ -844,18 +947,18 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
       role: [''],
       hoursWorked: [8, [Validators.min(0), Validators.max(24)]],
     });
-    
+
     // Update name when staff member is selected
-    memberGroup.get('id')?.valueChanges.subscribe(id => {
-      const staff = this.staffMembers().find(s => s.id === id);
+    memberGroup.get('id')?.valueChanges.subscribe((id) => {
+      const staff = this.staffMembers().find((s) => s.id === id);
       if (staff) {
-        memberGroup.patchValue({ 
+        memberGroup.patchValue({
           name: staff.name,
-          role: staff.primaryGroup 
+          role: staff.primaryGroup,
         });
       }
     });
-    
+
     this.teamMembersArray.push(memberGroup);
   }
 
@@ -933,17 +1036,21 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
           const previousKpi = kpis[0];
           // Copy relevant fields but not totals
           const fieldsToCopy = [
-            'contractorId', 'weatherConditions', 'weatherImpact',
-            'teamSize', 'equipmentUtilization', 'productivityScore'
+            'contractorId',
+            'weatherConditions',
+            'weatherImpact',
+            'teamSize',
+            'equipmentUtilization',
+            'productivityScore',
           ];
-          
+
           const valuesToCopy: any = {};
-          fieldsToCopy.forEach(field => {
+          fieldsToCopy.forEach((field) => {
             if (previousKpi[field as keyof DailyKPIs] !== undefined) {
               valuesToCopy[field] = previousKpi[field as keyof DailyKPIs];
             }
           });
-          
+
           this.kpiForm.patchValue(valuesToCopy);
           this.snackBar.open('Previous day data copied', 'Close', { duration: 2000 });
         } else {
@@ -963,24 +1070,24 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
     // Similar to original implementation
     const todayValue = Number(this.kpiForm.get(kpiDef.todayField)?.value) || 0;
     const currentTotal = Number(this.kpiForm.get(kpiDef.totalField)?.value) || 0;
-    
+
     this.kpiForm.patchValue({
-      [kpiDef.totalField]: currentTotal + todayValue
+      [kpiDef.totalField]: currentTotal + todayValue,
     });
   }
 
   getCoreKPIs() {
-    return this.kpiDefinitions.filter(kpi => 
-      ['permissions', 'status', 'poles'].includes(kpi.category)
+    return this.kpiDefinitions.filter((kpi) =>
+      ['permissions', 'status', 'poles'].includes(kpi.category),
     );
   }
 
   getCivilsKPIs() {
-    return this.kpiDefinitions.filter(kpi => kpi.category === 'civils');
+    return this.kpiDefinitions.filter((kpi) => kpi.category === 'civils');
   }
 
   getStringingKPIs() {
-    return this.kpiDefinitions.filter(kpi => kpi.category === 'stringing');
+    return this.kpiDefinitions.filter((kpi) => kpi.category === 'stringing');
   }
 
   getAllCivilsAndStringingKPIs() {
@@ -995,13 +1102,12 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
 
     this.loading.set(true);
     const currentUser = await this.authService.getCurrentUser();
-    
+
     // Prepare temperature range
     const tempMin = this.kpiForm.get('temperatureMin')?.value;
     const tempMax = this.kpiForm.get('temperatureMax')?.value;
-    const temperatureRange = (tempMin !== null && tempMax !== null) 
-      ? { min: tempMin, max: tempMax } 
-      : undefined;
+    const temperatureRange =
+      tempMin !== null && tempMax !== null ? { min: tempMin, max: tempMax } : undefined;
 
     // Prepare KPI data
     const kpiData: DailyKPIs = {
@@ -1014,9 +1120,9 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
     };
 
     // Get project and contractor names
-    const project = this.projects().find(p => p.id === kpiData.projectId);
-    const contractor = this.contractors().find(c => c.id === kpiData.contractorId);
-    
+    const project = this.projects().find((p) => p.id === kpiData.projectId);
+    const contractor = this.contractors().find((c) => c.id === kpiData.contractorId);
+
     if (project) kpiData.projectName = project.name;
     if (contractor) kpiData.contractorName = contractor.companyName;
 

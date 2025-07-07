@@ -54,7 +54,7 @@
             <section class="summary-section">
               <h3>Meeting Summary</h3>
               <p>{{ meeting()!.summary }}</p>
-              
+
               <div class="key-topics" *ngIf="meeting()!.insights?.keyTopics">
                 <h4>Key Topics Discussed</h4>
                 <mat-chip-listbox>
@@ -80,7 +80,9 @@
             <div class="action-items-header" *ngIf="selectedActionItems().size > 0">
               <button mat-raised-button color="primary" (click)="createTodosFromSelected()">
                 <mat-icon>add_task</mat-icon>
-                Create {{ selectedActionItems().size }} Todo{{ selectedActionItems().size > 1 ? 's' : '' }}
+                Create {{ selectedActionItems().size }} Todo{{
+                  selectedActionItems().size > 1 ? 's' : ''
+                }}
               </button>
             </div>
 
@@ -92,15 +94,18 @@
                     Pending Action Items ({{ pendingActionItems().length }})
                   </mat-panel-title>
                 </mat-expansion-panel-header>
-                
+
                 <mat-list>
-                  <mat-list-item *ngFor="let item of pendingActionItems(); let i = index" class="action-item">
-                    <mat-checkbox 
+                  <mat-list-item
+                    *ngFor="let item of pendingActionItems(); let i = index"
+                    class="action-item"
+                  >
+                    <mat-checkbox
                       matListItemIcon
                       [checked]="selectedActionItems().has(i)"
                       (change)="toggleActionItem(i)"
                     ></mat-checkbox>
-                    
+
                     <div matListItemTitle class="action-item-content">
                       <span class="action-text">{{ item.text }}</span>
                       <mat-chip [ngClass]="getPriorityColor(item.priority)" class="priority-chip">
@@ -108,13 +113,18 @@
                         {{ item.priority }}
                       </mat-chip>
                     </div>
-                    
+
                     <div matListItemMeta class="action-meta">
                       <div class="assignee">
                         <mat-icon>person</mat-icon>
                         {{ item.assignee }}
                       </div>
-                      <div class="due-date" [class.overdue]="item.dueDate && formatDueDate(item.dueDate).includes('Overdue')">
+                      <div
+                        class="due-date"
+                        [class.overdue]="
+                          item.dueDate && formatDueDate(item.dueDate).includes('Overdue')
+                        "
+                      >
                         <mat-icon>event</mat-icon>
                         {{ item.dueDate ? formatDueDate(item.dueDate) : 'No due date' }}
                       </div>
@@ -130,15 +140,18 @@
                     Completed Action Items ({{ completedActionItems().length }})
                   </mat-panel-title>
                 </mat-expansion-panel-header>
-                
+
                 <mat-list>
-                  <mat-list-item *ngFor="let item of completedActionItems()" class="action-item completed">
+                  <mat-list-item
+                    *ngFor="let item of completedActionItems()"
+                    class="action-item completed"
+                  >
                     <mat-icon matListItemIcon class="completed-icon">check_circle</mat-icon>
-                    
+
                     <div matListItemTitle class="action-item-content">
                       <span class="action-text">{{ item.text }}</span>
                     </div>
-                    
+
                     <div matListItemMeta class="action-meta">
                       <div class="assignee">
                         <mat-icon>person</mat-icon>
@@ -150,7 +163,10 @@
               </mat-expansion-panel>
             </mat-accordion>
 
-            <div class="empty-state" *ngIf="!meeting()!.actionItems || meeting()!.actionItems!.length === 0">
+            <div
+              class="empty-state"
+              *ngIf="!meeting()!.actionItems || meeting()!.actionItems!.length === 0"
+            >
               <mat-icon>task_alt</mat-icon>
               <h3>No Action Items</h3>
               <p>This meeting has no action items recorded.</p>
@@ -162,7 +178,10 @@
         <mat-tab label="Participants">
           <div class="tab-content">
             <mat-list>
-              <mat-list-item *ngFor="let participant of meeting()!.participants" class="participant-item">
+              <mat-list-item
+                *ngFor="let participant of meeting()!.participants"
+                class="participant-item"
+              >
                 <div matListItemAvatar class="participant-avatar">
                   {{ getInitials(participant.name) }}
                 </div>
@@ -178,10 +197,12 @@
                 <div *ngFor="let speaker of speakerStatsArray()" class="speaker-stat">
                   <div class="speaker-info">
                     <span class="speaker-name">{{ speaker.name }}</span>
-                    <span class="speaker-time">{{ speaker.duration }} min ({{ speaker.percentage }}%)</span>
+                    <span class="speaker-time"
+                      >{{ speaker.duration }} min ({{ speaker.percentage }}%)</span
+                    >
                   </div>
-                  <mat-progress-bar 
-                    mode="determinate" 
+                  <mat-progress-bar
+                    mode="determinate"
                     [value]="speaker.percentage"
                     color="primary"
                   ></mat-progress-bar>

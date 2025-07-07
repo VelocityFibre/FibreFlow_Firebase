@@ -93,4 +93,88 @@ firebase deploy --only functions
 
 ---
 
-*Last updated: 2025-06-25*
+## Version Control Workflow (jj - Jujutsu)
+
+### Why jj Instead of Git
+
+As a solo developer, we use **jj (Jujutsu)** for version control because:
+- **No staging area** - all changes are automatically tracked
+- **Every change is a snapshot** - no need to manually commit
+- **Deploy what you see** - no confusion about uncommitted changes
+- **Simplified workflow** - focus on building, not git commands
+
+### Daily Workflow
+
+```bash
+# Everything is automatically tracked! Just:
+deploy  # This alias commits everything and deploys
+```
+
+### Common Commands
+
+```bash
+# Check status (replaces git status)
+jj st
+
+# See your changes (replaces git diff)
+jj diff
+
+# Update your current change description
+jj describe -m "your message"
+
+# Push to GitHub and deploy
+deploy  # Custom alias that does everything
+
+# See history
+jj log
+```
+
+### Setup Commands (Already Done)
+
+```bash
+# Initialize jj with git coexistence
+jj git init --colocate
+
+# Import existing git history
+jj git import
+```
+
+### Deployment Workflow
+
+Our `deploy` command does everything:
+1. Automatically captures all current changes
+2. Creates a commit with timestamp
+3. Pushes to GitHub
+4. Deploys to Firebase
+
+```bash
+# One command to rule them all:
+deploy
+
+# Or if you want a custom message:
+deploy "Added new feature X"
+```
+
+### Important Notes
+
+- **No need to "add" files** - jj tracks everything automatically
+- **No need to commit** - every save is already tracked
+- **No branches needed** - work directly on main
+- **Conflicts are rare** - as a solo dev, you control everything
+
+### Troubleshooting
+
+```bash
+# If you need to see what jj is tracking
+jj st
+
+# If you need to undo the last change
+jj undo
+
+# If you need to go back to a previous version
+jj restore
+```
+
+---
+
+*Last updated: 2025-07-07*

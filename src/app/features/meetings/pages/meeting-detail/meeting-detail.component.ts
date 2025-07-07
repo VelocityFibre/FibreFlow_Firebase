@@ -15,7 +15,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { PageHeaderComponent, PageHeaderAction } from '../../../../shared/components/page-header/page-header.component';
+import {
+  PageHeaderComponent,
+  PageHeaderAction,
+} from '../../../../shared/components/page-header/page-header.component';
 import { MeetingService } from '../../services/meeting.service';
 import { PersonalTodoService } from '../../../personal-todos/services/personal-todo.service';
 import { Meeting, ActionItem } from '../../models/meeting.model';
@@ -58,21 +61,23 @@ export class MeetingDetailComponent implements OnInit {
   selectedActionItems = signal<Set<number>>(new Set());
 
   // Computed values
-  pendingActionItems = computed(() => 
-    this.meeting()?.actionItems?.filter(ai => !ai.completed) || []
+  pendingActionItems = computed(
+    () => this.meeting()?.actionItems?.filter((ai) => !ai.completed) || [],
   );
 
-  completedActionItems = computed(() => 
-    this.meeting()?.actionItems?.filter(ai => ai.completed) || []
+  completedActionItems = computed(
+    () => this.meeting()?.actionItems?.filter((ai) => ai.completed) || [],
   );
 
   speakerStatsArray = computed(() => {
     const stats = this.meeting()?.insights?.speakerStats;
     if (!stats) return [];
-    return Object.entries(stats).map(([name, data]) => ({
-      name,
-      ...data,
-    })).sort((a, b) => b.percentage - a.percentage);
+    return Object.entries(stats)
+      .map(([name, data]) => ({
+        name,
+        ...data,
+      }))
+      .sort((a, b) => b.percentage - a.percentage);
   });
 
   // Page header configuration
@@ -100,20 +105,20 @@ export class MeetingDetailComponent implements OnInit {
   }
 
   private loadMeeting(): void {
-    this.route.params.pipe(
-      switchMap(params => this.meetingService.getById(params['id']))
-    ).subscribe({
-      next: (meeting) => {
-        this.meeting.set(meeting);
-        this.loading.set(false);
-      },
-      error: (error) => {
-        console.error('Error loading meeting:', error);
-        this.loading.set(false);
-        // Load mock data for development
-        this.loadMockData();
-      },
-    });
+    this.route.params
+      .pipe(switchMap((params) => this.meetingService.getById(params['id'])))
+      .subscribe({
+        next: (meeting) => {
+          this.meeting.set(meeting);
+          this.loading.set(false);
+        },
+        error: (error) => {
+          console.error('Error loading meeting:', error);
+          this.loading.set(false);
+          // Load mock data for development
+          this.loadMockData();
+        },
+      });
   }
 
   private loadMockData(): void {
@@ -129,7 +134,8 @@ export class MeetingDetailComponent implements OnInit {
         { name: 'Jane Doe', email: 'jane@velocityfibre.co.za' },
         { name: 'Bob Wilson', email: 'bob@velocityfibre.co.za' },
       ],
-      summary: 'The team discussed the current sprint progress, identified blockers, and planned the work for the upcoming week. Key decisions were made regarding the API integration timeline and resource allocation.',
+      summary:
+        'The team discussed the current sprint progress, identified blockers, and planned the work for the upcoming week. Key decisions were made regarding the API integration timeline and resource allocation.',
       actionItems: [
         {
           text: 'Complete API integration for meetings module',
@@ -155,7 +161,8 @@ export class MeetingDetailComponent implements OnInit {
       ],
       meetingUrl: 'https://meet.google.com/abc-defg-hij',
       recordingUrl: 'https://fireflies.ai/view/meeting-recording',
-      transcript: 'This is a sample transcript that would contain the full conversation from the meeting...',
+      transcript:
+        'This is a sample transcript that would contain the full conversation from the meeting...',
       insights: {
         keyTopics: ['API Integration', 'Design Review', 'Sprint Planning', 'Resource Allocation'],
         sentiment: 'positive',
@@ -168,7 +175,7 @@ export class MeetingDetailComponent implements OnInit {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    
+
     this.meeting.set(mockMeeting);
     this.loading.set(false);
   }
@@ -210,7 +217,7 @@ export class MeetingDetailComponent implements OnInit {
     const now = new Date();
     const diffTime = date.getTime() - now.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays < 0) {
       return `Overdue by ${Math.abs(diffDays)} days`;
     } else if (diffDays === 0) {
@@ -263,11 +270,10 @@ export class MeetingDetailComponent implements OnInit {
     if (!meeting) return;
 
     const selectedIndices = Array.from(this.selectedActionItems());
-    const selectedItems = meeting.actionItems?.filter((_, index) => 
-      selectedIndices.includes(index)
-    ) || [];
+    const selectedItems =
+      meeting.actionItems?.filter((_, index) => selectedIndices.includes(index)) || [];
 
-    selectedItems.forEach(actionItem => {
+    selectedItems.forEach((actionItem) => {
       // For now, just log the action item
       console.log('Would create todo for:', actionItem);
       // TODO: Implement when we have user authentication
@@ -314,6 +320,10 @@ export class MeetingDetailComponent implements OnInit {
   }
 
   getInitials(name: string): string {
-    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase();
   }
 }

@@ -83,75 +83,74 @@ export class TaskManagementComponent implements OnInit {
   loadData() {
     console.log('Task Management - loadData method started');
     this.loading = true;
-    
+
     try {
+      // Load projects and staff for filters
+      this.projects$ = this.projectService.getProjects();
+      this.staff$ = this.staffService.getStaff();
 
-    // Load projects and staff for filters
-    this.projects$ = this.projectService.getProjects();
-    this.staff$ = this.staffService.getStaff();
+      // Load all tasks and enhance with project/staff names
+      this.tasks$ = combineLatest([
+        this.taskService.getAllTasks(),
+        this.projects$,
+        this.staff$,
+      ]).pipe(
+        map(([tasks, projects, staff]) => {
+          console.log('Task Management - Raw tasks from service:', tasks.length);
+          console.log('Task Management - Projects loaded:', projects.length);
+          console.log('Task Management - Staff loaded:', staff.length);
 
-    // Load all tasks and enhance with project/staff names
-    this.tasks$ = combineLatest([
-      this.taskService.getAllTasks(),
-      this.projects$,
-      this.staff$,
-    ]).pipe(
-      map(([tasks, projects, staff]) => {
-        console.log('Task Management - Raw tasks from service:', tasks.length);
-        console.log('Task Management - Projects loaded:', projects.length);
-        console.log('Task Management - Staff loaded:', staff.length);
-        
-        if (tasks.length > 0) {
-          console.log('Task Management - Sample task:', tasks[0]);
-        }
-        
-        return tasks.map((task) => {
-          const project = projects.find((p) => p.id === task.projectId);
-          const assignee = staff.find((s) => s.id === task.assignedTo);
+          if (tasks.length > 0) {
+            console.log('Task Management - Sample task:', tasks[0]);
+          }
 
-          return {
-            ...task,
-            projectName: project?.name,
-            assigneeName: assignee?.name,
-            isUpdating: false,
-          } as TaskDisplay;
-        });
-      }),
-    );
+          return tasks.map((task) => {
+            const project = projects.find((p) => p.id === task.projectId);
+            const assignee = staff.find((s) => s.id === task.assignedTo);
 
-    // Apply filters
-    this.filteredTasks$ = combineLatest([
-      this.tasks$,
-      this.projectFilter.valueChanges.pipe(startWith(this.projectFilter.value)),
-      this.assigneeFilter.valueChanges.pipe(startWith(this.assigneeFilter.value)),
-    ]).pipe(
-      map(([tasks, projectId, assigneeId]) => {
-        let filtered = tasks;
+            return {
+              ...task,
+              projectName: project?.name,
+              assigneeName: assignee?.name,
+              isUpdating: false,
+            } as TaskDisplay;
+          });
+        }),
+      );
 
-        // Filter by project
-        if (projectId !== 'all') {
-          filtered = filtered.filter((t) => t.projectId === projectId);
-        }
+      // Apply filters
+      this.filteredTasks$ = combineLatest([
+        this.tasks$,
+        this.projectFilter.valueChanges.pipe(startWith(this.projectFilter.value)),
+        this.assigneeFilter.valueChanges.pipe(startWith(this.assigneeFilter.value)),
+      ]).pipe(
+        map(([tasks, projectId, assigneeId]) => {
+          let filtered = tasks;
 
-        // Filter by assignee
-        if (assigneeId !== 'all') {
-          filtered = filtered.filter((t) => t.assignedTo === assigneeId);
-        }
+          // Filter by project
+          if (projectId !== 'all') {
+            filtered = filtered.filter((t) => t.projectId === projectId);
+          }
 
-        // Only show incomplete tasks
-        filtered = filtered.filter((t) => {
-          // Handle both enum values and string values from Firestore
-          const status = t.status?.toLowerCase();
-          return status !== 'completed' && status !== TaskStatus.COMPLETED;
-        });
+          // Filter by assignee
+          if (assigneeId !== 'all') {
+            filtered = filtered.filter((t) => t.assignedTo === assigneeId);
+          }
 
-        console.log('Task Management - Total tasks:', tasks.length);
-        console.log('Task Management - Filtered tasks:', filtered.length);
-        console.log('Task Management - Sample task:', filtered[0]);
+          // Only show incomplete tasks
+          filtered = filtered.filter((t) => {
+            // Handle both enum values and string values from Firestore
+            const status = t.status?.toLowerCase();
+            return status !== 'completed' && status !== TaskStatus.COMPLETED;
+          });
 
-        return filtered;
-      }),
-    );
+          console.log('Task Management - Total tasks:', tasks.length);
+          console.log('Task Management - Filtered tasks:', filtered.length);
+          console.log('Task Management - Sample task:', filtered[0]);
+
+          return filtered;
+        }),
+      );
 
       // Subscribe to set loading state - use a subscription to ensure it executes
       const loadingSub = this.filteredTasks$.pipe(take(1)).subscribe({
@@ -162,9 +161,9 @@ export class TaskManagementComponent implements OnInit {
         error: (error) => {
           console.error('Task Management - Error loading tasks:', error);
           this.loading = false;
-        }
+        },
       });
-      
+
       console.log('Task Management - loadData method completed');
     } catch (error) {
       console.error('Task Management - Error in loadData:', error);
@@ -190,7 +189,9 @@ export class TaskManagementComponent implements OnInit {
       });
 
       this.notification.success(
-        newStatus === TaskStatus.COMPLETED ? 'Task marked as complete' : 'Task marked as incomplete',
+        newStatus === TaskStatus.COMPLETED
+          ? 'Task marked as complete'
+          : 'Task marked as incomplete',
       );
 
       // Refresh tasks to get updated data

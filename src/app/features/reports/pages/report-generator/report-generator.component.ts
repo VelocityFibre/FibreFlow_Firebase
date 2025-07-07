@@ -93,7 +93,12 @@ import { DailyReport, WeeklyReport, MonthlyReport } from '../../models/report.mo
               @case ('weekly') {
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>Select Week Start Date</mat-label>
-                  <input matInput [matDatepicker]="weeklyPicker" formControlName="weekStart" required />
+                  <input
+                    matInput
+                    [matDatepicker]="weeklyPicker"
+                    formControlName="weekStart"
+                    required
+                  />
                   <mat-datepicker-toggle matIconSuffix [for]="weeklyPicker"></mat-datepicker-toggle>
                   <mat-datepicker #weeklyPicker></mat-datepicker>
                   <mat-hint>Select any Monday to generate report for that week</mat-hint>
@@ -124,10 +129,10 @@ import { DailyReport, WeeklyReport, MonthlyReport } from '../../models/report.mo
             <!-- Generate Button -->
             <div class="form-actions">
               <button mat-raised-button type="button" (click)="cancel()">Cancel</button>
-              <button 
-                mat-raised-button 
-                color="primary" 
-                type="submit" 
+              <button
+                mat-raised-button
+                color="primary"
+                type="submit"
                 [disabled]="loading() || reportForm.invalid"
               >
                 @if (loading()) {
@@ -154,13 +159,21 @@ import { DailyReport, WeeklyReport, MonthlyReport } from '../../models/report.mo
                 <div class="report-item" (click)="viewReport(report)">
                   <mat-icon [class]="'report-icon ' + report.reportType">
                     @switch (report.reportType) {
-                      @case ('daily') { today }
-                      @case ('weekly') { date_range }
-                      @case ('monthly') { calendar_month }
+                      @case ('daily') {
+                        today
+                      }
+                      @case ('weekly') {
+                        date_range
+                      }
+                      @case ('monthly') {
+                        calendar_month
+                      }
                     }
                   </mat-icon>
                   <div class="report-details">
-                    <div class="report-title">{{ report.projectName }} - {{ getReportTypeLabel(report.reportType) }}</div>
+                    <div class="report-title">
+                      {{ report.projectName }} - {{ getReportTypeLabel(report.reportType) }}
+                    </div>
                     <div class="report-date">{{ formatReportPeriod(report) }}</div>
                   </div>
                   <mat-icon class="view-icon">arrow_forward</mat-icon>
@@ -172,136 +185,138 @@ import { DailyReport, WeeklyReport, MonthlyReport } from '../../models/report.mo
       }
     </div>
   `,
-  styles: [`
-    .report-generator-container {
-      padding: 24px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .header-card {
-      margin-bottom: 24px;
-    }
-
-    .form-card {
-      margin-bottom: 24px;
-    }
-
-    .report-type-section h3 {
-      margin: 0 0 16px 0;
-      color: var(--mat-sys-on-surface);
-    }
-
-    .radio-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .radio-group mat-radio-button {
-      display: flex;
-      align-items: center;
-    }
-
-    .radio-group mat-icon {
-      margin-right: 8px;
-      margin-left: 8px;
-    }
-
-    .full-width {
-      width: 100%;
-    }
-
-    .my-4 {
-      margin: 24px 0;
-    }
-
-    .month-selection {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .form-actions {
-      display: flex;
-      gap: 16px;
-      justify-content: flex-end;
-      margin-top: 24px;
-    }
-
-    .recent-reports-card {
-      margin-top: 24px;
-    }
-
-    .recent-reports-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .report-item {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 12px;
-      border-radius: 8px;
-      background: var(--mat-sys-surface-variant);
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .report-item:hover {
-      background: var(--mat-sys-surface-container-high);
-    }
-
-    .report-icon {
-      font-size: 24px;
-      width: 24px;
-      height: 24px;
-    }
-
-    .report-icon.daily {
-      color: var(--mat-sys-primary);
-    }
-
-    .report-icon.weekly {
-      color: var(--mat-sys-secondary);
-    }
-
-    .report-icon.monthly {
-      color: var(--mat-sys-tertiary);
-    }
-
-    .report-details {
-      flex: 1;
-    }
-
-    .report-title {
-      font-weight: 500;
-      color: var(--mat-sys-on-surface);
-    }
-
-    .report-date {
-      font-size: 12px;
-      color: var(--mat-sys-on-surface-variant);
-      margin-top: 2px;
-    }
-
-    .view-icon {
-      color: var(--mat-sys-on-surface-variant);
-    }
-
-    mat-spinner {
-      display: inline-block;
-      margin-right: 8px;
-    }
-
-    @media (max-width: 600px) {
-      .month-selection {
-        grid-template-columns: 1fr;
+  styles: [
+    `
+      .report-generator-container {
+        padding: 24px;
+        max-width: 800px;
+        margin: 0 auto;
       }
-    }
-  `]
+
+      .header-card {
+        margin-bottom: 24px;
+      }
+
+      .form-card {
+        margin-bottom: 24px;
+      }
+
+      .report-type-section h3 {
+        margin: 0 0 16px 0;
+        color: var(--mat-sys-on-surface);
+      }
+
+      .radio-group {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .radio-group mat-radio-button {
+        display: flex;
+        align-items: center;
+      }
+
+      .radio-group mat-icon {
+        margin-right: 8px;
+        margin-left: 8px;
+      }
+
+      .full-width {
+        width: 100%;
+      }
+
+      .my-4 {
+        margin: 24px 0;
+      }
+
+      .month-selection {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 16px;
+        justify-content: flex-end;
+        margin-top: 24px;
+      }
+
+      .recent-reports-card {
+        margin-top: 24px;
+      }
+
+      .recent-reports-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .report-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 12px;
+        border-radius: 8px;
+        background: var(--mat-sys-surface-variant);
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .report-item:hover {
+        background: var(--mat-sys-surface-container-high);
+      }
+
+      .report-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+
+      .report-icon.daily {
+        color: var(--mat-sys-primary);
+      }
+
+      .report-icon.weekly {
+        color: var(--mat-sys-secondary);
+      }
+
+      .report-icon.monthly {
+        color: var(--mat-sys-tertiary);
+      }
+
+      .report-details {
+        flex: 1;
+      }
+
+      .report-title {
+        font-weight: 500;
+        color: var(--mat-sys-on-surface);
+      }
+
+      .report-date {
+        font-size: 12px;
+        color: var(--mat-sys-on-surface-variant);
+        margin-top: 2px;
+      }
+
+      .view-icon {
+        color: var(--mat-sys-on-surface-variant);
+      }
+
+      mat-spinner {
+        display: inline-block;
+        margin-right: 8px;
+      }
+
+      @media (max-width: 600px) {
+        .month-selection {
+          grid-template-columns: 1fr;
+        }
+      }
+    `,
+  ],
 })
 export class ReportGeneratorComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -332,7 +347,7 @@ export class ReportGeneratorComponent implements OnInit {
     { value: 9, label: 'September' },
     { value: 10, label: 'October' },
     { value: 11, label: 'November' },
-    { value: 12, label: 'December' }
+    { value: 12, label: 'December' },
   ];
 
   years: number[] = [];
@@ -346,14 +361,14 @@ export class ReportGeneratorComponent implements OnInit {
 
   private initializeForm() {
     const currentDate = new Date();
-    
+
     this.reportForm = this.fb.group({
       reportType: ['daily', Validators.required],
       projectId: ['', Validators.required],
       date: [currentDate],
       weekStart: [this.getMonday(currentDate)],
       month: [currentDate.getMonth() + 1],
-      year: [currentDate.getFullYear()]
+      year: [currentDate.getFullYear()],
     });
   }
 
@@ -369,7 +384,7 @@ export class ReportGeneratorComponent implements OnInit {
       error: (error) => {
         console.error('Error loading projects:', error);
         this.snackBar.open('Error loading projects', 'Close', { duration: 3000 });
-      }
+      },
     });
   }
 
@@ -382,9 +397,9 @@ export class ReportGeneratorComponent implements OnInit {
 
   private setupFormListeners() {
     // Clear date fields when report type changes
-    this.reportForm.get('reportType')?.valueChanges.subscribe(type => {
+    this.reportForm.get('reportType')?.valueChanges.subscribe((type) => {
       const currentDate = new Date();
-      
+
       switch (type) {
         case 'daily':
           this.reportForm.patchValue({ date: currentDate });
@@ -395,7 +410,7 @@ export class ReportGeneratorComponent implements OnInit {
         case 'monthly':
           this.reportForm.patchValue({
             month: currentDate.getMonth() + 1,
-            year: currentDate.getFullYear()
+            year: currentDate.getFullYear(),
           });
           break;
       }
@@ -410,66 +425,82 @@ export class ReportGeneratorComponent implements OnInit {
   }
 
   async generateReport() {
-    if (this.reportForm.invalid) return;
+    console.log('generateReport called');
+    if (this.reportForm.invalid) {
+      console.log('Form is invalid:', this.reportForm.errors);
+      return;
+    }
 
     this.loading.set(true);
     const formValue = this.reportForm.value;
+    console.log('Form values:', formValue);
 
     try {
       let report: DailyReport | WeeklyReport | MonthlyReport;
-      
+
       switch (formValue.reportType) {
         case 'daily':
+          console.log('Generating daily report for project:', formValue.projectId);
           report = await this.reportService.generateDailyReport(
-            formValue.projectId, 
-            new Date(formValue.date)
+            formValue.projectId,
+            new Date(formValue.date),
           );
           break;
-          
+
         case 'weekly':
+          console.log('Generating weekly report for project:', formValue.projectId);
           report = await this.reportService.generateWeeklyReport(
             formValue.projectId,
-            new Date(formValue.weekStart)
+            new Date(formValue.weekStart),
           );
           break;
-          
+
         case 'monthly':
           report = await this.reportService.generateMonthlyReport(
             formValue.projectId,
             formValue.month,
-            formValue.year
+            formValue.year,
           );
           break;
-          
+
         default:
           throw new Error(`Unsupported report type: ${formValue.reportType}`);
       }
 
+      console.log('Report generated:', report);
       this.loading.set(false);
-      
-      // Generate PDF
-      const pdf = this.reportPDFService.generateReportPDF(report);
-      
-      // Show options
-      this.snackBar.open('Report generated successfully!', 'Download PDF', { duration: 10000 })
+
+      // Show success message with view option
+      this.snackBar
+        .open('Report generated successfully!', 'View Report', { duration: 10000 })
         .onAction()
         .subscribe(() => {
-          // Download PDF
-          const filename = `${report.projectName}_${report.reportType}_report_${new Date().toISOString().split('T')[0]}.pdf`;
-          this.reportPDFService.savePDF(pdf, filename);
+          // Navigate to HTML viewer instead of downloading PDF
+          this.router.navigate(['/reports', formValue.reportType, formValue.projectId]);
         });
-      
-      // Also navigate to viewer
-      setTimeout(() => {
-        this.router.navigate(['/reports', formValue.reportType, report.id]);
-      }, 1000);
 
+      // Store report in recent reports (mock for now)
+      const recentReport = {
+        id: formValue.projectId,
+        projectName: report.projectName,
+        reportType: formValue.reportType,
+        period: report.period,
+        generatedAt: new Date(),
+      };
+
+      // Add to recent reports
+      const current = this.recentReports();
+      this.recentReports.set([recentReport, ...current.slice(0, 4)]);
     } catch (error) {
       this.loading.set(false);
       console.error('Error generating report:', error);
-      this.snackBar.open('Error generating report. Please ensure data exists for the selected period.', 'Close', { 
-        duration: 5000 
-      });
+      this.snackBar.open(
+        'Error generating report. Please ensure data exists for the selected period.',
+        'Close',
+        {
+          duration: 5000,
+        },
+      );
     }
   }
 
@@ -478,7 +509,7 @@ export class ReportGeneratorComponent implements OnInit {
   }
 
   viewReport(report: any) {
-    this.router.navigate(['/reports', report.reportType, report.id]);
+    this.router.navigate(['/reports', report.reportType, report.id || report.projectId]);
   }
 
   getReportTypeLabel(type: string): string {
@@ -488,7 +519,7 @@ export class ReportGeneratorComponent implements OnInit {
   formatReportPeriod(report: any): string {
     const start = new Date(report.period.start);
     const end = new Date(report.period.end);
-    
+
     if (report.reportType === 'daily') {
       return start.toLocaleDateString();
     } else if (report.reportType === 'weekly') {

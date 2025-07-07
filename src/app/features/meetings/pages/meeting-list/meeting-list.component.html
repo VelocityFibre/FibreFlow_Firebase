@@ -27,13 +27,17 @@
     <mat-card-content>
       <div class="table-container">
         <table mat-table [dataSource]="filteredMeetings()" class="meetings-table">
-          
           <!-- Selection Column -->
           <ng-container matColumnDef="select">
             <th mat-header-cell *matHeaderCellDef>
               <mat-checkbox
-                [checked]="selectedMeetings().size === filteredMeetings().length && filteredMeetings().length > 0"
-                [indeterminate]="selectedMeetings().size > 0 && selectedMeetings().size < filteredMeetings().length"
+                [checked]="
+                  selectedMeetings().size === filteredMeetings().length &&
+                  filteredMeetings().length > 0
+                "
+                [indeterminate]="
+                  selectedMeetings().size > 0 && selectedMeetings().size < filteredMeetings().length
+                "
                 (change)="selectAll()"
               ></mat-checkbox>
             </th>
@@ -85,16 +89,16 @@
             <td mat-cell *matCellDef="let meeting">
               <div class="participants-cell">
                 <div class="participant-avatars">
-                  <div 
-                    *ngFor="let participant of meeting.participants.slice(0, 3); let i = index" 
+                  <div
+                    *ngFor="let participant of meeting.participants.slice(0, 3); let i = index"
                     class="avatar"
-                    [style.z-index]="3-i"
+                    [style.z-index]="3 - i"
                     [matTooltip]="participant.name"
                   >
                     {{ getInitials(participant.name) }}
                   </div>
-                  <div 
-                    *ngIf="meeting.participants.length > 3" 
+                  <div
+                    *ngIf="meeting.participants.length > 3"
                     class="avatar more"
                     [matTooltip]="getRemainingParticipantsTooltip(meeting)"
                   >
@@ -111,7 +115,7 @@
             <th mat-header-cell *matHeaderCellDef>Action Items</th>
             <td mat-cell *matCellDef="let meeting">
               <div class="action-items-cell" [matTooltip]="getActionItemsTooltip(meeting)">
-                <mat-icon 
+                <mat-icon
                   [class.has-items]="hasActionItems(meeting)"
                   [class.has-pending]="hasPendingActionItems(meeting)"
                 >
@@ -120,9 +124,7 @@
                 <span *ngIf="hasActionItems(meeting)">
                   {{ getPendingActionItemsCount(meeting) }} / {{ meeting.actionItems.length }}
                 </span>
-                <span *ngIf="!meeting.actionItems || meeting.actionItems.length === 0">
-                  None
-                </span>
+                <span *ngIf="!meeting.actionItems || meeting.actionItems.length === 0"> None </span>
               </div>
             </td>
           </ng-container>
@@ -143,7 +145,11 @@
                   <mat-icon>videocam</mat-icon>
                   View Recording
                 </button>
-                <button mat-menu-item *ngIf="meeting.actionItems && meeting.actionItems.length > 0" [disabled]="true">
+                <button
+                  mat-menu-item
+                  *ngIf="meeting.actionItems && meeting.actionItems.length > 0"
+                  [disabled]="true"
+                >
                   <mat-icon>checklist</mat-icon>
                   Create Todos
                 </button>
@@ -156,7 +162,7 @@
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="meeting-row"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns" class="meeting-row"></tr>
         </table>
 
         <!-- Empty State -->

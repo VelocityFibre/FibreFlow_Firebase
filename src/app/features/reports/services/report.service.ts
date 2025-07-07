@@ -1,17 +1,17 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, combineLatest, map, of, catchError, forkJoin } from 'rxjs';
-import { 
-  Firestore, 
-  collection, 
-  query, 
-  where, 
-  orderBy, 
+import {
+  Firestore,
+  collection,
+  query,
+  where,
+  orderBy,
   getDocs,
   doc,
   setDoc,
   CollectionReference,
   Timestamp,
-  limit
+  limit,
 } from '@angular/fire/firestore';
 
 import { DailyReport, WeeklyReport, MonthlyReport, ReportConfig } from '../models/report.model';
@@ -25,7 +25,7 @@ import { StaffService } from '../../staff/services/staff.service';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ReportService {
   private firestore = inject(Firestore);
@@ -70,41 +70,41 @@ export class ReportService {
         reportType: 'daily',
         period: {
           start: date,
-          end: date
+          end: date,
         },
         generatedAt: new Date(),
         generatedBy: currentUser?.uid || 'system',
         status: 'draft',
         version: 1,
-        
+
         summary: {
           date,
           weatherConditions: kpis.weatherConditions || 'Not recorded',
           overallProgress: this.calculateDailyProgress(kpis),
           keyAchievements: this.extractKeyAchievements(kpis),
           criticalIssues: this.extractCriticalIssues(kpis),
-          tomorrowPlan: [] // To be filled manually or from comments
+          tomorrowPlan: [], // To be filled manually or from comments
         },
-        
+
         kpis,
         financials,
         quality,
         teamPerformance,
-        
+
         resources: {
           equipment: this.extractEquipmentUsage(kpis),
-          materials: this.extractMaterialUsage(kpis)
+          materials: this.extractMaterialUsage(kpis),
         },
-        
+
         safety: {
           incidents: kpis.safetyIncidents || 0,
           nearMisses: kpis.nearMisses || 0,
           toolboxTalks: kpis.toolboxTalks || 0,
           observations: kpis.safetyObservations || 0,
-          complianceScore: kpis.complianceScore || 100
+          complianceScore: kpis.complianceScore || 100,
         },
-        
-        attachments: []
+
+        attachments: [],
       };
 
       // Save report to Firestore
@@ -121,20 +121,29 @@ export class ReportService {
    * Generate a weekly report for a specific project and week
    */
   async generateWeeklyReport(projectId: string, weekStart: Date): Promise<WeeklyReport> {
+    console.log('ReportService: generateWeeklyReport called', { projectId, weekStart });
     try {
       // Calculate week end date
       const weekEnd = new Date(weekStart);
       weekEnd.setDate(weekEnd.getDate() + 6);
+      console.log('Week period:', { weekStart, weekEnd });
 
       // Get project details
+      console.log('Fetching project details...');
       const project = await this.projectService.getProjectById(projectId).toPromise();
-      if (!project) throw new Error('Project not found');
+      if (!project) {
+        console.error('Project not found for ID:', projectId);
+        throw new Error('Project not found');
+      }
+      console.log('Project found:', project.name || 'Unnamed project');
 
       // Get current user
       const currentUser = await this.authService.getCurrentUser();
 
       // Get all KPIs for the week
+      console.log('Fetching KPIs for date range...');
       const weeklyKpis = await this.getKPIsForDateRange(projectId, weekStart, weekEnd);
+      console.log('KPIs found:', weeklyKpis.length);
 
       // Aggregate weekly data
       const weeklyTotals = this.aggregateWeeklyKPIs(weeklyKpis);
@@ -150,7 +159,11 @@ export class ReportService {
       const progressAnalysis = await this.calculateProgressAnalysis(projectId, weeklyKpis);
 
       // Get contractor performance
-      const contractorPerformance = await this.getContractorPerformanceForWeek(projectId, weekStart, weekEnd);
+      const contractorPerformance = await this.getContractorPerformanceForWeek(
+        projectId,
+        weekStart,
+        weekEnd,
+      );
 
       // Extract risks
       const risks = this.extractWeeklyRisks(weeklyKpis);
@@ -158,44 +171,47 @@ export class ReportService {
       // Prepare report
       const report: WeeklyReport = {
         projectId,
-        projectName: project.name,
+        projectName: project.name || 'Unnamed Project',
         reportType: 'weekly',
         period: {
           start: weekStart,
-          end: weekEnd
+          end: weekEnd,
         },
         generatedAt: new Date(),
         generatedBy: currentUser?.uid || 'system',
         status: 'draft',
         version: 1,
-        
+
         summary: {
           weekNumber: this.getWeekNumber(weekStart),
           overallProgress: this.calculateWeeklyProgress(weeklyKpis),
           weeklyHighlights: this.extractWeeklyHighlights(weeklyKpis),
           majorChallenges: this.extractWeeklyChallenges(weeklyKpis),
           nextWeekPriorities: [],
-          executiveNotes: ''
+          executiveNotes: '',
         },
-        
+
         kpiSummary: {
           dailyKpis: weeklyKpis,
           weeklyTotals,
-          trends
+          trends,
         },
-        
+
         financialSummary,
         qualitySummary,
         progressAnalysis,
         contractorPerformance,
         risks,
-        
-        lessonsLearned: [] // To be filled manually
+
+        lessonsLearned: [], // To be filled manually
       };
 
       // Save report to Firestore
+      console.log('Saving report to Firestore...');
       await this.saveReport(report);
+      console.log('Report saved successfully');
 
+      console.log('Final report object:', report);
       return report;
     } catch (error) {
       console.error('Error generating weekly report:', error);
@@ -206,7 +222,11 @@ export class ReportService {
   /**
    * Generate a monthly report
    */
-  async generateMonthlyReport(projectId: string, month: number, year: number): Promise<MonthlyReport> {
+  async generateMonthlyReport(
+    projectId: string,
+    month: number,
+    year: number,
+  ): Promise<MonthlyReport> {
     try {
       // Calculate month start and end dates
       const monthStart = new Date(year, month - 1, 1);
@@ -244,13 +264,13 @@ export class ReportService {
         reportType: 'monthly',
         period: {
           start: monthStart,
-          end: monthEnd
+          end: monthEnd,
         },
         generatedAt: new Date(),
         generatedBy: currentUser?.uid || 'system',
         status: 'draft',
         version: 1,
-        
+
         dashboard: {
           month: `${this.getMonthName(month)} ${year}`,
           overallHealth: this.assessProjectHealth(monthlyKpis, project),
@@ -258,48 +278,48 @@ export class ReportService {
           budgetUtilization: financialSummary?.metrics?.roi || 0,
           scheduleAdherence: this.calculateScheduleAdherence(project),
           qualityScore: qualitySummary?.overview?.qualityScore || 0,
-          safetyScore: this.calculateMonthlySafetyScore(monthlyKpis)
+          safetyScore: this.calculateMonthlySafetyScore(monthlyKpis),
         },
-        
+
         strategicSummary: {
           executiveSummary: '',
           majorMilestones: this.extractMonthlyMilestones(project, monthlyKpis),
           strategicIssues: this.extractStrategicIssues(monthlyKpis),
-          recommendations: []
+          recommendations: [],
         },
-        
+
         metrics: {
           kpis: {
             monthly: monthlyTotals,
             weeklyBreakdown: this.getWeeklyBreakdown(monthlyKpis),
-            dailyTrend: this.getDailyProductivityTrend(monthlyKpis)
+            dailyTrend: this.getDailyProductivityTrend(monthlyKpis),
           },
           financial: financialSummary!,
-          quality: qualitySummary!
+          quality: qualitySummary!,
         },
-        
+
         resourceAnalysis,
-        
+
         stakeholderUpdate: {
           customerSatisfaction: qualitySummary?.overview?.customerSatisfaction || 0,
           communityEngagement: {
             meetings: 0,
             complaints: this.countCustomerComplaints(monthlyKpis),
-            resolved: 0
+            resolved: 0,
           },
           regulatoryCompliance: {
             permits: { required: 0, obtained: 0, pending: 0 },
-            inspections: { 
+            inspections: {
               passed: qualitySummary?.overview?.totalInspections || 0,
               failed: 0,
-              scheduled: 0
-            }
-          }
+              scheduled: 0,
+            },
+          },
         },
-        
+
         forecast,
         improvementPlan: [],
-        appendices: {}
+        appendices: {},
       };
 
       // Save report to Firestore
@@ -318,16 +338,32 @@ export class ReportService {
     return kpis && kpis.length > 0 ? kpis[0] : null;
   }
 
-  private async getKPIsForDateRange(projectId: string, startDate: Date, endDate: Date): Promise<DailyKPIs[]> {
-    return await this.kpisService.getKPIsByProjectAndDateRange(projectId, startDate, endDate).toPromise() || [];
+  private async getKPIsForDateRange(
+    projectId: string,
+    startDate: Date,
+    endDate: Date,
+  ): Promise<DailyKPIs[]> {
+    console.log('getKPIsForDateRange called', { projectId, startDate, endDate });
+    const kpis =
+      (await this.kpisService
+        .getKPIsByProjectAndDateRange(projectId, startDate, endDate)
+        .toPromise()) || [];
+    console.log('getKPIsForDateRange result:', kpis);
+    return kpis;
   }
 
-  private async getFinancialsForDate(projectId: string, date: Date): Promise<ProjectFinancials | undefined> {
+  private async getFinancialsForDate(
+    projectId: string,
+    date: Date,
+  ): Promise<ProjectFinancials | undefined> {
     // TODO: Implement when financial service is created
     return undefined;
   }
 
-  private async getQualityMetricsForDate(projectId: string, date: Date): Promise<QualityMetrics | undefined> {
+  private async getQualityMetricsForDate(
+    projectId: string,
+    date: Date,
+  ): Promise<QualityMetrics | undefined> {
     // TODO: Implement when quality service is created
     return undefined;
   }
@@ -343,7 +379,7 @@ export class ReportService {
       totalHoursWorked: kpis.regularHours || 0,
       overtimeHours: kpis.overtimeHours || 0,
       productivityScore: kpis.productivityScore || 0,
-      contractors: contractorPerformance
+      contractors: contractorPerformance,
     };
   }
 
@@ -354,7 +390,7 @@ export class ReportService {
 
   private extractKeyAchievements(kpis: DailyKPIs): string[] {
     const achievements = [];
-    
+
     if (kpis.polesPlantedToday > 0) {
       achievements.push(`Planted ${kpis.polesPlantedToday} poles`);
     }
@@ -364,29 +400,29 @@ export class ReportService {
     if (kpis.homesConnectedToday > 0) {
       achievements.push(`Connected ${kpis.homesConnectedToday} homes`);
     }
-    
+
     // Add cable stringing achievements
     const stringingTypes = [
       { field: 'stringing24Today', label: '24F' },
       { field: 'stringing48Today', label: '48F' },
       { field: 'stringing96Today', label: '96F' },
       { field: 'stringing144Today', label: '144F' },
-      { field: 'stringing288Today', label: '288F' }
+      { field: 'stringing288Today', label: '288F' },
     ];
-    
-    stringingTypes.forEach(type => {
+
+    stringingTypes.forEach((type) => {
       const value = kpis[type.field as keyof DailyKPIs] as number;
       if (value > 0) {
         achievements.push(`Strung ${value}m of ${type.label} cable`);
       }
     });
-    
+
     return achievements;
   }
 
   private extractCriticalIssues(kpis: DailyKPIs): string[] {
     const issues = [];
-    
+
     if (kpis.safetyIncidents && kpis.safetyIncidents > 0) {
       issues.push(`${kpis.safetyIncidents} safety incident(s) reported`);
     }
@@ -399,11 +435,11 @@ export class ReportService {
     if (kpis.weatherImpact && kpis.weatherImpact >= 7) {
       issues.push('Severe weather impact on operations');
     }
-    
+
     if (kpis.keyIssuesSummary) {
       issues.push(kpis.keyIssuesSummary);
     }
-    
+
     return issues;
   }
 
@@ -412,38 +448,58 @@ export class ReportService {
       {
         name: 'Vehicles',
         hoursUsed: kpis.regularHours || 0,
-        utilization: kpis.equipmentUtilization || 0
-      }
+        utilization: kpis.equipmentUtilization || 0,
+      },
     ];
   }
 
   private extractMaterialUsage(kpis: DailyKPIs): any[] {
     const materials: any[] = [];
-    
+
     if (kpis.materialsUsed && Array.isArray(kpis.materialsUsed)) {
-      return kpis.materialsUsed.map(m => ({
+      return kpis.materialsUsed.map((m) => ({
         type: m.type,
         consumed: m.quantity,
         unit: m.unit,
-        remaining: 0 // Would need inventory tracking
+        remaining: 0, // Would need inventory tracking
       }));
     }
-    
+
     return materials;
   }
 
   private aggregateWeeklyKPIs(kpis: DailyKPIs[]): Partial<DailyKPIs> {
-    const totals: any = {};
-    
-    // Sum up all daily values
-    kpis.forEach(daily => {
-      Object.keys(daily).forEach(key => {
-        if (key.includes('Today') && typeof daily[key as keyof DailyKPIs] === 'number') {
-          totals[key] = (totals[key] || 0) + (daily[key as keyof DailyKPIs] as number);
-        }
+    // Initialize with all KPI fields set to 0
+    const totals: any = {
+      // Permissions
+      permissionsToday: 0,
+      missingStatusToday: 0,
+      // Infrastructure
+      polesPlantedToday: 0,
+      trenchingToday: 0,
+      // Cable Stringing
+      stringing24Today: 0,
+      stringing48Today: 0,
+      stringing96Today: 0,
+      stringing144Today: 0,
+      stringing288Today: 0,
+      // Home Operations
+      homeSignupsToday: 0,
+      homeDropsToday: 0,
+      homesConnectedToday: 0,
+    };
+
+    // If we have data, sum up all daily values
+    if (kpis && kpis.length > 0) {
+      kpis.forEach((daily) => {
+        Object.keys(totals).forEach((key) => {
+          if (daily[key as keyof DailyKPIs] && typeof daily[key as keyof DailyKPIs] === 'number') {
+            totals[key] = (totals[key] || 0) + (daily[key as keyof DailyKPIs] as number);
+          }
+        });
       });
-    });
-    
+    }
+
     return totals;
   }
 
@@ -452,7 +508,11 @@ export class ReportService {
     return [];
   }
 
-  private async getFinancialSummaryForWeek(projectId: string, start: Date, end: Date): Promise<any> {
+  private async getFinancialSummaryForWeek(
+    projectId: string,
+    start: Date,
+    end: Date,
+  ): Promise<any> {
     // TODO: Implement when financial service is ready
     return {};
   }
@@ -467,18 +527,22 @@ export class ReportService {
     return {
       planned: { poles: 0, trenching: 0, cableStringing: 0, connections: 0 },
       actual: { poles: 0, trenching: 0, cableStringing: 0, connections: 0 },
-      variance: { poles: 0, trenching: 0, cableStringing: 0, connections: 0 }
+      variance: { poles: 0, trenching: 0, cableStringing: 0, connections: 0 },
     };
   }
 
-  private async getContractorPerformanceForWeek(projectId: string, start: Date, end: Date): Promise<any[]> {
+  private async getContractorPerformanceForWeek(
+    projectId: string,
+    start: Date,
+    end: Date,
+  ): Promise<any[]> {
     // TODO: Implement contractor performance metrics
     return [];
   }
 
   private extractWeeklyRisks(kpis: DailyKPIs[]): any[] {
     const risks = [];
-    
+
     // Check for consistent issues
     const safetyIncidents = kpis.reduce((sum, k) => sum + (k.safetyIncidents || 0), 0);
     if (safetyIncidents > 0) {
@@ -490,10 +554,10 @@ export class ReportService {
         impact: 'high',
         mitigation: 'Review safety procedures and conduct additional training',
         status: 'ongoing',
-        owner: 'Safety Officer'
+        owner: 'Safety Officer',
       });
     }
-    
+
     return risks;
   }
 
@@ -502,37 +566,38 @@ export class ReportService {
     const dayNum = d.getUTCDay() || 7;
     d.setUTCDate(d.getUTCDate() + 4 - dayNum);
     const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+    return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
   }
 
   private calculateWeeklyProgress(kpis: DailyKPIs[]): number {
     if (kpis.length === 0) return 0;
-    const avgProductivity = kpis.reduce((sum, k) => sum + (k.productivityScore || 0), 0) / kpis.length;
+    const avgProductivity =
+      kpis.reduce((sum, k) => sum + (k.productivityScore || 0), 0) / kpis.length;
     return Math.round(avgProductivity);
   }
 
   private extractWeeklyHighlights(kpis: DailyKPIs[]): string[] {
     const highlights = [];
-    
+
     // Sum totals
     const totals = this.aggregateWeeklyKPIs(kpis);
-    
+
     if (totals.polesPlantedToday && totals.polesPlantedToday > 0) {
       highlights.push(`${totals.polesPlantedToday} poles planted this week`);
     }
-    
+
     return highlights;
   }
 
   private extractWeeklyChallenges(kpis: DailyKPIs[]): string[] {
     const challenges = [];
-    
+
     // Count days with weather impact
-    const weatherImpactDays = kpis.filter(k => k.weatherImpact && k.weatherImpact >= 5).length;
+    const weatherImpactDays = kpis.filter((k) => k.weatherImpact && k.weatherImpact >= 5).length;
     if (weatherImpactDays > 0) {
       challenges.push(`Weather impacted operations for ${weatherImpactDays} days`);
     }
-    
+
     return challenges;
   }
 
@@ -540,66 +605,80 @@ export class ReportService {
     return this.aggregateWeeklyKPIs(kpis); // Same logic
   }
 
-  private async getFinancialSummaryForMonth(projectId: string, month: number, year: number): Promise<any> {
+  private async getFinancialSummaryForMonth(
+    projectId: string,
+    month: number,
+    year: number,
+  ): Promise<any> {
     // TODO: Implement
     return {};
   }
 
-  private async getQualitySummaryForMonth(projectId: string, month: number, year: number): Promise<any> {
+  private async getQualitySummaryForMonth(
+    projectId: string,
+    month: number,
+    year: number,
+  ): Promise<any> {
     // TODO: Implement
     return {};
   }
 
   private async calculateResourceAnalysis(projectId: string, kpis: DailyKPIs[]): Promise<any> {
     const totalManDays = kpis.reduce((sum, k) => sum + (k.teamSize || 0), 0);
-    const avgUtilization = kpis.reduce((sum, k) => sum + (k.equipmentUtilization || 0), 0) / (kpis.length || 1);
-    
+    const avgUtilization =
+      kpis.reduce((sum, k) => sum + (k.equipmentUtilization || 0), 0) / (kpis.length || 1);
+
     return {
       manpower: {
         planned: 0, // Would need project plan
         actual: totalManDays,
         utilization: avgUtilization,
-        forecast: Math.round(totalManDays / kpis.length * 30) // Simple forecast
+        forecast: Math.round((totalManDays / kpis.length) * 30), // Simple forecast
       },
       equipment: {
         availability: 100,
         utilization: avgUtilization,
         maintenanceHours: 0,
-        breakdowns: 0
+        breakdowns: 0,
       },
       materials: {
         consumption: [],
         wastage: 0,
-        stockLevels: []
-      }
+        stockLevels: [],
+      },
     };
   }
 
   private async calculateMonthlyForecast(project: any, kpis: DailyKPIs[]): Promise<any> {
     // Simple forecast based on current progress
-    const avgDailyPoles = kpis.reduce((sum, k) => sum + (k.polesPlantedToday || 0), 0) / (kpis.length || 1);
-    
+    const avgDailyPoles =
+      kpis.reduce((sum, k) => sum + (k.polesPlantedToday || 0), 0) / (kpis.length || 1);
+
     return {
       completionDate: new Date(), // Would need complex calculation
       finalCost: 0,
       remainingWork: {
         poles: 0,
         trenching: 0,
-        connections: 0
+        connections: 0,
       },
       requiredResources: {
         manDays: 0,
         equipment: [],
-        materials: []
+        materials: [],
       },
-      risks: []
+      risks: [],
     };
   }
 
-  private assessProjectHealth(kpis: DailyKPIs[], project: any): 'on-track' | 'at-risk' | 'behind-schedule' {
+  private assessProjectHealth(
+    kpis: DailyKPIs[],
+    project: any,
+  ): 'on-track' | 'at-risk' | 'behind-schedule' {
     // Simple assessment based on productivity
-    const avgProductivity = kpis.reduce((sum, k) => sum + (k.productivityScore || 0), 0) / (kpis.length || 1);
-    
+    const avgProductivity =
+      kpis.reduce((sum, k) => sum + (k.productivityScore || 0), 0) / (kpis.length || 1);
+
     if (avgProductivity >= 80) return 'on-track';
     if (avgProductivity >= 60) return 'at-risk';
     return 'behind-schedule';
@@ -617,10 +696,11 @@ export class ReportService {
 
   private calculateMonthlySafetyScore(kpis: DailyKPIs[]): number {
     const totalIncidents = kpis.reduce((sum, k) => sum + (k.safetyIncidents || 0), 0);
-    const avgCompliance = kpis.reduce((sum, k) => sum + (k.complianceScore || 100), 0) / (kpis.length || 1);
-    
+    const avgCompliance =
+      kpis.reduce((sum, k) => sum + (k.complianceScore || 100), 0) / (kpis.length || 1);
+
     // Simple calculation: deduct 10 points per incident from compliance average
-    return Math.max(0, avgCompliance - (totalIncidents * 10));
+    return Math.max(0, avgCompliance - totalIncidents * 10);
   }
 
   private extractMonthlyMilestones(project: any, kpis: DailyKPIs[]): any[] {
@@ -630,31 +710,31 @@ export class ReportService {
 
   private extractStrategicIssues(kpis: DailyKPIs[]): string[] {
     const issues = [];
-    
+
     // Check for recurring problems
     const totalQualityIssues = kpis.reduce((sum, k) => sum + (k.qualityIssues || 0), 0);
     if (totalQualityIssues > 10) {
       issues.push('High number of quality issues requiring attention');
     }
-    
+
     return issues;
   }
 
   private getWeeklyBreakdown(kpis: DailyKPIs[]): Partial<DailyKPIs>[] {
     // Group by week
     const weeks: { [key: number]: DailyKPIs[] } = {};
-    
-    kpis.forEach(kpi => {
+
+    kpis.forEach((kpi) => {
       const week = this.getWeekNumber(new Date(kpi.date));
       if (!weeks[week]) weeks[week] = [];
       weeks[week].push(kpi);
     });
-    
-    return Object.values(weeks).map(weekKpis => this.aggregateWeeklyKPIs(weekKpis));
+
+    return Object.values(weeks).map((weekKpis) => this.aggregateWeeklyKPIs(weekKpis));
   }
 
   private getDailyProductivityTrend(kpis: DailyKPIs[]): number[] {
-    return kpis.map(k => k.productivityScore || 0);
+    return kpis.map((k) => k.productivityScore || 0);
   }
 
   private countCustomerComplaints(kpis: DailyKPIs[]): number {
@@ -662,19 +742,39 @@ export class ReportService {
   }
 
   private getMonthName(month: number): string {
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 
-                   'July', 'August', 'September', 'October', 'November', 'December'];
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
     return months[month - 1];
   }
 
   private async saveReport(report: DailyReport | WeeklyReport | MonthlyReport): Promise<void> {
-    const reportCollection = collection(this.firestore, 'reports');
-    const reportDoc = doc(reportCollection);
-    await setDoc(reportDoc, {
-      ...report,
-      id: reportDoc.id,
-      createdAt: Timestamp.now(),
-      updatedAt: Timestamp.now()
-    });
+    try {
+      const reportCollection = collection(this.firestore, 'reports');
+      const reportDoc = doc(reportCollection);
+      const reportWithId = {
+        ...report,
+        id: reportDoc.id,
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
+      };
+      await setDoc(reportDoc, reportWithId);
+      // Update the report object with the ID
+      (report as any).id = reportDoc.id;
+    } catch (error) {
+      console.error('Error saving report:', error);
+      throw error;
+    }
   }
 }

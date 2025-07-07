@@ -14,7 +14,13 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
 import { Observable, combineLatest, map, startWith, take } from 'rxjs';
 
-import { PersonalTodo, TodoStatus, TodoPriority, TodoSource, TodoStats } from '../../models/personal-todo.model';
+import {
+  PersonalTodo,
+  TodoStatus,
+  TodoPriority,
+  TodoSource,
+  TodoStats,
+} from '../../models/personal-todo.model';
 import { PersonalTodoService } from '../../services/personal-todo.service';
 import { DateFormatService } from '../../../../core/services/date-format.service';
 import { NotificationService } from '../../../../core/services/notification.service';
@@ -77,10 +83,10 @@ export class TodoManagementComponent implements OnInit {
     this.loading = true;
 
     // Load todos and calculate stats
-    this.todos$ = this.todoService.getMyTodos().pipe(
-      map(todos => todos.map(todo => this.enhanceTodo(todo)))
-    );
-    
+    this.todos$ = this.todoService
+      .getMyTodos()
+      .pipe(map((todos) => todos.map((todo) => this.enhanceTodo(todo))));
+
     this.todoStats$ = this.todoService.getTodoStats();
 
     // Set up filtered todos with reactive filters
@@ -96,24 +102,26 @@ export class TodoManagementComponent implements OnInit {
         // Filter by status
         switch (status) {
           case 'active':
-            filtered = filtered.filter(t => t.status !== TodoStatus.COMPLETED && t.status !== TodoStatus.CANCELLED);
+            filtered = filtered.filter(
+              (t) => t.status !== TodoStatus.COMPLETED && t.status !== TodoStatus.CANCELLED,
+            );
             break;
           case 'completed':
-            filtered = filtered.filter(t => t.status === TodoStatus.COMPLETED);
+            filtered = filtered.filter((t) => t.status === TodoStatus.COMPLETED);
             break;
           case 'overdue':
-            filtered = filtered.filter(t => t.isOverdue);
+            filtered = filtered.filter((t) => t.isOverdue);
             break;
         }
 
         // Filter by priority
         if (priority !== 'all') {
-          filtered = filtered.filter(t => t.priority === priority);
+          filtered = filtered.filter((t) => t.priority === priority);
         }
 
         // Filter by source
         if (source !== 'all') {
-          filtered = filtered.filter(t => t.source === source);
+          filtered = filtered.filter((t) => t.source === source);
         }
 
         setTimeout(() => {
@@ -121,7 +129,7 @@ export class TodoManagementComponent implements OnInit {
         }, 0);
 
         return filtered;
-      })
+      }),
     );
 
     // Subscribe to set loading state
@@ -151,7 +159,7 @@ export class TodoManagementComponent implements OnInit {
 
   async toggleTodoCompletion(todo: TodoDisplay) {
     if (todo.isUpdating) return;
-    
+
     todo.isUpdating = true;
     try {
       if (todo.completed) {

@@ -43,7 +43,7 @@
   <!-- Task List -->
   <div class="table-container">
     <!-- Initial debug info -->
-    <div style="padding: 16px; background: #f0f0f0; margin-bottom: 16px;">
+    <div style="padding: 16px; background: #f0f0f0; margin-bottom: 16px">
       <p>Debug: Component loaded</p>
       <p>Debug: Loading state = {{ loading }}</p>
     </div>
@@ -54,7 +54,7 @@
     </div>
 
     <!-- Debug info -->
-    <div *ngIf="!loading" style="padding: 16px; background: #f0f0f0; margin-bottom: 16px;">
+    <div *ngIf="!loading" style="padding: 16px; background: #f0f0f0; margin-bottom: 16px">
       <p>Debug: Loading = {{ loading }}</p>
       <p>Debug: Tasks count = {{ (filteredTasks$ | async)?.length || 0 }}</p>
     </div>

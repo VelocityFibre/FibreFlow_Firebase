@@ -1,0 +1,104 @@
+@use '../../../../styles/component-theming' as theme;
+
+.pole-details-dialog {
+  width: 600px;
+  max-width: 90vw;
+}
+
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.details-section {
+  padding: theme.ff-spacing(lg) 0;
+
+  h3 {
+    margin: 0 0 theme.ff-spacing(md) 0;
+    color: theme.ff-rgba(foreground, 0.8);
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+
+mat-list-item {
+  height: auto;
+  padding: theme.ff-spacing(sm) 0;
+
+  span[matListItemTitle] {
+    font-weight: 500;
+    color: theme.ff-rgba(foreground, 0.7);
+    font-size: 14px;
+  }
+
+  span[matListItemLine] {
+    margin-top: theme.ff-spacing(xs);
+    color: theme.ff-rgb(foreground);
+  }
+}
+
+.error-text {
+  color: theme.ff-rgb(danger);
+}
+
+.notes {
+  padding: theme.ff-spacing(md);
+  background-color: theme.ff-rgba(surface-variant, 0.3);
+  border-radius: 4px;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+// Status chips
+.status-pending {
+  background-color: theme.ff-rgba(warning, 0.2);
+  color: theme.ff-rgb(warning);
+}
+
+.status-approved {
+  background-color: theme.ff-rgba(success, 0.2);
+  color: theme.ff-rgb(success);
+}
+
+.status-rejected {
+  background-color: theme.ff-rgba(danger, 0.2);
+  color: theme.ff-rgb(danger);
+}
+
+// Deviation chips
+.deviation-valid {
+  background-color: theme.ff-rgba(success, 0.2);
+  color: theme.ff-rgb(success);
+}
+
+.deviation-warning {
+  background-color: theme.ff-rgba(warning, 0.2);
+  color: theme.ff-rgb(warning);
+}
+
+.deviation-invalid {
+  background-color: theme.ff-rgba(danger, 0.2);
+  color: theme.ff-rgb(danger);
+}
+
+// Sync status chips
+.sync-synced {
+  background-color: theme.ff-rgba(success, 0.2);
+  color: theme.ff-rgb(success);
+}
+
+.sync-pending,
+.sync-syncing {
+  background-color: theme.ff-rgba(warning, 0.2);
+  color: theme.ff-rgb(warning);
+}
+
+.sync-failed {
+  background-color: theme.ff-rgba(danger, 0.2);
+  color: theme.ff-rgb(danger);
+}
+
+mat-divider {
+  margin: theme.ff-spacing(lg) 0;
+}

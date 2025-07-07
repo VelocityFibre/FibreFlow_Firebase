@@ -57,7 +57,7 @@ export interface FirefliesSentence {
 export class FirefliesService {
   private http = inject(HttpClient);
   private functions = inject(Functions);
-  
+
   // GraphQL endpoint
   private apiUrl = 'https://api.fireflies.ai/graphql';
 
@@ -66,10 +66,10 @@ export class FirefliesService {
     const getMeetingsFunction = httpsCallable(this.functions, 'getFirefliesMeetings');
     return from(getMeetingsFunction({ dateFrom, dateTo })).pipe(
       map((result: any) => result.data.meetings),
-      catchError(error => {
+      catchError((error) => {
         console.error('Error fetching Fireflies meetings:', error);
         return of([]);
-      })
+      }),
     );
   }
 
@@ -78,18 +78,20 @@ export class FirefliesService {
     const getTranscriptFunction = httpsCallable(this.functions, 'getFirefliesTranscript');
     return from(getTranscriptFunction({ meetingId })).pipe(
       map((result: any) => result.data),
-      catchError(error => {
+      catchError((error) => {
         console.error('Error fetching transcript:', error);
         throw error;
-      })
+      }),
     );
   }
 
   // GraphQL query builders
   private buildMeetingsQuery(dateFrom?: Date, dateTo?: Date): string {
-    const dateFilter = dateFrom && dateTo ? 
-      `date_from: "${dateFrom.toISOString()}", date_to: "${dateTo.toISOString()}"` : '';
-    
+    const dateFilter =
+      dateFrom && dateTo
+        ? `date_from: "${dateFrom.toISOString()}", date_to: "${dateTo.toISOString()}"`
+        : '';
+
     return `
       query GetMeetings {
         meetings(${dateFilter}) {
@@ -145,23 +147,27 @@ export class FirefliesService {
 
   // Process action items to extract insights
   processActionItems(actionItems: FirefliesActionItem[]): any[] {
-    return actionItems.map(item => {
+    return actionItems.map((item) => {
       const priority = this.extractPriority(item.text);
       const type = this.extractActionType(item.text);
-      
+
       return {
         ...item,
         priority,
         type,
-        context: this.extractContext(item.text)
+        context: this.extractContext(item.text),
       };
     });
   }
 
   private extractPriority(text: string): 'high' | 'medium' | 'low' {
     const lowercaseText = text.toLowerCase();
-    if (lowercaseText.includes('urgent') || lowercaseText.includes('asap') || 
-        lowercaseText.includes('critical') || lowercaseText.includes('immediately')) {
+    if (
+      lowercaseText.includes('urgent') ||
+      lowercaseText.includes('asap') ||
+      lowercaseText.includes('critical') ||
+      lowercaseText.includes('immediately')
+    ) {
       return 'high';
     }
     if (lowercaseText.includes('important') || lowercaseText.includes('priority')) {
@@ -192,10 +198,10 @@ export class FirefliesService {
       title: firefliesMeeting.title,
       date: new Date(firefliesMeeting.date),
       duration: firefliesMeeting.duration,
-      participants: firefliesMeeting.participants.map(p => ({
+      participants: firefliesMeeting.participants.map((p) => ({
         email: p.email,
         name: p.name,
-        isSpeaker: true
+        isSpeaker: true,
       })),
       summary: firefliesMeeting.summary,
       actionItems: this.processActionItems(firefliesMeeting.action_items).map((item, index) => ({
@@ -207,11 +213,11 @@ export class FirefliesService {
         completed: false,
         speakerName: item.speaker,
         timestamp: item.timestamp,
-        context: item.context
+        context: item.context,
       })),
       insights: [], // Will be populated by AI processing
       transcriptUrl: firefliesMeeting.transcript_url,
-      status: 'pending'
+      status: 'pending',
     };
   }
 }

@@ -16,7 +16,14 @@ import {
   Timestamp,
 } from '@angular/fire/firestore';
 import { Observable, from, map, combineLatest } from 'rxjs';
-import { PersonalTodo, TodoFilter, TodoStats, TodoStatus, TodoPriority, TodoSource } from '../models/personal-todo.model';
+import {
+  PersonalTodo,
+  TodoFilter,
+  TodoStats,
+  TodoStatus,
+  TodoPriority,
+  TodoSource,
+} from '../models/personal-todo.model';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Injectable({
@@ -29,7 +36,7 @@ export class PersonalTodoService {
 
   getTodos(filter: TodoFilter = {}): Observable<PersonalTodo[]> {
     const constraints: QueryConstraint[] = [];
-    
+
     // Default to current user if not specified
     const userId = filter.userId || this.authService.currentUser()?.uid;
     if (userId) {
@@ -53,14 +60,14 @@ export class PersonalTodoService {
     const q = query(this.todosCollection, ...constraints);
     return collectionData(q, { idField: 'id' }).pipe(
       map((todos) => todos.map((t) => this.convertFromFirestore(t))),
-      map((todos) => this.applyClientSideFilters(todos, filter))
+      map((todos) => this.applyClientSideFilters(todos, filter)),
     );
   }
 
   getTodoById(id: string): Observable<PersonalTodo | undefined> {
     const todoDoc = doc(this.firestore, 'personalTodos', id);
     return docData(todoDoc, { idField: 'id' }).pipe(
-      map((todo) => todo ? this.convertFromFirestore(todo) : undefined)
+      map((todo) => (todo ? this.convertFromFirestore(todo) : undefined)),
     );
   }
 
@@ -70,7 +77,7 @@ export class PersonalTodoService {
 
   getTodosByMeeting(meetingId: string): Observable<PersonalTodo[]> {
     return this.getTodos({ userId: this.authService.currentUser()?.uid }).pipe(
-      map(todos => todos.filter(t => t.meetingId === meetingId))
+      map((todos) => todos.filter((t) => t.meetingId === meetingId)),
     );
   }
 
@@ -78,10 +85,8 @@ export class PersonalTodoService {
     const now = new Date();
     return this.getTodos({
       userId: this.authService.currentUser()?.uid,
-      status: [TodoStatus.PENDING, TodoStatus.IN_PROGRESS]
-    }).pipe(
-      map(todos => todos.filter(t => t.dueDate && t.dueDate < now))
-    );
+      status: [TodoStatus.PENDING, TodoStatus.IN_PROGRESS],
+    }).pipe(map((todos) => todos.filter((t) => t.dueDate && t.dueDate < now)));
   }
 
   getTodosDueToday(): Observable<PersonalTodo[]> {
@@ -92,18 +97,14 @@ export class PersonalTodoService {
 
     return this.getTodos({
       userId: this.authService.currentUser()?.uid,
-      status: [TodoStatus.PENDING, TodoStatus.IN_PROGRESS]
+      status: [TodoStatus.PENDING, TodoStatus.IN_PROGRESS],
     }).pipe(
-      map(todos => todos.filter(t => 
-        t.dueDate && t.dueDate >= today && t.dueDate < tomorrow
-      ))
+      map((todos) => todos.filter((t) => t.dueDate && t.dueDate >= today && t.dueDate < tomorrow)),
     );
   }
 
   getTodoStats(): Observable<TodoStats> {
-    return this.getMyTodos().pipe(
-      map(todos => this.calculateStats(todos))
-    );
+    return this.getMyTodos().pipe(map((todos) => this.calculateStats(todos)));
   }
 
   async createTodo(todo: Omit<PersonalTodo, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
@@ -115,11 +116,13 @@ export class PersonalTodoService {
       updatedAt: Timestamp.fromDate(now),
       dueDate: todo.dueDate ? Timestamp.fromDate(todo.dueDate as Date) : null,
       completedAt: todo.completedAt ? Timestamp.fromDate(todo.completedAt as Date) : null,
-      reminder: todo.reminder ? {
-        ...todo.reminder,
-        date: Timestamp.fromDate(todo.reminder.date as Date),
-        sentAt: todo.reminder.sentAt ? Timestamp.fromDate(todo.reminder.sentAt as Date) : null
-      } : null
+      reminder: todo.reminder
+        ? {
+            ...todo.reminder,
+            date: Timestamp.fromDate(todo.reminder.date as Date),
+            sentAt: todo.reminder.sentAt ? Timestamp.fromDate(todo.reminder.sentAt as Date) : null,
+          }
+        : null,
     };
     const docRef = await addDoc(this.todosCollection, todoData);
     return docRef.id;
@@ -131,7 +134,7 @@ export class PersonalTodoService {
       ...updates,
       updatedAt: Timestamp.fromDate(new Date()),
     };
-    
+
     if (updates.dueDate) {
       updateData.dueDate = Timestamp.fromDate(updates.dueDate as Date);
     }
@@ -142,10 +145,12 @@ export class PersonalTodoService {
       updateData.reminder = {
         ...updates.reminder,
         date: Timestamp.fromDate(updates.reminder.date as Date),
-        sentAt: updates.reminder.sentAt ? Timestamp.fromDate(updates.reminder.sentAt as Date) : null
+        sentAt: updates.reminder.sentAt
+          ? Timestamp.fromDate(updates.reminder.sentAt as Date)
+          : null,
       };
     }
-    
+
     await updateDoc(todoDoc, updateData);
   }
 
@@ -153,7 +158,7 @@ export class PersonalTodoService {
     await this.updateTodo(id, {
       status: TodoStatus.COMPLETED,
       completed: true,
-      completedAt: new Date()
+      completedAt: new Date(),
     });
   }
 
@@ -166,7 +171,7 @@ export class PersonalTodoService {
     actionItem: any,
     meetingId: string,
     meetingTitle: string,
-    userId: string
+    userId: string,
   ): Promise<string> {
     const todo: Omit<PersonalTodo, 'id' | 'createdAt' | 'updatedAt'> = {
       userId,
@@ -191,11 +196,13 @@ export class PersonalTodoService {
       completedAt: data.completedAt?.toDate(),
       createdAt: data.createdAt?.toDate() || new Date(),
       updatedAt: data.updatedAt?.toDate() || new Date(),
-      reminder: data.reminder ? {
-        ...data.reminder,
-        date: data.reminder.date?.toDate(),
-        sentAt: data.reminder.sentAt?.toDate()
-      } : undefined
+      reminder: data.reminder
+        ? {
+            ...data.reminder,
+            date: data.reminder.date?.toDate(),
+            sentAt: data.reminder.sentAt?.toDate(),
+          }
+        : undefined,
     };
   }
 
@@ -203,28 +210,29 @@ export class PersonalTodoService {
     let filtered = [...todos];
 
     if (filter.dueDate?.from) {
-      filtered = filtered.filter(t => t.dueDate && t.dueDate >= filter.dueDate!.from!);
+      filtered = filtered.filter((t) => t.dueDate && t.dueDate >= filter.dueDate!.from!);
     }
     if (filter.dueDate?.to) {
-      filtered = filtered.filter(t => t.dueDate && t.dueDate <= filter.dueDate!.to!);
+      filtered = filtered.filter((t) => t.dueDate && t.dueDate <= filter.dueDate!.to!);
     }
 
     if (filter.category?.length) {
-      filtered = filtered.filter(t => t.category && filter.category!.includes(t.category));
+      filtered = filtered.filter((t) => t.category && filter.category!.includes(t.category));
     }
 
     if (filter.tags?.length) {
-      filtered = filtered.filter(t => 
-        t.tags && filter.tags!.some(tag => t.tags!.includes(tag))
+      filtered = filtered.filter(
+        (t) => t.tags && filter.tags!.some((tag) => t.tags!.includes(tag)),
       );
     }
 
     if (filter.search) {
       const search = filter.search.toLowerCase();
-      filtered = filtered.filter(t => 
-        t.text.toLowerCase().includes(search) ||
-        t.description?.toLowerCase().includes(search) ||
-        t.tags?.some(tag => tag.toLowerCase().includes(search))
+      filtered = filtered.filter(
+        (t) =>
+          t.text.toLowerCase().includes(search) ||
+          t.description?.toLowerCase().includes(search) ||
+          t.tags?.some((tag) => tag.toLowerCase().includes(search)),
       );
     }
 
@@ -242,29 +250,27 @@ export class PersonalTodoService {
 
     return {
       total: todos.length,
-      pending: todos.filter(t => t.status === TodoStatus.PENDING).length,
-      inProgress: todos.filter(t => t.status === TodoStatus.IN_PROGRESS).length,
-      completed: todos.filter(t => t.status === TodoStatus.COMPLETED).length,
-      overdue: todos.filter(t => 
-        t.dueDate && t.dueDate < now && !t.completed
+      pending: todos.filter((t) => t.status === TodoStatus.PENDING).length,
+      inProgress: todos.filter((t) => t.status === TodoStatus.IN_PROGRESS).length,
+      completed: todos.filter((t) => t.status === TodoStatus.COMPLETED).length,
+      overdue: todos.filter((t) => t.dueDate && t.dueDate < now && !t.completed).length,
+      dueToday: todos.filter(
+        (t) => t.dueDate && t.dueDate >= todayStart && t.dueDate < todayEnd && !t.completed,
       ).length,
-      dueToday: todos.filter(t => 
-        t.dueDate && t.dueDate >= todayStart && t.dueDate < todayEnd && !t.completed
-      ).length,
-      dueThisWeek: todos.filter(t => 
-        t.dueDate && t.dueDate >= todayStart && t.dueDate < weekEnd && !t.completed
+      dueThisWeek: todos.filter(
+        (t) => t.dueDate && t.dueDate >= todayStart && t.dueDate < weekEnd && !t.completed,
       ).length,
       byPriority: {
-        high: todos.filter(t => t.priority === TodoPriority.HIGH).length,
-        medium: todos.filter(t => t.priority === TodoPriority.MEDIUM).length,
-        low: todos.filter(t => t.priority === TodoPriority.LOW).length,
+        high: todos.filter((t) => t.priority === TodoPriority.HIGH).length,
+        medium: todos.filter((t) => t.priority === TodoPriority.MEDIUM).length,
+        low: todos.filter((t) => t.priority === TodoPriority.LOW).length,
       },
       bySource: {
-        meeting: todos.filter(t => t.source === TodoSource.MEETING).length,
-        manual: todos.filter(t => t.source === TodoSource.MANUAL).length,
-        email: todos.filter(t => t.source === TodoSource.EMAIL).length,
-        projectTask: todos.filter(t => t.source === TodoSource.PROJECT_TASK).length,
-      }
+        meeting: todos.filter((t) => t.source === TodoSource.MEETING).length,
+        manual: todos.filter((t) => t.source === TodoSource.MANUAL).length,
+        email: todos.filter((t) => t.source === TodoSource.EMAIL).length,
+        projectTask: todos.filter((t) => t.source === TodoSource.PROJECT_TASK).length,
+      },
     };
   }
 }

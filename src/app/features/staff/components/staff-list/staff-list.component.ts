@@ -568,10 +568,10 @@ export class StaffListComponent implements OnInit, AfterViewInit {
   openImportDialog() {
     const dialogRef = this.dialog.open(StaffImportComponent, {
       width: '600px',
-      disableClose: false
+      disableClose: false,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.loadStaff();
       }

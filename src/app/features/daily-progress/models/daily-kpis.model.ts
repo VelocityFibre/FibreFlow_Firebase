@@ -112,7 +112,7 @@ export interface DailyKPIs {
   materialCostToday?: number;
   equipmentCostToday?: number;
   totalCostToday?: number;
-  
+
   // Productivity Metrics
   productivityScore?: number; // 0-100 percentage
   plannedVsActual?: {
@@ -120,7 +120,7 @@ export interface DailyKPIs {
     actual: number;
     variance: number; // percentage
   };
-  
+
   // Customer Impact
   customerComplaints?: number;
   customerCompliments?: number;

@@ -19,7 +19,7 @@ import { Role } from '../../../../core/models/role.model';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatCardModule,
-    MatDialogModule
+    MatDialogModule,
   ],
   template: `
     <mat-card>
@@ -27,47 +27,52 @@ import { Role } from '../../../../core/models/role.model';
         <mat-card-title>Import Staff Members</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <p>Click the button below to import the predefined staff members from the Excel screenshot.</p>
+        <p>
+          Click the button below to import the predefined staff members from the Excel screenshot.
+        </p>
         <p>This will create:</p>
         <ul>
           <li>10 staff members with their roles and contact information</li>
-          <li>7 role definitions (Senior Management, RPM, PM, CLO, Engineer, Site Supervisor, Admin)</li>
+          <li>
+            7 role definitions (Senior Management, RPM, PM, CLO, Engineer, Site Supervisor, Admin)
+          </li>
         </ul>
       </mat-card-content>
       <mat-card-actions>
-        <button 
-          mat-raised-button 
-          color="primary" 
-          (click)="importStaff()"
-          [disabled]="importing"
-        >
-          <mat-spinner *ngIf="importing" diameter="20" style="display: inline-block; margin-right: 8px;"></mat-spinner>
+        <button mat-raised-button color="primary" (click)="importStaff()" [disabled]="importing">
+          <mat-spinner
+            *ngIf="importing"
+            diameter="20"
+            style="display: inline-block; margin-right: 8px;"
+          ></mat-spinner>
           {{ importing ? 'Importing...' : 'Import Staff Members' }}
         </button>
         <button mat-button (click)="dialogRef.close()" [disabled]="importing">Cancel</button>
       </mat-card-actions>
     </mat-card>
   `,
-  styles: [`
-    mat-card {
-      max-width: 600px;
-      margin: 20px auto;
-    }
-    ul {
-      margin-top: 8px;
-    }
-    mat-spinner {
-      display: inline-block;
-      margin-right: 8px;
-    }
-  `]
+  styles: [
+    `
+      mat-card {
+        max-width: 600px;
+        margin: 20px auto;
+      }
+      ul {
+        margin-top: 8px;
+      }
+      mat-spinner {
+        display: inline-block;
+        margin-right: 8px;
+      }
+    `,
+  ],
 })
 export class StaffImportComponent {
   private staffService = inject(StaffService);
   private roleService = inject(RoleService);
   private snackBar = inject(MatSnackBar);
   dialogRef = inject(MatDialogRef<StaffImportComponent>);
-  
+
   importing = false;
 
   // Staff data from the screenshot - simplified for compatibility
@@ -79,7 +84,7 @@ export class StaffImportComponent {
       employeeId: 'VF001',
       primaryGroup: 'Admin' as StaffGroup,
       position: 'Senior Management',
-      roleId: 'senior-management'
+      roleId: 'senior-management',
     },
     {
       name: 'Hein van Vuuren',
@@ -88,7 +93,7 @@ export class StaffImportComponent {
       employeeId: 'VF002',
       primaryGroup: 'Admin' as StaffGroup,
       position: 'Senior Management',
-      roleId: 'senior-management'
+      roleId: 'senior-management',
     },
     {
       name: 'Wian Musgrave',
@@ -97,7 +102,7 @@ export class StaffImportComponent {
       employeeId: 'VF003',
       primaryGroup: 'ProjectManager' as StaffGroup,
       position: 'RPM',
-      roleId: 'rpm'
+      roleId: 'rpm',
     },
     {
       name: 'Lenardt Meyer',
@@ -106,7 +111,7 @@ export class StaffImportComponent {
       employeeId: 'VF004',
       primaryGroup: 'ProjectManager' as StaffGroup,
       position: 'PM',
-      roleId: 'pm'
+      roleId: 'pm',
     },
     {
       name: 'Leonel Felix',
@@ -115,7 +120,7 @@ export class StaffImportComponent {
       employeeId: 'VF005',
       primaryGroup: 'Admin' as StaffGroup,
       position: 'CLO',
-      roleId: 'clo'
+      roleId: 'clo',
     },
     {
       name: 'Marchael Meyer',
@@ -124,7 +129,7 @@ export class StaffImportComponent {
       employeeId: 'VF006',
       primaryGroup: 'Technician' as StaffGroup,
       position: 'Engineer',
-      roleId: 'engineer'
+      roleId: 'engineer',
     },
     {
       name: 'Janice George',
@@ -133,7 +138,7 @@ export class StaffImportComponent {
       employeeId: 'VF007',
       primaryGroup: 'Admin' as StaffGroup,
       position: 'Admin',
-      roleId: 'admin'
+      roleId: 'admin',
     },
     {
       name: 'Kylin Musgrave',
@@ -142,7 +147,7 @@ export class StaffImportComponent {
       employeeId: 'VF008',
       primaryGroup: 'Admin' as StaffGroup,
       position: 'Admin',
-      roleId: 'admin'
+      roleId: 'admin',
     },
     {
       name: 'Jody Lenardt',
@@ -151,7 +156,7 @@ export class StaffImportComponent {
       employeeId: 'VF009',
       primaryGroup: 'ProjectManager' as StaffGroup,
       position: 'PM',
-      roleId: 'pm'
+      roleId: 'pm',
     },
     {
       name: 'Gert van Vuuren',
@@ -160,8 +165,8 @@ export class StaffImportComponent {
       employeeId: 'VF010',
       primaryGroup: 'Technician' as StaffGroup,
       position: 'Site Supervisor',
-      roleId: 'site-supervisor'
-    }
+      roleId: 'site-supervisor',
+    },
   ];
 
   // Role mappings
@@ -171,32 +176,47 @@ export class StaffImportComponent {
       name: 'Senior Management',
       description: 'Senior management team members',
       permissions: [
-        'projects_view', 'projects_manage',
-        'tasks_view', 'tasks_manage',
-        'staff_view', 'staff_manage',
-        'clients_view', 'clients_manage',
-        'suppliers_view', 'suppliers_manage',
-        'stock_view', 'stock_manage',
-        'reports_view', 'reports_generate',
-        'settings_view', 'settings_manage',
-        'roles_view', 'roles_manage'
+        'projects_view',
+        'projects_manage',
+        'tasks_view',
+        'tasks_manage',
+        'staff_view',
+        'staff_manage',
+        'clients_view',
+        'clients_manage',
+        'suppliers_view',
+        'suppliers_manage',
+        'stock_view',
+        'stock_manage',
+        'reports_view',
+        'reports_generate',
+        'settings_view',
+        'settings_manage',
+        'roles_view',
+        'roles_manage',
       ],
-      isSystem: true
+      isSystem: true,
     },
     {
       id: 'rpm',
       name: 'RPM',
       description: 'Regional Project Manager',
       permissions: [
-        'projects_view', 'projects_manage',
-        'tasks_view', 'tasks_manage',
-        'staff_view', 'staff_manage',
-        'clients_view', 'clients_manage',
-        'suppliers_view', 'suppliers_manage',
+        'projects_view',
+        'projects_manage',
+        'tasks_view',
+        'tasks_manage',
+        'staff_view',
+        'staff_manage',
+        'clients_view',
+        'clients_manage',
+        'suppliers_view',
+        'suppliers_manage',
         'stock_view',
-        'reports_view', 'reports_generate'
+        'reports_view',
+        'reports_generate',
       ],
-      isSystem: true
+      isSystem: true,
     },
     {
       id: 'pm',
@@ -204,14 +224,15 @@ export class StaffImportComponent {
       description: 'Project Manager',
       permissions: [
         'projects_view',
-        'tasks_view', 'tasks_manage',
+        'tasks_view',
+        'tasks_manage',
         'staff_view',
         'clients_view',
         'suppliers_view',
         'stock_view',
-        'reports_view'
+        'reports_view',
       ],
-      isSystem: true
+      isSystem: true,
     },
     {
       id: 'clo',
@@ -221,36 +242,28 @@ export class StaffImportComponent {
         'projects_view',
         'tasks_view',
         'staff_view',
-        'suppliers_view', 'suppliers_manage',
-        'stock_view', 'stock_manage',
-        'reports_view', 'reports_generate'
+        'suppliers_view',
+        'suppliers_manage',
+        'stock_view',
+        'stock_manage',
+        'reports_view',
+        'reports_generate',
       ],
-      isSystem: true
+      isSystem: true,
     },
     {
       id: 'engineer',
       name: 'Engineer',
       description: 'Engineering staff',
-      permissions: [
-        'projects_view',
-        'tasks_view',
-        'stock_view',
-        'reports_view'
-      ],
-      isSystem: true
+      permissions: ['projects_view', 'tasks_view', 'stock_view', 'reports_view'],
+      isSystem: true,
     },
     {
       id: 'site-supervisor',
       name: 'Site Supervisor',
       description: 'On-site supervision staff',
-      permissions: [
-        'projects_view',
-        'tasks_view',
-        'staff_view',
-        'stock_view',
-        'reports_view'
-      ],
-      isSystem: true
+      permissions: ['projects_view', 'tasks_view', 'staff_view', 'stock_view', 'reports_view'],
+      isSystem: true,
     },
     {
       id: 'admin',
@@ -260,14 +273,16 @@ export class StaffImportComponent {
         'projects_view',
         'tasks_view',
         'staff_view',
-        'clients_view', 'clients_manage',
-        'suppliers_view', 'suppliers_manage',
+        'clients_view',
+        'clients_manage',
+        'suppliers_view',
+        'suppliers_manage',
         'stock_view',
         'reports_view',
-        'settings_view'
+        'settings_view',
       ],
-      isSystem: true
-    }
+      isSystem: true,
+    },
   ];
 
   async importStaff() {
@@ -300,7 +315,7 @@ export class StaffImportComponent {
               status: 'available',
               workingHours: {},
               currentTaskCount: 0,
-              maxConcurrentTasks: 5
+              maxConcurrentTasks: 5,
             },
             activity: {
               lastLogin: null,
@@ -309,15 +324,15 @@ export class StaffImportComponent {
               tasksInProgress: 0,
               tasksFlagged: 0,
               totalProjectsWorked: 0,
-              averageTaskCompletionTime: 0
+              averageTaskCompletionTime: 0,
             },
             skills: [],
             certifications: [],
             emergencyContact: {
               name: '',
               phone: '',
-              relationship: ''
-            }
+              relationship: '',
+            },
           };
 
           await this.staffService.createStaff(newStaff as StaffMember);
@@ -331,19 +346,16 @@ export class StaffImportComponent {
       this.snackBar.open(
         `Import completed! Created ${roleSuccessCount} roles and ${successCount} staff members.`,
         'Close',
-        { duration: 5000 }
+        { duration: 5000 },
       );
-      
+
       // Close dialog on success
       this.dialogRef.close(true);
-
     } catch (error) {
       console.error('Import error:', error);
-      this.snackBar.open(
-        'Error during import. Check console for details.',
-        'Close',
-        { duration: 5000 }
-      );
+      this.snackBar.open('Error during import. Check console for details.', 'Close', {
+        duration: 5000,
+      });
     } finally {
       this.importing = false;
     }

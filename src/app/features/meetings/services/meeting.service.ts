@@ -26,13 +26,9 @@ export class MeetingService {
   private meetingsCollection = collection(this.firestore, 'meetings');
 
   getMeetings(constraints: QueryConstraint[] = []): Observable<Meeting[]> {
-    const q = query(
-      this.meetingsCollection,
-      orderBy('dateTime', 'desc'),
-      ...constraints
-    );
+    const q = query(this.meetingsCollection, orderBy('dateTime', 'desc'), ...constraints);
     return collectionData(q, { idField: 'id' }).pipe(
-      map((meetings) => meetings.map((m) => this.convertFromFirestore(m)))
+      map((meetings) => meetings.map((m) => this.convertFromFirestore(m))),
     );
   }
 
@@ -42,17 +38,17 @@ export class MeetingService {
 
   getById(id: string): Observable<Meeting> {
     return this.getMeetingById(id).pipe(
-      map(meeting => {
+      map((meeting) => {
         if (!meeting) throw new Error('Meeting not found');
         return meeting;
-      })
+      }),
     );
   }
 
   getMeetingById(id: string): Observable<Meeting | undefined> {
     const meetingDoc = doc(this.firestore, 'meetings', id);
     return docData(meetingDoc, { idField: 'id' }).pipe(
-      map((meeting) => meeting ? this.convertFromFirestore(meeting) : undefined)
+      map((meeting) => (meeting ? this.convertFromFirestore(meeting) : undefined)),
     );
   }
 
@@ -61,27 +57,24 @@ export class MeetingService {
   }
 
   getMeetingsByParticipant(email: string): Observable<Meeting[]> {
-    return this.getMeetings([
-      where('participants', 'array-contains', { email, isSpeaker: true })
-    ]);
+    return this.getMeetings([where('participants', 'array-contains', { email, isSpeaker: true })]);
   }
 
   getRecentMeetings(days: number = 7): Observable<Meeting[]> {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
-    return this.getMeetings([
-      where('dateTime', '>=', startDate.toISOString()),
-      limit(50)
-    ]);
+    return this.getMeetings([where('dateTime', '>=', startDate.toISOString()), limit(50)]);
   }
 
   getMeetingsWithPendingActions(): Observable<Meeting[]> {
-    return this.getMeetings([
-      where('actionItems', '!=', [])
-    ]).pipe(
-      map(meetings => meetings.filter(m => 
-        m.actionItems?.some(a => !a.completed && !a.convertedToTaskId && !a.convertedToPersonalTodoId)
-      ))
+    return this.getMeetings([where('actionItems', '!=', [])]).pipe(
+      map((meetings) =>
+        meetings.filter((m) =>
+          m.actionItems?.some(
+            (a) => !a.completed && !a.convertedToTaskId && !a.convertedToPersonalTodoId,
+          ),
+        ),
+      ),
     );
   }
 
@@ -104,32 +97,45 @@ export class MeetingService {
       ...updates,
       updatedAt: new Date().toISOString(),
     };
-    
+
     await updateDoc(meetingDoc, updateData);
   }
 
-  async updateActionItem(meetingId: string, actionItemIndex: number, updates: Partial<ActionItem>): Promise<void> {
+  async updateActionItem(
+    meetingId: string,
+    actionItemIndex: number,
+    updates: Partial<ActionItem>,
+  ): Promise<void> {
     const meeting = await this.getMeetingById(meetingId).toPromise();
     if (!meeting) throw new Error('Meeting not found');
 
-    const actionItems = meeting.actionItems?.map((item, index) =>
-      index === actionItemIndex ? { ...item, ...updates } : item
-    ) || [];
+    const actionItems =
+      meeting.actionItems?.map((item, index) =>
+        index === actionItemIndex ? { ...item, ...updates } : item,
+      ) || [];
 
     await this.updateMeeting(meetingId, { actionItems });
   }
 
-  async convertActionItemToTask(meetingId: string, actionItemIndex: number, taskId: string): Promise<void> {
+  async convertActionItemToTask(
+    meetingId: string,
+    actionItemIndex: number,
+    taskId: string,
+  ): Promise<void> {
     await this.updateActionItem(meetingId, actionItemIndex, {
       convertedToTaskId: taskId,
       completed: true,
-      completedAt: new Date().toISOString()
+      completedAt: new Date().toISOString(),
     });
   }
 
-  async convertActionItemToPersonalTodo(meetingId: string, actionItemIndex: number, todoId: string): Promise<void> {
+  async convertActionItemToPersonalTodo(
+    meetingId: string,
+    actionItemIndex: number,
+    todoId: string,
+  ): Promise<void> {
     await this.updateActionItem(meetingId, actionItemIndex, {
-      convertedToPersonalTodoId: todoId
+      convertedToPersonalTodoId: todoId,
     });
   }
 
@@ -142,14 +148,23 @@ export class MeetingService {
     return {
       ...data,
       dateTime: data.dateTime || data.date?.toDate()?.toISOString() || new Date().toISOString(),
-      createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : data.createdAt || new Date().toISOString(),
-      updatedAt: data.updatedAt?.toDate ? data.updatedAt.toDate().toISOString() : data.updatedAt || new Date().toISOString(),
-      processedAt: data.processedAt?.toDate ? data.processedAt.toDate().toISOString() : data.processedAt,
-      actionItems: data.actionItems?.map((item: any) => ({
-        ...item,
-        dueDate: item.dueDate?.toDate ? item.dueDate.toDate().toISOString() : item.dueDate,
-        completedAt: item.completedAt?.toDate ? item.completedAt.toDate().toISOString() : item.completedAt,
-      })) || [],
+      createdAt: data.createdAt?.toDate
+        ? data.createdAt.toDate().toISOString()
+        : data.createdAt || new Date().toISOString(),
+      updatedAt: data.updatedAt?.toDate
+        ? data.updatedAt.toDate().toISOString()
+        : data.updatedAt || new Date().toISOString(),
+      processedAt: data.processedAt?.toDate
+        ? data.processedAt.toDate().toISOString()
+        : data.processedAt,
+      actionItems:
+        data.actionItems?.map((item: any) => ({
+          ...item,
+          dueDate: item.dueDate?.toDate ? item.dueDate.toDate().toISOString() : item.dueDate,
+          completedAt: item.completedAt?.toDate
+            ? item.completedAt.toDate().toISOString()
+            : item.completedAt,
+        })) || [],
     };
   }
 }

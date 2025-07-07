@@ -1,0 +1,247 @@
+@use '../../../../styles/component-theming' as theme;
+
+.reports-container {
+  padding: theme.ff-spacing(xl);
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: theme.ff-spacing(xl);
+
+  h1 {
+    margin: 0;
+    color: theme.ff-rgb(foreground);
+  }
+
+  .header-actions {
+    display: flex;
+    gap: theme.ff-spacing(md);
+  }
+}
+
+// Project selector
+.project-selector-card {
+  margin-bottom: theme.ff-spacing(xl);
+
+  mat-card-content {
+    display: flex;
+    gap: theme.ff-spacing(lg);
+    align-items: center;
+    flex-wrap: wrap;
+
+    mat-form-field {
+      flex: 1;
+      min-width: 300px;
+    }
+  }
+}
+
+// Statistics Overview
+.stats-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: theme.ff-spacing(lg);
+  margin-bottom: theme.ff-spacing(xl);
+}
+
+.stat-card {
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  &.primary {
+    background: linear-gradient(135deg, 
+      theme.ff-rgba(primary, 0.1) 0%, 
+      theme.ff-rgba(primary, 0.05) 100%);
+    border: 1px solid theme.ff-rgba(primary, 0.2);
+  }
+
+  .stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: theme.ff-rgb(primary);
+    margin-bottom: theme.ff-spacing(xs);
+  }
+
+  .stat-label {
+    font-size: 14px;
+    color: theme.ff-rgba(foreground, 0.7);
+    margin-bottom: theme.ff-spacing(sm);
+  }
+
+  .stat-percentage {
+    display: inline-flex;
+    align-items: center;
+    gap: theme.ff-spacing(xs);
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 600;
+
+    &.positive {
+      background-color: theme.ff-rgba(success, 0.1);
+      color: theme.ff-rgb(success);
+    }
+
+    &.negative {
+      background-color: theme.ff-rgba(danger, 0.1);
+      color: theme.ff-rgb(danger);
+    }
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+// Charts section
+.charts-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: theme.ff-spacing(xl);
+  margin-bottom: theme.ff-spacing(xl);
+}
+
+.chart-card {
+  mat-card-header {
+    margin-bottom: theme.ff-spacing(lg);
+  }
+
+  .chart-container {
+    height: 300px;
+    position: relative;
+    padding: theme.ff-spacing(md);
+  }
+
+  .chart-placeholder {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: theme.ff-rgba(surface-variant, 0.3);
+    border-radius: 8px;
+    color: theme.ff-rgba(foreground, 0.5);
+  }
+}
+
+// Performance metrics
+.performance-section {
+  margin-bottom: theme.ff-spacing(xl);
+}
+
+.performance-table {
+  width: 100%;
+
+  .mat-mdc-header-row {
+    background-color: theme.ff-rgba(primary, 0.05);
+  }
+
+  .contractor-name {
+    font-weight: 600;
+    color: theme.ff-rgb(primary);
+  }
+
+  .performance-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: theme.ff-spacing(xs);
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 600;
+
+    &.excellent {
+      background-color: theme.ff-rgba(success, 0.1);
+      color: theme.ff-rgb(success);
+    }
+
+    &.good {
+      background-color: theme.ff-rgba(primary, 0.1);
+      color: theme.ff-rgb(primary);
+    }
+
+    &.average {
+      background-color: theme.ff-rgba(warning, 0.1);
+      color: theme.ff-rgb(warning);
+    }
+
+    &.poor {
+      background-color: theme.ff-rgba(danger, 0.1);
+      color: theme.ff-rgb(danger);
+    }
+  }
+
+  .metric-value {
+    font-weight: 600;
+    
+    &.high {
+      color: theme.ff-rgb(success);
+    }
+
+    &.medium {
+      color: theme.ff-rgb(warning);
+    }
+
+    &.low {
+      color: theme.ff-rgb(danger);
+    }
+  }
+}
+
+// Export section
+.export-section {
+  display: flex;
+  justify-content: center;
+  gap: theme.ff-spacing(lg);
+  padding: theme.ff-spacing(xl);
+  background-color: theme.ff-rgba(surface-variant, 0.3);
+  border-radius: 8px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: theme.ff-spacing(xxl);
+  color: theme.ff-rgba(foreground, 0.6);
+}
+
+.empty-state {
+  text-align: center;
+  padding: theme.ff-spacing(xxl);
+  color: theme.ff-rgba(foreground, 0.6);
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: theme.ff-spacing(lg);
+  }
+
+  h3 {
+    margin-bottom: theme.ff-spacing(md);
+  }
+}
+
+// Print styles
+@media print {
+  .header-actions,
+  .export-section {
+    display: none !important;
+  }
+
+  .reports-container {
+    padding: 0;
+  }
+
+  .chart-container {
+    break-inside: avoid;
+  }
+}

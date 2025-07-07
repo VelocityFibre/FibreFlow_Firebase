@@ -7,11 +7,11 @@ export interface PoleTracker {
   projectId: string;
   projectCode: string; // From project
   projectName?: string; // For display
-  
+
   // Alternative ID if pole number not found
   alternativePoleId?: string;
   groupNumber?: string; // If poles are grouped
-  
+
   // Installation Details
   dateInstalled: Timestamp | Date;
   location: string; // GPS coordinates or address
@@ -19,7 +19,7 @@ export interface PoleTracker {
   contractorId: string;
   contractorName?: string; // For display
   workingTeam: string;
-  
+
   // Image Uploads (6 types)
   uploads: {
     before: ImageUpload;
@@ -29,14 +29,14 @@ export interface PoleTracker {
     concrete: ImageUpload;
     compaction: ImageUpload;
   };
-  
+
   // Quality Check
   qualityChecked: boolean;
   qualityCheckedBy?: string;
   qualityCheckedByName?: string; // For display
   qualityCheckDate?: Timestamp | Date;
   qualityCheckNotes?: string;
-  
+
   // Metadata
   createdAt: Timestamp | Date;
   updatedAt: Timestamp | Date;
@@ -78,7 +78,7 @@ export enum PoleType {
   WOODEN = 'wooden',
   CONCRETE = 'concrete',
   STEEL = 'steel',
-  COMPOSITE = 'composite'
+  COMPOSITE = 'composite',
 }
 
 export enum UploadType {
@@ -87,7 +87,7 @@ export enum UploadType {
   SIDE = 'side',
   DEPTH = 'depth',
   CONCRETE = 'concrete',
-  COMPACTION = 'compaction'
+  COMPACTION = 'compaction',
 }
 
 // Helper type for display

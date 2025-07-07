@@ -26,13 +26,13 @@ export enum TodoSource {
   MEETING = 'meeting',
   MANUAL = 'manual',
   EMAIL = 'email',
-  PROJECT_TASK = 'project_task'
+  PROJECT_TASK = 'project_task',
 }
 
 export enum TodoPriority {
   HIGH = 'high',
   MEDIUM = 'medium',
-  LOW = 'low'
+  LOW = 'low',
 }
 
 export enum TodoStatus {
@@ -40,7 +40,7 @@ export enum TodoStatus {
   IN_PROGRESS = 'in_progress',
   COMPLETED = 'completed',
   CANCELLED = 'cancelled',
-  DEFERRED = 'deferred'
+  DEFERRED = 'deferred',
 }
 
 export interface TodoReminder {

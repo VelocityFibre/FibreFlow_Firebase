@@ -7,7 +7,6 @@ import { DailyReport, WeeklyReport, MonthlyReport } from '../models/report.model
   providedIn: 'root',
 })
 export class ReportPDFService {
-  
   /**
    * Generate PDF for any report type
    */
@@ -15,7 +14,7 @@ export class ReportPDFService {
     if (!report) {
       throw new Error('Report is required');
     }
-    
+
     switch (report.reportType) {
       case 'daily':
         return this.generateDailyPDF(report as DailyReport);
@@ -48,7 +47,7 @@ export class ReportPDFService {
 
     // Executive Summary
     yPosition = this.addSection(doc, 'Executive Summary', yPosition);
-    
+
     // Key Achievements
     if (report.summary.keyAchievements.length > 0) {
       doc.setFontSize(10);
@@ -56,8 +55,8 @@ export class ReportPDFService {
       doc.text('Key Achievements:', 20, yPosition);
       yPosition += 7;
       doc.setFont('helvetica', 'normal');
-      
-      report.summary.keyAchievements.forEach(achievement => {
+
+      report.summary.keyAchievements.forEach((achievement) => {
         doc.text(`• ${achievement}`, 25, yPosition);
         yPosition += 5;
       });
@@ -66,13 +65,28 @@ export class ReportPDFService {
 
     // KPI Summary Table
     yPosition = this.addSection(doc, 'Daily KPIs', yPosition);
-    
+
     const kpiData = [
       ['Metric', 'Today', 'Total', 'Unit'],
-      ['Permissions', report.kpis.permissionsToday || 0, report.kpis.permissionsTotal || 0, 'count'],
-      ['Poles Planted', report.kpis.polesPlantedToday || 0, report.kpis.polesPlantedTotal || 0, 'count'],
+      [
+        'Permissions',
+        report.kpis.permissionsToday || 0,
+        report.kpis.permissionsTotal || 0,
+        'count',
+      ],
+      [
+        'Poles Planted',
+        report.kpis.polesPlantedToday || 0,
+        report.kpis.polesPlantedTotal || 0,
+        'count',
+      ],
       ['Trenching', report.kpis.trenchingToday || 0, report.kpis.trenchingTotal || 0, 'meters'],
-      ['Homes Connected', report.kpis.homesConnectedToday || 0, report.kpis.homesConnectedTotal || 0, 'count'],
+      [
+        'Homes Connected',
+        report.kpis.homesConnectedToday || 0,
+        report.kpis.homesConnectedTotal || 0,
+        'count',
+      ],
     ];
 
     autoTable(doc, {
@@ -81,7 +95,7 @@ export class ReportPDFService {
       body: kpiData.slice(1),
       theme: 'striped',
       headStyles: { fillColor: [41, 128, 185] },
-      styles: { fontSize: 9 }
+      styles: { fontSize: 9 },
     });
 
     yPosition = (doc as any).lastAutoTable.finalY + 10;
@@ -89,7 +103,7 @@ export class ReportPDFService {
     // Safety Summary
     if (report.safety) {
       yPosition = this.addSection(doc, 'Safety & Compliance', yPosition);
-      
+
       const safetyData = [
         ['Metric', 'Value'],
         ['Safety Incidents', report.safety.incidents],
@@ -105,7 +119,7 @@ export class ReportPDFService {
         theme: 'striped',
         headStyles: { fillColor: [46, 204, 113] },
         styles: { fontSize: 9 },
-        columnStyles: { 0: { cellWidth: 100 } }
+        columnStyles: { 0: { cellWidth: 100 } },
       });
 
       yPosition = (doc as any).lastAutoTable.finalY + 10;
@@ -114,9 +128,9 @@ export class ReportPDFService {
     // Critical Issues
     if (report.summary.criticalIssues.length > 0) {
       yPosition = this.addSection(doc, 'Critical Issues', yPosition);
-      
+
       doc.setFontSize(10);
-      report.summary.criticalIssues.forEach(issue => {
+      report.summary.criticalIssues.forEach((issue) => {
         doc.text(`• ${issue}`, 25, yPosition);
         yPosition += 5;
       });
@@ -132,6 +146,10 @@ export class ReportPDFService {
    * Generate Weekly Report PDF
    */
   private generateWeeklyPDF(report: WeeklyReport): jsPDF {
+    console.log('generateWeeklyPDF called with report:', report);
+    console.log('Weekly totals:', report.kpiSummary.weeklyTotals);
+    console.log('Daily KPIs count:', report.kpiSummary.dailyKpis.length);
+
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     let yPosition = 20;
@@ -150,9 +168,9 @@ export class ReportPDFService {
 
     // Weekly Highlights
     yPosition = this.addSection(doc, 'Weekly Highlights', yPosition);
-    
+
     doc.setFontSize(10);
-    report.summary.weeklyHighlights.forEach(highlight => {
+    report.summary.weeklyHighlights.forEach((highlight) => {
       doc.text(`• ${highlight}`, 25, yPosition);
       yPosition += 5;
     });
@@ -160,14 +178,37 @@ export class ReportPDFService {
 
     // KPI Summary
     yPosition = this.addSection(doc, 'Weekly KPI Summary', yPosition);
-    
+
     // Aggregate weekly totals
     const weeklyTotals = report.kpiSummary.weeklyTotals;
+    // Get the latest daily KPI to show cumulative totals
+    const latestKpi =
+      report.kpiSummary.dailyKpis.length > 0
+        ? report.kpiSummary.dailyKpis[report.kpiSummary.dailyKpis.length - 1]
+        : null;
+
     const kpiData = [
       ['Metric', 'This Week', 'Cumulative Total'],
-      ['Poles Planted', weeklyTotals.polesPlantedToday || 0, '-'],
-      ['Trenching (m)', weeklyTotals.trenchingToday || 0, '-'],
-      ['Homes Connected', weeklyTotals.homesConnectedToday || 0, '-'],
+      // Planning & Permissions
+      ['Permissions', weeklyTotals.permissionsToday || 0, latestKpi?.permissionsTotal || 0],
+      ['Missing Status', weeklyTotals.missingStatusToday || 0, latestKpi?.missingStatusTotal || 0],
+      // Infrastructure
+      ['Poles Planted', weeklyTotals.polesPlantedToday || 0, latestKpi?.polesPlantedTotal || 0],
+      ['Trenching (m)', weeklyTotals.trenchingToday || 0, latestKpi?.trenchingTotal || 0],
+      // Cable Stringing (m)
+      ['24F Cable (m)', weeklyTotals.stringing24Today || 0, latestKpi?.stringing24Total || 0],
+      ['48F Cable (m)', weeklyTotals.stringing48Today || 0, latestKpi?.stringing48Total || 0],
+      ['96F Cable (m)', weeklyTotals.stringing96Today || 0, latestKpi?.stringing96Total || 0],
+      ['144F Cable (m)', weeklyTotals.stringing144Today || 0, latestKpi?.stringing144Total || 0],
+      ['288F Cable (m)', weeklyTotals.stringing288Today || 0, latestKpi?.stringing288Total || 0],
+      // Home Operations
+      ['Home Signups', weeklyTotals.homeSignupsToday || 0, latestKpi?.homeSignupsTotal || 0],
+      ['Home Drops', weeklyTotals.homeDropsToday || 0, latestKpi?.homeDropsTotal || 0],
+      [
+        'Homes Connected',
+        weeklyTotals.homesConnectedToday || 0,
+        latestKpi?.homesConnectedTotal || 0,
+      ],
     ];
 
     autoTable(doc, {
@@ -176,7 +217,7 @@ export class ReportPDFService {
       body: kpiData.slice(1),
       theme: 'striped',
       headStyles: { fillColor: [41, 128, 185] },
-      styles: { fontSize: 9 }
+      styles: { fontSize: 9 },
     });
 
     yPosition = (doc as any).lastAutoTable.finalY + 15;
@@ -184,9 +225,9 @@ export class ReportPDFService {
     // Major Challenges
     if (report.summary.majorChallenges.length > 0) {
       yPosition = this.addSection(doc, 'Major Challenges', yPosition);
-      
+
       doc.setFontSize(10);
-      report.summary.majorChallenges.forEach(challenge => {
+      report.summary.majorChallenges.forEach((challenge) => {
         doc.text(`• ${challenge}`, 25, yPosition);
         yPosition += 5;
       });
@@ -212,10 +253,14 @@ export class ReportPDFService {
 
     // Dashboard Summary
     yPosition = this.addSection(doc, 'Executive Dashboard', yPosition);
-    
+
     const dashboardData = [
       ['Metric', 'Value', 'Status'],
-      ['Overall Health', report.dashboard.overallHealth, this.getStatusColor(report.dashboard.overallHealth)],
+      [
+        'Overall Health',
+        report.dashboard.overallHealth,
+        this.getStatusColor(report.dashboard.overallHealth),
+      ],
       ['Completion', `${report.dashboard.completionPercentage}%`, 'info'],
       ['Budget Utilization', `${report.dashboard.budgetUtilization}%`, 'info'],
       ['Quality Score', `${report.dashboard.qualityScore}%`, 'info'],
@@ -228,7 +273,7 @@ export class ReportPDFService {
       body: dashboardData.slice(1),
       theme: 'striped',
       headStyles: { fillColor: [52, 73, 94] },
-      styles: { fontSize: 9 }
+      styles: { fontSize: 9 },
     });
 
     yPosition = (doc as any).lastAutoTable.finalY + 15;
@@ -236,9 +281,9 @@ export class ReportPDFService {
     // Strategic Issues
     if (report.strategicSummary.strategicIssues.length > 0) {
       yPosition = this.addSection(doc, 'Strategic Issues', yPosition);
-      
+
       doc.setFontSize(10);
-      report.strategicSummary.strategicIssues.forEach(issue => {
+      report.strategicSummary.strategicIssues.forEach((issue) => {
         doc.text(`• ${issue}`, 25, yPosition);
         yPosition += 5;
       });
@@ -255,12 +300,16 @@ export class ReportPDFService {
    */
   private addHeader(doc: jsPDF, title: string, projectName: string, yPosition: number): void {
     const pageWidth = doc.internal.pageSize.getWidth();
-    
+
     // Title
     doc.setFontSize(18);
     doc.setFont('helvetica', 'bold');
     doc.text(title, pageWidth / 2, yPosition, { align: 'center' });
-    
+
+    // Add version marker for debugging
+    doc.setFontSize(8);
+    doc.text('v2.0', pageWidth - 20, yPosition);
+
     // Project name
     doc.setFontSize(14);
     doc.setFont('helvetica', 'normal');
@@ -278,19 +327,26 @@ export class ReportPDFService {
   private addFooter(doc: jsPDF, report: any): void {
     const pageHeight = doc.internal.pageSize.getHeight();
     const pageWidth = doc.internal.pageSize.getWidth();
-    
+
     doc.setFontSize(8);
     doc.setTextColor(128);
     doc.text(`Generated: ${new Date(report.generatedAt).toLocaleString()}`, 20, pageHeight - 10);
+    doc.text('FibreFlow Project Management System', pageWidth / 2, pageHeight - 10, {
+      align: 'center',
+    });
     doc.text(`Page 1`, pageWidth - 30, pageHeight - 10);
   }
 
   private getStatusColor(status: string): string {
     switch (status) {
-      case 'on-track': return 'success';
-      case 'at-risk': return 'warning';
-      case 'behind-schedule': return 'danger';
-      default: return 'info';
+      case 'on-track':
+        return 'success';
+      case 'at-risk':
+        return 'warning';
+      case 'behind-schedule':
+        return 'danger';
+      default:
+        return 'info';
     }
   }
 

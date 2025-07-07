@@ -12,6 +12,6 @@ export const demoConfig = {
     '/attendance',
     '/performance',
     '/supplier-portal',
-    '/roles'
-  ]
+    '/roles',
+  ],
 };

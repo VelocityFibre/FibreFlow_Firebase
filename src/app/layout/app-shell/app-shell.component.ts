@@ -201,6 +201,30 @@ interface NavItem {
             </mat-nav-list>
           </div>
 
+          <!-- Mobile Pages Category -->
+          <div class="nav-category">
+            <h3 class="category-title">Mobile Pages</h3>
+            <mat-nav-list class="nav-list">
+              <a
+                mat-list-item
+                *ngFor="let item of mobileItems"
+                [routerLink]="item.route"
+                routerLinkActive="active-link"
+                class="nav-item"
+              >
+                <mat-icon
+                  matListItemIcon
+                  [matBadge]="item.badge"
+                  [matBadgeHidden]="!item.badge || item.badge === 0"
+                  matBadgeColor="warn"
+                  matBadgeSize="small"
+                  >{{ item.icon }}</mat-icon
+                >
+                <span matListItemTitle>{{ item.label }}</span>
+              </a>
+            </mat-nav-list>
+          </div>
+
           <!-- Settings Category -->
           <div class="nav-category">
             <h3 class="category-title">Settings</h3>
@@ -378,20 +402,20 @@ export class AppShellComponent {
   private authService = inject(AuthService);
 
   pendingTasksCount = 0;
-  
+
   // Helper method to filter items based on demo config
   private filterItems(items: NavItem[]): NavItem[] {
     if (!demoConfig.isDemo) {
       return items;
     }
-    return items.filter(item => {
+    return items.filter((item) => {
       // Check if the route itself is hidden
       if (demoConfig.hiddenRoutes.includes(item.route)) {
         return false;
       }
       // Check if the route starts with any hidden parent route
-      return !demoConfig.hiddenRoutes.some(hiddenRoute => 
-        item.route.startsWith(hiddenRoute + '/')
+      return !demoConfig.hiddenRoutes.some((hiddenRoute) =>
+        item.route.startsWith(hiddenRoute + '/'),
       );
     });
   }
@@ -399,7 +423,7 @@ export class AppShellComponent {
   // Main category items
   mainItems: NavItem[] = this.filterItems([
     { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
-    { label: 'Meetings', icon: 'groups', route: '/meetings' }
+    { label: 'Meetings', icon: 'groups', route: '/meetings' },
   ]);
 
   // Staff category items
@@ -449,6 +473,15 @@ export class AppShellComponent {
   clientItems: NavItem[] = this.filterItems([
     { label: 'Clients', icon: 'business', route: '/clients' },
     { label: 'Contractors', icon: 'engineering', route: '/contractors' },
+  ]);
+
+  // Mobile Pages category items
+  mobileItems: NavItem[] = this.filterItems([
+    { label: 'Pole Map View', icon: 'map', route: '/pole-tracker/mobile' },
+    { label: 'Quick Capture', icon: 'camera_alt', route: '/pole-tracker/mobile/capture' },
+    { label: 'My Assignments', icon: 'assignment_ind', route: '/pole-tracker/mobile/assignments' },
+    { label: 'Nearby Poles', icon: 'near_me', route: '/pole-tracker/mobile/nearby' },
+    { label: 'Import Poles', icon: 'cloud_upload', route: '/pole-tracker/import' },
   ]);
 
   // Settings category items

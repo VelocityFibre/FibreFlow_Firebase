@@ -1,8 +1,8 @@
 // FibreFlow Service Worker
 // Provides offline support and caching for the application
 
-const CACHE_NAME = 'fibreflow-v1';
-const RUNTIME_CACHE = 'fibreflow-runtime';
+const CACHE_NAME = 'fibreflow-v8-2025-07-07-mobile';
+const RUNTIME_CACHE = 'fibreflow-runtime-v8';
 
 // Assets to cache on install
 const PRECACHE_ASSETS = [
@@ -81,6 +81,17 @@ self.addEventListener('fetch', (event) => {
           // Return offline page if available
           return caches.match('/index.html');
         })
+    );
+    return;
+  }
+
+  // Skip caching for chunk files to avoid version mismatches
+  if (url.pathname.includes('chunk-') && url.pathname.endsWith('.js')) {
+    event.respondWith(
+      fetch(request).catch(() => {
+        // If chunk fetch fails, try to return index.html to trigger app reload
+        return caches.match('/index.html');
+      })
     );
     return;
   }

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clear FibreFlow Cache</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      button {
+        background: #1976d2;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 10px 5px;
+      }
+      button:hover {
+        background: #1565c0;
+      }
+      .status {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 4px;
+        display: none;
+      }
+      .success {
+        background: #c8e6c9;
+        color: #2e7d32;
+      }
+      .error {
+        background: #ffcdd2;
+        color: #c62828;
+      }
+      .info {
+        background: #bbdefb;
+        color: #1565c0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>FibreFlow Cache Manager</h1>
+      <p>
+        Use this page to clear the FibreFlow cache and service worker when you encounter loading
+        errors.
+      </p>
+
+      <button onclick="clearAllCaches()">Clear All Caches</button>
+      <button onclick="unregisterServiceWorker()">Unregister Service Worker</button>
+      <button onclick="hardReload()">Hard Reload App</button>
+
+      <div id="status" class="status"></div>
+    </div>
+
+    <script>
+      function showStatus(message, type = 'info') {
+        const status = document.getElementById('status');
+        status.textContent = message;
+        status.className = 'status ' + type;
+        status.style.display = 'block';
+      }
+
+      async function clearAllCaches() {
+        try {
+          showStatus('Clearing caches...', 'info');
+
+          // Clear all caches
+          const cacheNames = await caches.keys();
+          await Promise.all(
+            cacheNames.map((cacheName) => {
+              console.log('Deleting cache:', cacheName);
+              return caches.delete(cacheName);
+            }),
+          );
+
+          showStatus(`Cleared ${cacheNames.length} caches successfully!`, 'success');
+
+          // Also clear browser cache if possible
+          if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_CACHE' });
+          }
+        } catch (error) {
+          showStatus('Error clearing caches: ' + error.message, 'error');
+        }
+      }
+
+      async function unregisterServiceWorker() {
+        try {
+          showStatus('Unregistering service worker...', 'info');
+
+          if ('serviceWorker' in navigator) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+
+            await Promise.all(
+              registrations.map((registration) => {
+                console.log('Unregistering:', registration.scope);
+                return registration.unregister();
+              }),
+            );
+
+            showStatus(`Unregistered ${registrations.length} service workers!`, 'success');
+          } else {
+            showStatus('Service workers not supported', 'error');
+          }
+        } catch (error) {
+          showStatus('Error unregistering service worker: ' + error.message, 'error');
+        }
+      }
+
+      function hardReload() {
+        showStatus('Reloading app...', 'info');
+
+        // Clear session storage
+        sessionStorage.clear();
+
+        // Clear local storage (optional - be careful)
+        // localStorage.clear();
+
+        // Force reload, bypassing cache
+        setTimeout(() => {
+          window.location.href = '/';
+          window.location.reload(true);
+        }, 1000);
+      }
+
+      // Auto-detect if we're having cache issues
+      window.addEventListener('load', async () => {
+        if ('serviceWorker' in navigator) {
+          const registration = await navigator.serviceWorker.getRegistration();
+          if (registration) {
+            showStatus(
+              'Service Worker is active. Click buttons above to clear cache if needed.',
+              'info',
+            );
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

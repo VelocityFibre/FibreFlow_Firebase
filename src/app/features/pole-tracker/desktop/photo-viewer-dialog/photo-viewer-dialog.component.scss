@@ -1,0 +1,164 @@
+@use '../../../../styles/component-theming' as theme;
+
+.photo-viewer-dialog {
+  width: 800px;
+  max-width: 90vw;
+}
+
+.title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pole-info {
+  display: flex;
+  gap: theme.ff-spacing(xl);
+  padding: theme.ff-spacing(lg);
+  background-color: theme.ff-rgba(primary, 0.05);
+  border-radius: 8px;
+  margin-bottom: theme.ff-spacing(xl);
+
+  .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: theme.ff-spacing(xs);
+
+    strong {
+      font-size: 12px;
+      color: theme.ff-rgba(foreground, 0.6);
+    }
+  }
+}
+
+mat-tab-group {
+  margin-bottom: theme.ff-spacing(xl);
+}
+
+.photo-container {
+  padding: theme.ff-spacing(lg);
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-wrapper {
+  width: 100%;
+  max-width: 600px;
+}
+
+.pole-photo {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  cursor: zoom-in;
+  box-shadow: theme.ff-var(elevation-3);
+}
+
+.photo-metadata {
+  display: flex;
+  gap: theme.ff-spacing(lg);
+  margin-top: theme.ff-spacing(lg);
+  padding: theme.ff-spacing(md);
+  background-color: theme.ff-rgba(surface-variant, 0.5);
+  border-radius: 4px;
+
+  .metadata-item {
+    display: flex;
+    align-items: center;
+    gap: theme.ff-spacing(xs);
+    font-size: 14px;
+    color: theme.ff-rgba(foreground, 0.7);
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+.no-photo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: theme.ff-spacing(md);
+  color: theme.ff-rgba(foreground, 0.4);
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+  }
+}
+
+.photo-grid-toggle {
+  text-align: center;
+  margin-bottom: theme.ff-spacing(lg);
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: theme.ff-spacing(lg);
+  padding: theme.ff-spacing(lg);
+}
+
+.grid-item {
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.grid-photo {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: theme.ff-var(elevation-1);
+}
+
+.grid-placeholder {
+  width: 100%;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: theme.ff-rgba(surface-variant, 0.3);
+  border-radius: 4px;
+  color: theme.ff-rgba(foreground, 0.3);
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+  }
+}
+
+.grid-label {
+  text-align: center;
+  margin-top: theme.ff-spacing(xs);
+  font-size: 12px;
+  color: theme.ff-rgba(foreground, 0.7);
+}
+
+.deviation-valid {
+  background-color: theme.ff-rgba(success, 0.2);
+  color: theme.ff-rgb(success);
+}
+
+.deviation-warning {
+  background-color: theme.ff-rgba(warning, 0.2);
+  color: theme.ff-rgb(warning);
+}
+
+.deviation-invalid {
+  background-color: theme.ff-rgba(danger, 0.2);
+  color: theme.ff-rgb(danger);
+}

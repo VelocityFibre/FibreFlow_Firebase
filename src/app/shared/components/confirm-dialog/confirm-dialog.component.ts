@@ -22,28 +22,27 @@ export interface ConfirmDialogData {
     </mat-dialog-content>
     <mat-dialog-actions align="end">
       <button mat-button (click)="onCancel()">{{ data.cancelText || 'Cancel' }}</button>
-      <button 
-        mat-raised-button 
-        [color]="data.confirmColor || 'primary'"
-        (click)="onConfirm()">
+      <button mat-raised-button [color]="data.confirmColor || 'primary'" (click)="onConfirm()">
         {{ data.confirmText || 'Confirm' }}
       </button>
     </mat-dialog-actions>
   `,
-  styles: [`
-    mat-dialog-content {
-      min-width: 300px;
-    }
-    p {
-      margin: 0;
-      color: rgba(0, 0, 0, 0.87);
-    }
-  `]
+  styles: [
+    `
+      mat-dialog-content {
+        min-width: 300px;
+      }
+      p {
+        margin: 0;
+        color: rgba(0, 0, 0, 0.87);
+      }
+    `,
+  ],
 })
 export class ConfirmDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData
+    @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData,
   ) {}
 
   onCancel(): void {

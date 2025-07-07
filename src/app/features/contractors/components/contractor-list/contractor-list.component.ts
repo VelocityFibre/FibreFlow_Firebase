@@ -833,10 +833,10 @@ export class ContractorListComponent implements OnInit {
   openImportDialog() {
     const dialogRef = this.dialog.open(ContractorImportComponent, {
       width: '600px',
-      disableClose: false
+      disableClose: false,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.loadContractors();
       }

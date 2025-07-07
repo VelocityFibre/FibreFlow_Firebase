@@ -17,10 +17,20 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { PageHeaderComponent, PageHeaderAction } from '../../../../shared/components/page-header/page-header.component';
-import { SummaryCardsComponent, SummaryCard } from '../../../../shared/components/summary-cards/summary-cards.component';
-import { FilterFormComponent, FilterField } from '../../../../shared/components/filter-form/filter-form.component';
+import {
+  PageHeaderComponent,
+  PageHeaderAction,
+} from '../../../../shared/components/page-header/page-header.component';
+import {
+  SummaryCardsComponent,
+  SummaryCard,
+} from '../../../../shared/components/summary-cards/summary-cards.component';
+import {
+  FilterFormComponent,
+  FilterField,
+} from '../../../../shared/components/filter-form/filter-form.component';
 import { MeetingService } from '../../services/meeting.service';
+import { FirefliesService } from '../../services/fireflies.service';
 import { Meeting } from '../../models/meeting.model';
 import { Observable } from 'rxjs';
 
@@ -58,6 +68,7 @@ export class MeetingListComponent implements OnInit {
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private meetingService = inject(MeetingService);
+  private firefliesService = inject(FirefliesService);
 
   // Data signals
   meetings = signal<Meeting[]>([]);
@@ -72,30 +83,31 @@ export class MeetingListComponent implements OnInit {
     // Search filter
     if (filterValues.search) {
       const search = filterValues.search.toLowerCase();
-      filtered = filtered.filter(m => 
-        m.title.toLowerCase().includes(search) ||
-        m.organizer?.toLowerCase().includes(search) ||
-        m.participants.some(p => p.name.toLowerCase().includes(search))
+      filtered = filtered.filter(
+        (m) =>
+          m.title.toLowerCase().includes(search) ||
+          m.organizer?.toLowerCase().includes(search) ||
+          m.participants.some((p) => p.name.toLowerCase().includes(search)),
       );
     }
 
     // Date range filter
     if (filterValues.dateFrom) {
-      filtered = filtered.filter(m => new Date(m.dateTime) >= filterValues.dateFrom);
+      filtered = filtered.filter((m) => new Date(m.dateTime) >= filterValues.dateFrom);
     }
     if (filterValues.dateTo) {
-      filtered = filtered.filter(m => new Date(m.dateTime) <= filterValues.dateTo);
+      filtered = filtered.filter((m) => new Date(m.dateTime) <= filterValues.dateTo);
     }
 
     // Has action items filter
     if (filterValues.hasActionItems) {
-      filtered = filtered.filter(m => m.actionItems && m.actionItems.length > 0);
+      filtered = filtered.filter((m) => m.actionItems && m.actionItems.length > 0);
     }
 
     // Participant filter
     if (filterValues.participant) {
-      filtered = filtered.filter(m => 
-        m.participants.some(p => p.name === filterValues.participant)
+      filtered = filtered.filter((m) =>
+        m.participants.some((p) => p.name === filterValues.participant),
       );
     }
 
@@ -111,25 +123,21 @@ export class MeetingListComponent implements OnInit {
       color: 'primary',
     },
     {
-      value: this.meetings().filter(m => 
-        new Date(m.dateTime).toDateString() === new Date().toDateString()
+      value: this.meetings().filter(
+        (m) => new Date(m.dateTime).toDateString() === new Date().toDateString(),
       ).length,
-      label: 'Today\'s Meetings',
+      label: "Today's Meetings",
       icon: 'today',
       color: 'info',
     },
     {
-      value: this.meetings().reduce((sum, m) => 
-        sum + (m.actionItems?.length || 0), 0
-      ),
+      value: this.meetings().reduce((sum, m) => sum + (m.actionItems?.length || 0), 0),
       label: 'Total Action Items',
       icon: 'task_alt',
       color: 'warning',
     },
     {
-      value: this.meetings().filter(m => 
-        m.actionItems?.some(ai => !ai.completed)
-      ).length,
+      value: this.meetings().filter((m) => m.actionItems?.some((ai) => !ai.completed)).length,
       label: 'Meetings with Pending Actions',
       icon: 'pending_actions',
       color: 'danger',
@@ -139,8 +147,8 @@ export class MeetingListComponent implements OnInit {
   // Get unique participants for filter
   participants = computed(() => {
     const participantSet = new Set<string>();
-    this.meetings().forEach(m => {
-      m.participants.forEach(p => participantSet.add(p.name));
+    this.meetings().forEach((m) => {
+      m.participants.forEach((p) => participantSet.add(p.name));
     });
     return Array.from(participantSet).sort();
   });
@@ -201,7 +209,15 @@ export class MeetingListComponent implements OnInit {
   ];
 
   // Table configuration
-  displayedColumns = ['select', 'title', 'dateTime', 'duration', 'participants', 'actionItems', 'actions'];
+  displayedColumns = [
+    'select',
+    'title',
+    'dateTime',
+    'duration',
+    'participants',
+    'actionItems',
+    'actions',
+  ];
 
   ngOnInit(): void {
     this.initializeFilterForm();
@@ -374,27 +390,57 @@ export class MeetingListComponent implements OnInit {
         updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
       },
     ];
-    
+
     this.meetings.set(mockMeetings);
     this.loading.set(false);
   }
 
   syncMeetings(): void {
     this.loading.set(true);
-    // This would call the Firebase function to sync with Fireflies
-    // For now, just reload the meetings
-    setTimeout(() => {
-      this.loadMeetings();
-    }, 1500);
+    console.log('Starting Fireflies sync...');
+
+    // Get meetings from the last 7 days
+    const dateFrom = new Date();
+    dateFrom.setDate(dateFrom.getDate() - 7);
+    const dateTo = new Date();
+
+    this.firefliesService.getMeetings(dateFrom, dateTo).subscribe({
+      next: (firefliesMeetings) => {
+        console.log(`Found ${firefliesMeetings.length} meetings from Fireflies`);
+
+        // Convert and save each meeting
+        const savePromises = firefliesMeetings.map((firefliesMeeting) => {
+          const meeting = this.firefliesService.convertToMeeting(firefliesMeeting);
+          return this.meetingService.createMeeting(meeting);
+        });
+
+        Promise.all(savePromises)
+          .then(() => {
+            console.log('All meetings synced successfully');
+            this.loadMeetings(); // Reload to show updated data
+          })
+          .catch((error) => {
+            console.error('Error saving meetings:', error);
+            this.loading.set(false);
+          });
+      },
+      error: (error) => {
+        console.error('Error syncing meetings:', error);
+        this.loading.set(false);
+        // Still reload existing meetings
+        this.loadMeetings();
+      },
+    });
   }
 
   exportMeetings(): void {
     // Export functionality
     const selected = Array.from(this.selectedMeetings());
-    const dataToExport = selected.length > 0 
-      ? this.meetings().filter(m => selected.includes(m.id))
-      : this.filteredMeetings();
-    
+    const dataToExport =
+      selected.length > 0
+        ? this.meetings().filter((m) => selected.includes(m.id))
+        : this.filteredMeetings();
+
     console.log('Exporting meetings:', dataToExport);
   }
 
@@ -420,7 +466,7 @@ export class MeetingListComponent implements OnInit {
     if (this.selectedMeetings().size === this.filteredMeetings().length) {
       this.selectedMeetings.set(new Set());
     } else {
-      const allIds = new Set(this.filteredMeetings().map(m => m.id));
+      const allIds = new Set(this.filteredMeetings().map((m) => m.id));
       this.selectedMeetings.set(allIds);
     }
   }
@@ -457,8 +503,8 @@ export class MeetingListComponent implements OnInit {
     if (!meeting.actionItems || meeting.actionItems.length === 0) {
       return 'No action items';
     }
-    const pending = meeting.actionItems.filter(ai => !ai.completed).length;
-    const completed = meeting.actionItems.filter(ai => ai.completed).length;
+    const pending = meeting.actionItems.filter((ai) => !ai.completed).length;
+    const completed = meeting.actionItems.filter((ai) => ai.completed).length;
     return `${pending} pending, ${completed} completed`;
   }
 
@@ -476,11 +522,18 @@ export class MeetingListComponent implements OnInit {
   }
 
   getInitials(name: string): string {
-    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase();
   }
 
   getRemainingParticipantsTooltip(meeting: Meeting): string {
-    return meeting.participants.slice(3).map(p => p.name).join(', ');
+    return meeting.participants
+      .slice(3)
+      .map((p) => p.name)
+      .join(', ');
   }
 
   hasActionItems(meeting: Meeting): boolean {
@@ -488,10 +541,10 @@ export class MeetingListComponent implements OnInit {
   }
 
   hasPendingActionItems(meeting: Meeting): boolean {
-    return !!(meeting.actionItems && meeting.actionItems.some(ai => !ai.completed));
+    return !!(meeting.actionItems && meeting.actionItems.some((ai) => !ai.completed));
   }
 
   getPendingActionItemsCount(meeting: Meeting): number {
-    return meeting.actionItems?.filter(ai => !ai.completed).length || 0;
+    return meeting.actionItems?.filter((ai) => !ai.completed).length || 0;
   }
 }

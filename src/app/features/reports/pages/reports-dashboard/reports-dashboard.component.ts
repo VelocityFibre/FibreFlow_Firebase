@@ -92,9 +92,15 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
                       <td mat-cell *matCellDef="let report">
                         <mat-icon [class]="'type-icon ' + report.reportType">
                           @switch (report.reportType) {
-                            @case ('daily') { today }
-                            @case ('weekly') { date_range }
-                            @case ('monthly') { calendar_month }
+                            @case ('daily') {
+                              today
+                            }
+                            @case ('weekly') {
+                              date_range
+                            }
+                            @case ('monthly') {
+                              calendar_month
+                            }
                           }
                         </mat-icon>
                         {{ getReportTypeLabel(report.reportType) }}
@@ -114,7 +120,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
                     <ng-container matColumnDef="generated">
                       <th mat-header-cell *matHeaderCellDef>Generated</th>
                       <td mat-cell *matCellDef="let report">
-                        {{ report.generatedAt | date:'short' }}
+                        {{ report.generatedAt | date: 'short' }}
                       </td>
                     </ng-container>
 
@@ -134,7 +140,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="report-row"></tr>
+                    <tr
+                      mat-row
+                      *matRowDef="let row; columns: displayedColumns"
+                      class="report-row"
+                    ></tr>
                   </table>
                 }
               </div>
@@ -162,161 +172,165 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
       </mat-card>
     </div>
   `,
-  styles: [`
-    .reports-dashboard-container {
-      padding: 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .header-card {
-      margin-bottom: 24px;
-    }
-
-    .header-card mat-card-header {
-      flex: 1;
-    }
-
-    .header-card mat-card-actions {
-      margin: 0;
-      padding: 0;
-    }
-
-    .quick-actions {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .action-card {
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .action-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .action-card mat-card-content {
-      text-align: center;
-      padding: 24px;
-    }
-
-    .action-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
-      margin: 0 auto 16px;
-    }
-
-    .action-icon.daily {
-      color: var(--mat-sys-primary);
-    }
-
-    .action-icon.weekly {
-      color: var(--mat-sys-secondary);
-    }
-
-    .action-icon.monthly {
-      color: var(--mat-sys-tertiary);
-    }
-
-    .action-card h3 {
-      margin: 0 0 8px 0;
-      color: var(--mat-sys-on-surface);
-    }
-
-    .action-card p {
-      margin: 0;
-      color: var(--mat-sys-on-surface-variant);
-      font-size: 14px;
-    }
-
-    .history-card {
-      margin-top: 24px;
-    }
-
-    .tab-content {
-      padding: 24px 0;
-    }
-
-    .loading-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px;
-      gap: 16px;
-    }
-
-    .loading-container p {
-      color: var(--mat-sys-on-surface-variant);
-      margin: 0;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 60px;
-    }
-
-    .empty-state mat-icon {
-      font-size: 64px;
-      width: 64px;
-      height: 64px;
-      color: var(--mat-sys-on-surface-variant);
-      margin-bottom: 16px;
-    }
-
-    .empty-state h3 {
-      margin: 0 0 8px 0;
-      color: var(--mat-sys-on-surface);
-    }
-
-    .empty-state p {
-      margin: 0 0 24px 0;
-      color: var(--mat-sys-on-surface-variant);
-    }
-
-    .reports-table {
-      width: 100%;
-    }
-
-    .type-icon {
-      vertical-align: middle;
-      margin-right: 8px;
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-    }
-
-    .type-icon.daily {
-      color: var(--mat-sys-primary);
-    }
-
-    .type-icon.weekly {
-      color: var(--mat-sys-secondary);
-    }
-
-    .type-icon.monthly {
-      color: var(--mat-sys-tertiary);
-    }
-
-    .report-row {
-      cursor: pointer;
-    }
-
-    .report-row:hover {
-      background-color: var(--mat-sys-surface-variant);
-    }
-
-    @media (max-width: 768px) {
-      .quick-actions {
-        grid-template-columns: 1fr;
+  styles: [
+    `
+      .reports-dashboard-container {
+        padding: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
       }
-    }
-  `]
+
+      .header-card {
+        margin-bottom: 24px;
+      }
+
+      .header-card mat-card-header {
+        flex: 1;
+      }
+
+      .header-card mat-card-actions {
+        margin: 0;
+        padding: 0;
+      }
+
+      .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .action-card {
+        cursor: pointer;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .action-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .action-card mat-card-content {
+        text-align: center;
+        padding: 24px;
+      }
+
+      .action-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        margin: 0 auto 16px;
+      }
+
+      .action-icon.daily {
+        color: var(--mat-sys-primary);
+      }
+
+      .action-icon.weekly {
+        color: var(--mat-sys-secondary);
+      }
+
+      .action-icon.monthly {
+        color: var(--mat-sys-tertiary);
+      }
+
+      .action-card h3 {
+        margin: 0 0 8px 0;
+        color: var(--mat-sys-on-surface);
+      }
+
+      .action-card p {
+        margin: 0;
+        color: var(--mat-sys-on-surface-variant);
+        font-size: 14px;
+      }
+
+      .history-card {
+        margin-top: 24px;
+      }
+
+      .tab-content {
+        padding: 24px 0;
+      }
+
+      .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px;
+        gap: 16px;
+      }
+
+      .loading-container p {
+        color: var(--mat-sys-on-surface-variant);
+        margin: 0;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 60px;
+      }
+
+      .empty-state mat-icon {
+        font-size: 64px;
+        width: 64px;
+        height: 64px;
+        color: var(--mat-sys-on-surface-variant);
+        margin-bottom: 16px;
+      }
+
+      .empty-state h3 {
+        margin: 0 0 8px 0;
+        color: var(--mat-sys-on-surface);
+      }
+
+      .empty-state p {
+        margin: 0 0 24px 0;
+        color: var(--mat-sys-on-surface-variant);
+      }
+
+      .reports-table {
+        width: 100%;
+      }
+
+      .type-icon {
+        vertical-align: middle;
+        margin-right: 8px;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+
+      .type-icon.daily {
+        color: var(--mat-sys-primary);
+      }
+
+      .type-icon.weekly {
+        color: var(--mat-sys-secondary);
+      }
+
+      .type-icon.monthly {
+        color: var(--mat-sys-tertiary);
+      }
+
+      .report-row {
+        cursor: pointer;
+      }
+
+      .report-row:hover {
+        background-color: var(--mat-sys-surface-variant);
+      }
+
+      @media (max-width: 768px) {
+        .quick-actions {
+          grid-template-columns: 1fr;
+        }
+      }
+    `,
+  ],
 })
 export class ReportsDashboardComponent implements OnInit {
   private router = inject(Router);
@@ -347,8 +361,8 @@ export class ReportsDashboardComponent implements OnInit {
   }
 
   generateQuickReport(type: 'daily' | 'weekly' | 'monthly') {
-    this.router.navigate(['/reports/generate'], { 
-      queryParams: { type, quick: true } 
+    this.router.navigate(['/reports/generate'], {
+      queryParams: { type, quick: true },
     });
   }
 
@@ -373,7 +387,7 @@ export class ReportsDashboardComponent implements OnInit {
   formatReportPeriod(report: any): string {
     const start = new Date(report.period.start);
     const end = new Date(report.period.end);
-    
+
     if (report.reportType === 'daily') {
       return start.toLocaleDateString();
     } else if (report.reportType === 'weekly') {

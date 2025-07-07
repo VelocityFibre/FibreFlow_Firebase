@@ -118,9 +118,11 @@ import {
                     </div>
                     <div class="info-item">
                       <span class="info-label">Phone</span>
-                      <a class="info-value link" 
-                         [href]="'tel:' + (contractor.primaryContact?.phone || '')"
-                         *ngIf="contractor.primaryContact?.phone">
+                      <a
+                        class="info-value link"
+                        [href]="'tel:' + (contractor.primaryContact?.phone || '')"
+                        *ngIf="contractor.primaryContact?.phone"
+                      >
                         {{ contractor.primaryContact?.phone }}
                       </a>
                       <span class="info-value" *ngIf="!contractor.primaryContact?.phone">N/A</span>
@@ -174,7 +176,9 @@ import {
                     <div class="capability-group">
                       <h4>Equipment</h4>
                       <div class="chips-container">
-                        <mat-chip *ngFor="let equipment of contractor.capabilities?.equipment || []">
+                        <mat-chip
+                          *ngFor="let equipment of contractor.capabilities?.equipment || []"
+                        >
                           {{ equipment }}
                         </mat-chip>
                       </div>
@@ -273,7 +277,9 @@ import {
                     <div class="compliance-content">
                       <h4>Certifications</h4>
                       <mat-list>
-                        <mat-list-item *ngFor="let cert of contractor.capabilities?.certifications || []">
+                        <mat-list-item
+                          *ngFor="let cert of contractor.capabilities?.certifications || []"
+                        >
                           <mat-icon matListItemIcon>verified</mat-icon>
                           <div matListItemTitle>{{ cert.name }}</div>
                           <div matListItemMeta>
@@ -314,7 +320,9 @@ import {
                   <div class="info-item">
                     <span class="info-label">Account Number</span>
                     <span class="info-value">{{
-                      contractor.financial?.accountNumber ? maskAccountNumber(contractor.financial?.accountNumber || '') : 'N/A'
+                      contractor.financial?.accountNumber
+                        ? maskAccountNumber(contractor.financial?.accountNumber || '')
+                        : 'N/A'
                     }}</span>
                   </div>
                   <div class="info-item">
@@ -323,7 +331,9 @@ import {
                   </div>
                   <div class="info-item">
                     <span class="info-label">Payment Terms</span>
-                    <span class="info-value">{{ contractor.financial?.paymentTerms || 'N/A' }} days</span>
+                    <span class="info-value"
+                      >{{ contractor.financial?.paymentTerms || 'N/A' }} days</span
+                    >
                   </div>
                   <div class="info-item" *ngIf="contractor.financial?.creditLimit">
                     <span class="info-label">Credit Limit</span>
@@ -810,7 +820,9 @@ export class ContractorDetailPageComponent implements OnInit {
 
     const user = this.authService.getCurrentUser();
     if (!user) {
-      this.snackBar.open('Error: You must be logged in to approve contractors', 'Close', { duration: 3000 });
+      this.snackBar.open('Error: You must be logged in to approve contractors', 'Close', {
+        duration: 3000,
+      });
       return;
     }
 
@@ -825,14 +837,18 @@ export class ContractorDetailPageComponent implements OnInit {
     // Call the service to approve
     this.contractorService.approveContractor(contractorId, user.uid).then(
       () => {
-        this.snackBar.open(`${contractorName} has been approved successfully!`, 'Close', { duration: 3000 });
+        this.snackBar.open(`${contractorName} has been approved successfully!`, 'Close', {
+          duration: 3000,
+        });
         // Reload the page to show updated status
         window.location.reload();
       },
       (error) => {
         // console.error('Error approving contractor:', error);
-        this.snackBar.open('Error approving contractor. Please try again.', 'Close', { duration: 5000 });
-      }
+        this.snackBar.open('Error approving contractor. Please try again.', 'Close', {
+          duration: 5000,
+        });
+      },
     );
   }
 }

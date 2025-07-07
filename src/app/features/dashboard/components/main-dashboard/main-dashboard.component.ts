@@ -75,9 +75,12 @@ export class MainDashboardComponent implements OnInit, OnDestroy {
     initialValue: [],
   });
 
-  poleTrackers = toSignal(this.poleTrackerService.getPoleTrackers().pipe(catchError(() => of([]))), {
-    initialValue: [],
-  });
+  poleTrackers = toSignal(
+    this.poleTrackerService.getPoleTrackers().pipe(catchError(() => of([]))),
+    {
+      initialValue: [],
+    },
+  );
 
   meetings = toSignal(this.meetingService.getMeetings().pipe(catchError(() => of([]))), {
     initialValue: [],
@@ -104,11 +107,13 @@ export class MainDashboardComponent implements OnInit, OnDestroy {
   staffCount = computed(() => this.staff().length);
   contractorsCount = computed(() => this.contractors().length);
   polesInstalledCount = computed(() => this.poleTrackers().length);
-  polesQualityCheckedCount = computed(() => this.poleTrackers().filter(p => p.qualityChecked).length);
+  polesQualityCheckedCount = computed(
+    () => this.poleTrackers().filter((p) => p.qualityChecked).length,
+  );
   meetingsCount = computed(() => this.meetings().length);
   todaysMeetingsCount = computed(() => {
     const today = new Date().toISOString().split('T')[0];
-    return this.meetings().filter(meeting => meeting.dateTime.startsWith(today)).length;
+    return this.meetings().filter((meeting) => meeting.dateTime.startsWith(today)).length;
   });
 
   // Loading state computed from all data sources

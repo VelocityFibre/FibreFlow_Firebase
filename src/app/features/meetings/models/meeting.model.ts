@@ -61,14 +61,14 @@ export enum InsightType {
   COMMITMENT = 'commitment',
   QUESTION = 'question',
   CONCERN = 'concern',
-  OPPORTUNITY = 'opportunity'
+  OPPORTUNITY = 'opportunity',
 }
 
 export enum MeetingStatus {
   PENDING = 'pending',
   PROCESSING = 'processing',
   PROCESSED = 'processed',
-  FAILED = 'failed'
+  FAILED = 'failed',
 }
 
 export interface MeetingSearchQuery {

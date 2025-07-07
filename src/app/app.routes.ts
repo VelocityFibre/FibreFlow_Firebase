@@ -49,7 +49,8 @@ const allRoutes: Routes = [
   },
   {
     path: 'pole-tracker',
-    loadChildren: () => import('./features/pole-tracker/pole-tracker.routes').then((m) => m.poleTrackerRoutes),
+    loadChildren: () =>
+      import('./features/pole-tracker/pole-tracker.routes').then((m) => m.poleTrackerRoutes),
     data: { preload: true },
   },
   // Dashboard-linked routes
@@ -120,36 +121,37 @@ const allRoutes: Routes = [
     path: 'task-management',
     loadComponent: () => {
       console.log('FibreFlow: Loading TaskManagementComponent...');
-      return import('./features/tasks/pages/task-management/task-management.component').then(
-        (m) => {
+      return import('./features/tasks/pages/task-management/task-management.component')
+        .then((m) => {
           console.log('FibreFlow: TaskManagementComponent module loaded:', m);
           return m.TaskManagementComponent;
-        },
-      ).catch((error) => {
-        console.error('FibreFlow: Error loading TaskManagementComponent:', error);
-        throw error;
-      });
+        })
+        .catch((error) => {
+          console.error('FibreFlow: Error loading TaskManagementComponent:', error);
+          throw error;
+        });
     },
-    canActivate: [() => {
-      console.log('FibreFlow: Checking access to /task-management route');
-      const router = inject(Router);
-      console.log('FibreFlow: Current URL:', router.url);
-      return true;
-    }],
+    canActivate: [
+      () => {
+        console.log('FibreFlow: Checking access to /task-management route');
+        const router = inject(Router);
+        console.log('FibreFlow: Current URL:', router.url);
+        return true;
+      },
+    ],
     data: { title: 'Task Management' },
   },
   {
     path: 'personal-todos',
     loadComponent: () =>
       import('./features/personal-todos/pages/todo-management/todo-management.component').then(
-        (m) => m.TodoManagementComponent
+        (m) => m.TodoManagementComponent,
       ),
     data: { title: 'Personal Todos' },
   },
   {
     path: 'meetings',
-    loadChildren: () =>
-      import('./features/meetings/meetings.routes').then((m) => m.meetingsRoutes),
+    loadChildren: () => import('./features/meetings/meetings.routes').then((m) => m.meetingsRoutes),
     data: { title: 'Meetings' },
   },
   {
@@ -217,8 +219,7 @@ const allRoutes: Routes = [
   },
   {
     path: 'reports',
-    loadChildren: () =>
-      import('./features/reports/reports.routes').then((m) => m.REPORTS_ROUTES),
+    loadChildren: () => import('./features/reports/reports.routes').then((m) => m.REPORTS_ROUTES),
     data: { title: 'Reports', preload: true },
   },
   // Auth routes - temporary for testing
@@ -247,6 +248,6 @@ const allRoutes: Routes = [
 ];
 
 // Filter routes based on demo configuration
-export const routes: Routes = demoConfig.isDemo 
-  ? allRoutes.filter(route => !demoConfig.hiddenRoutes.includes('/' + route.path))
+export const routes: Routes = demoConfig.isDemo
+  ? allRoutes.filter((route) => !demoConfig.hiddenRoutes.includes('/' + route.path))
   : allRoutes;

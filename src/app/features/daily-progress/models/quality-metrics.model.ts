@@ -3,7 +3,7 @@ export interface QualityMetrics {
   projectId: string;
   projectName?: string;
   date: Date;
-  
+
   // Inspection Results
   inspections: {
     scheduled: number;
@@ -13,7 +13,7 @@ export interface QualityMetrics {
     pending: number;
     passRate: number; // percentage
   };
-  
+
   // Quality Issues
   issues: {
     total: number;
@@ -23,7 +23,7 @@ export interface QualityMetrics {
     resolved: number;
     outstanding: number;
   };
-  
+
   // Rework Tracking
   rework: {
     items: number;
@@ -37,7 +37,7 @@ export interface QualityMetrics {
       other: number;
     };
   };
-  
+
   // Defect Tracking
   defects: {
     reported: number;
@@ -51,7 +51,7 @@ export interface QualityMetrics {
       documentation: number;
     };
   };
-  
+
   // SLA Compliance
   slaCompliance: {
     overallScore: number; // percentage
@@ -70,7 +70,7 @@ export interface QualityMetrics {
       actual: number; // percentage
     };
   };
-  
+
   // Customer Satisfaction
   customerSatisfaction: {
     complaints: number;
@@ -85,7 +85,7 @@ export interface QualityMetrics {
       professionalism: number;
     };
   };
-  
+
   // Audit Results
   audits: {
     internal: {
@@ -101,7 +101,7 @@ export interface QualityMetrics {
       findings: number;
     };
   };
-  
+
   // Safety Quality
   safetyQuality: {
     incidentsReported: number;
@@ -110,7 +110,7 @@ export interface QualityMetrics {
     trainingCompliance: number; // percentage
     ppeCompliance: number; // percentage
   };
-  
+
   // Documentation Quality
   documentation: {
     complete: number;
@@ -118,7 +118,7 @@ export interface QualityMetrics {
     accuracy: number; // percentage
     timeliness: number; // percentage
   };
-  
+
   // Performance Indicators
   kpis: {
     firstTimeRightRate: number; // percentage
@@ -126,7 +126,7 @@ export interface QualityMetrics {
     materialWastage: number; // percentage
     processCompliance: number; // percentage
   };
-  
+
   // Metadata
   submittedBy: string;
   submittedByName?: string;
@@ -144,36 +144,36 @@ export interface QualityCheckpoint {
   projectId: string;
   checkpointName: string;
   checkpointType: 'pole' | 'cable' | 'splicing' | 'connection' | 'testing' | 'documentation';
-  
+
   criteria: {
     id: string;
     description: string;
     mandatory: boolean;
     weight: number; // importance factor
   }[];
-  
+
   results: {
     criteriaId: string;
     passed: boolean;
     notes?: string;
     evidence?: string[]; // photo URLs
   }[];
-  
+
   overallResult: 'pass' | 'fail' | 'conditional';
   score: number; // percentage
-  
+
   inspector: {
     id: string;
     name: string;
     certification?: string;
   };
-  
+
   location?: {
     latitude: number;
     longitude: number;
     address?: string;
   };
-  
+
   timestamp: Date;
   weatherConditions?: string;
   correctionRequired?: boolean;
@@ -188,7 +188,7 @@ export interface QualitySummary {
     end: Date;
     type: 'daily' | 'weekly' | 'monthly';
   };
-  
+
   overview: {
     totalInspections: number;
     passRate: number;
@@ -197,23 +197,23 @@ export interface QualitySummary {
     customerSatisfaction: number;
     slaCompliance: number;
   };
-  
+
   trends: {
     qualityScore: number[]; // array of daily/weekly scores
     defectRate: number[];
     customerSatisfaction: number[];
     reworkHours: number[];
   };
-  
+
   topIssues: {
     description: string;
     frequency: number;
     impact: 'high' | 'medium' | 'low';
     status: 'open' | 'resolved';
   }[];
-  
+
   recommendations: string[];
-  
+
   comparison?: {
     previousPeriod: {
       qualityScore: number;

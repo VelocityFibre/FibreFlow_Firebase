@@ -1,5 +1,8 @@
 import { DailyKPIs } from '../../daily-progress/models/daily-kpis.model';
-import { ProjectFinancials, FinancialSummary } from '../../daily-progress/models/financial-tracking.model';
+import {
+  ProjectFinancials,
+  FinancialSummary,
+} from '../../daily-progress/models/financial-tracking.model';
 import { QualityMetrics, QualitySummary } from '../../daily-progress/models/quality-metrics.model';
 import { Project } from '../../../core/models/project.model';
 import { Contractor } from '../../contractors/models/contractor.model';
@@ -23,7 +26,7 @@ export interface ReportMetadata {
 
 export interface DailyReport extends ReportMetadata {
   reportType: 'daily';
-  
+
   // Executive Summary
   summary: {
     date: Date;
@@ -33,16 +36,16 @@ export interface DailyReport extends ReportMetadata {
     criticalIssues: string[];
     tomorrowPlan: string[];
   };
-  
+
   // KPI Data
   kpis: DailyKPIs;
-  
+
   // Financial Data
   financials?: ProjectFinancials;
-  
+
   // Quality Data
   quality?: QualityMetrics;
-  
+
   // Team Performance
   teamPerformance: {
     totalTeamSize: number;
@@ -60,7 +63,7 @@ export interface DailyReport extends ReportMetadata {
       };
     }[];
   };
-  
+
   // Resource Utilization
   resources: {
     equipment: {
@@ -75,7 +78,7 @@ export interface DailyReport extends ReportMetadata {
       remaining: number;
     }[];
   };
-  
+
   // Safety Summary
   safety: {
     incidents: number;
@@ -84,7 +87,7 @@ export interface DailyReport extends ReportMetadata {
     observations: number;
     complianceScore: number;
   };
-  
+
   // Photos/Evidence
   attachments: {
     type: 'photo' | 'document' | 'report';
@@ -96,7 +99,7 @@ export interface DailyReport extends ReportMetadata {
 
 export interface WeeklyReport extends ReportMetadata {
   reportType: 'weekly';
-  
+
   // Executive Summary
   summary: {
     weekNumber: number;
@@ -106,7 +109,7 @@ export interface WeeklyReport extends ReportMetadata {
     nextWeekPriorities: string[];
     executiveNotes?: string;
   };
-  
+
   // Aggregated KPIs
   kpiSummary: {
     dailyKpis: DailyKPIs[]; // array of daily entries
@@ -118,13 +121,13 @@ export interface WeeklyReport extends ReportMetadata {
       changePercentage: number;
     }[];
   };
-  
+
   // Financial Summary
   financialSummary?: FinancialSummary;
-  
+
   // Quality Summary
   qualitySummary?: QualitySummary;
-  
+
   // Progress Analysis
   progressAnalysis: {
     planned: {
@@ -146,7 +149,7 @@ export interface WeeklyReport extends ReportMetadata {
       connections: number;
     };
   };
-  
+
   // Contractor Performance
   contractorPerformance: {
     contractorId: string;
@@ -159,7 +162,7 @@ export interface WeeklyReport extends ReportMetadata {
     };
     ranking: number;
   }[];
-  
+
   // Risk Register
   risks: {
     id: string;
@@ -171,7 +174,7 @@ export interface WeeklyReport extends ReportMetadata {
     status: 'new' | 'ongoing' | 'mitigated' | 'closed';
     owner: string;
   }[];
-  
+
   // Lessons Learned
   lessonsLearned: {
     category: 'process' | 'technical' | 'safety' | 'quality';
@@ -182,7 +185,7 @@ export interface WeeklyReport extends ReportMetadata {
 
 export interface MonthlyReport extends ReportMetadata {
   reportType: 'monthly';
-  
+
   // Executive Dashboard
   dashboard: {
     month: string; // e.g., "June 2025"
@@ -193,7 +196,7 @@ export interface MonthlyReport extends ReportMetadata {
     qualityScore: number;
     safetyScore: number;
   };
-  
+
   // Strategic Summary
   strategicSummary: {
     executiveSummary: string;
@@ -206,7 +209,7 @@ export interface MonthlyReport extends ReportMetadata {
     strategicIssues: string[];
     recommendations: string[];
   };
-  
+
   // Comprehensive Metrics
   metrics: {
     kpis: {
@@ -217,7 +220,7 @@ export interface MonthlyReport extends ReportMetadata {
     financial: FinancialSummary;
     quality: QualitySummary;
   };
-  
+
   // Resource Analysis
   resourceAnalysis: {
     manpower: {
@@ -248,7 +251,7 @@ export interface MonthlyReport extends ReportMetadata {
       }[];
     };
   };
-  
+
   // Stakeholder Management
   stakeholderUpdate: {
     customerSatisfaction: number; // percentage or score
@@ -270,7 +273,7 @@ export interface MonthlyReport extends ReportMetadata {
       };
     };
   };
-  
+
   // Forecast & Projections
   forecast: {
     completionDate: Date;
@@ -287,7 +290,7 @@ export interface MonthlyReport extends ReportMetadata {
     };
     risks: string[];
   };
-  
+
   // Improvement Plan
   improvementPlan: {
     area: 'productivity' | 'quality' | 'safety' | 'cost';
@@ -297,7 +300,7 @@ export interface MonthlyReport extends ReportMetadata {
     deadline: Date;
     status: 'planned' | 'in-progress' | 'completed';
   }[];
-  
+
   // Appendices
   appendices: {
     detailedFinancials?: any;

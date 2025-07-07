@@ -3,13 +3,13 @@ export interface ProjectFinancials {
   projectId: string;
   projectName?: string;
   date: Date;
-  
+
   // Budget Information
   budgetAllocated: number;
   budgetSpent: number;
   budgetRemaining: number;
   budgetUtilization: number; // percentage
-  
+
   // Daily Costs
   laborCost: {
     regular: number;
@@ -17,7 +17,7 @@ export interface ProjectFinancials {
     contractors: number;
     total: number;
   };
-  
+
   materialCost: {
     poles: number;
     cables: number;
@@ -25,14 +25,14 @@ export interface ProjectFinancials {
     consumables: number;
     total: number;
   };
-  
+
   equipmentCost: {
     rental: number;
     fuel: number;
     maintenance: number;
     total: number;
   };
-  
+
   otherCosts: {
     permits: number;
     utilities: number;
@@ -41,7 +41,7 @@ export interface ProjectFinancials {
     miscellaneous: number;
     total: number;
   };
-  
+
   // Revenue Tracking
   revenue: {
     homesConnected: number;
@@ -50,7 +50,7 @@ export interface ProjectFinancials {
     other: number;
     total: number;
   };
-  
+
   // Cost per Unit Metrics
   costPerUnit: {
     perPole: number;
@@ -58,26 +58,26 @@ export interface ProjectFinancials {
     perHomeConnection: number;
     perKmTrenching: number;
   };
-  
+
   // Financial Health Indicators
   profitMargin: number; // percentage
   cashFlow: number;
   paymentsPending: number;
   invoicesRaised: number;
   invoicesPaid: number;
-  
+
   // Variance Analysis
   variance: {
     budgetVariance: number; // percentage
     scheduleVariance: number; // percentage
     costVariance: number; // percentage
   };
-  
+
   // Forecasting
   projectedTotalCost: number;
   projectedCompletionDate: Date;
   projectedROI: number; // percentage
-  
+
   // Metadata
   submittedBy: string;
   submittedByName?: string;
@@ -125,26 +125,26 @@ export interface FinancialSummary {
     end: Date;
     type: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly';
   };
-  
+
   totalRevenue: number;
   totalCosts: number;
   grossProfit: number;
   netProfit: number;
-  
+
   costBreakdown: {
     labor: number;
     materials: number;
     equipment: number;
     other: number;
   };
-  
+
   revenueBreakdown: {
     connections: number;
     activations: number;
     installations: number;
     other: number;
   };
-  
+
   metrics: {
     avgCostPerDay: number;
     avgRevenuePerDay: number;
@@ -152,7 +152,7 @@ export interface FinancialSummary {
     roi: number;
     paybackPeriod: number; // in months
   };
-  
+
   comparison?: {
     previousPeriod: {
       revenue: number;
