@@ -2,8 +2,8 @@ name: Sync Airtable to Azure SQL (curl method)
 
 on:
   schedule:
-    # Run every hour
-    - cron: '0 * * * *'
+    # Run at 6am every weekday (Monday-Friday)
+    - cron: '0 6 * * 1-5'
   workflow_dispatch: # Allow manual trigger
 
 jobs:
@@ -24,62 +24,98 @@ jobs:
         npm install mssql dotenv
     
     - name: Export Airtable data using curl
+      env:
+        AIRTABLE_PAT: ${{ secrets.AIRTABLE_PAT }}
       run: |
-        echo "📥 Fetching projects from Airtable using curl..."
+        echo "📥 Fetching data from Airtable using curl..."
         
-        # Initialize variables
-        ALL_RECORDS="[]"
-        OFFSET=""
-        TOTAL_COUNT=0
+        # Debug: Check if token is set
+        if [ -z "$AIRTABLE_PAT" ]; then
+          echo "❌ ERROR: AIRTABLE_PAT is not set!"
+          exit 1
+        fi
         
-        # Fetch with pagination
-        while true; do
-          if [ -z "$OFFSET" ]; then
-            URL="https://api.airtable.com/v0/appkYMgaK0cHVu4Zg/Projects?pageSize=100"
-          else
-            URL="https://api.airtable.com/v0/appkYMgaK0cHVu4Zg/Projects?pageSize=100&offset=$OFFSET"
-          fi
-          
-          RESPONSE=$(curl -s "$URL" -H "Authorization: Bearer ${{ secrets.AIRTABLE_PAT }}")
-          
-          # Check for errors
-          if echo "$RESPONSE" | jq -e '.error' > /dev/null 2>&1; then
-            echo "❌ Airtable API error:"
-            echo "$RESPONSE" | jq '.error'
-            exit 1
-          fi
-          
-          # Extract records
-          RECORDS=$(echo "$RESPONSE" | jq -r '.records')
-          COUNT=$(echo "$RECORDS" | jq 'length')
-          TOTAL_COUNT=$((TOTAL_COUNT + COUNT))
-          
-          echo "  Fetched $COUNT records (total: $TOTAL_COUNT)"
-          
-          # Append records
-          ALL_RECORDS=$(echo "$ALL_RECORDS" "$RECORDS" | jq -s 'add')
-          
-          # Check for offset
-          OFFSET=$(echo "$RESPONSE" | jq -r '.offset // empty')
-          if [ -z "$OFFSET" ]; then
-            break
-          fi
-        done
+        echo "✅ AIRTABLE_PAT is set (length: ${#AIRTABLE_PAT})"
+        echo "🔍 Token starts with: ${AIRTABLE_PAT:0:10}..."
         
-        echo "✅ Total projects fetched: $TOTAL_COUNT"
+        # Function to fetch data from any table
+        fetch_table() {
+          local TABLE_NAME="$1"
+          local OUTPUT_FILE="$2"
+          
+          echo "📋 Fetching $TABLE_NAME..."
+          
+          ALL_RECORDS="[]"
+          OFFSET=""
+          TOTAL_COUNT=0
+          
+          # Fetch with pagination
+          while true; do
+            if [ -z "$OFFSET" ]; then
+              URL="https://api.airtable.com/v0/appkYMgaK0cHVu4Zg/$TABLE_NAME?pageSize=100"
+            else
+              URL="https://api.airtable.com/v0/appkYMgaK0cHVu4Zg/$TABLE_NAME?pageSize=100&offset=$OFFSET"
+            fi
+            
+            echo "🔗 Calling: $URL"
+            RESPONSE=$(curl -s "$URL" -H "Authorization: Bearer $AIRTABLE_PAT")
+            
+            # Check for errors
+            if echo "$RESPONSE" | jq -e '.error' > /dev/null 2>&1; then
+              echo "❌ Airtable API error for $TABLE_NAME:"
+              echo "$RESPONSE" | jq '.error'
+              exit 1
+            fi
+            
+            # Extract records
+            RECORDS=$(echo "$RESPONSE" | jq -r '.records')
+            COUNT=$(echo "$RECORDS" | jq 'length')
+            TOTAL_COUNT=$((TOTAL_COUNT + COUNT))
+            
+            echo "  Fetched $COUNT records (total: $TOTAL_COUNT)"
+            
+            # Append records
+            ALL_RECORDS=$(echo "$ALL_RECORDS" "$RECORDS" | jq -s 'add')
+            
+            # Check for offset
+            OFFSET=$(echo "$RESPONSE" | jq -r '.offset // empty')
+            if [ -z "$OFFSET" ]; then
+              break
+            fi
+          done
+          
+          echo "✅ Total $TABLE_NAME fetched: $TOTAL_COUNT"
+          
+          # Save to file in proper format
+          echo "{\"records\": $ALL_RECORDS}" > "$OUTPUT_FILE"
+          echo "💾 Saved $TABLE_NAME to $OUTPUT_FILE"
+        }
         
-        # Save to file
-        echo "$ALL_RECORDS" > airtable-projects-full.json
-        echo "💾 Saved data to airtable-projects-full.json"
+        # Fetch Projects data
+        fetch_table "Projects" "airtable-projects-full.json"
+        
+        # Fetch Daily Tracker data
+        fetch_table "Daily%20Tracker" "airtable-daily-tracker.json"
     
-    - name: Sync to Azure SQL
+    - name: Sync Projects to Azure SQL
       env:
         AZURE_SQL_SERVER: ${{ secrets.AZURE_SQL_SERVER }}
         AZURE_SQL_DATABASE: ${{ secrets.AZURE_SQL_DATABASE }}
         AZURE_SQL_USER: ${{ secrets.AZURE_SQL_USER }}
         AZURE_SQL_PASSWORD: ${{ secrets.AZURE_SQL_PASSWORD }}
       run: |
-        node sync-all-project-fields-v2.js
+        echo "🔄 Syncing Projects data..."
+        node sync-all-project-fields-v3.js
+    
+    - name: Sync Daily Tracker to Azure SQL
+      env:
+        AZURE_SQL_SERVER: ${{ secrets.AZURE_SQL_SERVER }}
+        AZURE_SQL_DATABASE: ${{ secrets.AZURE_SQL_DATABASE }}
+        AZURE_SQL_USER: ${{ secrets.AZURE_SQL_USER }}
+        AZURE_SQL_PASSWORD: ${{ secrets.AZURE_SQL_PASSWORD }}
+      run: |
+        echo "🔄 Syncing Daily Tracker data..."
+        node sync-daily-tracker-complete.js
     
     - name: Verify sync
       env:
@@ -88,7 +124,7 @@ jobs:
         AZURE_SQL_USER: ${{ secrets.AZURE_SQL_USER }}
         AZURE_SQL_PASSWORD: ${{ secrets.AZURE_SQL_PASSWORD }}
       run: |
-        # Create a simple verification script
+        # Create a comprehensive verification script
         cat > verify-sync.js << 'EOF'
         require('dotenv').config();
         const sql = require('mssql');
@@ -107,8 +143,29 @@ jobs:
         async function verify() {
           try {
             const pool = await sql.connect(sqlConfig);
-            const result = await pool.request().query('SELECT COUNT(*) as count FROM projects');
-            console.log(`✅ Sync successful! ${result.recordset[0].count} projects in database`);
+            
+            // Check Projects
+            const projectsResult = await pool.request().query('SELECT COUNT(*) as count FROM projects');
+            console.log(`✅ Projects sync successful! ${projectsResult.recordset[0].count} projects in database`);
+            
+            // Check Daily Tracker
+            const trackerResult = await pool.request().query('SELECT COUNT(*) as count FROM daily_tracker');
+            console.log(`✅ Daily Tracker sync successful! ${trackerResult.recordset[0].count} daily tracker records in database`);
+            
+            // Check recent data
+            const recentData = await pool.request().query(`
+              SELECT TOP 1 date, project_name, missing_status
+              FROM daily_tracker 
+              WHERE date IS NOT NULL 
+              ORDER BY date DESC
+            `);
+            
+            if (recentData.recordset.length > 0) {
+              const latest = recentData.recordset[0];
+              console.log(`📅 Latest daily tracker entry: ${latest.project_name} on ${new Date(latest.date).toLocaleDateString()} (Missing Status: ${latest.missing_status})`);
+            }
+            
+            console.log('🎯 Complete sync verification successful!');
             await pool.close();
           } catch (err) {
             console.error('❌ Verification failed:', err.message);

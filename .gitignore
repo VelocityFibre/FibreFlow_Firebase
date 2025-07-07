@@ -49,3 +49,6 @@ antiHall/
 *.env
 **/node_modules
 **/.angular
+
+# JJ temporary files
+.jj-return-tofibreflow-service-account.json
