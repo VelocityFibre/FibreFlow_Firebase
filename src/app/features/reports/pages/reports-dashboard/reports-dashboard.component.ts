@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ReportService } from '../../services/report.service';
 
 @Component({
   selector: 'app-reports-dashboard',
@@ -334,6 +335,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 })
 export class ReportsDashboardComponent implements OnInit {
   private router = inject(Router);
+  private reportService = inject(ReportService);
 
   // Signals
   loading = signal(false);
@@ -346,14 +348,46 @@ export class ReportsDashboardComponent implements OnInit {
     this.loadReports();
   }
 
-  private loadReports() {
-    // TODO: Load reports from Firestore
+  private async loadReports() {
     this.loading.set(true);
-    setTimeout(() => {
-      this.loading.set(false);
-      // Mock data for now
+    try {
+      const reports = await this.reportService.getReports();
+      // Format the reports for display
+      const formattedReports = reports.map(report => ({
+        ...report,
+        type: report.reportType || 'Unknown',
+        project: report.projectName || 'N/A',
+        period: this.formatPeriod(report),
+        generatedAt: report.createdAt?.toDate ? report.createdAt.toDate() : 
+                     report.createdAt ? new Date(report.createdAt) : new Date()
+      }));
+      this.reports.set(formattedReports);
+    } catch (error) {
+      console.error('Error loading reports:', error);
       this.reports.set([]);
-    }, 1000);
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
+  private formatPeriod(report: any): string {
+    try {
+      if (report.reportType === 'daily' && report.date) {
+        // Handle Firestore Timestamp or Date
+        const date = report.date.toDate ? report.date.toDate() : new Date(report.date);
+        return date.toLocaleDateString();
+      } else if (report.reportType === 'weekly' && report.weekStartDate && report.weekEndDate) {
+        // Handle Firestore Timestamp or Date
+        const start = report.weekStartDate.toDate ? report.weekStartDate.toDate() : new Date(report.weekStartDate);
+        const end = report.weekEndDate.toDate ? report.weekEndDate.toDate() : new Date(report.weekEndDate);
+        return `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`;
+      } else if (report.reportType === 'monthly' && report.month && report.year) {
+        return `${report.month}/${report.year}`;
+      }
+    } catch (error) {
+      console.error('Error formatting period:', error);
+    }
+    return 'N/A';
   }
 
   navigateToGenerator() {
@@ -381,19 +415,19 @@ export class ReportsDashboardComponent implements OnInit {
   }
 
   getReportTypeLabel(type: string): string {
-    return type.charAt(0).toUpperCase() + type.slice(1);
+    switch (type) {
+      case 'daily':
+        return 'Daily';
+      case 'weekly':
+        return 'Weekly';
+      case 'monthly':
+        return 'Monthly';
+      default:
+        return 'Unknown';
+    }
   }
 
   formatReportPeriod(report: any): string {
-    const start = new Date(report.period.start);
-    const end = new Date(report.period.end);
-
-    if (report.reportType === 'daily') {
-      return start.toLocaleDateString();
-    } else if (report.reportType === 'weekly') {
-      return `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`;
-    } else {
-      return start.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-    }
+    return this.formatPeriod(report);
   }
 }

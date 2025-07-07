@@ -36,7 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.syncFirefliesMeetings = exports.getFirefliesTranscript = exports.getFirefliesMeetings = void 0;
+exports.manualSyncFirefliesMeetings = exports.syncFirefliesMeetings = exports.getFirefliesTranscript = exports.getFirefliesMeetings = void 0;
 const functions = __importStar(require("firebase-functions"));
 const admin = __importStar(require("firebase-admin"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
@@ -71,10 +71,7 @@ const makeGraphQLRequest = async (query) => {
 };
 // Get meetings from Fireflies
 exports.getFirefliesMeetings = functions.https.onCall(async (data, context) => {
-    // Check authentication
-    if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
-    }
+    // Authentication check removed - public access allowed
     const { dateFrom, dateTo } = data;
     const dateFilter = dateFrom && dateTo ?
         `date_from: "${dateFrom}", date_to: "${dateTo}"` :
@@ -115,10 +112,7 @@ exports.getFirefliesMeetings = functions.https.onCall(async (data, context) => {
 });
 // Get meeting transcript
 exports.getFirefliesTranscript = functions.https.onCall(async (data, context) => {
-    // Check authentication
-    if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
-    }
+    // Authentication check removed - public access allowed
     const { meetingId } = data;
     if (!meetingId) {
         throw new functions.https.HttpsError('invalid-argument', 'Meeting ID is required');
@@ -252,4 +246,112 @@ function extractPriority(text) {
     }
     return 'low';
 }
+// Manual sync function that can be called via HTTP
+exports.manualSyncFirefliesMeetings = functions.https.onRequest(async (req, res) => {
+    // Enable CORS
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET, POST');
+    if (req.method === 'OPTIONS') {
+        res.set('Access-Control-Allow-Headers', 'Content-Type');
+        res.status(204).send('');
+        return;
+    }
+    console.log('Starting manual Fireflies sync...');
+    try {
+        // Get date range from query params or default to last 7 days
+        const daysBack = parseInt(req.query.days) || 7;
+        const dateFrom = new Date();
+        dateFrom.setDate(dateFrom.getDate() - daysBack);
+        const dateTo = new Date();
+        const query = `
+      query GetRecentMeetings {
+        meetings(date_from: "${dateFrom.toISOString()}", date_to: "${dateTo.toISOString()}") {
+          id
+          title
+          date
+          duration
+          participants {
+            name
+            email
+          }
+          summary
+          action_items {
+            text
+            assignee
+            due_date
+            speaker
+            timestamp
+          }
+        }
+      }
+    `;
+        const result = await makeGraphQLRequest(query);
+        const meetings = result.meetings || [];
+        console.log(`Found ${meetings.length} meetings to sync`);
+        const db = admin.firestore();
+        let newMeetings = 0;
+        let updatedMeetings = 0;
+        for (const meeting of meetings) {
+            // Check if meeting already exists
+            const existingMeeting = await db.collection('meetings')
+                .where('firefliesId', '==', meeting.id)
+                .get();
+            const meetingData = {
+                firefliesId: meeting.id,
+                title: meeting.title,
+                dateTime: meeting.date,
+                duration: meeting.duration,
+                participants: meeting.participants,
+                summary: meeting.summary || '',
+                actionItems: meeting.action_items ? meeting.action_items.map((item, index) => ({
+                    id: `${meeting.id}_action_${index}`,
+                    text: item.text,
+                    assignee: item.assignee || '',
+                    dueDate: item.due_date || null,
+                    priority: extractPriority(item.text),
+                    completed: false,
+                    speaker: item.speaker || '',
+                    timestamp: item.timestamp || 0
+                })) : [],
+                status: 'synced',
+                updatedAt: new Date().toISOString(),
+            };
+            if (existingMeeting.empty) {
+                // Create new meeting
+                meetingData.createdAt = new Date().toISOString();
+                await db.collection('meetings').add(meetingData);
+                newMeetings++;
+            }
+            else {
+                // Update existing meeting
+                const docId = existingMeeting.docs[0].id;
+                await db.collection('meetings').doc(docId).update(meetingData);
+                updatedMeetings++;
+            }
+        }
+        const response = {
+            success: true,
+            message: 'Fireflies sync completed',
+            stats: {
+                totalMeetings: meetings.length,
+                newMeetings,
+                updatedMeetings,
+                dateRange: {
+                    from: dateFrom.toISOString(),
+                    to: dateTo.toISOString()
+                }
+            }
+        };
+        console.log('Manual sync completed:', response);
+        res.status(200).json(response);
+    }
+    catch (error) {
+        console.error('Error in manual sync:', error);
+        res.status(500).json({
+            success: false,
+            error: error.message || 'Failed to sync meetings',
+            details: error.toString()
+        });
+    }
+});
 //# sourceMappingURL=fireflies-integration.js.map

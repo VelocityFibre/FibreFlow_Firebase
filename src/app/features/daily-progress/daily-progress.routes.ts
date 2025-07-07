@@ -22,14 +22,14 @@ export const DAILY_PROGRESS_ROUTES: Routes = [
           ),
         data: { title: 'New Progress Report' },
       },
-      {
-        path: 'kpis',
-        loadComponent: () =>
-          import('./components/daily-kpis-form/daily-kpis-form.component').then(
-            (m) => m.DailyKpisFormComponent,
-          ),
-        data: { title: 'Daily KPIs' },
-      },
+      // {
+      //   path: 'kpis',
+      //   loadComponent: () =>
+      //     import('./components/daily-kpis-form/daily-kpis-form.component').then(
+      //       (m) => m.DailyKpisFormComponent,
+      //     ),
+      //   data: { title: 'Daily KPIs' },
+      // },
       {
         path: 'kpis-enhanced',
         loadComponent: () =>

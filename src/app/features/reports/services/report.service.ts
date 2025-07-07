@@ -777,4 +777,49 @@ export class ReportService {
       throw error;
     }
   }
+
+  /**
+   * Fetch all reports from Firestore
+   */
+  async getReports(projectId?: string): Promise<any[]> {
+    try {
+      const reportCollection = collection(this.firestore, 'reports');
+      let q = query(reportCollection, orderBy('createdAt', 'desc'));
+      
+      if (projectId) {
+        q = query(reportCollection, where('projectId', '==', projectId), orderBy('createdAt', 'desc'));
+      }
+      
+      const snapshot = await getDocs(q);
+      return snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+    } catch (error) {
+      console.error('Error fetching reports:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Get a specific report by ID
+   */
+  async getReportById(reportId: string): Promise<any> {
+    try {
+      const reportCollection = collection(this.firestore, 'reports');
+      const q = query(reportCollection, where('id', '==', reportId), limit(1));
+      const snapshot = await getDocs(q);
+      
+      if (!snapshot.empty) {
+        return {
+          id: snapshot.docs[0].id,
+          ...snapshot.docs[0].data()
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error('Error fetching report:', error);
+      return null;
+    }
+  }
 }

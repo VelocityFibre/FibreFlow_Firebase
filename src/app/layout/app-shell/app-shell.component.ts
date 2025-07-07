@@ -445,7 +445,7 @@ export class AppShellComponent {
     { label: 'All Tasks', icon: 'task_alt', route: '/tasks' },
     { label: 'Task Management', icon: 'checklist', route: '/task-management' },
     { label: 'Daily Progress', icon: 'assignment_turned_in', route: '/daily-progress' },
-    { label: 'Daily KPIs', icon: 'analytics', route: '/daily-progress/kpis' },
+    // { label: 'Daily KPIs', icon: 'analytics', route: '/daily-progress/kpis' },
     { label: 'Enhanced KPIs', icon: 'insights', route: '/daily-progress/kpis-enhanced' },
     { label: 'KPI Dashboard', icon: 'dashboard', route: '/daily-progress/kpis-summary' },
     { label: 'Reports', icon: 'description', route: '/reports' },

@@ -8,7 +8,8 @@ admin.initializeApp();
 export { 
   getFirefliesMeetings, 
   getFirefliesTranscript, 
-  syncFirefliesMeetings 
+  syncFirefliesMeetings,
+  manualSyncFirefliesMeetings 
 } from './fireflies-integration';
 
 // Map collection names to entity types
