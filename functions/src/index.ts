@@ -9,8 +9,20 @@ export {
   getFirefliesMeetings, 
   getFirefliesTranscript, 
   syncFirefliesMeetings,
-  manualSyncFirefliesMeetings 
+  syncFirefliesMeetingsManually 
 } from './fireflies-integration';
+
+// Temporary sync function for testing
+export { tempSyncMeetings } from './temp-sync';
+
+// Test callable function
+export { testCallable } from './test-callable';
+
+// HTTP sync function (CORS-friendly)
+export { syncMeetingsHttp } from './sync-meetings-http';
+
+// Database check function
+export { checkDatabase } from './check-db';
 
 // Map collection names to entity types
 const COLLECTION_TO_ENTITY_MAP: Record<string, string> = {

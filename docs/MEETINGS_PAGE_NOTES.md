@@ -26,8 +26,28 @@ firebase functions:config:set fireflies.api_key="894886b5-b232-4319-95c7-1296782
 4. **Submodule Issue**: ✅ FIXED - Removed FibreFlow-Meetings directory which was causing confusion. It contained no source code and was not a proper git submodule. All meetings functionality is properly located in src/app/features/meetings/
 
 ### Next Steps
-- Deploy Firebase Functions with the new configuration:
-  ```bash
-  firebase deploy --only functions
-  ```
+- Deploy Firebase Functions with the new configuration: ✅ DONE
 - Test the meeting sync functionality
+
+### Manual Sync Function Created
+- Created `syncFirefliesMeetingsManually` callable function
+- No IAM permission issues - callable functions work without public access
+- Accepts `days` parameter (default 7 days)
+- Deleted old HTTP function that had permission issues
+
+### Current Status
+- API key is configured ✅
+- Auth requirements removed ✅
+- Mock data removed ✅
+- Manual sync function created and deployed ✅
+- Frontend updated to use sync function ✅
+- IAM permissions fixed by using callable function ✅
+
+### How It Works
+The sync button now calls the `syncFirefliesMeetingsManually` callable function which:
+1. Fetches meetings from Fireflies for the specified number of days (default 30)
+2. Checks if each meeting already exists in Firebase
+3. Creates new meetings or updates existing ones
+4. Returns statistics about the sync operation
+
+No more permission issues!

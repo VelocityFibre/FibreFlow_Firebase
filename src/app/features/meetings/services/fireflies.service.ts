@@ -57,6 +57,32 @@ export interface FirefliesSentence {
 export class FirefliesService {
   private http = inject(HttpClient);
   private functions = inject(Functions);
+  
+  constructor() {
+    console.log('FirefliesService initialized');
+    console.log('Functions instance available:', !!this.functions);
+  }
+
+  // Alternative HTTP sync method (bypasses CORS issues)
+  syncMeetingsViaHttp(daysBack: number = 7): Observable<any> {
+    // Use the tempSyncMeetings function which has proper CORS headers and is deployed
+    const functionUrl = `https://us-central1-fibreflow-73daf.cloudfunctions.net/tempSyncMeetings?days=${daysBack}`;
+    
+    return this.http.get(functionUrl).pipe(
+      map((response: any) => {
+        console.log('HTTP sync response:', response);
+        return response;
+      }),
+      catchError((error) => {
+        console.error('Error in HTTP sync:', error);
+        return of({
+          success: false,
+          error: error.message || 'Failed to sync meetings',
+          stats: { totalMeetings: 0 }
+        });
+      })
+    );
+  }
 
   // GraphQL endpoint
   private apiUrl = 'https://api.fireflies.ai/graphql';
@@ -70,6 +96,35 @@ export class FirefliesService {
         console.error('Error fetching Fireflies meetings:', error);
         return of([]);
       }),
+    );
+  }
+
+  // Manual sync meetings from Fireflies
+  syncMeetings(daysBack: number = 7): Observable<any> {
+    console.log('FirefliesService: Starting sync with daysBack:', daysBack);
+    console.log('Functions instance:', this.functions);
+    
+    // Use the new callable function that doesn't have IAM issues
+    const syncFunction = httpsCallable(this.functions, 'syncFirefliesMeetingsManually');
+    console.log('Callable function created:', syncFunction);
+    
+    return from(syncFunction({ days: daysBack })).pipe(
+      map((result: any) => {
+        console.log('Sync function result:', result);
+        return result.data;
+      }),
+      catchError((error) => {
+        console.error('Error syncing meetings - Full error:', error);
+        console.error('Error code:', error.code);
+        console.error('Error message:', error.message);
+        console.error('Error details:', error.details);
+        return of({
+          success: false,
+          error: error.message || 'Failed to sync meetings',
+          errorCode: error.code,
+          stats: { totalMeetings: 0 }
+        });
+      })
     );
   }
 

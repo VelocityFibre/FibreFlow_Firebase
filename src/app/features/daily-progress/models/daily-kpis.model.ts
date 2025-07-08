@@ -57,6 +57,7 @@ export interface DailyKPIs {
 
   // Status Flags
   riskFlag: boolean;
+  siteLiveStatus?: 'Not Live' | 'Partially Live' | 'Fully Live';
 
   // Weather & Environmental
   weatherConditions?: 'sunny' | 'cloudy' | 'rainy' | 'stormy' | 'windy' | 'foggy';

@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testAuditSystem = exports.auditSubcollections = exports.universalAuditTrail = exports.manualSyncFirefliesMeetings = exports.syncFirefliesMeetings = exports.getFirefliesTranscript = exports.getFirefliesMeetings = void 0;
+exports.testAuditSystem = exports.auditSubcollections = exports.universalAuditTrail = exports.tempSyncMeetings = exports.syncFirefliesMeetingsManually = exports.syncFirefliesMeetings = exports.getFirefliesTranscript = exports.getFirefliesMeetings = void 0;
 const functions = __importStar(require("firebase-functions"));
 const admin = __importStar(require("firebase-admin"));
 // Initialize admin SDK
@@ -43,7 +43,10 @@ var fireflies_integration_1 = require("./fireflies-integration");
 Object.defineProperty(exports, "getFirefliesMeetings", { enumerable: true, get: function () { return fireflies_integration_1.getFirefliesMeetings; } });
 Object.defineProperty(exports, "getFirefliesTranscript", { enumerable: true, get: function () { return fireflies_integration_1.getFirefliesTranscript; } });
 Object.defineProperty(exports, "syncFirefliesMeetings", { enumerable: true, get: function () { return fireflies_integration_1.syncFirefliesMeetings; } });
-Object.defineProperty(exports, "manualSyncFirefliesMeetings", { enumerable: true, get: function () { return fireflies_integration_1.manualSyncFirefliesMeetings; } });
+Object.defineProperty(exports, "syncFirefliesMeetingsManually", { enumerable: true, get: function () { return fireflies_integration_1.syncFirefliesMeetingsManually; } });
+// Temporary sync function for testing
+var temp_sync_1 = require("./temp-sync");
+Object.defineProperty(exports, "tempSyncMeetings", { enumerable: true, get: function () { return temp_sync_1.tempSyncMeetings; } });
 // Map collection names to entity types
 const COLLECTION_TO_ENTITY_MAP = {
     'projects': 'project',

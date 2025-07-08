@@ -255,30 +255,19 @@ export class MeetingListComponent implements OnInit {
     this.loading.set(true);
     console.log('Starting Fireflies sync...');
 
-    // Get meetings from the last 7 days
-    const dateFrom = new Date();
-    dateFrom.setDate(dateFrom.getDate() - 7);
-    const dateTo = new Date();
-
-    this.firefliesService.getMeetings(dateFrom, dateTo).subscribe({
-      next: (firefliesMeetings) => {
-        console.log(`Found ${firefliesMeetings.length} meetings from Fireflies`);
-
-        // Convert and save each meeting
-        const savePromises = firefliesMeetings.map((firefliesMeeting) => {
-          const meeting = this.firefliesService.convertToMeeting(firefliesMeeting);
-          return this.meetingService.createMeeting(meeting);
-        });
-
-        Promise.all(savePromises)
-          .then(() => {
-            console.log('All meetings synced successfully');
-            this.loadMeetings(); // Reload to show updated data
-          })
-          .catch((error) => {
-            console.error('Error saving meetings:', error);
-            this.loading.set(false);
-          });
+    // Use the new callable function that doesn't have IAM issues
+    this.firefliesService.syncMeetings(30).subscribe({
+      next: (response) => {
+        console.log('Sync response:', response);
+        if (response.success) {
+          console.log(`Sync completed: ${response.stats.totalMeetings} meetings processed`);
+          console.log(`New meetings: ${response.stats.newMeetings}, Updated: ${response.stats.updatedMeetings}`);
+          // Reload meetings to show the synced data
+          this.loadMeetings();
+        } else {
+          console.error('Sync failed:', response.error);
+          this.loading.set(false);
+        }
       },
       error: (error) => {
         console.error('Error syncing meetings:', error);

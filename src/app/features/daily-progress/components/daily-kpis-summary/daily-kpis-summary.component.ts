@@ -15,6 +15,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
@@ -22,8 +23,11 @@ import * as XLSX from 'xlsx';
 import { DailyKPIs, KPI_DEFINITIONS } from '../../models/daily-kpis.model';
 import { DailyKpisService } from '../../services/daily-kpis.service';
 import { ProjectService } from '../../../../core/services/project.service';
+import { WeeklyReportGeneratorService } from '../../services/weekly-report-generator.service';
+import { WeeklyReportDocxService } from '../../services/weekly-report-docx.service';
+import { WeeklyReportPreviewComponent } from '../weekly-report-preview/weekly-report-preview.component';
 import { Project } from '../../../../core/models/project.model';
-import { combineLatest, map, switchMap, of, catchError } from 'rxjs';
+import { combineLatest, map, switchMap, of, catchError, firstValueFrom } from 'rxjs';
 
 interface KPISummaryRow {
   metric: string;
@@ -131,6 +135,11 @@ interface KPISummaryRow {
                 <button mat-menu-item (click)="exportCSV()">
                   <mat-icon>csv</mat-icon>
                   <span>Export as CSV</span>
+                </button>
+                <mat-divider></mat-divider>
+                <button mat-menu-item (click)="generateWeeklyReport()">
+                  <mat-icon>description</mat-icon>
+                  <span>Generate Weekly Report</span>
                 </button>
               </mat-menu>
             }
@@ -733,6 +742,9 @@ export class DailyKpisSummaryComponent implements OnInit {
   private projectService = inject(ProjectService);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
+  private weeklyReportGenerator = inject(WeeklyReportGeneratorService);
+  private weeklyReportDocx = inject(WeeklyReportDocxService);
 
   // Form controls
   dateControl = new FormControl<Date>(new Date());
@@ -1440,6 +1452,86 @@ export class DailyKpisSummaryComponent implements OnInit {
     } catch (error) {
       console.error('Error generating CSV:', error);
       this.snackBar.open('Error generating CSV', 'Close', { duration: 3000 });
+    }
+  }
+
+  async generateWeeklyReport() {
+    try {
+      console.log('Starting weekly report generation...');
+      
+      // Get the selected project
+      const projectId = this.projectControl.value;
+      console.log('Selected project ID:', projectId);
+      
+      if (!projectId) {
+        this.snackBar.open('Please select a project', 'Close', { duration: 3000 });
+        return;
+      }
+
+      // Get the selected project details
+      const project = this.projects().find(p => p.id === projectId);
+      console.log('Found project:', project);
+      
+      if (!project) {
+        this.snackBar.open('Project not found', 'Close', { duration: 3000 });
+        return;
+      }
+
+      // Calculate the week range (last 7 days from selected date)
+      let endDate: Date;
+      if (this.dateRangeMode()) {
+        endDate = this.endDateControl.value || new Date();
+      } else {
+        endDate = this.dateControl.value || new Date();
+      }
+      
+      const startDate = new Date(endDate);
+      startDate.setDate(startDate.getDate() - 6); // 7 days including end date
+      
+      console.log('Date range:', startDate, 'to', endDate);
+
+      // Open the preview dialog with loading state
+      const dialogRef = this.dialog.open(WeeklyReportPreviewComponent, {
+        width: '90%',
+        maxWidth: '1200px',
+        height: '90%',
+        data: {}
+      });
+
+      // Set loading state
+      dialogRef.componentInstance.loading = true;
+
+      try {
+        // Just fetch the raw KPI data
+        console.log('Fetching KPI data...');
+        const kpis = await firstValueFrom(
+          this.kpisService.getKPIsForDateRange(projectId, startDate, endDate)
+        );
+        
+        console.log('KPIs fetched:', kpis.length, 'records');
+
+        if (kpis && kpis.length > 0) {
+          // Update dialog with raw data
+          dialogRef.componentInstance.loading = false;
+          dialogRef.componentInstance.rawKpis = kpis;
+          dialogRef.componentInstance.project = project;
+          dialogRef.componentInstance.dateRange = { start: startDate, end: endDate };
+        } else {
+          throw new Error('No data found for the selected date range');
+        }
+      } catch (error) {
+        console.error('Error fetching KPI data:', error);
+        dialogRef.close();
+        this.snackBar.open(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`, 'Close', { duration: 5000 });
+      }
+
+      // Handle dialog close
+      dialogRef.componentInstance.close.subscribe(() => {
+        dialogRef.close();
+      });
+    } catch (error) {
+      console.error('Error in weekly report generation:', error);
+      this.snackBar.open(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`, 'Close', { duration: 5000 });
     }
   }
 

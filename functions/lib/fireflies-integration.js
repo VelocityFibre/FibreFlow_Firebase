@@ -36,7 +36,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.manualSyncFirefliesMeetings = exports.syncFirefliesMeetings = exports.getFirefliesTranscript = exports.getFirefliesMeetings = void 0;
+exports.syncFirefliesMeetingsManually = exports.syncFirefliesMeetings = exports.getFirefliesTranscript = exports.getFirefliesMeetings = void 0;
 const functions = __importStar(require("firebase-functions"));
 const admin = __importStar(require("firebase-admin"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
@@ -170,56 +170,80 @@ exports.getFirefliesTranscript = functions.https.onCall(async (data, context) =>
 exports.syncFirefliesMeetings = functions.pubsub
     .schedule('every 6 hours')
     .onRun(async (context) => {
+    var _a, _b, _c, _d, _e, _f;
     console.log('Starting Fireflies sync...');
     // Get meetings from last 24 hours
     const dateFrom = new Date();
     dateFrom.setDate(dateFrom.getDate() - 1);
     const dateTo = new Date();
     const query = `
-      query GetRecentMeetings {
-        meetings(date_from: "${dateFrom.toISOString()}", date_to: "${dateTo.toISOString()}") {
+      query {
+        transcripts(
+          fromDate: "${dateFrom.toISOString()}"
+          toDate: "${dateTo.toISOString()}"
+        ) {
           id
           title
           date
           duration
-          participants {
-            name
-            email
-          }
-          summary
-          action_items {
-            text
-            assignee
-            due_date
-            speaker
-            timestamp
+          participants
+          organizer_email
+          meeting_link
+          summary {
+            keywords
+            action_items
+            outline
+            shorthand_bullet
+            overview
+            bullet_gist
+            gist
+            short_summary
           }
         }
       }
     `;
     try {
         const result = await makeGraphQLRequest(query);
-        const meetings = result.meetings || [];
+        const meetings = result.transcripts || [];
         console.log(`Found ${meetings.length} meetings to sync`);
         const db = admin.firestore();
         const batch = db.batch();
         for (const meeting of meetings) {
             // Check if meeting already exists
             const existingMeeting = await db.collection('meetings')
-                .where('firefliesToId', '==', meeting.id)
+                .where('firefliesId', '==', meeting.id)
                 .get();
             if (existingMeeting.empty) {
                 // Create new meeting
                 const meetingRef = db.collection('meetings').doc();
                 batch.set(meetingRef, {
-                    firefliesToId: meeting.id,
+                    firefliesId: meeting.id,
                     title: meeting.title,
-                    date: admin.firestore.Timestamp.fromDate(new Date(meeting.date)),
+                    dateTime: meeting.date,
                     duration: meeting.duration,
-                    participants: meeting.participants,
-                    summary: meeting.summary,
-                    actionItems: meeting.action_items.map((item, index) => (Object.assign(Object.assign({ id: `${meeting.id}_action_${index}` }, item), { dueDate: item.due_date ? admin.firestore.Timestamp.fromDate(new Date(item.due_date)) : null, priority: extractPriority(item.text), completed: false }))),
-                    status: 'pending',
+                    participants: meeting.participants ? meeting.participants.map((email) => ({
+                        name: email.split('@')[0],
+                        email: email
+                    })) : [],
+                    organizer: meeting.organizer_email || '',
+                    meetingUrl: meeting.meeting_link || '',
+                    summary: ((_a = meeting.summary) === null || _a === void 0 ? void 0 : _a.overview) || ((_b = meeting.summary) === null || _b === void 0 ? void 0 : _b.short_summary) || '',
+                    actionItems: ((_c = meeting.summary) === null || _c === void 0 ? void 0 : _c.action_items) ? meeting.summary.action_items.map((item, index) => ({
+                        id: `${meeting.id}_action_${index}`,
+                        text: item,
+                        assignee: '',
+                        dueDate: null,
+                        priority: extractPriority(item),
+                        completed: false,
+                        speaker: '',
+                        timestamp: 0
+                    })) : [],
+                    insights: {
+                        keywords: ((_d = meeting.summary) === null || _d === void 0 ? void 0 : _d.keywords) || [],
+                        outline: ((_e = meeting.summary) === null || _e === void 0 ? void 0 : _e.outline) || '',
+                        bulletPoints: ((_f = meeting.summary) === null || _f === void 0 ? void 0 : _f.bullet_gist) || ''
+                    },
+                    status: 'synced',
                     createdAt: admin.firestore.FieldValue.serverTimestamp(),
                     updatedAt: admin.firestore.FieldValue.serverTimestamp(),
                 });
@@ -246,47 +270,44 @@ function extractPriority(text) {
     }
     return 'low';
 }
-// Manual sync function that can be called via HTTP
-exports.manualSyncFirefliesMeetings = functions.https.onRequest(async (req, res) => {
-    // Enable CORS
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Methods', 'GET, POST');
-    if (req.method === 'OPTIONS') {
-        res.set('Access-Control-Allow-Headers', 'Content-Type');
-        res.status(204).send('');
-        return;
-    }
+// Manual sync function as a callable function (no IAM issues)
+exports.syncFirefliesMeetingsManually = functions.https.onCall(async (data, context) => {
+    var _a, _b, _c, _d, _e, _f;
     console.log('Starting manual Fireflies sync...');
     try {
-        // Get date range from query params or default to last 7 days
-        const daysBack = parseInt(req.query.days) || 7;
+        // Get date range from data or default to last 7 days
+        const daysBack = data.days || 7;
         const dateFrom = new Date();
         dateFrom.setDate(dateFrom.getDate() - daysBack);
         const dateTo = new Date();
         const query = `
-      query GetRecentMeetings {
-        meetings(date_from: "${dateFrom.toISOString()}", date_to: "${dateTo.toISOString()}") {
+      query {
+        transcripts(
+          fromDate: "${dateFrom.toISOString()}"
+          toDate: "${dateTo.toISOString()}"
+        ) {
           id
           title
           date
           duration
-          participants {
-            name
-            email
-          }
-          summary
-          action_items {
-            text
-            assignee
-            due_date
-            speaker
-            timestamp
+          participants
+          organizer_email
+          meeting_link
+          summary {
+            keywords
+            action_items
+            outline
+            shorthand_bullet
+            overview
+            bullet_gist
+            gist
+            short_summary
           }
         }
       }
     `;
         const result = await makeGraphQLRequest(query);
-        const meetings = result.meetings || [];
+        const meetings = result.transcripts || [];
         console.log(`Found ${meetings.length} meetings to sync`);
         const db = admin.firestore();
         let newMeetings = 0;
@@ -301,18 +322,28 @@ exports.manualSyncFirefliesMeetings = functions.https.onRequest(async (req, res)
                 title: meeting.title,
                 dateTime: meeting.date,
                 duration: meeting.duration,
-                participants: meeting.participants,
-                summary: meeting.summary || '',
-                actionItems: meeting.action_items ? meeting.action_items.map((item, index) => ({
-                    id: `${meeting.id}_action_${index}`,
-                    text: item.text,
-                    assignee: item.assignee || '',
-                    dueDate: item.due_date || null,
-                    priority: extractPriority(item.text),
-                    completed: false,
-                    speaker: item.speaker || '',
-                    timestamp: item.timestamp || 0
+                participants: meeting.participants ? meeting.participants.map((email) => ({
+                    name: email.split('@')[0],
+                    email: email
                 })) : [],
+                organizer: meeting.organizer_email || '',
+                meetingUrl: meeting.meeting_link || '',
+                summary: ((_a = meeting.summary) === null || _a === void 0 ? void 0 : _a.overview) || ((_b = meeting.summary) === null || _b === void 0 ? void 0 : _b.short_summary) || '',
+                actionItems: ((_c = meeting.summary) === null || _c === void 0 ? void 0 : _c.action_items) ? meeting.summary.action_items.map((item, index) => ({
+                    id: `${meeting.id}_action_${index}`,
+                    text: item,
+                    assignee: '',
+                    dueDate: null,
+                    priority: extractPriority(item),
+                    completed: false,
+                    speaker: '',
+                    timestamp: 0
+                })) : [],
+                insights: {
+                    keywords: ((_d = meeting.summary) === null || _d === void 0 ? void 0 : _d.keywords) || [],
+                    outline: ((_e = meeting.summary) === null || _e === void 0 ? void 0 : _e.outline) || '',
+                    bulletPoints: ((_f = meeting.summary) === null || _f === void 0 ? void 0 : _f.bullet_gist) || ''
+                },
                 status: 'synced',
                 updatedAt: new Date().toISOString(),
             };
@@ -343,15 +374,11 @@ exports.manualSyncFirefliesMeetings = functions.https.onRequest(async (req, res)
             }
         };
         console.log('Manual sync completed:', response);
-        res.status(200).json(response);
+        return response;
     }
     catch (error) {
         console.error('Error in manual sync:', error);
-        res.status(500).json({
-            success: false,
-            error: error.message || 'Failed to sync meetings',
-            details: error.toString()
-        });
+        throw new functions.https.HttpsError('internal', error.message || 'Failed to sync meetings');
     }
 });
 //# sourceMappingURL=fireflies-integration.js.map

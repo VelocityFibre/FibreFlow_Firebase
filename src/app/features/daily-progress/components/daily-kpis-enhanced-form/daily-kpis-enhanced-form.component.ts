@@ -464,6 +464,77 @@ import { StaffMember } from '../../../staff/models/staff.model';
                             >
                           </div>
                         </div>
+
+                        <mat-divider class="my-3"></mat-divider>
+
+                        <div class="customer-engagement-section">
+                          <h4>🏠 Customer Engagement</h4>
+                          <div class="financial-grid">
+                            <mat-form-field appearance="outline">
+                              <mat-label>Home Sign-ups Today</mat-label>
+                              <input
+                                matInput
+                                type="number"
+                                min="0"
+                                formControlName="homeSignupsToday"
+                                (input)="updateHomeTotal('homeSignups')"
+                              />
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                              <mat-label>Home Sign-ups Total</mat-label>
+                              <input
+                                matInput
+                                type="number"
+                                min="0"
+                                formControlName="homeSignupsTotal"
+                                readonly
+                              />
+                              <mat-hint>Auto-calculated</mat-hint>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                              <mat-label>Home Drops Today</mat-label>
+                              <input
+                                matInput
+                                type="number"
+                                min="0"
+                                formControlName="homeDropsToday"
+                                (input)="updateHomeTotal('homeDrops')"
+                              />
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                              <mat-label>Home Drops Total</mat-label>
+                              <input
+                                matInput
+                                type="number"
+                                min="0"
+                                formControlName="homeDropsTotal"
+                                readonly
+                              />
+                              <mat-hint>Auto-calculated</mat-hint>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                              <mat-label>Homes Connected Today</mat-label>
+                              <input
+                                matInput
+                                type="number"
+                                min="0"
+                                formControlName="homesConnectedToday"
+                                (input)="updateHomeTotal('homesConnected')"
+                              />
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                              <mat-label>Homes Connected Total</mat-label>
+                              <input
+                                matInput
+                                type="number"
+                                min="0"
+                                formControlName="homesConnectedTotal"
+                                readonly
+                              />
+                              <mat-hint>Auto-calculated</mat-hint>
+                            </mat-form-field>
+                          </div>
+                        </div>
                       </mat-card-content>
                     </mat-card>
                   </div>
@@ -543,6 +614,22 @@ import { StaffMember } from '../../../staff/models/staff.model';
                             Risk Flag - Check if there are significant risks
                           </mat-slide-toggle>
                         </div>
+
+                        <mat-divider class="my-3"></mat-divider>
+
+                        <div class="operational-status-section">
+                          <h4>📡 Operational Status</h4>
+                          <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Site Live Status</mat-label>
+                            <mat-select formControlName="siteLiveStatus">
+                              <mat-option value="Not Live">🔴 Not Live</mat-option>
+                              <mat-option value="Partially Live">🟡 Partially Live</mat-option>
+                              <mat-option value="Fully Live">🟢 Fully Live</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+
+                        <mat-divider class="my-3"></mat-divider>
 
                         <mat-form-field appearance="outline" class="full-width">
                           <mat-label>Weekly Report Details</mat-label>
@@ -870,6 +957,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
       keyIssuesSummary: [''],
       weeklyReportInsights: [''],
       monthlyReports: [''],
+      siteLiveStatus: ['Not Live'],
     };
 
     // Add all existing KPI fields
@@ -1076,6 +1164,18 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
     });
   }
 
+  updateHomeTotal(type: 'homeSignups' | 'homeDrops' | 'homesConnected') {
+    const todayField = `${type}Today`;
+    const totalField = `${type}Total`;
+    
+    const todayValue = Number(this.kpiForm.get(todayField)?.value) || 0;
+    const currentTotal = Number(this.kpiForm.get(totalField)?.value) || 0;
+
+    this.kpiForm.patchValue({
+      [totalField]: currentTotal + todayValue,
+    });
+  }
+
   getCoreKPIs() {
     return this.kpiDefinitions.filter((kpi) =>
       ['permissions', 'status', 'poles'].includes(kpi.category),
@@ -1107,26 +1207,40 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
     const tempMin = this.kpiForm.get('temperatureMin')?.value;
     const tempMax = this.kpiForm.get('temperatureMax')?.value;
     const temperatureRange =
-      tempMin !== null && tempMax !== null ? { min: tempMin, max: tempMax } : undefined;
+      tempMin !== null && tempMin !== undefined && 
+      tempMax !== null && tempMax !== undefined ? { min: tempMin, max: tempMax } : null;
 
     // Prepare KPI data
+    const formData = this.kpiForm.value;
     const kpiData: DailyKPIs = {
-      ...this.kpiForm.value,
-      temperatureRange,
+      ...formData,
       submittedBy: currentUser?.uid || 'unknown',
       submittedByName: currentUser?.displayName || currentUser?.email || 'Unknown User',
       submittedAt: new Date(),
       date: new Date(this.kpiForm.get('date')?.value),
     };
 
+    // Only add temperatureRange if it exists
+    if (temperatureRange) {
+      kpiData.temperatureRange = temperatureRange;
+    }
+    
+    // Remove any temporary form fields that shouldn't be saved
+    const dataToSave: any = { ...kpiData };
+    delete dataToSave.temperatureMin;
+    delete dataToSave.temperatureMax;
+
     // Get project and contractor names
     const project = this.projects().find((p) => p.id === kpiData.projectId);
     const contractor = this.contractors().find((c) => c.id === kpiData.contractorId);
 
-    if (project) kpiData.projectName = project.name;
-    if (contractor) kpiData.contractorName = contractor.companyName;
+    if (project) dataToSave.projectName = project.name;
+    if (contractor) dataToSave.contractorName = contractor.companyName;
 
-    this.kpisService.createKPI(kpiData.projectId!, kpiData).subscribe({
+    // Clean up any undefined values to prevent Firestore errors
+    const cleanedData = this.removeUndefinedFields(dataToSave);
+
+    this.kpisService.createKPI(cleanedData.projectId!, cleanedData).subscribe({
       next: (result: any) => {
         this.loading.set(false);
         this.snackBar.open('KPIs saved successfully!', 'Close', { duration: 3000 });
@@ -1142,5 +1256,17 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
 
   cancel() {
     this.router.navigate(['/daily-progress/kpis-summary']);
+  }
+
+  private removeUndefinedFields(obj: any): any {
+    const cleaned = { ...obj };
+    Object.keys(cleaned).forEach(key => {
+      if (cleaned[key] === undefined) {
+        delete cleaned[key];
+      } else if (cleaned[key] === null && key === 'temperatureRange') {
+        delete cleaned[key];
+      }
+    });
+    return cleaned;
   }
 }

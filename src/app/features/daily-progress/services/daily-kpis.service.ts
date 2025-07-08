@@ -240,4 +240,11 @@ export class DailyKpisService {
       catchError(handleError('getKPIsByProjectAndDateRange', [])),
     );
   }
+
+  /**
+   * Alias for getKPIsByProjectAndDateRange for weekly report generator
+   */
+  getKPIsForDateRange(projectId: string, startDate: Date, endDate: Date): Observable<DailyKPIs[]> {
+    return this.getKPIsByProjectAndDateRange(projectId, startDate, endDate);
+  }
 }
