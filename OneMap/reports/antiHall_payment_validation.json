@@ -1,0 +1,95 @@
+{
+  "validation_timestamp": "2025-07-10T14:02:11.949492",
+  "report_type": "Payment Analysis Validation",
+  "validations_performed": {
+    "gps_calculation": {
+      "test_points": "(-26.382490198, 27.794995192) to (-26.3824975907512, 27.7950021901272)",
+      "calculated_distance": "1.08 meters",
+      "formula": "Haversine",
+      "verified": true
+    },
+    "duplicate_counts": {
+      "total_poles_analyzed": 998,
+      "poles_with_multiple_agents": 873,
+      "poles_with_single_agent": 125,
+      "total_claims_processed": 2451,
+      "verified": true
+    },
+    "agent_statistics": {
+      "total_agents_with_conflicts": 81,
+      "top_5_agents": {
+        "itumeleng": 172,
+        "Yolanda": 106,
+        "simphiwe mashaba": 98,
+        "Zanele hele": 86,
+        "Disemelo": 86
+      },
+      "verified": true
+    },
+    "data_completeness": {
+      "original_unique_poles": 3749,
+      "processed_poles": 3749,
+      "data_loss": 0,
+      "verified": true
+    },
+    "risk_assessment": {
+      "high_risk_poles": 873,
+      "medium_risk_poles": 21,
+      "risk_criteria": {
+        "HIGH": "Multiple different agents",
+        "MEDIUM": "Same agent multiple times",
+        "LOW": "System duplicates (same day)"
+      },
+      "verified": true
+    },
+    "contact_information": {
+      "agents_with_contacts": 81,
+      "agents_without_contacts": 0,
+      "contact_coverage": "100.0%",
+      "verified": true
+    }
+  },
+  "evidence_samples": {
+    "sample_conflicts": {
+      "LAW.P.B341": [
+        "Dikgahlo Lesitha",
+        "Elizabeth",
+        "Vinolia",
+        "itumeleng",
+        "lebohang"
+      ],
+      "LAW.P.B362": [
+        "itumeleng",
+        "Elizabeth",
+        "Karma",
+        "Lerato"
+      ],
+      "LAW.P.B544": [
+        "Yolanda",
+        "Nonkululeko",
+        "Karma",
+        "Sylvia"
+      ],
+      "LAW.P.E153": [
+        "Tumesang",
+        "Vinolia",
+        "Nonkululeko",
+        "simphiwe mashaba"
+      ],
+      "LAW.P.B242": [
+        "itumeleng",
+        "lebohang",
+        "Lebohang",
+        "Sylvia"
+      ]
+    }
+  },
+  "overall_status": "VERIFIED",
+  "key_findings": {
+    "total_poles_analyzed": 3749,
+    "poles_with_conflicts": 998,
+    "conflict_rate": "26.6%",
+    "data_quality": "100% GPS coverage",
+    "recommendation": "Hold payment for 873 HIGH RISK poles pending verification"
+  }
+}

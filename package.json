@@ -26,7 +26,10 @@
     "deploy:reports": "./deploy-worktree.sh reports",
     "deploy:hotfix": "./deploy-worktree.sh hotfix",
     "deploy:perf": "./deploy-worktree.sh perf",
-    "worktree:status": "git worktree list"
+    "worktree:status": "git worktree list",
+    "sync:meetings": "node scripts/sync-meetings-simple.js",
+    "sync:meetings:7days": "node scripts/sync-meetings-simple.js 7",
+    "sync:meetings:60days": "node scripts/sync-meetings-simple.js 60"
   },
   "private": true,
   "dependencies": {
@@ -51,6 +54,7 @@
     "jspdf": "^3.0.1",
     "jspdf-autotable": "^5.0.2",
     "mssql": "^11.0.1",
+    "node-fetch": "^2.7.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "xlsx": "^0.18.5",

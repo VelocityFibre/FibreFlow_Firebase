@@ -52,3 +52,17 @@ antiHall/
 
 # JJ temporary files
 .jj-return-tofibreflow-service-account.json
+
+# OneMap data files
+OneMap/*.csv
+OneMap/*.xlsx
+OneMap/duplicate_analysis_*.json
+OneMap/split_data/
+OneMap/antiHall_validation_*.json
+OneMap/workflow_analysis_*.json
+OneMap/validation_*.json
+OneMap/pole_conflicts_*.json
+OneMap/.venv/
+OneMap/duplicate_analysis_report.md
+OneMap/pole_duplicate_data.json
+OneMap/antiHall_validation_report.json

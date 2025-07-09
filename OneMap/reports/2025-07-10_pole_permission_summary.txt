@@ -1,0 +1,22 @@
+POLE PERMISSION SUMMARY (First Permissions Only)
+============================================================
+
+Total unique poles with permissions: 3749
+
+Permissions by Status:
+  Home Installation: In Progress: 36
+  Home Sign Ups: Approved & Installation Scheduled: 27
+  Pole Permission: Approved: 3670
+  Pole Permission: Declined: 16
+
+
+Top 20 Agents (by first permissions submitted):
+
+
+Permissions by Month:
+
+
+Data Quality:
+  Missing agent name: 3749 (100.0%)
+  Missing contact: 3749 (100.0%)
+  Missing GPS: 0 (0.0%)

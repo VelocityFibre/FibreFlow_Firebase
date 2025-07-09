@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-07-10T09:37:37.934194",
+  "purpose": "GPS-based duplicate pole permission analysis for payment verification",
+  "context": "High-density informal settlements - addresses unreliable, GPS is truth",
+  "data_quality": {
+    "total_records": 14579,
+    "permission_records": 5156,
+    "missing_gps": 0,
+    "missing_agent": 0
+  },
+  "duplicate_summary": {
+    "total_poles_with_duplicates": 998,
+    "high_risk_count": 873,
+    "medium_risk_count": 21,
+    "no_agent_count": 0
+  }
+}

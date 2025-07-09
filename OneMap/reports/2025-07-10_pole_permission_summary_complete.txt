@@ -1,0 +1,51 @@
+POLE PERMISSION SUMMARY (First Permissions Only)
+============================================================
+
+Total unique poles with permissions: 3749
+
+Permissions by Status:
+  Home Installation: In Progress: 41
+  Home Sign Ups: Approved & Installation Scheduled: 26
+  Pole Permission: Approved: 3664
+  Pole Permission: Declined: 18
+
+
+Agent Data Quality:
+  Permissions with agent name: 3749 (100.0%)
+  Missing agent name: 0 (0.0%)
+
+
+Top 20 Agents (by first permissions submitted):
+  itumeleng: 439 poles
+  Yolanda: 367 poles
+  Zanele hele: 302 poles
+  Disemelo: 292 poles
+  Nompumelelo: 245 poles
+  Tumesang: 199 poles
+  Cecilia: 162 poles
+  Nompumelelo Kunene: 161 poles
+  nathan: 123 poles
+  Ana Jane: 111 poles
+  Tumesang Evelyn Molahlehi: 99 poles
+  Lerato: 82 poles
+  Almerinda: 82 poles
+  manuel: 80 poles
+  Adrian: 78 poles
+  Tholakele: 74 poles
+  marchael: 71 poles
+  simphiwe mashaba: 60 poles
+  Angelique mashele: 50 poles
+  lebohang: 50 poles
+
+
+Permissions by Month:
+  2025-04: 116
+  2025-05: 897
+  2025-06: 1835
+  2025-07: 901
+
+
+Data Quality Summary:
+  Missing agent name: 0 (0.0%)
+  Missing contact number: 0 (0.0%)
+  Missing GPS coordinates: 0 (0.0%)

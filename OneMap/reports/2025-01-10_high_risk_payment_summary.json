@@ -1,0 +1,906 @@
+{
+  "report_date": "2025-07-10T09:37:38.436232",
+  "high_risk_poles": [
+    {
+      "pole_number": "LAW.P.B341",
+      "agents_involved": [
+        "Vinolia",
+        "Dikgahlo Lesitha",
+        "Elizabeth",
+        "lebohang",
+        "itumeleng"
+      ],
+      "claim_dates": [
+        "2025-07-08",
+        "2025-06-03",
+        "2025-06-02",
+        "2025-07-08",
+        "2025-06-22"
+      ],
+      "gps_locations": 5,
+      "max_distance_meters": 27.02,
+      "total_claims": 5
+    },
+    {
+      "pole_number": "LAW.P.B362",
+      "agents_involved": [
+        "Karma",
+        "Lerato",
+        "Elizabeth",
+        "itumeleng"
+      ],
+      "claim_dates": [
+        "2025-07-01",
+        "2025-07-01",
+        "2025-06-12",
+        "2025-06-12",
+        "2025-06-12",
+        "2025-06-25",
+        "2025-06-25"
+      ],
+      "gps_locations": 5,
+      "max_distance_meters": 18.89,
+      "total_claims": 7
+    },
+    {
+      "pole_number": "LAW.P.B544",
+      "agents_involved": [
+        "Yolanda",
+        "Karma",
+        "Nonkululeko",
+        "Sylvia"
+      ],
+      "claim_dates": [
+        "2025-07-07",
+        "2025-07-07",
+        "2025-07-02",
+        "2025-07-02",
+        "2025-06-13",
+        "2025-07-07"
+      ],
+      "gps_locations": 5,
+      "max_distance_meters": 31.42,
+      "total_claims": 6
+    },
+    {
+      "pole_number": "LAW.P.E153",
+      "agents_involved": [
+        "Tumesang",
+        "Nonkululeko",
+        "Vinolia",
+        "simphiwe mashaba"
+      ],
+      "claim_dates": [
+        "2025-06-26",
+        "2025-06-02",
+        "2025-07-01",
+        "2025-06-04",
+        "2025-06-04",
+        "2025-06-04"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 14.71,
+      "total_claims": 6
+    },
+    {
+      "pole_number": "LAW.P.B242",
+      "agents_involved": [
+        "Lebohang",
+        "Sylvia",
+        "lebohang",
+        "itumeleng"
+      ],
+      "claim_dates": [
+        "2025-06-20",
+        "2025-06-22",
+        "2025-06-04",
+        "2025-06-23",
+        "2025-06-20"
+      ],
+      "gps_locations": 5,
+      "max_distance_meters": 65.24,
+      "total_claims": 5
+    },
+    {
+      "pole_number": "LAW.P.B977",
+      "agents_involved": [
+        "Karma",
+        "Vinolia",
+        "Sylvia",
+        "itumeleng"
+      ],
+      "claim_dates": [
+        "2025-07-07",
+        "2025-05-30",
+        "2025-07-03",
+        "2025-07-01",
+        "2025-07-07"
+      ],
+      "gps_locations": 5,
+      "max_distance_meters": 23.03,
+      "total_claims": 5
+    },
+    {
+      "pole_number": "LAW.P.E018",
+      "agents_involved": [
+        "Nompumelelo",
+        "Karma",
+        "Nonkululeko",
+        "Nompumelelo Nkosi"
+      ],
+      "claim_dates": [
+        "2025-06-24",
+        "2025-06-03",
+        "2025-07-08",
+        "2025-07-08",
+        "2025-06-24"
+      ],
+      "gps_locations": 5,
+      "max_distance_meters": 19.86,
+      "total_claims": 5
+    },
+    {
+      "pole_number": "LAW.P.D705",
+      "agents_involved": [
+        "Zanele hele",
+        "Almerinda",
+        "Vinolia",
+        "simphiwe mashaba"
+      ],
+      "claim_dates": [
+        "2025-05-29",
+        "2025-06-01",
+        "2025-05-29",
+        "2025-05-29",
+        "2025-05-29"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 13.83,
+      "total_claims": 5
+    },
+    {
+      "pole_number": "LAW.P.C657",
+      "agents_involved": [
+        "Zanele hele",
+        "Zanele",
+        "Tholakele",
+        "simphiwe mashaba"
+      ],
+      "claim_dates": [
+        "2025-05-29",
+        "2025-05-30",
+        "2025-07-05",
+        "2025-05-30",
+        "2025-05-29"
+      ],
+      "gps_locations": 5,
+      "max_distance_meters": 14.33,
+      "total_claims": 5
+    },
+    {
+      "pole_number": "LAW.P.D220",
+      "agents_involved": [
+        "Lebohang",
+        "Karma",
+        "lebohang",
+        "cloudia"
+      ],
+      "claim_dates": [
+        "2025-06-07",
+        "2025-07-07",
+        "2025-06-07",
+        "2025-06-06"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 51.5,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.C121",
+      "agents_involved": [
+        "Nonkukuleko",
+        "Lorraine",
+        "Yolanda",
+        "Cecilia"
+      ],
+      "claim_dates": [
+        "2025-06-23",
+        "2025-06-02",
+        "2025-06-02",
+        "2025-06-24"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 17.17,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.E093",
+      "agents_involved": [
+        "Zanele hele",
+        "Tumesang Evelyn Molahlehi",
+        "Lerato",
+        "Ana Jane"
+      ],
+      "claim_dates": [
+        "2025-06-02",
+        "2025-06-02",
+        "2025-06-02",
+        "2025-06-03"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 17.56,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.B422",
+      "agents_involved": [
+        "Karma",
+        "lerato",
+        "Lerato",
+        "itumeleng"
+      ],
+      "claim_dates": [
+        "2025-06-12",
+        "2025-06-25",
+        "2025-06-25",
+        "2025-07-01"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 10.28,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.B363",
+      "agents_involved": [
+        "Vinolia",
+        "Karma",
+        "Tholakele",
+        "itumeleng"
+      ],
+      "claim_dates": [
+        "2025-07-01",
+        "2025-06-12",
+        "2025-06-25",
+        "2025-07-01"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 24.78,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.B920",
+      "agents_involved": [
+        "Karma",
+        "simphiwe mashaba",
+        "karma",
+        "itumeleng"
+      ],
+      "claim_dates": [
+        "2025-07-08",
+        "2025-07-08",
+        "2025-06-11",
+        "2025-07-01"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 11.12,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.D776",
+      "agents_involved": [
+        "itumeleng",
+        "Disemelo",
+        "Almerinda",
+        "Pearl Molisa"
+      ],
+      "claim_dates": [
+        "2025-05-31",
+        "2025-07-07",
+        "2025-07-08",
+        "2025-06-06"
+      ],
+      "gps_locations": 3,
+      "max_distance_meters": 21.15,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.C801",
+      "agents_involved": [
+        "Lebohang",
+        "cloudia",
+        "Lorraine",
+        "Pearl"
+      ],
+      "claim_dates": [
+        "2025-06-04",
+        "2025-06-04",
+        "2025-06-03",
+        "2025-06-03"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 29.9,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.D286",
+      "agents_involved": [
+        "Karma",
+        "lebohang",
+        "cloudia",
+        "Tshepiso"
+      ],
+      "claim_dates": [
+        "2025-06-06",
+        "2025-06-06",
+        "2025-06-06",
+        "2025-06-07"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 33.58,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.B750",
+      "agents_involved": [
+        "Sylvia",
+        "Vinolia",
+        "Elizabeth"
+      ],
+      "claim_dates": [
+        "2025-06-26",
+        "2025-07-01",
+        "2025-06-03",
+        "2025-07-08",
+        "2025-06-03",
+        "2025-06-03"
+      ],
+      "gps_locations": 5,
+      "max_distance_meters": 19.06,
+      "total_claims": 6
+    },
+    {
+      "pole_number": "LAW.P.E016",
+      "agents_involved": [
+        "Nompumelelo",
+        "Nonkululeko",
+        "Karma"
+      ],
+      "claim_dates": [
+        "2025-07-08",
+        "2025-07-08",
+        "2025-06-03",
+        "2025-06-24",
+        "2025-06-24"
+      ],
+      "gps_locations": 5,
+      "max_distance_meters": 21.36,
+      "total_claims": 5
+    },
+    {
+      "pole_number": "LAW.P.B369",
+      "agents_involved": [
+        "Almerinda",
+        "lebohang",
+        "itumeleng"
+      ],
+      "claim_dates": [
+        "2025-07-01",
+        "2025-07-01",
+        "2025-06-12",
+        "2025-06-25",
+        "2025-07-01"
+      ],
+      "gps_locations": 5,
+      "max_distance_meters": 26.75,
+      "total_claims": 5
+    },
+    {
+      "pole_number": "LAW.P.B751",
+      "agents_involved": [
+        "Sylvia",
+        "Vinolia",
+        "Dikgahlo Lesitha"
+      ],
+      "claim_dates": [
+        "2025-06-03",
+        "2025-06-03",
+        "2025-06-03",
+        "2025-07-01",
+        "2025-07-08"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 25.38,
+      "total_claims": 5
+    },
+    {
+      "pole_number": "LAW.P.E284",
+      "agents_involved": [
+        "Almerinda",
+        "Vinolia",
+        "Pearl Molisa"
+      ],
+      "claim_dates": [
+        "2025-06-04",
+        "2025-06-04",
+        "2025-06-04",
+        "2025-06-04",
+        "2025-07-07"
+      ],
+      "gps_locations": 5,
+      "max_distance_meters": 47.6,
+      "total_claims": 5
+    },
+    {
+      "pole_number": "LAW.P.E276",
+      "agents_involved": [
+        "Almerinda",
+        "Vinolia",
+        "Elizabeth"
+      ],
+      "claim_dates": [
+        "2025-05-30",
+        "2025-05-30",
+        "2025-06-02",
+        "2025-06-02",
+        "2025-06-02"
+      ],
+      "gps_locations": 5,
+      "max_distance_meters": 46.28,
+      "total_claims": 5
+    },
+    {
+      "pole_number": "LAW.P.C584",
+      "agents_involved": [
+        "simphiwe mashaba",
+        "nathan",
+        "Simphiwe mashaba"
+      ],
+      "claim_dates": [
+        "2025-06-02",
+        "2025-06-02",
+        "2025-04-30",
+        "2025-06-02",
+        "2025-06-02"
+      ],
+      "gps_locations": 5,
+      "max_distance_meters": 11.39,
+      "total_claims": 5
+    },
+    {
+      "pole_number": "LAW.P.D229",
+      "agents_involved": [
+        "Sylvia",
+        "lebohang",
+        "cloudia"
+      ],
+      "claim_dates": [
+        "2025-07-07",
+        "2025-07-07",
+        "2025-07-05",
+        "2025-06-03"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 28.87,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.D129",
+      "agents_involved": [
+        "Nompumelelo",
+        "Tholakele",
+        "Thembi"
+      ],
+      "claim_dates": [
+        "2025-07-05",
+        "2025-06-25",
+        "2025-06-23",
+        "2025-06-04"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 18.65,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.D002",
+      "agents_involved": [
+        "Karma",
+        "Mpumi",
+        "Thembi"
+      ],
+      "claim_dates": [
+        "2025-06-24",
+        "2025-06-12",
+        "2025-06-24",
+        "2025-06-18"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 21.43,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.D004",
+      "agents_involved": [
+        "Mpumi",
+        "Thembi",
+        "Angeligue"
+      ],
+      "claim_dates": [
+        "2025-06-12",
+        "2025-06-13",
+        "2025-06-24",
+        "2025-06-24"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 25.03,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.D001",
+      "agents_involved": [
+        "Karma",
+        "Tholakele",
+        "Thembi"
+      ],
+      "claim_dates": [
+        "2025-06-24",
+        "2025-06-13",
+        "2025-06-24",
+        "2025-06-12"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 11.48,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.C418",
+      "agents_involved": [
+        "Zanele",
+        "Almerinda",
+        "Nompumelelo Nkosi"
+      ],
+      "claim_dates": [
+        "2025-07-07",
+        "2025-05-29",
+        "2025-05-29",
+        "2025-05-29"
+      ],
+      "gps_locations": 3,
+      "max_distance_meters": 16.78,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.C554",
+      "agents_involved": [
+        "Zanele hele",
+        "Vinolia",
+        "Thembi"
+      ],
+      "claim_dates": [
+        "2025-06-11",
+        "2025-05-29",
+        "2025-05-29",
+        "2025-06-03"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 19.22,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.C361",
+      "agents_involved": [
+        "Nonkululeko",
+        "Tholakele",
+        "Yolanda"
+      ],
+      "claim_dates": [
+        "2025-07-05",
+        "2025-06-05",
+        "2025-06-25",
+        "2025-07-05"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 7.47,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.C104",
+      "agents_involved": [
+        "Nonkululeko",
+        "manuel",
+        "Nonkukuleko"
+      ],
+      "claim_dates": [
+        "2025-04-30",
+        "2025-06-23",
+        "2025-06-23",
+        "2025-06-23"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 17.93,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.C106",
+      "agents_involved": [
+        "Nonkululeko",
+        "manuel",
+        "Nonkukuleko"
+      ],
+      "claim_dates": [
+        "2025-06-23",
+        "2025-04-30",
+        "2025-06-23",
+        "2025-06-23"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 19.26,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.A045",
+      "agents_involved": [
+        "Tumesang Evelyn Molahlehi",
+        "manuel",
+        "Thembi"
+      ],
+      "claim_dates": [
+        "2025-05-05",
+        "2025-05-29",
+        "2025-06-20",
+        "2025-06-24"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 11.2,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.D555",
+      "agents_involved": [
+        "Lerato",
+        "Cecilia",
+        "Nonkukuleko"
+      ],
+      "claim_dates": [
+        "2025-05-30",
+        "2025-06-23",
+        "2025-06-23",
+        "2025-05-29"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 30.1,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.D831",
+      "agents_involved": [
+        "Yolanda",
+        "Thembi",
+        "Cecilia"
+      ],
+      "claim_dates": [
+        "2025-05-29",
+        "2025-05-29",
+        "2025-06-18",
+        "2025-06-19"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 11.94,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.D814",
+      "agents_involved": [
+        "Disemelo",
+        "Lerato",
+        "Pearl Molisa"
+      ],
+      "claim_dates": [
+        "2025-05-30",
+        "2025-05-29",
+        "2025-05-29",
+        "2025-07-05"
+      ],
+      "gps_locations": 3,
+      "max_distance_meters": 7.78,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.D953",
+      "agents_involved": [
+        "Nonkululeko",
+        "Disemelo",
+        "Lerato"
+      ],
+      "claim_dates": [
+        "2025-06-02",
+        "2025-07-08",
+        "2025-07-08",
+        "2025-06-02"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 11.26,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.B241",
+      "agents_involved": [
+        "Lebohang",
+        "lebohang",
+        "itumeleng"
+      ],
+      "claim_dates": [
+        "2025-06-04",
+        "2025-06-22",
+        "2025-06-20",
+        "2025-06-20"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 20.25,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.E250",
+      "agents_involved": [
+        "lebohang",
+        "simphiwe mashaba",
+        "Lerato"
+      ],
+      "claim_dates": [
+        "2025-06-25",
+        "2025-06-25",
+        "2025-06-26",
+        "2025-06-03"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 16.45,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.E249",
+      "agents_involved": [
+        "Tholakele",
+        "Thembi",
+        "Lerato"
+      ],
+      "claim_dates": [
+        "2025-06-03",
+        "2025-07-02",
+        "2025-07-02",
+        "2025-06-23"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 9.26,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.B263",
+      "agents_involved": [
+        "Sylvia",
+        "lebohang",
+        "itumeleng"
+      ],
+      "claim_dates": [
+        "2025-06-06",
+        "2025-07-03",
+        "2025-07-03",
+        "2025-06-20"
+      ],
+      "gps_locations": 3,
+      "max_distance_meters": 5.07,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.A789",
+      "agents_involved": [
+        "Lebohang",
+        "Disemelo",
+        "lebohang"
+      ],
+      "claim_dates": [
+        "2025-06-20",
+        "2025-06-21",
+        "2025-06-04",
+        "2025-06-20"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 20.42,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.A788",
+      "agents_involved": [
+        "Lebohang",
+        "Disemelo",
+        "lebohang"
+      ],
+      "claim_dates": [
+        "2025-06-20",
+        "2025-06-23",
+        "2025-06-05",
+        "2025-06-21"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 19.6,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.B432",
+      "agents_involved": [
+        "itumeleng",
+        "simphiwe mashaba",
+        "Simphiwe mashaba"
+      ],
+      "claim_dates": [
+        "2025-06-03",
+        "2025-06-03",
+        "2025-06-03",
+        "2025-07-08"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 18.39,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.B884",
+      "agents_involved": [
+        "Karma",
+        "Dikgahlo Lesitha",
+        "Ana Jane"
+      ],
+      "claim_dates": [
+        "2025-07-01",
+        "2025-07-07",
+        "2025-07-07",
+        "2025-07-01"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 20.02,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.C057",
+      "agents_involved": [
+        "Vinolia",
+        "Anna Jane",
+        "Simphiwe mashaba"
+      ],
+      "claim_dates": [
+        "2025-05-30",
+        "2025-05-30",
+        "2025-07-02",
+        "2025-05-30"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 28.88,
+      "total_claims": 4
+    },
+    {
+      "pole_number": "LAW.P.C056",
+      "agents_involved": [
+        "simphiwe mashaba",
+        "Lerato",
+        "Ana Jane"
+      ],
+      "claim_dates": [
+        "2025-07-01",
+        "2025-05-30",
+        "2025-07-01",
+        "2025-07-01"
+      ],
+      "gps_locations": 4,
+      "max_distance_meters": 25.87,
+      "total_claims": 4
+    }
+  ],
+  "summary": {
+    "total_poles_with_duplicates": 998,
+    "high_risk_count": 873,
+    "medium_risk_count": 21,
+    "no_agent_count": 0
+  },
+  "recommendations": {
+    "immediate": "Hold payment for 873 poles pending verification",
+    "contact": "Reach out to agents with multiple conflicting claims",
+    "process": "Require GPS validation for all future pole permissions"
+  }
+}

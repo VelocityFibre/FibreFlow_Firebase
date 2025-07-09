@@ -15,6 +15,7 @@ The BOQ management has been successfully integrated into the project detail page
   - Search by item code, description, or specification
   - Filter by status (Planned, Partially Allocated, Fully Allocated, Ordered, Delivered)
   - Show only items needing quotes
+  - **✅ Show items with Required > 0** (Implemented 2025-01-10)
 - **Import/Export**: CSV import and export functionality for bulk operations
 - **CRUD Operations**: Add, edit, and delete BOQ items within project context
 

@@ -14,6 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 
 import { BOQService } from '../../../boq/services/boq.service';
@@ -41,6 +42,7 @@ import { BOQImportDialogComponent } from '../../../boq/components/boq-import-dia
     MatDialogModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
+    MatCheckboxModule,
   ],
   template: `
     <div class="project-boq-container">
@@ -147,6 +149,10 @@ import { BOQImportDialogComponent } from '../../../boq/components/boq-import-dia
             <mat-option [value]="true">Items Needing Quotes</mat-option>
           </mat-select>
         </mat-form-field>
+
+        <mat-checkbox [(ngModel)]="showRequiredOnly" (change)="filterItems()" color="primary">
+          Show items with Required > 0
+        </mat-checkbox>
       </div>
 
       <!-- Loading State -->
@@ -392,6 +398,10 @@ import { BOQImportDialogComponent } from '../../../boq/components/boq-import-dia
         min-width: 300px;
       }
 
+      mat-checkbox {
+        margin-left: 8px;
+      }
+
       .table-container {
         overflow-x: auto;
         border: 1px solid rgb(var(--ff-border));
@@ -559,6 +569,7 @@ export class ProjectBOQComponent implements OnInit, OnDestroy {
 
   selectedStatus: BOQStatus | 'all' = 'all';
   showQuotesOnly = false;
+  showRequiredOnly = false;
   searchControl = new FormControl('');
 
   statuses: BOQStatus[] = [
@@ -654,6 +665,11 @@ export class ProjectBOQComponent implements OnInit, OnDestroy {
           item.description.toLowerCase().includes(searchTerm) ||
           item.specification?.toLowerCase().includes(searchTerm),
       );
+    }
+
+    // Filter by required quantity > 0
+    if (this.showRequiredOnly) {
+      filtered = filtered.filter((item) => item.requiredQuantity > 0);
     }
 
     this.filteredItems = filtered;

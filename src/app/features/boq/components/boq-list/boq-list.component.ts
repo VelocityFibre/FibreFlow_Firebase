@@ -15,6 +15,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Subject, takeUntil, combineLatest, debounceTime } from 'rxjs';
 import { FormControl } from '@angular/forms';
@@ -52,6 +53,7 @@ import { RemoteLoggerService } from '../../../../core/services/remote-logger.ser
     MatDialogModule,
     MatProgressSpinnerModule,
     ScrollingModule,
+    MatCheckboxModule,
   ],
   template: `
     <div class="boq-container">
@@ -159,6 +161,10 @@ import { RemoteLoggerService } from '../../../../core/services/remote-logger.ser
                 </mat-option>
               </mat-select>
             </mat-form-field>
+
+            <mat-checkbox [(ngModel)]="showRequiredOnly" (change)="filterItems()" color="primary">
+              Show items with Required > 0
+            </mat-checkbox>
           </div>
         </mat-card-content>
       </mat-card>
@@ -585,6 +591,10 @@ import { RemoteLoggerService } from '../../../../core/services/remote-logger.ser
         flex: 1;
       }
 
+      mat-checkbox {
+        margin-left: 8px;
+      }
+
       .table-card {
         margin-bottom: 24px;
       }
@@ -780,6 +790,7 @@ export class BOQListComponent implements OnInit, OnDestroy {
   selectedProjectId = 'all';
   selectedStatus: BOQStatus | 'all' = 'all';
   searchControl = new FormControl('');
+  showRequiredOnly = false;
 
   statuses: BOQStatus[] = [
     'Planned',
@@ -851,7 +862,7 @@ export class BOQListComponent implements OnInit, OnDestroy {
       .subscribe(() => this.filterItems());
   }
 
-  private filterItems() {
+  filterItems() {
     let filtered = [...this.boqItems];
 
     // Filter by project
@@ -873,6 +884,11 @@ export class BOQListComponent implements OnInit, OnDestroy {
           item.description.toLowerCase().includes(searchTerm) ||
           item.specification?.toLowerCase().includes(searchTerm),
       );
+    }
+
+    // Filter by required quantity > 0
+    if (this.showRequiredOnly) {
+      filtered = filtered.filter((item) => item.requiredQuantity > 0);
     }
 
     // Apply sorting

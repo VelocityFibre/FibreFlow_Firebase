@@ -17,6 +17,12 @@
 - `npm run parse` - Update antiHall knowledge graph
 - `/create-feature` - Scaffold new feature with proper structure
 - `/check-implementation` - Verify feature completeness
+- `/dev-task` - View development backlog and tasks
+
+**Development Tracking**:
+- `docs/DEVELOPMENT_BACKLOG.md` - Centralized dev tasks, bugs, features
+- Reference tasks in commits: "DEV-001: Fixed issue"
+- Update task status as you work
 
 **Feature Development Workflow**:
 1. Create PRP using `docs/PRP_TEMPLATE.md` - Plan the feature
@@ -229,6 +235,24 @@ As a solo developer, we use **jj (Jujutsu)** for version control because:
 - **Deploy what you see** - no confusion about uncommitted changes
 - **Simplified workflow** - focus on building, not git commands
 
+### jj File Size Rules
+
+**Default limit**: 1MiB per file (prevents accidental large file commits)
+
+**Already configured in .gitignore**:
+```
+# Large data files
+OneMap/*.csv
+OneMap/*.xlsx
+OneMap/*.json
+OneMap/split_data/
+```
+
+**If you encounter file size errors**:
+1. Add to .gitignore (recommended for data files)
+2. Or increase limit: `jj config set --repo snapshot.max-new-file-size 50MiB`
+3. Or override once: `jj --config snapshot.max-new-file-size=50MiB st`
+
 ### Daily Workflow
 
 ```bash
@@ -299,6 +323,10 @@ jj undo
 
 # If you need to go back to a previous version
 jj restore
+
+# If you need to untrack files (after adding to .gitignore)
+jj file untrack path/to/file
+jj file untrack 'glob:path/to/directory/**'
 ```
 
 ---
