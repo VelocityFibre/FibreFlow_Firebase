@@ -203,6 +203,15 @@
   }
 }
 
+// Danger text for delete button
+.danger-text {
+  color: rgb(var(--ff-destructive)) !important;
+  
+  mat-icon {
+    color: rgb(var(--ff-destructive)) !important;
+  }
+}
+
 // Responsive
 @media (max-width: 768px) {
   .table-card {

@@ -353,13 +353,16 @@ export class ReportsDashboardComponent implements OnInit {
     try {
       const reports = await this.reportService.getReports();
       // Format the reports for display
-      const formattedReports = reports.map(report => ({
+      const formattedReports = reports.map((report) => ({
         ...report,
         type: report.reportType || 'Unknown',
         project: report.projectName || 'N/A',
         period: this.formatPeriod(report),
-        generatedAt: report.createdAt?.toDate ? report.createdAt.toDate() : 
-                     report.createdAt ? new Date(report.createdAt) : new Date()
+        generatedAt: report.createdAt?.toDate
+          ? report.createdAt.toDate()
+          : report.createdAt
+            ? new Date(report.createdAt)
+            : new Date(),
       }));
       this.reports.set(formattedReports);
     } catch (error) {
@@ -378,8 +381,12 @@ export class ReportsDashboardComponent implements OnInit {
         return date.toLocaleDateString();
       } else if (report.reportType === 'weekly' && report.weekStartDate && report.weekEndDate) {
         // Handle Firestore Timestamp or Date
-        const start = report.weekStartDate.toDate ? report.weekStartDate.toDate() : new Date(report.weekStartDate);
-        const end = report.weekEndDate.toDate ? report.weekEndDate.toDate() : new Date(report.weekEndDate);
+        const start = report.weekStartDate.toDate
+          ? report.weekStartDate.toDate()
+          : new Date(report.weekStartDate);
+        const end = report.weekEndDate.toDate
+          ? report.weekEndDate.toDate()
+          : new Date(report.weekEndDate);
         return `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`;
       } else if (report.reportType === 'monthly' && report.month && report.year) {
         return `${report.month}/${report.year}`;

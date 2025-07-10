@@ -1,0 +1,191 @@
+<!-- Dev Panel Toggle Button -->
+@if (isAdmin()) {
+  <button mat-fab 
+    class="dev-panel-toggle"
+    [class.panel-open]="isOpen()"
+    (click)="togglePanel()"
+    matTooltip="Dev Panel"
+    matTooltipPosition="left"
+    color="accent">
+    <mat-icon>code</mat-icon>
+    @if (devStats(); as stats) {
+      @if (stats.pendingTasks > 0) {
+        <span class="task-badge">{{ stats.pendingTasks }}</span>
+      }
+    }
+  </button>
+}
+
+<!-- Dev Panel Sidebar -->
+@if (isAdmin() && isOpen()) {
+  <div class="dev-panel-container" [class.minimized]="isMinimized()">
+    <!-- Header -->
+    <div class="panel-header">
+      <div class="header-content">
+        <h3>Dev Panel</h3>
+        <span class="route-name">{{ currentRoute().title }}</span>
+      </div>
+      <div class="header-actions">
+        <button mat-icon-button (click)="toggleMinimize()">
+          <mat-icon>{{ isMinimized() ? 'expand_more' : 'expand_less' }}</mat-icon>
+        </button>
+        <button mat-icon-button (click)="togglePanel()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    @if (!isMinimized()) {
+      <div class="panel-content">
+        <!-- Stats Summary -->
+        @if (devStats(); as stats) {
+          <div class="stats-row">
+            <mat-chip-set>
+              <mat-chip>
+                <mat-icon>task</mat-icon>
+                {{ stats.pendingTasks }} pending
+              </mat-chip>
+              <mat-chip>
+                <mat-icon>error_outline</mat-icon>
+                {{ stats.unresolvedErrors }} errors
+              </mat-chip>
+              <mat-chip>
+                <mat-icon>pages</mat-icon>
+                {{ stats.pagesWithNotes }} pages
+              </mat-chip>
+            </mat-chip-set>
+          </div>
+        }
+
+        @if (currentNote(); as note) {
+          <!-- Page Notes Section -->
+          <mat-expansion-panel expanded>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon>notes</mat-icon>
+                Page Notes
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            
+            <div class="notes-section">
+              @if (!isEditingNotes()) {
+                <div class="notes-display" (click)="isEditingNotes.set(true)">
+                  @if (note.notes) {
+                    <p>{{ note.notes }}</p>
+                  } @else {
+                    <p class="placeholder">Click to add notes for this page...</p>
+                  }
+                </div>
+              } @else {
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Notes</mat-label>
+                  <textarea matInput 
+                    [ngModel]="notesText()" 
+                    (ngModelChange)="notesText.set($event)"
+                    rows="4"
+                    placeholder="Add development notes, issues, or ideas for this page...">
+                  </textarea>
+                </mat-form-field>
+                <div class="notes-actions">
+                  <button mat-button (click)="isEditingNotes.set(false)">Cancel</button>
+                  <button mat-raised-button color="primary" (click)="saveNotes()">Save</button>
+                </div>
+              }
+            </div>
+          </mat-expansion-panel>
+
+          <!-- Tasks Section -->
+          <mat-expansion-panel expanded>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon>checklist</mat-icon>
+                Tasks
+                @if (note.tasks && note.tasks.length > 0) {
+                  <mat-chip>{{ getUnfinishedTaskCount(note.tasks) }}</mat-chip>
+                }
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="tasks-section">
+              <!-- Add Task Form -->
+              <div class="add-task-form">
+                <mat-form-field appearance="outline" class="task-input">
+                  <mat-label>New Task</mat-label>
+                  <input matInput 
+                    [ngModel]="newTaskText()" 
+                    (ngModelChange)="newTaskText.set($event)"
+                    (keyup.enter)="addTask()"
+                    placeholder="Add a development task...">
+                </mat-form-field>
+                
+                <mat-form-field appearance="outline" class="priority-select">
+                  <mat-label>Priority</mat-label>
+                  <mat-select [ngModel]="newTaskPriority()" (ngModelChange)="newTaskPriority.set($event)">
+                    <mat-option value="low">Low</mat-option>
+                    <mat-option value="medium">Medium</mat-option>
+                    <mat-option value="high">High</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                
+                <button mat-icon-button color="primary" (click)="addTask()">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+
+              <!-- Task List -->
+              <mat-list class="task-list">
+                @for (task of note.tasks; track task.id) {
+                  <mat-list-item [class.completed]="task.status === 'done'">
+                    <mat-icon matListItemIcon 
+                      [color]="task.status === 'done' ? 'primary' : ''"
+                      class="task-status-icon"
+                      (click)="updateTaskStatus(task, task.status === 'done' ? 'todo' : 'done')">
+                      {{ getTaskIcon(task.status) }}
+                    </mat-icon>
+                    
+                    <div matListItemTitle>{{ task.text }}</div>
+                    
+                    <mat-chip matListItemMeta [color]="getPriorityColor(task.priority)">
+                      {{ task.priority }}
+                    </mat-chip>
+                  </mat-list-item>
+                }
+                
+                @if (!note.tasks || note.tasks.length === 0) {
+                  <p class="no-tasks">No tasks for this page yet.</p>
+                }
+              </mat-list>
+            </div>
+          </mat-expansion-panel>
+
+          <!-- Errors Section (if any) -->
+          @if (note.errors && note.errors.length > 0) {
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon color="warn">error</mat-icon>
+                  Errors
+                  <mat-chip color="warn">{{ getUnresolvedErrorCount(note.errors) }}</mat-chip>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <mat-list class="error-list">
+                @for (error of note.errors; track error.id) {
+                  @if (!error.resolved) {
+                    <mat-list-item>
+                      <mat-icon matListItemIcon color="warn">error_outline</mat-icon>
+                      <div matListItemTitle>{{ error.message }}</div>
+                      <div matListItemLine class="error-time">
+                        {{ error.timestamp | date:'short' }}
+                      </div>
+                    </mat-list-item>
+                  }
+                }
+              </mat-list>
+            </mat-expansion-panel>
+          }
+        }
+      </div>
+    }
+  </div>
+}

@@ -157,6 +157,11 @@
                   <mat-icon>share</mat-icon>
                   Share
                 </button>
+                <mat-divider></mat-divider>
+                <button mat-menu-item (click)="deleteMeeting(meeting)" class="danger-text">
+                  <mat-icon color="warn">delete</mat-icon>
+                  Delete Meeting
+                </button>
               </mat-menu>
             </td>
           </ng-container>

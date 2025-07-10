@@ -1167,7 +1167,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
   updateHomeTotal(type: 'homeSignups' | 'homeDrops' | 'homesConnected') {
     const todayField = `${type}Today`;
     const totalField = `${type}Total`;
-    
+
     const todayValue = Number(this.kpiForm.get(todayField)?.value) || 0;
     const currentTotal = Number(this.kpiForm.get(totalField)?.value) || 0;
 
@@ -1207,8 +1207,9 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
     const tempMin = this.kpiForm.get('temperatureMin')?.value;
     const tempMax = this.kpiForm.get('temperatureMax')?.value;
     const temperatureRange =
-      tempMin !== null && tempMin !== undefined && 
-      tempMax !== null && tempMax !== undefined ? { min: tempMin, max: tempMax } : null;
+      tempMin !== null && tempMin !== undefined && tempMax !== null && tempMax !== undefined
+        ? { min: tempMin, max: tempMax }
+        : null;
 
     // Prepare KPI data
     const formData = this.kpiForm.value;
@@ -1224,7 +1225,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
     if (temperatureRange) {
       kpiData.temperatureRange = temperatureRange;
     }
-    
+
     // Remove any temporary form fields that shouldn't be saved
     const dataToSave: any = { ...kpiData };
     delete dataToSave.temperatureMin;
@@ -1260,7 +1261,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
 
   private removeUndefinedFields(obj: any): any {
     const cleaned = { ...obj };
-    Object.keys(cleaned).forEach(key => {
+    Object.keys(cleaned).forEach((key) => {
       if (cleaned[key] === undefined) {
         delete cleaned[key];
       } else if (cleaned[key] === null && key === 'temperatureRange') {

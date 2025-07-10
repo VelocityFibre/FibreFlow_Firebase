@@ -101,7 +101,13 @@ export interface DailyAnalysis {
 }
 
 export interface OperationalChallenge {
-  type: 'construction_gap' | 'status_reporting' | 'connection_delivery' | 'resource' | 'weather' | 'other';
+  type:
+    | 'construction_gap'
+    | 'status_reporting'
+    | 'connection_delivery'
+    | 'resource'
+    | 'weather'
+    | 'other';
   description: string;
   impact: 'high' | 'medium' | 'low';
   daysAffected: number;

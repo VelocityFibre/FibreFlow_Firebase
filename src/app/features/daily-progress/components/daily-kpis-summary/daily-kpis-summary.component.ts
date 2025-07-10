@@ -103,7 +103,11 @@ interface KPISummaryRow {
               </mat-select>
             </mat-form-field>
 
-            <button mat-button (click)="toggleDateRangeMode()" [color]="dateRangeMode() ? 'primary' : 'basic'">
+            <button
+              mat-button
+              (click)="toggleDateRangeMode()"
+              [color]="dateRangeMode() ? 'primary' : 'basic'"
+            >
               <mat-icon>{{ dateRangeMode() ? 'date_range' : 'today' }}</mat-icon>
               {{ dateRangeMode() ? 'Date Range' : 'Single Date' }}
             </button>
@@ -190,7 +194,9 @@ interface KPISummaryRow {
 
               <ng-container matColumnDef="total">
                 <th mat-header-cell *matHeaderCellDef class="number-header">Total</th>
-                <td mat-cell *matCellDef="let row" class="number-cell total-cell">{{ row.total }}</td>
+                <td mat-cell *matCellDef="let row" class="number-cell total-cell">
+                  {{ row.total }}
+                </td>
               </ng-container>
 
               <ng-container matColumnDef="unit">
@@ -213,19 +219,25 @@ interface KPISummaryRow {
             <mat-card-content>
               <div class="data-grid">
                 @for (kpi of currentKpis(); track kpi.id) {
-                  @if (kpi.weatherConditions || kpi.weatherImpact !== undefined || kpi.temperatureRange) {
+                  @if (
+                    kpi.weatherConditions || kpi.weatherImpact !== undefined || kpi.temperatureRange
+                  ) {
                     <div class="data-item">
                       <span class="label">Weather</span>
                       <span class="value">{{ kpi.weatherConditions || 'Not recorded' }}</span>
                     </div>
                     <div class="data-item">
                       <span class="label">Weather Impact</span>
-                      <span class="value">{{ kpi.weatherImpact !== undefined ? kpi.weatherImpact + '/10' : 'N/A' }}</span>
+                      <span class="value">{{
+                        kpi.weatherImpact !== undefined ? kpi.weatherImpact + '/10' : 'N/A'
+                      }}</span>
                     </div>
                     @if (kpi.temperatureRange) {
                       <div class="data-item">
                         <span class="label">Temperature Range</span>
-                        <span class="value">{{ kpi.temperatureRange.min }}°C - {{ kpi.temperatureRange.max }}°C</span>
+                        <span class="value"
+                          >{{ kpi.temperatureRange.min }}°C - {{ kpi.temperatureRange.max }}°C</span
+                        >
                       </div>
                     }
                   }
@@ -247,13 +259,17 @@ interface KPISummaryRow {
                   @if (kpi.safetyIncidents !== undefined) {
                     <div class="data-item">
                       <span class="label">Safety Incidents</span>
-                      <span class="value" [class.warning]="kpi.safetyIncidents > 0">{{ kpi.safetyIncidents }}</span>
+                      <span class="value" [class.warning]="kpi.safetyIncidents > 0">{{
+                        kpi.safetyIncidents
+                      }}</span>
                     </div>
                   }
                   @if (kpi.nearMisses !== undefined) {
                     <div class="data-item">
                       <span class="label">Near Misses</span>
-                      <span class="value" [class.warning]="kpi.nearMisses > 0">{{ kpi.nearMisses }}</span>
+                      <span class="value" [class.warning]="kpi.nearMisses > 0">{{
+                        kpi.nearMisses
+                      }}</span>
                     </div>
                   }
                   @if (kpi.toolboxTalks !== undefined) {
@@ -271,7 +287,11 @@ interface KPISummaryRow {
                   @if (kpi.complianceScore !== undefined) {
                     <div class="data-item">
                       <span class="label">Compliance Score</span>
-                      <span class="value" [class.success]="kpi.complianceScore >= 90" [class.warning]="kpi.complianceScore < 80">
+                      <span
+                        class="value"
+                        [class.success]="kpi.complianceScore >= 90"
+                        [class.warning]="kpi.complianceScore < 80"
+                      >
                         {{ kpi.complianceScore }}%
                       </span>
                     </div>
@@ -294,13 +314,17 @@ interface KPISummaryRow {
                   @if (kpi.qualityIssues !== undefined) {
                     <div class="data-item">
                       <span class="label">Quality Issues</span>
-                      <span class="value" [class.warning]="kpi.qualityIssues > 0">{{ kpi.qualityIssues }}</span>
+                      <span class="value" [class.warning]="kpi.qualityIssues > 0">{{
+                        kpi.qualityIssues
+                      }}</span>
                     </div>
                   }
                   @if (kpi.reworkRequired !== undefined) {
                     <div class="data-item">
                       <span class="label">Rework Required</span>
-                      <span class="value" [class.warning]="kpi.reworkRequired > 0">{{ kpi.reworkRequired }}</span>
+                      <span class="value" [class.warning]="kpi.reworkRequired > 0">{{
+                        kpi.reworkRequired
+                      }}</span>
                     </div>
                   }
                   @if (kpi.inspectionsPassed !== undefined) {
@@ -312,7 +336,9 @@ interface KPISummaryRow {
                   @if (kpi.inspectionsFailed !== undefined) {
                     <div class="data-item">
                       <span class="label">Inspections Failed</span>
-                      <span class="value" [class.error]="kpi.inspectionsFailed > 0">{{ kpi.inspectionsFailed }}</span>
+                      <span class="value" [class.error]="kpi.inspectionsFailed > 0">{{
+                        kpi.inspectionsFailed
+                      }}</span>
                     </div>
                   }
                 }
@@ -345,7 +371,9 @@ interface KPISummaryRow {
                   @if (kpi.overtimeHours !== undefined) {
                     <div class="data-item">
                       <span class="label">Overtime Hours</span>
-                      <span class="value" [class.warning]="kpi.overtimeHours > 8">{{ kpi.overtimeHours }}</span>
+                      <span class="value" [class.warning]="kpi.overtimeHours > 8">{{
+                        kpi.overtimeHours
+                      }}</span>
                     </div>
                   }
                   @if (kpi.equipmentUtilization !== undefined) {
@@ -395,31 +423,35 @@ interface KPISummaryRow {
                   @if (kpi.laborCostToday !== undefined) {
                     <div class="data-item">
                       <span class="label">Labor Cost</span>
-                      <span class="value">R{{ kpi.laborCostToday | number:'1.2-2' }}</span>
+                      <span class="value">R{{ kpi.laborCostToday | number: '1.2-2' }}</span>
                     </div>
                   }
                   @if (kpi.materialCostToday !== undefined) {
                     <div class="data-item">
                       <span class="label">Material Cost</span>
-                      <span class="value">R{{ kpi.materialCostToday | number:'1.2-2' }}</span>
+                      <span class="value">R{{ kpi.materialCostToday | number: '1.2-2' }}</span>
                     </div>
                   }
                   @if (kpi.equipmentCostToday !== undefined) {
                     <div class="data-item">
                       <span class="label">Equipment Cost</span>
-                      <span class="value">R{{ kpi.equipmentCostToday | number:'1.2-2' }}</span>
+                      <span class="value">R{{ kpi.equipmentCostToday | number: '1.2-2' }}</span>
                     </div>
                   }
                   @if (kpi.totalCostToday !== undefined) {
                     <div class="data-item">
                       <span class="label">Total Cost</span>
-                      <span class="value total">R{{ kpi.totalCostToday | number:'1.2-2' }}</span>
+                      <span class="value total">R{{ kpi.totalCostToday | number: '1.2-2' }}</span>
                     </div>
                   }
                   @if (kpi.productivityScore !== undefined) {
                     <div class="data-item">
                       <span class="label">Productivity Score</span>
-                      <span class="value" [class.success]="kpi.productivityScore >= 80" [class.warning]="kpi.productivityScore < 60">
+                      <span
+                        class="value"
+                        [class.success]="kpi.productivityScore >= 80"
+                        [class.warning]="kpi.productivityScore < 60"
+                      >
                         {{ kpi.productivityScore }}%
                       </span>
                     </div>
@@ -478,8 +510,10 @@ interface KPISummaryRow {
           <mat-card-content>
             @for (kpi of currentKpis(); track kpi.id) {
               <div class="info-row">
-                <span>Submitted by: <strong>{{ kpi.submittedByName || kpi.submittedBy }}</strong></span>
-                <span>Date: {{ kpi.submittedAt | date:'short' }}</span>
+                <span
+                  >Submitted by: <strong>{{ kpi.submittedByName || kpi.submittedBy }}</strong></span
+                >
+                <span>Date: {{ kpi.submittedAt | date: 'short' }}</span>
               </div>
             }
           </mat-card-content>
@@ -1035,60 +1069,63 @@ export class DailyKpisSummaryComponent implements OnInit {
 
   // Helper methods to check if sections have data
   hasWeatherData(): boolean {
-    return this.currentKpis().some(kpi => 
-      kpi.weatherConditions || 
-      kpi.weatherImpact !== undefined || 
-      kpi.temperatureRange
+    return this.currentKpis().some(
+      (kpi) => kpi.weatherConditions || kpi.weatherImpact !== undefined || kpi.temperatureRange,
     );
   }
 
   hasSafetyData(): boolean {
-    return this.currentKpis().some(kpi => 
-      kpi.safetyIncidents !== undefined ||
-      kpi.nearMisses !== undefined ||
-      kpi.toolboxTalks !== undefined ||
-      kpi.safetyObservations !== undefined ||
-      kpi.complianceScore !== undefined
+    return this.currentKpis().some(
+      (kpi) =>
+        kpi.safetyIncidents !== undefined ||
+        kpi.nearMisses !== undefined ||
+        kpi.toolboxTalks !== undefined ||
+        kpi.safetyObservations !== undefined ||
+        kpi.complianceScore !== undefined,
     );
   }
 
   hasQualityData(): boolean {
-    return this.currentKpis().some(kpi => 
-      kpi.qualityIssues !== undefined ||
-      kpi.reworkRequired !== undefined ||
-      kpi.inspectionsPassed !== undefined ||
-      kpi.inspectionsFailed !== undefined
+    return this.currentKpis().some(
+      (kpi) =>
+        kpi.qualityIssues !== undefined ||
+        kpi.reworkRequired !== undefined ||
+        kpi.inspectionsPassed !== undefined ||
+        kpi.inspectionsFailed !== undefined,
     );
   }
 
   hasResourceData(): boolean {
-    return this.currentKpis().some(kpi => 
-      kpi.teamSize !== undefined ||
-      kpi.regularHours !== undefined ||
-      kpi.overtimeHours !== undefined ||
-      kpi.equipmentUtilization !== undefined ||
-      kpi.vehiclesUsed !== undefined ||
-      (kpi.teamMembers && kpi.teamMembers.length > 0)
+    return this.currentKpis().some(
+      (kpi) =>
+        kpi.teamSize !== undefined ||
+        kpi.regularHours !== undefined ||
+        kpi.overtimeHours !== undefined ||
+        kpi.equipmentUtilization !== undefined ||
+        kpi.vehiclesUsed !== undefined ||
+        (kpi.teamMembers && kpi.teamMembers.length > 0),
     );
   }
 
   hasFinancialData(): boolean {
-    return this.currentKpis().some(kpi => 
-      kpi.laborCostToday !== undefined ||
-      kpi.materialCostToday !== undefined ||
-      kpi.equipmentCostToday !== undefined ||
-      kpi.totalCostToday !== undefined ||
-      kpi.productivityScore !== undefined
+    return this.currentKpis().some(
+      (kpi) =>
+        kpi.laborCostToday !== undefined ||
+        kpi.materialCostToday !== undefined ||
+        kpi.equipmentCostToday !== undefined ||
+        kpi.totalCostToday !== undefined ||
+        kpi.productivityScore !== undefined,
     );
   }
 
   hasCommentsOrRisk(): boolean {
-    return this.currentKpis().some(kpi => 
-      kpi.riskFlag ||
-      kpi.comments ||
-      kpi.keyIssuesSummary ||
-      kpi.weeklyReportDetails ||
-      kpi.weeklyReportInsights
+    return this.currentKpis().some(
+      (kpi) =>
+        kpi.riskFlag ||
+        kpi.comments ||
+        kpi.keyIssuesSummary ||
+        kpi.weeklyReportDetails ||
+        kpi.weeklyReportInsights,
     );
   }
 
@@ -1108,7 +1145,7 @@ export class DailyKpisSummaryComponent implements OnInit {
       // Project and Date Info
       doc.setFontSize(12);
       doc.setFont('helvetica', 'normal');
-      const dateText = this.dateRangeMode() 
+      const dateText = this.dateRangeMode()
         ? `${this.startDateControl.value?.toLocaleDateString()} - ${this.endDateControl.value?.toLocaleDateString()}`
         : this.dateControl.value?.toLocaleDateString() || '';
       doc.text(`Project: ${this.selectedProjectName()}`, 20, yPosition);
@@ -1126,11 +1163,11 @@ export class DailyKpisSummaryComponent implements OnInit {
       doc.text('Core Activities', 20, yPosition);
       yPosition += 5;
 
-      const kpiData = this.dailySummary().map(row => [
+      const kpiData = this.dailySummary().map((row) => [
         row.metric,
         row.today.toString(),
         row.total.toString(),
-        row.unit
+        row.unit,
       ]);
 
       autoTable(doc, {
@@ -1157,7 +1194,7 @@ export class DailyKpisSummaryComponent implements OnInit {
           yPosition += 5;
           doc.setFont('helvetica', 'normal');
           doc.setFontSize(10);
-          
+
           if (firstKpi.weatherConditions) {
             doc.text(`Weather: ${firstKpi.weatherConditions}`, 25, yPosition);
             yPosition += 5;
@@ -1167,7 +1204,11 @@ export class DailyKpisSummaryComponent implements OnInit {
             yPosition += 5;
           }
           if (firstKpi.temperatureRange) {
-            doc.text(`Temperature: ${firstKpi.temperatureRange.min}°C - ${firstKpi.temperatureRange.max}°C`, 25, yPosition);
+            doc.text(
+              `Temperature: ${firstKpi.temperatureRange.min}°C - ${firstKpi.temperatureRange.max}°C`,
+              25,
+              yPosition,
+            );
             yPosition += 5;
           }
           yPosition += 5;
@@ -1266,12 +1307,16 @@ export class DailyKpisSummaryComponent implements OnInit {
 
       // Footer
       doc.setFontSize(8);
-      doc.text(`Generated on: ${new Date().toLocaleString()}`, 20, doc.internal.pageSize.getHeight() - 10);
+      doc.text(
+        `Generated on: ${new Date().toLocaleString()}`,
+        20,
+        doc.internal.pageSize.getHeight() - 10,
+      );
 
       // Save the PDF
       const filename = `KPI_Summary_${this.selectedProjectName()}_${new Date().toISOString().split('T')[0]}.pdf`;
       doc.save(filename);
-      
+
       this.snackBar.open('PDF exported successfully', 'Close', { duration: 3000 });
     } catch (error) {
       console.error('Error generating PDF:', error);
@@ -1282,7 +1327,7 @@ export class DailyKpisSummaryComponent implements OnInit {
   exportExcel() {
     try {
       const workbook = XLSX.utils.book_new();
-      
+
       // Core KPIs Sheet
       const coreData = [
         ['KPI Summary Report'],
@@ -1291,9 +1336,9 @@ export class DailyKpisSummaryComponent implements OnInit {
         [`Contractor: ${this.selectedContractorName() || 'N/A'}`],
         [],
         ['Metric', 'Today', 'Total', 'Unit'],
-        ...this.dailySummary().map(row => [row.metric, row.today, row.total, row.unit])
+        ...this.dailySummary().map((row) => [row.metric, row.today, row.total, row.unit]),
       ];
-      
+
       const coreSheet = XLSX.utils.aoa_to_sheet(coreData);
       XLSX.utils.book_append_sheet(workbook, coreSheet, 'Core KPIs');
 
@@ -1301,17 +1346,18 @@ export class DailyKpisSummaryComponent implements OnInit {
       const kpis = this.currentKpis();
       if (kpis.length > 0) {
         const enhancedData: any[][] = [['Enhanced KPI Data'], []];
-        
+
         kpis.forEach((kpi, index) => {
           if (index > 0) enhancedData.push([]);
-          
+
           enhancedData.push([`Entry ${index + 1} - ${new Date(kpi.date).toLocaleDateString()}`]);
-          
+
           // Weather Data
           if (this.hasWeatherData()) {
             enhancedData.push(['Weather & Environmental']);
             if (kpi.weatherConditions) enhancedData.push(['Weather', kpi.weatherConditions]);
-            if (kpi.weatherImpact !== undefined) enhancedData.push(['Weather Impact', kpi.weatherImpact]);
+            if (kpi.weatherImpact !== undefined)
+              enhancedData.push(['Weather Impact', kpi.weatherImpact]);
             if (kpi.temperatureRange) {
               enhancedData.push(['Temperature Min', kpi.temperatureRange.min]);
               enhancedData.push(['Temperature Max', kpi.temperatureRange.max]);
@@ -1321,40 +1367,57 @@ export class DailyKpisSummaryComponent implements OnInit {
           // Safety Data
           if (this.hasSafetyData()) {
             enhancedData.push([], ['Safety & Compliance']);
-            if (kpi.safetyIncidents !== undefined) enhancedData.push(['Safety Incidents', kpi.safetyIncidents]);
+            if (kpi.safetyIncidents !== undefined)
+              enhancedData.push(['Safety Incidents', kpi.safetyIncidents]);
             if (kpi.nearMisses !== undefined) enhancedData.push(['Near Misses', kpi.nearMisses]);
-            if (kpi.toolboxTalks !== undefined) enhancedData.push(['Toolbox Talks', kpi.toolboxTalks]);
-            if (kpi.safetyObservations !== undefined) enhancedData.push(['Safety Observations', kpi.safetyObservations]);
-            if (kpi.complianceScore !== undefined) enhancedData.push(['Compliance Score (%)', kpi.complianceScore]);
+            if (kpi.toolboxTalks !== undefined)
+              enhancedData.push(['Toolbox Talks', kpi.toolboxTalks]);
+            if (kpi.safetyObservations !== undefined)
+              enhancedData.push(['Safety Observations', kpi.safetyObservations]);
+            if (kpi.complianceScore !== undefined)
+              enhancedData.push(['Compliance Score (%)', kpi.complianceScore]);
           }
 
           // Quality Data
           if (this.hasQualityData()) {
             enhancedData.push([], ['Quality Metrics']);
-            if (kpi.qualityIssues !== undefined) enhancedData.push(['Quality Issues', kpi.qualityIssues]);
-            if (kpi.reworkRequired !== undefined) enhancedData.push(['Rework Required', kpi.reworkRequired]);
-            if (kpi.inspectionsPassed !== undefined) enhancedData.push(['Inspections Passed', kpi.inspectionsPassed]);
-            if (kpi.inspectionsFailed !== undefined) enhancedData.push(['Inspections Failed', kpi.inspectionsFailed]);
+            if (kpi.qualityIssues !== undefined)
+              enhancedData.push(['Quality Issues', kpi.qualityIssues]);
+            if (kpi.reworkRequired !== undefined)
+              enhancedData.push(['Rework Required', kpi.reworkRequired]);
+            if (kpi.inspectionsPassed !== undefined)
+              enhancedData.push(['Inspections Passed', kpi.inspectionsPassed]);
+            if (kpi.inspectionsFailed !== undefined)
+              enhancedData.push(['Inspections Failed', kpi.inspectionsFailed]);
           }
 
           // Resources Data
           if (this.hasResourceData()) {
             enhancedData.push([], ['Resources & Team']);
             if (kpi.teamSize !== undefined) enhancedData.push(['Team Size', kpi.teamSize]);
-            if (kpi.regularHours !== undefined) enhancedData.push(['Regular Hours', kpi.regularHours]);
-            if (kpi.overtimeHours !== undefined) enhancedData.push(['Overtime Hours', kpi.overtimeHours]);
-            if (kpi.equipmentUtilization !== undefined) enhancedData.push(['Equipment Utilization (%)', kpi.equipmentUtilization]);
-            if (kpi.vehiclesUsed !== undefined) enhancedData.push(['Vehicles Used', kpi.vehiclesUsed]);
+            if (kpi.regularHours !== undefined)
+              enhancedData.push(['Regular Hours', kpi.regularHours]);
+            if (kpi.overtimeHours !== undefined)
+              enhancedData.push(['Overtime Hours', kpi.overtimeHours]);
+            if (kpi.equipmentUtilization !== undefined)
+              enhancedData.push(['Equipment Utilization (%)', kpi.equipmentUtilization]);
+            if (kpi.vehiclesUsed !== undefined)
+              enhancedData.push(['Vehicles Used', kpi.vehiclesUsed]);
           }
 
           // Financial Data
           if (this.hasFinancialData()) {
             enhancedData.push([], ['Financial Tracking']);
-            if (kpi.laborCostToday !== undefined) enhancedData.push(['Labor Cost', kpi.laborCostToday]);
-            if (kpi.materialCostToday !== undefined) enhancedData.push(['Material Cost', kpi.materialCostToday]);
-            if (kpi.equipmentCostToday !== undefined) enhancedData.push(['Equipment Cost', kpi.equipmentCostToday]);
-            if (kpi.totalCostToday !== undefined) enhancedData.push(['Total Cost', kpi.totalCostToday]);
-            if (kpi.productivityScore !== undefined) enhancedData.push(['Productivity Score (%)', kpi.productivityScore]);
+            if (kpi.laborCostToday !== undefined)
+              enhancedData.push(['Labor Cost', kpi.laborCostToday]);
+            if (kpi.materialCostToday !== undefined)
+              enhancedData.push(['Material Cost', kpi.materialCostToday]);
+            if (kpi.equipmentCostToday !== undefined)
+              enhancedData.push(['Equipment Cost', kpi.equipmentCostToday]);
+            if (kpi.totalCostToday !== undefined)
+              enhancedData.push(['Total Cost', kpi.totalCostToday]);
+            if (kpi.productivityScore !== undefined)
+              enhancedData.push(['Productivity Score (%)', kpi.productivityScore]);
           }
 
           // Comments
@@ -1368,14 +1431,14 @@ export class DailyKpisSummaryComponent implements OnInit {
 
         // Team Members Sheet
         const teamData: any[][] = [['Team Members'], ['Date', 'Name', 'Role', 'Hours Worked']];
-        kpis.forEach(kpi => {
+        kpis.forEach((kpi) => {
           if (kpi.teamMembers && kpi.teamMembers.length > 0) {
-            kpi.teamMembers.forEach(member => {
+            kpi.teamMembers.forEach((member) => {
               teamData.push([
                 new Date(kpi.date).toLocaleDateString(),
                 member.name,
                 member.role,
-                member.hoursWorked
+                member.hoursWorked,
               ]);
             });
           }
@@ -1390,7 +1453,7 @@ export class DailyKpisSummaryComponent implements OnInit {
       // Generate filename and save
       const filename = `KPI_Summary_${this.selectedProjectName()}_${new Date().toISOString().split('T')[0]}.xlsx`;
       XLSX.writeFile(workbook, filename);
-      
+
       this.snackBar.open('Excel exported successfully', 'Close', { duration: 3000 });
     } catch (error) {
       console.error('Error generating Excel:', error);
@@ -1401,53 +1464,64 @@ export class DailyKpisSummaryComponent implements OnInit {
   exportCSV() {
     try {
       const csvData: string[] = [];
-      
+
       // Header
       csvData.push(`KPI Summary Report`);
       csvData.push(`Project: ${this.selectedProjectName()}`);
       csvData.push(`Date: ${this.getDateRangeText()}`);
       csvData.push(`Contractor: ${this.selectedContractorName() || 'N/A'}`);
       csvData.push('');
-      
+
       // Core KPIs
       csvData.push('Metric,Today,Total,Unit');
-      this.dailySummary().forEach(row => {
+      this.dailySummary().forEach((row) => {
         csvData.push(`${row.metric},${row.today},${row.total},${row.unit}`);
       });
-      
+
       // Enhanced data
       const kpis = this.currentKpis();
-      if (kpis.length > 0 && (this.hasWeatherData() || this.hasSafetyData() || this.hasFinancialData())) {
+      if (
+        kpis.length > 0 &&
+        (this.hasWeatherData() || this.hasSafetyData() || this.hasFinancialData())
+      ) {
         csvData.push('');
         csvData.push('Enhanced Data');
-        
+
         kpis.forEach((kpi, index) => {
           csvData.push('');
           csvData.push(`Entry ${index + 1} - ${new Date(kpi.date).toLocaleDateString()}`);
-          
+
           if (kpi.weatherConditions) csvData.push(`Weather,${kpi.weatherConditions}`);
-          if (kpi.weatherImpact !== undefined) csvData.push(`Weather Impact,${kpi.weatherImpact}/10`);
-          if (kpi.safetyIncidents !== undefined) csvData.push(`Safety Incidents,${kpi.safetyIncidents}`);
-          if (kpi.complianceScore !== undefined) csvData.push(`Compliance Score,${kpi.complianceScore}%`);
-          if (kpi.totalCostToday !== undefined) csvData.push(`Total Cost Today,R${kpi.totalCostToday}`);
-          if (kpi.productivityScore !== undefined) csvData.push(`Productivity Score,${kpi.productivityScore}%`);
+          if (kpi.weatherImpact !== undefined)
+            csvData.push(`Weather Impact,${kpi.weatherImpact}/10`);
+          if (kpi.safetyIncidents !== undefined)
+            csvData.push(`Safety Incidents,${kpi.safetyIncidents}`);
+          if (kpi.complianceScore !== undefined)
+            csvData.push(`Compliance Score,${kpi.complianceScore}%`);
+          if (kpi.totalCostToday !== undefined)
+            csvData.push(`Total Cost Today,R${kpi.totalCostToday}`);
+          if (kpi.productivityScore !== undefined)
+            csvData.push(`Productivity Score,${kpi.productivityScore}%`);
         });
       }
-      
+
       // Create and download CSV
       const csvContent = csvData.join('\n');
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement('a');
       const url = URL.createObjectURL(blob);
-      
+
       link.setAttribute('href', url);
-      link.setAttribute('download', `KPI_Summary_${this.selectedProjectName()}_${new Date().toISOString().split('T')[0]}.csv`);
+      link.setAttribute(
+        'download',
+        `KPI_Summary_${this.selectedProjectName()}_${new Date().toISOString().split('T')[0]}.csv`,
+      );
       link.style.visibility = 'hidden';
-      
+
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
+
       this.snackBar.open('CSV exported successfully', 'Close', { duration: 3000 });
     } catch (error) {
       console.error('Error generating CSV:', error);
@@ -1458,20 +1532,20 @@ export class DailyKpisSummaryComponent implements OnInit {
   async generateWeeklyReport() {
     try {
       console.log('Starting weekly report generation...');
-      
+
       // Get the selected project
       const projectId = this.projectControl.value;
       console.log('Selected project ID:', projectId);
-      
+
       if (!projectId) {
         this.snackBar.open('Please select a project', 'Close', { duration: 3000 });
         return;
       }
 
       // Get the selected project details
-      const project = this.projects().find(p => p.id === projectId);
+      const project = this.projects().find((p) => p.id === projectId);
       console.log('Found project:', project);
-      
+
       if (!project) {
         this.snackBar.open('Project not found', 'Close', { duration: 3000 });
         return;
@@ -1484,10 +1558,10 @@ export class DailyKpisSummaryComponent implements OnInit {
       } else {
         endDate = this.dateControl.value || new Date();
       }
-      
+
       const startDate = new Date(endDate);
       startDate.setDate(startDate.getDate() - 6); // 7 days including end date
-      
+
       console.log('Date range:', startDate, 'to', endDate);
 
       // Open the preview dialog with loading state
@@ -1495,7 +1569,7 @@ export class DailyKpisSummaryComponent implements OnInit {
         width: '90%',
         maxWidth: '1200px',
         height: '90%',
-        data: {}
+        data: {},
       });
 
       // Set loading state
@@ -1505,9 +1579,9 @@ export class DailyKpisSummaryComponent implements OnInit {
         // Just fetch the raw KPI data
         console.log('Fetching KPI data...');
         const kpis = await firstValueFrom(
-          this.kpisService.getKPIsForDateRange(projectId, startDate, endDate)
+          this.kpisService.getKPIsForDateRange(projectId, startDate, endDate),
         );
-        
+
         console.log('KPIs fetched:', kpis.length, 'records');
 
         if (kpis && kpis.length > 0) {
@@ -1522,7 +1596,11 @@ export class DailyKpisSummaryComponent implements OnInit {
       } catch (error) {
         console.error('Error fetching KPI data:', error);
         dialogRef.close();
-        this.snackBar.open(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`, 'Close', { duration: 5000 });
+        this.snackBar.open(
+          `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          'Close',
+          { duration: 5000 },
+        );
       }
 
       // Handle dialog close
@@ -1531,7 +1609,11 @@ export class DailyKpisSummaryComponent implements OnInit {
       });
     } catch (error) {
       console.error('Error in weekly report generation:', error);
-      this.snackBar.open(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`, 'Close', { duration: 5000 });
+      this.snackBar.open(
+        `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        'Close',
+        { duration: 5000 },
+      );
     }
   }
 

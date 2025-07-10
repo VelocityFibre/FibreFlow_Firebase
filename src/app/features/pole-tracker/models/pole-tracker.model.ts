@@ -8,9 +8,15 @@ export interface PoleTracker {
   projectCode: string; // From project
   projectName?: string; // For display
 
-  // Alternative ID if pole number not found
-  alternativePoleId?: string;
+  // Pole Identification
+  poleNumber?: string; // Physical pole number
+  alternativePoleId?: string; // Alternative ID if pole number not found
   groupNumber?: string; // If poles are grouped
+
+  // Network Details
+  pon?: string; // PON (Passive Optical Network) identifier
+  zone?: string; // Zone/Area designation
+  distributionFeeder?: string; // Distribution or Feeder type
 
   // Installation Details
   dateInstalled: Timestamp | Date;

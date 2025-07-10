@@ -97,6 +97,7 @@ export class SettingsPageComponent {
   tabs: SettingsTab[] = [
     { label: 'Company Info', icon: 'business', route: 'company' },
     { label: 'Email Templates', icon: 'mail_outline', route: 'email-templates' },
+    { label: 'OneMap', icon: 'map', route: 'onemap' },
     { label: 'Users', icon: 'people', route: 'users' },
     { label: 'Email', icon: 'email', route: 'email' },
     { label: 'Notifications', icon: 'notifications', route: 'notifications' },

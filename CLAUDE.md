@@ -4,6 +4,7 @@
 @docs/TESTING_GUIDE.md
 @docs/COMPONENT_LIBRARY.md
 @docs/THEME_SYSTEM.md
+@docs/SYNC_MEETINGS_GUIDE.md
 @.claude/commands/
 
 ## Quick Start for Claude
@@ -82,6 +83,8 @@ npm run check "code or pattern to verify"
 4. **Meetings** ✅
    - Fireflies API integration
    - Meeting notes and action items
+   - Sync meetings: `node scripts/sync-meetings-improved.js`
+   - See `docs/SYNC_MEETINGS_GUIDE.md` for details
 
 5. **Stock Management** ✅
    - Inventory tracking with movements
@@ -127,6 +130,7 @@ npm run check "code or pattern to verify"
 - **Theme System**: `docs/THEME_SYSTEM.md` - 4 themes, ff-functions
 - **Database Schema**: `docs/DATABASE_STRUCTURE.md` - Firestore structure
 - **PRP Template**: `docs/PRP_TEMPLATE.md` - Feature planning
+- **Sync Meetings Guide**: `docs/SYNC_MEETINGS_GUIDE.md` - Fireflies sync instructions
 - **Commands**: `.claude/commands/` - Slash commands
 - **antiHall**: `antiHall/` - Hallucination prevention
 

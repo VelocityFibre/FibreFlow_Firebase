@@ -439,7 +439,8 @@ export class AppShellComponent {
   // Project Management category items
   projectItems: NavItem[] = this.filterItems([
     { label: 'Projects', icon: 'folder', route: '/projects' },
-    { label: 'Pole Tracker', icon: 'cell_tower', route: '/pole-tracker' },
+    { label: 'Pole Tracker (Desktop)', icon: 'cell_tower', route: '/pole-tracker' },
+    { label: 'Pole Tracker (Mobile)', icon: 'phone_android', route: '/pole-tracker/mobile' },
     { label: 'Phases', icon: 'timeline', route: '/phases' },
     { label: 'Steps', icon: 'linear_scale', route: '/steps', badge: 0 },
     { label: 'All Tasks', icon: 'task_alt', route: '/tasks' },
@@ -481,7 +482,6 @@ export class AppShellComponent {
     { label: 'Quick Capture', icon: 'camera_alt', route: '/pole-tracker/mobile/capture' },
     { label: 'My Assignments', icon: 'assignment_ind', route: '/pole-tracker/mobile/assignments' },
     { label: 'Nearby Poles', icon: 'near_me', route: '/pole-tracker/mobile/nearby' },
-    { label: 'Import Poles', icon: 'cloud_upload', route: '/pole-tracker/import' },
   ]);
 
   // Settings category items

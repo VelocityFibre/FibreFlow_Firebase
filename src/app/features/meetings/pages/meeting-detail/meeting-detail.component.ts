@@ -15,6 +15,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import {
   PageHeaderComponent,
   PageHeaderAction,
@@ -44,6 +47,8 @@ import { switchMap } from 'rxjs/operators';
     MatBadgeModule,
     MatExpansionModule,
     MatProgressSpinnerModule,
+    MatDialogModule,
+    MatSnackBarModule,
     PageHeaderComponent,
   ],
   templateUrl: './meeting-detail.component.html',
@@ -54,6 +59,8 @@ export class MeetingDetailComponent implements OnInit {
   private router = inject(Router);
   private meetingService = inject(MeetingService);
   private todoService = inject(PersonalTodoService);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
   // Data signals
   meeting = signal<Meeting | null>(null);
@@ -96,6 +103,13 @@ export class MeetingDetailComponent implements OnInit {
         color: 'primary',
         action: () => this.openRecording(),
         disabled: !this.meeting()?.recordingUrl,
+      },
+      {
+        label: 'Delete Meeting',
+        icon: 'delete',
+        color: 'warn',
+        variant: 'stroked',
+        action: () => this.deleteMeeting(),
       },
     ];
   }
@@ -325,5 +339,46 @@ export class MeetingDetailComponent implements OnInit {
       .map((n) => n[0])
       .join('')
       .toUpperCase();
+  }
+
+  deleteMeeting(): void {
+    const meeting = this.meeting();
+    if (!meeting) return;
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Delete Meeting',
+        message: `Are you sure you want to delete "${meeting.title}"? This action cannot be undone.`,
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+        confirmColor: 'warn',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loading.set(true);
+        this.meetingService
+          .deleteMeeting(meeting.id)
+          .then(() => {
+            this.snackBar.open('Meeting deleted successfully', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'end',
+              verticalPosition: 'top',
+            });
+            // Navigate back to meetings list
+            this.router.navigate(['/meetings']);
+          })
+          .catch((error) => {
+            console.error('Error deleting meeting:', error);
+            this.snackBar.open('Error deleting meeting', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'end',
+              verticalPosition: 'top',
+            });
+            this.loading.set(false);
+          });
+      }
+    });
   }
 }

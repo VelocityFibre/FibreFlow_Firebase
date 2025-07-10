@@ -1,0 +1,257 @@
+@use '../../../../styles/utils/component-theming' as theme;
+
+// Toggle button - fixed position
+.dev-panel-toggle {
+  position: fixed;
+  bottom: theme.ff-spacing(2xl);
+  right: theme.ff-spacing(lg);
+  z-index: 1000;
+  transition: all 0.3s ease;
+  
+  &.panel-open {
+    right: 420px;
+  }
+  
+  .task-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: theme.ff-rgb(destructive);
+    color: theme.ff-rgb(destructive-foreground);
+    border-radius: 10px;
+    padding: 0 6px;
+    font-size: 11px;
+    font-weight: 500;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+// Main panel container
+.dev-panel-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px;
+  height: 100vh;
+  background: theme.ff-rgb(background);
+  border-left: 1px solid theme.ff-rgb(border);
+  box-shadow: theme.ff-shadow(xl);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+  
+  &.minimized {
+    width: 300px;
+    
+    .panel-header {
+      min-height: 48px;
+    }
+  }
+}
+
+// Panel header
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: theme.ff-spacing(md);
+  border-bottom: 1px solid theme.ff-rgb(border);
+  background: theme.ff-rgba(muted, 0.5);
+  
+  .header-content {
+    display: flex;
+    flex-direction: column;
+    gap: theme.ff-spacing(xs);
+    
+    h3 {
+      margin: 0;
+      font-size: theme.ff-rem(18);
+      font-weight: 500;
+      color: theme.ff-rgb(foreground);
+    }
+    
+    .route-name {
+      font-size: theme.ff-rem(12);
+      color: theme.ff-rgb(muted-foreground);
+    }
+  }
+  
+  .header-actions {
+    display: flex;
+    gap: theme.ff-spacing(xs);
+  }
+}
+
+// Panel content
+.panel-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: theme.ff-spacing(md);
+  
+  .stats-row {
+    margin-bottom: theme.ff-spacing(lg);
+    
+    mat-chip-set {
+      gap: theme.ff-spacing(sm);
+    }
+    
+    mat-chip {
+      background: theme.ff-rgba(primary, 0.1);
+      color: theme.ff-rgb(primary);
+      
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        margin-right: theme.ff-spacing(xs);
+      }
+    }
+  }
+}
+
+// Expansion panels
+mat-expansion-panel {
+  margin-bottom: theme.ff-spacing(md);
+  background: theme.ff-rgb(card);
+  
+  mat-panel-title {
+    display: flex;
+    align-items: center;
+    gap: theme.ff-spacing(sm);
+    
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+    
+    mat-chip {
+      margin-left: auto;
+      font-size: 11px;
+      padding: 0 8px;
+      height: 20px;
+    }
+  }
+}
+
+// Notes section
+.notes-section {
+  .notes-display {
+    padding: theme.ff-spacing(md);
+    background: theme.ff-rgba(muted, 0.3);
+    border-radius: theme.ff-var(radius);
+    cursor: pointer;
+    min-height: 60px;
+    
+    &:hover {
+      background: theme.ff-rgba(muted, 0.5);
+    }
+    
+    p {
+      margin: 0;
+      white-space: pre-wrap;
+    }
+    
+    .placeholder {
+      color: theme.ff-rgb(muted-foreground);
+      font-style: italic;
+    }
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  
+  .notes-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: theme.ff-spacing(sm);
+    margin-top: theme.ff-spacing(sm);
+  }
+}
+
+// Tasks section
+.tasks-section {
+  .add-task-form {
+    display: flex;
+    gap: theme.ff-spacing(sm);
+    align-items: flex-start;
+    margin-bottom: theme.ff-spacing(md);
+    
+    .task-input {
+      flex: 1;
+    }
+    
+    .priority-select {
+      width: 100px;
+    }
+  }
+  
+  .task-list {
+    mat-list-item {
+      transition: opacity 0.3s ease;
+      
+      &.completed {
+        opacity: 0.6;
+        
+        [matListItemTitle] {
+          text-decoration: line-through;
+        }
+      }
+      
+      .task-status-icon {
+        cursor: pointer;
+        transition: color 0.2s ease;
+        
+        &:hover {
+          color: theme.ff-rgb(primary);
+        }
+      }
+    }
+  }
+  
+  .no-tasks {
+    text-align: center;
+    color: theme.ff-rgb(muted-foreground);
+    font-style: italic;
+    padding: theme.ff-spacing(lg);
+  }
+}
+
+// Error list
+.error-list {
+  mat-list-item {
+    border-left: 3px solid theme.ff-rgb(destructive);
+    margin-bottom: theme.ff-spacing(sm);
+    
+    .error-time {
+      font-size: theme.ff-rem(12);
+      color: theme.ff-rgb(muted-foreground);
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .dev-panel-toggle {
+    bottom: theme.ff-spacing(xl);
+    right: theme.ff-spacing(md);
+    
+    &.panel-open {
+      right: theme.ff-spacing(md);
+    }
+  }
+  
+  .dev-panel-container {
+    width: 100%;
+    
+    &.minimized {
+      width: 100%;
+    }
+  }
+}

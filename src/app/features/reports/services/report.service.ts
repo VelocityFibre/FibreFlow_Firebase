@@ -785,15 +785,19 @@ export class ReportService {
     try {
       const reportCollection = collection(this.firestore, 'reports');
       let q = query(reportCollection, orderBy('createdAt', 'desc'));
-      
+
       if (projectId) {
-        q = query(reportCollection, where('projectId', '==', projectId), orderBy('createdAt', 'desc'));
+        q = query(
+          reportCollection,
+          where('projectId', '==', projectId),
+          orderBy('createdAt', 'desc'),
+        );
       }
-      
+
       const snapshot = await getDocs(q);
-      return snapshot.docs.map(doc => ({
+      return snapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       }));
     } catch (error) {
       console.error('Error fetching reports:', error);
@@ -809,11 +813,11 @@ export class ReportService {
       const reportCollection = collection(this.firestore, 'reports');
       const q = query(reportCollection, where('id', '==', reportId), limit(1));
       const snapshot = await getDocs(q);
-      
+
       if (!snapshot.empty) {
         return {
           id: snapshot.docs[0].id,
-          ...snapshot.docs[0].data()
+          ...snapshot.docs[0].data(),
         };
       }
       return null;

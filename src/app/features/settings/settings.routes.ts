@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { SettingsPageComponent } from './pages/settings-page/settings-page.component';
 import { CompanySettingsComponent } from './components/company-settings/company-settings.component';
 import { EmailTemplatesComponent } from './components/email-templates/email-templates.component';
+// import { OnemapComponent } from './components/onemap/onemap';
 
 export const settingsRoutes: Routes = [
   {
@@ -22,6 +23,14 @@ export const settingsRoutes: Routes = [
         path: 'email-templates',
         component: EmailTemplatesComponent,
         title: 'Email Templates - FibreFlow',
+      },
+      {
+        path: 'onemap',
+        loadComponent: () =>
+          import('./components/onemap/onemap').then(
+            (m) => m.OnemapComponent,
+          ),
+        title: 'OneMap Data Processing - FibreFlow',
       },
       {
         path: 'users',

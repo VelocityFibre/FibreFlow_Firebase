@@ -28,7 +28,7 @@ import { firstValueFrom } from 'rxjs';
     MatDialogModule,
     MatTableModule,
     MatChipsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
   template: `
     <div class="report-preview-container">
@@ -56,29 +56,29 @@ import { firstValueFrom } from 'rxjs';
             <table mat-table [dataSource]="rawKpis" class="data-preview-table">
               <ng-container matColumnDef="date">
                 <th mat-header-cell *matHeaderCellDef>Date</th>
-                <td mat-cell *matCellDef="let kpi">{{ kpi.date | date:'shortDate' }}</td>
+                <td mat-cell *matCellDef="let kpi">{{ kpi.date | date: 'shortDate' }}</td>
               </ng-container>
-              
+
               <ng-container matColumnDef="poles">
                 <th mat-header-cell *matHeaderCellDef>Poles</th>
                 <td mat-cell *matCellDef="let kpi">{{ kpi.polesPlantedToday || 0 }}</td>
               </ng-container>
-              
+
               <ng-container matColumnDef="permissions">
                 <th mat-header-cell *matHeaderCellDef>Permissions</th>
                 <td mat-cell *matCellDef="let kpi">{{ kpi.permissionsToday || 0 }}</td>
               </ng-container>
-              
+
               <ng-container matColumnDef="trenching">
                 <th mat-header-cell *matHeaderCellDef>Trenching (m)</th>
                 <td mat-cell *matCellDef="let kpi">{{ kpi.trenchingToday || 0 }}</td>
               </ng-container>
-              
+
               <ng-container matColumnDef="stringing">
                 <th mat-header-cell *matHeaderCellDef>Total Stringing (m)</th>
                 <td mat-cell *matCellDef="let kpi">{{ getTotalStringing(kpi) }}</td>
               </ng-container>
-              
+
               <ng-container matColumnDef="status">
                 <th mat-header-cell *matHeaderCellDef>Site Status</th>
                 <td mat-cell *matCellDef="let kpi">
@@ -87,9 +87,25 @@ import { firstValueFrom } from 'rxjs';
                   </mat-chip>
                 </td>
               </ng-container>
-              
-              <tr mat-header-row *matHeaderRowDef="['date', 'poles', 'permissions', 'trenching', 'stringing', 'status']"></tr>
-              <tr mat-row *matRowDef="let row; columns: ['date', 'poles', 'permissions', 'trenching', 'stringing', 'status']"></tr>
+
+              <tr
+                mat-header-row
+                *matHeaderRowDef="[
+                  'date',
+                  'poles',
+                  'permissions',
+                  'trenching',
+                  'stringing',
+                  'status',
+                ]"
+              ></tr>
+              <tr
+                mat-row
+                *matRowDef="
+                  let row;
+                  columns: ['date', 'poles', 'permissions', 'trenching', 'stringing', 'status']
+                "
+              ></tr>
             </table>
           </mat-card-content>
         </mat-card>
@@ -133,7 +149,12 @@ import { firstValueFrom } from 'rxjs';
 
         <!-- Action Buttons -->
         <div class="action-buttons">
-          <button mat-raised-button color="primary" (click)="generateFullReport()" [disabled]="generatingReport">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="generateFullReport()"
+            [disabled]="generatingReport"
+          >
             @if (generatingReport) {
               <mat-spinner diameter="20"></mat-spinner>
             } @else {
@@ -166,13 +187,17 @@ import { firstValueFrom } from 'rxjs';
           </mat-card-header>
           <mat-card-content>
             <p class="overview">{{ reportData.executiveSummary.overview }}</p>
-            
+
             @if (reportData.executiveSummary.keyAchievements.length > 0) {
               <h3>Key Achievements</h3>
               <ul>
-                @for (achievement of reportData.executiveSummary.keyAchievements; track achievement.metric) {
+                @for (
+                  achievement of reportData.executiveSummary.keyAchievements;
+                  track achievement.metric
+                ) {
                   <li>
-                    <strong>{{ achievement.metric }}:</strong> {{ achievement.value }} - {{ achievement.context }}
+                    <strong>{{ achievement.metric }}:</strong> {{ achievement.value }} -
+                    {{ achievement.context }}
                   </li>
                 }
               </ul>
@@ -201,16 +226,27 @@ import { firstValueFrom } from 'rxjs';
               <div class="metric-grid">
                 <div class="metric-item">
                   <span class="label">Total Poles Planted</span>
-                  <span class="value">{{ reportData.performanceMetrics.infrastructureDevelopment.totalPolesPlanted }}</span>
+                  <span class="value">{{
+                    reportData.performanceMetrics.infrastructureDevelopment.totalPolesPlanted
+                  }}</span>
                 </div>
                 <div class="metric-item">
                   <span class="label">Average Per Day</span>
-                  <span class="value">{{ reportData.performanceMetrics.infrastructureDevelopment.averagePerDay }}</span>
+                  <span class="value">{{
+                    reportData.performanceMetrics.infrastructureDevelopment.averagePerDay
+                  }}</span>
                 </div>
                 @if (reportData.performanceMetrics.infrastructureDevelopment.peakDay) {
                   <div class="metric-item">
                     <span class="label">Peak Day</span>
-                    <span class="value">{{ reportData.performanceMetrics.infrastructureDevelopment.peakDay.count }} poles on {{ reportData.performanceMetrics.infrastructureDevelopment.peakDay.date | date:'shortDate' }}</span>
+                    <span class="value"
+                      >{{ reportData.performanceMetrics.infrastructureDevelopment.peakDay.count }}
+                      poles on
+                      {{
+                        reportData.performanceMetrics.infrastructureDevelopment.peakDay.date
+                          | date: 'shortDate'
+                      }}</span
+                    >
                   </div>
                 }
               </div>
@@ -223,7 +259,9 @@ import { firstValueFrom } from 'rxjs';
                 <div class="metric-grid">
                   <div class="metric-item">
                     <span class="label">Total Permissions Secured</span>
-                    <span class="value">{{ reportData.performanceMetrics.permissionsProcessing.totalPermissionsSecured }}</span>
+                    <span class="value">{{
+                      reportData.performanceMetrics.permissionsProcessing.totalPermissionsSecured
+                    }}</span>
                   </div>
                 </div>
               </div>
@@ -236,7 +274,11 @@ import { firstValueFrom } from 'rxjs';
                 <div class="metric-grid">
                   <div class="metric-item">
                     <span class="label">Total Cable Strung</span>
-                    <span class="value">{{ reportData.performanceMetrics.stringingOperations.totalOperations }}m</span>
+                    <span class="value"
+                      >{{
+                        reportData.performanceMetrics.stringingOperations.totalOperations
+                      }}m</span
+                    >
                   </div>
                 </div>
                 <table mat-table [dataSource]="getStringingDataSource()" class="stringing-table">
@@ -261,15 +303,21 @@ import { firstValueFrom } from 'rxjs';
                 <div class="metric-grid">
                   <div class="metric-item">
                     <span class="label">Home Sign-ups</span>
-                    <span class="value">{{ reportData.performanceMetrics.customerEngagement.homeSignUps }}</span>
+                    <span class="value">{{
+                      reportData.performanceMetrics.customerEngagement.homeSignUps
+                    }}</span>
                   </div>
                   <div class="metric-item">
                     <span class="label">Home Drops Completed</span>
-                    <span class="value">{{ reportData.performanceMetrics.customerEngagement.homeDropsCompleted }}</span>
+                    <span class="value">{{
+                      reportData.performanceMetrics.customerEngagement.homeDropsCompleted
+                    }}</span>
                   </div>
                   <div class="metric-item">
                     <span class="label">Home Connections</span>
-                    <span class="value">{{ reportData.performanceMetrics.customerEngagement.homeConnections }}</span>
+                    <span class="value">{{
+                      reportData.performanceMetrics.customerEngagement.homeConnections
+                    }}</span>
                   </div>
                   <div class="metric-item">
                     <span class="label">Site Status</span>
@@ -370,7 +418,9 @@ import { firstValueFrom } from 'rxjs';
                     {{ rec.priority }}
                   </mat-chip>
                   <p>{{ rec.description }}</p>
-                  <p class="expected-impact"><strong>Expected Impact:</strong> {{ rec.expectedImpact }}</p>
+                  <p class="expected-impact">
+                    <strong>Expected Impact:</strong> {{ rec.expectedImpact }}
+                  </p>
                 </div>
               }
             </mat-card-content>
@@ -388,209 +438,214 @@ import { firstValueFrom } from 'rxjs';
       }
     </div>
   `,
-  styles: [`
-    .report-preview-container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-
-    .loading-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px;
-      gap: 16px;
-    }
-
-    .report-header {
-      margin-bottom: 24px;
-      text-align: center;
-
-      h1 {
-        margin: 0 0 8px 0;
-        font-size: 28px;
+  styles: [
+    `
+      .report-preview-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 24px;
       }
 
-      h2 {
-        margin: 0 0 16px 0;
-        font-size: 20px;
-        color: var(--mat-sys-on-surface-variant);
-      }
-
-      .header-info {
+      .loading-container {
         display: flex;
-        gap: 24px;
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
-        flex-wrap: wrap;
-        
-        p {
-          margin: 0;
+        padding: 60px;
+        gap: 16px;
+      }
+
+      .report-header {
+        margin-bottom: 24px;
+        text-align: center;
+
+        h1 {
+          margin: 0 0 8px 0;
+          font-size: 28px;
+        }
+
+        h2 {
+          margin: 0 0 16px 0;
+          font-size: 20px;
+          color: var(--mat-sys-on-surface-variant);
+        }
+
+        .header-info {
+          display: flex;
+          gap: 24px;
+          justify-content: center;
+          flex-wrap: wrap;
+
+          p {
+            margin: 0;
+          }
         }
       }
-    }
 
-    .report-section {
-      margin-bottom: 24px;
+      .report-section {
+        margin-bottom: 24px;
 
-      mat-card-header {
+        mat-card-header {
+          margin-bottom: 16px;
+        }
+      }
+
+      .overview {
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 24px;
+      }
+
+      h3 {
+        margin: 24px 0 12px 0;
+        color: var(--mat-sys-primary);
+      }
+
+      h4 {
+        margin: 16px 0 8px 0;
+      }
+
+      .metric-section {
+        margin-bottom: 32px;
+      }
+
+      .metric-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 16px;
         margin-bottom: 16px;
       }
-    }
 
-    .overview {
-      font-size: 16px;
-      line-height: 1.6;
-      margin-bottom: 24px;
-    }
+      .metric-item {
+        display: flex;
+        flex-direction: column;
+        padding: 16px;
+        background: var(--mat-sys-surface-variant);
+        border-radius: 8px;
 
-    h3 {
-      margin: 24px 0 12px 0;
-      color: var(--mat-sys-primary);
-    }
+        .label {
+          font-size: 14px;
+          color: var(--mat-sys-on-surface-variant);
+          margin-bottom: 4px;
+        }
 
-    h4 {
-      margin: 16px 0 8px 0;
-    }
+        .value {
+          font-size: 20px;
+          font-weight: 600;
+          color: var(--mat-sys-on-surface);
+        }
+      }
 
-    .metric-section {
-      margin-bottom: 32px;
-    }
+      .stringing-table {
+        width: 100%;
+        margin-top: 16px;
+      }
 
-    .metric-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px;
-      margin-bottom: 16px;
-    }
+      .challenge-item,
+      .risk-item,
+      .recommendation-item {
+        margin-bottom: 24px;
+        padding: 16px;
+        background: var(--mat-sys-surface-variant);
+        border-radius: 8px;
+      }
 
-    .metric-item {
-      display: flex;
-      flex-direction: column;
-      padding: 16px;
-      background: var(--mat-sys-surface-variant);
-      border-radius: 8px;
+      .challenge-meta {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        margin-top: 8px;
+      }
 
-      .label {
-        font-size: 14px;
+      .risk-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      .risk-overview {
+        margin-bottom: 24px;
+      }
+
+      .mitigation {
+        margin-top: 8px;
+        font-style: italic;
+      }
+
+      .expected-impact {
+        margin-top: 8px;
         color: var(--mat-sys-on-surface-variant);
-        margin-bottom: 4px;
       }
 
-      .value {
-        font-size: 20px;
-        font-weight: 600;
-        color: var(--mat-sys-on-surface);
-      }
-    }
-
-    .stringing-table {
-      width: 100%;
-      margin-top: 16px;
-    }
-
-    .challenge-item, .risk-item, .recommendation-item {
-      margin-bottom: 24px;
-      padding: 16px;
-      background: var(--mat-sys-surface-variant);
-      border-radius: 8px;
-    }
-
-    .challenge-meta {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      margin-top: 8px;
-    }
-
-    .risk-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-
-    .risk-overview {
-      margin-bottom: 24px;
-    }
-
-    .mitigation {
-      margin-top: 8px;
-      font-style: italic;
-    }
-
-    .expected-impact {
-      margin-top: 8px;
-      color: var(--mat-sys-on-surface-variant);
-    }
-
-    .action-buttons {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      margin-top: 32px;
-      position: sticky;
-      bottom: 24px;
-      background: var(--mat-sys-surface);
-      padding: 16px;
-      border-radius: 8px;
-      box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
-    }
-
-    .data-table-card, .summary-stats-card {
-      margin-bottom: 24px;
-    }
-
-    .data-preview-table {
-      width: 100%;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-    }
-
-    .stat-item {
-      display: flex;
-      flex-direction: column;
-      padding: 16px;
-      background: var(--mat-sys-surface-variant);
-      border-radius: 8px;
-
-      .label {
-        font-size: 14px;
-        color: var(--mat-sys-on-surface-variant);
-        margin-bottom: 4px;
-      }
-
-      .value {
-        font-size: 24px;
-        font-weight: 600;
-        color: var(--mat-sys-on-surface);
-      }
-    }
-
-    mat-chip {
-      font-size: 12px;
-    }
-
-    ul {
-      margin: 8px 0;
-      padding-left: 24px;
-
-      li {
-        margin: 4px 0;
-      }
-    }
-
-    @media print {
       .action-buttons {
-        display: none;
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        margin-top: 32px;
+        position: sticky;
+        bottom: 24px;
+        background: var(--mat-sys-surface);
+        padding: 16px;
+        border-radius: 8px;
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
       }
-    }
-  `]
+
+      .data-table-card,
+      .summary-stats-card {
+        margin-bottom: 24px;
+      }
+
+      .data-preview-table {
+        width: 100%;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+      }
+
+      .stat-item {
+        display: flex;
+        flex-direction: column;
+        padding: 16px;
+        background: var(--mat-sys-surface-variant);
+        border-radius: 8px;
+
+        .label {
+          font-size: 14px;
+          color: var(--mat-sys-on-surface-variant);
+          margin-bottom: 4px;
+        }
+
+        .value {
+          font-size: 24px;
+          font-weight: 600;
+          color: var(--mat-sys-on-surface);
+        }
+      }
+
+      mat-chip {
+        font-size: 12px;
+      }
+
+      ul {
+        margin: 8px 0;
+        padding-left: 24px;
+
+        li {
+          margin: 4px 0;
+        }
+      }
+
+      @media print {
+        .action-buttons {
+          display: none;
+        }
+      }
+    `,
+  ],
 })
 export class WeeklyReportPreviewComponent {
   @Input() reportData: WeeklyReportData | null = null;
@@ -612,11 +667,13 @@ export class WeeklyReportPreviewComponent {
   }
 
   getTotalStringing(kpi: DailyKPIs): number {
-    return (kpi.stringing24Today || 0) +
-           (kpi.stringing48Today || 0) +
-           (kpi.stringing96Today || 0) +
-           (kpi.stringing144Today || 0) +
-           (kpi.stringing288Today || 0);
+    return (
+      (kpi.stringing24Today || 0) +
+      (kpi.stringing48Today || 0) +
+      (kpi.stringing96Today || 0) +
+      (kpi.stringing144Today || 0) +
+      (kpi.stringing288Today || 0)
+    );
   }
 
   getTotalPoles(): number {
@@ -636,11 +693,12 @@ export class WeeklyReportPreviewComponent {
   }
 
   getDaysWithActivity(): number {
-    return this.rawKpis.filter(kpi => 
-      (kpi.polesPlantedToday || 0) > 0 ||
-      (kpi.permissionsToday || 0) > 0 ||
-      (kpi.trenchingToday || 0) > 0 ||
-      this.getTotalStringing(kpi) > 0
+    return this.rawKpis.filter(
+      (kpi) =>
+        (kpi.polesPlantedToday || 0) > 0 ||
+        (kpi.permissionsToday || 0) > 0 ||
+        (kpi.trenchingToday || 0) > 0 ||
+        this.getTotalStringing(kpi) > 0,
     ).length;
   }
 
@@ -652,17 +710,23 @@ export class WeeklyReportPreviewComponent {
   getLatestSiteStatusColor(): 'primary' | 'accent' | 'warn' {
     const status = this.getLatestSiteStatus();
     switch (status) {
-      case 'Fully Live': return 'primary';
-      case 'Partially Live': return 'accent';
-      default: return 'warn';
+      case 'Fully Live':
+        return 'primary';
+      case 'Partially Live':
+        return 'accent';
+      default:
+        return 'warn';
     }
   }
 
   getSiteStatusColorFromKpi(kpi: DailyKPIs): 'primary' | 'accent' | 'warn' {
     switch (kpi.siteLiveStatus) {
-      case 'Fully Live': return 'primary';
-      case 'Partially Live': return 'accent';
-      default: return 'warn';
+      case 'Fully Live':
+        return 'primary';
+      case 'Partially Live':
+        return 'accent';
+      default:
+        return 'warn';
     }
   }
 
@@ -678,13 +742,15 @@ export class WeeklyReportPreviewComponent {
         this.weeklyReportGenerator.generateWeeklyReport(
           this.project.id,
           this.dateRange.start,
-          this.dateRange.end
-        )
+          this.dateRange.end,
+        ),
       );
 
       if (reportData) {
         this.reportData = reportData;
-        this.snackBar.open('Report generated! You can now download it.', 'Close', { duration: 3000 });
+        this.snackBar.open('Report generated! You can now download it.', 'Close', {
+          duration: 3000,
+        });
       } else {
         throw new Error('Failed to generate report data');
       }
@@ -705,75 +771,95 @@ export class WeeklyReportPreviewComponent {
 
   getStringingDataSource() {
     if (!this.reportData?.performanceMetrics.stringingOperations) return [];
-    
+
     const stringing = this.reportData.performanceMetrics.stringingOperations.totalByType;
     return [
       { type: '24 Core', length: stringing.cable24Core },
       { type: '48 Core', length: stringing.cable48Core },
       { type: '96 Core', length: stringing.cable96Core },
       { type: '144 Core', length: stringing.cable144Core },
-      { type: '288 Core', length: stringing.cable288Core }
-    ].filter(item => item.length > 0);
+      { type: '288 Core', length: stringing.cable288Core },
+    ].filter((item) => item.length > 0);
   }
 
   formatChallengeType(type: string): string {
-    return type.split('_').map(word => 
-      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-    ).join(' ');
+    return type
+      .split('_')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
   }
 
   getSiteStatusColor(): 'primary' | 'accent' | 'warn' {
     if (!this.reportData) return 'warn';
     const status = this.reportData.performanceMetrics.customerEngagement?.siteLiveStatus;
-    
+
     switch (status) {
-      case 'Fully Live': return 'primary';
-      case 'Partially Live': return 'accent';
-      default: return 'warn';
+      case 'Fully Live':
+        return 'primary';
+      case 'Partially Live':
+        return 'accent';
+      default:
+        return 'warn';
     }
   }
 
   getImpactColor(impact: string): 'primary' | 'accent' | 'warn' {
     switch (impact) {
-      case 'low': return 'primary';
-      case 'medium': return 'accent';
-      case 'high': return 'warn';
-      default: return 'accent';
+      case 'low':
+        return 'primary';
+      case 'medium':
+        return 'accent';
+      case 'high':
+        return 'warn';
+      default:
+        return 'accent';
     }
   }
 
   getRiskLevelColor(): 'primary' | 'accent' | 'warn' {
     if (!this.reportData) return 'warn';
-    
+
     switch (this.reportData.riskAssessment.overallRiskLevel) {
-      case 'low': return 'primary';
-      case 'medium': return 'accent';
-      case 'high': return 'warn';
-      default: return 'accent';
+      case 'low':
+        return 'primary';
+      case 'medium':
+        return 'accent';
+      case 'high':
+        return 'warn';
+      default:
+        return 'accent';
     }
   }
 
   getSeverityColor(severity: string): 'primary' | 'accent' | 'warn' {
     switch (severity) {
-      case 'low': return 'primary';
-      case 'medium': return 'accent';
-      case 'high': return 'warn';
-      default: return 'accent';
+      case 'low':
+        return 'primary';
+      case 'medium':
+        return 'accent';
+      case 'high':
+        return 'warn';
+      default:
+        return 'accent';
     }
   }
 
   getPriorityColor(priority: string): 'primary' | 'accent' | 'warn' {
     switch (priority) {
-      case 'long-term': return 'primary';
-      case 'medium-term': return 'accent';
-      case 'immediate': return 'warn';
-      default: return 'accent';
+      case 'long-term':
+        return 'primary';
+      case 'medium-term':
+        return 'accent';
+      case 'immediate':
+        return 'warn';
+      default:
+        return 'accent';
     }
   }
 
   async downloadDocx() {
     if (!this.reportData) return;
-    
+
     try {
       this.snackBar.open('Generating DOCX file...', '', { duration: 0 });
       await this.weeklyReportDocx.generateReport(this.reportData);

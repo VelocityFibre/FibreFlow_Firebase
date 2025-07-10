@@ -138,12 +138,36 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
             <table mat-table [dataSource]="filteredPoles()" class="full-width-table">
               <!-- VF Pole ID Column -->
               <ng-container matColumnDef="vfPoleId">
-                <th mat-header-cell *matHeaderCellDef>Pole ID</th>
+                <th mat-header-cell *matHeaderCellDef>VF Pole ID</th>
                 <td mat-cell *matCellDef="let pole">
                   <a [routerLink]="['/pole-tracker', pole.id]" class="pole-link">
                     {{ pole.vfPoleId }}
                   </a>
                 </td>
+              </ng-container>
+
+              <!-- Pole Number Column -->
+              <ng-container matColumnDef="poleNumber">
+                <th mat-header-cell *matHeaderCellDef>Pole #</th>
+                <td mat-cell *matCellDef="let pole">{{ pole.poleNumber || '-' }}</td>
+              </ng-container>
+
+              <!-- PON Column -->
+              <ng-container matColumnDef="pon">
+                <th mat-header-cell *matHeaderCellDef>PON</th>
+                <td mat-cell *matCellDef="let pole">{{ pole.pon || '-' }}</td>
+              </ng-container>
+
+              <!-- Zone Column -->
+              <ng-container matColumnDef="zone">
+                <th mat-header-cell *matHeaderCellDef>Zone</th>
+                <td mat-cell *matCellDef="let pole">{{ pole.zone || '-' }}</td>
+              </ng-container>
+
+              <!-- Distribution/Feeder Column -->
+              <ng-container matColumnDef="distributionFeeder">
+                <th mat-header-cell *matHeaderCellDef>Dist/Feeder</th>
+                <td mat-cell *matCellDef="let pole">{{ pole.distributionFeeder || '-' }}</td>
               </ng-container>
 
               <!-- Project Column -->
@@ -158,16 +182,18 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
                 <td mat-cell *matCellDef="let pole">
                   {{
                     pole.dateInstalled?.toDate
-                      ? pole.dateInstalled.toDate()
-                      : (pole.dateInstalled | date)
+                      ? (pole.dateInstalled.toDate() | date:"d MMM ''yy")
+                      : (pole.dateInstalled | date:"d MMM ''yy")
                   }}
                 </td>
               </ng-container>
 
-              <!-- Location Column -->
+              <!-- GPS Location Column -->
               <ng-container matColumnDef="location">
-                <th mat-header-cell *matHeaderCellDef>Location</th>
-                <td mat-cell *matCellDef="let pole">{{ pole.location }}</td>
+                <th mat-header-cell *matHeaderCellDef>GPS</th>
+                <td mat-cell *matCellDef="let pole">
+                  <span class="gps-location">{{ pole.location }}</span>
+                </td>
               </ng-container>
 
               <!-- Type Column -->
@@ -359,6 +385,20 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
         background-color: #5d4037;
         color: white;
       }
+
+      .gps-location {
+        font-family: monospace;
+        font-size: 12px;
+        color: #1976d2;
+      }
+
+      .table-container {
+        overflow-x: auto;
+      }
+
+      table {
+        min-width: 1200px;
+      }
     `,
   ],
 })
@@ -383,9 +423,13 @@ export class PoleTrackerListComponent implements OnInit {
 
   displayedColumns = [
     'vfPoleId',
+    'poleNumber',
+    'pon',
+    'zone',
+    'distributionFeeder',
+    'location',
     'project',
     'dateInstalled',
-    'location',
     'type',
     'contractor',
     'uploadProgress',

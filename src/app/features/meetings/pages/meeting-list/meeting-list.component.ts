@@ -17,6 +17,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import {
   PageHeaderComponent,
   PageHeaderAction,
@@ -57,6 +61,9 @@ import { Observable } from 'rxjs';
     MatDatepickerModule,
     MatNativeDateModule,
     MatCheckboxModule,
+    MatDividerModule,
+    MatDialogModule,
+    MatSnackBarModule,
     PageHeaderComponent,
     SummaryCardsComponent,
     FilterFormComponent,
@@ -69,6 +76,8 @@ export class MeetingListComponent implements OnInit {
   private fb = inject(FormBuilder);
   private meetingService = inject(MeetingService);
   private firefliesService = inject(FirefliesService);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
   // Data signals
   meetings = signal<Meeting[]>([]);
@@ -250,7 +259,6 @@ export class MeetingListComponent implements OnInit {
     });
   }
 
-
   syncMeetings(): void {
     this.loading.set(true);
     console.log('Starting Fireflies sync...');
@@ -261,7 +269,9 @@ export class MeetingListComponent implements OnInit {
         console.log('Sync response:', response);
         if (response.success) {
           console.log(`Sync completed: ${response.stats.totalMeetings} meetings processed`);
-          console.log(`New meetings: ${response.stats.newMeetings}, Updated: ${response.stats.updatedMeetings}`);
+          console.log(
+            `New meetings: ${response.stats.newMeetings}, Updated: ${response.stats.updatedMeetings}`,
+          );
           // Reload meetings to show the synced data
           this.loadMeetings();
         } else {
@@ -291,6 +301,45 @@ export class MeetingListComponent implements OnInit {
 
   viewMeeting(meeting: Meeting): void {
     this.router.navigate(['/meetings', meeting.id]);
+  }
+
+  deleteMeeting(meeting: Meeting): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Delete Meeting',
+        message: `Are you sure you want to delete "${meeting.title}"? This action cannot be undone.`,
+        confirmText: 'Delete',
+        cancelText: 'Cancel',
+        confirmColor: 'warn',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loading.set(true);
+        this.meetingService
+          .deleteMeeting(meeting.id)
+          .then(() => {
+            this.snackBar.open('Meeting deleted successfully', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'end',
+              verticalPosition: 'top',
+            });
+            // Remove from local state
+            this.meetings.update((meetings) => meetings.filter((m) => m.id !== meeting.id));
+            this.loading.set(false);
+          })
+          .catch((error) => {
+            console.error('Error deleting meeting:', error);
+            this.snackBar.open('Error deleting meeting', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'end',
+              verticalPosition: 'top',
+            });
+            this.loading.set(false);
+          });
+      }
+    });
   }
 
   toggleSelection(meetingId: string): void {

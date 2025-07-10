@@ -86,6 +86,12 @@ import { switchMap, tap } from 'rxjs';
                   </mat-select>
                 </mat-form-field>
 
+                <!-- Pole Number -->
+                <mat-form-field appearance="outline">
+                  <mat-label>Pole Number</mat-label>
+                  <input matInput formControlName="poleNumber" placeholder="Physical pole number" />
+                </mat-form-field>
+
                 <!-- Alternative Pole ID -->
                 <mat-form-field appearance="outline">
                   <mat-label>Alternative Pole ID (if pole # not found)</mat-label>
@@ -96,6 +102,28 @@ import { switchMap, tap } from 'rxjs';
                 <mat-form-field appearance="outline">
                   <mat-label>Group Number (if grouped)</mat-label>
                   <input matInput formControlName="groupNumber" />
+                </mat-form-field>
+
+                <!-- PON -->
+                <mat-form-field appearance="outline">
+                  <mat-label>PON</mat-label>
+                  <input matInput formControlName="pon" placeholder="Passive Optical Network ID" />
+                </mat-form-field>
+
+                <!-- Zone -->
+                <mat-form-field appearance="outline">
+                  <mat-label>Zone</mat-label>
+                  <input matInput formControlName="zone" placeholder="Zone/Area designation" />
+                </mat-form-field>
+
+                <!-- Distribution/Feeder -->
+                <mat-form-field appearance="outline">
+                  <mat-label>Distribution/Feeder</mat-label>
+                  <input
+                    matInput
+                    formControlName="distributionFeeder"
+                    placeholder="Distribution or Feeder type"
+                  />
                 </mat-form-field>
               </div>
             </mat-card-content>
@@ -121,16 +149,21 @@ import { switchMap, tap } from 'rxjs';
                   <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
 
-                <!-- Location -->
+                <!-- GPS Location -->
                 <mat-form-field appearance="outline">
-                  <mat-label>Location (GPS or Address)</mat-label>
-                  <input matInput formControlName="location" required />
+                  <mat-label>GPS Location</mat-label>
+                  <input
+                    matInput
+                    formControlName="location"
+                    required
+                    placeholder="GPS coordinates or address"
+                  />
                   <button
                     mat-icon-button
                     matSuffix
                     type="button"
                     (click)="getCurrentLocation()"
-                    matTooltip="Get current location"
+                    matTooltip="Get current GPS location"
                   >
                     <mat-icon>my_location</mat-icon>
                   </button>
@@ -370,8 +403,12 @@ export class PoleTrackerFormComponent implements OnInit {
   poleForm: FormGroup = this.fb.group({
     vfPoleId: ['', Validators.required],
     projectId: ['', Validators.required],
+    poleNumber: [''],
     alternativePoleId: [''],
     groupNumber: [''],
+    pon: [''],
+    zone: [''],
+    distributionFeeder: [''],
     dateInstalled: [new Date(), Validators.required],
     location: ['', Validators.required],
     poleType: ['', Validators.required],
@@ -432,8 +469,12 @@ export class PoleTrackerFormComponent implements OnInit {
           this.poleForm.patchValue({
             vfPoleId: pole.vfPoleId,
             projectId: pole.projectId,
+            poleNumber: pole.poleNumber || '',
             alternativePoleId: pole.alternativePoleId || '',
             groupNumber: pole.groupNumber || '',
+            pon: pole.pon || '',
+            zone: pole.zone || '',
+            distributionFeeder: pole.distributionFeeder || '',
             dateInstalled: pole.dateInstalled,
             location: pole.location,
             poleType: pole.poleType,

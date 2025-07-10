@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { 
-  Document, 
-  Paragraph, 
-  TextRun, 
+import {
+  Document,
+  Paragraph,
+  TextRun,
   HeadingLevel,
   Table,
   TableRow,
@@ -15,101 +15,102 @@ import {
   Header,
   Footer,
   PageNumber,
-  NumberFormat
+  NumberFormat,
 } from 'docx';
 import { saveAs } from 'file-saver';
-import { 
-  WeeklyReportData, 
+import {
+  WeeklyReportData,
   ExecutiveSummary,
   PerformanceMetrics,
   RiskAssessment,
   Recommendation,
   Achievement,
-  OperationalChallenge
+  OperationalChallenge,
 } from '../models/weekly-report.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WeeklyReportDocxService {
-
   async generateReport(reportData: WeeklyReportData): Promise<void> {
     console.log('WeeklyReportDocxService.generateReport called with:', reportData);
-    
+
     // Calculate week range string
     const weekRange = `${reportData.reportPeriod.startDate.toLocaleDateString()} - ${reportData.reportPeriod.endDate.toLocaleDateString()}`;
     console.log('Week range:', weekRange);
-    
+
     const doc = new Document({
-      sections: [{
-        properties: {
-          page: {
-            margin: {
-              top: 1440,    // 1 inch
-              right: 1440,
-              bottom: 1440,
-              left: 1440,
+      sections: [
+        {
+          properties: {
+            page: {
+              margin: {
+                top: 1440, // 1 inch
+                right: 1440,
+                bottom: 1440,
+                left: 1440,
+              },
             },
           },
+          headers: {
+            default: new Header({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: 'Velocity Fibre',
+                      bold: true,
+                      size: 24,
+                    }),
+                  ],
+                  alignment: AlignmentType.RIGHT,
+                }),
+              ],
+            }),
+          },
+          footers: {
+            default: new Footer({
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: 'Page ',
+                    }),
+                    new TextRun({
+                      children: [PageNumber.CURRENT],
+                    }),
+                    new TextRun({
+                      text: ' of ',
+                    }),
+                    new TextRun({
+                      children: [PageNumber.TOTAL_PAGES],
+                    }),
+                  ],
+                  alignment: AlignmentType.CENTER,
+                }),
+              ],
+            }),
+          },
+          children: [
+            ...this.createTitleSection(reportData, weekRange),
+            ...this.createExecutiveSummary(reportData.executiveSummary),
+            ...this.createPerformanceMetrics(reportData.performanceMetrics),
+            ...this.createOperationalChallenges(reportData.operationalChallenges),
+            ...this.createRiskAssessment(reportData.riskAssessment),
+            ...this.createRecommendations(reportData.recommendations),
+          ],
         },
-        headers: {
-          default: new Header({
-            children: [
-              new Paragraph({
-                children: [
-                  new TextRun({
-                    text: 'Velocity Fibre',
-                    bold: true,
-                    size: 24,
-                  }),
-                ],
-                alignment: AlignmentType.RIGHT,
-              }),
-            ],
-          }),
-        },
-        footers: {
-          default: new Footer({
-            children: [
-              new Paragraph({
-                children: [
-                  new TextRun({
-                    text: 'Page ',
-                  }),
-                  new TextRun({
-                    children: [PageNumber.CURRENT],
-                  }),
-                  new TextRun({
-                    text: ' of ',
-                  }),
-                  new TextRun({
-                    children: [PageNumber.TOTAL_PAGES],
-                  }),
-                ],
-                alignment: AlignmentType.CENTER,
-              }),
-            ],
-          }),
-        },
-        children: [
-          ...this.createTitleSection(reportData, weekRange),
-          ...this.createExecutiveSummary(reportData.executiveSummary),
-          ...this.createPerformanceMetrics(reportData.performanceMetrics),
-          ...this.createOperationalChallenges(reportData.operationalChallenges),
-          ...this.createRiskAssessment(reportData.riskAssessment),
-          ...this.createRecommendations(reportData.recommendations),
-        ],
-      }],
+      ],
     });
 
     console.log('Creating DOCX blob...');
     const blob = await Packer.toBlob(doc);
     console.log('Blob created:', blob);
     console.log('Blob size:', blob.size, 'bytes');
-    
+
     const filename = `${reportData.projectInfo.projectName}_Weekly_Report_${weekRange.replace(/\//g, '-')}.docx`;
     console.log('Saving file as:', filename);
-    
+
     // Try alternative download method
     try {
       // Method 1: Using saveAs (file-saver)
@@ -117,7 +118,7 @@ export class WeeklyReportDocxService {
       console.log('saveAs called - file should be downloading');
     } catch (saveError) {
       console.error('saveAs failed:', saveError);
-      
+
       // Method 2: Manual download link
       console.log('Trying alternative download method...');
       const url = window.URL.createObjectURL(blob);
@@ -208,10 +209,10 @@ export class WeeklyReportDocxService {
           text: 'Key Achievements',
           heading: HeadingLevel.HEADING_2,
           spacing: { before: 200, after: 100 },
-        })
+        }),
       );
-      
-      summary.keyAchievements.forEach(achievement => {
+
+      summary.keyAchievements.forEach((achievement) => {
         elements.push(
           new Paragraph({
             children: [
@@ -224,7 +225,7 @@ export class WeeklyReportDocxService {
               }),
             ],
             spacing: { after: 50 },
-          })
+          }),
         );
       });
     }
@@ -235,15 +236,15 @@ export class WeeklyReportDocxService {
           text: 'Critical Focus Areas',
           heading: HeadingLevel.HEADING_2,
           spacing: { before: 200, after: 100 },
-        })
+        }),
       );
-      
-      summary.criticalFocusAreas.forEach(area => {
+
+      summary.criticalFocusAreas.forEach((area) => {
         elements.push(
           new Paragraph({
             text: `• ${area}`,
             spacing: { after: 50 },
-          })
+          }),
         );
       });
     }
@@ -274,7 +275,7 @@ export class WeeklyReportDocxService {
       new Paragraph({
         text: `Average Per Day: ${metrics.infrastructureDevelopment.averagePerDay.toFixed(1)}`,
         spacing: { after: 100 },
-      })
+      }),
     );
 
     // Permissions Processing
@@ -292,7 +293,7 @@ export class WeeklyReportDocxService {
         new Paragraph({
           text: `Best Performing Days: ${metrics.permissionsProcessing.bestPerformingDays.length}`,
           spacing: { after: 100 },
-        })
+        }),
       );
     }
 
@@ -315,7 +316,7 @@ export class WeeklyReportDocxService {
         new Paragraph({
           text: `Home Connections: ${metrics.customerEngagement.homeConnections}`,
           spacing: { after: 100 },
-        })
+        }),
       );
     }
 
@@ -336,10 +337,10 @@ export class WeeklyReportDocxService {
         new Paragraph({
           text: 'No significant operational challenges reported during this period.',
           spacing: { after: 200 },
-        })
+        }),
       );
     } else {
-      challenges.forEach(challenge => {
+      challenges.forEach((challenge) => {
         elements.push(
           new Paragraph({
             children: [
@@ -362,7 +363,7 @@ export class WeeklyReportDocxService {
             text: `Days Affected: ${challenge.daysAffected}`,
             indent: { left: 720 },
             spacing: { after: 100 },
-          })
+          }),
         );
       });
     }
@@ -390,7 +391,7 @@ export class WeeklyReportDocxService {
           text: 'Identified Risks',
           heading: HeadingLevel.HEADING_2,
           spacing: { before: 200, after: 100 },
-        })
+        }),
       );
 
       const risksTable = new Table({
@@ -398,45 +399,54 @@ export class WeeklyReportDocxService {
         rows: [
           new TableRow({
             children: [
-              new TableCell({ 
-                children: [new Paragraph({ 
-                  children: [new TextRun({ text: 'Risk', bold: true })] 
-                })] 
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [new TextRun({ text: 'Risk', bold: true })],
+                  }),
+                ],
               }),
-              new TableCell({ 
-                children: [new Paragraph({ 
-                  children: [new TextRun({ text: 'Severity', bold: true })] 
-                })] 
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [new TextRun({ text: 'Severity', bold: true })],
+                  }),
+                ],
               }),
-              new TableCell({ 
-                children: [new Paragraph({ 
-                  children: [new TextRun({ text: 'Category', bold: true })] 
-                })] 
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [new TextRun({ text: 'Category', bold: true })],
+                  }),
+                ],
               }),
-              new TableCell({ 
-                children: [new Paragraph({ 
-                  children: [new TextRun({ text: 'Mitigation', bold: true })] 
-                })] 
+              new TableCell({
+                children: [
+                  new Paragraph({
+                    children: [new TextRun({ text: 'Mitigation', bold: true })],
+                  }),
+                ],
               }),
             ],
           }),
-          ...allRisks.map(risk => 
-            new TableRow({
-              children: [
-                new TableCell({ 
-                  children: [new Paragraph({ text: risk.description })] 
-                }),
-                new TableCell({ 
-                  children: [new Paragraph({ text: risk.severity })] 
-                }),
-                new TableCell({ 
-                  children: [new Paragraph({ text: risk.category })] 
-                }),
-                new TableCell({ 
-                  children: [new Paragraph({ text: risk.mitigation || 'TBD' })] 
-                }),
-              ],
-            })
+          ...allRisks.map(
+            (risk) =>
+              new TableRow({
+                children: [
+                  new TableCell({
+                    children: [new Paragraph({ text: risk.description })],
+                  }),
+                  new TableCell({
+                    children: [new Paragraph({ text: risk.severity })],
+                  }),
+                  new TableCell({
+                    children: [new Paragraph({ text: risk.category })],
+                  }),
+                  new TableCell({
+                    children: [new Paragraph({ text: risk.mitigation || 'TBD' })],
+                  }),
+                ],
+              }),
           ),
         ],
       });
@@ -476,7 +486,7 @@ export class WeeklyReportDocxService {
           text: `Expected Impact: ${rec.expectedImpact}`,
           indent: { left: 720 },
           spacing: { after: 100 },
-        })
+        }),
       );
     });
 
