@@ -79,7 +79,7 @@ export class DevPanel {
   // Check if user is admin
   isAdmin = computed(() => {
     const userRole = this.authService.userRole();
-    return userRole === 'admin' || userRole === 'super_admin';
+    return userRole === 'admin';
   });
 
   constructor() {

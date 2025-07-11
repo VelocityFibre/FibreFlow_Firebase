@@ -1,15 +1,16 @@
-@use '../../../../styles/utils/component-theming' as theme;
+@use '../../../../styles/component-theming' as theme;
+@use '../../../../styles/spacing' as *;
 
 // Toggle button - fixed position
 .dev-panel-toggle {
   position: fixed;
-  bottom: theme.ff-spacing(2xl);
-  right: theme.ff-spacing(lg);
+  bottom: ff-spacing(2xl);
+  right: ff-spacing(lg);
   z-index: 1000;
   transition: all 0.3s ease;
   
   &.panel-open {
-    right: 420px;
+    right: 420px; // 400px panel + 20px offset
   }
   
   .task-badge {
@@ -39,7 +40,7 @@
   height: 100vh;
   background: theme.ff-rgb(background);
   border-left: 1px solid theme.ff-rgb(border);
-  box-shadow: theme.ff-shadow(xl);
+  box-shadow: theme.ff-shadow(lg);
   z-index: 999;
   display: flex;
   flex-direction: column;
@@ -59,14 +60,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: theme.ff-spacing(md);
+  padding: ff-spacing(md);
   border-bottom: 1px solid theme.ff-rgb(border);
   background: theme.ff-rgba(muted, 0.5);
   
   .header-content {
     display: flex;
     flex-direction: column;
-    gap: theme.ff-spacing(xs);
+    gap: ff-spacing(xs);
     
     h3 {
       margin: 0;
@@ -83,7 +84,7 @@
   
   .header-actions {
     display: flex;
-    gap: theme.ff-spacing(xs);
+    gap: ff-spacing(xs);
   }
 }
 
@@ -91,13 +92,13 @@
 .panel-content {
   flex: 1;
   overflow-y: auto;
-  padding: theme.ff-spacing(md);
+  padding: ff-spacing(md);
   
   .stats-row {
-    margin-bottom: theme.ff-spacing(lg);
+    margin-bottom: ff-spacing(lg);
     
     mat-chip-set {
-      gap: theme.ff-spacing(sm);
+      gap: ff-spacing(sm);
     }
     
     mat-chip {
@@ -108,7 +109,7 @@
         font-size: 16px;
         width: 16px;
         height: 16px;
-        margin-right: theme.ff-spacing(xs);
+        margin-right: ff-spacing(xs);
       }
     }
   }
@@ -116,13 +117,13 @@
 
 // Expansion panels
 mat-expansion-panel {
-  margin-bottom: theme.ff-spacing(md);
+  margin-bottom: ff-spacing(md);
   background: theme.ff-rgb(card);
   
   mat-panel-title {
     display: flex;
     align-items: center;
-    gap: theme.ff-spacing(sm);
+    gap: ff-spacing(sm);
     
     mat-icon {
       font-size: 20px;
@@ -133,7 +134,7 @@ mat-expansion-panel {
     mat-chip {
       margin-left: auto;
       font-size: 11px;
-      padding: 0 8px;
+      padding: 0 ff-spacing(sm);
       height: 20px;
     }
   }
@@ -142,7 +143,7 @@ mat-expansion-panel {
 // Notes section
 .notes-section {
   .notes-display {
-    padding: theme.ff-spacing(md);
+    padding: ff-spacing(md);
     background: theme.ff-rgba(muted, 0.3);
     border-radius: theme.ff-var(radius);
     cursor: pointer;
@@ -170,8 +171,8 @@ mat-expansion-panel {
   .notes-actions {
     display: flex;
     justify-content: flex-end;
-    gap: theme.ff-spacing(sm);
-    margin-top: theme.ff-spacing(sm);
+    gap: ff-spacing(sm);
+    margin-top: ff-spacing(sm);
   }
 }
 
@@ -179,9 +180,9 @@ mat-expansion-panel {
 .tasks-section {
   .add-task-form {
     display: flex;
-    gap: theme.ff-spacing(sm);
+    gap: ff-spacing(sm);
     align-items: flex-start;
-    margin-bottom: theme.ff-spacing(md);
+    margin-bottom: ff-spacing(md);
     
     .task-input {
       flex: 1;
@@ -219,7 +220,7 @@ mat-expansion-panel {
     text-align: center;
     color: theme.ff-rgb(muted-foreground);
     font-style: italic;
-    padding: theme.ff-spacing(lg);
+    padding: ff-spacing(lg);
   }
 }
 
@@ -227,7 +228,7 @@ mat-expansion-panel {
 .error-list {
   mat-list-item {
     border-left: 3px solid theme.ff-rgb(destructive);
-    margin-bottom: theme.ff-spacing(sm);
+    margin-bottom: ff-spacing(sm);
     
     .error-time {
       font-size: theme.ff-rem(12);
@@ -239,11 +240,11 @@ mat-expansion-panel {
 // Responsive
 @media (max-width: 768px) {
   .dev-panel-toggle {
-    bottom: theme.ff-spacing(xl);
-    right: theme.ff-spacing(md);
+    bottom: ff-spacing(xl);
+    right: ff-spacing(md);
     
     &.panel-open {
-      right: theme.ff-spacing(md);
+      right: ff-spacing(md);
     }
   }
   

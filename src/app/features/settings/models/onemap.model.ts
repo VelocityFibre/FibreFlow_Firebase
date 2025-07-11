@@ -1,6 +1,6 @@
 export interface OneMapRecord {
   propertyId: string;
-  oneMapNadId: string;
+  oneMapNadId?: string; // Optional - not in CSV
   poleNumber: string;
   dropNumber: string;
   status: string;

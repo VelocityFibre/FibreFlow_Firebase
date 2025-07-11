@@ -1,16 +1,17 @@
 @use '../../../../../styles/component-theming' as theme;
+@use '../../../../../styles/spacing' as *;
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: theme.ff-spacing(lg);
+  padding: ff-spacing(lg);
   display: flex;
   flex-direction: column;
-  gap: theme.ff-spacing(lg);
+  gap: ff-spacing(lg);
 }
 
 mat-card {
-  @include theme.surface-card;
+  @include theme.card-theme();
 }
 
 // Upload Section
@@ -18,7 +19,7 @@ mat-card {
   .upload-area {
     border: 2px dashed theme.ff-rgba(border, 0.5);
     border-radius: theme.ff-var(radius);
-    padding: theme.ff-spacing(3xl);
+    padding: ff-spacing(3xl);
     text-align: center;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -34,7 +35,7 @@ mat-card {
       width: 48px;
       height: 48px;
       color: theme.ff-rgb(muted-foreground);
-      margin-bottom: theme.ff-spacing(md);
+      margin-bottom: ff-spacing(md);
     }
 
     p {
@@ -47,9 +48,9 @@ mat-card {
   .success-message {
     display: flex;
     align-items: center;
-    gap: theme.ff-spacing(sm);
-    margin-top: theme.ff-spacing(md);
-    padding: theme.ff-spacing(md);
+    gap: ff-spacing(sm);
+    margin-top: ff-spacing(md);
+    padding: ff-spacing(md);
     border-radius: theme.ff-var(radius);
   }
 
@@ -68,9 +69,9 @@ mat-card {
 .date-section {
   .date-form {
     display: flex;
-    gap: theme.ff-spacing(lg);
+    gap: ff-spacing(lg);
     align-items: flex-start;
-    margin-bottom: theme.ff-spacing(lg);
+    margin-bottom: ff-spacing(lg);
 
     mat-form-field {
       flex: 1;
@@ -83,13 +84,13 @@ mat-card {
   .report-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: theme.ff-spacing(xl);
+    gap: ff-spacing(xl);
   }
 
   .report-category {
     h3 {
       color: theme.ff-rgb(foreground);
-      margin-bottom: theme.ff-spacing(lg);
+      margin-bottom: ff-spacing(lg);
       font-size: theme.ff-rem(18);
       font-weight: 600;
     }
@@ -99,17 +100,17 @@ mat-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: theme.ff-spacing(md);
+    padding: ff-spacing(md);
     border: 1px solid theme.ff-rgb(border);
     border-radius: theme.ff-var(radius);
-    margin-bottom: theme.ff-spacing(md);
+    margin-bottom: ff-spacing(md);
     background: theme.ff-rgba(muted, 0.05);
 
     .report-info {
       flex: 1;
 
       h4 {
-        margin: 0 0 theme.ff-spacing(xs) 0;
+        margin: 0 0 ff-spacing(xs) 0;
         color: theme.ff-rgb(foreground);
         font-size: theme.ff-rem(16);
         font-weight: 500;
@@ -123,7 +124,7 @@ mat-card {
     }
 
     button {
-      margin-left: theme.ff-spacing(md);
+      margin-left: ff-spacing(md);
     }
   }
 }
@@ -144,7 +145,7 @@ mat-card {
   backdrop-filter: blur(4px);
 
   p {
-    margin-top: theme.ff-spacing(lg);
+    margin-top: ff-spacing(lg);
     color: theme.ff-rgb(foreground);
     font-size: theme.ff-rem(16);
   }
@@ -153,7 +154,7 @@ mat-card {
 // Responsive
 @media (max-width: 768px) {
   .container {
-    padding: theme.ff-spacing(md);
+    padding: ff-spacing(md);
   }
 
   .date-form {
@@ -170,7 +171,7 @@ mat-card {
 
     button {
       margin-left: 0;
-      margin-top: theme.ff-spacing(md);
+      margin-top: ff-spacing(md);
       width: 100%;
     }
   }

@@ -7,15 +7,13 @@ import { OneMapRecord, ProcessedOneMapData } from '../models/onemap.model';
 export class OneMapService {
   private readonly REQUIRED_COLUMNS = [
     'Property ID',
-    '1map NAD ID', 
     'Pole Number',
     'Drop Number',
     'Status',
     'Flow Name Groups',
     'Sections',
     'PONs',
-    'Location',
-    'Address',
+    'Location Address',
     'Field Agent Name (Home Sign Ups)',
     'Last Modified Home Sign Ups By',
     'Last Modified Home Sign Ups Date'
@@ -43,11 +41,22 @@ export class OneMapService {
     
     // Check for required columns (some might have slight variations)
     this.REQUIRED_COLUMNS.forEach(required => {
-      const found = headers.some(header => 
-        header.includes(required) || 
-        (required === 'Location' && header.includes('Location Address')) ||
-        (required === 'Address' && header.includes('Location Address'))
-      );
+      const found = headers.some(header => {
+        const normalizedHeader = header.trim().toLowerCase();
+        const normalizedRequired = required.toLowerCase();
+        
+        // Direct match
+        if (normalizedHeader === normalizedRequired) return true;
+        
+        // Contains match
+        if (normalizedHeader.includes(normalizedRequired)) return true;
+        
+        // Special cases
+        if (required === 'Location Address' && normalizedHeader.includes('location')) return true;
+        
+        return false;
+      });
+      
       if (!found) {
         missingColumns.push(required);
       }
@@ -84,15 +93,14 @@ export class OneMapService {
       
       const record: OneMapRecord = {
         propertyId: values[columnIndices['propertyId']] || '',
-        oneMapNadId: values[columnIndices['oneMapNadId']] || '',
         poleNumber: values[columnIndices['poleNumber']] || '',
         dropNumber: values[columnIndices['dropNumber']] || '',
         status: values[columnIndices['status']] || '',
         flowNameGroups: values[columnIndices['flowNameGroups']] || '',
         sections: values[columnIndices['sections']] || '',
         pons: values[columnIndices['pons']] || '',
-        location: values[columnIndices['location']] || '',
-        address: values[columnIndices['address']] || '',
+        location: values[columnIndices['location']] || values[columnIndices['address']] || '',
+        address: values[columnIndices['address']] || values[columnIndices['location']] || '',
         fieldAgentName: values[columnIndices['fieldAgentName']] || '',
         lastModifiedBy: values[columnIndices['lastModifiedBy']] || '',
         lastModifiedDate: values[columnIndices['lastModifiedDate']] || ''
@@ -216,7 +224,6 @@ export class OneMapService {
     // Create CSV header
     const headers = [
       'Property ID',
-      '1map NAD ID',
       'Pole Number',
       'Drop Number',
       'Status',
@@ -235,7 +242,6 @@ export class OneMapService {
       headers.join(','),
       ...records.map(record => [
         this.escapeCsvValue(record.propertyId),
-        this.escapeCsvValue(record.oneMapNadId),
         this.escapeCsvValue(record.poleNumber),
         this.escapeCsvValue(record.dropNumber),
         this.escapeCsvValue(record.status),
