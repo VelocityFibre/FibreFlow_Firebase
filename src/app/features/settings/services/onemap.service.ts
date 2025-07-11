@@ -7,7 +7,7 @@ import { OneMapRecord, ProcessedOneMapData } from '../models/onemap.model';
 export class OneMapService {
   private readonly REQUIRED_COLUMNS = [
     'Property ID',
-    '1map NAD ID', 
+    '1map NAD ID',
     'Pole Number',
     'Drop Number',
     'Status',
@@ -31,7 +31,6 @@ export class OneMapService {
     'Sections': 'sections',
     'PONs': 'pons',
     'Location': 'location',
-    'Location Address': 'address',
     'Address': 'address',
     'Field Agent Name (Home Sign Ups)': 'fieldAgentName',
     'Last Modified Home Sign Ups By': 'lastModifiedBy',
@@ -43,11 +42,22 @@ export class OneMapService {
     
     // Check for required columns (some might have slight variations)
     this.REQUIRED_COLUMNS.forEach(required => {
-      const found = headers.some(header => 
-        header.includes(required) || 
-        (required === 'Location' && header.includes('Location Address')) ||
-        (required === 'Address' && header.includes('Location Address'))
-      );
+      const found = headers.some(header => {
+        const normalizedHeader = header.trim().toLowerCase();
+        const normalizedRequired = required.toLowerCase();
+        
+        // Direct match
+        if (normalizedHeader === normalizedRequired) return true;
+        
+        // Contains match
+        if (normalizedHeader.includes(normalizedRequired)) return true;
+        
+        // Special cases
+        if (required === 'Location Address' && normalizedHeader.includes('location')) return true;
+        
+        return false;
+      });
+      
       if (!found) {
         missingColumns.push(required);
       }
@@ -127,66 +137,94 @@ export class OneMapService {
   }
 
   processData(records: OneMapRecord[], startDate: Date, endDate: Date): ProcessedOneMapData {
-    // Step 1: Filter for approved & scheduled records (exclude pole permissions)
+    // Step 1: Initial Data Filtering
+    // Filter records where Status = "Home Sign Ups: Approved & Installation Scheduled"
+    // Exclude records where Status contains "Pole Permissions"
     let filteredRecords = records.filter(record => 
       record.status === 'Home Sign Ups: Approved & Installation Scheduled' &&
       !record.status.includes('Pole Permissions')
     );
 
-    // Step 2a: Separate records without drop numbers
-    const noDropAllocated = filteredRecords.filter(record => !record.dropNumber);
-    filteredRecords = filteredRecords.filter(record => record.dropNumber);
+    // Step 2: Data Quality Control
+    // 2a. Handle Missing Drop Numbers
+    // Identify and move ALL rows without a Drop Number to "No_Drop_Allocated"
+    const noDropAllocated = filteredRecords.filter(record => !record.dropNumber || record.dropNumber.trim() === '');
+    const recordsWithDrops = filteredRecords.filter(record => record.dropNumber && record.dropNumber.trim() !== '');
 
-    // Step 2b: Handle duplicate drop numbers
+    // 2b. Handle Duplicate Drop Numbers  
+    // For rows with duplicate Drop Numbers, compare "Last Modified Home Sign Ups Date"
+    // Keep only the row with the earliest date for each Drop Number
+    // Move newer duplicates to "Duplicate_Drops_Removed"
     const dropNumberMap = new Map<string, OneMapRecord[]>();
     const duplicateDropsRemoved: OneMapRecord[] = [];
 
-    filteredRecords.forEach(record => {
-      const dropNumber = record.dropNumber;
+    // Group records by drop number
+    recordsWithDrops.forEach(record => {
+      const dropNumber = record.dropNumber.trim();
       if (!dropNumberMap.has(dropNumber)) {
         dropNumberMap.set(dropNumber, []);
       }
       dropNumberMap.get(dropNumber)!.push(record);
     });
 
-    // Keep only earliest record for each drop number
-    const uniqueRecords: OneMapRecord[] = [];
-    dropNumberMap.forEach((records, dropNumber) => {
-      if (records.length === 1) {
-        uniqueRecords.push(records[0]);
+    // Keep earliest record for each drop number, move duplicates to removed list
+    const cleanRecords: OneMapRecord[] = [];
+    dropNumberMap.forEach((recordsForDrop, dropNumber) => {
+      if (recordsForDrop.length === 1) {
+        // No duplicates, keep the record
+        cleanRecords.push(recordsForDrop[0]);
       } else {
-        // Sort by date and keep earliest
-        const sorted = records.sort((a, b) => {
+        // Multiple records for same drop number
+        // Sort by "Last Modified Home Sign Ups Date" and keep earliest
+        const sorted = recordsForDrop.sort((a, b) => {
           const dateA = this.parseDate(a.lastModifiedDate);
           const dateB = this.parseDate(b.lastModifiedDate);
           return dateA.getTime() - dateB.getTime();
         });
         
-        uniqueRecords.push(sorted[0]);
+        // Keep the earliest (first in sorted array)
+        cleanRecords.push(sorted[0]);
+        // Move newer duplicates to removed list
         duplicateDropsRemoved.push(...sorted.slice(1));
       }
     });
 
-    // Step 3: Find first approval date for each drop
+    // Step 3: First Approval Date Analysis
+    // From the remaining clean data, for each unique Drop Number, 
+    // identify the earliest "Last Modified Home Sign Ups Date"
+    // This becomes the "first approval date" for that Drop
     const dropFirstApprovalMap = new Map<string, Date>();
-    uniqueRecords.forEach(record => {
+    cleanRecords.forEach(record => {
       const date = this.parseDate(record.lastModifiedDate);
-      const existing = dropFirstApprovalMap.get(record.dropNumber);
+      const dropNumber = record.dropNumber.trim();
+      const existing = dropFirstApprovalMap.get(dropNumber);
       if (!existing || date < existing) {
-        dropFirstApprovalMap.set(record.dropNumber, date);
+        dropFirstApprovalMap.set(dropNumber, date);
       }
     });
 
-    // Step 4: Separate by date window
+    // Step 4: Date-Based Sheet Creation
+    // Create two main sheets based on first approval date
     const firstEntryRecords: OneMapRecord[] = [];
     const duplicatesPreWindow: OneMapRecord[] = [];
 
-    uniqueRecords.forEach(record => {
-      const firstApprovalDate = dropFirstApprovalMap.get(record.dropNumber);
-      if (firstApprovalDate && firstApprovalDate >= startDate && firstApprovalDate <= endDate) {
-        firstEntryRecords.push(record);
-      } else if (firstApprovalDate && firstApprovalDate < startDate) {
-        duplicatesPreWindow.push(record);
+    // Get all records for each drop and categorize based on first approval date
+    const allRecordsForAnalysis = [...cleanRecords];
+    
+    allRecordsForAnalysis.forEach(record => {
+      const dropNumber = record.dropNumber.trim();
+      const firstApprovalDate = dropFirstApprovalMap.get(dropNumber);
+      
+      if (firstApprovalDate) {
+        if (firstApprovalDate >= startDate && firstApprovalDate <= endDate) {
+          // Sheet 1: "FirstEntry_StartDate-EndDate"
+          // Include ALL rows for Drops whose first approval date falls within the date range
+          firstEntryRecords.push(record);
+        } else if (firstApprovalDate < startDate) {
+          // Sheet 2: "Duplicates_PreWindow"  
+          // Include ALL rows for Drops whose first approval date is before StartDate
+          duplicatesPreWindow.push(record);
+        }
       }
     });
 
@@ -213,7 +251,7 @@ export class OneMapService {
   exportToCsv(records: OneMapRecord[], filename: string): void {
     if (records.length === 0) return;
 
-    // Create CSV header
+    // Create CSV header in exact order specified
     const headers = [
       'Property ID',
       '1map NAD ID',

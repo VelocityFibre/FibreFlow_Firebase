@@ -84,7 +84,7 @@ export class OnemapComponent {
     const validation = this.oneMapService.validateCsvHeaders(headers);
     
     if (!validation.valid) {
-      this.uploadError.set(`Missing required columns: ${validation.missingColumns.join(', ')}`);
+      this.uploadError.set(`Invalid CSV format. Missing required columns: ${validation.missingColumns.join(', ')}\n\nPlease upload a home sign-ups CSV file (like Lawley_Project_Louis.csv), not a pole infrastructure file.`);
       return;
     }
 

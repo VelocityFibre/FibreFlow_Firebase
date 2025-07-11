@@ -66,3 +66,7 @@ OneMap/.venv/
 OneMap/duplicate_analysis_report.md
 OneMap/pole_duplicate_data.json
 OneMap/antiHall_validation_report.json
+
+# Backup files
+backups/
+*.backup.json

@@ -1,8 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { BaseFirestoreService } from './base-firestore.service';
 import { DevNote, DevTask, PageError } from '../models/dev-note.model';
 import { AuthService } from './auth.service';
-import { EntityType } from '../models/audit-log.model';
 import { Observable, map, of, switchMap, from } from 'rxjs';
 import { 
   where, 
@@ -13,21 +11,20 @@ import {
   doc,
   updateDoc,
   addDoc,
-  collectionData,
-  query
-} from 'firebase/firestore';
+  query,
+  getDocs
+} from '@angular/fire/firestore';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DevNoteService extends BaseFirestoreService {
+export class DevNoteService {
   private authService = inject(AuthService);
   private firestore = inject(Firestore);
   private collection: CollectionReference<DevNote>;
 
   constructor() {
-    super('devNotes');
     this.collection = collection(this.firestore, 'devNotes') as CollectionReference<DevNote>;
   }
 
@@ -177,7 +174,12 @@ export class DevNoteService extends BaseFirestoreService {
    * Get all dev notes
    */
   getAll(): Observable<DevNote[]> {
-    return collectionData(this.collection, { idField: 'id' });
+    return from(getDocs(this.collection)).pipe(
+      map(snapshot => snapshot.docs.map(doc => ({ 
+        ...doc.data(), 
+        id: doc.id 
+      })))
+    );
   }
 
   /**
@@ -185,7 +187,12 @@ export class DevNoteService extends BaseFirestoreService {
    */
   getWithQuery(constraints: any[]): Observable<DevNote[]> {
     const q = query(this.collection, ...constraints);
-    return collectionData(q, { idField: 'id' });
+    return from(getDocs(q)).pipe(
+      map(snapshot => snapshot.docs.map(doc => ({ 
+        ...doc.data(), 
+        id: doc.id 
+      })))
+    );
   }
 
   /**
@@ -205,10 +212,4 @@ export class DevNoteService extends BaseFirestoreService {
     await updateDoc(docRef, data as any);
   }
 
-  /**
-   * Get entity type for audit logging
-   */
-  protected getEntityType(): EntityType {
-    return 'devNotes' as EntityType;
-  }
 }
