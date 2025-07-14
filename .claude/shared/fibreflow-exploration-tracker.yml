@@ -1,0 +1,118 @@
+# FibreFlow Exploration Tracker
+# Central tracking of all exploration progress
+version: 1.0
+name: Exploration Progress Tracker
+description: Track what's been explored, documented, and implemented
+last_updated: "2025-07-14"
+
+# Exploration Status
+exploration_status:
+  # Status levels:
+  # - not_started: Haven't looked at it yet
+  # - in_progress: Currently exploring
+  # - documented: Patterns extracted and documented
+  # - implemented: Added to SuperClaude system
+  # - needs_update: Changed since last exploration
+
+  core_services:
+    base_firestore_service:
+      file: "src/app/core/services/base-firestore.service.ts"
+      status: "not_started"
+      last_explored: null
+      documented_in: null
+      patterns_found: 0
+      
+    project_service:
+      file: "src/app/core/services/project.service.ts"
+      status: "not_started"
+      last_explored: null
+      documented_in: null
+      patterns_found: 0
+    
+    # Add more services as we discover them...
+
+  core_models:
+    project_model:
+      file: "src/app/core/models/project.model.ts"
+      status: "not_started"
+      last_explored: null
+      documented_in: null
+      
+  shared_components:
+    page_header:
+      path: "src/app/shared/components/page-header/"
+      status: "not_started"
+      last_explored: null
+      documented_in: null
+      
+  features:
+    projects:
+      path: "src/app/features/projects/"
+      status: "not_started"
+      last_explored: null
+      documented_in: null
+      subtasks:
+        - "Service patterns"
+        - "Component patterns"
+        - "Routing patterns"
+        - "State management"
+
+# Daily Progress Log
+daily_progress:
+  "2025-07-14":
+    started: "Exploration system setup"
+    completed:
+      - "Created exploration system"
+      - "Created error capture workflow"
+      - "Created exploration schedule"
+      - "Created this tracker"
+    next: "Start exploring core services"
+
+# Patterns Discovered
+patterns_discovered:
+  # Will be populated as we explore
+  total_count: 0
+  by_category:
+    service_patterns: 0
+    component_patterns: 0
+    error_patterns: 0
+    performance_patterns: 0
+    workflow_patterns: 0
+
+# Knowledge Gaps Found
+knowledge_gaps:
+  # Things we need to document better
+  gaps: []
+
+# Files Created
+documentation_created:
+  # Track all YAML files we create
+  files: []
+
+# Metrics Dashboard
+metrics:
+  files_total: 0
+  files_explored: 0
+  files_documented: 0
+  patterns_extracted: 0
+  knowledge_gaps: 0
+  percentage_complete: 0
+
+# Next Actions Queue
+next_actions:
+  immediate:
+    - "Scan src/app/core/services/"
+    - "Count total files to explore"
+    - "Start with BaseFirestoreService"
+  
+  this_week:
+    - "Complete core services"
+    - "Document service patterns"
+    - "Start shared components"
+  
+  blocked_by: []
+
+# Exploration Commands Used
+commands_log:
+  # Track which commands we've run
+  executed: []

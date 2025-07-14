@@ -1,0 +1,150 @@
+# FibreFlow Collaboration Protocol
+# Ensuring human-AI collaboration on key decisions
+version: 1.0
+name: Collaboration Protocol
+description: When and how to involve human architect in decisions
+
+# Decision Points Requiring Discussion
+require_discussion:
+  # Always discuss these before proceeding
+  critical_decisions:
+    - "Creating new system-wide patterns"
+    - "Modifying existing workflows"
+    - "Adding new YAML configurations"
+    - "Changing architectural approaches"
+    - "Creating new documentation structures"
+    - "Defining specifications"
+    - "Setting priorities"
+  
+  exploration_decisions:
+    - "What to explore first"
+    - "How to document findings"
+    - "What patterns to extract"
+    - "Which services to prioritize"
+    - "Format of documentation"
+  
+  implementation_decisions:
+    - "Choosing between multiple approaches"
+    - "Trade-offs between options"
+    - "Performance vs simplicity"
+    - "Breaking changes"
+
+# Collaboration Workflow
+collaboration_flow:
+  1_propose:
+    ai_action: "Present options with pros/cons"
+    human_input: "Choose direction or suggest alternative"
+    example: |
+      "I found BaseFirestoreService. Should I:
+      A) Document all methods in detail
+      B) Extract just the patterns
+      C) Create a specification for it
+      What would be most valuable?"
+  
+  2_discuss:
+    ai_action: "Explain implications of each choice"
+    human_input: "Provide context and preferences"
+    
+  3_decide:
+    ai_action: "Summarize decision"
+    human_input: "Confirm or adjust"
+    
+  4_implement:
+    ai_action: "Execute agreed approach"
+    human_input: "Review and provide feedback"
+
+# Discussion Templates
+discussion_templates:
+  exploration_finding: |
+    I've found {finding} in {location}.
+    
+    Options:
+    1. {option_1} - Pro: {pro} Con: {con}
+    2. {option_2} - Pro: {pro} Con: {con}
+    
+    What would you prefer?
+  
+  pattern_discovery: |
+    I've identified this pattern: {pattern}
+    Used in: {locations}
+    
+    Should I:
+    A) Document as reusable pattern
+    B) Create specification
+    C) Add to antiHall
+    D) Just note for reference
+  
+  documentation_format: |
+    For {topic}, I could document as:
+    1. YAML configuration - structured, searchable
+    2. Markdown guide - readable, detailed
+    3. Inline comments - close to code
+    4. Specification - formal, testable
+    
+    Which fits best?
+
+# When to Act Autonomously
+autonomous_actions:
+  allowed:
+    - "Following established patterns"
+    - "Fixing obvious errors"
+    - "Completing discussed tasks"
+    - "Gathering information"
+    - "Running analysis commands"
+  
+  not_allowed:
+    - "Creating new documentation files without discussion"
+    - "Changing system architecture"
+    - "Modifying workflow processes"
+    - "Setting priorities"
+    - "Making trade-off decisions"
+
+# Checkpoint System
+checkpoints:
+  before_creating_file:
+    ask: "What should I name this and what format?"
+    
+  before_major_documentation:
+    ask: "What aspects are most important to capture?"
+    
+  when_multiple_approaches:
+    ask: "Which approach aligns with project goals?"
+    
+  after_discovery:
+    ask: "How should we use this finding?"
+
+# Communication Patterns
+communication:
+  status_updates:
+    - "I'm about to {action}. Should I proceed?"
+    - "I found {discovery}. How should I document it?"
+    - "There are {n} options. Let me explain each..."
+  
+  decision_requests:
+    - "Given {context}, would you prefer A or B?"
+    - "This could impact {area}. Your thoughts?"
+    - "I see a trade-off between {x} and {y}. Which matters more?"
+  
+  clarification:
+    - "Could you clarify what you mean by {term}?"
+    - "What's the priority: {option1} or {option2}?"
+    - "Should this follow pattern X or create new pattern Y?"
+
+# Feedback Integration
+feedback_loop:
+  immediate:
+    - "Stop if approach seems wrong"
+    - "Redirect if missing the point"
+    - "Clarify if ambiguous"
+  
+  post_implementation:
+    - "Review what was created"
+    - "Suggest improvements"
+    - "Note preferences for future"
+
+# Default Behaviors
+defaults:
+  when_uncertain: "Always ask"
+  multiple_valid_approaches: "Present options"
+  new_pattern_discovered: "Discuss before documenting"
+  file_creation: "Propose name and format first"

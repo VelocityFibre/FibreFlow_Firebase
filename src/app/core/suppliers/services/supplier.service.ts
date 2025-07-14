@@ -26,15 +26,19 @@ import {
   SupplierCategory,
   ServiceArea,
   SupplierContact,
+  VerificationStatus,
 } from '../models';
+import { BaseFirestoreService } from '../../services/base-firestore.service';
+import { EntityType } from '../../models/audit-log.model';
 
 @Injectable({ providedIn: 'root' })
-export class SupplierService {
-  private firestore = inject(Firestore);
-  private suppliersCollection = collection(
-    this.firestore,
-    'suppliers',
-  ) as CollectionReference<Supplier>;
+export class SupplierService extends BaseFirestoreService<Supplier> {
+  protected override firestore = inject(Firestore); // Needed for subcollections
+  protected collectionName = 'suppliers';
+  
+  protected getEntityType(): EntityType {
+    return 'supplier';
+  }
 
   getSuppliers(filter?: SupplierFilter): Observable<Supplier[]> {
     console.log('SupplierService.getSuppliers called with filter:', filter);
@@ -54,10 +58,7 @@ export class SupplierService {
 
     constraints.push(orderBy('companyName', 'asc'));
 
-    const q = query(this.suppliersCollection, ...constraints);
-    console.log('Executing Firestore query with constraints:', constraints.length);
-
-    return collectionData(q, { idField: 'id' }).pipe(
+    return this.getWithQuery(constraints).pipe(
       map((suppliers) => {
         console.log('Raw suppliers from Firestore:', suppliers);
         if (filter?.searchQuery) {
@@ -81,8 +82,7 @@ export class SupplierService {
   }
 
   getSupplierById(id: string): Observable<Supplier | undefined> {
-    const supplierDoc = doc(this.firestore, 'suppliers', id) as DocumentReference<Supplier>;
-    return docData(supplierDoc, { idField: 'id' }).pipe(
+    return this.getById(id).pipe(
       catchError((error) => {
         console.error('Error fetching supplier:', error);
         return throwError(() => new Error('Failed to fetch supplier'));
@@ -99,14 +99,7 @@ export class SupplierService {
     supplier: Omit<Supplier, 'id' | 'createdAt' | 'updatedAt'>,
   ): Promise<string> {
     try {
-      const newSupplier = {
-        ...supplier,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      };
-
-      const docRef = await addDoc(this.suppliersCollection, newSupplier);
-      return docRef.id;
+      return await this.create(supplier);
     } catch (error) {
       console.error('Error creating supplier:', error);
       throw new Error('Failed to create supplier');
@@ -115,11 +108,7 @@ export class SupplierService {
 
   async updateSupplier(id: string, updates: Partial<Supplier>): Promise<void> {
     try {
-      const supplierDoc = doc(this.firestore, 'suppliers', id);
-      await updateDoc(supplierDoc, {
-        ...updates,
-        updatedAt: serverTimestamp(),
-      });
+      await this.update(id, updates);
     } catch (error) {
       console.error('Error updating supplier:', error);
       throw new Error('Failed to update supplier');
@@ -128,8 +117,7 @@ export class SupplierService {
 
   async deleteSupplier(id: string): Promise<void> {
     try {
-      const supplierDoc = doc(this.firestore, 'suppliers', id);
-      await deleteDoc(supplierDoc);
+      await this.delete(id);
     } catch (error) {
       console.error('Error deleting supplier:', error);
       throw new Error('Failed to delete supplier');
@@ -205,14 +193,11 @@ export class SupplierService {
   }
 
   getSuppliersByCategory(categories: SupplierCategory[]): Observable<Supplier[]> {
-    const q = query(
-      this.suppliersCollection,
+    return this.getWithQuery([
       where('categories', 'array-contains-any', categories),
       where('status', '==', SupplierStatus.ACTIVE),
       orderBy('companyName', 'asc'),
-    );
-
-    return collectionData(q, { idField: 'id' }).pipe(
+    ]).pipe(
       catchError((error) => {
         console.error('Error fetching suppliers by category:', error);
         return throwError(() => new Error('Failed to fetch suppliers by category'));
@@ -221,13 +206,10 @@ export class SupplierService {
   }
 
   getSuppliersByServiceArea(area: ServiceArea): Observable<Supplier[]> {
-    const q = query(
-      this.suppliersCollection,
+    return this.getWithQuery([
       where('status', '==', SupplierStatus.ACTIVE),
       orderBy('companyName', 'asc'),
-    );
-
-    return collectionData(q, { idField: 'id' }).pipe(
+    ]).pipe(
       map((suppliers) => {
         return suppliers.filter((supplier) => {
           return supplier.serviceAreas.some(
@@ -246,11 +228,7 @@ export class SupplierService {
 
   async updateCreditLimit(supplierId: string, limit: number): Promise<void> {
     try {
-      const supplierDoc = doc(this.firestore, 'suppliers', supplierId);
-      await updateDoc(supplierDoc, {
-        creditLimit: limit,
-        updatedAt: serverTimestamp(),
-      });
+      await this.update(supplierId, { creditLimit: limit });
     } catch (error) {
       console.error('Error updating credit limit:', error);
       throw new Error('Failed to update credit limit');
@@ -263,14 +241,10 @@ export class SupplierService {
 
   async updateVerificationStatus(
     supplierId: string,
-    verificationStatus: 'verified' | 'pending' | 'unverified',
+    verificationStatus: VerificationStatus,
   ): Promise<void> {
     try {
-      const supplierDoc = doc(this.firestore, 'suppliers', supplierId);
-      await updateDoc(supplierDoc, {
-        verificationStatus,
-        updatedAt: serverTimestamp(),
-      });
+      await this.update(supplierId, { verificationStatus });
     } catch (error) {
       console.error('Error updating verification status:', error);
       throw new Error('Failed to update verification status');

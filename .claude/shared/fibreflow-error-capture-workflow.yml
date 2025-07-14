@@ -1,0 +1,181 @@
+# FibreFlow Error Capture Workflow
+# Quick and systematic error documentation
+version: 1.0
+name: Error Capture Workflow
+description: Streamlined process to capture errors as they happen
+
+# Capture Process
+capture_workflow:
+  when_error_occurs:
+    1_immediate_capture:
+      command: "!error capture"
+      
+      captures:
+        - timestamp
+        - error_message
+        - error_code
+        - file_location
+        - line_number
+        - surrounding_code
+        - stack_trace
+    
+    2_quick_classification:
+      categories:
+        - build_error
+        - runtime_error
+        - deployment_error
+        - typescript_error
+        - firebase_error
+        - dependency_error
+    
+    3_auto_file_creation:
+      naming: "fibreflow-{category}-{error_code}-{timestamp}.yml"
+      location: ".claude/errors/"
+
+# Quick Capture Template
+error_template: |
+  # Error: {error_code}
+  captured: {timestamp}
+  status: active
+  
+  # Error Context
+  context:
+    message: "{full_error_message}"
+    file: "{file_path}:{line_number}"
+    category: {category}
+    severity: {high|medium|low}
+    
+    code_context: |
+      {5_lines_before}
+      >>> {error_line}  # ERROR HERE
+      {5_lines_after}
+  
+  # Attempted Solutions
+  attempts:
+    - attempt: 1
+      approach: "{what_was_tried}"
+      result: "{failed|partial|success}"
+      
+  # Final Solution
+  solution:
+    fixed: {yes|no}
+    approach: "{what_worked}"
+    code_change: |
+      {before}
+      {after}
+    
+    prevention: "{how_to_prevent}"
+  
+  # Learning Points
+  learnings:
+    - "{key_learning_1}"
+    - "{key_learning_2}"
+  
+  # Search Tags
+  tags: [{error_code}, {tool}, {feature}]
+
+# Capture Commands
+capture_commands:
+  quick_capture: |
+    # Function to capture error context
+    capture_error() {
+      local error_msg="$1"
+      local file="$2"
+      local line="$3"
+      
+      # Create timestamp
+      local timestamp=$(date +%Y%m%d_%H%M%S)
+      
+      # Extract error code if present
+      local error_code=$(echo "$error_msg" | grep -oE "[A-Z]+[0-9]{3,4}" | head -1)
+      
+      # Create error file
+      cat > ".claude/errors/error_${error_code}_${timestamp}.yml" << EOF
+    # Error: ${error_code:-UNKNOWN}
+    captured: $(date -Iseconds)
+    status: active
+    
+    context:
+      message: "$error_msg"
+      file: "$file:$line"
+      
+    code_context: |
+    $(sed -n "$((line-5)),$((line+5))p" "$file" | nl -v $((line-5)))
+    EOF
+      
+      echo "Error captured: .claude/errors/error_${error_code}_${timestamp}.yml"
+    }
+  
+  typescript_capture: |
+    # Capture TypeScript errors
+    npx tsc --noEmit 2>&1 | while read line; do
+      if [[ $line =~ ^(.+)\(([0-9]+),([0-9]+)\):.+error.+(TS[0-9]+):.+$ ]]; then
+        file="${BASH_REMATCH[1]}"
+        line="${BASH_REMATCH[2]}"
+        col="${BASH_REMATCH[3]}"
+        code="${BASH_REMATCH[4]}"
+        capture_error "$line" "$file" "$line"
+      fi
+    done
+
+# Prevention Integration
+prevention_system:
+  before_coding:
+    check_command: "!check errors {feature}"
+    
+    shows:
+      - "Previous errors in this feature"
+      - "Common mistakes to avoid"
+      - "Proven solutions"
+  
+  during_coding:
+    real_time_checks:
+      - "Pattern matching against known errors"
+      - "Suggest alternatives"
+      - "Warn about gotchas"
+  
+  after_error:
+    auto_search:
+      - "Find similar errors"
+      - "Suggest known solutions"
+      - "Create new entry if unique"
+
+# Search & Retrieval
+search_system:
+  by_error_code: |
+    grep -r "error_code: TS4111" .claude/errors/
+  
+  by_feature: |
+    grep -r "feature: boq" .claude/errors/
+  
+  by_solution_status: |
+    grep -B5 "fixed: no" .claude/errors/*.yml
+  
+  frequency_analysis: |
+    # Most common errors
+    grep -h "error_code:" .claude/errors/*.yml | 
+    sort | uniq -c | sort -nr | head -10
+
+# Learning Metrics
+metrics:
+  track:
+    - total_errors_captured
+    - errors_prevented
+    - solution_reuse_count
+    - time_to_resolution
+  
+  report:
+    weekly: "Top 5 errors and solutions"
+    monthly: "Error trends and preventions"
+
+# Integration Points
+integration:
+  with_development:
+    - "VS Code extension for quick capture"
+    - "Git hooks for error checking"
+    - "CI/CD error reporting"
+  
+  with_superclaude:
+    - "Auto-update error index"
+    - "Pattern recognition"
+    - "Proactive prevention"

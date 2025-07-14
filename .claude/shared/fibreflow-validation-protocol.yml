@@ -1,0 +1,143 @@
+# FibreFlow Validation Protocol
+# Always validate before documenting patterns
+version: 1.0
+name: Pattern Validation Protocol
+description: 4-step validation before documenting any patterns
+
+# Standard Validation Steps
+validation_steps:
+  step_1_codebase_verification:
+    question: "Are these patterns actually used in FibreFlow?"
+    actions:
+      - "Search codebase for pattern usage"
+      - "Count how many files use this pattern"
+      - "Find counterexamples"
+      - "Check if suggested pattern exists but is unused"
+    
+    tools:
+      - "Task tool to search and analyze files"
+      - "Grep for pattern instances"
+      - "Check imports and extensions"
+    
+    output: "Pattern usage report with evidence"
+  
+  step_2_angular_best_practices:
+    question: "Are these the current recommended approaches?"
+    actions:
+      - "Check Angular version compatibility"
+      - "Verify against Angular style guide"
+      - "Check if pattern is deprecated"
+      - "Consider framework direction"
+    
+    considerations:
+      - "Angular 20.x patterns"
+      - "Standalone components era"
+      - "Signals vs RxJS guidance"
+      - "Dependency injection evolution"
+    
+    output: "Best practice alignment assessment"
+  
+  step_3_design_philosophy:
+    question: "Do they align with 'keep it simple, get basics working first'?"
+    actions:
+      - "Check complexity level"
+      - "Evaluate learning curve"
+      - "Consider maintenance burden"
+      - "Assess debugging difficulty"
+    
+    philosophy_check:
+      - "Simple over complex"
+      - "Working over theoretical"
+      - "Patterns over abstractions"
+      - "Consistency over novelty"
+    
+    output: "Philosophy alignment score"
+  
+  step_4_antihall_validation:
+    question: "Have these patterns been verified against existing code?"
+    actions:
+      - "Run antiHall knowledge update"
+      - "Check patterns against codebase"
+      - "Validate suggestions"
+      - "Document any contradictions"
+    
+    commands:
+      - "cd antiHall && npm run parse"
+      - "npm run check 'pattern to verify'"
+    
+    output: "antiHall validation report"
+
+# Validation Template
+validation_template: |
+  # Pattern Validation: {pattern_name}
+  Date: {date}
+  
+  ## Step 1: Codebase Verification
+  - Pattern found in: {files_count} files
+  - Examples: {file_paths}
+  - Counterexamples: {exceptions}
+  - Usage: {widespread|limited|unused}
+  
+  ## Step 2: Angular Best Practices
+  - Framework version: Angular {version}
+  - Best practice status: {recommended|acceptable|deprecated}
+  - Style guide compliance: {yes|no|partial}
+  
+  ## Step 3: Design Philosophy
+  - Complexity: {simple|moderate|complex}
+  - Learning curve: {easy|moderate|steep}
+  - Maintenance: {low|medium|high}
+  - Philosophy alignment: {high|medium|low}
+  
+  ## Step 4: antiHall Validation
+  - Knowledge updated: {yes|no}
+  - Pattern validated: {yes|no|conflicts}
+  - Contradictions: {none|list}
+  
+  ## Recommendation
+  - Should document: {yes|no}
+  - Confidence level: {high|medium|low}
+  - Notes: {additional_context}
+
+# When to Apply Validation
+apply_validation:
+  always:
+    - "Before documenting any pattern"
+    - "Before creating service templates"
+    - "Before suggesting architectural changes"
+    - "Before updating guidelines"
+  
+  patterns_requiring_validation:
+    - "Service creation patterns"
+    - "Component structures"
+    - "State management approaches"
+    - "Data flow patterns"
+    - "Error handling strategies"
+
+# Integration with Workflows
+workflow_integration:
+  exploration_workflow:
+    after: "Pattern discovery"
+    before: "Documentation creation"
+  
+  development_workflow:
+    after: "Requirements gathering"
+    before: "Implementation"
+  
+  improvement_workflow:
+    after: "Issue identification"
+    before: "Solution recommendation"
+
+# Validation Commands
+quick_commands:
+  full_validation: |
+    # Run complete validation
+    !validate pattern "{pattern_description}"
+  
+  codebase_check: |
+    # Check pattern usage
+    !check usage "{pattern_code}"
+  
+  antihall_verify: |
+    # Verify against antiHall
+    cd antiHall && npm run check "{pattern}"

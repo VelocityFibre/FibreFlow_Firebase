@@ -16,7 +16,8 @@ export type EntityType =
   | 'email'
   | 'settings'
   | 'role'
-  | 'user';
+  | 'user'
+  | 'devNote';
 
 export type AuditAction =
   | 'create'

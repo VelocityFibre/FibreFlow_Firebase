@@ -1,4 +1,5 @@
 import { inject } from '@angular/core';
+import { Observable } from 'rxjs';
 import {
   Firestore,
   collection,
@@ -8,26 +9,53 @@ import {
   deleteDoc,
   setDoc,
   getDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  QueryConstraint,
+  WhereFilterOp,
   DocumentReference,
   CollectionReference,
   DocumentData,
   UpdateData,
   WithFieldValue,
   PartialWithFieldValue,
+  collectionData,
+  docData,
+  serverTimestamp,
+  Timestamp,
 } from '@angular/fire/firestore';
 import { AuditTrailService } from './audit-trail.service';
 import { EntityType } from '../models/audit-log.model';
 
+// Type for data that excludes automatically managed fields
+export type CreateData<T> = Omit<T, 'id' | 'createdAt' | 'updatedAt'>;
+
+// Base interface for all Firestore entities
+export interface BaseEntity {
+  id?: string;
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
+}
+
 /**
  * Base service that ALL Firestore services should extend
  * Automatically logs all CRUD operations to audit trail
+ * Provides standardized CRUD operations with audit logging
  */
-export abstract class BaseFirestoreService {
+export abstract class BaseFirestoreService<T extends BaseEntity> {
   protected firestore = inject(Firestore);
   private auditService = inject(AuditTrailService);
 
-  // Abstract method that child services must implement
+  // Abstract methods that child services must implement
+  protected abstract collectionName: string;
   protected abstract getEntityType(): EntityType;
+
+  // Standardized collection reference
+  protected get collection(): CollectionReference<T> {
+    return this.getCollection<T>(this.collectionName);
+  }
 
   // Helper to extract entity name from data
   protected getEntityName(data: any): string {
@@ -248,5 +276,95 @@ export abstract class BaseFirestoreService {
     ...pathSegments: string[]
   ): DocumentReference<T> {
     return doc(this.firestore, path, ...pathSegments) as DocumentReference<T>;
+  }
+
+  // Standardized CRUD Operations
+  
+  /**
+   * Get all documents from collection
+   */
+  getAll(): Observable<T[]> {
+    return collectionData(this.collection, { idField: 'id' });
+  }
+
+  /**
+   * Get document by ID
+   */
+  getById(id: string): Observable<T | undefined> {
+    const docRef = this.getDoc<T>(this.collectionName, id);
+    return docData(docRef, { idField: 'id' });
+  }
+
+  /**
+   * Create new document with audit logging
+   */
+  async create(data: CreateData<T>): Promise<string> {
+    const timestampedData = {
+      ...data,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    } as WithFieldValue<T>;
+    
+    const docRef = await this.addDocWithAudit(this.collection, timestampedData);
+    return docRef.id;
+  }
+
+  /**
+   * Update document with audit logging
+   */
+  async update(id: string, data: Partial<T>): Promise<void> {
+    const docRef = this.getDoc<T>(this.collectionName, id);
+    const timestampedData = {
+      ...data,
+      updatedAt: serverTimestamp(),
+    } as UpdateData<T>;
+    
+    await this.updateDocWithAudit(docRef, timestampedData);
+  }
+
+  /**
+   * Delete document with audit logging
+   */
+  async delete(id: string): Promise<void> {
+    const docRef = this.getDoc<T>(this.collectionName, id);
+    await this.deleteDocWithAudit(docRef);
+  }
+
+  // Query Helper Methods
+  
+  /**
+   * Get documents with custom query constraints
+   */
+  protected getWithQuery(constraints: QueryConstraint[]): Observable<T[]> {
+    const q = query(this.collection, ...constraints);
+    return collectionData(q, { idField: 'id' });
+  }
+
+  /**
+   * Get documents with simple where filter
+   */
+  protected getWithFilter(field: string, operator: WhereFilterOp, value: any): Observable<T[]> {
+    return this.getWithQuery([where(field, operator, value)]);
+  }
+
+  /**
+   * Get active/enabled documents (common pattern)
+   */
+  getActive(): Observable<T[]> {
+    return this.getWithFilter('isActive', '==', true);
+  }
+
+  /**
+   * Get documents ordered by creation date
+   */
+  getOrderedByDate(direction: 'asc' | 'desc' = 'desc'): Observable<T[]> {
+    return this.getWithQuery([orderBy('createdAt', direction)]);
+  }
+
+  /**
+   * Get limited number of documents
+   */
+  getLimited(limitCount: number): Observable<T[]> {
+    return this.getWithQuery([limit(limitCount)]);
   }
 }

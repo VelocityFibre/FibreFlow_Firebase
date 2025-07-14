@@ -134,7 +134,6 @@ export class DevPanel {
 
     await this.devNoteService.update(note.id, {
       notes: this.notesText(),
-      lastUpdated: new Date(),
       updatedBy: this.authService.currentUser()?.email || 'system',
     });
 

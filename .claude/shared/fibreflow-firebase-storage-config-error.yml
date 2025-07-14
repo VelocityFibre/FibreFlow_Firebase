@@ -1,0 +1,77 @@
+# Firebase Storage Configuration Error
+# Specific solution for storage deployment failures
+version: 1.0
+name: Firebase Storage Config Array Error
+description: Fix for "Cannot release resource type firebase.storage" error
+
+# Error Details
+error_details:
+  error_message: "Error: Cannot release resource type 'firebase.storage'"
+  occurs_during: "firebase deploy"
+  firebase_cli_version: "13.x"
+
+# Root Cause
+root_cause:
+  issue: "firebase.json has storage configuration in array format"
+  location: "firebase.json"
+  
+  wrong_format: |
+    {
+      "storage": [{
+        "rules": "storage.rules"
+      }]
+    }
+  
+  correct_format: |
+    {
+      "storage": {
+        "rules": "storage.rules"
+      }
+    }
+
+# Why This Matters
+explanation:
+  - "Firebase expects object format for single storage bucket"
+  - "Array format is for multiple storage buckets (rare)"
+  - "Most projects only need one storage bucket"
+
+# How to Fix
+fix_steps:
+  1_locate: "Open firebase.json in project root"
+  2_find_storage: "Find the 'storage' configuration"
+  3_remove_brackets: "Change array [{...}] to object {...}"
+  4_save: "Save the file"
+  5_deploy: "Run firebase deploy again"
+
+# Quick Check Command
+validation:
+  check_format: "cat firebase.json | jq '.storage'"
+  
+  should_see: |
+    {
+      "rules": "storage.rules"
+    }
+  
+  not_this: |
+    [
+      {
+        "rules": "storage.rules"
+      }
+    ]
+
+# Prevention
+prevention:
+  - "Use Firebase CLI to initialize: firebase init storage"
+  - "Don't manually edit firebase.json unless necessary"
+  - "Validate JSON syntax before deploying"
+
+# Related Errors
+related_issues:
+  - "Storage rules syntax errors"
+  - "Missing storage.rules file"
+  - "Invalid JSON in firebase.json"
+
+# Testing
+test_deployment:
+  isolate_storage: "firebase deploy --only storage"
+  with_debug: "firebase deploy --only storage --debug"

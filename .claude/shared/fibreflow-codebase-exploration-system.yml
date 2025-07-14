@@ -1,0 +1,214 @@
+# FibreFlow Codebase Exploration System
+# Methodical approach to discover and document patterns
+version: 1.0
+name: Codebase Exploration System
+description: Systematic scanning to enhance SuperClaude knowledge base
+
+# Exploration Strategy
+exploration_phases:
+  phase_1_discovery:
+    name: "Structure & Pattern Discovery"
+    duration: "1 week"
+    
+    scan_targets:
+      - directory: "src/app/core/"
+        focus: ["Services", "Models", "Guards", "Interceptors"]
+        extract: ["Base patterns", "Common methods", "Error handling"]
+        
+      - directory: "src/app/shared/"
+        focus: ["Components", "Directives", "Pipes", "Utils"]
+        extract: ["Reusable patterns", "UI conventions", "Helper functions"]
+        
+      - directory: "src/app/features/"
+        focus: ["Feature structure", "Routing patterns", "State management"]
+        extract: ["Feature templates", "Common workflows", "Integration patterns"]
+    
+    outputs:
+      - "Pattern library YAML files"
+      - "Undocumented features list"
+      - "Reusable code snippets"
+  
+  phase_2_deep_dive:
+    name: "Feature-Specific Analysis"
+    duration: "2 weeks"
+    
+    per_feature_analysis:
+      - "Complete workflow documentation"
+      - "Error patterns and solutions"
+      - "Performance bottlenecks"
+      - "Security considerations"
+      - "Testing approaches"
+    
+    priority_features:
+      1: "projects"    # Core feature
+      2: "boq"         # Complex with imports
+      3: "pole-tracker" # Mobile + desktop
+      4: "daily-progress" # KPIs
+      5: "stock"       # Inventory patterns
+  
+  phase_3_optimization:
+    name: "Pattern Optimization & Consolidation"
+    duration: "1 week"
+    
+    tasks:
+      - "Identify duplicate patterns"
+      - "Create reusable templates"
+      - "Build code generators"
+      - "Optimize SuperClaude responses"
+
+# Scanning Methodology
+scanning_method:
+  automated_scan:
+    tools:
+      - "AST parsing for pattern detection"
+      - "Dependency analysis"
+      - "Complexity metrics"
+    
+    commands:
+      find_patterns: |
+        # Find all service patterns
+        grep -r "extends BaseFirestoreService" src/ --include="*.ts" | 
+        awk -F: '{print $1}' | sort | uniq
+        
+      find_components: |
+        # Find all standalone components
+        grep -r "standalone: true" src/ --include="*.ts" |
+        grep -v node_modules
+        
+      find_error_handling: |
+        # Find error handling patterns
+        grep -r "catch\|error\|Error" src/ --include="*.ts" |
+        grep -v node_modules | head -20
+  
+  manual_review:
+    checklist:
+      per_file:
+        - "Identify main purpose"
+        - "Extract key patterns"
+        - "Note error handling"
+        - "Find reusable code"
+        - "Document dependencies"
+      
+      per_feature:
+        - "Map complete workflow"
+        - "Document business rules"
+        - "Identify pain points"
+        - "Note performance issues"
+
+# Knowledge Extraction Rules
+extraction_rules:
+  what_to_capture:
+    patterns:
+      - "Repeated code structures"
+      - "Common problem solutions"
+      - "Naming conventions"
+      - "File organization"
+    
+    workflows:
+      - "User journeys"
+      - "Data flow"
+      - "State management"
+      - "Error recovery"
+    
+    gotchas:
+      - "Non-obvious dependencies"
+      - "Performance traps"
+      - "Security considerations"
+      - "Testing challenges"
+  
+  how_to_document:
+    format: "YAML with examples"
+    naming: "fibreflow-{feature}-{aspect}.yml"
+    location: ".claude/shared/"
+    
+    template: |
+      # {Feature} {Aspect}
+      discovered_date: {date}
+      
+      pattern:
+        name: {pattern_name}
+        usage: {where_used}
+        example: |
+          {code_example}
+      
+      reusable: {yes/no}
+      performance: {impact}
+      gotchas: []
+
+# Progress Tracking
+progress_tracking:
+  dashboard:
+    total_files: 0
+    scanned_files: 0
+    patterns_found: 0
+    knowledge_gaps: 0
+    
+  metrics:
+    - "Files scanned per day"
+    - "Patterns documented"
+    - "Reusable snippets created"
+    - "SuperClaude improvements"
+
+# Integration with SuperClaude
+integration_plan:
+  immediate_value:
+    - "Document found patterns"
+    - "Create quick references"
+    - "Build error prevention"
+  
+  long_term_value:
+    - "Pattern recognition"
+    - "Auto-suggestions"
+    - "Code generation"
+    - "Proactive guidance"
+
+# Continuous Discovery
+continuous_process:
+  triggers:
+    - "New feature added"
+    - "Major refactoring"
+    - "Performance optimization"
+    - "Bug fixes"
+  
+  maintenance:
+    weekly: "Scan changed files"
+    monthly: "Review patterns"
+    quarterly: "Consolidate knowledge"
+
+# Quick Start Commands
+quick_start:
+  begin_scan: |
+    # Start with core services
+    find src/app/core/services -name "*.service.ts" | 
+    while read file; do
+      echo "=== Scanning $file ==="
+      # Extract class definition
+      grep -A 5 "export class" "$file"
+      # Find methods
+      grep "^\s*[a-zA-Z].*(" "$file" | grep -v "constructor"
+    done
+  
+  find_undocumented: |
+    # Find components without documentation
+    for file in $(find src/app -name "*.component.ts"); do
+      if ! grep -q "@description\|/\*\*" "$file"; then
+        echo "Undocumented: $file"
+      fi
+    done
+
+# Expected Outcomes
+expected_outcomes:
+  week_1:
+    - "Complete service pattern library"
+    - "Component conventions documented"
+    - "Error handling patterns identified"
+  
+  week_2:
+    - "5 features fully documented"
+    - "Common workflows extracted"
+    - "Performance patterns noted"
+  
+  week_3:
+    - "Reusable templates created"
+    - "SuperClaude knowledge enhanced"
+    - "Development speed improved"

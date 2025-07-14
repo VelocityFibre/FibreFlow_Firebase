@@ -24,8 +24,8 @@ export interface Supplier {
   status: SupplierStatus;
   verificationStatus: VerificationStatus;
 
-  createdAt: Timestamp | Date;
-  updatedAt: Timestamp | Date;
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
   createdBy: string;
 
   portalEnabled: boolean;

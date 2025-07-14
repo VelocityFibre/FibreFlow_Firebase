@@ -1,3 +1,5 @@
+import { Timestamp } from '@angular/fire/firestore';
+
 export interface DevNote {
   id?: string;
   route: string; // e.g., '/projects', '/daily-progress'
@@ -5,9 +7,10 @@ export interface DevNote {
   notes: string; // Markdown-supported notes
   tasks: DevTask[]; // Array of development tasks
   errors: PageError[]; // Logged errors for this page
-  lastUpdated: Date;
+  lastUpdated?: Timestamp;
   updatedBy: string; // User email who made changes
-  createdAt: Date;
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
   createdBy: string;
 }
 

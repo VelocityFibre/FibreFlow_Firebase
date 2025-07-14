@@ -45,7 +45,42 @@ configuration_hierarchy:
   10_deployment_gotchas: "fibreflow-deployment-gotchas.yml"  # Deployment mistakes to avoid
   11_kpi_implementation: "fibreflow-kpi-tracking-implementation.yml"  # KPI system reference
   12_naming_conventions: "fibreflow-naming-conventions.yml"  # Naming rules and patterns
-  13_master: "THIS FILE"                      # Orchestration rules
+  13_error_solutions: "fibreflow-error-solutions-index.yml"  # Index of specific error fixes
+  14_codebase_exploration: "fibreflow-codebase-exploration-system.yml"  # Systematic discovery
+  15_error_capture: "fibreflow-error-capture-workflow.yml"  # Error documentation workflow
+  16_exploration_schedule: "fibreflow-exploration-schedule.yml"  # Practical exploration plan
+  17_workflow_selector: "fibreflow-workflow-selector.yml"  # Smart context loading
+  18_task_breakdown: "fibreflow-task-breakdown-templates.yml"  # Task decomposition
+  19_exploration_tracker: "fibreflow-exploration-tracker.yml"  # Progress tracking
+  20_specification_system: "fibreflow-specification-system.yml"  # Specification-first development
+  21_base_service_refactoring: "fibreflow-base-service-refactoring.yml"  # BaseFirestoreService lessons
+  22_master: "THIS FILE"                      # Orchestration rules
+
+# Conflict Resolution Hierarchy
+conflict_resolution:
+  priority_order:
+    1: "Specific error solutions"      # Most specific wins
+    2: "Page-specific documentation"   # page-intel.yml
+    3: "Feature implementations"       # kpi-implementation.yml
+    4: "Component patterns"           # component-library.yml
+    5: "General patterns"             # development.yml
+    6: "Workflow rules"               # workflows.yml
+    7: "Global settings"              # master-config.yml
+  
+  resolution_rules:
+    - "More specific always overrides general"
+    - "Working code overrides theoretical patterns"
+    - "Recent documentation overrides old"
+    - "Explicit user instruction overrides all"
+  
+  examples:
+    service_pattern:
+      conflict: "Different service patterns suggested"
+      resolution: "Use page-intel.yml > general patterns"
+    
+    naming:
+      conflict: "Component naming variations"
+      resolution: "Use established project pattern > general convention"
 
 # Automated Workflow Logic
 workflow_automation:
@@ -55,6 +90,8 @@ workflow_automation:
       - "Run antiHall before suggesting new patterns"
       - "Check security patterns on auth-related code"
       - "Validate queries against Firestore best practices"
+      - "Validate file names against naming conventions"
+      - "Reject generic names like 'achievements', 'updates'"
     
     code_quality:
       - "Fix lint errors automatically"
@@ -71,6 +108,12 @@ workflow_automation:
       - "Use established patterns from antiHall"
       - "Follow component structure exactly"
       - "Maintain consistent naming"
+      
+    naming_validation:
+      - "Before creating any file: check naming conventions"
+      - "If name contains generic words: stop and be specific"
+      - "Pattern: fibreflow-{feature}-{purpose}.yml"
+      - "Always ask: What would someone search for?"
   
   # What requires your approval
   requires_human_approval:
@@ -174,6 +217,21 @@ decision_framework:
       inline: "Code comments for non-obvious choices"
       yaml: "In relevant configuration files"
       prp: "In feature planning documents"
+
+# Workflow Phase Management
+workflow_phases:
+  active_workflow: null  # Set by workflow selector
+  current_phase: null    # Planning, Implementation, Testing, etc.
+  
+  phase_transitions:
+    planning_to_implementation:
+      verify: ["Requirements clear", "Patterns identified", "Design approved"]
+      
+    implementation_to_testing:
+      verify: ["Code complete", "No TypeScript errors", "Build succeeds"]
+      
+    testing_to_deployment:
+      verify: ["All tests pass", "Documentation updated", "No console errors"]
 
 # Workflow Orchestration
 workflow_orchestration:

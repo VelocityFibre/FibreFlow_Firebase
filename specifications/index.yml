@@ -1,0 +1,195 @@
+# FibreFlow Specification Index
+# Central registry of all system specifications
+version: 1.0
+last_updated: "2025-07-14"
+
+# Specification Registry
+specifications:
+  # Authentication & Authorization
+  AUTH:
+    SPEC-AUTH-001:
+      title: "User Authentication"
+      status: "implemented"
+      description: "Users must authenticate before accessing system"
+      implementation: "src/app/core/services/auth.service.ts"
+      
+    SPEC-AUTH-002:
+      title: "Role-Based Access Control"
+      status: "implemented"
+      description: "Users have roles that determine feature access"
+      implementation: "src/app/core/guards/role.guard.ts"
+
+  # KPI & Progress Tracking
+  KPI:
+    SPEC-KPI-001:
+      title: "Daily Progress KPI Tracking"
+      status: "implemented"
+      description: "Track daily achievements against KPI targets"
+      implementation: "src/app/features/daily-progress/"
+      documentation: "specifications/SPEC-KPI-001-daily-progress-tracking.md"
+    
+    SPEC-KPI-002:
+      title: "KPI Timeline Calculation"
+      status: "implemented"
+      description: "Calculate project timelines based on KPI targets and rates"
+      implementation: "src/app/core/services/kpi-timeline.service.ts"
+
+  # Project Management
+  PROJ:
+    SPEC-PROJ-001:
+      title: "Project Lifecycle Management"
+      status: "implemented"
+      description: "Create, update, and track projects through phases"
+      implementation: "src/app/features/projects/"
+    
+    SPEC-PROJ-002:
+      title: "Project Hierarchy"
+      status: "implemented"
+      description: "4-level hierarchy: Project > Phase > Step > Task"
+      implementation: "src/app/core/models/project.model.ts"
+
+  # Mobile Features
+  MOBILE:
+    SPEC-MOBILE-001:
+      title: "Mobile-Optimized UI"
+      status: "partial"
+      description: "Touch-friendly interface for field workers"
+      implementation: "src/app/features/pole-tracker/mobile/"
+    
+    SPEC-MOBILE-002:
+      title: "GPS Integration"
+      status: "implemented"
+      description: "Capture and display GPS coordinates"
+      implementation: "src/app/core/services/google-maps.service.ts"
+    
+    SPEC-MOBILE-003:
+      title: "Offline Queue"
+      status: "implemented"
+      description: "Queue actions when offline, sync when connected"
+      implementation: "src/app/core/services/offline-queue.service.ts"
+
+  # Data Synchronization
+  SYNC:
+    SPEC-SYNC-001:
+      title: "Offline Data Sync"
+      status: "implemented"
+      description: "Changes made offline must sync without data loss"
+      implementation: "Firestore offline persistence"
+    
+    SPEC-SYNC-002:
+      title: "Meeting Sync from Fireflies"
+      status: "implemented"
+      description: "Import meetings and action items from Fireflies.ai"
+      implementation: "scripts/sync-meetings-improved.js"
+
+  # Performance Requirements
+  PERF:
+    SPEC-PERF-001:
+      title: "List View Performance"
+      status: "partial"
+      description: "List views must load in < 2 seconds"
+      issues: ["No pagination for large lists"]
+      
+    SPEC-PERF-002:
+      title: "Search Performance"
+      status: "draft"
+      description: "Search results must return in < 500ms"
+      planned_implementation: "Firestore composite indexes"
+
+  # Data Management
+  DATA:
+    SPEC-DATA-001:
+      title: "Data Validation"
+      status: "implemented"
+      description: "All user input validated before storage"
+      implementation: "Reactive form validators"
+    
+    SPEC-DATA-002:
+      title: "Audit Trail"
+      status: "implemented"
+      description: "Track all data changes with user and timestamp"
+      implementation: "functions/src/audit-trail.ts"
+    
+    SPEC-DATA-003:
+      title: "Data Import/Export"
+      status: "partial"
+      description: "Support Excel/CSV import and export"
+      implementation: ["BOQ import", "Stock import"]
+      missing: ["Projects export", "Universal import"]
+
+  # BOQ (Bill of Quantities)
+  BOQ:
+    SPEC-BOQ-001:
+      title: "BOQ Management"
+      status: "implemented"
+      description: "Create and manage bill of quantities"
+      implementation: "src/app/features/boq/"
+      issues: ["DEV-001: Zero quantity filter broken"]
+    
+    SPEC-BOQ-002:
+      title: "BOQ Excel Import"
+      status: "partial"
+      description: "Import BOQ items from Excel"
+      implementation: "src/app/features/boq/import/"
+      issues: ["Large files timeout", "Silent failures on duplicates"]
+
+  # UI/UX Requirements
+  UI:
+    SPEC-UI-001:
+      title: "Theme Support"
+      status: "implemented"
+      description: "Support multiple themes (light, dark, branded)"
+      implementation: "src/app/core/services/theme.service.ts"
+    
+    SPEC-UI-002:
+      title: "Responsive Design"
+      status: "partial"
+      description: "Work on all screen sizes"
+      issues: ["Some tables not mobile-friendly"]
+
+# Specification Statistics
+statistics:
+  total_specifications: 20
+  by_status:
+    implemented: 12
+    partial: 5
+    draft: 3
+    deprecated: 0
+  
+  by_domain:
+    AUTH: 2
+    KPI: 2
+    PROJ: 2
+    MOBILE: 3
+    SYNC: 2
+    PERF: 2
+    DATA: 3
+    BOQ: 2
+    UI: 2
+  
+  coverage:
+    features_with_specs: "60%"
+    retroactive_specs_needed: 10
+    new_features_without_specs: 0
+
+# Next Specifications to Write
+backlog:
+  high_priority:
+    - "SPEC-REPORT-001: Report Generation"
+    - "SPEC-POLE-001: Pole Tracker Mobile List"
+    - "SPEC-TASK-001: Task Management"
+  
+  medium_priority:
+    - "SPEC-CLIENT-001: Client Management"
+    - "SPEC-SUPPLIER-001: Supplier Management"
+    - "SPEC-STOCK-001: Stock Management"
+  
+  low_priority:
+    - "SPEC-SETTINGS-001: User Settings"
+    - "SPEC-NOTIF-001: Notifications"
+
+# Quick Reference
+quick_commands:
+  find_spec: "grep -r 'SPEC-XXX-001' specifications/"
+  list_by_status: "grep 'status: draft' specifications/index.yml"
+  check_implementation: "grep 'implementation:' specifications/index.yml | grep -v 'src/'"

@@ -1,0 +1,288 @@
+# FibreFlow Task Breakdown Templates
+# Pre-defined task structures with automatic decomposition
+version: 1.0
+name: Task Breakdown Templates
+description: Structured templates for common development tasks
+
+# Task Templates
+task_templates:
+  # New Feature Template
+  new_feature:
+    description: "Complete feature implementation"
+    
+    main_tasks:
+      1_planning:
+        subtasks:
+          - "Review requirements"
+          - "Check existing patterns in page-intel.yml"
+          - "Design data model"
+          - "Plan UI components"
+        verification: "PRP document created"
+      
+      2_backend:
+        subtasks:
+          - "Create/update model interfaces"
+          - "Create service extending BaseFirestoreService"
+          - "Add Firestore security rules"
+          - "Create any needed Cloud Functions"
+        verification: "Service methods testable"
+        
+      3_frontend:
+        subtasks:
+          - "Create feature module structure"
+          - "Build list component"
+          - "Build detail component"
+          - "Build form component"
+          - "Add routing"
+        verification: "Components render without errors"
+      
+      4_integration:
+        subtasks:
+          - "Connect components to service"
+          - "Add loading states"
+          - "Add error handling"
+          - "Update navigation"
+        verification: "CRUD operations work"
+      
+      5_polish:
+        subtasks:
+          - "Add form validation"
+          - "Implement search/filter"
+          - "Add success messages"
+          - "Mobile responsive check"
+        verification: "Feature complete and polished"
+      
+      6_documentation:
+        subtasks:
+          - "Update page-intel.yml"
+          - "Add to feature list in CLAUDE.md"
+          - "Document any new patterns"
+        verification: "Documentation updated"
+    
+    auto_breakdown_rules:
+      - if: "subtask contains 'Create service'"
+        expand_to:
+          - "Define service class"
+          - "Add CRUD methods"
+          - "Add custom queries"
+          - "Add error handling"
+      
+      - if: "subtask contains 'Build form'"
+        expand_to:
+          - "Create form component"
+          - "Define form controls"
+          - "Add validators"
+          - "Handle submission"
+          - "Show validation errors"
+
+  # Bug Fix Template
+  bug_fix:
+    description: "Systematic bug resolution"
+    
+    main_tasks:
+      1_reproduce:
+        subtasks:
+          - "Understand expected behavior"
+          - "Reproduce the issue"
+          - "Check browser console"
+          - "Check network requests"
+        verification: "Can reproduce consistently"
+      
+      2_diagnose:
+        subtasks:
+          - "Search error-solutions-index.yml"
+          - "Check similar past issues"
+          - "Identify root cause"
+          - "Locate problematic code"
+        verification: "Root cause identified"
+      
+      3_fix:
+        subtasks:
+          - "Implement fix"
+          - "Test fix locally"
+          - "Check for side effects"
+          - "Update related code if needed"
+        verification: "Bug no longer occurs"
+      
+      4_prevent:
+        subtasks:
+          - "Add to error documentation"
+          - "Update validation if applicable"
+          - "Consider adding tests"
+          - "Document prevention"
+        verification: "Prevention documented"
+
+  # Performance Optimization Template
+  optimization:
+    description: "Improve application performance"
+    
+    main_tasks:
+      1_measure:
+        subtasks:
+          - "Identify slow operations"
+          - "Measure current performance"
+          - "Use Chrome DevTools"
+          - "Check bundle size"
+        verification: "Baseline metrics recorded"
+      
+      2_analyze:
+        subtasks:
+          - "Find bottlenecks"
+          - "Check Firestore queries"
+          - "Review component rendering"
+          - "Analyze network requests"
+        verification: "Bottlenecks identified"
+      
+      3_optimize:
+        subtasks:
+          - "Implement optimizations"
+          - "Add pagination/virtual scroll"
+          - "Optimize queries"
+          - "Reduce bundle size"
+        verification: "Optimizations applied"
+      
+      4_verify:
+        subtasks:
+          - "Measure improvement"
+          - "Compare to baseline"
+          - "Test functionality"
+          - "Document changes"
+        verification: "Performance improved"
+
+  # Exploration Template
+  codebase_exploration:
+    description: "Systematic code discovery"
+    
+    main_tasks:
+      1_survey:
+        subtasks:
+          - "List all files in target directory"
+          - "Identify file purposes"
+          - "Note file relationships"
+          - "Check documentation"
+        verification: "Directory mapped"
+      
+      2_analyze:
+        subtasks:
+          - "Read key files in detail"
+          - "Extract patterns"
+          - "Find reusable code"
+          - "Identify improvements"
+        verification: "Patterns documented"
+      
+      3_document:
+        subtasks:
+          - "Create pattern YAML"
+          - "Update exploration tracker"
+          - "Add to relevant docs"
+          - "Create examples"
+        verification: "Documentation created"
+
+# Automatic Task Management
+auto_task_management:
+  breakdown_triggers:
+    - trigger: "Task estimated > 1 hour"
+      action: "Break into 15-30 min subtasks"
+    
+    - trigger: "Subtask has multiple verbs"
+      action: "Split into separate subtasks"
+      example: "'Create and test service' → 'Create service', 'Test service'"
+    
+    - trigger: "Subtask mentions multiple files"
+      action: "Create subtask per file"
+  
+  task_dependencies:
+    rules:
+      - "Backend tasks before frontend integration"
+      - "Model definition before service creation"
+      - "Service creation before component connection"
+      - "Testing after implementation"
+  
+  parallel_tasks:
+    can_parallelize:
+      - "Component creation (list, detail, form)"
+      - "Documentation updates"
+      - "Style improvements"
+    
+    must_serialize:
+      - "Model → Service → Component → Integration"
+      - "Fix → Test → Document"
+
+# Verification Gates
+verification_gates:
+  types:
+    code_quality:
+      checks:
+        - "No TypeScript errors"
+        - "Linting passes"
+        - "Build succeeds"
+      command: "npm run lint && npm run build"
+    
+    functional:
+      checks:
+        - "Feature works as expected"
+        - "No console errors"
+        - "Data persists correctly"
+      method: "Manual testing"
+    
+    deployment_ready:
+      checks:
+        - "All code committed"
+        - "No hardcoded values"
+        - "Documentation updated"
+      command: "firebase deploy --dry-run"
+
+# Task Estimation
+estimation_helpers:
+  complexity_factors:
+    simple: # 30 min - 1 hour
+      - "Single file change"
+      - "UI text update"
+      - "Add validation rule"
+    
+    medium: # 2-4 hours
+      - "New CRUD feature"
+      - "Complex form"
+      - "Service integration"
+    
+    complex: # 1-2 days
+      - "Multi-step workflow"
+      - "External API integration"
+      - "Performance optimization"
+  
+  time_multipliers:
+    first_time: 2.0      # Double estimate if new pattern
+    similar_exists: 0.5  # Half if copying existing pattern
+    needs_research: 1.5  # Add 50% if requirements unclear
+
+# Usage Examples
+usage:
+  select_template: |
+    # Manually select template
+    !task template:new_feature
+    
+    # Auto-detect from description
+    "Create invoice management" → new_feature template
+    "Fix login error" → bug_fix template
+  
+  breakdown_task: |
+    # Break down a specific task
+    !task breakdown "Create invoice service"
+    
+    # Output:
+    1. Define Invoice model interface
+    2. Create InvoiceService class
+    3. Add getInvoices() method
+    4. Add createInvoice() method
+    5. Add updateInvoice() method
+    6. Add deleteInvoice() method
+    7. Add error handling
+    8. Test service methods
+  
+  track_progress: |
+    # Mark task complete
+    !task complete "Create Invoice model"
+    
+    # Check progress
+    !task status
+    # Shows: 1/8 tasks complete (12.5%)

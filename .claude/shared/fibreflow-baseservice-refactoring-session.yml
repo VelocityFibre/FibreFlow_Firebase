@@ -1,0 +1,195 @@
+# BaseFirestoreService Refactoring Session - Continuation Guide
+# Created: 2025-01-14
+# Purpose: Maintain continuity after context auto-compact
+
+## Session Summary
+**Goal**: Refactor all services to extend BaseFirestoreService for consistent CRUD and automatic audit logging
+
+## Current Status (40% Complete)
+
+### ✅ Completed Services (4/10+)
+1. **StaffService** ✅ 
+   - Extended BaseFirestoreService<StaffMember>
+   - 22% code reduction
+   - Deployed successfully
+   
+2. **ContractorService** ✅
+   - Extended BaseFirestoreService<Contractor>
+   - 17% code reduction
+   - Fixed TypeScript errors with override
+   
+3. **SupplierService** ✅
+   - Extended BaseFirestoreService<Supplier>
+   - Updated model: Date → Timestamp
+   - Fixed VerificationStatus enum usage
+   
+4. **MaterialService** ✅
+   - Extended BaseFirestoreService<MasterMaterial>
+   - Updated model: Date → Timestamp
+   - Preserved batch import functionality
+
+### 🔄 Next Services to Refactor
+```typescript
+// Priority order (simple → complex)
+1. ClientService        // Next - moderate complexity
+2. TaskService         // Simple CRUD
+3. RoleService         // Simple CRUD
+4. ProjectService      // Complex - has subcollections
+5. BOQService          // Complex - has import/export
+6. StockService        // Complex - has movements
+```
+
+## Key Patterns & Fixes
+
+### 1. Service Refactoring Pattern
+```typescript
+// BEFORE: Manual CRUD implementation
+export class ServiceName {
+  private firestore = inject(Firestore);
+  private collection = collection(this.firestore, 'collection-name');
+  
+  async create(data) { /* manual implementation */ }
+  async update(id, data) { /* manual implementation */ }
+  // No audit logging
+}
+
+// AFTER: Extends BaseFirestoreService
+export class ServiceName extends BaseFirestoreService<ModelType> {
+  protected override firestore = inject(Firestore); // Only if needed for subcollections
+  protected collectionName = 'collection-name';
+  
+  protected getEntityType(): EntityType {
+    return 'entity-type';
+  }
+  
+  // Inherits create(), update(), delete(), getAll(), getById()
+  // Automatic audit logging on all operations
+}
+```
+
+### 2. Common Model Fixes
+```typescript
+// Update model interfaces
+export interface ModelName {
+  id?: string;
+  // Change these:
+  createdAt?: Date;    → createdAt?: Timestamp;
+  updatedAt?: Date;    → updatedAt?: Timestamp;
+  // Add import:
+  import { Timestamp } from '@angular/fire/firestore';
+}
+```
+
+### 3. Common TypeScript Fixes
+```typescript
+// Fix 1: Override firestore when needed
+protected override firestore = inject(Firestore);
+
+// Fix 2: Observable to Promise conversion
+const result = await this.getById(id).pipe(take(1)).toPromise();
+
+// Fix 3: Timestamp compatibility
+approvedAt: serverTimestamp() as any
+
+// Fix 4: Remove getByIdOnce (doesn't exist)
+❌ await this.getByIdOnce(id)
+✅ await this.getById(id).pipe(take(1)).toPromise()
+```
+
+### 4. Component Fixes After Service Refactor
+```typescript
+// Fix enum usage in components
+❌ supplierService.updateVerificationStatus(id, 'verified')
+✅ supplierService.updateVerificationStatus(id, VerificationStatus.VERIFIED)
+
+// Import the enum
+import { VerificationStatus } from '../models';
+```
+
+## Critical Files & Locations
+
+### Core Files
+- `/src/app/core/services/base-firestore.service.ts` - Enhanced base class
+- `/src/app/core/services/firestore-audit-wrapper.service.ts` - Audit wrapper
+- `/.claude/shared/fibreflow-base-service-refactoring.yml` - Full documentation
+
+### Services Location Pattern
+```
+/src/app/core/services/*.service.ts           // Core services
+/src/app/features/*/services/*.service.ts     // Feature services
+/src/app/core/suppliers/services/*.service.ts // Special case
+```
+
+### Models Location Pattern
+```
+/src/app/core/models/*.model.ts              // Core models
+/src/app/features/*/models/*.model.ts        // Feature models
+```
+
+## Session Recovery Instructions
+
+After auto-compact, to continue:
+
+1. **Read this file first**: `.claude/shared/fibreflow-baseservice-refactoring-session.yml`
+
+2. **Check progress**:
+   ```bash
+   # See which services extend BaseFirestoreService
+   grep -r "extends BaseFirestoreService" src/app --include="*.service.ts"
+   ```
+
+3. **Continue with next service**:
+   ```bash
+   # Find ClientService
+   find src -name "*client*.service.ts" -type f
+   ```
+
+4. **Apply the pattern**:
+   - Read current service implementation
+   - Check model for Date vs Timestamp
+   - Refactor following the pattern above
+   - Fix TypeScript errors
+   - Build to verify
+   - Update progress in this file
+
+## Test Commands
+```bash
+# Check TypeScript
+npx tsc --noEmit
+
+# Build project
+npm run build
+
+# Deploy (when auth works)
+jj describe -m "message" && firebase deploy
+```
+
+## Common Error Messages & Solutions
+
+1. **TS2415**: Class incorrectly extends base
+   - Solution: Use `protected override firestore`
+
+2. **TS2339**: Property 'getByIdOnce' doesn't exist
+   - Solution: Use `getById(id).pipe(take(1)).toPromise()`
+
+3. **TS2344**: Type 'Model' doesn't satisfy constraint 'BaseEntity'
+   - Solution: Update model to use Timestamp instead of Date
+
+4. **TS2345**: Argument type mismatch (enum)
+   - Solution: Use proper enum value instead of string
+
+## Notes for Next Session
+- Authentication issue with Firebase deployment
+- DevNoteService needs special handling (already extends but has issues)
+- Some components need enum imports after service refactoring
+- Total estimated services: 10-15 core services
+
+## Success Metrics
+- All services extend BaseFirestoreService
+- Automatic audit logging on all CRUD operations
+- 15-25% code reduction per service
+- Consistent patterns across codebase
+- Zero TypeScript errors
+
+---
+**Remember**: The goal is fixing the design flaw where BaseFirestoreService existed but wasn't used. We're making it the foundation for ALL services.

@@ -14,67 +14,55 @@ import {
   serverTimestamp,
   getDocs,
   Timestamp,
+  QueryConstraint,
 } from '@angular/fire/firestore';
 import { Observable, map } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Contractor, ContractorStatus, ContractorTeam } from '../models/contractor.model';
+import { BaseFirestoreService } from '../../../core/services/base-firestore.service';
+import { EntityType } from '../../../core/models/audit-log.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ContractorService {
-  private firestore = inject(Firestore);
-  private contractorsCollection = collection(this.firestore, 'contractors');
+export class ContractorService extends BaseFirestoreService<Contractor> {
+  protected override firestore = inject(Firestore); // Still needed for some specialized operations
+  protected collectionName = 'contractors';
+
+  protected getEntityType(): EntityType {
+    return 'contractor';
+  }
 
   // Get all contractors
   getContractors(): Observable<Contractor[]> {
-    const q = query(this.contractorsCollection, orderBy('createdAt', 'desc'));
-
-    return collectionData(q, { idField: 'id' }) as Observable<Contractor[]>;
+    return this.getWithQuery([orderBy('createdAt', 'desc')]);
   }
 
   // Get active contractors only
   getActiveContractors(): Observable<Contractor[]> {
-    const q = query(
-      this.contractorsCollection,
+    return this.getWithQuery([
       where('status', '==', 'active'),
       orderBy('companyName'),
-    );
-
-    return collectionData(q, { idField: 'id' }) as Observable<Contractor[]>;
+    ]);
   }
 
   // Get single contractor by ID
-  getContractor(id: string): Observable<Contractor | null> {
-    const contractorDoc = doc(this.firestore, 'contractors', id);
-    return docData(contractorDoc, { idField: 'id' }) as Observable<Contractor>;
+  getContractor(id: string): Observable<Contractor | undefined> {
+    return this.getById(id);
   }
 
   // Create new contractor
   async createContractor(
     contractor: Omit<Contractor, 'id' | 'createdAt' | 'updatedAt'>,
   ): Promise<string> {
-    const newContractor = {
-      ...contractor,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    };
-
-    const docRef = await addDoc(this.contractorsCollection, newContractor);
-    return docRef.id;
+    return this.create(contractor);
   }
 
   // Update contractor
   async updateContractor(id: string, updates: Partial<Contractor>): Promise<void> {
-    const contractorDoc = doc(this.firestore, 'contractors', id);
-
     // Remove id from updates if present
     const { id: _, ...updateData } = updates;
-
-    await updateDoc(contractorDoc, {
-      ...updateData,
-      updatedAt: serverTimestamp(),
-    });
+    return this.update(id, updateData);
   }
 
   // Update contractor status
@@ -85,7 +73,6 @@ export class ContractorService {
   ): Promise<void> {
     const updates: Partial<Contractor> = {
       status,
-      updatedAt: serverTimestamp() as Timestamp,
     };
 
     if (status === 'suspended' && suspensionReason) {
@@ -94,8 +81,7 @@ export class ContractorService {
       updates.suspensionReason = undefined;
     }
 
-    const contractorDoc = doc(this.firestore, 'contractors', id);
-    await updateDoc(contractorDoc, updates);
+    return this.update(id, updates);
   }
 
   // Delete contractor (soft delete by changing status)
@@ -103,74 +89,65 @@ export class ContractorService {
     await this.updateContractorStatus(id, 'blacklisted', 'Deleted by user');
   }
 
+  // Hard delete contractor (if needed)
+  async hardDeleteContractor(id: string): Promise<void> {
+    return this.delete(id);
+  }
+
   // Search contractors
   searchContractors(searchTerm: string): Observable<Contractor[]> {
     // Note: Firestore doesn't support full-text search natively
     // This is a simple implementation - consider using Algolia or ElasticSearch for production
-    const q = query(this.contractorsCollection, orderBy('companyName'));
-
-    return collectionData(q, { idField: 'id' }).pipe(
+    return this.getWithQuery([orderBy('companyName')]).pipe(
       map((contractors) =>
         contractors.filter(
           (contractor) =>
-            contractor['companyName'].toLowerCase().includes(searchTerm.toLowerCase()) ||
-            contractor['registrationNumber']?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            contractor['primaryContact']?.name.toLowerCase().includes(searchTerm.toLowerCase()),
+            contractor.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            contractor.registrationNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            contractor.primaryContact?.name.toLowerCase().includes(searchTerm.toLowerCase()),
         ),
       ),
-    ) as Observable<Contractor[]>;
+    );
   }
 
   // Get contractors by service type
   getContractorsByService(service: string): Observable<Contractor[]> {
-    const q = query(
-      this.contractorsCollection,
+    return this.getWithQuery([
       where('capabilities.services', 'array-contains', service),
       where('status', '==', 'active'),
       orderBy('companyName'),
-    );
-
-    return collectionData(q, { idField: 'id' }) as Observable<Contractor[]>;
+    ]);
   }
 
   // Check if registration number exists
   async checkRegistrationExists(registrationNumber: string, excludeId?: string): Promise<boolean> {
-    const q = query(
-      this.contractorsCollection,
+    const contractors = await this.getWithQuery([
       where('registrationNumber', '==', registrationNumber),
-    );
-
-    const snapshot = await getDocs(q);
+    ]).pipe(take(1)).toPromise() || [];
 
     if (excludeId) {
-      return snapshot.docs.some((doc) => doc.id !== excludeId);
+      return contractors.some((contractor: Contractor) => contractor.id !== excludeId);
     }
 
-    return !snapshot.empty;
+    return contractors.length > 0;
   }
 
   // Approve contractor
   async approveContractor(id: string, approverId: string): Promise<void> {
-    const contractorDoc = doc(this.firestore, 'contractors', id);
-
-    await updateDoc(contractorDoc, {
+    return this.update(id, {
       status: 'active',
       onboardingStatus: 'approved',
       approvedBy: approverId,
-      approvedAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
+      approvedAt: serverTimestamp() as any, // Cast for Timestamp compatibility
     });
   }
 
   // Reject contractor
   async rejectContractor(id: string, reason: string): Promise<void> {
-    const contractorDoc = doc(this.firestore, 'contractors', id);
-
-    await updateDoc(contractorDoc, {
+    return this.update(id, {
       status: 'pending_approval',
       onboardingStatus: 'rejected',
       suspensionReason: reason,
-      updatedAt: serverTimestamp(),
     });
   }
 
@@ -183,7 +160,7 @@ export class ContractorService {
     action: 'add' | 'complete',
     contractValue?: number,
   ): Promise<void> {
-    const contractor = await this.getContractor(contractorId).pipe(take(1)).toPromise();
+    const contractor = await this.getById(contractorId).pipe(take(1)).toPromise();
     if (!contractor) throw new Error('Contractor not found');
 
     const projects = contractor.projects || {
@@ -217,49 +194,39 @@ export class ContractorService {
       }
     }
 
-    const contractorDoc = doc(this.firestore, 'contractors', contractorId);
-    await updateDoc(contractorDoc, {
-      projects,
-      updatedAt: serverTimestamp(),
-    });
+    return this.update(contractorId, { projects });
   }
 
   // Get contractors with projects
   getContractorsWithProjects(): Observable<Contractor[]> {
-    const q = query(
-      this.contractorsCollection,
+    return this.getWithQuery([
       where('projects.totalProjectsCount', '>', 0),
       orderBy('projects.totalProjectsCount', 'desc'),
-    );
-
-    return collectionData(q, { idField: 'id' }) as Observable<Contractor[]>;
+    ]);
   }
 
   // Get available contractors for a project
   getAvailableContractors(requiredServices: string[]): Observable<Contractor[]> {
     // Get active contractors that have all required services
-    const q = query(
-      this.contractorsCollection,
+    return this.getWithQuery([
       where('status', '==', 'active'),
       where('capabilities.services', 'array-contains-any', requiredServices),
       orderBy('companyName'),
-    );
-
-    return collectionData(q, { idField: 'id' }).pipe(
+    ]).pipe(
       map((contractors) =>
         // Further filter to ensure all required services are present
         contractors.filter((contractor) =>
-          requiredServices.every((service) =>
-            contractor['capabilities']?.services?.includes(service),
+          requiredServices.every((service: string) =>
+            contractor.capabilities?.services?.includes(service as any),
           ),
         ),
       ),
-    ) as Observable<Contractor[]>;
+    );
   }
 
   // Add team to contractor
   async addTeamToContractor(contractorId: string, team: ContractorTeam): Promise<void> {
-    const contractor = await this.getContractor(contractorId).pipe(take(1)).toPromise();
+    const contractor = await this.getById(contractorId).pipe(take(1)).toPromise();
     if (!contractor) throw new Error('Contractor not found');
 
     const teams = contractor.teams || [];
@@ -271,11 +238,7 @@ export class ContractorService {
     };
     teams.push(teamWithId);
 
-    const contractorDoc = doc(this.firestore, 'contractors', contractorId);
-    await updateDoc(contractorDoc, {
-      teams,
-      updatedAt: serverTimestamp(),
-    });
+    return this.update(contractorId, { teams });
   }
 
   // Update contractor team
@@ -284,11 +247,11 @@ export class ContractorService {
     teamId: string,
     updates: Partial<ContractorTeam>,
   ): Promise<void> {
-    const contractor = await this.getContractor(contractorId).pipe(take(1)).toPromise();
+    const contractor = await this.getById(contractorId).pipe(take(1)).toPromise();
     if (!contractor) throw new Error('Contractor not found');
 
     const teams = contractor.teams || [];
-    const teamIndex = teams.findIndex((t) => t.id === teamId);
+    const teamIndex = teams.findIndex((t: ContractorTeam) => t.id === teamId);
 
     if (teamIndex === -1) throw new Error('Team not found');
 
@@ -298,16 +261,14 @@ export class ContractorService {
       updatedAt: serverTimestamp(),
     };
 
-    const contractorDoc = doc(this.firestore, 'contractors', contractorId);
-    await updateDoc(contractorDoc, {
-      teams,
-      updatedAt: serverTimestamp(),
-    });
+    return this.update(contractorId, { teams });
   }
 
   // Get contractor teams
   getContractorTeams(contractorId: string): Observable<ContractorTeam[]> {
-    return this.getContractor(contractorId).pipe(map((contractor) => contractor?.teams || []));
+    return this.getById(contractorId).pipe(
+      map((contractor) => contractor?.teams || [])
+    );
   }
 
   // Get available teams for a contractor

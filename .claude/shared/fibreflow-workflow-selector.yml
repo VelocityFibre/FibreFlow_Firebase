@@ -1,0 +1,192 @@
+# FibreFlow Workflow Selector
+# Intelligently selects which configs to use based on task
+version: 1.0
+name: Workflow Selector System
+description: Context-aware configuration loading based on task type
+
+# Workflow Selection Rules
+workflow_rules:
+  # Feature Development Workflows
+  new_feature:
+    triggers: ["create feature", "new feature", "implement", "add functionality"]
+    
+    use_configs:
+      primary:
+        - "fibreflow-development.yml"
+        - "fibreflow-page-contexts.yml"
+        - "fibreflow-component-library.yml"
+      secondary:
+        - "fibreflow-naming-conventions.yml"
+        - "fibreflow-queries.yml"
+      reference:
+        - "fibreflow-page-intel.yml"
+    
+    exclude_configs:
+      - "fibreflow-deployment-gotchas.yml"  # Not needed during creation
+    
+    workflow_phases:
+      planning:
+        configs: ["fibreflow-development.yml", "fibreflow-page-intel.yml"]
+        focus: "Architecture and patterns"
+      
+      implementation:
+        configs: ["fibreflow-component-library.yml", "fibreflow-queries.yml"]
+        focus: "Code patterns and examples"
+      
+      testing:
+        configs: ["fibreflow-deployment.yml", "fibreflow-error-solutions-index.yml"]
+        focus: "Validation and deployment"
+
+  # Bug Fixing Workflows
+  bug_fix:
+    triggers: ["fix", "debug", "error", "broken", "not working", "issue"]
+    
+    use_configs:
+      primary:
+        - "fibreflow-error-solutions-index.yml"
+        - "fibreflow-page-intel.yml"  # For bug tracking
+        - "fibreflow-deployment-gotchas.yml"
+      secondary:
+        - "fibreflow-error-capture-workflow.yml"
+      
+    workflow_phases:
+      diagnosis:
+        configs: ["fibreflow-error-solutions-index.yml", "fibreflow-page-intel.yml"]
+        focus: "Identify root cause"
+      
+      fix:
+        configs: ["fibreflow-component-library.yml", "fibreflow-queries.yml"]
+        focus: "Apply correct pattern"
+      
+      verify:
+        configs: ["fibreflow-deployment.yml", "fibreflow-testing-guide.yml"]
+        focus: "Ensure fix works"
+
+  # Exploration Workflows
+  exploration:
+    triggers: ["explore", "analyze", "document", "understand", "scan"]
+    
+    use_configs:
+      primary:
+        - "fibreflow-codebase-exploration-system.yml"
+        - "fibreflow-exploration-tracker.yml"
+        - "fibreflow-exploration-schedule.yml"
+      secondary:
+        - "fibreflow-page-contexts.yml"
+        - "fibreflow-naming-conventions.yml"
+    
+    outputs:
+      - "Pattern documentation"
+      - "Knowledge gaps"
+      - "Reusable snippets"
+
+  # Deployment Workflows
+  deployment:
+    triggers: ["deploy", "release", "push", "publish"]
+    
+    use_configs:
+      primary:
+        - "fibreflow-deployment.yml"
+        - "fibreflow-deployment-gotchas.yml"
+        - "fibreflow-security.yml"
+      critical:
+        - "fibreflow-github-secret-detection-error.yml"
+        - "fibreflow-firebase-storage-config-error.yml"
+
+  # Performance Optimization
+  optimization:
+    triggers: ["optimize", "performance", "slow", "speed up"]
+    
+    use_configs:
+      primary:
+        - "fibreflow-queries.yml"  # For Firestore optimization
+        - "fibreflow-page-intel.yml"  # For performance issues
+      reference:
+        - "fibreflow-component-library.yml"  # For best practices
+
+# Context Priority Rules
+context_priority:
+  # When multiple configs have conflicting info
+  resolution_order:
+    1: "Task-specific error solutions"  # Most specific
+    2: "Page-specific documentation"     # page-intel.yml
+    3: "Feature-specific patterns"       # component patterns
+    4: "General development patterns"    # development.yml
+    5: "Global configuration"           # master-config.yml
+  
+  conflict_examples:
+    naming:
+      scenario: "Component naming conflict"
+      resolution: "Use page-intel.yml > naming-conventions.yml"
+    
+    patterns:
+      scenario: "Service pattern conflict"
+      resolution: "Use working implementation > suggested pattern"
+
+# Automatic Context Switching
+auto_switching:
+  enabled: true
+  
+  detection_rules:
+    - if_message_contains: ["error:", "failed", "not working"]
+      switch_to: "bug_fix"
+      
+    - if_message_contains: ["create", "new", "add"]
+      switch_to: "new_feature"
+      
+    - if_message_contains: ["deploy", "firebase deploy"]
+      switch_to: "deployment"
+      
+    - if_file_path_contains: ["/services/", "service.ts"]
+      load_additionally: ["fibreflow-queries.yml"]
+
+# Workflow Verification
+verification_requirements:
+  new_feature:
+    before_starting:
+      - "Check page-intel.yml for existing patterns"
+      - "Verify naming conventions"
+    
+    after_completion:
+      - "Update page-intel.yml"
+      - "Document new patterns"
+  
+  bug_fix:
+    before_starting:
+      - "Search error-solutions-index"
+      - "Check page-intel bugs section"
+    
+    after_completion:
+      - "Update error documentation"
+      - "Add prevention notes"
+
+# Usage Instructions
+usage:
+  manual_selection: |
+    # Explicitly set workflow
+    !workflow new_feature
+    !workflow bug_fix
+    !workflow exploration
+  
+  automatic: |
+    # System detects from task description
+    "Create a new invoice feature" → new_feature workflow
+    "Fix the BOQ import error" → bug_fix workflow
+  
+  query_current: |
+    # Check active workflow
+    !workflow status
+    # Shows: Active workflow, loaded configs, current phase
+
+# Workflow Metrics
+metrics:
+  track:
+    - "Workflow switches per session"
+    - "Most used workflows"
+    - "Config load frequency"
+    - "Conflict resolutions"
+  
+  optimize:
+    - "Frequently paired configs"
+    - "Unused configurations"
+    - "Switching patterns"

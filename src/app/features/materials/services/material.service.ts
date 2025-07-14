@@ -12,6 +12,8 @@ import {
   CollectionReference,
   writeBatch,
   limit,
+  QueryConstraint,
+  serverTimestamp,
 } from '@angular/fire/firestore';
 import { collectionData, docData } from '@angular/fire/firestore';
 import { Observable, from, map, catchError, of, firstValueFrom } from 'rxjs';
@@ -22,42 +24,40 @@ import {
   MaterialCategory,
 } from '../models/material.model';
 import { RemoteLoggerService } from '../../../core/services/remote-logger.service';
+import { BaseFirestoreService } from '../../../core/services/base-firestore.service';
+import { EntityType } from '../../../core/models/audit-log.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class MaterialService {
-  private firestore = inject(Firestore);
+export class MaterialService extends BaseFirestoreService<MasterMaterial> {
+  protected override firestore = inject(Firestore); // Still needed for batch operations
   private logger = inject(RemoteLoggerService);
-  private materialsCollection: CollectionReference<MasterMaterial>;
-
-  constructor() {
-    this.materialsCollection = collection(
-      this.firestore,
-      'materials',
-    ) as CollectionReference<MasterMaterial>;
+  protected collectionName = 'materials';
+  
+  protected getEntityType(): EntityType {
+    return 'material';
   }
 
   // Get all materials with optional filters
   getMaterials(filter?: MaterialFilter): Observable<MasterMaterial[]> {
     this.logger.debug('getMaterials called', 'MaterialService', filter as Record<string, unknown>);
 
-    // Start with a simple query - let's filter on client side for now
-    let q = query(this.materialsCollection, orderBy('itemCode'));
+    const constraints: QueryConstraint[] = [orderBy('itemCode')];
 
     // Only add server-side filters if no isActive filter is specified
     // This avoids the index requirement temporarily
     if (!filter?.isActive) {
       if (filter?.category) {
-        q = query(q, where('category', '==', filter.category));
+        constraints.push(where('category', '==', filter.category));
       }
 
       if (filter?.supplierId) {
-        q = query(q, where('supplierId', '==', filter.supplierId));
+        constraints.push(where('supplierId', '==', filter.supplierId));
       }
     }
 
-    return collectionData(q, { idField: 'id' }).pipe(
+    return this.getWithQuery(constraints).pipe(
       map((materials) => {
         this.logger.debug('Materials fetched from Firestore', 'MaterialService', {
           count: materials.length,
@@ -107,8 +107,7 @@ export class MaterialService {
 
   // Get material by ID
   getMaterial(id: string): Observable<MasterMaterial | undefined> {
-    const docRef = doc(this.materialsCollection, id);
-    return docData(docRef, { idField: 'id' }).pipe(
+    return this.getById(id).pipe(
       catchError((error) => {
         console.error('Error fetching material:', error);
         return of(undefined);
@@ -118,8 +117,7 @@ export class MaterialService {
 
   // Get material by item code
   getMaterialByCode(itemCode: string): Observable<MasterMaterial | undefined> {
-    const q = query(this.materialsCollection, where('itemCode', '==', itemCode), limit(1));
-    return collectionData(q, { idField: 'id' }).pipe(
+    return this.getWithQuery([where('itemCode', '==', itemCode), limit(1)]).pipe(
       map((materials) => materials[0]),
       catchError((error) => {
         console.error('Error fetching material by code:', error);
@@ -133,9 +131,8 @@ export class MaterialService {
     await this.logger.debug('Checking if item code exists', 'MaterialService', { itemCode });
 
     try {
-      const q = query(this.materialsCollection, where('itemCode', '==', itemCode), limit(1));
       const exists = await firstValueFrom(
-        collectionData(q).pipe(
+        this.getWithQuery([where('itemCode', '==', itemCode), limit(1)]).pipe(
           map((materials) => materials.length > 0),
           catchError((error) => {
             this.logger.error('Error checking item code', 'MaterialService', error);
@@ -157,7 +154,7 @@ export class MaterialService {
   }
 
   // Add new material
-  async addMaterial(material: Omit<MasterMaterial, 'id'>): Promise<string> {
+  async addMaterial(material: Omit<MasterMaterial, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
     await this.logger.debug('MaterialService.addMaterial called', 'MaterialService', material);
 
     try {
@@ -171,26 +168,18 @@ export class MaterialService {
         throw error;
       }
 
-      const docRef = doc(this.materialsCollection);
-      const newMaterial: MasterMaterial = {
+      const newMaterial = {
         ...material,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        isActive: true,
+        isActive: material.isActive ?? true,
       };
 
-      await this.logger.info('Saving material to Firestore', 'MaterialService', {
-        docId: docRef.id,
-        material: newMaterial,
-      });
-
-      await setDoc(docRef, newMaterial);
+      const id = await this.create(newMaterial);
 
       await this.logger.info('Material saved successfully', 'MaterialService', {
-        docId: docRef.id,
+        docId: id,
       });
 
-      return docRef.id;
+      return id;
     } catch (error) {
       await this.logger.logError(error as Error, 'MaterialService', 'Failed to add material');
       throw error;
@@ -199,13 +188,8 @@ export class MaterialService {
 
   // Update material
   updateMaterial(id: string, material: Partial<MasterMaterial>): Observable<void> {
-    const docRef = doc(this.materialsCollection, id);
-    const update = {
-      ...material,
-      updatedAt: new Date(),
-    };
-    delete update.id; // Remove id from update object
-    return from(updateDoc(docRef, update));
+    const { id: _, ...updateData } = material; // Remove id from update object
+    return from(this.update(id, updateData));
   }
 
   // Delete material (soft delete)
@@ -215,12 +199,11 @@ export class MaterialService {
 
   // Hard delete material (use with caution)
   hardDeleteMaterial(id: string): Observable<void> {
-    const docRef = doc(this.materialsCollection, id);
-    return from(deleteDoc(docRef));
+    return from(this.delete(id));
   }
 
   // Import multiple materials
-  async importMaterials(materials: Omit<MasterMaterial, 'id'>[]): Promise<void> {
+  async importMaterials(materials: Omit<MasterMaterial, 'id' | 'createdAt' | 'updatedAt'>[]): Promise<void> {
     const batch = writeBatch(this.firestore);
     const existingCodes = new Set<string>();
 
@@ -240,12 +223,12 @@ export class MaterialService {
 
     // Add all materials in a batch
     for (const material of materials) {
-      const docRef = doc(this.materialsCollection);
-      const newMaterial: MasterMaterial = {
+      const docRef = doc(collection(this.firestore, this.collectionName));
+      const newMaterial = {
         ...material,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        isActive: true,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        isActive: material.isActive ?? true,
       };
       batch.set(docRef, newMaterial);
     }

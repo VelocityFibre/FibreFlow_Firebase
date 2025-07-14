@@ -1,0 +1,109 @@
+# JJ (Jujutsu) Push Shows Nothing Changed
+# Specific solution for jj git push issues
+version: 1.0
+name: JJ Push Nothing Changed Issue
+description: Fix for when jj git push shows "Nothing changed" despite having commits
+
+# Problem Details
+problem:
+  symptom: "jj git push shows 'Nothing changed'"
+  cause: "Master bookmark not moved to current commit"
+  confusion: "Commits exist but aren't being pushed"
+
+# Understanding JJ Concepts
+jj_concepts:
+  bookmarks_vs_branches:
+    - "JJ bookmarks = Git branches"
+    - "Bookmarks don't move automatically"
+    - "Must explicitly move bookmarks to commits"
+  
+  current_commit: "@ symbol represents current commit"
+  master_bookmark: "Points to what will be pushed as 'master'"
+
+# Complete Fix Workflow
+solution_steps:
+  1_check_current_state: |
+    jj st           # See current commit
+    jj log          # See commit history
+    jj bookmark list # See where bookmarks point
+  
+  2_move_master_bookmark: |
+    jj bookmark move master --to @
+    # This moves 'master' to current commit (@)
+  
+  3_verify_bookmark_moved: |
+    jj bookmark list
+    # Should show: master: [commit-hash] (current commit)
+  
+  4_push_to_github: |
+    jj git push --branch master
+    # Now it will push successfully
+
+# Common Scenarios
+scenarios:
+  after_new_commits:
+    situation: "Made commits but master still points to old commit"
+    fix: "jj bookmark move master --to @"
+  
+  multiple_bookmarks:
+    situation: "Have feature branches"
+    fix: "jj bookmark move feature-branch --to @"
+  
+  first_time_setup:
+    situation: "No master bookmark exists"
+    fix: "jj bookmark create master --to @"
+
+# Visual Explanation
+visual_guide: |
+  Before moving bookmark:
+  * @ (current) - "New feature implemented"
+  * ◯ - "Previous commit"
+  * ◯ master - "Old commit (nothing to push)"
+  
+  After moving bookmark:
+  * @ master (current) - "New feature implemented" ✓
+  * ◯ - "Previous commit"
+  * ◯ - "Old commit"
+
+# Complete Push Workflow
+standard_workflow:
+  1_make_changes: "Edit files"
+  2_check_status: "jj st"
+  3_describe_commit: "jj describe -m 'Your message'"
+  4_move_bookmark: "jj bookmark move master --to @"
+  5_push: "jj git push --branch master"
+
+# Troubleshooting
+if_still_not_working:
+  check_remote: |
+    jj git remote -v
+    # Ensure remote is configured
+  
+  check_tracking: |
+    jj bookmark list -r
+    # See remote bookmarks
+  
+  force_push_carefully: |
+    jj git push --branch master --force
+    # Only if you're sure!
+
+# Prevention
+best_practices:
+  - "Always move bookmark after commits"
+  - "Check bookmark position before pushing"
+  - "Use aliases for common workflows"
+
+# Useful Aliases
+suggested_aliases:
+  push_master: |
+    # Add to ~/.jjconfig.toml
+    [alias]
+    pm = ["bookmark", "move", "master", "--to", "@"]
+    
+    # Then use: jj pm && jj git push --branch master
+
+# Related Issues
+see_also:
+  - "JJ documentation on bookmarks"
+  - "Git branch vs JJ bookmark concepts"
+  - "fibreflow-deployment.yml for full workflow"

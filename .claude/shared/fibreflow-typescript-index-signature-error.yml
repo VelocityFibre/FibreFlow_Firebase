@@ -1,0 +1,95 @@
+# TypeScript Index Signature Error TS4111
+# Specific solution for index signature access errors
+version: 1.0
+name: TypeScript Index Signature Error (TS4111)
+description: How to fix "Property comes from an index signature" errors
+
+# Error Details
+error_details:
+  error_code: "TS4111"
+  error_message: "Property comes from an index signature, so it must be accessed with ['property']"
+  typescript_version: "5.x"
+  
+# When This Occurs
+occurs_when:
+  - "Accessing properties on objects with index signatures"
+  - "Using spread operator with indexed objects"
+  - "Dynamic property access with dot notation"
+
+# Actual Example from KPI Implementation
+real_example:
+  file: "src/app/features/projects/pages/project-create/project-create.component.ts"
+  
+  error_code: |
+    // This caused TS4111 error:
+    kpiTargets: this.fb.group({
+      ...DEFAULT_KPI_CONFIGURATIONS.polePermissions,
+      ...DEFAULT_KPI_CONFIGURATIONS.homeSignups,
+      ...DEFAULT_KPI_CONFIGURATIONS.polesPlanted,
+      ...DEFAULT_KPI_CONFIGURATIONS.fibreStringing,
+      ...DEFAULT_KPI_CONFIGURATIONS.trenching
+    })
+  
+  fixed_code: |
+    // Fixed by using bracket notation:
+    kpiTargets: this.fb.group({
+      ...DEFAULT_KPI_CONFIGURATIONS['polePermissions'],
+      ...DEFAULT_KPI_CONFIGURATIONS['homeSignups'],
+      ...DEFAULT_KPI_CONFIGURATIONS['polesPlanted'],
+      ...DEFAULT_KPI_CONFIGURATIONS['fibreStringing'],
+      ...DEFAULT_KPI_CONFIGURATIONS['trenching']
+    })
+
+# Why This Happens
+technical_explanation:
+  cause: "TypeScript enforces bracket notation for index signatures to ensure type safety"
+  
+  index_signature_example: |
+    interface KPIConfig {
+      [key: string]: {
+        target: number;
+        dailyRate: number;
+      }
+    }
+  
+  rule: "Properties accessed via index signatures must use bracket notation"
+
+# Solutions
+solutions:
+  immediate_fix:
+    description: "Replace dot notation with bracket notation"
+    pattern: "object.property → object['property']"
+    
+  better_approach:
+    description: "Define explicit interface instead of index signature"
+    example: |
+      // Instead of:
+      interface Config {
+        [key: string]: KPIData;
+      }
+      
+      // Use:
+      interface Config {
+        polePermissions: KPIData;
+        homeSignups: KPIData;
+        polesPlanted: KPIData;
+        fibreStringing: KPIData;
+        trenching: KPIData;
+      }
+
+# Prevention
+prevention:
+  1_type_checking: "Run npx tsc --noEmit before building"
+  2_eslint_rule: "Enable @typescript-eslint/dot-notation rule"
+  3_prefer_types: "Use explicit types over index signatures when possible"
+
+# Quick Commands
+commands:
+  check: "npx tsc --noEmit"
+  find_issues: "npx tsc --noEmit | grep TS4111"
+  
+# Related Files
+related_patterns:
+  - "Any file using DEFAULT_KPI_CONFIGURATIONS"
+  - "Services with dynamic property access"
+  - "Components using spread with indexed objects"

@@ -1,0 +1,168 @@
+# FibreFlow Codebase Exploration Schedule
+# Practical daily/weekly plan for systematic exploration
+version: 1.0
+name: Exploration Schedule
+description: Actionable schedule for codebase discovery
+
+# Week 1: Core Infrastructure
+week_1_core:
+  monday:
+    target: "src/app/core/services/"
+    focus: "Base service patterns"
+    
+    tasks:
+      - scan: "All services extending BaseFirestoreService"
+      - document: "Common CRUD patterns"
+      - identify: "Unique service methods"
+      - create: "fibreflow-service-patterns.yml"
+    
+    deliverable: "Complete service pattern library"
+  
+  tuesday:
+    target: "src/app/core/models/"
+    focus: "Data structures and interfaces"
+    
+    tasks:
+      - map: "All model relationships"
+      - document: "Validation rules"
+      - identify: "Computed properties"
+      - create: "fibreflow-model-patterns.yml"
+  
+  wednesday:
+    target: "src/app/shared/components/"
+    focus: "Reusable UI components"
+    
+    tasks:
+      - catalog: "All shared components"
+      - document: "Input/output patterns"
+      - extract: "Common UI patterns"
+      - create: "fibreflow-component-library-extended.yml"
+  
+  thursday:
+    target: "Error handling patterns"
+    focus: "How errors are managed"
+    
+    tasks:
+      - find: "All try-catch blocks"
+      - document: "Error display patterns"
+      - identify: "Recovery strategies"
+      - create: "fibreflow-error-handling-patterns.yml"
+  
+  friday:
+    target: "Weekly consolidation"
+    focus: "Review and organize findings"
+    
+    tasks:
+      - review: "All created YAMLs"
+      - identify: "Knowledge gaps"
+      - plan: "Next week priorities"
+      - update: "Master config"
+
+# Week 2: Feature Deep Dives
+week_2_features:
+  projects_feature:
+    files_to_explore:
+      - "features/projects/services/project.service.ts"
+      - "features/projects/pages/*"
+      - "features/projects/components/*"
+    
+    extract:
+      - "Complete workflow from create to complete"
+      - "Integration with other features"
+      - "Performance optimizations"
+      - "Known issues and solutions"
+  
+  boq_feature:
+    special_focus: "Import/export functionality"
+    document: "Excel handling patterns"
+  
+  pole_tracker_feature:
+    special_focus: "Mobile vs desktop patterns"
+    document: "Offline capabilities"
+
+# Daily Exploration Routine
+daily_routine:
+  morning_scan: # 30 minutes
+    - "Pick target directory/feature"
+    - "Run automated scans"
+    - "Note interesting patterns"
+  
+  deep_dive: # 2 hours
+    - "Analyze 3-5 files in detail"
+    - "Extract reusable patterns"
+    - "Document findings"
+  
+  documentation: # 1 hour
+    - "Create/update YAML files"
+    - "Add to SuperClaude"
+    - "Test improvements"
+
+# Exploration Tools
+exploration_tools:
+  pattern_finder: |
+    #!/bin/bash
+    # Find all instances of a pattern
+    pattern="$1"
+    echo "=== Finding pattern: $pattern ==="
+    grep -r "$pattern" src/ --include="*.ts" --include="*.html" |
+    grep -v node_modules | 
+    awk -F: '{print $1}' | sort | uniq -c | sort -nr
+  
+  complexity_analyzer: |
+    # Find complex files that need documentation
+    find src/ -name "*.ts" -exec wc -l {} + | 
+    sort -nr | head -20
+  
+  undocumented_finder: |
+    # Find files without proper documentation
+    for file in $(find src/ -name "*.ts"); do
+      if ! head -20 "$file" | grep -q "^\s*\*\|^\s*//"; then
+        echo "Needs docs: $file"
+      fi
+    done
+
+# Success Metrics
+exploration_metrics:
+  week_1_goals:
+    - "50+ patterns documented"
+    - "All core services mapped"
+    - "Shared components cataloged"
+    - "Error patterns identified"
+  
+  week_2_goals:
+    - "5 features fully explored"
+    - "20+ workflows documented"
+    - "Performance patterns found"
+    - "Integration maps created"
+  
+  overall_impact:
+    - "90% reduction in 'where is X?' questions"
+    - "Instant pattern suggestions"
+    - "Proactive error prevention"
+    - "Faster development"
+
+# Integration Checkpoints
+checkpoints:
+  daily:
+    - "Update exploration progress"
+    - "Add findings to SuperClaude"
+    - "Test new knowledge"
+  
+  weekly:
+    - "Review all discoveries"
+    - "Consolidate patterns"
+    - "Update master systems"
+    - "Plan next targets"
+
+# Priority Targets
+priority_order:
+  must_explore:
+    1: "Authentication/security patterns"
+    2: "Data validation approaches"
+    3: "Performance optimizations"
+    4: "Testing strategies"
+  
+  nice_to_have:
+    - "Animation patterns"
+    - "Theme customizations"
+    - "Build optimizations"

@@ -15,7 +15,13 @@ Master config: `.claude/shared/fibreflow-master-config.yml`
 
 ## Quick Start for Claude
 
-**Philosophy**: Keep it simple, get basics working first.
+**Philosophy**: Specifications first, code second. Define WHAT before HOW.
+
+**New Development Process**:
+1. **Start with Specification** - Write SPEC-XXX-001 defining intent and success criteria
+2. **Get Approval** - Ensure specification meets business needs
+3. **Implement to Spec** - Code that fulfills the specification
+4. **Test Against Spec** - Validate all criteria are met
 
 **Essential Commands**:
 - `deploy` - Build, commit & deploy to Firebase (via jj) - ALWAYS test this way
@@ -38,13 +44,16 @@ Master config: `.claude/shared/fibreflow-master-config.yml`
 - Update task status as you work
 
 **Feature Development Workflow**:
-1. Create PRP using `docs/PRP_TEMPLATE.md` - Plan the feature
-2. Use `/create-feature` command to scaffold structure
-3. Follow patterns in `docs/COMPONENT_LIBRARY.md`
-4. Implement CRUD first, enhancements later
-5. Deploy frequently with `deploy` command
-6. Test on live site: https://fibreflow.web.app
-7. Use `/check-implementation` to verify completeness
+1. Write specification in `specifications/SPEC-XXX-001.md` - Define WHAT you want
+2. Create PRP using `docs/PRP_TEMPLATE.md` - Plan HOW to build it
+3. Use `/create-feature` command to scaffold structure
+4. Follow patterns in `docs/COMPONENT_LIBRARY.md`
+5. Implement CRUD first, enhancements later
+6. Deploy frequently with `deploy` command
+7. Test against specification criteria (not just functionality)
+8. Validate on live site: https://fibreflow.web.app
+9. Use `/check-implementation` to verify completeness
+10. Link implementation back to specification
 
 **Critical Rules**:
 - ❌ NEVER use `ng serve` for testing
@@ -75,6 +84,26 @@ npm run check "code or pattern to verify"
 - State: Signals + RxJS
 - Styling: SCSS with CSS Custom Properties
 - Version Control: jj (Jujutsu) with Git coexistence
+
+### Specification-First Development (NEW!)
+
+**Core Principle**: Software engineering is about intent, not code.
+
+**Specifications Directory**: `specifications/`
+- Index: `specifications/index.yml` - Central registry
+- Format: `SPEC-{DOMAIN}-{NUMBER}` (e.g., SPEC-AUTH-001)
+- Example: `specifications/SPEC-KPI-001-daily-progress-tracking.md`
+
+**Why Specifications First**:
+- Clear success criteria before coding
+- Test against intent, not just function
+- AI can generate better code from specs
+- Requirements traceable to implementation
+
+**Quick Spec Commands**:
+- View all specs: Check `specifications/index.yml`
+- Find by ID: `grep -r "SPEC-XXX-001" specifications/`
+- Check implementation: See index.yml for code links
 
 ### Recent Achievements (July 2025)
 

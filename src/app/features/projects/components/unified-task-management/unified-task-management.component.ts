@@ -185,36 +185,24 @@ type ViewFilter = 'all' | 'uncompleted' | 'flagged';
         </mat-card>
       }
 
-      <!-- Debug button (temporary) -->
+      <!-- Task Management Actions -->
       @if (!loading() && databaseTasks().length > 0) {
-        <div style="margin: 16px 0; text-align: right;">
-          <button mat-stroked-button (click)="debugTasks()" style="margin-right: 8px;">
-            <mat-icon>bug_report</mat-icon>
-            Debug Tasks
-          </button>
-          <button mat-stroked-button (click)="reinitializeTasks()" color="warn">
-            <mat-icon>refresh</mat-icon>
-            Reinitialize All Tasks
-          </button>
-          <button
-            mat-stroked-button
-            (click)="flagTestTasks()"
-            color="accent"
-            style="margin-left: 8px;"
-          >
-            <mat-icon>flag</mat-icon>
-            Flag Test Tasks
-          </button>
-          <button
-            mat-stroked-button
-            (click)="createMissingTasks()"
-            color="primary"
-            style="margin-left: 8px;"
-          >
-            <mat-icon>add_task</mat-icon>
-            Create Missing Tasks
-          </button>
-        </div>
+        <mat-card class="actions-card">
+          <div class="actions-container">
+            <button mat-raised-button (click)="reinitializeTasks()" color="warn">
+              <mat-icon>refresh</mat-icon>
+              Reinitialize All Tasks
+            </button>
+            <button mat-raised-button (click)="flagTestTasks()" color="accent">
+              <mat-icon>flag</mat-icon>
+              Flag Test Tasks
+            </button>
+            <button mat-raised-button (click)="createMissingTasks()" color="primary">
+              <mat-icon>add_task</mat-icon>
+              Create Missing Tasks
+            </button>
+          </div>
+        </mat-card>
       }
 
       <!-- Phases with Steps and Tasks (matching tasks page structure) -->
@@ -430,6 +418,24 @@ type ViewFilter = 'all' | 'uncompleted' | 'flagged';
         text-align: center;
         padding: 64px;
         border-radius: var(--ff-radius-lg) !important;
+      }
+
+      /* Actions Card */
+      .actions-card {
+        margin-bottom: 24px;
+        border-radius: var(--ff-radius-lg) !important;
+        padding: 16px;
+      }
+
+      .actions-container {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+      }
+
+      .actions-container button {
+        min-width: 180px;
       }
 
       .empty-icon {
@@ -1357,66 +1363,6 @@ export class UnifiedTaskManagementComponent implements OnInit {
     console.log('Updated phases with tracking:', phasesWithTracking);
   }
 
-  debugTasks() {
-    const dbTasks = this.databaseTasks();
-    console.log('=== TASK DEBUG INFO ===');
-    console.log('Total database tasks:', dbTasks.length);
-    console.log('Tasks with ID:', dbTasks.filter((t) => t.id).length);
-    console.log('Tasks without ID:', dbTasks.filter((t) => !t.id).length);
-    console.log('Tasks with stepId:', dbTasks.filter((t) => t.stepId).length);
-    console.log('Tasks without stepId:', dbTasks.filter((t) => !t.stepId).length);
-
-    // Show priority distribution
-    const priorityCounts = dbTasks.reduce(
-      (acc, task) => {
-        acc[task.priority || 'undefined'] = (acc[task.priority || 'undefined'] || 0) + 1;
-        return acc;
-      },
-      {} as Record<string, number>,
-    );
-    console.log('Priority distribution:', priorityCounts);
-
-    // Show flagged tasks
-    const flaggedTasks = dbTasks.filter((t) => t.priority === 'high' || t.priority === 'critical');
-    console.log('Flagged tasks (HIGH/CRITICAL priority):', flaggedTasks.length);
-
-    if (flaggedTasks.length > 0) {
-      console.log(
-        'Flagged task details:',
-        flaggedTasks.map((t) => ({ name: t.name, priority: t.priority })),
-      );
-    }
-
-    // Show current phase structure with flagged count
-    const phases = this.phasesWithTracking();
-    let totalFlagged = 0;
-    phases.forEach((phase) => {
-      phase.steps.forEach((step) => {
-        step.tasks.forEach((task) => {
-          if (task.isFlagged) totalFlagged++;
-        });
-      });
-    });
-    console.log('Total flagged tasks in UI:', totalFlagged);
-
-    // Test filter functionality
-    const currentFilter = this.viewFilter();
-    console.log('Current view filter:', currentFilter);
-
-    if (currentFilter === 'flagged') {
-      console.log('Flagged filter is active - checking visible tasks...');
-      const filteredPhases = this.filteredPhases();
-      let visibleFlaggedCount = 0;
-      filteredPhases.forEach((phase) => {
-        phase.steps.forEach((step) => {
-          step.tasks.forEach((task) => {
-            if (task.isFlagged) visibleFlaggedCount++;
-          });
-        });
-      });
-      console.log('Visible flagged tasks after filter:', visibleFlaggedCount);
-    }
-  }
 
   async reinitializeTasks() {
     const confirmDialog = confirm(

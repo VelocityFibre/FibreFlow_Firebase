@@ -1,10 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectModule, MatSelect } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -160,7 +160,17 @@ import {
               <h3>Services Offered</h3>
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Select Services</mat-label>
-                <mat-select formControlName="services" multiple required>
+                <mat-select formControlName="services" multiple required panelClass="services-dropdown-panel" 
+                            #servicesSelect
+                            (openedChange)="onServicesDropdownChange($event)">
+                  <mat-select-trigger>
+                    <mat-chip-set>
+                      <mat-chip *ngFor="let service of capabilitiesForm.get('services')?.value" removable="false">
+                        {{ getServiceLabel(service) }}
+                      </mat-chip>
+                    </mat-chip-set>
+                    <span *ngIf="!capabilitiesForm.get('services')?.value?.length">Select services...</span>
+                  </mat-select-trigger>
                   <mat-option *ngFor="let service of contractorServices" [value]="service.value">
                     {{ service.label }}
                   </mat-option>
@@ -383,6 +393,26 @@ import {
         left: 0;
         right: 0;
       }
+
+      ::ng-deep .services-dropdown-panel {
+        max-height: 300px !important;
+      }
+
+      ::ng-deep .cdk-overlay-backdrop {
+        position: fixed;
+      }
+
+      mat-select mat-chip-set {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+
+      mat-select mat-chip {
+        font-size: 12px;
+        min-height: 24px;
+        padding: 2px 8px;
+      }
     `,
   ],
 })
@@ -391,6 +421,8 @@ export class ContractorFormComponent implements OnInit {
   private contractorService = inject(ContractorService);
   public dialogRef = inject(MatDialogRef<ContractorFormComponent>);
   public data: { mode: 'add' | 'edit'; contractor?: Contractor } = inject(MAT_DIALOG_DATA);
+
+  @ViewChild('servicesSelect') servicesSelect!: MatSelect;
 
   basicInfoForm!: FormGroup;
   capabilitiesForm!: FormGroup;
@@ -531,5 +563,16 @@ export class ContractorFormComponent implements OnInit {
 
   cancel() {
     this.dialogRef.close();
+  }
+
+  onServicesDropdownChange(isOpen: boolean) {
+    if (!isOpen) {
+      // Force close the dropdown panel when it should be closed
+      setTimeout(() => {
+        if (this.servicesSelect && this.servicesSelect.panelOpen) {
+          this.servicesSelect.close();
+        }
+      }, 100);
+    }
   }
 }

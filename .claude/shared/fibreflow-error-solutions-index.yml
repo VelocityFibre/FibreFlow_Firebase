@@ -1,0 +1,87 @@
+# FibreFlow Error Solutions Index
+# Master index of all specific error solution files
+version: 1.0
+name: Error Solutions Index
+description: Quick lookup for specific errors and their solution files
+
+# Error Categories
+error_categories:
+  typescript:
+    TS4111:
+      description: "Index signature property access error"
+      solution_file: "fibreflow-typescript-index-signature-error.yml"
+      quick_fix: "Use bracket notation: obj['prop'] instead of obj.prop"
+  
+  firebase:
+    storage_config:
+      description: "Cannot release resource type firebase.storage"
+      solution_file: "fibreflow-firebase-storage-config-error.yml"
+      quick_fix: "Change storage from array [{...}] to object {...}"
+  
+  github:
+    GH013:
+      description: "Push blocked due to secrets"
+      solution_file: "fibreflow-github-secret-detection-error.yml"
+      quick_fix: "Add to .gitignore, untrack with jj, push again"
+  
+  jj_workflow:
+    nothing_changed:
+      description: "jj git push shows nothing changed"
+      solution_file: "fibreflow-jj-push-workflow-issue.yml"
+      quick_fix: "jj bookmark move master --to @"
+
+# Quick Lookup Commands
+quick_commands:
+  find_typescript_errors: "npx tsc --noEmit | grep TS"
+  check_firebase_config: "cat firebase.json | jq '.storage'"
+  scan_for_secrets: "grep -r 'password\\|key\\|secret' . --exclude-dir=node_modules"
+  check_jj_bookmarks: "jj bookmark list"
+
+# Common Workflows
+workflows:
+  when_build_fails:
+    1: "Check TypeScript: npx tsc --noEmit"
+    2: "If TS4111 → Use bracket notation"
+    3: "Run build again: npm run build"
+  
+  when_deploy_fails:
+    1: "Check error message"
+    2: "If storage error → Check firebase.json format"
+    3: "Fix configuration"
+    4: "Deploy again: firebase deploy"
+  
+  when_push_blocked:
+    1: "Check for GH013 error"
+    2: "Add files to .gitignore"
+    3: "Untrack with jj file untrack"
+    4: "Push again"
+  
+  when_push_shows_nothing:
+    1: "Check bookmarks: jj bookmark list"
+    2: "Move master: jj bookmark move master --to @"
+    3: "Push: jj git push --branch master"
+
+# Learning Pattern
+learning_pattern:
+  when_error_occurs:
+    1: "Document specific error"
+    2: "Create specific solution file"
+    3: "Name file after the error"
+    4: "Add to this index"
+    5: "Update prevention guides"
+
+# File Naming Convention for Errors
+naming_convention:
+  pattern: "fibreflow-{tool}-{specific-error}.yml"
+  examples:
+    - "fibreflow-typescript-index-signature-error.yml"
+    - "fibreflow-firebase-storage-config-error.yml"
+    - "fibreflow-github-secret-detection-error.yml"
+    - "fibreflow-jj-push-workflow-issue.yml"
+
+# Prevention References
+prevention_docs:
+  typescript: "See tsconfig.json strict settings"
+  firebase: "See firebase.json validation"
+  secrets: "See .gitignore patterns"
+  jj: "See jj workflow documentation"

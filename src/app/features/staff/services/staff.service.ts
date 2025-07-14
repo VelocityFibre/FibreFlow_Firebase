@@ -1,34 +1,31 @@
 import { Injectable, inject } from '@angular/core';
 import {
   Firestore,
-  collection,
-  collectionData,
-  doc,
-  docData,
-  addDoc,
-  updateDoc,
-  deleteDoc,
   query,
   where,
   orderBy,
   QueryConstraint,
   serverTimestamp,
   DocumentReference,
-  CollectionReference,
   Timestamp,
 } from '@angular/fire/firestore';
 import { Observable, from, map, catchError, throwError, shareReplay, startWith } from 'rxjs';
 import { StaffMember, StaffFilter, StaffGroup, AvailabilityStatus } from '../models';
+import { BaseFirestoreService } from '../../../core/services/base-firestore.service';
+import { EntityType } from '../../../core/models/audit-log.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class StaffService {
-  private firestore = inject(Firestore);
-  private staffCollection = collection(this.firestore, 'staff') as CollectionReference<StaffMember>;
-
+export class StaffService extends BaseFirestoreService<StaffMember> {
+  protected collectionName = 'staff';
+  
   // Cache for staff list
   private staffCache$?: Observable<StaffMember[]>;
+
+  protected getEntityType(): EntityType {
+    return 'staff';
+  }
 
   getStaff(filter?: StaffFilter): Observable<StaffMember[]> {
     console.log('Fetching staff with filter:', filter);
@@ -48,8 +45,6 @@ export class StaffService {
 
     constraints.push(orderBy('name'));
 
-    const q = query(this.staffCollection, ...constraints);
-
     // If no filter, use cached version
     if (
       !filter ||
@@ -59,7 +54,7 @@ export class StaffService {
         !filter.searchTerm)
     ) {
       if (!this.staffCache$) {
-        this.staffCache$ = collectionData(q, { idField: 'id' }).pipe(
+        this.staffCache$ = this.getWithQuery(constraints).pipe(
           map((staff) => {
             console.log('Loaded staff members:', staff.length, 'members');
             console.log(
@@ -80,7 +75,7 @@ export class StaffService {
     }
 
     // For filtered queries, don't cache
-    return collectionData(q, { idField: 'id' }).pipe(
+    return this.getWithQuery(constraints).pipe(
       map((staff) => {
         console.log('Loaded filtered staff members:', staff.length, 'members');
         if (filter?.searchTerm) {
@@ -110,8 +105,7 @@ export class StaffService {
 
   getStaffById(id: string): Observable<StaffMember | undefined> {
     console.log('Fetching staff member by ID:', id);
-    const staffDoc = doc(this.staffCollection, id);
-    return docData(staffDoc, { idField: 'id' }).pipe(
+    return this.getById(id).pipe(
       map((staff) => {
         console.log(
           'Staff member fetched:',
@@ -128,14 +122,11 @@ export class StaffService {
   }
 
   getStaffByGroup(group: StaffGroup): Observable<StaffMember[]> {
-    const q = query(
-      this.staffCollection,
+    return this.getWithQuery([
       where('primaryGroup', '==', group),
       where('isActive', '==', true),
       orderBy('name'),
-    );
-
-    return collectionData(q, { idField: 'id' }).pipe(
+    ]).pipe(
       catchError((error) => {
         console.error('Error fetching staff by group:', error);
         return throwError(() => new Error('Failed to fetch staff by group'));
@@ -144,14 +135,11 @@ export class StaffService {
   }
 
   getAvailableStaff(requiredSkills?: string[]): Observable<StaffMember[]> {
-    const q = query(
-      this.staffCollection,
+    return this.getWithQuery([
       where('isActive', '==', true),
       where('availability.status', 'in', ['available', 'busy']),
       orderBy('availability.currentTaskCount'),
-    );
-
-    return collectionData(q, { idField: 'id' }).pipe(
+    ]).pipe(
       map((staff) => {
         // Filter by available task capacity
         let filtered = staff.filter(
@@ -179,10 +167,8 @@ export class StaffService {
   ): Observable<DocumentReference> {
     console.log('Creating staff member with data:', staffData);
 
-    const newStaff: Omit<StaffMember, 'id'> = {
+    const newStaff = {
       ...staffData,
-      createdAt: serverTimestamp() as Timestamp,
-      updatedAt: serverTimestamp() as Timestamp,
       activity: {
         lastLogin: null,
         lastActive: null,
@@ -196,11 +182,12 @@ export class StaffService {
 
     console.log('Final staff data to be saved:', newStaff);
 
-    return from(addDoc(this.staffCollection, newStaff)).pipe(
-      map((result) => {
-        console.log('Staff member created successfully with ID:', result.id);
+    return from(this.create(newStaff)).pipe(
+      map((id) => {
+        console.log('Staff member created successfully with ID:', id);
         this.clearCache(); // Clear cache after successful creation
-        return result;
+        // Return a mock DocumentReference for compatibility
+        return { id } as DocumentReference;
       }),
       catchError((error) => {
         console.error('Error creating staff member:', error);
@@ -211,13 +198,7 @@ export class StaffService {
   }
 
   updateStaff(id: string, updates: Partial<StaffMember>): Observable<void> {
-    const staffDoc = doc(this.staffCollection, id);
-    const updateData = {
-      ...updates,
-      updatedAt: serverTimestamp(),
-    };
-
-    return from(updateDoc(staffDoc, updateData)).pipe(
+    return from(this.update(id, updates)).pipe(
       map(() => {
         this.clearCache(); // Clear cache after successful update
       }),
@@ -229,14 +210,12 @@ export class StaffService {
   }
 
   updateStaffAvailability(id: string, status: AvailabilityStatus): Observable<void> {
-    const staffDoc = doc(this.staffCollection, id);
     const updateData = {
       'availability.status': status,
       'activity.lastActive': serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    };
+    } as Partial<StaffMember>;
 
-    return from(updateDoc(staffDoc, updateData)).pipe(
+    return from(this.update(id, updateData)).pipe(
       catchError((error) => {
         console.error('Error updating staff availability:', error);
         return throwError(() => new Error('Failed to update staff availability'));
@@ -245,13 +224,11 @@ export class StaffService {
   }
 
   incrementTaskCount(id: string, increment: number): Observable<void> {
-    const staffDoc = doc(this.staffCollection, id);
     const updateData = {
       'availability.currentTaskCount': increment,
-      updatedAt: serverTimestamp(),
-    };
+    } as Partial<StaffMember>;
 
-    return from(updateDoc(staffDoc, updateData)).pipe(
+    return from(this.update(id, updateData)).pipe(
       catchError((error) => {
         console.error('Error updating task count:', error);
         return throwError(() => new Error('Failed to update task count'));
@@ -260,8 +237,7 @@ export class StaffService {
   }
 
   deleteStaff(id: string): Observable<void> {
-    const staffDoc = doc(this.staffCollection, id);
-    return from(deleteDoc(staffDoc)).pipe(
+    return from(this.delete(id)).pipe(
       catchError((error) => {
         console.error('Error deleting staff member:', error);
         return throwError(() => new Error('Failed to delete staff member'));

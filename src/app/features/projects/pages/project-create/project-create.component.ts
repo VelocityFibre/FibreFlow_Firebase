@@ -14,6 +14,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProjectService } from '../../../../core/services/project.service';
+import { ClientService } from '../../../../features/clients/services/client.service';
+import { Client } from '../../../../features/clients/models/client.model';
+import { Observable } from 'rxjs';
 import {
   ProjectType,
   ProjectStatus,
@@ -138,7 +141,11 @@ import {
               <div class="form-section">
                 <mat-form-field appearance="outline">
                   <mat-label>Client Organization</mat-label>
-                  <input matInput formControlName="clientOrganization" placeholder="Company name" />
+                  <mat-select formControlName="clientOrganization" placeholder="Select client">
+                    <mat-option *ngFor="let client of clients$ | async" [value]="client.id">
+                      {{ client.name }}
+                    </mat-option>
+                  </mat-select>
                   <mat-error *ngIf="projectForm.get('clientOrganization')?.hasError('required')">
                     Client organization is required
                   </mat-error>
@@ -528,9 +535,11 @@ import {
 export class ProjectCreateComponent {
   private fb = inject(FormBuilder);
   private projectService = inject(ProjectService);
+  private clientService = inject(ClientService);
   private router = inject(Router);
 
   isSubmitting = false;
+  clients$: Observable<Client[]> = this.clientService.getActiveClients();
 
   getEstimatedDuration(): number {
     const form = this.projectForm.value;
@@ -592,7 +601,7 @@ export class ProjectCreateComponent {
         ...formValue,
 
         // Set client fields
-        clientId: `client-${Date.now()}`,
+        clientId: formValue.clientOrganization, // Now contains the selected client ID
         clientName: formValue.clientContact,
 
         // Set initial status and phase

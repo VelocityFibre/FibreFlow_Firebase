@@ -1,0 +1,146 @@
+# FibreFlow Quick Fix Commands
+# Instant solutions for common issues
+version: 1.0
+name: Quick Fix Commands
+description: Copy-paste commands for immediate problem resolution
+
+# Error Detection Commands
+detect:
+  typescript_errors: |
+    # Show all TypeScript errors
+    npx tsc --noEmit | grep -E "TS[0-9]{4}" | sort | uniq -c
+    
+  find_secrets: |
+    # Scan for potential secrets
+    find . -type f -name "*.json" -o -name "*.js" -o -name "*.ts" | 
+    xargs grep -l -E "(api[_-]?key|secret|password|token)" | 
+    grep -v node_modules
+    
+  check_firebase_config: |
+    # Validate Firebase configuration
+    cat firebase.json | jq . > /dev/null && echo "✓ Valid JSON" || echo "✗ Invalid JSON"
+    cat firebase.json | jq '.storage | type' # Should output "object" not "array"
+    
+  jj_status_check: |
+    # Complete JJ status
+    echo "=== Current Status ===" && jj st &&
+    echo -e "\n=== Bookmarks ===" && jj bookmark list &&
+    echo -e "\n=== Recent History ===" && jj log -r @- -n 3
+
+# Instant Fixes
+fix:
+  typescript_index_signature: |
+    # Fix all TS4111 errors in a file
+    sed -i 's/\.\([a-zA-Z_][a-zA-Z0-9_]*\)\]/[\x27\1\x27]/g' "$FILE"
+    # Note: Always review changes before committing!
+    
+  firebase_storage_array: |
+    # Fix storage array to object in firebase.json
+    sed -i '/"storage": \[{/,/}\]/c\  "storage": {\n    "rules": "storage.rules"\n  },' firebase.json
+    
+  add_to_gitignore: |
+    # Add all common secret patterns
+    cat >> .gitignore << 'EOF'
+    
+    # Secrets - Added by quick fix
+    *-service-account.json
+    *.key
+    *.pem
+    .env*
+    !.env.example
+    EOF
+    
+  jj_quick_push: |
+    # One-line push to master
+    jj bookmark move master --to @ && jj git push --branch master
+
+# Validation Commands
+validate:
+  before_build: |
+    # Pre-build validation suite
+    echo "1. TypeScript Check..." && npx tsc --noEmit &&
+    echo "2. Lint Check..." && npm run lint &&
+    echo "3. Import Check..." && npx import-sort --check &&
+    echo "✓ All checks passed!"
+    
+  before_deploy: |
+    # Pre-deploy validation
+    echo "1. Build test..." && npm run build &&
+    echo "2. Firebase config..." && firebase deploy --only firestore:rules,storage:rules --dry-run &&
+    echo "3. Secret scan..." && ! grep -r "api.*key\|secret" --include="*.ts" --include="*.js" . &&
+    echo "✓ Ready to deploy!"
+    
+  before_push: |
+    # Pre-push validation
+    echo "1. No secrets..." && ! jj diff | grep -i "key\|secret\|password" &&
+    echo "2. Tests pass..." && npm test &&
+    echo "3. Build works..." && npm run build &&
+    echo "✓ Safe to push!"
+
+# Batch Operations
+batch_fixes:
+  fix_all_imports: |
+    # Fix all import ordering issues
+    npx import-sort --write "src/**/*.{ts,tsx}"
+    
+  update_all_dependencies: |
+    # Safe dependency updates
+    npx npm-check-updates -u --target minor
+    npm install
+    npm audit fix
+    
+  clean_all_caches: |
+    # Clear all build caches
+    rm -rf node_modules/.cache
+    rm -rf .angular
+    rm -rf dist
+    npm cache clean --force
+
+# Emergency Rollbacks
+rollback:
+  undo_last_jj_commit: |
+    # Undo last commit but keep changes
+    jj undo
+    
+  reset_firebase_deploy: |
+    # Rollback to previous Firebase deployment
+    firebase hosting:rollback
+    
+  restore_package_lock: |
+    # Restore package-lock.json from last commit
+    jj restore package-lock.json
+
+# Diagnostic Commands
+diagnose:
+  why_deploy_fails: |
+    # Comprehensive deployment diagnosis
+    echo "=== Checking Firebase Config ===" &&
+    firebase deploy --only firestore:rules --dry-run &&
+    firebase deploy --only storage:rules --dry-run &&
+    echo -e "\n=== Checking Build ===" &&
+    npm run build &&
+    echo -e "\n=== Checking Functions ===" &&
+    cd functions && npm run build
+    
+  why_push_fails: |
+    # Diagnose push issues
+    echo "=== JJ Status ===" && jj st &&
+    echo -e "\n=== Bookmarks ===" && jj bookmark list &&
+    echo -e "\n=== Diff Check ===" && jj diff --stat &&
+    echo -e "\n=== Secret Scan ===" && jj diff | grep -i "key\|secret\|password" || echo "No secrets found"
+
+# Aliases for Common Workflows
+suggested_aliases:
+  # Add to ~/.bashrc or ~/.zshrc
+  shell_aliases: |
+    alias jjpm='jj bookmark move master --to @ && jj git push --branch master'
+    alias fbdeploy='npm run build && firebase deploy'
+    alias precheck='npx tsc --noEmit && npm run lint'
+    alias cleanbuild='rm -rf dist .angular && npm run build'
+
+# Copy-Paste Solutions
+instant_solutions:
+  "Error: TS4111": "Replace .property with ['property']"
+  "Error: Cannot release storage": "Change storage: [{}] to storage: {}"
+  "Error: GH013": "Add to .gitignore && jj file untrack <file>"
+  "Nothing changed": "jj bookmark move master --to @"

@@ -1,3 +1,5 @@
+import { Timestamp } from '@angular/fire/firestore';
+
 export interface MasterMaterial {
   id?: string;
   itemCode: string; // Unique identifier (e.g., "DP-A-1-LB-86/73-2-10")
@@ -15,8 +17,8 @@ export interface MasterMaterial {
   reorderPoint?: number;
   reorderQuantity?: number;
   isActive: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
   createdBy?: string;
   updatedBy?: string;
 }
