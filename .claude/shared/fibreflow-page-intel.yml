@@ -1,0 +1,533 @@
+# FibreFlow Page Intelligence System
+# Single source of truth for all page information
+version: 1.0
+name: Page Intelligence System
+description: Comprehensive documentation for every page/feature in FibreFlow
+
+# Page Documentation Template
+page_template: |
+  feature_name:
+    # Overview
+    purpose: "Business purpose and user value"
+    status: "production|development|broken|planned"
+    last_updated: "YYYY-MM-DD"
+    owner: "Who to ask about this feature"
+    
+    # Current State
+    working_features:
+      - "What works perfectly"
+      - "Core functionality available"
+    
+    broken_features:
+      - "What's currently broken"
+      - "Known limitations"
+    
+    missing_features:
+      - "Expected but not implemented"
+      - "Planned but not started"
+    
+    # Technical Details
+    routes:
+      main: "/feature"
+      sub_routes:
+        - "/feature/new"
+        - "/feature/:id"
+    
+    components:
+      list: "FeatureListComponent"
+      detail: "FeatureDetailComponent"
+      form: "FeatureFormComponent"
+      dialogs: []
+      shared: []
+    
+    services:
+      primary: "FeatureService"
+      dependencies: ["OtherService"]
+    
+    database:
+      collections: ["features"]
+      subcollections: ["features/{id}/items"]
+      indexes_needed: []
+      common_queries: []
+    
+    # User Experience
+    user_workflows:
+      create:
+        - "Navigate to /feature/new"
+        - "Fill required fields"
+        - "Submit and redirect to list"
+      
+      common_tasks:
+        - task: "Filter by status"
+          how: "Use filter dropdown"
+          works_correctly: true
+    
+    # BUGS TO FIX (not accept!)
+    bugs_to_fix:
+      - id: "BUG-001"
+        description: "Filter doesn't persist on refresh"
+        severity: "low"
+        fix_approach: "Store filter in URL params or localStorage"
+        reported: "2025-01-01"
+        assigned_to: "Claude"
+        target_fix_date: "This week"
+    
+    performance_issues:
+      - issue: "Large lists (>1000) slow to load"
+        fix: "Implement pagination"
+        priority: "high"
+    
+    # Business Rules
+    business_logic:
+      - "Only admins can delete"
+      - "Status changes trigger email"
+      - "Linked to projects"
+    
+    validations:
+      - "Name must be unique"
+      - "Date cannot be in past"
+    
+    # Integration Points
+    integrations:
+      depends_on: ["projects", "users"]
+      used_by: ["reports", "dashboard"]
+      external_apis: []
+    
+    # Development Priorities
+    priorities:
+      immediate: # Fix these NOW
+        - "Critical bugs blocking users"
+        - "Security vulnerabilities"
+      
+      this_week:
+        - "High severity bugs"
+        - "Quick wins (< 1 hour fixes)"
+      
+      next_sprint:
+        - "New features requested"
+        - "Performance optimizations"
+    
+    # Development Notes
+    dev_notes:
+      patterns: "Uses standard CRUD pattern"
+      gotchas: "Date handling uses moment.js"
+      test_data: "Use seed script"
+    
+    # Quick Commands
+    commands:
+      test: "npm test feature.spec"
+      seed: "npm run seed:feature"
+      deploy: "deploy 'Updated feature X'"
+
+# Actual Page Documentation
+pages:
+  # Projects - Core feature with KPI Tracking
+  projects:
+    # Overview
+    purpose: "Manage fiber optic installation projects with KPI tracking"
+    status: "production"
+    last_updated: "2025-07-14"
+    owner: "Project Management Team"
+    
+    # Current State
+    working_features:
+      - "Complete CRUD operations"
+      - "4-level hierarchy: Project > Phase > Step > Task"
+      - "KPI tracking system with targets and timelines (NEW!)"
+      - "Progress calculation from tasks"
+      - "Contractor assignments"
+      - "Client associations"
+      - "Status management"
+    
+    recent_additions:
+      - feature: "KPI Tracking System"
+        date: "2025-07-14"
+        reference: "fibreflow-kpi-tracking-implementation.yml"
+        highlights:
+          - "5 required KPI targets"
+          - "Daily achievement rates"
+          - "Dependency-aware timelines"
+          - "Visual progress indicators"
+          - "Gantt chart visualization"
+    
+    # Technical Details
+    routes:
+      main: "/projects"
+      sub_routes:
+        - "/projects/new"
+        - "/projects/:id"
+        - "/projects/:id/edit"
+        - "/projects/:id/phases"
+        - "/projects/:id/kpis (NEW!)"
+    
+    components:
+      list: "ProjectListComponent"
+      detail: "ProjectDetailComponent"
+      form: "ProjectFormComponent"
+      kpi_components:
+        - "KpiProgressIndicatorComponent"
+        - "KpiTimelineComponent"
+    
+    services:
+      primary: "ProjectService"
+      dependencies: ["PhaseService", "ClientService", "ContractorService"]
+      kpi_service: "KpiTimelineService"
+    
+    database:
+      collections: ["projects"]
+      subcollections: 
+        - "projects/{id}/phases"
+        - "projects/{id}/phases/{id}/steps"
+        - "projects/{id}/phases/{id}/steps/{id}/tasks"
+      
+      kpi_fields_added:
+        - "kpiTargets: Record<string, number>"
+        - "kpiDailyRates: Record<string, number>"
+        - "projectStartDate: Date"
+    
+    # User Experience
+    user_workflows:
+      create_with_kpis:
+        - "Navigate to /projects/new"
+        - "Fill project details"
+        - "Set 5 required KPI targets"
+        - "Set daily achievement rates"
+        - "Pick project start date"
+        - "Review calculated timeline"
+        - "Save project"
+      
+      track_kpi_progress:
+        - "View project details"
+        - "See progress indicators"
+        - "Enter daily progress"
+        - "Monitor timeline changes"
+    
+    # Business Rules
+    business_logic:
+      - "Projects require client assignment"
+      - "Status workflow: planning → active → completed"
+      - "KPI dependencies: trenching → cables → blowing"
+      - "Progress calculated from task completion"
+      - "Timeline excludes weekends"
+    
+    # Integration Points
+    integrations:
+      depends_on: ["clients", "contractors"]
+      used_by: ["daily-progress", "reports", "boq", "pole-tracker"]
+      kpi_integration: "See fibreflow-kpi-tracking-implementation.yml"
+    
+    # Development Notes
+    dev_notes:
+      kpi_implementation: "Full details in fibreflow-kpi-tracking-implementation.yml"
+      hierarchy: "Uses nested subcollections for phases/steps/tasks"
+      progress: "Calculated recursively from task completion"
+
+pages:
+  # BOQ - Comprehensive Example
+  boq:
+    # Overview
+    purpose: "Manage Bill of Quantities for projects - central pricing and materials database"
+    status: "production"
+    last_updated: "2025-01-11"
+    owner: "Project Management Team"
+    
+    # Current State
+    working_features:
+      - "CRUD operations for BOQ items"
+      - "Excel import/export"
+      - "Template management"
+      - "Link to projects"
+      - "Quote generation from BOQ"
+      - "Material allocation tracking"
+    
+    broken_features:
+      - "Zero quantity filter not working (DEV-001)"
+      - "Large Excel imports (>5000 rows) timeout"
+    
+    missing_features:
+      - "Bulk edit functionality"
+      - "Version history/rollback"
+      - "Approval workflow"
+    
+    # Technical Details
+    routes:
+      main: "/boq"
+      sub_routes:
+        - "/boq/new"
+        - "/boq/:id"
+        - "/boq/:id/edit"
+        - "/boq/import"
+        - "/boq/templates"
+        - "/projects/:projectId/boq"
+    
+    components:
+      list: "BoqListComponent"
+      detail: "BoqDetailComponent"
+      form: "BoqFormComponent"
+      dialogs: ["BoqImportDialogComponent", "BoqTemplateDialogComponent"]
+      shared: ["BoqItemsTableComponent", "BoqSummaryComponent"]
+    
+    services:
+      primary: "BoqService"
+      dependencies: ["ProjectService", "MaterialService", "ExcelService"]
+    
+    database:
+      collections: ["boqItems"]
+      subcollections: 
+        - "boqItems/{id}/revisions"
+        - "boqItems/{id}/allocations"
+      indexes_needed:
+        - "projectId + status"
+        - "templateId + createdAt"
+      common_queries:
+        - "Active BOQs by project"
+        - "Template BOQs"
+        - "BOQs with pending quotes"
+    
+    # User Experience
+    user_workflows:
+      create_from_template:
+        - "Go to BOQ list"
+        - "Click 'New from Template'"
+        - "Select template"
+        - "Modify quantities/prices"
+        - "Save and link to project"
+      
+      import_from_excel:
+        - "Click Import button"
+        - "Download template if needed"
+        - "Upload filled Excel"
+        - "Map columns"
+        - "Review and confirm"
+        - "Import completes successfully"
+    
+    # BUGS TO FIX
+    bugs_to_fix:
+      - id: "DEV-001"
+        description: "Zero quantity filter shows all items instead of filtering"
+        severity: "medium"
+        fix_approach: "Add proper where clause to Firestore query: where('quantity', '>', 0)"
+        reported: "2024-12-15"
+        assigned_to: "Claude - fix immediately"
+        attempts: 3
+        notes: "Previous fixes were lost - need to fix at source in BoqService"
+      
+      - id: "BOQ-002"
+        description: "Import fails silently for duplicate items"
+        severity: "high"
+        fix_approach: "Add duplicate detection before import, show user which items are duplicates"
+        reported: "2025-01-05"
+        assigned_to: "Claude - this week"
+    
+    performance_issues:
+      - issue: "List view slow with >1000 items"
+        fix: "Implement virtual scrolling or pagination"
+        priority: "high"
+        
+      - issue: "Excel export takes 30+ seconds"
+        fix: "Stream data instead of loading all in memory"
+        priority: "medium"
+    
+    # Business Rules
+    business_logic:
+      - "BOQ items must have unique SKU within project"
+      - "Prices can only be edited by managers"
+      - "Template BOQs cannot be deleted if used"
+      - "Quantity changes trigger recalculation"
+      - "Approved BOQs lock automatically"
+    
+    validations:
+      - "SKU format: XXX-YYYY-ZZZ"
+      - "Quantity must be positive"
+      - "Unit price required"
+      - "Description max 500 chars"
+    
+    # Integration Points
+    integrations:
+      depends_on: ["projects", "materials", "suppliers"]
+      used_by: ["quotes", "rfq", "reports", "stock"]
+      external_apis: ["Excel import/export"]
+    
+    # Development Priorities
+    priorities:
+      immediate:
+        - "Fix BOQ-002 (silent import failures)"
+        - "Fix DEV-001 (zero quantity filter)"
+      
+      this_week:
+        - "Add pagination to prevent timeouts"
+        - "Show progress bar for large imports"
+      
+      next_sprint:
+        - "Bulk edit functionality"
+        - "Version history"
+        - "Performance optimizations"
+    
+    # Development Notes
+    dev_notes:
+      patterns: "Uses BaseFirestoreService, standard CRUD components"
+      fix_locations:
+        DEV_001: "src/app/core/services/boq.service.ts - getFilteredItems() method"
+        BOQ_002: "src/app/features/boq/components/boq-import/boq-import.component.ts"
+      test_data: "npm run seed:boq -- --items=100"
+      related_docs: "docs/BOQ_FILTER_PLAN.md (shows previous attempts)"
+
+  # Pole Tracker - With Navigation Issues TO FIX
+  pole_tracker:
+    # Overview
+    purpose: "Track pole installation progress with photo evidence and GPS locations"
+    status: "production"
+    last_updated: "2025-01-11"
+    owner: "Field Operations Team"
+    
+    # Current State
+    working_features:
+      - "Desktop list view with filters"
+      - "GPS map view for mobile"
+      - "Photo capture (6 required photos)"
+      - "Offline queue for poor connectivity"
+      - "Assignment management"
+      - "CSV/Excel import"
+      - "Real-time sync"
+    
+    broken_features:
+      - "Mobile list view missing (shows map instead)"
+      - "Navigation conflict at /pole-tracker/mobile"
+      - "Some photos fail to upload in offline mode"
+    
+    missing_features:
+      - "Mobile-optimized list component"
+      - "Bulk photo upload"
+      - "Route optimization for field workers"
+      - "Progress notifications"
+    
+    # Technical Details
+    routes:
+      main: "/pole-tracker"
+      sub_routes:
+        desktop:
+          - "/pole-tracker/new"
+          - "/pole-tracker/:id"
+          - "/pole-tracker/:id/edit"
+          - "/pole-tracker/import"
+        mobile:
+          - "/pole-tracker/mobile (BROKEN - should show list, shows map)"
+          - "/pole-tracker/mobile/capture"
+          - "/pole-tracker/mobile/assignments"
+          - "/pole-tracker/mobile/nearby"
+    
+    components:
+      desktop:
+        list: "PoleTrackerListComponent"
+        detail: "PoleTrackerDetailComponent"
+        form: "PoleTrackerFormComponent"
+      mobile:
+        map: "MobileMapViewComponent"
+        capture: "QuickCaptureComponent"
+        assignments: "MyAssignmentsComponent"
+        nearby: "NearbyPolesComponent"
+        missing: "PoleTrackerMobileListComponent (CREATE THIS!)"
+    
+    services:
+      primary: "PoleTrackerService"
+      dependencies: ["GoogleMapsService", "ImageUploadService", "OfflineQueueService"]
+    
+    # BUGS TO FIX
+    bugs_to_fix:
+      - id: "POLE-001"
+        description: "Route conflict - /pole-tracker/mobile shows map instead of list"
+        severity: "high"
+        fix_approach: |
+          1. Create PoleTrackerMobileListComponent
+          2. Update pole-tracker.routes.ts to use new component
+          3. Move map to /pole-tracker/mobile/map
+          4. Update navigation menu
+        assigned_to: "Claude - immediate fix"
+        
+      - id: "POLE-002"
+        description: "Offline photos sometimes don't sync"
+        severity: "medium"
+        fix_approach: "Add retry logic to OfflineQueueService, implement sync status UI"
+        assigned_to: "Claude - this week"
+    
+    performance_issues:
+      - issue: "Map slow with >500 markers"
+        fix: "Implement marker clustering"
+        priority: "medium"
+        
+      - issue: "Photo upload blocks UI"
+        fix: "Move upload to Web Worker"
+        priority: "low"
+    
+    # Development Priorities
+    priorities:
+      immediate:
+        - "Create mobile list component"
+        - "Fix route conflict"
+      
+      this_week:
+        - "Fix offline photo sync"
+        - "Add sync status indicator"
+      
+      next_sprint:
+        - "Marker clustering for performance"
+        - "Route optimization algorithm"
+
+# Bug Tracking System
+bug_tracking:
+  # All bugs in one place
+  active_bugs:
+    high_severity:
+      - page: "boq"
+        id: "BOQ-002"
+        impact: "Data loss - imports fail silently"
+        
+      - page: "pole_tracker"
+        id: "POLE-001"
+        impact: "Navigation broken - can't access mobile list"
+    
+    medium_severity:
+      - page: "boq"
+        id: "DEV-001"
+        impact: "Filter not working - shows wrong data"
+        
+      - page: "pole_tracker"
+        id: "POLE-002"
+        impact: "Photos lost - offline sync fails"
+  
+  # Fix priority queue
+  fix_queue:
+    today:
+      - "BOQ-002: Silent import failures"
+      - "POLE-001: Mobile navigation conflict"
+    
+    this_week:
+      - "DEV-001: Zero quantity filter"
+      - "POLE-002: Offline photo sync"
+    
+    next_sprint:
+      - "Performance optimizations"
+      - "Missing features"
+
+# Fix Commands
+fix_commands:
+  "!fix {bug-id}": "Get fix approach and location"
+  "!bugs": "List all active bugs by priority"
+  "!bugs {page}": "List bugs for specific page"
+  "!test-fix {bug-id}": "Commands to test the fix"
+
+# Maintenance Protocol
+maintenance:
+  bug_workflow:
+    1: "Bug reported → Add to bugs_to_fix"
+    2: "Assign to Claude with deadline"
+    3: "Fix at source (no workarounds!)"
+    4: "Test thoroughly"
+    5: "Deploy and verify"
+    6: "Move to fixed_bugs archive"
+  
+  no_workarounds_policy:
+    - "Every bug must be fixed at source"
+    - "Temporary fixes must have deadlines"
+    - "Document fix location for future reference"
+    - "Test to prevent regression"

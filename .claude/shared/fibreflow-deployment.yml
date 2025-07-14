@@ -1,0 +1,349 @@
+# FibreFlow Deployment & Version Control Workflow
+# Structured jj (Jujutsu) + Firebase deployment with best practices
+
+version: 1.0
+name: FibreFlow Deployment Configuration
+description: Deploy-first testing philosophy with jj version control integration
+
+# Core Philosophy (from CLAUDE.md)
+deployment_philosophy:
+  principles:
+    - "Deploy to test, NEVER use ng serve"
+    - "Every change is automatically tracked by jj"
+    - "One command deployment: build → commit → deploy"
+    - "Test on live Firebase immediately"
+  
+  forbidden:
+    - "ng serve (local dev server)"
+    - "Manual git commands (use jj)"
+    - "Deploying without testing"
+    - "Skipping lint/build checks"
+
+# Version Control with jj (from CLAUDE.md lines 232-334)
+version_control:
+  why_jj:
+    - "No staging area - all changes auto-tracked"
+    - "Every change is a snapshot"
+    - "Deploy what you see"
+    - "Simplified workflow for solo dev"
+  
+  file_size_management:
+    default_limit: "1MiB"
+    large_files_handling:
+      gitignore_patterns:
+        - "OneMap/*.csv"
+        - "OneMap/*.xlsx"
+        - "OneMap/*.json"
+        - "OneMap/split_data/"
+        - "**/*.zip"
+        - "**/*.tar.gz"
+      
+      override_options:
+        temporary: "jj --config snapshot.max-new-file-size=50MiB st"
+        permanent: "jj config set --repo snapshot.max-new-file-size 50MiB"
+  
+  essential_commands:
+    status: "jj st"
+    diff: "jj diff"
+    describe: "jj describe -m 'message'"
+    log: "jj log"
+    undo: "jj undo"
+    restore: "jj restore"
+
+# Main Deployment Workflow
+deployment_workflow:
+  # The master 'deploy' command/alias
+  deploy_command:
+    description: "One command to build, commit, and deploy"
+    alias_definition: |
+      # Add to ~/.bashrc or ~/.zshrc
+      alias deploy='npm run build && jj describe -m "${1:-Deployment $(date +%Y-%m-%d_%H:%M)}" && jj git push && firebase deploy'
+    
+    steps:
+      - name: "Pre-deployment validation"
+        parallel: true
+        checks:
+          - command: "npm run lint"
+            fail_on_error: true
+            fix_command: "npm run lint:fix"
+          
+          - command: "npx tsc --noEmit"
+            fail_on_error: true
+            purpose: "TypeScript type checking"
+          
+          - command: "npm run check"
+            fail_on_error: false
+            purpose: "Additional checks if configured"
+      
+      - name: "antiHall validation"
+        when: "new_services_or_patterns_added"
+        commands:
+          - "cd antiHall && npm run parse"
+          - "npm run check 'new patterns'"
+      
+      - name: "Build production"
+        command: "npm run build"
+        validation:
+          - "Check bundle size"
+          - "Verify no build warnings"
+          - "Ensure all assets included"
+      
+      - name: "Version control"
+        automatic: true
+        jj_workflow:
+          - "All changes auto-tracked"
+          - "Create descriptive commit message"
+          - "Push to GitHub"
+        command: |
+          jj describe -m "${MESSAGE:-feat: $(date +%Y-%m-%d) deployment}"
+          jj git push
+      
+      - name: "Firebase deployment"
+        command: "firebase deploy"
+        options:
+          hosting_only: "firebase deploy --only hosting"
+          functions_only: "firebase deploy --only functions"
+          everything: "firebase deploy"
+      
+      - name: "Post-deployment verification"
+        manual: true
+        checklist:
+          - "Open https://fibreflow.web.app"
+          - "Test core functionality"
+          - "Check all themes work"
+          - "Verify no console errors"
+          - "Test on mobile"
+
+# Enhanced Deployment Patterns
+deployment_patterns:
+  # Quick feature deployment
+  feature_deployment:
+    description: "Deploy after adding new feature"
+    workflow: |
+      # 1. Implement feature
+      # 2. Test locally with build
+      npm run build
+      
+      # 3. Deploy with descriptive message
+      deploy "feat: added invoice management with PDF export"
+      
+      # 4. Test on live site immediately
+      # 5. Fix any issues and redeploy
+  
+  # Hotfix deployment
+  hotfix_deployment:
+    description: "Emergency fixes"
+    workflow: |
+      # 1. Fix the issue
+      # 2. Minimal testing
+      npm run lint && npm run build
+      
+      # 3. Deploy immediately
+      deploy "fix: resolved critical auth issue"
+      
+      # 4. Monitor for side effects
+  
+  # Major release deployment
+  release_deployment:
+    description: "Significant updates"
+    pre_deployment:
+      - "Run full test suite"
+      - "Check bundle size changes"
+      - "Review security audit"
+      - "Update CHANGELOG.md"
+    
+    workflow: |
+      # 1. Create release commit
+      jj new -m "release: v2.0.0 - Major UI overhaul"
+      
+      # 2. Tag the release
+      jj bookmark create v2.0.0
+      
+      # 3. Full deployment
+      deploy "release: v2.0.0 - see CHANGELOG.md"
+      
+      # 4. Create GitHub release
+      gh release create v2.0.0
+
+# Deployment Optimization
+optimization:
+  # Build optimization
+  build_performance:
+    - tip: "Use production builds only"
+      command: "npm run build -- --configuration production"
+    
+    - tip: "Enable source maps for debugging"
+      config: |
+        // angular.json
+        "sourceMap": {
+          "scripts": true,
+          "styles": true,
+          "hidden": true
+        }
+    
+    - tip: "Optimize bundle size"
+      checks:
+        - "Run bundle analyzer: npm run build -- --stats-json"
+        - "Review lazy-loaded modules"
+        - "Check for duplicate dependencies"
+  
+  # Firebase optimization
+  firebase_performance:
+    - tip: "Use Firebase hosting preview channels"
+      command: "firebase hosting:channel:deploy preview"
+    
+    - tip: "Enable CDN caching"
+      config: |
+        // firebase.json
+        {
+          "hosting": {
+            "headers": [{
+              "source": "**/*.@(js|css)",
+              "headers": [{
+                "key": "Cache-Control",
+                "value": "max-age=31536000"
+              }]
+            }]
+          }
+        }
+    
+    - tip: "Configure regions for functions"
+      pattern: |
+        export const myFunction = functions
+          .region('us-central1')  // Choose closest to users
+          .https.onCall(...)
+
+# Environment-Specific Deployments
+environments:
+  development:
+    description: "Your local machine"
+    config: ".env.local"
+    deployment: "Not applicable - always deploy to Firebase"
+  
+  staging:
+    description: "Preview channel for testing"
+    setup: |
+      firebase hosting:channel:create staging
+      firebase hosting:channel:deploy staging
+    url_pattern: "https://fibreflow--staging-*.web.app"
+  
+  production:
+    description: "Live site"
+    url: "https://fibreflow.web.app"
+    pre_deployment_checklist:
+      - "All tests passing"
+      - "Security audit clean"
+      - "Performance acceptable"
+      - "Backup recent data"
+
+# Rollback Procedures
+rollback:
+  jj_rollback:
+    description: "Revert to previous version"
+    commands:
+      - "jj undo  # Undo last operation"
+      - "jj restore  # Restore to previous state"
+      - "jj log  # Find commit to restore"
+  
+  firebase_rollback:
+    description: "Revert Firebase deployment"
+    hosting: |
+      # List recent deployments
+      firebase hosting:releases:list
+      
+      # Rollback to previous
+      firebase hosting:rollback
+    
+    functions: |
+      # Functions require redeployment
+      # Checkout previous code and redeploy
+      jj restore --to [previous-commit]
+      firebase deploy --only functions
+
+# Monitoring & Alerts
+post_deployment:
+  monitoring:
+    - name: "Check Firebase Console"
+      areas:
+        - "Hosting: Deployment status"
+        - "Functions: Execution logs"
+        - "Firestore: Usage spikes"
+    
+    - name: "Monitor error reporting"
+      tools:
+        - "Browser console"
+        - "Sentry (if configured)"
+        - "Firebase Crashlytics"
+    
+    - name: "Performance monitoring"
+      metrics:
+        - "Page load time"
+        - "Time to interactive"
+        - "Core Web Vitals"
+
+# Common Issues & Solutions
+troubleshooting:
+  build_failures:
+    - issue: "TypeScript errors"
+      solution: "npx tsc --noEmit to see all errors"
+    
+    - issue: "Lint errors"
+      solution: "npm run lint:fix for auto-fixable issues"
+    
+    - issue: "Memory issues during build"
+      solution: "NODE_OPTIONS='--max-old-space-size=4096' npm run build"
+  
+  deployment_failures:
+    - issue: "Firebase auth error"
+      solution: |
+        firebase login --reauth
+        firebase use --add
+    
+    - issue: "Quota exceeded"
+      solution: "Check Firebase Console quotas"
+    
+    - issue: "Functions deployment fails"
+      solution: |
+        cd functions
+        npm install
+        npm run build
+
+# Best Practices Integration
+best_practices:
+  commit_messages:
+    format: "{type}: {description}"
+    types:
+      - "feat: New feature"
+      - "fix: Bug fix"
+      - "docs: Documentation"
+      - "style: Formatting"
+      - "refactor: Code restructuring"
+      - "test: Test updates"
+      - "chore: Maintenance"
+    
+    examples:
+      - "feat: added real-time chat to pole tracker"
+      - "fix: resolved memory leak in subscription"
+      - "docs: updated API reference for v2"
+  
+  deployment_frequency:
+    recommendation: "Deploy early and often"
+    guidelines:
+      - "Multiple times per day is normal"
+      - "Small incremental changes"
+      - "Fix forward, not backward"
+      - "Each deployment should be stable"
+
+# Integration Points
+integrations:
+  antiHall:
+    pre_deployment: "Validate all new patterns"
+    command: "npm run check"
+  
+  github:
+    auto_push: "jj git push with every deploy"
+    actions: "Can trigger additional workflows"
+  
+  monitoring:
+    sentry: "Auto-capture deployment info"
+    analytics: "Track deployment frequency"

@@ -1,0 +1,118 @@
+# FibreFlow Planning Protocol
+# Prevents hasty implementations by enforcing proper planning
+
+version: 1.0
+name: Planning Before Implementation Protocol
+description: Mandatory planning steps for systems that require careful design
+
+# Core Rule
+planning_requirement:
+  triggers:
+    - "New system or framework"
+    - "Major architectural changes"
+    - "Cross-cutting concerns"
+    - "Documentation systems"
+    - "Workflow modifications"
+    - "When human says 'plan this properly'"
+  
+  mandatory_response: "I need to plan this properly. Let me break it down first."
+
+# Planning Workflow
+planning_stages:
+  1_understand:
+    name: "Understand the Problem"
+    actions:
+      - "Restate what's being asked"
+      - "Identify what problem we're solving"
+      - "Ask clarifying questions"
+      - "List success criteria"
+    
+    output: "Problem statement document"
+    
+  2_research:
+    name: "Research Current State"
+    actions:
+      - "Explore existing code/structure"
+      - "Identify patterns in use"
+      - "Find related systems"
+      - "Note constraints"
+    
+    output: "Research findings"
+    
+  3_design:
+    name: "Design Solution"
+    actions:
+      - "List possible approaches"
+      - "Evaluate pros/cons"
+      - "Choose approach with reasoning"
+      - "Create implementation plan"
+    
+    output: "Design document with steps"
+    
+  4_validate:
+    name: "Validate with Human"
+    actions:
+      - "Present plan for review"
+      - "Get explicit approval"
+      - "Incorporate feedback"
+      - "Confirm understanding"
+    
+    output: "Approved plan"
+    
+  5_implement:
+    name: "Implement Incrementally"
+    actions:
+      - "Start with minimal version"
+      - "Test each addition"
+      - "Get feedback at milestones"
+      - "Document as building"
+    
+    output: "Working system"
+
+# Behavioral Modifications
+behavior_rules:
+  when_asked_for_system:
+    wrong: "Immediately create comprehensive YAML/code"
+    correct: "Say: 'This needs proper planning. Let me break it down.'"
+    
+  when_seeing_pattern_need:
+    wrong: "Create full solution based on one example"
+    correct: "Research multiple examples first"
+    
+  when_human_requests_feature:
+    wrong: "Implement what I think they want"
+    correct: "Clarify requirements and constraints first"
+
+# Integration with Master Config
+master_config_update:
+  add_to_workflow_automation:
+    requires_planning:
+      - "System design requests"
+      - "New documentation frameworks"
+      - "Architectural patterns"
+      - "Major refactoring"
+    
+    planning_indicators:
+      keywords: ["system", "framework", "architecture", "redesign", "overhaul"]
+      scope: "Affects multiple features or pages"
+      permanence: "Hard to change later"
+
+# Specific Application: Page Context System
+page_context_planning:
+  status: "Planning Required"
+  stage: "1_understand"
+  
+  problem_statement: |
+    Need: Quick access to page-specific information
+    - Database locations
+    - Known issues
+    - Related components
+    - Improvement notes
+    
+    Current pain: Searching for BOQ data took 10 minutes
+    
+    Success criteria:
+    - Instant access to page context
+    - Integrated with SuperClaude
+    - Searchable by antiHall
+    - Easy to maintain

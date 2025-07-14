@@ -1,5 +1,13 @@
 {
   "projects": {
     "default": "fibreflow-73daf"
+  },
+  "targets": {},
+  "etags": {
+    "fibreflow-73daf": {
+      "extensionInstances": {
+        "firestore-send-email": "02ddd8b8e8f5322e5b68da19e023dbb9b0d0f12c6fe4324354fa6b16c350cc5e"
+      }
+    }
   }
 }

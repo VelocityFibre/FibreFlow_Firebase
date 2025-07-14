@@ -1,0 +1,258 @@
+# FibreFlow Security & Secret Management
+# Enhanced with Firebase best practices and automated scanning
+
+version: 1.0
+name: FibreFlow Security Configuration
+description: Security patterns with automated validation and best practices
+
+# Core Security Rules (from CLAUDE.md + enhancements)
+security_rules:
+  # Original rules from CLAUDE.md
+  absolute_prohibitions:
+    - rule: "NEVER commit .env files"
+      validation:
+        files_to_check: [".env", ".env.local", ".env.*", "*.env"]
+        git_hooks:
+          pre_commit: |
+            # Automated check before every commit
+            if git diff --cached --name-only | grep -E '\.env'; then
+              echo "❌ ERROR: Attempting to commit .env file!"
+              exit 1
+            fi
+        jj_validation: "jj st | grep -E '\\.env' && exit 1 || exit 0"
+    
+    - rule: "NEVER store secrets in Angular code"
+      validation:
+        # Enhanced regex patterns for better detection
+        forbidden_patterns:
+          - pattern: "api[_-]?key\\s*[:=]\\s*['\"][a-zA-Z0-9-_]{20,}"
+            message: "API key detected"
+          - pattern: "password\\s*[:=]\\s*['\"][^'\"$]+"
+            message: "Hardcoded password detected"
+          - pattern: "secret\\s*[:=]\\s*['\"][a-zA-Z0-9-_]+"
+            message: "Secret value detected"
+          - pattern: "token\\s*[:=]\\s*['\"][a-zA-Z0-9-_.]+"
+            message: "Token detected"
+        scan_locations:
+          - "src/**/*.ts"
+          - "src/**/*.js"
+          - "src/**/*.html"
+        allowed_exceptions:
+          - "src/environments/environment*.ts"  # Only public config
+    
+    - rule: "ALWAYS use Firebase Functions for secrets"
+      validation:
+        when_detected: ["api call", "external service", "authentication"]
+        enforce:
+          allowed_in: "functions/src/**"
+          forbidden_in: "src/app/**"
+        example: |
+          // ❌ Wrong: In Angular component
+          const apiKey = 'sk-abc123...';
+          
+          // ✅ Correct: In Firebase Function
+          const apiKey = functions.config().service.api_key;
+
+  # NEW: Firebase Security Best Practices
+  firebase_security:
+    - rule: "Validate Firestore security rules"
+      validation:
+        before_deploy: true
+        commands:
+          - "firebase firestore:rules:validate"
+          - "npm run test:rules"  # If you have rule tests
+      common_mistakes:
+        - pattern: "allow read, write: if true"
+          severity: "critical"
+          message: "Open read/write detected - NEVER use in production"
+        - pattern: "allow (read|write)(?!.*request\\.auth)"
+          severity: "high"
+          message: "Missing auth check in security rule"
+    
+    - rule: "Implement least privilege access"
+      guidelines:
+        - "Users can only read/write their own data"
+        - "Admin operations require custom claims"
+        - "Use granular permissions per collection"
+
+# Secret Management Workflows
+secret_management:
+  # Storage locations (from CLAUDE.md)
+  storage_hierarchy:
+    local_development:
+      location: ".env.local"
+      format: "KEY=value"
+      required_keys:
+        - "FIREBASE_TOKEN"
+        - "FIREFLIES_API_KEY"
+      validation_script: |
+        # Check all required keys exist
+        for key in FIREBASE_TOKEN FIREFLIES_API_KEY; do
+          if ! grep -q "^$key=" .env.local; then
+            echo "❌ Missing required key: $key"
+            exit 1
+          fi
+        done
+    
+    firebase_functions:
+      commands:
+        set: "firebase functions:config:set {service}.{key}=\"{value}\""
+        get: "firebase functions:config:get"
+        verify: "firebase functions:config:get | jq '.{service}.{key}'"
+      deployment_checklist:
+        - "Read value from .env.local"
+        - "Set in Firebase config"
+        - "Deploy functions"
+        - "Verify in production"
+    
+    angular_public:
+      location: "src/environments/environment.ts"
+      allowed_only:
+        - "Firebase project config (public)"
+        - "API endpoints (URLs only)"
+        - "Feature flags"
+        - "Public keys (like Stripe publishable)"
+
+  # NEW: Automated Secret Scanning
+  automated_scanning:
+    pre_commit:
+      enabled: true
+      tools:
+        - name: "Built-in patterns"
+          patterns_file: ".claude/shared/secret-patterns.json"
+        - name: "git-secrets"
+          install: "git secrets --install"
+          scan: "git secrets --scan"
+    
+    continuous:
+      schedule: "on_file_save"
+      actions:
+        - "Highlight detected secrets"
+        - "Block deployment if found"
+        - "Suggest proper storage location"
+
+  # NEW: Secret Rotation Tracking
+  rotation_schedule:
+    firebase_token:
+      frequency: "90_days"
+      last_rotated: "track_in_env_local"
+      reminder: "Check Firebase Console for token expiry"
+    
+    api_keys:
+      frequency: "180_days"
+      process:
+        - "Generate new key in provider dashboard"
+        - "Update .env.local"
+        - "Update Firebase config"
+        - "Deploy functions"
+        - "Test thoroughly"
+        - "Revoke old key after 24h"
+
+# Security Workflows
+workflows:
+  add_new_secret:
+    description: "Securely add a new secret"
+    steps:
+      - name: "Identify secret type"
+        decision:
+          api_key: "Use Firebase Functions"
+          public_config: "Use environment.ts"
+          sensitive: "Use .env.local + Functions"
+      
+      - name: "Add to local development"
+        commands:
+          - "echo 'SECRET_NAME=value' >> .env.local"
+          - "# Verify not tracked: git status .env.local"
+      
+      - name: "Configure for production"
+        when: "used_in_functions"
+        commands:
+          - "# Get value from .env.local"
+          - "firebase functions:config:set service.key='value'"
+          - "firebase deploy --only functions"
+      
+      - name: "Document the secret"
+        update:
+          - "CLAUDE.md secret inventory"
+          - "Add rotation schedule"
+          - "Note usage location"
+
+  security_audit:
+    description: "Comprehensive security check"
+    frequency: "before_major_deploy"
+    steps:
+      - name: "Scan codebase"
+        parallel: true
+        checks:
+          - "Secret detection scan"
+          - "Dependency vulnerabilities: npm audit"
+          - "Firebase rules validation"
+          - "CORS configuration"
+      
+      - name: "Review Firebase settings"
+        manual_checks:
+          - "Security rules are restrictive"
+          - "API keys are properly scoped"
+          - "Functions have error handling"
+      
+      - name: "Verify production config"
+        commands:
+          - "firebase functions:config:get"
+          - "firebase firestore:rules:get"
+
+# Enhanced Error Detection
+secret_detection_patterns:
+  high_confidence:
+    # These are definitely secrets
+    - name: "Firebase Service Account"
+      pattern: '"private_key":\s*"-----BEGIN PRIVATE KEY-----'
+      severity: "critical"
+    
+    - name: "API Keys with prefix"
+      pattern: "(sk|pk|api)[-_]live[-_][a-zA-Z0-9]{24,}"
+      severity: "critical"
+    
+    - name: "JWT Tokens"
+      pattern: "eyJ[a-zA-Z0-9_-]+\\.eyJ[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]+"
+      severity: "high"
+  
+  medium_confidence:
+    # Might be secrets, need context
+    - name: "Generic API key"
+      pattern: "api[_-]?key.*=.*['\"][a-zA-Z0-9]{16,}"
+      severity: "medium"
+      
+    - name: "Password fields"
+      pattern: "password.*=.*['\"][^'\"]{8,}"
+      severity: "medium"
+      exclude_if: ["$", "{", "process.env", "config.get"]
+
+# Integration Points
+integrations:
+  antiHall:
+    validate_security_patterns: true
+    commands:
+      - "npm run check 'functions.config()'"
+      - "npm run check 'process.env'"
+  
+  github_actions:
+    security_workflow: |
+      - name: Secret Scanning
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+
+# Best Practices Reminders
+reminders:
+  development:
+    - "Always use .env.local for local secrets"
+    - "Check git status before commits"
+    - "Run security audit before major deploys"
+  
+  production:
+    - "Rotate keys regularly"
+    - "Use least privilege principle"
+    - "Monitor Firebase usage for anomalies"
+    - "Keep security rules up to date"

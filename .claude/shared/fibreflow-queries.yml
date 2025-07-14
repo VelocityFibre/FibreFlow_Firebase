@@ -1,0 +1,353 @@
+# FibreFlow Query Optimization & Firestore Patterns
+# Enhanced with Firebase best practices for performance and scalability
+
+version: 1.0
+name: FibreFlow Query Configuration
+description: Optimized Firestore query patterns with cursor pagination and performance guidelines
+
+# Current Pattern (from CLAUDE.md lines 432-440)
+current_patterns:
+  base_service_queries:
+    description: "BaseFirestoreService query pattern"
+    example: |
+      getActiveItems(): Observable<Item[]> {
+        return this.getWithQuery([
+          where('status', '==', 'active'),
+          orderBy('createdAt', 'desc')
+        ]);
+      }
+    validated_by_antiHall: true
+
+# Enhanced Query Patterns
+optimized_patterns:
+  # Basic Query Pattern (preserving your existing)
+  simple_queries:
+    description: "Standard queries without pagination"
+    when_to_use: "Collections with < 100 documents"
+    pattern: |
+      // Your existing pattern - still valid!
+      getActiveItems(): Observable<Item[]> {
+        return this.getWithQuery([
+          where('status', '==', 'active'),
+          orderBy('createdAt', 'desc'),
+          limit(50)  // Always set a reasonable limit
+        ]);
+      }
+    best_practices:
+      - "Always add limit() to prevent runaway queries"
+      - "Order by indexed fields"
+      - "Use compound indexes for multiple conditions"
+
+  # NEW: Cursor-based Pagination
+  cursor_pagination:
+    description: "Efficient pagination for large datasets"
+    when_to_use: "Collections with > 100 documents"
+    benefits:
+      - "No performance degradation with offset"
+      - "Consistent read costs"
+      - "Works with real-time listeners"
+    
+    implementation: |
+      // Enhanced BaseFirestoreService method
+      getPagedItems(pageSize: number = 20, lastDoc?: DocumentSnapshot): Observable<{
+        items: Item[];
+        lastDocument: DocumentSnapshot | null;
+        hasMore: boolean;
+      }> {
+        const constraints: QueryConstraint[] = [
+          where('status', '==', 'active'),
+          orderBy('createdAt', 'desc'),
+          limit(pageSize + 1)  // Get one extra to check if more exist
+        ];
+        
+        if (lastDoc) {
+          constraints.push(startAfter(lastDoc));
+        }
+        
+        return this.getWithQuery(constraints).pipe(
+          map(items => {
+            const hasMore = items.length > pageSize;
+            if (hasMore) items.pop();  // Remove the extra item
+            
+            return {
+              items,
+              lastDocument: items[items.length - 1]?._doc || null,
+              hasMore
+            };
+          })
+        );
+      }
+    
+    component_usage: |
+      // In component
+      export class ItemListComponent {
+        items: Item[] = [];
+        lastDoc: DocumentSnapshot | null = null;
+        hasMore = true;
+        loading = false;
+        
+        loadMore() {
+          if (this.loading || !this.hasMore) return;
+          
+          this.loading = true;
+          this.itemService.getPagedItems(20, this.lastDoc)
+            .pipe(take(1))
+            .subscribe(result => {
+              this.items.push(...result.items);
+              this.lastDoc = result.lastDocument;
+              this.hasMore = result.hasMore;
+              this.loading = false;
+            });
+        }
+      }
+
+  # NEW: Optimized Search Queries
+  search_optimization:
+    description: "Efficient text search patterns"
+    problem: "Firestore doesn't have full-text search"
+    solutions:
+      - name: "Prefix search"
+        pattern: |
+          searchByName(prefix: string): Observable<Item[]> {
+            const endPrefix = prefix + '\uf8ff';
+            return this.getWithQuery([
+              where('nameLowercase', '>=', prefix.toLowerCase()),
+              where('nameLowercase', '<=', endPrefix),
+              orderBy('nameLowercase'),
+              limit(20)
+            ]);
+          }
+        
+      - name: "Search index approach"
+        pattern: |
+          // Store searchable tokens on write
+          createSearchableItem(item: Item) {
+            const searchTokens = this.generateSearchTokens(item.name);
+            return this.add({
+              ...item,
+              searchTokens,  // Array of lowercase tokens
+              nameLowercase: item.name.toLowerCase()
+            });
+          }
+          
+          private generateSearchTokens(text: string): string[] {
+            // "John Smith" -> ["john", "smith", "johnsmith"]
+            const words = text.toLowerCase().split(/\s+/);
+            return [...words, words.join('')];
+          }
+
+# Query Performance Guidelines
+performance_optimization:
+  # Index Management (from Firebase best practices)
+  indexing:
+    auto_indexes:
+      description: "Firestore creates these automatically"
+      types:
+        - "Single field indexes for each field"
+        - "Array-contains queries"
+    
+    composite_indexes:
+      description: "Must be created manually"
+      when_needed: "Multiple where() or where() + orderBy()"
+      creation_methods:
+        - "Firebase Console (easiest)"
+        - "firestore.indexes.json file"
+        - "Let query fail, click link in error"
+      
+      example: |
+        // This query needs a composite index:
+        where('projectId', '==', projectId),
+        where('status', '==', 'active'),
+        orderBy('priority', 'desc')
+        
+        // Add to firestore.indexes.json:
+        {
+          "indexes": [{
+            "collectionGroup": "tasks",
+            "fields": [
+              { "fieldPath": "projectId", "order": "ASCENDING" },
+              { "fieldPath": "status", "order": "ASCENDING" },
+              { "fieldPath": "priority", "order": "DESCENDING" }
+            ]
+          }]
+        }
+    
+    # NEW: Index exemptions for performance
+    exemptions:
+      description: "Disable unused indexes on large fields"
+      benefits: "Reduces write latency and storage"
+      pattern: |
+        // In firestore.indexes.json
+        {
+          "fieldOverrides": [{
+            "collectionGroup": "items",
+            "fieldPath": "description",  // Large text field
+            "indexes": []  // Disable all indexes
+          }]
+        }
+
+  # Query Efficiency Rules
+  efficiency_rules:
+    - rule: "Limit result sets"
+      implementation: "Always use limit() - default to 20-50"
+      reason: "Reduces bandwidth and improves response time"
+    
+    - rule: "Avoid offset()"
+      bad: "query.offset(1000).limit(20)"
+      good: "Use cursor pagination instead"
+      reason: "Offset reads and discards all skipped documents"
+    
+    - rule: "Denormalize for read performance"
+      example: |
+        // Instead of joining data, store what you need
+        {
+          taskId: '123',
+          taskName: 'Update site',
+          // Denormalized user data
+          assignedTo: {
+            userId: '456',
+            userName: 'John Doe',  // Store name to avoid lookup
+            userAvatar: 'url...'   // Store frequently displayed data
+          }
+        }
+    
+    - rule: "Use collection group queries wisely"
+      when: "Querying across subcollections"
+      indexing: "Requires specific indexes"
+      example: |
+        // Query all comments across all posts
+        collectionGroup('comments')
+          .where('authorId', '==', userId)
+          .orderBy('createdAt', 'desc')
+
+# Real-time Optimization
+realtime_queries:
+  subscription_management:
+    description: "Efficient real-time listeners"
+    patterns:
+      - name: "Component lifecycle management"
+        implementation: |
+          export class ItemListComponent implements OnDestroy {
+            private destroy$ = new Subject<void>();
+            
+            items$ = this.itemService.getActiveItems().pipe(
+              takeUntil(this.destroy$)  // Auto-unsubscribe
+            );
+            
+            ngOnDestroy() {
+              this.destroy$.next();
+              this.destroy$.complete();
+            }
+          }
+      
+      - name: "Conditional subscriptions"
+        implementation: |
+          // Only subscribe when needed
+          ngOnInit() {
+            this.route.params.pipe(
+              switchMap(params => params.id 
+                ? this.itemService.getById(params.id)
+                : of(null)
+              ),
+              takeUntil(this.destroy$)
+            ).subscribe();
+          }
+
+  optimization_tips:
+    - "Use observables with async pipe when possible"
+    - "Limit real-time listeners to visible data"
+    - "Consider polling for rarely-changing data"
+    - "Use shareReplay() for shared subscriptions"
+
+# Query Debugging & Monitoring
+debugging:
+  performance_monitoring:
+    - name: "Enable debug logging"
+      code: |
+        import { enableFirestoreLogging } from '@angular/fire/firestore';
+        if (!environment.production) {
+          enableFirestoreLogging();
+        }
+    
+    - name: "Monitor query execution time"
+      pattern: |
+        getItemsWithTiming(): Observable<Item[]> {
+          const start = performance.now();
+          return this.getAll().pipe(
+            tap(items => {
+              const duration = performance.now() - start;
+              console.log(`Query took ${duration}ms for ${items.length} items`);
+              if (duration > 1000) {
+                console.warn('Slow query detected!');
+              }
+            })
+          );
+        }
+    
+    - name: "Track query costs"
+      metrics:
+        - "Document reads per query"
+        - "Index usage"
+        - "Cache hit rate"
+
+# Migration Patterns
+migration_to_optimized:
+  step_by_step:
+    - step: "Identify large collections (>100 docs)"
+      command: "Check Firebase Console usage tab"
+    
+    - step: "Add pagination to existing services"
+      approach: "Add new methods, don't break existing"
+    
+    - step: "Update components gradually"
+      strategy: "Start with most-used features"
+    
+    - step: "Add proper indexes"
+      tool: "Use Firebase Console recommendations"
+
+# Integration with FibreFlow
+fibreflow_specific:
+  collections_needing_pagination:
+    - name: "projects"
+      reason: "Can grow large over time"
+      sort_by: "createdAt desc"
+    
+    - name: "tasks"
+      reason: "Many per project"
+      sort_by: "priority desc, dueDate asc"
+    
+    - name: "audit-trail"
+      reason: "Append-only, grows forever"
+      sort_by: "timestamp desc"
+    
+    - name: "daily-progress"
+      reason: "Daily entries accumulate"
+      sort_by: "date desc"
+
+  search_implementations:
+    - collection: "projects"
+      search_fields: ["name", "client", "location"]
+    
+    - collection: "staff"
+      search_fields: ["name", "email", "role"]
+    
+    - collection: "contractors"
+      search_fields: ["companyName", "contactPerson"]
+
+# Anti-patterns to Avoid
+avoid_these:
+  - pattern: "Fetching all documents"
+    bad: "collection('items').get()"
+    good: "collection('items').limit(50).get()"
+  
+  - pattern: "Deep nesting"
+    bad: "projects/{id}/phases/{id}/tasks/{id}/subtasks/{id}"
+    good: "Flatten to tasks with projectId, phaseId fields"
+  
+  - pattern: "Large in/array-contains"
+    bad: "where('id', 'in', [hundreds of IDs])"
+    good: "Batch into groups of 10 (Firestore limit)"
+  
+  - pattern: "Sorting without index"
+    bad: "where('status', '==', 'active').orderBy('name')"
+    good: "Create composite index or sort in memory for small sets"

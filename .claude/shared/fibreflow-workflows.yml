@@ -1,0 +1,243 @@
+# FibreFlow-Specific SuperClaude Workflows
+# Structured AI guidance for consistent development patterns
+
+version: 1.0
+name: FibreFlow AI Workflows
+description: Converts CLAUDE.md patterns into structured YAML workflows
+
+# Core Philosophy
+philosophy:
+  principles:
+    - "Keep it simple, get basics working first"
+    - "Deploy to test, never use local dev server"
+    - "One feature at a time, test frequently"
+    - "Validate with antiHall before implementing"
+  
+  forbidden:
+    - "ng serve (NEVER use for testing)"
+    - "storing secrets in code"
+    - "complex abstractions early"
+    - "working on multiple features at once"
+    - "skipping antiHall validation"
+
+# Development Workflows
+workflows:
+  # Feature Development Workflow
+  create_feature:
+    description: "Scaffold and implement new FibreFlow features"
+    triggers:
+      - "create new feature"
+      - "add feature"
+      - "implement"
+    
+    steps:
+      - name: "Plan with PRP"
+        action: "Create PRP using docs/PRP_TEMPLATE.md"
+        required: true
+        
+      - name: "Validate Pattern"
+        action: "cd antiHall && npm run check '{pattern}'"
+        required: true
+        
+      - name: "Create Structure"
+        commands:
+          - "ng g interface core/models/{feature}"
+          - "ng g service core/services/{feature}"
+          - "ng g component features/{feature}/components/{feature}-list"
+          - "ng g component features/{feature}/components/{feature}-form"
+        
+      - name: "Implement Service"
+        template: |
+          export class {Feature}Service extends BaseFirestoreService<{Feature}Model> {
+            constructor() {
+              super('{collection-name}');
+            }
+          }
+        
+      - name: "Deploy & Test"
+        action: "deploy 'Added {feature} list and form'"
+        required: true
+
+  # Deployment Workflow
+  deploy:
+    description: "Build, test, and deploy to Firebase"
+    triggers:
+      - "deploy"
+      - "push to production"
+      - "release"
+    
+    steps:
+      - name: "Pre-flight Checks"
+        parallel: true
+        commands:
+          - "npm run lint"
+          - "npm run build"
+          - "npx tsc --noEmit"
+      
+      - name: "antiHall Validation"
+        action: "cd antiHall && npm run parse"
+        when: "new_services_added"
+      
+      - name: "Commit with jj"
+        action: "jj describe -m '{message}'"
+      
+      - name: "Deploy to Firebase"
+        action: "firebase deploy"
+      
+      - name: "Verify Live"
+        action: "Open https://fibreflow.web.app"
+        manual: true
+
+  # Security Audit Workflow
+  security_audit:
+    description: "Check for vulnerabilities and secrets"
+    triggers:
+      - "security check"
+      - "audit"
+      - "before deploy"
+    
+    steps:
+      - name: "Check for Secrets"
+        validate:
+          - "No API keys in code"
+          - "No passwords in commits"
+          - ".env.local not tracked"
+      
+      - name: "Verify Firebase Config"
+        action: "firebase functions:config:get"
+      
+      - name: "Check Dependencies"
+        action: "npm audit"
+
+# Pattern Templates
+patterns:
+  service_creation:
+    description: "Standard Firebase service pattern"
+    template: |
+      import { Injectable } from '@angular/core';
+      import { BaseFirestoreService } from '@core/services/base-firestore.service';
+      import { {ModelName} } from '@core/models/{model-file}';
+      
+      @Injectable({ providedIn: 'root' })
+      export class {ServiceName} extends BaseFirestoreService<{ModelName}> {
+        constructor() {
+          super('{collection}');
+        }
+      }
+  
+  component_structure:
+    description: "Standalone component pattern"
+    template: |
+      @Component({
+        selector: 'app-{feature}',
+        standalone: true,
+        imports: [CommonModule, MaterialModule],
+        templateUrl: './{feature}.component.html'
+      })
+      export class {Feature}Component {
+        // Implementation
+      }
+  
+  theme_styling:
+    description: "Theme-aware component styling"
+    template: |
+      @use '../../../styles/utils/component-theming' as theme;
+      
+      .component {
+        color: theme.ff-rgb(foreground);
+        background: theme.ff-rgb(background);
+      }
+
+# Validation Rules
+validations:
+  pre_implementation:
+    - check: "Pattern exists in antiHall"
+      command: "npm run check '{code}'"
+      required: true
+    
+    - check: "No hardcoded colors"
+      pattern: "/#[0-9a-fA-F]{6}/"
+      message: "Use theme functions instead"
+    
+    - check: "Service extends BaseFirestoreService"
+      when: "creating_service"
+      required: true
+
+  pre_deployment:
+    - check: "Lint passes"
+      command: "npm run lint"
+      required: true
+    
+    - check: "Build succeeds"
+      command: "npm run build"
+      required: true
+    
+    - check: "No console.log statements"
+      pattern: "/console\\.log/"
+      severity: "warning"
+
+# Context Triggers
+context_triggers:
+  file_patterns:
+    "*.service.ts": 
+      persona: "backend"
+      apply: "service_creation pattern"
+    
+    "*.component.ts":
+      persona: "frontend"
+      apply: "component_structure pattern"
+    
+    "*.scss":
+      apply: "theme_styling pattern"
+      validate: "no hardcoded colors"
+  
+  keywords:
+    "new feature|create feature":
+      workflow: "create_feature"
+    
+    "deploy|release":
+      workflow: "deploy"
+      validate: "pre_deployment"
+    
+    "security|audit":
+      workflow: "security_audit"
+
+# Integration Points
+integrations:
+  antiHall:
+    type: "validation"
+    commands:
+      parse: "cd antiHall && npm run parse"
+      check: "cd antiHall && npm run check '{code}'"
+    auto_trigger:
+      - "before implementation"
+      - "after adding services"
+  
+  jj_version_control:
+    type: "vcs"
+    commands:
+      status: "jj st"
+      diff: "jj diff"
+      commit: "jj describe -m '{message}'"
+    philosophy: "Every change auto-tracked, no staging"
+  
+  firebase:
+    type: "deployment"
+    commands:
+      deploy: "firebase deploy"
+      functions_config: "firebase functions:config:get"
+    never: "ng serve"
+
+# Success Metrics
+metrics:
+  track:
+    - "Deployment frequency"
+    - "antiHall validation rate"
+    - "Pattern compliance"
+    - "Token usage (with --uc flag)"
+  
+  goals:
+    - "100% antiHall validation before implementation"
+    - "Zero hardcoded values"
+    - "All services extend BaseFirestoreService"
+    - "Deploy within 30 minutes of feature completion"

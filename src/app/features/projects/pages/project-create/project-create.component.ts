@@ -19,6 +19,7 @@ import {
   ProjectStatus,
   Priority,
   PhaseType,
+  DEFAULT_KPI_CONFIGURATIONS,
 } from '../../../../core/models/project.model';
 
 @Component({
@@ -176,6 +177,130 @@ import {
                     Phone is required
                   </mat-error>
                 </mat-form-field>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- KPI Targets (Required) -->
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon style="margin-right: 8px; vertical-align: middle;">trending_up</mat-icon>
+                KPI Targets (Required)
+              </mat-card-title>
+              <mat-card-subtitle>Set daily targets for key performance indicators</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="form-section">
+                <div class="form-row">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Pole Permissions Target</mat-label>
+                    <input matInput type="number" formControlName="polePermissionsTotal" placeholder="50" />
+                    <span matSuffix>permissions</span>
+                    <mat-error *ngIf="projectForm.get('polePermissionsTotal')?.hasError('required')">
+                      Pole permissions target is required
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Permissions Per Day</mat-label>
+                    <input matInput type="number" formControlName="polePermissionsDaily" placeholder="5" />
+                    <span matSuffix>per day</span>
+                    <mat-error *ngIf="projectForm.get('polePermissionsDaily')?.hasError('required')">
+                      Daily target is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Home Signups Target</mat-label>
+                    <input matInput type="number" formControlName="homeSignupsTotal" placeholder="100" />
+                    <span matSuffix>homes</span>
+                    <mat-error *ngIf="projectForm.get('homeSignupsTotal')?.hasError('required')">
+                      Home signups target is required
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Signups Per Day</mat-label>
+                    <input matInput type="number" formControlName="homeSignupsDaily" placeholder="8" />
+                    <span matSuffix>per day</span>
+                    <mat-error *ngIf="projectForm.get('homeSignupsDaily')?.hasError('required')">
+                      Daily target is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Poles to Plant</mat-label>
+                    <input matInput type="number" formControlName="polesPlantedTotal" placeholder="50" />
+                    <span matSuffix>poles</span>
+                    <mat-error *ngIf="projectForm.get('polesPlantedTotal')?.hasError('required')">
+                      Poles target is required
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Poles Per Day</mat-label>
+                    <input matInput type="number" formControlName="polesPlantedDaily" placeholder="3" />
+                    <span matSuffix>per day</span>
+                    <mat-error *ngIf="projectForm.get('polesPlantedDaily')?.hasError('required')">
+                      Daily target is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Fibre Stringing (meters)</mat-label>
+                    <input matInput type="number" formControlName="fibreStringingTotal" placeholder="2000" />
+                    <span matSuffix>meters</span>
+                    <mat-error *ngIf="projectForm.get('fibreStringingTotal')?.hasError('required')">
+                      Fibre stringing target is required
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Stringing Per Day</mat-label>
+                    <input matInput type="number" formControlName="fibreStringingDaily" placeholder="150" />
+                    <span matSuffix>meters/day</span>
+                    <mat-error *ngIf="projectForm.get('fibreStringingDaily')?.hasError('required')">
+                      Daily target is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Trenching (meters)</mat-label>
+                    <input matInput type="number" formControlName="trenchingMetersTotal" placeholder="500" />
+                    <span matSuffix>meters</span>
+                    <mat-error *ngIf="projectForm.get('trenchingMetersTotal')?.hasError('required')">
+                      Trenching target is required
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Trenching Per Day</mat-label>
+                    <input matInput type="number" formControlName="trenchingMetersDaily" placeholder="50" />
+                    <span matSuffix>meters/day</span>
+                    <mat-error *ngIf="projectForm.get('trenchingMetersDaily')?.hasError('required')">
+                      Daily target is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="kpi-timeline-info" *ngIf="projectForm.valid">
+                  <mat-icon>info</mat-icon>
+                  <div>
+                    <strong>Estimated Project Timeline:</strong>
+                    <br>
+                    Based on your KPI targets, this project is estimated to take
+                    <strong>{{ getEstimatedDuration() }} working days</strong>
+                  </div>
+                </div>
               </div>
             </mat-card-content>
           </mat-card>
@@ -358,6 +483,26 @@ import {
         font-weight: 500 !important;
       }
 
+      .kpi-timeline-info {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px;
+        background: #f0f9ff;
+        border: 1px solid #bae6fd;
+        border-radius: 8px;
+        margin-top: 16px;
+        font-size: 14px;
+        color: #0c4a6e;
+      }
+
+      .kpi-timeline-info mat-icon {
+        color: #0284c7;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+
       /* Responsive */
       @media (max-width: 768px) {
         .form-header {
@@ -387,6 +532,18 @@ export class ProjectCreateComponent {
 
   isSubmitting = false;
 
+  getEstimatedDuration(): number {
+    const form = this.projectForm.value;
+    const kpiDurations = [
+      Math.ceil(form.polePermissionsTotal / form.polePermissionsDaily || 0),
+      Math.ceil(form.homeSignupsTotal / form.homeSignupsDaily || 0),
+      Math.ceil(form.polesPlantedTotal / form.polesPlantedDaily || 0),
+      Math.ceil(form.fibreStringingTotal / form.fibreStringingDaily || 0),
+      Math.ceil(form.trenchingMetersTotal / form.trenchingMetersDaily || 0),
+    ];
+    return Math.max(...kpiDurations.filter(d => d > 0));
+  }
+
   projectForm: FormGroup = this.fb.group({
     projectCode: ['', Validators.required],
     name: ['', Validators.required],
@@ -408,6 +565,18 @@ export class ProjectCreateComponent {
     workingHours: ['8:00 AM - 5:00 PM SAST'],
     allowWeekendWork: [false],
     allowNightWork: [false],
+
+    // KPI Targets (Required)
+    polePermissionsTotal: ['', [Validators.required, Validators.min(1)]],
+    polePermissionsDaily: ['', [Validators.required, Validators.min(1)]],
+    homeSignupsTotal: ['', [Validators.required, Validators.min(1)]],
+    homeSignupsDaily: ['', [Validators.required, Validators.min(1)]],
+    polesPlantedTotal: ['', [Validators.required, Validators.min(1)]],
+    polesPlantedDaily: ['', [Validators.required, Validators.min(1)]],
+    fibreStringingTotal: ['', [Validators.required, Validators.min(1)]],
+    fibreStringingDaily: ['', [Validators.required, Validators.min(1)]],
+    trenchingMetersTotal: ['', [Validators.required, Validators.min(1)]],
+    trenchingMetersDaily: ['', [Validators.required, Validators.min(1)]],
   });
 
   async onSubmit() {
@@ -440,6 +609,43 @@ export class ProjectCreateComponent {
         activeTasksCount: 0,
         completedTasksCount: 0,
         currentPhaseProgress: 0,
+
+        // KPI Targets
+        metadata: {
+          kpiTargets: {
+            polePermissions: {
+              ...DEFAULT_KPI_CONFIGURATIONS['polePermissions'],
+              totalTarget: formValue.polePermissionsTotal,
+              dailyTarget: formValue.polePermissionsDaily,
+              estimatedDays: Math.ceil(formValue.polePermissionsTotal / formValue.polePermissionsDaily),
+            },
+            homeSignups: {
+              ...DEFAULT_KPI_CONFIGURATIONS['homeSignups'],
+              totalTarget: formValue.homeSignupsTotal,
+              dailyTarget: formValue.homeSignupsDaily,
+              estimatedDays: Math.ceil(formValue.homeSignupsTotal / formValue.homeSignupsDaily),
+            },
+            polesPlanted: {
+              ...DEFAULT_KPI_CONFIGURATIONS['polesPlanted'],
+              totalTarget: formValue.polesPlantedTotal,
+              dailyTarget: formValue.polesPlantedDaily,
+              estimatedDays: Math.ceil(formValue.polesPlantedTotal / formValue.polesPlantedDaily),
+            },
+            fibreStringing: {
+              ...DEFAULT_KPI_CONFIGURATIONS['fibreStringing'],
+              totalTarget: formValue.fibreStringingTotal,
+              dailyTarget: formValue.fibreStringingDaily,
+              estimatedDays: Math.ceil(formValue.fibreStringingTotal / formValue.fibreStringingDaily),
+            },
+            trenchingMeters: {
+              ...DEFAULT_KPI_CONFIGURATIONS['trenchingMeters'],
+              totalTarget: formValue.trenchingMetersTotal,
+              dailyTarget: formValue.trenchingMetersDaily,
+              estimatedDays: Math.ceil(formValue.trenchingMetersTotal / formValue.trenchingMetersDaily),
+            },
+            calculatedDuration: this.getEstimatedDuration(),
+          },
+        },
 
         // Metadata
         createdBy: 'user',

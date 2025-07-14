@@ -1,11 +1,17 @@
 # Claude Development Notes
 
+## 🚀 SuperClaude Enhanced Mode Active
+Configuration files in: `.claude/shared/`
+Master config: `.claude/shared/fibreflow-master-config.yml`
+
 @docs/API_REFERENCE.md
 @docs/TESTING_GUIDE.md
 @docs/COMPONENT_LIBRARY.md
 @docs/THEME_SYSTEM.md
 @docs/SYNC_MEETINGS_GUIDE.md
 @.claude/commands/
+@.claude/shared/
+@.claude/shared/fibreflow-page-contexts.yml
 
 ## Quick Start for Claude
 
@@ -19,6 +25,12 @@
 - `/create-feature` - Scaffold new feature with proper structure
 - `/check-implementation` - Verify feature completeness
 - `/dev-task` - View development backlog and tasks
+
+**Page Context Commands**:
+- `!db {feature}` - Show database info (collections, subcollections)
+- `!routes {feature}` - Show all routes for feature
+- `!services {feature}` - Show services for feature
+- `!notes {feature}` - Show quick notes and known issues
 
 **Development Tracking**:
 - `docs/DEVELOPMENT_BACKLOG.md` - Centralized dev tasks, bugs, features
@@ -63,6 +75,16 @@ npm run check "code or pattern to verify"
 - State: Signals + RxJS
 - Styling: SCSS with CSS Custom Properties
 - Version Control: jj (Jujutsu) with Git coexistence
+
+### Recent Achievements (July 2025)
+
+1. **Firebase Cleanup & Backup System** ✅
+   - Complete database cleanup scripts
+   - Automated daily backups at 9:00 AM
+   - Service account authentication
+   - Compressed backup storage
+   - Selective restoration capabilities
+   - Clean state: 2 reference projects (Mohadin MO-001, Lawley Law-001)
 
 ### Implemented Features (Production-Ready)
 
@@ -528,16 +550,29 @@ Providing comprehensive context to prevent hallucinations and improve code quali
 - **Faster development** - Less back-and-forth
 - **Better quality** - Follows established patterns
 
-### Context Updates
+### Context Updates & Continuous Improvement
 
 When you:
 - Add new patterns → Update CLAUDE.md
 - Find common errors → Add to fix-common-errors.md
 - Create new components → Update COMPONENT_LIBRARY.md
 - Change workflows → Update relevant commands
+- **Struggle with finding something → Add to page-contexts.yml**
 
-Remember: Good context = Good code
+**Continuous Improvement Protocol**:
+If Claude struggles repeatedly with the same information:
+1. **Document the solution** in relevant system (page-contexts.yml, antiHall, etc.)
+2. **Note the path/location** for future reference
+3. **Update the context** so it's instantly available next time
+4. **Test the improvement** to ensure it works
+
+Examples:
+- "Where is BOQ data stored?" → Added to page-contexts.yml under boq.collections
+- "Which service handles X?" → Document in page-contexts.yml service mappings
+- "What routes exist for Y?" → Add to page-contexts.yml route listings
+
+Remember: Good context = Good code = No repeated struggles
 
 ---
 
-*Last updated: 2025-01-08*
+*Last updated: 2025-07-14*

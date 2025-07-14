@@ -1,0 +1,426 @@
+# FibreFlow Development Workflow
+# Structured patterns for feature development, CRUD operations, and code organization
+
+version: 1.0
+name: FibreFlow Development Configuration
+description: Feature development patterns with simplicity principles and antiHall validation
+
+# Core Development Philosophy (from CLAUDE.md lines 338-369)
+development_philosophy:
+  core_principle: "Keep it simple, get the basics working first"
+  
+  simplicity_rules:
+    - rule: "Start Simple"
+      implementation:
+        - "Build CRUD first, add features later"
+        - "One feature at a time"
+        - "Test basic functionality before complexity"
+    
+    - rule: "Clear Boundaries"
+      structure:
+        services: "/core/services/"
+        models: "/core/models/"
+        components: "/features/[feature]/"
+        shared: "/shared/components/"
+      principle: "Don't mix concerns"
+    
+    - rule: "Predictable Patterns"
+      patterns:
+        - "All services extend BaseFirestoreService"
+        - "All components are standalone"
+        - "All forms use reactive patterns"
+        - "Same structure for every feature"
+    
+    - rule: "Direct Communication"
+      architecture:
+        - "Service provides Observable methods"
+        - "Component subscribes and displays"
+        - "No unnecessary abstractions"
+    
+    - rule: "Quick Wins"
+      progression: "List view → Details → Edit → Create"
+      validation: "Deploy immediately to test"
+
+# Feature Development Workflow (from CLAUDE.md lines 28-35)
+feature_development:
+  complete_workflow:
+    - step: "Plan with PRP"
+      description: "Create Product Requirements Prompt"
+      commands:
+        - "cp docs/PRP_TEMPLATE.md .claude/prps/feature-{name}.md"
+        - "Edit PRP with feature requirements"
+      validation: "PRP reviewed and complete"
+    
+    - step: "Scaffold structure"
+      description: "Use /create-feature command"
+      command: "/create-feature {feature-name}"
+      creates:
+        - "Model interface"
+        - "Service with BaseFirestoreService"
+        - "List component"
+        - "Form component"
+        - "Routing configuration"
+    
+    - step: "Follow component patterns"
+      reference: "docs/COMPONENT_LIBRARY.md"
+      required_patterns:
+        - "Standalone components"
+        - "Material Design imports"
+        - "Theme-aware styling"
+    
+    - step: "Implement CRUD first"
+      order:
+        1: "List view with data"
+        2: "Create functionality"
+        3: "Edit capability"
+        4: "Delete with confirmation"
+      principle: "Get basics working before enhancements"
+    
+    - step: "Deploy frequently"
+      frequency: "After each CRUD operation works"
+      command: "deploy 'Added {feature} {operation}'"
+    
+    - step: "Test on live site"
+      url: "https://fibreflow.web.app"
+      checklist:
+        - "Data displays correctly"
+        - "Forms validate properly"
+        - "Navigation works"
+        - "Mobile responsive"
+    
+    - step: "Verify completeness"
+      command: "/check-implementation {feature}"
+      validates:
+        - "All CRUD operations"
+        - "Error handling"
+        - "Loading states"
+        - "Empty states"
+
+# Code Generation Patterns (from CLAUDE.md lines 370-388)
+code_generation:
+  new_feature_sequence:
+    - name: "Create the model"
+      command: "ng g interface core/models/{feature}"
+      template: |
+        export interface {Feature} {
+          id?: string;
+          name: string;
+          description?: string;
+          status: 'active' | 'inactive';
+          createdAt?: Date;
+          updatedAt?: Date;
+          createdBy?: string;
+        }
+      validation: "Model includes audit fields"
+    
+    - name: "Create the service"
+      command: "ng g service core/services/{feature}"
+      template: |
+        import { Injectable } from '@angular/core';
+        import { BaseFirestoreService } from './base-firestore.service';
+        import { {Feature} } from '@core/models/{feature}.model';
+        
+        @Injectable({ providedIn: 'root' })
+        export class {Feature}Service extends BaseFirestoreService<{Feature}> {
+          constructor() {
+            super('{feature}s'); // Collection name (plural)
+          }
+          
+          // Add custom methods as needed
+          getActive() {
+            return this.getWithQuery([
+              where('status', '==', 'active'),
+              orderBy('name')
+            ]);
+          }
+        }
+      validation: 
+        - "Extends BaseFirestoreService"
+        - "Proper typing"
+        - "Collection name set"
+    
+    - name: "Create list component"
+      command: "ng g component features/{feature}/components/{feature}-list"
+      template: |
+        @Component({
+          selector: 'app-{feature}-list',
+          standalone: true,
+          imports: [
+            CommonModule,
+            MaterialModule,
+            RouterModule,
+            PageHeaderComponent,
+            LoadingSkeletonComponent
+          ],
+          templateUrl: './{feature}-list.component.html',
+          styleUrl: './{feature}-list.component.scss'
+        })
+        export class {Feature}ListComponent {
+          private {feature}Service = inject({Feature}Service);
+          private router = inject(Router);
+          
+          {feature}s$ = this.{feature}Service.getAll();
+          loading = true;
+          
+          headerActions = [{
+            label: 'Add {Feature}',
+            icon: 'add',
+            color: 'primary',
+            action: () => this.router.navigate(['/{feature}s/new'])
+          }];
+          
+          ngOnInit() {
+            this.{feature}s$.subscribe(() => this.loading = false);
+          }
+        }
+    
+    - name: "Create form component"
+      command: "ng g component features/{feature}/components/{feature}-form"
+      template: |
+        @Component({
+          selector: 'app-{feature}-form',
+          standalone: true,
+          imports: [
+            CommonModule,
+            ReactiveFormsModule,
+            MaterialModule,
+            PageHeaderComponent
+          ],
+          templateUrl: './{feature}-form.component.html',
+          styleUrl: './{feature}-form.component.scss'
+        })
+        export class {Feature}FormComponent {
+          private fb = inject(FormBuilder);
+          private {feature}Service = inject({Feature}Service);
+          private router = inject(Router);
+          private route = inject(ActivatedRoute);
+          
+          form = this.fb.group({
+            name: ['', [Validators.required]],
+            description: [''],
+            status: ['active', [Validators.required]]
+          });
+          
+          loading = false;
+          {feature}Id?: string;
+          
+          ngOnInit() {
+            this.{feature}Id = this.route.snapshot.params['id'];
+            if (this.{feature}Id) {
+              this.load{Feature}();
+            }
+          }
+          
+          save() {
+            if (this.form.invalid) return;
+            
+            this.loading = true;
+            const operation = this.{feature}Id 
+              ? this.{feature}Service.update(this.{feature}Id, this.form.value)
+              : this.{feature}Service.add(this.form.value);
+              
+            operation.subscribe({
+              next: () => this.router.navigate(['/{feature}s']),
+              error: (error) => {
+                console.error('Save failed:', error);
+                this.loading = false;
+              }
+            });
+          }
+        }
+    
+    - name: "Wire up and deploy"
+      steps:
+        - "Add routes to feature module"
+        - "Add navigation menu item"
+        - "Test with: npm run build"
+        - "Deploy: deploy 'Added {feature} management'"
+        - "Test on live site immediately"
+
+# Common Development Patterns (from CLAUDE.md lines 392-457)
+common_patterns:
+  service_patterns:
+    base_service_extension:
+      pattern: |
+        export class {Name}Service extends BaseFirestoreService<{Model}> {
+          constructor() {
+            super('{collection-name}');
+          }
+        }
+      when: "Creating any Firestore service"
+      validation: "Check with antiHall"
+    
+    custom_queries:
+      pattern: |
+        getByProject(projectId: string) {
+          return this.getWithQuery([
+            where('projectId', '==', projectId),
+            orderBy('createdAt', 'desc')
+          ]);
+        }
+      best_practices:
+        - "Use proper TypeScript return types"
+        - "Add error handling"
+        - "Consider pagination for large results"
+  
+  component_patterns:
+    standalone_structure:
+      required: true
+      pattern: |
+        @Component({
+          selector: 'app-{name}',
+          standalone: true,
+          imports: [CommonModule, MaterialModule],
+          templateUrl: './{name}.component.html'
+        })
+      imports_guide:
+        CommonModule: "Always needed for *ngFor, *ngIf"
+        MaterialModule: "Or specific Mat modules"
+        ReactiveFormsModule: "For forms"
+        RouterModule: "For routerLink"
+    
+    lifecycle_management:
+      pattern: |
+        export class {Name}Component implements OnDestroy {
+          private destroy$ = new Subject<void>();
+          
+          data$ = this.service.getAll().pipe(
+            takeUntil(this.destroy$)
+          );
+          
+          ngOnDestroy() {
+            this.destroy$.next();
+            this.destroy$.complete();
+          }
+        }
+  
+  form_patterns:
+    reactive_forms:
+      pattern: |
+        form = this.fb.group({
+          field: ['', [Validators.required]],
+          email: ['', [Validators.required, Validators.email]],
+          age: [null, [Validators.min(0), Validators.max(120)]]
+        });
+      validation_display: |
+        <mat-error *ngIf="form.get('email')?.hasError('required')">
+          Email is required
+        </mat-error>
+        <mat-error *ngIf="form.get('email')?.hasError('email')">
+          Invalid email format
+        </mat-error>
+    
+    form_submission:
+      pattern: |
+        save() {
+          if (this.form.invalid) {
+            this.form.markAllAsTouched();
+            return;
+          }
+          
+          this.loading = true;
+          this.service.add(this.form.value).subscribe({
+            next: () => {
+              this.snackBar.open('Saved successfully', 'Close', { duration: 3000 });
+              this.router.navigate(['../']);
+            },
+            error: (error) => {
+              this.snackBar.open('Save failed', 'Close', { duration: 5000 });
+              this.loading = false;
+            }
+          });
+        }
+  
+  styling_patterns:
+    theme_aware:
+      pattern: |
+        @use '../../../styles/utils/component-theming' as theme;
+        
+        .container {
+          color: theme.ff-rgb(foreground);
+          background: theme.ff-rgb(background);
+          padding: theme.ff-spacing(lg);
+          border-radius: theme.ff-var(radius);
+        }
+      required: "No hardcoded colors"
+      theme_functions:
+        - "ff-rgb() for colors"
+        - "ff-spacing() for spacing"
+        - "ff-var() for other variables"
+
+# Development Checkpoints
+checkpoints:
+  before_starting:
+    - "PRP created and reviewed"
+    - "antiHall knowledge updated: npm run parse"
+    - "Related documentation read"
+    - "Existing patterns identified"
+  
+  during_development:
+    - "Following established patterns"
+    - "One feature at a time"
+    - "Deploying frequently"
+    - "Testing on live site"
+  
+  before_completion:
+    - "All CRUD operations work"
+    - "Error handling implemented"
+    - "Loading states shown"
+    - "Mobile responsive"
+    - "Themes tested"
+
+# Integration with Tools
+tool_integration:
+  antiHall:
+    when: "Before implementing new patterns"
+    commands:
+      - "cd antiHall && npm run parse  # Update knowledge"
+      - "npm run check '{pattern}'     # Validate pattern"
+  
+  slash_commands:
+    create_feature: "Scaffolds complete feature structure"
+    check_implementation: "Validates feature completeness"
+    quick_reference: "Shows code patterns"
+    fix_common_errors: "Solutions to frequent issues"
+  
+  deployment:
+    frequency: "After each working piece"
+    command: "deploy '{descriptive message}'"
+    validation: "Always test on live site"
+
+# Common Pitfalls & Solutions
+avoid_these:
+  - pitfall: "Over-engineering early"
+    solution: "Start with basic CRUD, enhance later"
+    example: "Don't add complex filters before basic list works"
+  
+  - pitfall: "Working on multiple features"
+    solution: "Complete one feature fully before starting next"
+    reason: "Easier to debug, test, and deploy"
+  
+  - pitfall: "Skipping deployment"
+    solution: "Deploy after every small win"
+    reason: "Catch issues early, maintain momentum"
+  
+  - pitfall: "Ignoring patterns"
+    solution: "Always check existing implementations"
+    command: "Use antiHall to find similar code"
+
+# Success Metrics
+success_indicators:
+  feature_complete:
+    - "Lists data from Firestore"
+    - "Creates new records"
+    - "Updates existing records"
+    - "Deletes with confirmation"
+    - "Handles errors gracefully"
+    - "Shows loading states"
+    - "Works on mobile"
+    - "Follows theme system"
+  
+  code_quality:
+    - "Passes lint checks"
+    - "No TypeScript errors"
+    - "Follows established patterns"
+    - "antiHall validation passed"
+    - "Deployed successfully"

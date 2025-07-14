@@ -1,0 +1,369 @@
+# FibreFlow Page Context System - Overview Map
+# Hybrid approach: High-level overview here, details in inline docs
+
+version: 1.0
+name: Page Context Overview
+description: Quick reference for all pages/features with database and component mappings
+
+# Context Structure Template
+context_template: |
+  feature_name:
+    routes: []           # All routes for this feature
+    collections: []      # Primary Firebase collections
+    subcollections: []   # Related subcollections
+    components: []       # Main components
+    services: []         # Primary services
+    related: []          # Connected features
+    status: ""           # production/development/planned
+    notes: []            # Quick notes
+
+# Active Page Contexts
+page_contexts:
+  # BOQ - First fully documented example
+  boq:
+    routes:
+      - "/boq"
+      - "/projects/:projectId/boq"
+    
+    collections:
+      primary: "boqItems"
+      related: ["quotes", "projects", "materials"]
+    
+    subcollections:
+      - "boq/{id}/items"
+      - "boq/{id}/revisions"
+    
+    components:
+      list: "BoqListComponent"
+      form: "BoqFormComponent"
+      detail: "BoqDetailComponent"
+      related: ["BoqItemsTableComponent", "BoqImportComponent"]
+    
+    services:
+      primary: "BoqService"
+      related: ["QuoteService", "MaterialService", "ProjectService"]
+    
+    related_features:
+      - "projects"
+      - "quotes"
+      - "materials"
+      - "suppliers"
+    
+    status: "production"
+    
+    quick_notes:
+      - "BOQ items denormalized for performance"
+      - "Excel import/export capability"
+      - "Template system available"
+      - "Quotes reference BOQ by ID"
+    
+    inline_markers:
+      service: "src/app/core/services/boq.service.ts"
+      components: "src/app/features/boq/"
+      models: "src/app/core/models/boq.model.ts"
+
+  # Projects - Core feature
+  projects:
+    routes:
+      - "/projects"
+      - "/projects/new"
+      - "/projects/:id"
+    
+    collections:
+      primary: "projects"
+      subcollections: ["phases", "steps", "tasks"]
+    
+    components:
+      list: "ProjectListComponent"
+      detail: "ProjectDetailComponent"
+      form: "ProjectFormComponent"
+    
+    services:
+      primary: "ProjectService"
+      related: ["PhaseService", "ClientService", "ContractorService"]
+    
+    status: "production"
+    
+    quick_notes:
+      - "4-level hierarchy: Project > Phase > Step > Task"
+      - "Progress calculated from task completion"
+      - "Integrates with multiple other features"
+    
+    inline_markers:
+      service: "src/app/core/services/project.service.ts"
+
+  # Pole Tracker - Desktop & Mobile versions
+  pole_tracker:
+    navigation_structure:
+      projects_section:
+        - name: "Pole Tracker (Desktop)"
+          url: "/pole-tracker"
+          component: "PoleTrackerListComponent"
+          purpose: "Desktop pole management"
+          status: "working"
+        
+        - name: "Pole Tracker (Mobile)" 
+          url: "/pole-tracker/mobile"
+          component: "MISSING - should be mobile list"
+          purpose: "Mobile-optimized pole management"
+          status: "broken - shows GPS map instead"
+          
+      mobile_pages_section:
+        - name: "Pole Map View"
+          url: "/pole-tracker/mobile"  # CONFLICT!
+          component: "MobileMapViewComponent"
+          purpose: "GPS map for field workers"
+          status: "working but wrong route"
+          
+        - name: "Quick Capture"
+          url: "/pole-tracker/mobile/capture"
+          component: "QuickCaptureComponent"
+          purpose: "Photo capture"
+          status: "working"
+          
+        - name: "My Assignments"
+          url: "/pole-tracker/mobile/assignments"
+          component: "MyAssignmentsComponent"
+          purpose: "User's assigned poles"
+          status: "working"
+          
+        - name: "Nearby Poles"
+          url: "/pole-tracker/mobile/nearby"
+          component: "NearbyPolesComponent"
+          purpose: "Location-based pole finding"
+          status: "working"
+    
+    routing_issues:
+      - issue: "Route conflict at /pole-tracker/mobile"
+        current: "Shows GPS map (MobileMapViewComponent)"
+        expected: "Should show mobile-optimized pole list"
+        fix: "Create PoleTrackerMobileListComponent and update routing"
+    routes:
+      desktop:
+        - "/pole-tracker" # Main list view
+        - "/pole-tracker/new" # Create new pole
+        - "/pole-tracker/:id" # View details
+        - "/pole-tracker/:id/edit" # Edit pole
+        - "/pole-tracker/import" # Bulk import (admin)
+      mobile:
+        - "/pole-tracker/mobile" # GPS map view
+        - "/pole-tracker/mobile/capture" # Quick photo capture
+        - "/pole-tracker/mobile/capture/:plannedPoleId" # Capture specific pole
+        - "/pole-tracker/mobile/assignments" # My assigned poles
+        - "/pole-tracker/mobile/nearby" # Find nearby poles
+    
+    collections:
+      primary: "planned-poles"
+      related: ["pole-installations", "projects", "import-batches"]
+    
+    components:
+      desktop:
+        list: "PoleTrackerListComponent"
+        form: "PoleTrackerFormComponent" 
+        detail: "PoleTrackerDetailComponent"
+        dialogs: ["PoleDetailsDialogComponent", "PhotoViewerDialogComponent"]
+      mobile:
+        map: "MobileMapViewComponent"
+        capture: "QuickCaptureComponent"
+        assignments: "MyAssignmentsComponent"
+        nearby: "NearbyPolesComponent"
+      shared:
+        - "ImageUploadComponent"
+        - "ImportWizardComponent"
+        - "NotificationSettingsComponent"
+    
+    services:
+      primary: "PoleTrackerService"
+      specialized: 
+        - "GoogleMapsService"
+        - "ImageUploadService" 
+        - "OfflineQueueService"
+    
+    models:
+      - "PoleTracker" # Main pole data
+      - "PlannedPole" # Pre-imported poles
+      - "PoleInstallation" # Mobile captures
+      - "ImportBatch" # Bulk imports
+    
+    photo_requirements:
+      - "Before - Site before installation"
+      - "Front - Front view of pole"
+      - "Side - Side angle view"
+      - "Depth - Installation depth"
+      - "Concrete - Base/foundation"
+      - "Compaction - Ground compaction"
+    
+    key_fields:
+      required: ["VF Pole ID (auto-gen)", "GPS Location"]
+      optional: ["Pole Number", "PON", "Zone", "Distribution/Feeder"]
+    
+    status: "production"
+    last_updated: "2025-01-11"
+    
+    mobile_features:
+      - "GPS-based map view with markers"
+      - "Quick photo capture workflow"
+      - "Offline queue for poor connectivity"
+      - "Assignment management"
+      - "Navigation to pole locations"
+      - "Simplified forms for field use"
+    
+    desktop_features:
+      - "Advanced filtering by project/contractor"
+      - "Statistics dashboard"
+      - "Bulk CSV/Excel import"
+      - "Quality assurance workflow"
+      - "Comprehensive list view"
+    
+    technical_details:
+      offline_support: "OfflineQueueService"
+      maps_integration: "GoogleMapsService with GPS"
+      photo_storage: "Firebase Storage"
+      real_time_sync: "Firestore real-time updates"
+
+  # Daily Progress - KPI tracking
+  daily_progress:
+    routes:
+      - "/daily-progress"
+      - "/daily-progress/new"
+      - "/daily-progress/:id"
+    
+    collections:
+      primary: "dailyProgress"
+      related: ["daily-kpis", "projects"]
+    
+    components:
+      list: "DailyProgressListComponent"
+      form: "DailyProgressFormComponent"
+      kpis: "KpisEnhancedComponent"
+    
+    services:
+      primary: "DailyProgressService"
+    
+    status: "production"
+    
+    quick_notes:
+      - "Enhanced KPI forms"
+      - "Weekly report generation"
+      - "Financial tracking integration"
+
+  # Meetings - Fireflies integration
+  meetings:
+    routes:
+      - "/meetings"
+      - "/meetings/:id"
+    
+    collections:
+      primary: "meetings"
+      subcollections: ["actionItems"]
+    
+    external_apis:
+      - "Fireflies GraphQL API"
+    
+    services:
+      primary: "MeetingService"
+      sync: "scripts/sync-meetings-improved.js"
+    
+    status: "production"
+    
+    quick_notes:
+      - "Fireflies.ai integration"
+      - "Action items parsing"
+      - "Manual sync required"
+      - "All API calls through Firebase Functions"
+
+  # Stock Management
+  stock:
+    routes:
+      - "/stock"
+      - "/stock/movements"
+      - "/stock/allocations"
+    
+    collections:
+      primary: "stockItems"
+      related: ["stockMovements", "stockAllocations", "materials"]
+    
+    services:
+      primary: "StockService"
+      related: ["StockMovementService", "MaterialService"]
+    
+    status: "production"
+    
+    quick_notes:
+      - "Inventory tracking with movements"
+      - "Material allocations to projects"
+      - "Import/export capabilities"
+
+# Quick Reference Mappings
+quick_reference:
+  # Route to Collection mapping
+  route_to_collection:
+    "/boq": "boqItems"
+    "/projects": "projects"
+    "/staff": "staff"
+    "/contractors": "contractors"
+    "/stock": "stockItems"
+    "/daily-progress": "dailyProgress"
+    "/meetings": "meetings"
+    "/pole-tracker": "planned-poles"
+  
+  # Collection to Service mapping
+  collection_to_service:
+    "projects": "ProjectService"
+    "boqItems": "BoqService"
+    "staff": "StaffService"
+    "contractors": "ContractorService"
+    "stockItems": "StockService"
+    "dailyProgress": "DailyProgressService"
+    "meetings": "MeetingService"
+    "planned-poles": "PoleTrackerService"
+
+# Integration Rules
+integration:
+  # Auto-load context when working on files
+  file_triggers:
+    "*/boq/*": "Load boq context"
+    "*/projects/*": "Load projects context"
+    "*/pole-tracker/*": "Load pole_tracker context"
+    "*/daily-progress/*": "Load daily_progress context"
+    "*/meetings/*": "Load meetings context"
+    "*/stock/*": "Load stock context"
+  
+  # Context commands
+  commands:
+    "!db {feature}": "Show database info for feature"
+    "!routes {feature}": "Show all routes for feature"
+    "!services {feature}": "Show services for feature"
+    "!notes {feature}": "Show quick notes for feature"
+
+# Maintenance Plan
+maintenance:
+  update_triggers:
+    - "New feature added"
+    - "Route changes"
+    - "Database structure changes"
+    - "Service modifications"
+  
+  validation:
+    - "Routes exist in routing files"
+    - "Collections exist in services"
+    - "Components exist in codebase"
+    - "Services are properly typed"
+
+# Expansion Plan
+expansion:
+  next_features_to_document:
+    - "clients"
+    - "suppliers" 
+    - "tasks"
+    - "reports"
+    - "settings"
+  
+  inline_docs_pattern: |
+    /**
+     * @page-context feature_name
+     * @collection primary_collection
+     * @routes /route1, /route2
+     * @issues Known issue description
+     * @performance Performance note
+     */

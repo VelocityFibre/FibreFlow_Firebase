@@ -48,6 +48,11 @@ antiHall/
 .env.*.local
 *.env
 **/node_modules
+
+# Service Account Keys - NEVER commit these!
+*-service-account.json
+fibreflow-service-account.json
+service-account-*.json
 **/.angular
 
 # JJ temporary files

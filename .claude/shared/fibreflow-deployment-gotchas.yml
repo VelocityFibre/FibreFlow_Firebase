@@ -1,0 +1,153 @@
+# FibreFlow Deployment Gotchas & Lessons Learned
+# Document faulty workflows to prevent repeated mistakes
+version: 1.0
+name: Deployment Gotchas
+description: Common deployment mistakes and the correct approaches
+
+# Faulty Workflows to Avoid
+faulty_workflows:
+  partial_deployment_mistake:
+    date_occurred: "2025-07-14"
+    what_i_did_wrong: |
+      When storage rules failed during deployment, I suggested:
+      "firebase deploy --only hosting,functions"
+      
+    why_its_wrong: |
+      - Hosting without working storage is USELESS
+      - Images/files won't load
+      - Users get broken experience
+      - Creates inconsistent state
+      
+    correct_approach: |
+      1. ALWAYS fix the root cause first
+      2. Storage rules MUST work before deploying hosting
+      3. Check storage.rules syntax
+      4. Test rules in Firebase Console
+      5. Deploy everything together when fixed
+      
+    human_feedback: "NO. no use hosting without storage working"
+    
+    lesson_learned: "Never suggest partial deployments that create broken user experience"
+    
+    actual_fix_applied: |
+      The issue was in firebase.json:
+      - Storage was configured as array: "storage": [{...}]
+      - Should be object: "storage": {...}
+      Fixed by removing array brackets
+
+# Firebase Configuration Gotchas
+firebase_config_issues:
+  storage_array_vs_object:
+    issue: "Storage deployment fails with array configuration"
+    symptom: "Error during firebase deploy for storage rules"
+    root_cause: |
+      firebase.json had:
+      "storage": [{
+        "rules": "storage.rules"
+      }]
+    
+    correct_format: |
+      "storage": {
+        "rules": "storage.rules"
+      }
+    
+    how_to_spot: "Check firebase.json for array brackets around storage config"
+    
+    prevention: "Always use object format for single storage bucket"
+
+# Deployment Dependencies
+deployment_dependencies:
+  hosting_requires:
+    - "Storage rules (for images/uploads)"
+    - "Firestore rules (for data access)"
+    - "Functions (for API calls)"
+    
+  never_deploy_hosting_without:
+    - "Working storage rules"
+    - "Tested Firestore rules"
+    - "All dependent functions"
+
+# Correct Deployment Workflow
+correct_deployment_workflow:
+  pre_deployment_checks:
+    - "Check firebase.json syntax"
+    - "Validate all rule files exist"
+    - "Run: firebase deploy --only firestore:rules --dry-run"
+    - "Run: firebase deploy --only storage:rules --dry-run"
+    
+  deployment_order:
+    1: "Fix ALL configuration issues first"
+    2: "Deploy rules: firebase deploy --only firestore:rules,storage:rules"
+    3: "Deploy functions: firebase deploy --only functions"
+    4: "Deploy hosting: firebase deploy --only hosting"
+    5: "Or just: firebase deploy (when everything works)"
+    
+  troubleshooting_storage_rules:
+    common_issues:
+      - "Array format in firebase.json (should be object)"
+      - "Missing storage.rules file"
+      - "Syntax errors in storage.rules"
+      - "Invalid path matching"
+    
+    fix_approach:
+      1: "Check firebase.json format"
+      2: "Verify storage.rules exists"
+      3: "Validate syntax"
+      4: "Test in Rules Playground"
+
+# Other Deployment Gotchas
+other_gotchas:
+  functions_timeout:
+    issue: "Functions deployment times out"
+    wrong_approach: "Skip functions deployment"
+    correct_approach: "Deploy functions individually or increase timeout"
+    
+  large_hosting_files:
+    issue: "Hosting deployment fails with large files"
+    wrong_approach: "Deploy without those files"
+    correct_approach: "Optimize files first or use CDN"
+
+# Quick Reference
+deployment_principles:
+  - "NEVER create broken user experiences"
+  - "ALWAYS fix root cause before deploying"
+  - "Check configuration files first"
+  - "Dependencies matter - respect them"
+  - "Test incrementally but deploy completely"
+  - "User experience > Quick deployment"
+
+# Commands That Should Trigger Warnings
+danger_commands:
+  "firebase deploy --only hosting":
+    warning: "Are storage and firestore rules working?"
+    check_first: ["storage.rules", "firestore.rules", "firebase.json format"]
+    
+  "firebase deploy --only functions":
+    warning: "Will the frontend still work without updated functions?"
+    check_first: ["Function dependencies", "API compatibility"]
+
+# Configuration Checklist
+firebase_json_checklist:
+  storage:
+    correct: |
+      "storage": {
+        "rules": "storage.rules"
+      }
+    incorrect: |
+      "storage": [{
+        "rules": "storage.rules"
+      }]
+  
+  hosting:
+    check_for: ["public directory", "rewrites", "headers"]
+  
+  functions:
+    check_for: ["source directory", "runtime version"]
+
+# Reminder Triggers
+when_to_remember_this:
+  - "Deployment fails partially"
+  - "Considering --only flags"
+  - "Storage or Firestore errors"
+  - "Tempted to skip broken components"
+  - "Firebase deployment errors"

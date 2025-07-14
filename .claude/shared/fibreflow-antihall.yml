@@ -1,0 +1,312 @@
+# FibreFlow antiHall Integration
+# Hallucination prevention system integration throughout development workflows
+
+version: 1.0
+name: FibreFlow antiHall Configuration
+description: Structured validation patterns using antiHall to prevent AI hallucinations
+
+# antiHall Overview
+antihall_system:
+  purpose: "Prevent AI hallucinations by validating against real codebase"
+  components:
+    knowledge_graph: "antiHall/knowledge-graph.json"
+    parser: "Analyzes entire FibreFlow codebase"
+    validator: "Checks patterns against existing implementations"
+  
+  philosophy:
+    - "Never trust, always verify"
+    - "Real code > theoretical patterns"
+    - "Update knowledge before major changes"
+    - "Validate before implementing"
+
+# Integration Points in Development Workflow
+workflow_integration:
+  # 1. Before Starting Any Feature
+  pre_development:
+    description: "Update antiHall's knowledge of the codebase"
+    when:
+      - "Starting new feature"
+      - "After pulling latest changes"
+      - "Weekly maintenance"
+    
+    commands:
+      update_knowledge: |
+        cd antiHall && npm run parse
+        # This scans the entire codebase and updates knowledge-graph.json
+    
+    validates:
+      - "All services and components are indexed"
+      - "New patterns are discovered"
+      - "Deprecated patterns are identified"
+    
+    success_indicator: "Parse complete. Knowledge graph updated."
+
+  # 2. During Pattern Research
+  pattern_discovery:
+    description: "Find existing patterns before implementing"
+    when: "Need to implement something new"
+    
+    usage_examples:
+      - scenario: "Need to create a new service"
+        command: |
+          npm run check "BaseFirestoreService"
+          # Shows all services extending BaseFirestoreService
+        
+      - scenario: "Need to implement search"
+        command: |
+          npm run check "search implementation"
+          # Finds existing search patterns in codebase
+        
+      - scenario: "Need to add authentication"
+        command: |
+          npm run check "auth guard canActivate"
+          # Shows authentication implementations
+
+  # 3. Before Implementation
+  pre_implementation:
+    description: "Validate planned patterns"
+    required: true
+    
+    validation_workflow:
+      - step: "Write pattern snippet"
+        example: |
+          // Planning to write:
+          export class InvoiceService extends BaseFirestoreService<Invoice> {
+            constructor() {
+              super('invoices');
+            }
+          }
+      
+      - step: "Validate pattern"
+        command: |
+          npm run check "export class InvoiceService extends BaseFirestoreService"
+      
+      - step: "Check response"
+        success: "✅ No hallucinations detected! Pattern matches existing code"
+        failure: "⚠️ Potential hallucination - review existing patterns"
+
+  # 4. During Code Generation
+  code_generation:
+    description: "Validate AI-generated code"
+    when: "Claude generates code snippets"
+    
+    validation_patterns:
+      service_validation: |
+        # After Claude suggests a service:
+        npm run check "the entire service code"
+        
+        # Checks for:
+        - Correct BaseFirestoreService usage
+        - Proper dependency injection
+        - Consistent naming patterns
+      
+      component_validation: |
+        # After Claude suggests a component:
+        npm run check "component decorator and imports"
+        
+        # Validates:
+        - Standalone component structure
+        - Material imports
+        - Routing patterns
+      
+      query_validation: |
+        # For Firestore queries:
+        npm run check "where orderBy query pattern"
+        
+        # Ensures:
+        - Proper query constraints
+        - Index-friendly queries
+        - Error handling
+
+  # 5. Post-Implementation
+  post_implementation:
+    description: "Update knowledge after adding new code"
+    when:
+      - "Added new services or components"
+      - "Created new patterns"
+      - "Before deployment"
+    
+    commands:
+      update: "cd antiHall && npm run parse"
+      verify: "npm run check 'new pattern name'"
+    
+    benefits:
+      - "Future suggestions will include your new patterns"
+      - "Team consistency improved"
+      - "Prevents drift from established patterns"
+
+# Specific Validation Patterns
+validation_patterns:
+  # Service Validation
+  services:
+    base_pattern: |
+      npm run check "extends BaseFirestoreService"
+    
+    validates:
+      - "Correct inheritance"
+      - "Constructor with collection name"
+      - "Proper typing"
+    
+    common_issues:
+      - issue: "Direct Firestore usage"
+        detection: "import { getFirestore }"
+        solution: "Use BaseFirestoreService methods instead"
+      
+      - issue: "Missing error handling"
+        detection: "subscribe(" without "error:"
+        solution: "Add error handling to subscriptions"
+
+  # Component Validation  
+  components:
+    structure_check: |
+      npm run check "@Component standalone: true"
+    
+    import_validation: |
+      npm run check "imports: [CommonModule, MaterialModule]"
+    
+    common_issues:
+      - issue: "Using NgModules"
+        detection: "@NgModule"
+        solution: "Convert to standalone components"
+      
+      - issue: "Hardcoded colors"
+        detection: "color: #"
+        solution: "Use theme functions: ff-rgb()"
+
+  # Query Validation
+  queries:
+    firestore_patterns: |
+      npm run check "where orderBy limit"
+    
+    pagination_check: |
+      npm run check "startAfter limit cursor"
+    
+    index_validation: |
+      npm run check "compound index query"
+
+  # Security Validation
+  security:
+    secret_detection: |
+      npm run check "api_key password secret"
+    
+    auth_patterns: |
+      npm run check "canActivate guard auth"
+    
+    function_config: |
+      npm run check "functions.config()"
+
+# Automated Validation Hooks
+automation:
+  # Git hooks integration
+  pre_commit_hook:
+    description: "Validate changes before commit"
+    script: |
+      #!/bin/bash
+      # Add to .git/hooks/pre-commit
+      
+      # Check for potential hallucinations in staged files
+      for file in $(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(ts|js)$'); do
+        if grep -q "extends BaseFirestoreService" "$file"; then
+          npm run check "$file" || exit 1
+        fi
+      done
+  
+  # CI/CD integration
+  github_actions:
+    description: "Validate in CI pipeline"
+    workflow: |
+      - name: Update antiHall Knowledge
+        run: cd antiHall && npm run parse
+      
+      - name: Validate Patterns
+        run: |
+          npm run check "BaseFirestoreService"
+          npm run check "standalone: true"
+          npm run check "ff-rgb"
+
+# Common antiHall Commands
+command_reference:
+  basic_commands:
+    parse: "cd antiHall && npm run parse  # Update knowledge graph"
+    check: "npm run check 'pattern'       # Validate specific pattern"
+    search: "npm run search 'keyword'     # Find implementations"
+  
+  advanced_usage:
+    check_file: |
+      npm run check "$(cat path/to/file.ts)"
+      # Validates entire file content
+    
+    check_multiple: |
+      npm run check "pattern1" && npm run check "pattern2"
+      # Chain multiple validations
+    
+    check_with_context: |
+      npm run check "extends BaseFirestoreService constructor super"
+      # More specific validation
+
+# Integration with Other Tools
+tool_integration:
+  with_slash_commands:
+    "/create-feature": "Auto-validates generated structure"
+    "/check-implementation": "Uses antiHall for validation"
+    "/quick-reference": "Pulls patterns from knowledge graph"
+  
+  with_personas:
+    angular_developer: "Validates component patterns"
+    firebase_developer: "Validates service patterns"
+    security_officer: "Validates security patterns"
+  
+  with_deployment:
+    pre_deploy: "Update knowledge graph"
+    post_deploy: "Validate deployment didn't break patterns"
+
+# Best Practices
+best_practices:
+  - practice: "Parse before major work"
+    frequency: "Daily or before features"
+    benefit: "Always working with current patterns"
+  
+  - practice: "Check before implementing"
+    frequency: "Every new pattern"
+    benefit: "Avoid hallucinated code"
+  
+  - practice: "Validate AI suggestions"
+    frequency: "Every code generation"
+    benefit: "Ensure consistency"
+  
+  - practice: "Update after changes"
+    frequency: "After adding new patterns"
+    benefit: "Keep knowledge current"
+
+# Troubleshooting
+troubleshooting:
+  common_issues:
+    - issue: "Parse command fails"
+      solution: |
+        cd antiHall
+        npm install
+        npm run parse
+    
+    - issue: "Check shows hallucination for valid code"
+      cause: "Knowledge graph outdated"
+      solution: "Run parse to update"
+    
+    - issue: "Slow parse on large codebase"
+      solution: "Normal - happens once, then cached"
+    
+    - issue: "Pattern not found"
+      solution: "Try more specific keywords or check spelling"
+
+# Success Metrics
+success_indicators:
+  validation_rate: "100% of new patterns checked"
+  hallucination_prevention: "Zero hallucinated patterns deployed"
+  pattern_consistency: "All services follow same structure"
+  knowledge_currency: "Parse run at least weekly"
+
+# Future Enhancements
+future_possibilities:
+  - "Real-time validation in editor"
+  - "Automatic pattern suggestions"
+  - "Team pattern sharing"
+  - "Pattern evolution tracking"

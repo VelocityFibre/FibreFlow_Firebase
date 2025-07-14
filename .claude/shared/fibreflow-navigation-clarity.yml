@@ -1,0 +1,110 @@
+# FibreFlow Navigation Clarity System
+# Prevents confusion about where pages belong and what they do
+
+version: 1.0
+name: Navigation Structure Documentation
+description: Clear mapping of all pages, their navigation sections, and purposes
+
+# Navigation Menu Structure
+navigation_sections:
+  projects:
+    name: "Projects"
+    description: "Main business features"
+    pages:
+      - name: "Projects"
+        route: "/projects"
+        component: "ProjectListComponent"
+        purpose: "Project management"
+        
+      - name: "Pole Tracker"
+        route: "/pole-tracker"
+        component: "PoleTrackerListComponent"
+        purpose: "Desktop pole management - list, create, edit"
+        
+      - name: "Pole Tracker (Mobile)"
+        route: "/pole-tracker/mobile"
+        expected_component: "PoleTrackerMobileListComponent"
+        actual_component: "MobileMapViewComponent"
+        purpose: "Should be mobile-friendly pole list"
+        status: "BROKEN - shows map instead of list"
+        
+  mobile_pages:
+    name: "Mobile Pages"
+    description: "Field worker tools"
+    pages:
+      - name: "Pole Map View"
+        route: "/pole-tracker/mobile/map"
+        current_route: "/pole-tracker/mobile"  # WRONG!
+        component: "MobileMapViewComponent"
+        purpose: "GPS map for field workers"
+        
+      - name: "Quick Capture"
+        route: "/pole-tracker/mobile/capture"
+        component: "QuickCaptureComponent"
+        purpose: "Photo capture workflow"
+        
+      - name: "My Assignments"
+        route: "/pole-tracker/mobile/assignments"
+        component: "MyAssignmentsComponent"
+        purpose: "User's assigned poles"
+        
+      - name: "Nearby Poles"
+        route: "/pole-tracker/mobile/nearby"
+        component: "NearbyPolesComponent"
+        purpose: "Find poles by location"
+
+# Current Issues
+navigation_issues:
+  route_conflicts:
+    - route: "/pole-tracker/mobile"
+      conflict: "Used by two different features"
+      projects_section_expects: "Mobile-optimized pole list"
+      mobile_pages_section_has: "GPS map view"
+      
+  missing_components:
+    - component: "PoleTrackerMobileListComponent"
+      purpose: "Mobile-optimized version of pole tracker"
+      needed_for: "Projects section mobile pole tracker"
+
+# Rules for Clarity
+clarity_rules:
+  - rule: "Desktop versions go in main sections"
+    example: "/pole-tracker → Projects section"
+    
+  - rule: "Mobile-optimized versions stay with desktop"
+    example: "/pole-tracker/mobile → Projects section (mobile version)"
+    
+  - rule: "Field tools go in Mobile Pages"
+    example: "/pole-tracker/mobile/map → Mobile Pages section"
+    
+  - rule: "Avoid route conflicts"
+    bad: "Same route in two sections"
+    good: "Unique routes for each purpose"
+
+# How to Fix Current Issues
+fixes_needed:
+  step_1:
+    action: "Create PoleTrackerMobileListComponent"
+    purpose: "Mobile-optimized pole list"
+    
+  step_2:
+    action: "Update routing"
+    changes:
+      - "/pole-tracker/mobile → PoleTrackerMobileListComponent"
+      - "/pole-tracker/mobile/map → MobileMapViewComponent"
+      
+  step_3:
+    action: "Update navigation menu"
+    ensure: "Clear section separation"
+
+# Integration with SuperClaude
+superclaude_integration:
+  when_confused:
+    - "Check this file for navigation structure"
+    - "Verify which section a page belongs to"
+    - "Understand the purpose of each route"
+    
+  continuous_improvement:
+    - "Update when new pages added"
+    - "Document any navigation changes"
+    - "Flag routing conflicts immediately"

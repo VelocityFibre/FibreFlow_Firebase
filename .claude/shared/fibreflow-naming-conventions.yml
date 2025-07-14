@@ -1,0 +1,220 @@
+# FibreFlow Naming Conventions
+# Enforced naming patterns for all system files and components
+version: 1.0
+name: Naming Convention System
+description: Prevent generic names, ensure searchability and clarity
+
+# Core Naming Principles
+naming_principles:
+  1_be_specific: "Name things for WHAT they are, not their category"
+  2_be_searchable: "Use keywords that users would search for"
+  3_be_contextual: "Include the feature/domain in the name"
+  4_be_consistent: "Follow established patterns"
+
+# File Naming Rules
+file_naming_rules:
+  yaml_files:
+    pattern: "fibreflow-{feature}-{purpose}.yml"
+    
+    good_examples:
+      - "fibreflow-kpi-tracking-implementation.yml" ✓
+      - "fibreflow-pole-tracker-mobile-fix.yml" ✓
+      - "fibreflow-boq-import-enhancement.yml" ✓
+      
+    bad_examples:
+      - "fibreflow-achievements.yml" ✗ (too generic)
+      - "fibreflow-updates.yml" ✗ (what updates?)
+      - "fibreflow-new-stuff.yml" ✗ (what stuff?)
+      - "fibreflow-fixes.yml" ✗ (which fixes?)
+    
+    rules:
+      - "Include the specific feature name"
+      - "Include what aspect (implementation, fix, enhancement)"
+      - "Make it searchable by the problem it solves"
+  
+  implementation_docs:
+    pattern: "fibreflow-{feature-name}-{what-was-built}.yml"
+    examples:
+      good:
+        - "fibreflow-kpi-tracking-implementation.yml"
+        - "fibreflow-meeting-sync-system.yml"
+        - "fibreflow-firebase-backup-automation.yml"
+      bad:
+        - "fibreflow-success.yml"
+        - "fibreflow-completed.yml"
+        - "fibreflow-done.yml"
+  
+  bug_fix_docs:
+    pattern: "fibreflow-{feature}-{bug-id}-fix.yml"
+    examples:
+      - "fibreflow-boq-dev001-zero-filter-fix.yml"
+      - "fibreflow-pole-tracker-pole001-navigation-fix.yml"
+  
+  enhancement_docs:
+    pattern: "fibreflow-{feature}-{enhancement-name}.yml"
+    examples:
+      - "fibreflow-projects-gantt-timeline.yml"
+      - "fibreflow-stock-bulk-import.yml"
+
+# Component Naming
+component_naming:
+  pattern: "{Feature}{Purpose}Component"
+  
+  good_examples:
+    - "KpiProgressIndicatorComponent" ✓
+    - "BoqImportDialogComponent" ✓
+    - "PoleTrackerMobileListComponent" ✓
+    
+  bad_examples:
+    - "DataComponent" ✗
+    - "ListComponent" ✗
+    - "NewComponent" ✗
+
+# Service Naming
+service_naming:
+  pattern: "{Feature}{Purpose}Service"
+  
+  examples:
+    - "KpiTimelineService" ✓ (clear what it calculates)
+    - "BoqImportService" ✓ (clear what it handles)
+    - "PoleImageUploadService" ✓ (specific purpose)
+
+# Variable & Method Naming
+code_naming:
+  methods:
+    pattern: "{verb}{What}{Context}"
+    examples:
+      - "calculateKpiTimeline()" ✓
+      - "validateBoqImport()" ✓
+      - "syncFirefliesMeetings()" ✓
+    
+    avoid:
+      - "process()" ✗
+      - "handle()" ✗
+      - "doWork()" ✗
+  
+  variables:
+    pattern: "{descriptor}{Type}"
+    examples:
+      - "kpiTargets" ✓
+      - "dailyAchievementRates" ✓
+      - "poleInstallationPhotos" ✓
+    
+    avoid:
+      - "data" ✗
+      - "items" ✗
+      - "stuff" ✗
+
+# Automatic Naming Validation
+validation_rules:
+  before_creating_file:
+    - prompt: "What specific feature does this relate to?"
+    - prompt: "What specific problem does this solve?"
+    - prompt: "What would someone search for to find this?"
+    - format: "fibreflow-{feature}-{specific-purpose}.yml"
+  
+  red_flags:
+    - "achievements" → Ask: "Achievements in what?"
+    - "updates" → Ask: "Updates to what feature?"
+    - "improvements" → Ask: "Improvements to what?"
+    - "changes" → Ask: "Changes in what?"
+    - "new" → Ask: "New what specifically?"
+
+# Integration with Workflow
+workflow_integration:
+  when_creating_docs:
+    1: "Identify the specific feature"
+    2: "Identify the specific aspect (implementation/fix/enhancement)"
+    3: "Create searchable name"
+    4: "Validate against patterns"
+    
+  when_ai_suggests_generic_name:
+    human_should: "Stop and ask for specific name"
+    ai_should: "Provide 3 specific alternatives"
+    
+  example_correction:
+    ai_suggests: "Let me create fibreflow-achievements.yml"
+    human_asks: "Achievements of what?"
+    ai_corrects: "You're right! Let me create:"
+      - "fibreflow-kpi-tracking-implementation.yml"
+      - "fibreflow-kpi-system-setup.yml"
+      - "fibreflow-projects-kpi-feature.yml"
+
+# Search Optimization
+search_optimization:
+  naming_for_search:
+    - "Include keywords users would search"
+    - "Use full words, not abbreviations"
+    - "Include feature name + purpose"
+    
+  examples:
+    searchable:
+      - "kpi-tracking" → finds KPI implementation
+      - "pole mobile" → finds pole tracker mobile issues
+      - "boq import" → finds BOQ import features
+    
+    not_searchable:
+      - "stuff" → finds nothing useful
+      - "updates" → too many irrelevant results
+      - "new" → unclear what's new
+
+# Enforcement Mechanism
+enforcement:
+  ai_self_check:
+    before_suggesting_filename:
+      - "Is this name specific to the feature?"
+      - "Does it describe what's inside?"
+      - "Would someone find this by searching?"
+      - "Does it follow the pattern?"
+    
+    if_generic_name_detected:
+      - "STOP and reconsider"
+      - "Apply naming pattern"
+      - "Suggest 3 specific alternatives"
+  
+  human_override:
+    when: "AI suggests generic name"
+    action: "Request specific name immediately"
+    ai_response: "Thank you! Here are better options..."
+
+# Common Naming Mistakes to Avoid
+common_mistakes:
+  too_generic:
+    - "system", "data", "info", "stuff"
+    - "updates", "changes", "new", "old"
+    - "temp", "test", "misc", "other"
+    
+  too_vague:
+    - "improvements" (to what?)
+    - "enhancements" (of what?)
+    - "fixes" (for what?)
+    
+  missing_context:
+    - "implementation" (of what feature?)
+    - "bug-fix" (which bug? what feature?)
+    - "documentation" (for what?)
+
+# Quick Reference Card
+quick_reference:
+  yaml_files: "fibreflow-{feature}-{purpose}.yml"
+  components: "{Feature}{Purpose}Component"
+  services: "{Feature}{Purpose}Service"
+  methods: "{verb}{What}{Context}()"
+  
+  always_ask:
+    - "What feature?"
+    - "What purpose?"
+    - "What would I search for?"
+
+# Success Metrics
+success_metrics:
+  good_naming:
+    - "Can find file by searching for feature"
+    - "Name describes contents accurately"
+    - "Follows consistent pattern"
+    - "No generic words"
+  
+  validation:
+    - "0 generic filenames created"
+    - "All files searchable by feature"
+    - "Clear purpose from name alone"

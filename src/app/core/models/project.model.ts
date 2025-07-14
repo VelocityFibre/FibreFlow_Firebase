@@ -183,6 +183,45 @@ export interface ProjectMetadata {
   numberOfSites?: number;
   networkType?: string;
   tags?: string[];
+  
+  // KPI Targets with Daily Rates and Smart Start Dates
+  kpiTargets?: ProjectKPITargets;
+}
+
+export interface ProjectKPITargets {
+  // Core KPI Targets (Required)
+  polePermissions: KPITarget;      // Start immediately
+  homeSignups: KPITarget;          // Start immediately  
+  polesPlanted: KPITarget;         // Start after permissions phase
+  fibreStringing: KPITarget;       // Start after poles planted
+  trenchingMeters: KPITarget;      // Start with civils phase
+  
+  // Calculated Project Timeline
+  calculatedDuration?: number;      // Total days based on targets
+  estimatedEndDate?: Date;         // Based on start date + duration
+}
+
+export interface KPITarget {
+  // Target Values
+  totalTarget: number;             // Total quantity to complete
+  dailyTarget: number;             // Target per working day
+  unit: string;                    // 'poles', 'meters', 'homes', etc.
+  
+  // Smart Start Logic
+  startPhase: PhaseType;           // When this KPI should start
+  dependsOn?: string[];            // Other KPIs that must start first
+  startDelayDays?: number;         // Days after phase/dependency starts
+  
+  // Calculated Timeline
+  estimatedDays?: number;          // totalTarget / dailyTarget
+  estimatedStartDate?: Date;       // Calculated based on dependencies
+  estimatedEndDate?: Date;         // Start + estimated days
+  
+  // Progress Tracking (populated during project execution)
+  actualStartDate?: Date;          // When first KPI entry was made
+  currentTotal?: number;           // Current progress
+  averageDailyActual?: number;     // Actual daily rate so far
+  onTrack?: boolean;               // Is progress on schedule
 }
 
 export interface Attachment {
@@ -399,3 +438,34 @@ export const FIBER_PROJECT_PHASES: PhaseTemplate[] = [
     ],
   },
 ];
+
+// Default KPI Target Configurations
+export const DEFAULT_KPI_CONFIGURATIONS: { [key: string]: Partial<KPITarget> } = {
+  polePermissions: {
+    unit: 'permissions',
+    startPhase: PhaseType.INITIATE_PROJECT,
+    startDelayDays: 0, // Start immediately
+  },
+  homeSignups: {
+    unit: 'homes',
+    startPhase: PhaseType.INITIATE_PROJECT,
+    startDelayDays: 0, // Start immediately with marketing
+  },
+  polesPlanted: {
+    unit: 'poles',
+    startPhase: PhaseType.WORK_IN_PROGRESS,
+    dependsOn: ['polePermissions'],
+    startDelayDays: 7, // Wait for permissions to get ahead
+  },
+  fibreStringing: {
+    unit: 'meters',
+    startPhase: PhaseType.WORK_IN_PROGRESS,
+    dependsOn: ['polesPlanted'],
+    startDelayDays: 14, // Wait for reasonable number of poles
+  },
+  trenchingMeters: {
+    unit: 'meters',
+    startPhase: PhaseType.WORK_IN_PROGRESS,
+    startDelayDays: 0, // Can start with civils immediately
+  }
+};

@@ -178,6 +178,50 @@ export class DailyKpisService {
   }
 
   /**
+   * Get the latest KPI entry for a project
+   */
+  getLatestByProject(projectId: string): Observable<DailyKPIs> {
+    const kpisCollection = this.getKpisCollection(projectId);
+    const q = query(kpisCollection, orderBy('date', 'desc'), limit(1));
+
+    return from(getDocs(q)).pipe(
+      map((snapshot) => {
+        if (snapshot.empty) {
+          // Return empty KPI with all zeros
+          return {
+            projectId,
+            date: new Date(),
+            permissionsTotal: 0,
+            missingStatusTotal: 0,
+            polesPlantedTotal: 0,
+            homeSignupsTotal: 0,
+            homeDropsTotal: 0,
+            homesConnectedTotal: 0,
+            trenchingTotal: 0,
+            stringing24Total: 0,
+            stringing48Total: 0,
+            stringing96Total: 0,
+            stringing144Total: 0,
+            stringing288Total: 0,
+          } as DailyKPIs;
+        }
+        
+        const doc = snapshot.docs[0];
+        const data = doc.data();
+        return {
+          id: doc.id,
+          ...data,
+          date: data['date']?.toDate() || new Date(),
+          submittedAt: data['submittedAt']?.toDate() || new Date(),
+          createdAt: data['createdAt']?.toDate() || new Date(),
+          updatedAt: data['updatedAt']?.toDate() || new Date(),
+        } as DailyKPIs;
+      }),
+      catchError(handleError('getLatestByProject', {} as DailyKPIs)),
+    );
+  }
+
+  /**
    * Get KPIs for a specific project with a limit
    */
   getKPIsForProject(projectId: string, limitCount: number = 10): Observable<DailyKPIs[]> {
