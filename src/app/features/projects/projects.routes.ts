@@ -21,6 +21,13 @@ export const projectRoutes: Routes = [
       ),
   },
   {
+    path: ':id/edit',
+    loadComponent: () =>
+      import('./pages/project-create/project-create.component').then(
+        (m) => m.ProjectCreateComponent,
+      ),
+  },
+  {
     path: ':projectId/boq',
     loadChildren: () =>
       import('../boq-management/boq-management.routes').then((m) => m.boqManagementRoutes),

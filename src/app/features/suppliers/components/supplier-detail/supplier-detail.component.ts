@@ -16,7 +16,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Observable, switchMap } from 'rxjs';
 
 import { SupplierService } from '../../../../core/suppliers/services/supplier.service';
-import { Supplier, SupplierContact, SupplierStatus } from '../../../../core/suppliers/models';
+import { Supplier, SupplierContact, SupplierStatus, VerificationStatus } from '../../../../core/suppliers/models';
 
 @Component({
   selector: 'app-supplier-detail',
@@ -131,7 +131,7 @@ export class SupplierDetailComponent implements OnInit {
 
   async verifySupplier(supplierId: string): Promise<void> {
     try {
-      await this.supplierService.updateVerificationStatus(supplierId, 'verified');
+      await this.supplierService.updateVerificationStatus(supplierId, VerificationStatus.VERIFIED);
       this.snackBar.open('Supplier verified successfully', 'Close', {
         duration: 3000,
       });

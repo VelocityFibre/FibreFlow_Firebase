@@ -195,6 +195,7 @@ export interface ProjectKPITargets {
   polesPlanted: KPITarget;         // Start after permissions phase
   fibreStringing: KPITarget;       // Start after poles planted
   trenchingMeters: KPITarget;      // Start with civils phase
+  homesConnected: KPITarget;       // Start after fibre stringing
   
   // Calculated Project Timeline
   calculatedDuration?: number;      // Total days based on targets
@@ -467,5 +468,11 @@ export const DEFAULT_KPI_CONFIGURATIONS: { [key: string]: Partial<KPITarget> } =
     unit: 'meters',
     startPhase: PhaseType.WORK_IN_PROGRESS,
     startDelayDays: 0, // Can start with civils immediately
+  },
+  homesConnected: {
+    unit: 'homes',
+    startPhase: PhaseType.WORK_IN_PROGRESS,
+    dependsOn: ['fibreStringing'],
+    startDelayDays: 21, // Wait for fibre to be strung before connecting homes
   }
 };

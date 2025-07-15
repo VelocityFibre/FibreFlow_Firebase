@@ -1,30 +1,28 @@
 import { Injectable, inject } from '@angular/core';
 import {
   Firestore,
-  collection,
-  collectionData,
-  doc,
-  docData,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  query,
   where,
   orderBy,
   QueryConstraint,
   Timestamp,
 } from '@angular/fire/firestore';
-import { Observable, map } from 'rxjs';
+import { Observable, map, take } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { Client, ClientFilter, ClientSortOptions } from '../models/client.model';
+import { BaseFirestoreService } from '../../../core/services/base-firestore.service';
+import { EntityType } from '../../../core/models/audit-log.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ClientService {
-  private firestore = inject(Firestore);
+export class ClientService extends BaseFirestoreService<Client> {
+  protected override firestore = inject(Firestore);
   private authService = inject(AuthService);
-  private clientsCollection = collection(this.firestore, 'clients');
+  protected collectionName = 'clients';
+
+  protected getEntityType(): EntityType {
+    return 'client';
+  }
 
   getClients(filter?: ClientFilter, sort?: ClientSortOptions): Observable<Client[]> {
     const constraints: QueryConstraint[] = [];
@@ -52,23 +50,15 @@ export class ClientService {
       constraints.push(orderBy('name', 'asc'));
     }
 
-    const q = query(this.clientsCollection, ...constraints);
-
-    return collectionData(q, { idField: 'id' }) as Observable<Client[]>;
+    return this.getWithQuery(constraints);
   }
 
   getClient(id: string): Observable<Client | undefined> {
-    const clientDoc = doc(this.firestore, 'clients', id);
-    return docData(clientDoc, { idField: 'id' }) as Observable<Client | undefined>;
+    return this.getById(id);
   }
 
   async getClientById(id: string): Promise<Client | undefined> {
-    return new Promise((resolve) => {
-      this.getClient(id).subscribe({
-        next: (client) => resolve(client),
-        error: () => resolve(undefined),
-      });
-    });
+    return this.getById(id).pipe(take(1)).toPromise();
   }
 
   async createClient(clientData: Partial<Client>): Promise<string> {
@@ -80,36 +70,30 @@ export class ClientService {
       projectsCount: 0,
       activeProjectsCount: 0,
       totalValue: 0,
-      createdAt: Timestamp.now(),
-      updatedAt: Timestamp.now(),
       createdBy: currentUser.uid,
     };
 
-    const docRef = await addDoc(this.clientsCollection, newClient);
-    return docRef.id;
+    return this.create(newClient as any);
   }
 
   async updateClient(id: string, clientData: Partial<Client>): Promise<void> {
     const currentUser = await this.authService.getCurrentUserProfile();
     if (!currentUser) throw new Error('User not authenticated');
 
-    const clientDoc = doc(this.firestore, 'clients', id);
-    await updateDoc(clientDoc, {
+    return this.update(id, {
       ...clientData,
-      updatedAt: Timestamp.now(),
       lastModifiedBy: currentUser.uid,
     });
   }
 
   async deleteClient(id: string): Promise<void> {
-    const clientDoc = doc(this.firestore, 'clients', id);
-    await deleteDoc(clientDoc);
+    return this.delete(id);
   }
 
   searchClients(searchTerm: string): Observable<Client[]> {
     // For now, we'll do client-side filtering
     // In production, consider using a search service like Algolia
-    return this.getClients().pipe(
+    return this.getAll().pipe(
       map((clients) =>
         clients.filter(
           (client) =>
@@ -124,14 +108,12 @@ export class ClientService {
 
   // Helper method to get clients by type
   getClientsByType(clientType: string): Observable<Client[]> {
-    const q = query(this.clientsCollection, where('clientType', '==', clientType));
-    return collectionData(q, { idField: 'id' }) as Observable<Client[]>;
+    return this.getWithFilter('clientType', '==', clientType);
   }
 
   // Helper method to get active clients
   getActiveClients(): Observable<Client[]> {
-    const q = query(this.clientsCollection, where('status', '==', 'Active'));
-    return collectionData(q, { idField: 'id' }) as Observable<Client[]>;
+    return this.getWithFilter('status', '==', 'Active');
   }
 
   // Update client metrics (called when projects are updated)
@@ -144,10 +126,6 @@ export class ClientService {
       lastProjectDate?: Timestamp;
     },
   ): Promise<void> {
-    const clientDoc = doc(this.firestore, 'clients', clientId);
-    await updateDoc(clientDoc, {
-      ...metrics,
-      updatedAt: Timestamp.now(),
-    });
+    return this.update(clientId, metrics);
   }
 }

@@ -119,12 +119,12 @@ export class ProjectInitializationService {
             estimatedHours: 40,
             actualHours: 0,
             completionPercentage: 0,
-            startDate: (phase.startDate as Timestamp).toDate(),
-            dueDate: new Date(
+            startDate: Timestamp.fromDate((phase.startDate as Timestamp).toDate()),
+            dueDate: Timestamp.fromDate(new Date(
               (phase.startDate as Timestamp).toDate().getTime() + 7 * 24 * 60 * 60 * 1000,
-            ), // 7 days
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            )), // 7 days
+            createdAt: Timestamp.now(),
+            updatedAt: Timestamp.now(),
           };
 
           batch.set(taskRef, task);

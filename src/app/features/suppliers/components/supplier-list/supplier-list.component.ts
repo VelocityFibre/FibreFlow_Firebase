@@ -25,6 +25,7 @@ import {
   SupplierFilter,
   SupplierStatus,
   SupplierCategory,
+  VerificationStatus,
 } from '../../../../core/suppliers/models';
 import { Observable, map, catchError, of } from 'rxjs';
 
@@ -188,7 +189,7 @@ export class SupplierListComponent implements OnInit {
     }
 
     try {
-      await this.supplierService.updateVerificationStatus(supplierId, 'verified');
+      await this.supplierService.updateVerificationStatus(supplierId, VerificationStatus.VERIFIED);
       this.snackBar.open('Supplier verified successfully', 'Close', {
         duration: 3000,
       });

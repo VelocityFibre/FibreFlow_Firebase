@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Observable, combineLatest, map, startWith, take } from 'rxjs';
+import { Timestamp } from '@angular/fire/firestore';
 
 import { Task, TaskStatus } from '../../../../core/models/task.model';
 import { TaskService } from '../../../../core/services/task.service';
@@ -185,7 +186,7 @@ export class TaskManagementComponent implements OnInit {
 
       await this.taskService.updateTask(task.id!, {
         status: newStatus,
-        completedDate: newStatus === TaskStatus.COMPLETED ? new Date() : undefined,
+        completedDate: newStatus === TaskStatus.COMPLETED ? Timestamp.now() : undefined,
       });
 
       this.notification.success(

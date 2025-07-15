@@ -13,7 +13,9 @@ import {
   addDoc,
   query,
   getDocs,
-  Timestamp
+  Timestamp,
+  collectionData,
+  docData
 } from '@angular/fire/firestore';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { BaseFirestoreService } from './base-firestore.service';

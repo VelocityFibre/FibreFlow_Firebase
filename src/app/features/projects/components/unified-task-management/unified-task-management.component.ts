@@ -16,6 +16,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatInputModule } from '@angular/material/input';
 import { MatBadgeModule } from '@angular/material/badge';
 import { Observable, map, firstValueFrom, combineLatest } from 'rxjs';
+import { Timestamp } from '@angular/fire/firestore';
 
 import { StaffMember } from '../../../staff/models/staff.model';
 import { StaffService } from '../../../staff/services/staff.service';
@@ -185,25 +186,6 @@ type ViewFilter = 'all' | 'uncompleted' | 'flagged';
         </mat-card>
       }
 
-      <!-- Task Management Actions -->
-      @if (!loading() && databaseTasks().length > 0) {
-        <mat-card class="actions-card">
-          <div class="actions-container">
-            <button mat-raised-button (click)="reinitializeTasks()" color="warn">
-              <mat-icon>refresh</mat-icon>
-              Reinitialize All Tasks
-            </button>
-            <button mat-raised-button (click)="flagTestTasks()" color="accent">
-              <mat-icon>flag</mat-icon>
-              Flag Test Tasks
-            </button>
-            <button mat-raised-button (click)="createMissingTasks()" color="primary">
-              <mat-icon>add_task</mat-icon>
-              Create Missing Tasks
-            </button>
-          </div>
-        </mat-card>
-      }
 
       <!-- Phases with Steps and Tasks (matching tasks page structure) -->
       @if (!loading() && databaseTasks().length > 0) {
@@ -418,24 +400,6 @@ type ViewFilter = 'all' | 'uncompleted' | 'flagged';
         text-align: center;
         padding: 64px;
         border-radius: var(--ff-radius-lg) !important;
-      }
-
-      /* Actions Card */
-      .actions-card {
-        margin-bottom: 24px;
-        border-radius: var(--ff-radius-lg) !important;
-        padding: 16px;
-      }
-
-      .actions-container {
-        display: flex;
-        gap: 12px;
-        justify-content: flex-end;
-        flex-wrap: wrap;
-      }
-
-      .actions-container button {
-        min-width: 180px;
       }
 
       .empty-icon {
@@ -1192,7 +1156,7 @@ export class UnifiedTaskManagementComponent implements OnInit {
       const updates = {
         status: task.dbTask.status,
         completionPercentage: task.progress,
-        completedDate: task.isCompleted ? new Date() : undefined,
+        completedDate: task.isCompleted ? Timestamp.now() : undefined,
       };
 
       await this.taskService.updateTask(task.dbTask.id!, updates);

@@ -1,3 +1,5 @@
+import { Timestamp } from '@angular/fire/firestore';
+
 export enum TaskStatus {
   PENDING = 'pending',
   IN_PROGRESS = 'in_progress',
@@ -28,14 +30,14 @@ export interface Task {
   estimatedHours?: number;
   actualHours?: number;
   completionPercentage: number;
-  dueDate?: Date;
-  startDate?: Date;
-  completedDate?: Date;
+  dueDate?: Timestamp;
+  startDate?: Timestamp;
+  completedDate?: Timestamp;
   notes?: string;
   dependencies?: string[];
   attachments?: string[];
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
   createdBy?: string;
   updatedBy?: string;
 
@@ -50,7 +52,7 @@ export interface Task {
 export interface TaskAssignment {
   taskId: string;
   userId: string;
-  assignedDate: Date;
+  assignedDate: Timestamp;
   assignedBy: string;
   notes?: string;
 }
@@ -62,5 +64,5 @@ export interface TaskUpdate {
   newValue?: string | number | TaskStatus | TaskPriority;
   notes?: string;
   updatedBy: string;
-  updatedAt: Date;
+  updatedAt: Timestamp;
 }

@@ -1,15 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import {
   Firestore,
-  collection,
-  collectionData,
-  doc,
-  docData,
-  setDoc,
-  updateDoc,
-  deleteDoc,
-  // query,
-  // where,
   serverTimestamp,
   Timestamp,
 } from '@angular/fire/firestore';
@@ -22,24 +13,29 @@ import {
   DEFAULT_ROLE_PERMISSIONS,
 } from '../models/role.model';
 import { AuthService } from './auth.service';
+import { BaseFirestoreService } from './base-firestore.service';
+import { EntityType } from '../models/audit-log.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class RoleService {
-  private firestore = inject(Firestore);
+export class RoleService extends BaseFirestoreService<Role> {
+  protected override firestore = inject(Firestore);
   private authService = inject(AuthService);
-  private rolesCollection = collection(this.firestore, 'roles');
+  protected collectionName = 'roles';
+
+  protected getEntityType(): EntityType {
+    return 'role';
+  }
 
   // Get all roles
   getRoles(): Observable<Role[]> {
-    return collectionData(this.rolesCollection, { idField: 'id' }) as Observable<Role[]>;
+    return this.getAll();
   }
 
   // Get a single role by ID
   getRole(id: string): Observable<Role | undefined> {
-    const roleDoc = doc(this.firestore, 'roles', id);
-    return docData(roleDoc, { idField: 'id' }) as Observable<Role>;
+    return this.getById(id);
   }
 
   // Get all available permissions
@@ -50,29 +46,22 @@ export class RoleService {
   // Create a new role
   async createRole(role: Omit<Role, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
     const currentUser = await this.authService.getCurrentUser();
-    const newRole: Omit<Role, 'id'> = {
+    const newRole = {
       ...role,
       isSystem: false,
       userCount: 0,
-      createdAt: serverTimestamp() as Timestamp,
-      updatedAt: serverTimestamp() as Timestamp,
       createdBy: currentUser?.uid || 'system',
       updatedBy: currentUser?.uid || 'system',
     };
 
-    const roleDoc = doc(this.rolesCollection);
-    await setDoc(roleDoc, newRole);
-    return roleDoc.id;
+    return this.create(newRole);
   }
 
   // Update an existing role
   async updateRole(id: string, updates: Partial<Role>): Promise<void> {
     const currentUser = await this.authService.getCurrentUser();
-    const roleDoc = doc(this.firestore, 'roles', id);
-
     const updateData = {
       ...updates,
-      updatedAt: serverTimestamp(),
       updatedBy: currentUser?.uid || 'system',
     };
 
@@ -82,13 +71,12 @@ export class RoleService {
     delete updateData.createdBy;
     delete updateData.isSystem;
 
-    await updateDoc(roleDoc, updateData);
+    return this.update(id, updateData);
   }
 
   // Delete a role (only non-system roles)
   async deleteRole(id: string): Promise<void> {
-    const roleDoc = doc(this.firestore, 'roles', id);
-    await deleteDoc(roleDoc);
+    return this.delete(id);
   }
 
   // Initialize default roles (call this during app setup)

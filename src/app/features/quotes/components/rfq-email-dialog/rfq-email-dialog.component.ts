@@ -16,6 +16,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Observable, forkJoin } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
+import { Timestamp } from '@angular/fire/firestore';
 
 import { RFQ } from '../../models/rfq.model';
 import { RFQFirebaseEmailService } from '../../services/rfq-firebase-email.service';
@@ -354,8 +355,8 @@ export class RFQEmailDialogComponent {
             },
             status: SupplierStatus.ACTIVE,
             verificationStatus: VerificationStatus.UNVERIFIED,
-            createdAt: new Date(),
-            updatedAt: new Date(),
+            createdAt: Timestamp.fromDate(new Date()),
+            updatedAt: Timestamp.fromDate(new Date()),
             createdBy: 'system',
             portalEnabled: false,
           }));

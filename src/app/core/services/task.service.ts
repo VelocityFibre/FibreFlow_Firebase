@@ -4,46 +4,41 @@ import {
   collection,
   collectionData,
   doc,
-  docData,
-  addDoc,
-  updateDoc,
-  deleteDoc,
   query,
   where,
   orderBy,
   serverTimestamp,
   writeBatch,
   getDoc,
-  // DocumentReference,
   Query,
   Timestamp,
-  // collectionGroup,
+  addDoc,
 } from '@angular/fire/firestore';
 import { Observable, from, map, of, switchMap, firstValueFrom } from 'rxjs';
 import { Task, TaskStatus, TaskPriority } from '../models/task.model';
 import { AuthService } from './auth.service';
-// Removed ProjectService import to break circular dependency
 import { StaffService } from '../../features/staff/services/staff.service';
 import { DEFAULT_TASK_TEMPLATES, PHASE_NAME_MAPPING } from '../models/task-templates.model';
 import { Phase } from '../models/phase.model';
-import { AuditTrailService } from './audit-trail.service';
+import { BaseFirestoreService } from './base-firestore.service';
+import { EntityType } from '../models/audit-log.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TaskService {
-  private firestore = inject(Firestore);
+export class TaskService extends BaseFirestoreService<Task> {
+  protected override firestore = inject(Firestore);
   private authService = inject(AuthService);
-  // Removed projectService to break circular dependency
   private projectsCollection = collection(this.firestore, 'projects');
   private staffService = inject(StaffService);
-  private tasksCollection = collection(this.firestore, 'tasks');
-  private auditService = inject(AuditTrailService);
+  protected collectionName = 'tasks';
+
+  protected getEntityType(): EntityType {
+    return 'task';
+  }
 
   getAllTasks(): Observable<Task[]> {
-    const q = query(this.tasksCollection);
-
-    return (collectionData(q, { idField: 'id' }) as Observable<Task[]>).pipe(
+    return this.getAll().pipe(
       switchMap((tasks: Task[]) => {
         if (tasks.length === 0) return of([]);
 
@@ -69,14 +64,11 @@ export class TaskService {
   }
 
   getTasksByProject(projectId: string): Observable<Task[]> {
-    const q = query(
-      this.tasksCollection,
+    return this.getWithQuery([
       where('projectId', '==', projectId),
       orderBy('phaseId', 'asc'),
       orderBy('orderNo', 'asc'),
-    );
-
-    return (collectionData(q, { idField: 'id' }) as Observable<Task[]>).pipe(
+    ]).pipe(
       switchMap((tasks) => {
         console.log(`TaskService: Loaded ${tasks.length} tasks for project ${projectId}`);
         console.log('Tasks with ID:', tasks.filter((t) => t.id).length);
@@ -108,7 +100,7 @@ export class TaskService {
 
   getTasksByPhase(phaseId: string): Observable<Task[]> {
     const q = query(
-      this.tasksCollection,
+      this.collection,
       where('phaseId', '==', phaseId),
       orderBy('orderNo', 'asc'),
     );
@@ -122,13 +114,10 @@ export class TaskService {
   }
 
   getTasksByAssignee(userId: string): Observable<Task[]> {
-    const q = query(
-      this.tasksCollection,
+    return this.getWithQuery([
       where('assignedTo', '==', userId),
       orderBy('dueDate', 'asc'),
-    );
-
-    return (collectionData(q, { idField: 'id' }) as Observable<Task[]>).pipe(
+    ]).pipe(
       switchMap((tasks: Task[]) => {
         if (tasks.length === 0) return of([]);
 
@@ -154,8 +143,7 @@ export class TaskService {
   }
 
   getTask(taskId: string): Observable<Task | undefined> {
-    const taskDoc = doc(this.firestore, 'tasks', taskId);
-    return docData(taskDoc, { idField: 'id' }) as Observable<Task>;
+    return this.getById(taskId);
   }
 
   async createTask(task: Omit<Task, 'id'>): Promise<string> {
@@ -165,39 +153,16 @@ export class TaskService {
       status: task.status || TaskStatus.PENDING,
       priority: task.priority || TaskPriority.MEDIUM,
       completionPercentage: 0,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
       createdBy: currentUser?.uid,
     };
 
-    const docRef = await addDoc(this.tasksCollection, newTask);
-    return docRef.id;
+    return this.create(newTask);
   }
 
   async updateTask(taskId: string, updates: Partial<Task>): Promise<void> {
-    console.log('=== UPDATE TASK DEBUG ===');
-    console.log('Task ID:', taskId);
-    console.log('Updates:', updates);
-
     const currentUser = await this.authService.getCurrentUser();
-    console.log('Current user for update:', currentUser?.uid);
-
-    const taskDoc = doc(this.firestore, 'tasks', taskId);
-    console.log('Task document reference:', taskDoc.path);
-
-    // Get current task data for audit logging
-    let currentTaskData: Task | undefined;
-    try {
-      const currentTaskSnapshot = await getDoc(taskDoc);
-      currentTaskData = currentTaskSnapshot.data() as Task;
-      console.log('📋 Current task data for audit:', currentTaskData?.name);
-    } catch (error) {
-      console.warn('Could not fetch current task data for audit:', error);
-    }
-
     const updateData: any = {
       ...updates,
-      updatedAt: serverTimestamp(),
       updatedBy: currentUser?.uid,
     };
 
@@ -207,59 +172,11 @@ export class TaskService {
       updateData.completionPercentage = 100;
     }
 
-    console.log('Final update data:', updateData);
-
-    try {
-      await updateDoc(taskDoc, updateData);
-      console.log('Task updated successfully in Firestore');
-
-      // Log audit trail for task update
-      try {
-        console.log('📝 Attempting to log audit trail for task update...');
-        await this.auditService.logUserAction(
-          'task',
-          taskId,
-          currentTaskData?.name || 'Unknown Task',
-          'update',
-          currentTaskData,
-          { ...currentTaskData, ...updateData },
-          'success',
-        );
-        console.log('✅ Audit trail logged successfully for task update');
-      } catch (error) {
-        console.error('❌ Error logging task update audit trail:', error);
-      }
-    } catch (error) {
-      console.error('=== UPDATE TASK ERROR ===');
-      console.error('Error updating task:', error);
-      console.error('Error code:', (error as any)?.code);
-      console.error('Error message:', (error as any)?.message);
-
-      // Log failed task update
-      try {
-        await this.auditService.logUserAction(
-          'task',
-          taskId,
-          currentTaskData?.name || 'Unknown Task',
-          'update',
-          currentTaskData,
-          updates,
-          'failed',
-          error instanceof Error ? error.message : 'Unknown error',
-        );
-      } catch (auditError) {
-        console.error('Error logging failed task update audit trail:', auditError);
-      }
-
-      throw error;
-    }
-
-    console.log('=== UPDATE TASK COMPLETE ===');
+    return this.update(taskId, updateData);
   }
 
   async deleteTask(taskId: string): Promise<void> {
-    const taskDoc = doc(this.firestore, 'tasks', taskId);
-    await deleteDoc(taskDoc);
+    return this.delete(taskId);
   }
 
   async updateTaskOrder(tasks: { id: string; orderNo: number }[]): Promise<void> {

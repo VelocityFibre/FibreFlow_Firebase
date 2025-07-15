@@ -31,6 +31,7 @@ Master config: `.claude/shared/fibreflow-master-config.yml`
 - `/create-feature` - Scaffold new feature with proper structure
 - `/check-implementation` - Verify feature completeness
 - `/dev-task` - View development backlog and tasks
+- `node scripts/sync-meetings-improved.js` - Sync meetings from Fireflies to Firebase
 
 **Page Context Commands**:
 - `!db {feature}` - Show database info (collections, subcollections)

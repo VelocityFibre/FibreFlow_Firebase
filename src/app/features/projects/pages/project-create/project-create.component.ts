@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -53,8 +53,8 @@ import {
             <mat-icon>arrow_back</mat-icon>
           </button>
           <div>
-            <h1 class="page-title">Create New Project</h1>
-            <p class="page-subtitle">Set up a new fiber optic infrastructure project</p>
+            <h1 class="page-title">{{ isEditMode ? 'Edit Project' : 'Create New Project' }}</h1>
+            <p class="page-subtitle">{{ isEditMode ? 'Update project details' : 'Set up a new fiber optic infrastructure project' }}</p>
           </div>
         </div>
       </div>
@@ -188,12 +188,12 @@ import {
             </mat-card-content>
           </mat-card>
 
-          <!-- KPI Targets (Required) -->
+          <!-- Scope of Work (SOW) -->
           <mat-card>
             <mat-card-header>
               <mat-card-title>
                 <mat-icon style="margin-right: 8px; vertical-align: middle;">trending_up</mat-icon>
-                KPI Targets (Required)
+                Scope of Work (SOW)
               </mat-card-title>
               <mat-card-subtitle>Set daily targets for key performance indicators</mat-card-subtitle>
             </mat-card-header>
@@ -299,6 +299,26 @@ import {
                   </mat-form-field>
                 </div>
 
+                <div class="form-row">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Homes Connected</mat-label>
+                    <input matInput type="number" formControlName="homesConnectedTotal" placeholder="200" />
+                    <span matSuffix>homes</span>
+                    <mat-error *ngIf="projectForm.get('homesConnectedTotal')?.hasError('required')">
+                      Homes connected target is required
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Homes Per Day</mat-label>
+                    <input matInput type="number" formControlName="homesConnectedDaily" placeholder="10" />
+                    <span matSuffix>homes/day</span>
+                    <mat-error *ngIf="projectForm.get('homesConnectedDaily')?.hasError('required')">
+                      Daily target is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
                 <div class="kpi-timeline-info" *ngIf="projectForm.valid">
                   <mat-icon>info</mat-icon>
                   <div>
@@ -398,7 +418,7 @@ import {
             <mat-icon *ngIf="isSubmitting">
               <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
             </mat-icon>
-            {{ isSubmitting ? 'Creating...' : 'Create Project' }}
+            {{ isSubmitting ? (isEditMode ? 'Updating...' : 'Creating...') : (isEditMode ? 'Update Project' : 'Create Project') }}
           </button>
         </div>
       </form>
@@ -532,26 +552,17 @@ import {
     `,
   ],
 })
-export class ProjectCreateComponent {
+export class ProjectCreateComponent implements OnInit {
   private fb = inject(FormBuilder);
   private projectService = inject(ProjectService);
   private clientService = inject(ClientService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   isSubmitting = false;
+  isEditMode = false;
+  projectId: string | null = null;
   clients$: Observable<Client[]> = this.clientService.getActiveClients();
-
-  getEstimatedDuration(): number {
-    const form = this.projectForm.value;
-    const kpiDurations = [
-      Math.ceil(form.polePermissionsTotal / form.polePermissionsDaily || 0),
-      Math.ceil(form.homeSignupsTotal / form.homeSignupsDaily || 0),
-      Math.ceil(form.polesPlantedTotal / form.polesPlantedDaily || 0),
-      Math.ceil(form.fibreStringingTotal / form.fibreStringingDaily || 0),
-      Math.ceil(form.trenchingMetersTotal / form.trenchingMetersDaily || 0),
-    ];
-    return Math.max(...kpiDurations.filter(d => d > 0));
-  }
 
   projectForm: FormGroup = this.fb.group({
     projectCode: ['', Validators.required],
@@ -575,7 +586,7 @@ export class ProjectCreateComponent {
     allowWeekendWork: [false],
     allowNightWork: [false],
 
-    // KPI Targets (Required)
+    // Scope of Work (SOW)
     polePermissionsTotal: ['', [Validators.required, Validators.min(1)]],
     polePermissionsDaily: ['', [Validators.required, Validators.min(1)]],
     homeSignupsTotal: ['', [Validators.required, Validators.min(1)]],
@@ -586,7 +597,93 @@ export class ProjectCreateComponent {
     fibreStringingDaily: ['', [Validators.required, Validators.min(1)]],
     trenchingMetersTotal: ['', [Validators.required, Validators.min(1)]],
     trenchingMetersDaily: ['', [Validators.required, Validators.min(1)]],
+    homesConnectedTotal: ['', [Validators.required, Validators.min(1)]],
+    homesConnectedDaily: ['', [Validators.required, Validators.min(1)]],
   });
+
+  constructor() {
+    // Watch for client selection changes
+    this.projectForm.get('clientOrganization')?.valueChanges.subscribe(clientId => {
+      if (clientId) {
+        this.clientService.getClient(clientId).subscribe(client => {
+          if (client) {
+            // Auto-populate client fields
+            this.projectForm.patchValue({
+              clientContact: client.contactPerson || '',
+              clientEmail: client.email || '',
+              clientPhone: client.phone || ''
+            });
+          }
+        });
+      }
+    });
+  }
+
+  ngOnInit() {
+    // Check if we're in edit mode
+    this.projectId = this.route.snapshot.paramMap.get('id');
+    if (this.projectId) {
+      this.isEditMode = true;
+      this.loadProject(this.projectId);
+    }
+  }
+
+  loadProject(projectId: string) {
+    this.projectService.getProject(projectId).subscribe(project => {
+      if (project) {
+        // Populate form with existing project data
+        this.projectForm.patchValue({
+          projectCode: project.projectCode,
+          name: project.name,
+          description: project.description,
+          projectType: project.projectType,
+          priorityLevel: project.priorityLevel,
+          location: project.location,
+          
+          clientOrganization: project.clientId,
+          clientContact: project.clientContact,
+          clientEmail: project.clientEmail,
+          clientPhone: project.clientPhone,
+          
+          startDate: project.startDate instanceof Date ? project.startDate : (project.startDate as any)?.toDate ? (project.startDate as any).toDate() : project.startDate,
+          expectedEndDate: project.expectedEndDate instanceof Date ? project.expectedEndDate : (project.expectedEndDate as any)?.toDate ? (project.expectedEndDate as any).toDate() : project.expectedEndDate,
+          budget: project.budget,
+          
+          projectManagerName: project.projectManagerName,
+          workingHours: project.workingHours,
+          allowWeekendWork: project.allowWeekendWork || false,
+          allowNightWork: project.allowNightWork || false,
+          
+          // KPI Targets
+          polePermissionsTotal: project.metadata?.kpiTargets?.polePermissions?.totalTarget || '',
+          polePermissionsDaily: project.metadata?.kpiTargets?.polePermissions?.dailyTarget || '',
+          homeSignupsTotal: project.metadata?.kpiTargets?.homeSignups?.totalTarget || '',
+          homeSignupsDaily: project.metadata?.kpiTargets?.homeSignups?.dailyTarget || '',
+          polesPlantedTotal: project.metadata?.kpiTargets?.polesPlanted?.totalTarget || '',
+          polesPlantedDaily: project.metadata?.kpiTargets?.polesPlanted?.dailyTarget || '',
+          fibreStringingTotal: project.metadata?.kpiTargets?.fibreStringing?.totalTarget || '',
+          fibreStringingDaily: project.metadata?.kpiTargets?.fibreStringing?.dailyTarget || '',
+          trenchingMetersTotal: project.metadata?.kpiTargets?.trenchingMeters?.totalTarget || '',
+          trenchingMetersDaily: project.metadata?.kpiTargets?.trenchingMeters?.dailyTarget || '',
+          homesConnectedTotal: project.metadata?.kpiTargets?.homesConnected?.totalTarget || '',
+          homesConnectedDaily: project.metadata?.kpiTargets?.homesConnected?.dailyTarget || '',
+        });
+      }
+    });
+  }
+
+  getEstimatedDuration(): number {
+    const form = this.projectForm.value;
+    const kpiDurations = [
+      Math.ceil(form.polePermissionsTotal / form.polePermissionsDaily || 0),
+      Math.ceil(form.homeSignupsTotal / form.homeSignupsDaily || 0),
+      Math.ceil(form.polesPlantedTotal / form.polesPlantedDaily || 0),
+      Math.ceil(form.fibreStringingTotal / form.fibreStringingDaily || 0),
+      Math.ceil(form.trenchingMetersTotal / form.trenchingMetersDaily || 0),
+      Math.ceil(form.homesConnectedTotal / form.homesConnectedDaily || 0),
+    ];
+    return Math.max(...kpiDurations.filter(d => d > 0));
+  }
 
   async onSubmit() {
     if (this.projectForm.invalid) return;
@@ -597,29 +694,14 @@ export class ProjectCreateComponent {
       const formValue = this.projectForm.value;
 
       // Prepare project data
-      const projectData = {
+      const projectData: any = {
         ...formValue,
 
         // Set client fields
         clientId: formValue.clientOrganization, // Now contains the selected client ID
         clientName: formValue.clientContact,
 
-        // Set initial status and phase
-        status: ProjectStatus.PLANNING,
-        currentPhase: PhaseType.PLANNING,
-        currentPhaseName: 'Planning Phase',
-
-        // Set people
-        projectManagerId: `pm-${Date.now()}`,
-
-        // Initialize progress
-        budgetUsed: 0,
-        overallProgress: 0,
-        activeTasksCount: 0,
-        completedTasksCount: 0,
-        currentPhaseProgress: 0,
-
-        // KPI Targets
+        // Scope of Work (SOW)
         metadata: {
           kpiTargets: {
             polePermissions: {
@@ -652,32 +734,60 @@ export class ProjectCreateComponent {
               dailyTarget: formValue.trenchingMetersDaily,
               estimatedDays: Math.ceil(formValue.trenchingMetersTotal / formValue.trenchingMetersDaily),
             },
+            homesConnected: {
+              ...DEFAULT_KPI_CONFIGURATIONS['homesConnected'] || {
+                name: 'Homes Connected',
+                unit: 'homes',
+                icon: 'home',
+                color: '#10B981',
+                enabled: true,
+              },
+              totalTarget: formValue.homesConnectedTotal,
+              dailyTarget: formValue.homesConnectedDaily,
+              estimatedDays: Math.ceil(formValue.homesConnectedTotal / formValue.homesConnectedDaily),
+            },
             calculatedDuration: this.getEstimatedDuration(),
           },
         },
 
         // Metadata
-        createdBy: 'user',
         lastModifiedBy: 'user',
       };
 
-      const projectId = await this.projectService.createProject(projectData);
-      // Project created successfully
-
-      // Check if projectId is valid before navigating
-      if (projectId) {
-        // Navigate to the new project
-        await this.router.navigate(['/projects', projectId]);
+      if (this.isEditMode && this.projectId) {
+        // Update existing project
+        await this.projectService.updateProject(this.projectId, projectData);
+        // Navigate back to the project details
+        await this.router.navigate(['/projects', this.projectId]);
       } else {
-        // This shouldn't happen, but handle it just in case
-        throw new Error('Project created but no ID returned');
+        // Create new project - add create-only fields
+        projectData.status = ProjectStatus.PLANNING;
+        projectData.currentPhase = PhaseType.PLANNING;
+        projectData.currentPhaseName = 'Planning Phase';
+        projectData.projectManagerId = `pm-${Date.now()}`;
+        projectData.budgetUsed = 0;
+        projectData.overallProgress = 0;
+        projectData.activeTasksCount = 0;
+        projectData.completedTasksCount = 0;
+        projectData.currentPhaseProgress = 0;
+        projectData.createdBy = 'user';
+
+        const projectId = await this.projectService.createProject(projectData);
+        // Check if projectId is valid before navigating
+        if (projectId) {
+          // Navigate to the new project
+          await this.router.navigate(['/projects', projectId]);
+        } else {
+          // This shouldn't happen, but handle it just in case
+          throw new Error('Project created but no ID returned');
+        }
       }
     } catch (error) {
-      console.error('Error creating project:', error);
-      // Only show error if we actually failed to create the project
+      console.error(`Error ${this.isEditMode ? 'updating' : 'creating'} project:`, error);
+      // Only show error if we actually failed to create/update the project
       // Check if we're already on a project page (which would indicate success)
       if (!this.router.url.includes('/projects/')) {
-        alert('Failed to create project. Please try again.');
+        alert(`Failed to ${this.isEditMode ? 'update' : 'create'} project. Please try again.`);
       }
     } finally {
       this.isSubmitting = false;
