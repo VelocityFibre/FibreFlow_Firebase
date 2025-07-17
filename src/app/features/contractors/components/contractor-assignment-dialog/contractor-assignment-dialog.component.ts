@@ -176,23 +176,32 @@ import { Timestamp } from '@angular/fire/firestore';
       }
 
       .contract-details-section {
-        margin-top: 24px;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid rgba(0, 0, 0, 0.12);
       }
 
       .contract-details-section h3 {
-        margin: 0 0 16px 0;
+        margin: 0 0 20px 0;
         font-size: 16px;
         font-weight: 500;
+        color: rgba(0, 0, 0, 0.87);
       }
 
       mat-chip-set {
         margin-top: 8px;
+        margin-bottom: 16px;
+        display: block;
       }
 
       mat-chip {
         font-size: 11px !important;
         min-height: 22px !important;
         padding: 0 8px !important;
+      }
+
+      .mat-mdc-form-field-hint {
+        margin-bottom: 8px;
       }
 
       .loading {
