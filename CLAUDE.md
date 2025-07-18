@@ -30,6 +30,13 @@ Master config: `.claude/shared/fibreflow-master-config.yml`
 **✅ All features from yesterday's work preserved**
 **✅ No jj commands can delete this work anymore**
 
+### 🚨 CRITICAL DISCOVERY: jj AFFECTS LIVE APPS
+**⚠️ IMPORTANT**: Even when code is built and deployed, jj commands can still affect the live application behavior! This happens because:
+- jj commands change the working directory files
+- Angular build process reads from working directory
+- Next deployment uses changed files, not the previous build
+- **Result**: Live app changes even though it was "already deployed"**
+
 @docs/API_REFERENCE.md
 @docs/TESTING_GUIDE.md
 @docs/COMPONENT_LIBRARY.md

@@ -58,6 +58,28 @@ rm -rf          # Deletes files permanently
 
 **SAFETY PROTOCOL: Never run these without explicit user permission!**
 
+## 🚨 CRITICAL DISCOVERY: jj AFFECTS LIVE APPS EVEN AFTER DEPLOYMENT
+
+**⚠️ SHOCKING REALITY**: Even when your app is built and deployed to Firebase, jj commands can still break your live application!
+
+### Why This Happens:
+1. **jj commands change working directory files** (your local source code)
+2. **Angular build reads from working directory** (not from previous builds)
+3. **Next deployment uses changed files** (not the previous successful build)
+4. **Result**: Live app functionality changes/breaks even though it was "already deployed"
+
+### What This Means:
+- ❌ **"It's deployed, so it's safe"** - FALSE!
+- ❌ **"jj only affects local files"** - FALSE!
+- ✅ **"jj can break live apps by changing source code"** - TRUE!
+- ✅ **"Working directory must stay intact for app to work"** - TRUE!
+
+### The Solution:
+**Keep your working directory files exactly as they are when the app is working!**
+- Don't run jj commands that change file contents
+- Don't delete or modify working files
+- Always backup working directory before any jj operations
+
 ## 🔧 Emergency Recovery
 
 If you accidentally lose code:
