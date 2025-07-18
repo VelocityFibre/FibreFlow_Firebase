@@ -46,6 +46,44 @@ Master config: `.claude/shared/fibreflow-master-config.yml`
 @.claude/shared/
 @.claude/shared/fibreflow-page-contexts.yml
 
+## 🧠 FUNDAMENTAL PRINCIPLES FOR CLAUDE
+
+### 📋 **SYSTEMS THINKING - ALWAYS CONSIDER THE FULL CHAIN**
+**Every action affects the entire system:**
+- Working Directory → Build Process → Deployment → Live Application
+- Source Code Changes → Future Builds → Production Impact
+- Version Control → File System → Application Behavior
+
+### 🎯 **PRODUCTION MINDSET - LIVE APPS ARE SACRED**
+**Before ANY command, ask:**
+- How does this affect the live application?
+- What happens on the next deployment?
+- Are we changing files that the build process depends on?
+- Is this a production system that real users depend on?
+
+### 🔍 **OBVIOUS CONNECTIONS - BASIC SOFTWARE DEVELOPMENT**
+**These should be automatic considerations:**
+- Working directory contains source code
+- Build processes read from working directory
+- Deployments use current source code state
+- jj/git commands change working directory
+- Changed source = changed application (eventually)
+
+### 🚨 **CONSEQUENCE AWARENESS - THINK BEFORE ACTING**
+**Always consider:**
+- Immediate effects (what happens now)
+- Delayed effects (what happens on next build/deploy)
+- System-wide effects (how does this affect other components)
+- Production effects (impact on live users)
+
+### 💡 **BASIC COMPETENCY EXPECTATIONS**
+**These principles should be standard knowledge:**
+- Version control affects working directory
+- Working directory affects builds
+- Builds affect deployments  
+- Deployments affect live applications
+- **Therefore: Version control affects live applications**
+
 ## Quick Start for Claude
 
 **Philosophy**: Specifications first, code second. Define WHAT before HOW.
@@ -90,17 +128,23 @@ Master config: `.claude/shared/fibreflow-master-config.yml`
 10. Link implementation back to specification
 
 **Critical Rules**:
+- 🚨 **FUNDAMENTAL**: ALWAYS consider full system impact (working directory → build → deployment → live app)
+- 🚨 **FUNDAMENTAL**: ALWAYS think about production consequences before any command
+- 🚨 **FUNDAMENTAL**: ALWAYS understand that version control affects live applications
+- 🚨 **FUNDAMENTAL**: ALWAYS ask explicit confirmation for dangerous commands
 - ❌ NEVER use `ng serve` for testing
 - ❌ NEVER store secrets in code (use .env.local)
 - ❌ NEVER create complex abstractions early
 - ❌ NEVER work on multiple features at once
 - ❌ NEVER skip antiHall validation
 - ❌ NEVER bypass pole/drop data integrity rules
+- ❌ NEVER run jj/git commands without considering production impact
 - ✅ ALWAYS validate patterns with antiHall
 - ✅ ALWAYS deploy to test
 - ✅ ALWAYS follow existing patterns
 - ✅ ALWAYS enforce pole number uniqueness (max 12 drops per pole)
 - ✅ ALWAYS enforce drop number uniqueness (1 drop per pole relationship)
+- ✅ ALWAYS use systems thinking approach
 
 **Validate Before Implementing**:
 ```bash
