@@ -4,6 +4,10 @@
 Configuration files in: `.claude/shared/`
 Master config: `.claude/shared/fibreflow-master-config.yml`
 
+## 🛡️ CRITICAL: Read Before Any Backup
+**📖 [BULLETPROOF_BACKUP_GUIDE.md](docs/BULLETPROOF_BACKUP_GUIDE.md)**  
+**⚠️ NEVER use `jj new` or `jj abandon` - They delete your code!**
+
 @docs/API_REFERENCE.md
 @docs/TESTING_GUIDE.md
 @docs/COMPONENT_LIBRARY.md
