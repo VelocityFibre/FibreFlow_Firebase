@@ -1,0 +1,384 @@
+# FibreFlow Data Integrity Rules
+# Critical business rules that MUST be enforced across all data operations
+
+version: 1.0
+name: Data Integrity & Linking Rules
+description: Pole-Drop relationship rules and unique identifier enforcement
+priority: CRITICAL - ALWAYS ENFORCE
+created: 2025-07-15
+
+# Core Architectural Rules
+unique_identifier_system:
+  pole_system:
+    identifier: "poleNumber"
+    type: "string"
+    uniqueness: "GLOBALLY_UNIQUE"
+    purpose: "Primary key for all pole-related operations"
+    format: "3-20 characters, alphanumeric"
+    validation: "Must not exist before creation"
+    used_by: ["pole-tracker", "pole-analytics", "home-signups"]
+    
+  drop_system:
+    identifier: "dropNumber"
+    type: "string"
+    uniqueness: "GLOBALLY_UNIQUE"
+    purpose: "Primary key for all home/drop-related operations"
+    format: "3-20 characters, alphanumeric"
+    validation: "Must not exist before creation"
+    used_by: ["home-signups", "homes-connected", "homes-activated"]
+
+# Relationship Rules
+pole_drop_relationships:
+  business_rule: "Each pole can serve maximum 12 drops (physical cable limit)"
+  
+  constraints:
+    max_drops_per_pole: 12
+    min_drops_per_pole: 0
+    one_pole_per_drop: true
+    
+  validation_points:
+    before_drop_creation:
+      check: "Pole exists and has < 12 drops"
+      error: "Pole {poleNumber} already has maximum 12 drops"
+      
+    before_drop_assignment:
+      check: "Target pole can accept another drop"
+      error: "Cannot assign drop to pole {poleNumber} - capacity exceeded"
+      
+    before_pole_deletion:
+      check: "No drops connected to this pole"
+      error: "Cannot delete pole {poleNumber} - has {count} connected drops"
+
+# Data Model Structure
+data_models:
+  pole_model:
+    collection: "planned-poles"
+    required_fields:
+      - "poleNumber (unique)"
+      - "location (GPS coordinates)"
+      - "status"
+    
+    relationship_fields:
+      - "connectedDrops: string[] (max 12 items)"
+      - "dropCount: number (calculated field)"
+    
+    indexes_required:
+      - "poleNumber (ascending, unique)"
+      - "status (ascending)"
+      - "dropCount (ascending)"
+  
+  drop_model:
+    collections: ["home-signups", "homes-connected", "homes-activated"]
+    required_fields:
+      - "dropNumber (unique)"
+      - "poleNumber (foreign key)"
+      - "address"
+      - "status"
+    
+    relationship_fields:
+      - "connectedToPole: string (poleNumber reference)"
+    
+    indexes_required:
+      - "dropNumber (ascending, unique)"
+      - "poleNumber (ascending)"
+      - "status (ascending)"
+
+# Enforcement Mechanisms
+enforcement_layers:
+  layer_1_firestore_rules:
+    location: "firestore.rules"
+    enforcement: "Server-side validation (cannot be bypassed)"
+    
+    rules_to_implement:
+      pole_uniqueness:
+        rule: "function validatePoleNumber(poleNumber)"
+        check: "poleNumber not already exists in planned-poles"
+        
+      drop_uniqueness:
+        rule: "function validateDropNumber(dropNumber)"
+        check: "dropNumber not already exists across all drop collections"
+        
+      pole_capacity:
+        rule: "function validatePoleCapacity(poleNumber)"
+        check: "connected drops count < 12"
+        
+      drop_pole_link:
+        rule: "function validateDropPoleLink(data)"
+        check: "referenced pole exists and has capacity"
+  
+  layer_2_service_validation:
+    location: "Angular services"
+    enforcement: "Application-level validation"
+    
+    services_to_update:
+      - "PoleTrackerService"
+      - "HomeSignupService" 
+      - "HomesConnectedService"
+      - "HomesActivatedService"
+    
+    validation_methods:
+      - "validatePoleNumberUniqueness()"
+      - "validateDropNumberUniqueness()"
+      - "validatePoleCapacity()"
+      - "enforceDropPoleRelationship()"
+  
+  layer_3_ui_prevention:
+    location: "Angular components/forms"
+    enforcement: "User interface validation"
+    
+    features_to_implement:
+      - "Real-time pole number availability check"
+      - "Drop number uniqueness verification"
+      - "Pole capacity indicator in UI"
+      - "Auto-suggest available poles when creating drops"
+      - "Warning when pole approaching capacity (10+ drops)"
+
+# Implementation Priority
+implementation_phases:
+  phase_1_immediate:
+    priority: "CRITICAL"
+    timeline: "This week"
+    items:
+      - "Update Firestore security rules"
+      - "Add service-level validation"
+      - "Update existing data models"
+      - "Create validation utility functions"
+  
+  phase_2_enhancement:
+    priority: "HIGH"
+    timeline: "Next week"
+    items:
+      - "Add UI validation and feedback"
+      - "Create data migration scripts for existing data"
+      - "Add monitoring/alerts for rule violations"
+      - "Update documentation"
+  
+  phase_3_optimization:
+    priority: "MEDIUM"
+    timeline: "Following week"
+    items:
+      - "Performance optimization for validation queries"
+      - "Batch validation for bulk operations"
+      - "Automated testing for all validation rules"
+      - "Analytics dashboard for pole/drop relationships"
+
+# Specific Implementation Locations
+file_locations:
+  firestore_rules:
+    file: "firestore.rules"
+    functions_to_add:
+      - "validatePoleNumber(poleNumber)"
+      - "validateDropNumber(dropNumber)"
+      - "validatePoleCapacity(poleNumber)"
+      - "enforceDropPoleRelationship(data)"
+  
+  service_updates:
+    pole_tracker_service:
+      file: "src/app/core/services/pole-tracker.service.ts"
+      methods_to_add:
+        - "validatePoleNumberUniqueness(poleNumber: string)"
+        - "checkPoleCapacity(poleNumber: string)"
+        - "getConnectedDropCount(poleNumber: string)"
+    
+    base_service_extension:
+      file: "src/app/core/services/base-firestore.service.ts"
+      methods_to_add:
+        - "validateUniqueness(field: string, value: string, collection?: string)"
+        - "enforceRelationshipRules(data: any, rules: ValidationRule[])"
+  
+  model_updates:
+    pole_model:
+      file: "src/app/core/models/pole-tracker.model.ts"
+      fields_to_add:
+        - "connectedDrops?: string[]"
+        - "dropCount?: number"
+        - "maxCapacity: number = 12"
+    
+    drop_models:
+      files: 
+        - "src/app/core/models/home-signup.model.ts"
+        - "src/app/core/models/homes-connected.model.ts"
+        - "src/app/core/models/homes-activated.model.ts"
+      fields_to_add:
+        - "connectedToPole: string"
+        - "poleValidated?: boolean"
+
+# Validation Utility Functions
+validation_utilities:
+  unique_validator:
+    name: "UniqueFieldValidator"
+    location: "src/app/core/validators/"
+    purpose: "Async validator for unique fields across collections"
+    
+  relationship_validator:
+    name: "PoleDropRelationshipValidator"
+    location: "src/app/core/validators/"
+    purpose: "Validates pole-drop relationship constraints"
+    
+  capacity_checker:
+    name: "PoleCapacityChecker"
+    location: "src/app/core/validators/"
+    purpose: "Checks pole capacity before drop assignment"
+
+# Error Messages
+error_messages:
+  pole_number_exists:
+    en: "Pole number {poleNumber} already exists. Please choose a different number."
+    code: "POLE_NUMBER_EXISTS"
+  
+  drop_number_exists:
+    en: "Drop number {dropNumber} already exists. Please choose a different number."
+    code: "DROP_NUMBER_EXISTS"
+  
+  pole_capacity_exceeded:
+    en: "Pole {poleNumber} already has maximum 12 drops. Cannot add more drops."
+    code: "POLE_CAPACITY_EXCEEDED"
+  
+  pole_not_found:
+    en: "Pole {poleNumber} does not exist. Please select a valid pole."
+    code: "POLE_NOT_FOUND"
+  
+  invalid_pole_drop_link:
+    en: "Cannot link drop {dropNumber} to pole {poleNumber}. Validation failed."
+    code: "INVALID_POLE_DROP_LINK"
+
+# Monitoring & Alerts
+monitoring:
+  pole_capacity_alerts:
+    trigger: "When pole reaches 10+ drops (83% capacity)"
+    action: "Notify admin to plan new pole in area"
+    
+  orphaned_drops_alert:
+    trigger: "Drop references non-existent pole"
+    action: "Flag for data cleanup"
+    
+  duplicate_identifier_alert:
+    trigger: "Attempt to create duplicate pole/drop number"
+    action: "Block operation and log attempt"
+
+# Testing Requirements
+testing_scenarios:
+  pole_creation:
+    - "Create pole with unique number → Success"
+    - "Create pole with existing number → Block with error"
+    - "Create pole with invalid format → Block with error"
+  
+  drop_creation:
+    - "Create drop with unique number + valid pole → Success"
+    - "Create drop with existing number → Block with error"
+    - "Create drop on pole with 12 drops → Block with error"
+    - "Create drop referencing non-existent pole → Block with error"
+  
+  bulk_operations:
+    - "Import poles with duplicate numbers → Identify and reject duplicates"
+    - "Import drops exceeding pole capacity → Block excess drops"
+    - "Migrate existing data → Validate all relationships"
+
+# Critical Success Criteria
+success_criteria:
+  data_consistency:
+    - "Zero duplicate pole numbers across system"
+    - "Zero duplicate drop numbers across all collections"
+    - "Zero poles with >12 drops"
+    - "Zero drops referencing non-existent poles"
+  
+  user_experience:
+    - "Clear error messages when validation fails"
+    - "Real-time feedback during data entry"
+    - "Suggested alternatives when conflicts occur"
+    - "Fast validation response times (<500ms)"
+  
+  system_reliability:
+    - "Cannot bypass validation rules"
+    - "Consistent enforcement across all entry points"
+    - "Automatic data healing for existing inconsistencies"
+    - "Comprehensive audit trail for all changes"
+
+# Integration Points
+integration_with_existing_features:
+  pole_tracker:
+    impact: "Add capacity checking to pole creation/editing"
+    changes: "Update forms to show drop count and capacity"
+    
+  pole_analytics:
+    impact: "Validate pole numbers during CSV import"
+    changes: "Add relationship validation to processing pipeline"
+    
+  home_signups:
+    impact: "Validate drop numbers and pole references"
+    changes: "Add pole selection dropdown with capacity indicator"
+
+# Backward Compatibility
+migration_strategy:
+  existing_data_cleanup:
+    step_1: "Audit existing pole numbers for duplicates"
+    step_2: "Audit existing drop numbers for duplicates"
+    step_3: "Identify poles with >12 drops"
+    step_4: "Find drops referencing non-existent poles"
+    step_5: "Create data cleanup scripts"
+    step_6: "Apply fixes with admin approval"
+  
+  gradual_enforcement:
+    phase_1: "Warning mode - log violations but allow operations"
+    phase_2: "Strict mode - block new violations"
+    phase_3: "Full enforcement - require cleanup of existing violations"
+
+# Documentation Updates Required
+documentation_updates:
+  claude_md:
+    add_section: "Data Integrity Rules"
+    content: "Pole-Drop relationship enforcement"
+    
+  api_reference:
+    update_sections:
+      - "Pole creation endpoints"
+      - "Drop creation endpoints"
+      - "Validation error responses"
+  
+  user_guides:
+    create_new:
+      - "Pole Number Guidelines"
+      - "Drop Assignment Best Practices"
+      - "Troubleshooting Validation Errors"
+
+# AI Behavior Instructions
+ai_enforcement_instructions:
+  always_validate:
+    - "Before creating any pole-related code: check these rules"
+    - "Before creating any drop-related code: validate relationships"
+    - "When working with imports: enforce uniqueness validation"
+    - "When writing Firestore rules: include these constraints"
+  
+  never_bypass:
+    - "Never create code that bypasses uniqueness validation"
+    - "Never allow >12 drops per pole without explicit override"
+    - "Never create drops without valid pole references"
+    - "Never implement bulk operations without validation"
+  
+  proactive_suggestions:
+    - "Suggest capacity warnings when poles approach limit"
+    - "Recommend validation utilities for new features"
+    - "Propose monitoring alerts for rule violations"
+    - "Suggest UI improvements for better user experience"
+
+# Notes for Implementation
+implementation_notes:
+  firestore_limitations:
+    - "Firestore rules cannot check across collections efficiently"
+    - "May need application-level validation for cross-collection uniqueness"
+    - "Consider using Cloud Functions for complex validation"
+  
+  performance_considerations:
+    - "Index poleNumber and dropNumber fields for fast uniqueness checks"
+    - "Cache pole capacity data to avoid repeated queries"
+    - "Use batch operations for bulk validation"
+    - "Consider eventual consistency for non-critical validations"
+  
+  user_experience_priorities:
+    - "Real-time validation feedback is critical"
+    - "Clear error messages prevent user frustration"
+    - "Auto-suggestions improve data entry speed"
+    - "Progress indicators for bulk operations"
+
+last_updated: 2025-07-15
+status: ACTIVE - MUST BE ENFORCED

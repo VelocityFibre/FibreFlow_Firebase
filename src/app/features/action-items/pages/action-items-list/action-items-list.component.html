@@ -1,0 +1,221 @@
+<app-page-header
+  title="Action Items Management"
+  subtitle="Manage and track action items from all meetings"
+  [actions]="headerActions">
+</app-page-header>
+
+<div class="container">
+  <!-- Statistics Cards -->
+  <div class="stats-cards" *ngIf="stats()">
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ stats()!.total }}</div>
+        <div class="stat-label">Total Items</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ stats()!.pending }}</div>
+        <div class="stat-label">Pending</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ stats()!.inProgress }}</div>
+        <div class="stat-label">In Progress</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ stats()!.overdue }}</div>
+        <div class="stat-label">Overdue</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ stats()!.dueToday }}</div>
+        <div class="stat-label">Due Today</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Filters -->
+  <mat-card class="filter-card">
+    <mat-card-content>
+      <div class="filter-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select [(ngModel)]="filter().status" multiple>
+            <mat-option *ngFor="let status of statusOptions" [value]="status">
+              {{ status | titlecase }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Priority</mat-label>
+          <mat-select [(ngModel)]="filter().priority" multiple>
+            <mat-option *ngFor="let priority of priorityOptions" [value]="priority">
+              {{ priority | titlecase }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Assignee</mat-label>
+          <input matInput [(ngModel)]="filter().assignee" placeholder="Filter by assignee">
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Search</mat-label>
+          <input matInput [(ngModel)]="filter().searchText" placeholder="Search action items">
+        </mat-form-field>
+        
+        <div class="filter-actions">
+          <button mat-raised-button color="primary" (click)="applyFilter()">
+            <mat-icon>filter_list</mat-icon>
+            Apply
+          </button>
+          <button mat-stroked-button (click)="clearFilter()">
+            <mat-icon>clear</mat-icon>
+            Clear
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Loading State -->
+  <app-loading-skeleton *ngIf="loading()" type="table"></app-loading-skeleton>
+
+  <!-- Action Items Table -->
+  <mat-card *ngIf="!loading()" class="table-card">
+    <mat-card-content>
+      <table mat-table [dataSource]="filteredItems()" class="action-items-table">
+        
+        <!-- Selection Column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox
+              (change)="$event ? masterToggle() : null"
+              [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox
+              (click)="$event.stopPropagation()"
+              (change)="$event ? selection.toggle(row) : null"
+              [checked]="selection.isSelected(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- Action Item Column -->
+        <ng-container matColumnDef="actionItem">
+          <th mat-header-cell *matHeaderCellDef>Action Item</th>
+          <td mat-cell *matCellDef="let item" class="action-item-cell">
+            <div class="action-item-text">{{ getActionItemText(item) }}</div>
+            <div class="action-item-notes" *ngIf="item.updates.notes">
+              <mat-icon>note</mat-icon>
+              {{ item.updates.notes }}
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Meeting Column -->
+        <ng-container matColumnDef="meeting">
+          <th mat-header-cell *matHeaderCellDef>Meeting</th>
+          <td mat-cell *matCellDef="let item" class="meeting-cell">
+            <div class="meeting-title">{{ item.meetingTitle }}</div>
+            <div class="meeting-date">{{ item.meetingDate | date:'short' }}</div>
+          </td>
+        </ng-container>
+
+        <!-- Priority Column -->
+        <ng-container matColumnDef="priority">
+          <th mat-header-cell *matHeaderCellDef>Priority</th>
+          <td mat-cell *matCellDef="let item">
+            <mat-chip [color]="getPriorityColor(getPriority(item))" selected>
+              {{ getPriority(item) | titlecase }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <!-- Assignee Column -->
+        <ng-container matColumnDef="assignee">
+          <th mat-header-cell *matHeaderCellDef>Assignee</th>
+          <td mat-cell *matCellDef="let item">
+            <div class="assignee">
+              <mat-icon>person</mat-icon>
+              {{ getAssignee(item) }}
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Due Date Column -->
+        <ng-container matColumnDef="dueDate">
+          <th mat-header-cell *matHeaderCellDef>Due Date</th>
+          <td mat-cell *matCellDef="let item" [class.overdue]="isOverdue(item)">
+            <div class="due-date">
+              <mat-icon>event</mat-icon>
+              {{ formatDueDate(getDueDate(item)) }}
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let item">
+            <mat-chip [ngClass]="getStatusColor(item.status)">
+              {{ item.status | titlecase }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let item">
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="editActionItem(item)">
+                <mat-icon>edit</mat-icon>
+                <span>Edit</span>
+              </button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item 
+                *ngFor="let status of statusOptions"
+                (click)="updateStatus(item, status)"
+                [disabled]="item.status === status">
+                <mat-icon>{{ status === 'completed' ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+                <span>Mark as {{ status | titlecase }}</span>
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="filteredItems().length === 0">
+        <mat-icon>assignment</mat-icon>
+        <h3>No Action Items</h3>
+        <p>Import action items from meetings to get started</p>
+        <button mat-raised-button color="primary" (click)="importFromMeetings()">
+          <mat-icon>sync</mat-icon>
+          Import from Meetings
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

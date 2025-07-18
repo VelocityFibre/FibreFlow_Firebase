@@ -18,35 +18,42 @@ import { KPITarget } from '../../../core/models/project.model';
           {{ statusText }}
         </span>
       </div>
-      
+
       <div class="progress-info">
         <div class="progress-numbers">
-          <span class="current">{{ currentValue }} / {{ target.totalTarget }} {{ target.unit }}</span>
+          <span class="current"
+            >{{ currentValue }} / {{ target.totalTarget }} {{ target.unit }}</span
+          >
           <span class="percentage">{{ percentage }}%</span>
         </div>
-        
-        <mat-progress-bar 
-          mode="determinate" 
-          [value]="percentage"
-          [color]="progressColor">
+
+        <mat-progress-bar mode="determinate" [value]="percentage" [color]="progressColor">
         </mat-progress-bar>
-        
+
         <div class="daily-info">
           <span class="daily-rate">
             <mat-icon>speed</mat-icon>
             Target: {{ target.dailyTarget }} {{ target.unit }}/day
           </span>
           <span class="actual-rate" *ngIf="actualDailyRate">
-            Actual: {{ actualDailyRate | number:'1.1-1' }} {{ target.unit }}/day
+            Actual: {{ actualDailyRate | number: '1.1-1' }} {{ target.unit }}/day
           </span>
         </div>
-        
+
         <div class="timeline-info" *ngIf="daysInfo">
-          <span class="days-status" [class.ahead]="daysInfo.daysAhead > 0" [class.behind]="daysInfo.daysAhead < 0">
+          <span
+            class="days-status"
+            [class.ahead]="daysInfo.daysAhead > 0"
+            [class.behind]="daysInfo.daysAhead < 0"
+          >
             <mat-icon>{{ daysInfo.daysAhead >= 0 ? 'trending_up' : 'trending_down' }}</mat-icon>
-            {{ Math.abs(daysInfo.daysAhead) }} days {{ daysInfo.daysAhead >= 0 ? 'ahead' : 'behind' }}
+            {{ Math.abs(daysInfo.daysAhead) }} days
+            {{ daysInfo.daysAhead >= 0 ? 'ahead' : 'behind' }}
           </span>
-          <span class="projected-end" [matTooltip]="'Projected completion: ' + (daysInfo.projectedEndDate | date)">
+          <span
+            class="projected-end"
+            [matTooltip]="'Projected completion: ' + (daysInfo.projectedEndDate | date)"
+          >
             <mat-icon>event</mat-icon>
             {{ getDaysUntilCompletion() }} days to go
           </span>
@@ -54,152 +61,157 @@ import { KPITarget } from '../../../core/models/project.model';
       </div>
     </div>
   `,
-  styles: [`
-    .kpi-progress-container {
-      padding: 16px;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      background: #f9fafb;
-      margin-bottom: 16px;
-    }
+  styles: [
+    `
+      .kpi-progress-container {
+        padding: 16px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: #f9fafb;
+        margin-bottom: 16px;
+      }
 
-    .kpi-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
+      .kpi-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
 
-    .kpi-label {
-      font-size: 16px;
-      font-weight: 500;
-      color: #111827;
-    }
+      .kpi-label {
+        font-size: 16px;
+        font-weight: 500;
+        color: #111827;
+      }
 
-    .kpi-status {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 14px;
-      color: #6b7280;
-    }
+      .kpi-status {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 14px;
+        color: #6b7280;
+      }
 
-    .kpi-status.on-track {
-      color: #10b981;
-    }
+      .kpi-status.on-track {
+        color: #10b981;
+      }
 
-    .kpi-status.behind {
-      color: #ef4444;
-    }
+      .kpi-status.behind {
+        color: #ef4444;
+      }
 
-    .kpi-status mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
-    }
+      .kpi-status mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
 
-    .progress-info {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .progress-numbers {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 14px;
-    }
-
-    .current {
-      color: #374151;
-    }
-
-    .percentage {
-      font-weight: 600;
-      color: #111827;
-    }
-
-    mat-progress-bar {
-      height: 8px;
-      border-radius: 4px;
-    }
-
-    .daily-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      color: #6b7280;
-      margin-top: 4px;
-    }
-
-    .daily-rate, .actual-rate {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .daily-rate mat-icon, .actual-rate mat-icon {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-    }
-
-    .timeline-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px solid #e5e7eb;
-    }
-
-    .days-status {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: #6b7280;
-    }
-
-    .days-status.ahead {
-      color: #10b981;
-    }
-
-    .days-status.behind {
-      color: #ef4444;
-    }
-
-    .days-status mat-icon {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-    }
-
-    .projected-end {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: #6b7280;
-      cursor: help;
-    }
-
-    .projected-end mat-icon {
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-    }
-
-    /* Responsive */
-    @media (max-width: 640px) {
-      .daily-info, .timeline-info {
+      .progress-info {
+        display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .progress-numbers {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 14px;
+      }
+
+      .current {
+        color: #374151;
+      }
+
+      .percentage {
+        font-weight: 600;
+        color: #111827;
+      }
+
+      mat-progress-bar {
+        height: 8px;
+        border-radius: 4px;
+      }
+
+      .daily-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        color: #6b7280;
+        margin-top: 4px;
+      }
+
+      .daily-rate,
+      .actual-rate {
+        display: flex;
+        align-items: center;
         gap: 4px;
       }
-    }
-  `]
+
+      .daily-rate mat-icon,
+      .actual-rate mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+
+      .timeline-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid #e5e7eb;
+      }
+
+      .days-status {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: #6b7280;
+      }
+
+      .days-status.ahead {
+        color: #10b981;
+      }
+
+      .days-status.behind {
+        color: #ef4444;
+      }
+
+      .days-status mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+
+      .projected-end {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: #6b7280;
+        cursor: help;
+      }
+
+      .projected-end mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+
+      /* Responsive */
+      @media (max-width: 640px) {
+        .daily-info,
+        .timeline-info {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 4px;
+        }
+      }
+    `,
+  ],
 })
 export class KpiProgressIndicatorComponent implements OnInit {
   @Input() label!: string;
@@ -235,7 +247,7 @@ export class KpiProgressIndicatorComponent implements OnInit {
       const startDate = this.actualStartDate || this.target.actualStartDate;
       const today = new Date();
       const daysElapsed = Math.ceil(
-        (today.getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24)
+        (today.getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24),
       );
 
       if (daysElapsed > 0) {
@@ -255,7 +267,7 @@ export class KpiProgressIndicatorComponent implements OnInit {
 
         this.daysInfo = {
           daysAhead,
-          projectedEndDate
+          projectedEndDate,
         };
 
         // Update status
@@ -274,7 +286,7 @@ export class KpiProgressIndicatorComponent implements OnInit {
     } else {
       // Simple progress check without timeline
       const expectedPercentage = this.getExpectedPercentage();
-      this.isOnTrack = this.percentage >= (expectedPercentage - 5); // 5% tolerance
+      this.isOnTrack = this.percentage >= expectedPercentage - 5; // 5% tolerance
       this.statusText = this.isOnTrack ? 'On Track' : 'Behind Target';
       this.progressColor = this.isOnTrack ? 'primary' : 'warn';
     }
@@ -288,12 +300,12 @@ export class KpiProgressIndicatorComponent implements OnInit {
 
   getDaysUntilCompletion(): number {
     if (!this.daysInfo) return 0;
-    
+
     const today = new Date();
     const daysRemaining = Math.ceil(
-      (this.daysInfo.projectedEndDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+      (this.daysInfo.projectedEndDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
     );
-    
+
     return Math.max(0, daysRemaining);
   }
 }

@@ -1,3 +1,5 @@
+import { Timestamp } from '@angular/fire/firestore';
+
 export interface BOQItem {
   id?: string;
   projectId: string;
@@ -14,8 +16,8 @@ export interface BOQItem {
   status: BOQStatus;
   needsQuote: boolean;
   stockItemId?: string; // Link to stock management
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
   createdBy?: string;
   updatedBy?: string;
 }

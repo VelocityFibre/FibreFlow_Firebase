@@ -1,0 +1,173 @@
+{
+  "extraction_timestamp": "2025-07-16T11:38:32.688207",
+  "source_file": "/home/ldp/Downloads/Lawley Pole (CSV).csv",
+  "validations": {
+    "input_file": {
+      "path": "/home/ldp/Downloads/Lawley Pole (CSV).csv",
+      "exists": true,
+      "size_bytes": 2852590
+    },
+    "statistics": {
+      "csv_lines": {
+        "total_lines": 4472,
+        "header_lines": 1,
+        "data_lines": 4471,
+        "matches_total": true
+      },
+      "pole_counts": {
+        "valid_plus_invalid": 4471,
+        "equals_total": true,
+        "actual_poles_in_list": 4468,
+        "matches_valid_count": true
+      },
+      "pole_types": {
+        "sum_of_types": 4468,
+        "equals_valid": true
+      },
+      "gps_coverage": {
+        "with_plus_without": 4468,
+        "equals_valid": true
+      },
+      "unique_poles": {
+        "unique_ids": 4468,
+        "equals_valid": true
+      }
+    }
+  },
+  "evidence": {
+    "column_mapping": {
+      "pole_id": "column 0 (label_1)",
+      "height": "column 4 (dim1)",
+      "diameter": "column 5 (dim2)",
+      "status": "column 8 (status)",
+      "latitude": "column 75 (lat)",
+      "longitude": "column 76 (lon)",
+      "pon_number": "column 80 (pon_no)",
+      "zone_number": "column 81 (zone_no)"
+    },
+    "pole_type_examples": [
+      {
+        "diameter": "140-160mm",
+        "classified_as": "feeder"
+      },
+      {
+        "diameter": "140-160mm",
+        "classified_as": "feeder"
+      },
+      {
+        "diameter": "120-140mm",
+        "classified_as": "distribution"
+      },
+      {
+        "diameter": "140-160mm",
+        "classified_as": "feeder"
+      },
+      {
+        "diameter": "140-160mm",
+        "classified_as": "feeder"
+      }
+    ],
+    "numeric_extraction_examples": [
+      {
+        "original": "7m",
+        "extracted": 7.0
+      },
+      {
+        "original": "7m",
+        "extracted": 7.0
+      },
+      {
+        "original": "7m",
+        "extracted": 7.0
+      }
+    ],
+    "sample_poles": [
+      {
+        "poleId": "LAW.P.A001",
+        "height": "7m",
+        "heightNumeric": 7.0,
+        "diameter": "140-160mm",
+        "poleType": "feeder",
+        "status": "Permission not granted",
+        "latitude": -26.37849016,
+        "longitude": 27.808374608968297,
+        "ponNumber": "1",
+        "zoneNumber": "1",
+        "connectedDrops": [],
+        "dropCount": 0
+      },
+      {
+        "poleId": "LAW.P.A002",
+        "height": "7m",
+        "heightNumeric": 7.0,
+        "diameter": "140-160mm",
+        "poleType": "feeder",
+        "status": "Permission not granted",
+        "latitude": -26.37844683,
+        "longitude": 27.80865019,
+        "ponNumber": "1",
+        "zoneNumber": "1",
+        "connectedDrops": [],
+        "dropCount": 0
+      },
+      {
+        "poleId": "LAW.P.A003",
+        "height": "7m",
+        "heightNumeric": 7.0,
+        "diameter": "120-140mm",
+        "poleType": "distribution",
+        "status": "Permission not granted",
+        "latitude": -26.37840496,
+        "longitude": 27.80890143,
+        "ponNumber": "1",
+        "zoneNumber": "1",
+        "connectedDrops": [],
+        "dropCount": 0
+      }
+    ],
+    "sample_errors": [
+      "Row 4470: Invalid or missing pole ID: LAW.S.A001",
+      "Row 4471: Invalid or missing pole ID: LAW.S.A002",
+      "Row 4472: Invalid or missing pole ID: LAW.S.A003"
+    ],
+    "unique_pon_values": [
+      "96",
+      "145",
+      "81",
+      "175",
+      "192"
+    ],
+    "unique_zone_values": [
+      "11",
+      "5",
+      "3",
+      "12",
+      "1"
+    ]
+  },
+  "assertions": {
+    "passed": [
+      "Valid pole ID format: LAW.P.A001...",
+      "Valid coordinate: -26.37849016",
+      "Valid coordinate: 27.808374608968297",
+      "Valid pole ID format: LAW.P.A002...",
+      "Valid coordinate: -26.37844683",
+      "Valid coordinate: 27.80865019",
+      "Valid pole ID format: LAW.P.A003...",
+      "Valid coordinate: -26.37840496",
+      "Valid coordinate: 27.80890143",
+      "Valid pole ID format: LAW.P.A004..."
+    ],
+    "failed": [
+      "Invalid pole ID: LAW.S.A001",
+      "Invalid pole ID: LAW.S.A002",
+      "Invalid pole ID: LAW.S.A003"
+    ],
+    "total_passed": 13404,
+    "total_failed": 3
+  },
+  "summary": {
+    "all_internal_checks_passed": true,
+    "confidence_percentage": 99.9776236294473
+  }
+}

@@ -99,11 +99,7 @@ export class TaskService extends BaseFirestoreService<Task> {
   }
 
   getTasksByPhase(phaseId: string): Observable<Task[]> {
-    const q = query(
-      this.collection,
-      where('phaseId', '==', phaseId),
-      orderBy('orderNo', 'asc'),
-    );
+    const q = query(this.collection, where('phaseId', '==', phaseId), orderBy('orderNo', 'asc'));
 
     return collectionData(q, { idField: 'id' }) as Observable<Task[]>;
   }
@@ -114,10 +110,7 @@ export class TaskService extends BaseFirestoreService<Task> {
   }
 
   getTasksByAssignee(userId: string): Observable<Task[]> {
-    return this.getWithQuery([
-      where('assignedTo', '==', userId),
-      orderBy('dueDate', 'asc'),
-    ]).pipe(
+    return this.getWithQuery([where('assignedTo', '==', userId), orderBy('dueDate', 'asc')]).pipe(
       switchMap((tasks: Task[]) => {
         if (tasks.length === 0) return of([]);
 

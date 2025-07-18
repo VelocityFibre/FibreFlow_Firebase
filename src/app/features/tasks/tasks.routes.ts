@@ -21,4 +21,12 @@ export const tasksRoutes: Routes = [
       ),
     canActivate: [authGuard],
   },
+  {
+    path: 'management/grid',
+    loadComponent: () =>
+      import('./pages/task-management-grid/task-management-grid.component').then(
+        (m) => m.TaskManagementGridComponent,
+      ),
+    canActivate: [authGuard],
+  },
 ];

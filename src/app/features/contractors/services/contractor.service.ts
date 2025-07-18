@@ -40,10 +40,7 @@ export class ContractorService extends BaseFirestoreService<Contractor> {
 
   // Get active contractors only
   getActiveContractors(): Observable<Contractor[]> {
-    return this.getWithQuery([
-      where('status', '==', 'active'),
-      orderBy('companyName'),
-    ]);
+    return this.getWithQuery([where('status', '==', 'active'), orderBy('companyName')]);
   }
 
   // Get single contractor by ID
@@ -121,9 +118,10 @@ export class ContractorService extends BaseFirestoreService<Contractor> {
 
   // Check if registration number exists
   async checkRegistrationExists(registrationNumber: string, excludeId?: string): Promise<boolean> {
-    const contractors = await this.getWithQuery([
-      where('registrationNumber', '==', registrationNumber),
-    ]).pipe(take(1)).toPromise() || [];
+    const contractors =
+      (await this.getWithQuery([where('registrationNumber', '==', registrationNumber)])
+        .pipe(take(1))
+        .toPromise()) || [];
 
     if (excludeId) {
       return contractors.some((contractor: Contractor) => contractor.id !== excludeId);
@@ -266,9 +264,7 @@ export class ContractorService extends BaseFirestoreService<Contractor> {
 
   // Get contractor teams
   getContractorTeams(contractorId: string): Observable<ContractorTeam[]> {
-    return this.getById(contractorId).pipe(
-      map((contractor) => contractor?.teams || [])
-    );
+    return this.getById(contractorId).pipe(map((contractor) => contractor?.teams || []));
   }
 
   // Get available teams for a contractor

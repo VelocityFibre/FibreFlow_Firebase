@@ -94,6 +94,13 @@ page_contexts:
 
   # Pole Tracker - Desktop & Mobile versions
   pole_tracker:
+    data_integrity_enforcement:
+      pole_numbers: "MUST be globally unique - primary identifier for pole-drop linking"
+      validation_required: "Before creation, editing, and import operations"
+      capacity_rule: "Each pole maximum 12 drops (physical cable limit)"
+      relationship_tracking: "Track connected drops in connectedDrops array"
+      reference_config: "fibreflow-data-integrity-rules.yml"
+    
     navigation_structure:
       projects_section:
         - name: "Pole Tracker (Desktop)"
@@ -198,7 +205,59 @@ page_contexts:
       optional: ["Pole Number", "PON", "Zone", "Distribution/Feeder"]
     
     status: "production"
-    last_updated: "2025-01-11"
+    last_updated: "2025-07-15"
+    
+    implementation_plan:
+      strategy: "Option A: Responsive Approach (Recommended)"
+      primary_purpose_updated: "For field workers to manage fiber optic pole installations easily via their mobile phones"
+      
+      phase_1_mobile_list:
+        component: "PoleListMobileComponent"
+        location: "src/app/features/pole-tracker/mobile/pole-list-mobile/"
+        purpose: "Mobile-optimized version of desktop PoleTrackerListComponent"
+        features:
+          - "Card-based layout instead of table (better for mobile)"
+          - "Touch-friendly interactions (swipe, tap, pinch)"
+          - "Simplified filtering (drawer-based filters)"
+          - "Condensed information display (show essential data only)"
+          - "Quick actions (capture, edit, view) as floating buttons"
+          - "Offline support via OfflineQueueService"
+      
+      phase_2_navigation:
+        update_mobile_items:
+          - "Pole Tracker (Mobile) → /pole-tracker/mobile (new mobile list)"
+          - "Pole Map View → /pole-tracker/mobile/map (move current map)"
+          - "Keep existing: Quick Capture, My Assignments, Nearby Poles"
+      
+      phase_3_routing:
+        restructure: "/pole-tracker/mobile routes"
+        new_routes:
+          - "'' → PoleListMobileComponent (new mobile list)"
+          - "'map' → MobileMapViewComponent (move existing map)"
+          - "Keep existing capture, assignments, nearby routes"
+      
+      technical_implementation:
+        mobile_card_layout:
+          - "Pole ID & Project (header)"
+          - "Status indicators (visual badges)"
+          - "GPS location (with map link)"
+          - "Quick actions (capture, edit, view)"
+          - "Swipe actions for common operations"
+        
+        data_sync:
+          - "Same PoleTrackerService methods"
+          - "Same real-time Firestore sync"
+          - "Same offline queue support"
+          - "Same photo upload functionality"
+        
+        navigation_flow: "Mobile List → Detail View → Edit Form → Photo Capture"
+        
+        benefits:
+          - "Maintains all desktop functionality in mobile-friendly format"
+          - "Preserves existing mobile features (GPS, offline, etc.)"
+          - "Provides intuitive mobile navigation"
+          - "Reduces code duplication by sharing services"
+          - "Allows field workers to perform complete pole management on mobile"
     
     mobile_features:
       - "GPS-based map view with markers"
@@ -294,6 +353,256 @@ page_contexts:
       - "Material allocations to projects"
       - "Import/export capabilities"
 
+  # OneMap - Home Sign-up Data Processing (Keep As-Is)
+  onemap:
+    routes:
+      - "/settings/onemap"
+    
+    collections:
+      primary: "N/A - CSV processing tool"
+      related: ["projects", "clients"]
+    
+    data_integrity_enforcement:
+      drop_numbers: "MUST validate drop number uniqueness during processing"
+      pole_references: "MUST validate pole numbers exist before assignment"
+      capacity_checking: "MUST check pole capacity before drop assignment"
+      validation_mode: "Import validation with detailed error reporting"
+      reference_config: "fibreflow-data-integrity-rules.yml"
+    
+    components:
+      main: "OnemapComponent"
+      service: "OneMapService" 
+      model: "OneMapRecord, ProcessedOneMapData"
+    
+    services:
+      primary: "OneMapService"
+    
+    function: "Home sign-up data processing and analysis"
+    
+    processing_capabilities:
+      - "CSV upload and validation (home sign-ups)"
+      - "Date range analysis for first approvals"
+      - "Data categorization (new vs existing)"
+      - "4 basic report generation"
+    
+    status: "production - keep unchanged"
+    
+    quick_notes:
+      - "Simple home sign-up processor"
+      - "4 reports: new, existing, no drop, duplicates"
+      - "Do not modify - create separate pole analytics module"
+      - "CRITICAL: Add drop number uniqueness validation"
+
+  # Pole Analytics - Dedicated Analytics Platform (New Module)
+  pole_analytics:
+    routes:
+      - "/analytics/pole-permissions"
+      - "/analytics/pole-permissions/upload"
+      - "/analytics/pole-permissions/process"
+      - "/analytics/pole-permissions/reports"
+    
+    collections:
+      primary: "N/A - CSV/API processing tool"
+      related: ["planned-poles", "pole-installations", "contractors", "audit-trail"]
+    
+    components:
+      main: "PoleAnalyticsComponent"
+      wizard: "PoleAnalyticsWizardComponent"
+      upload: "DataSourceSelectorComponent"
+      process: "DataProcessorComponent"
+      reports: "ReportGeneratorComponent"
+      services: ["PoleAnalyticsService", "PoleDataSourceFactory"]
+      models: ["PoleRecord", "ProcessedPoleData", "AnalyticsConfig"]
+    
+    specification: "SPEC-ANALYTICS-001"
+    
+    purpose: "Universal pole permission status tracking and agent analytics"
+    
+    architecture_design:
+      data_source_abstraction:
+        interface: "PoleDataSource"
+        csv_implementation: "CsvPoleDataSource"
+        api_implementation: "ApiPoleDataSource (future)"
+        factory: "PoleDataSourceFactory"
+      
+      processing_pipeline:
+        - "Data ingestion (CSV/API)"
+        - "Status filtering ('Pole Permission: Approved')"
+        - "Quality control (missing poles, agent validation)"
+        - "Duplicate removal (by pole number, keep earliest)"
+        - "Time-based analysis (monthly/weekly/custom)"
+        - "Report generation (multiple formats)"
+    
+    data_specifications:
+      input_schema: "17 columns (Property ID, Pole Number, Agent, etc.)"
+      target_records: "~5,287 pole permission entries"
+      expected_output: "~3,732 unique poles after deduplication"
+      processing_time: "<10 seconds for typical datasets"
+    
+    features:
+      phase_1_csv:
+        - "Multi-step wizard interface"
+        - "CSV upload with validation"
+        - "Status filtering and duplicate removal"
+        - "Time-based analysis options"
+        - "Excel export with multiple sheets"
+        - "Agent validation and quality control"
+      
+      phase_2_api:
+        - "Real-time API data processing"
+        - "Server-side filtering capabilities"
+        - "Automated processing schedules"
+        - "Live dashboard updates"
+    
+    reports_generated:
+      primary_analysis:
+        - "All_First_Status_Changes (complete dataset)"
+        - "First_Status_Changes_YYYY-MM (monthly)"
+        - "Week_Ending_YYYY-MM-DD (weekly)"
+        - "Custom_Range_dates (user-defined)"
+      
+      quality_control:
+        - "Duplicate_Poles_Removed"
+        - "No_Pole_Allocated"
+        - "Agent_Data_Mismatches"
+        - "Processing_Summary (statistics)"
+    
+    integration_points:
+      - "pole-tracker (validation and cross-reference)"
+      - "contractors (agent assignment verification)"
+      - "audit-trail (status change tracking)"
+      - "projects (project context and filtering)"
+    
+    development_phases:
+      phase_1: "Foundation & CSV processing (Week 1)"
+      phase_2: "Processing engine & algorithms (Week 2)"
+      phase_3: "Analytics & report generation (Week 3)"
+      phase_4: "UI/UX & wizard interface (Week 4)"
+      phase_5: "Integration & testing (Week 5)"
+      phase_6: "API migration (future)"
+    
+    technical_stack:
+      frontend: "Angular 20 + Material Design"
+      processing: "RxJS observables + signals"
+      export: "ExcelJS for multi-sheet reports"
+      validation: "Custom validation pipeline"
+      architecture: "Service-based with abstraction layers"
+    
+    status: "planned - ready for implementation"
+    priority: "high"
+    estimated_effort: "5 weeks (1 developer)"
+    last_updated: "2025-07-15"
+    
+    data_integrity_enforcement:
+      pole_numbers: "MUST be globally unique across all pole collections"
+      drop_numbers: "MUST be globally unique across all drop collections"
+      relationship_rule: "Each pole can serve maximum 12 drops (physical limit)"
+      validation_points: "Before creation, assignment, and import operations"
+      error_handling: "Clear user feedback when validation fails"
+      reference_config: "fibreflow-data-integrity-rules.yml"
+    
+    quick_notes:
+      - "Separate from existing OneMap tab (keep both)"
+      - "Future-proof for CSV-to-API migration"
+      - "Comprehensive analytics platform for pole operations"
+      - "Integration with existing pole and contractor systems"
+      - "CRITICAL: Enforce pole/drop uniqueness and capacity rules"
+
+  # Tasks Management
+  tasks:
+    routes:
+      - "/tasks"
+      - "/task-grid"  # Direct route to grid view (simpler)
+    
+    collections:
+      primary: "tasks"
+      related: ["projects", "phases", "steps"]
+    
+    components:
+      list: "TaskManagementComponent"
+      grid: "TaskManagementGridComponent"
+    
+    services:
+      primary: "TaskService"
+      related: ["ProjectService"]
+    
+    status: "production"
+    
+    routing_issues_resolved:
+      - issue: "Nested route '/tasks/management/grid' causing NG04002 error"
+        error_message: "Cannot match any routes. URL Segment: 'tasks/management/grid'"
+        root_cause: "Angular's lazy-loaded nested routes stripping leading slashes"
+        previous_attempts:
+          - "Nested children array in tasks.routes.ts"
+          - "loadChildren for management module"
+          - "pathMatch: 'full' configurations"
+        solution: "Create direct route '/task-grid' in app.routes.ts"
+        implementation:
+          - "Add direct route to app.routes.ts"
+          - "Update navigation links to use '/task-grid'"
+          - "Simpler, faster, and more reliable"
+        benefits:
+          - "No nested routing confusion"
+          - "Direct bookmarkable URL"
+          - "Faster loading (no module nesting)"
+          - "Easier to understand and maintain"
+        fixed_date: "2025-01-17"
+        status: "RESOLVED"
+    
+    quick_notes:
+      - "Task management integrated with project hierarchy"
+      - "Grid view provides advanced filtering and bulk operations"
+      - "Direct route '/task-grid' is preferred over nested routes"
+
+  # Contractors Management
+  contractors:
+    routes:
+      - "/contractors"
+      - "/contractors/new"
+      - "/contractors/:id"
+    
+    collections:
+      primary: "contractors"
+      subcollections: ["teams", "projects"]
+    
+    components:
+      list: "ContractorListComponent"
+      form: "ContractorFormComponent"
+      detail: "ContractorDetailComponent"
+      related: ["ContractorAssignmentDialogComponent"]
+    
+    services:
+      primary: "ContractorService"
+      related: ["ContractorProjectService"]
+    
+    status: "production"
+    
+    known_issues:
+      - issue: "Services dropdown doesn't close after selection"
+        component: "ContractorFormComponent"
+        location: "src/app/features/contractors/components/contractor-form/contractor-form.component.ts:163-177"
+        description: "mat-select with multiple attribute keeps dropdown open by design"
+        root_cause: "Angular Material multi-select default behavior"
+        previous_fix_attempts:
+          - "setTimeout approach with openedChange event (unreliable)"
+          - "Force close with panelOpen check (race conditions)"
+        solution: "Add explicit Done button inside dropdown panel"
+        implementation_notes:
+          - "Use mat-option with button inside dropdown"
+          - "Call servicesSelect.close() on button click"
+          - "Style button to look like action button"
+          - "Apply same pattern to other multi-select dropdowns"
+        fixed_date: "2025-07-15"
+        fix_commit: "fix: Add Done button to contractor services dropdown"
+        verified_working: "2025-07-15"
+        status: "RESOLVED"
+    
+    quick_notes:
+      - "4-step wizard form (Basic, Capabilities, Financial, Review)"
+      - "Services dropdown uses multi-select with chips display"
+      - "Integrated with projects for contractor assignments"
+      - "Banking details for payment processing"
+
 # Quick Reference Mappings
 quick_reference:
   # Route to Collection mapping
@@ -328,6 +637,7 @@ integration:
     "*/daily-progress/*": "Load daily_progress context"
     "*/meetings/*": "Load meetings context"
     "*/stock/*": "Load stock context"
+    "*/contractors/*": "Load contractors context"
   
   # Context commands
   commands:

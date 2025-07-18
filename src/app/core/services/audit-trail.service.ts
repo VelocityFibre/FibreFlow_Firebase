@@ -80,7 +80,7 @@ export class AuditTrailService implements OnDestroy {
       actionType: 'user',
       status,
       errorMessage,
-      timestamp: serverTimestamp() as Timestamp,
+      timestamp: null as any, // Will be set to serverTimestamp() during flush
       sessionId: this.generateSessionId(),
       metadata,
       source: 'audit',
@@ -117,7 +117,7 @@ export class AuditTrailService implements OnDestroy {
       userDisplayName: 'System',
       actionType: 'system',
       status: 'success',
-      timestamp: serverTimestamp() as Timestamp,
+      timestamp: null as any, // Will be set to serverTimestamp() during flush
       metadata: {
         description,
         ...metadata,
@@ -149,7 +149,7 @@ export class AuditTrailService implements OnDestroy {
       actionType: 'user',
       status,
       errorMessage,
-      timestamp: serverTimestamp() as Timestamp,
+      timestamp: null as any, // Will be set to serverTimestamp() during flush
       sessionId: this.generateSessionId(),
       metadata: {
         bulkOperation: operation,
@@ -359,9 +359,13 @@ export class AuditTrailService implements OnDestroy {
 
       logsToFlush.forEach((log) => {
         const docRef = doc(collection(this.firestore, 'audit-logs'));
+        // Create a copy of the log without the timestamp field
+        const { timestamp, ...logWithoutTimestamp } = log;
         const logData = {
-          ...log,
+          ...logWithoutTimestamp,
           id: docRef.id,
+          // Set serverTimestamp directly in the batch operation
+          timestamp: serverTimestamp(),
         };
         console.log('📝 Writing audit log:', logData);
         batch.set(docRef, logData);

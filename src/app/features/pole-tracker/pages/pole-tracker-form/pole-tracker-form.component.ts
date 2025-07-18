@@ -13,6 +13,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatChipsModule } from '@angular/material/chips';
 import { PoleTrackerService } from '../../services/pole-tracker.service';
 import { ProjectService } from '../../../../core/services/project.service';
 import { ContractorService } from '../../../contractors/services/contractor.service';
@@ -23,6 +25,7 @@ import { Project } from '../../../../core/models/project.model';
 import { Contractor } from '../../../contractors/models/contractor.model';
 import { StaffMember } from '../../../staff/models/staff.model';
 import { ImageUploadComponent } from '../../components/image-upload/image-upload.component';
+import { DataIntegrityValidator } from '../../../../core/validators/data-integrity.validator';
 import { switchMap, tap } from 'rxjs';
 
 @Component({
@@ -43,6 +46,8 @@ import { switchMap, tap } from 'rxjs';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatCheckboxModule,
+    MatTooltipModule,
+    MatChipsModule,
     ImageUploadComponent,
   ],
   template: `
@@ -86,11 +91,50 @@ import { switchMap, tap } from 'rxjs';
                   </mat-select>
                 </mat-form-field>
 
-                <!-- Pole Number -->
+                <!-- Pole Number with Data Integrity Validation -->
                 <mat-form-field appearance="outline">
                   <mat-label>Pole Number</mat-label>
-                  <input matInput formControlName="poleNumber" placeholder="Physical pole number" />
+                  <input
+                    matInput
+                    formControlName="poleNumber"
+                    placeholder="Physical pole number"
+                    required
+                  />
+                  <mat-hint>Must be globally unique (3-20 characters)</mat-hint>
+
+                  <!-- Real-time validation feedback -->
+                  @if (poleForm.get('poleNumber')?.pending) {
+                    <mat-icon matSuffix>sync</mat-icon>
+                  }
+                  @if (poleForm.get('poleNumber')?.invalid && poleForm.get('poleNumber')?.touched) {
+                    <mat-error>
+                      {{ getPoleNumberError() }}
+                    </mat-error>
+                  }
+                  @if (poleForm.get('poleNumber')?.valid && poleForm.get('poleNumber')?.value) {
+                    <mat-icon matSuffix color="primary">check_circle</mat-icon>
+                  }
                 </mat-form-field>
+
+                <!-- Pole Capacity Indicator -->
+                @if (
+                  poleForm.get('poleNumber')?.valid &&
+                  poleForm.get('poleNumber')?.value &&
+                  poleCapacityInfo()
+                ) {
+                  <div class="capacity-indicator">
+                    <mat-chip-set>
+                      <mat-chip
+                        [matTooltip]="
+                          'This pole has ' + poleCapacityInfo()?.count + ' of 12 maximum drops'
+                        "
+                      >
+                        <mat-icon matChipAvatar>cable</mat-icon>
+                        Drops: {{ poleCapacityInfo()?.count || 0 }}/12
+                      </mat-chip>
+                    </mat-chip-set>
+                  </div>
+                }
 
                 <!-- Alternative Pole ID -->
                 <mat-form-field appearance="outline">
@@ -194,6 +238,21 @@ import { switchMap, tap } from 'rxjs';
                 <mat-form-field appearance="outline">
                   <mat-label>Working Team</mat-label>
                   <input matInput formControlName="workingTeam" required />
+                </mat-form-field>
+
+                <!-- Rate Paid -->
+                <mat-form-field appearance="outline">
+                  <mat-label>Rate Paid</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    formControlName="ratePaid"
+                    placeholder="0.00"
+                  />
+                  <span matTextPrefix>R&nbsp;</span>
+                  <mat-hint>Rate paid to contractor for this pole installation</mat-hint>
                 </mat-form-field>
               </div>
             </mat-card-content>
@@ -371,6 +430,33 @@ import { switchMap, tap } from 'rxjs';
         margin-top: 24px;
       }
 
+      .capacity-indicator {
+        margin-top: 8px;
+        margin-bottom: 16px;
+      }
+
+      .capacity-warning {
+        background-color: rgba(255, 152, 0, 0.1);
+        border: 1px solid orange;
+        border-radius: 4px;
+        padding: 8px;
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .capacity-error {
+        background-color: rgba(244, 67, 54, 0.1);
+        border: 1px solid #f44336;
+        border-radius: 4px;
+        padding: 8px;
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
       @media (max-width: 600px) {
         .form-grid,
         .upload-grid {
@@ -398,12 +484,26 @@ export class PoleTrackerFormComponent implements OnInit {
   contractors = signal<Contractor[]>([]);
   staff = signal<StaffMember[]>([]);
   currentPole = signal<PoleTracker | null>(null);
+  poleCapacityInfo = signal<{ count: number; canAddMore: boolean } | null>(null);
+
+  // Properties need to be initialized before form
+  isEditMode = false;
+  poleId: string = '';
 
   // Form
   poleForm: FormGroup = this.fb.group({
     vfPoleId: ['', Validators.required],
     projectId: ['', Validators.required],
-    poleNumber: [''],
+    poleNumber: [
+      '',
+      [Validators.required, Validators.minLength(3), Validators.maxLength(20)],
+      [
+        DataIntegrityValidator.uniquePoleNumber(
+          this.poleTrackerService,
+          this.isEditMode ? this.poleId : undefined,
+        ),
+      ],
+    ],
     alternativePoleId: [''],
     groupNumber: [''],
     pon: [''],
@@ -414,11 +514,10 @@ export class PoleTrackerFormComponent implements OnInit {
     poleType: ['', Validators.required],
     contractorId: ['', Validators.required],
     workingTeam: ['', Validators.required],
+    ratePaid: [null, [Validators.min(0)]],
     qualityChecked: [false],
     qualityCheckNotes: [''],
   });
-  isEditMode = false;
-  poleId: string = '';
 
   ngOnInit() {
     // Check if edit mode
@@ -438,6 +537,15 @@ export class PoleTrackerFormComponent implements OnInit {
     this.poleForm.get('projectId')?.valueChanges.subscribe((projectId) => {
       if (projectId && !this.isEditMode) {
         this.generateVFPoleId(projectId);
+      }
+    });
+
+    // Watch for pole number changes to check capacity
+    this.poleForm.get('poleNumber')?.valueChanges.subscribe((poleNumber) => {
+      if (poleNumber && poleNumber.length >= 3 && this.poleForm.get('poleNumber')?.valid) {
+        this.checkPoleCapacity(poleNumber);
+      } else {
+        this.poleCapacityInfo.set(null);
       }
     });
 
@@ -480,6 +588,7 @@ export class PoleTrackerFormComponent implements OnInit {
             poleType: pole.poleType,
             contractorId: pole.contractorId,
             workingTeam: pole.workingTeam,
+            ratePaid: pole.ratePaid || null,
             qualityChecked: pole.qualityChecked || false,
             qualityCheckNotes: pole.qualityCheckNotes || '',
           });
@@ -544,6 +653,36 @@ export class PoleTrackerFormComponent implements OnInit {
     this.snackBar.open(error, 'Close', { duration: 3000 });
   }
 
+  // Check pole capacity when pole number changes
+  async checkPoleCapacity(poleNumber: string) {
+    try {
+      const capacity = await this.poleTrackerService.checkPoleCapacity(poleNumber);
+      this.poleCapacityInfo.set(capacity);
+    } catch (error) {
+      console.error('Error checking pole capacity:', error);
+      this.poleCapacityInfo.set(null);
+    }
+  }
+
+  // Get pole number validation error message
+  getPoleNumberError(): string {
+    const control = this.poleForm.get('poleNumber');
+    if (control?.errors && control.touched) {
+      return DataIntegrityValidator.getErrorMessage(control.errors);
+    }
+    return '';
+  }
+
+  // Get capacity indicator color
+  getCapacityColor(): 'primary' | 'accent' | 'warn' {
+    const info = this.poleCapacityInfo();
+    if (!info) return 'primary';
+
+    if (info.count >= 12) return 'warn';
+    if (info.count >= 10) return 'accent';
+    return 'primary';
+  }
+
   onSubmit() {
     if (!this.poleForm.valid) return;
 
@@ -570,7 +709,8 @@ export class PoleTrackerFormComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error updating pole:', error);
-          this.snackBar.open('Failed to update pole', 'Close', { duration: 3000 });
+          const errorMessage = error.message || 'Failed to update pole';
+          this.snackBar.open(errorMessage, 'Close', { duration: 5000 });
           this.saving.set(false);
         },
       });
@@ -586,7 +726,8 @@ export class PoleTrackerFormComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error creating pole:', error);
-          this.snackBar.open('Failed to create pole', 'Close', { duration: 3000 });
+          const errorMessage = error.message || 'Failed to create pole';
+          this.snackBar.open(errorMessage, 'Close', { duration: 5000 });
           this.saving.set(false);
         },
       });

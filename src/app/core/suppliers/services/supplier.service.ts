@@ -35,7 +35,7 @@ import { EntityType } from '../../models/audit-log.model';
 export class SupplierService extends BaseFirestoreService<Supplier> {
   protected override firestore = inject(Firestore); // Needed for subcollections
   protected collectionName = 'suppliers';
-  
+
   protected getEntityType(): EntityType {
     return 'supplier';
   }

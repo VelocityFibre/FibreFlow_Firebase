@@ -24,32 +24,32 @@ import { PageHeaderComponent } from '../../../../shared/components/page-header/p
     MatInputModule,
     MatProgressSpinnerModule,
     PageHeaderComponent,
-    DatePipe
+    DatePipe,
   ],
   templateUrl: './onemap.html',
-  styleUrl: './onemap.scss'
+  styleUrl: './onemap.scss',
 })
 export class OnemapComponent {
   private fb = inject(FormBuilder);
   private oneMapService = inject(OneMapService);
-  
+
   uploadedData = signal<OneMapRecord[]>([]);
   processedData = signal<ProcessedOneMapData | null>(null);
   isProcessing = signal(false);
   uploadError = signal<string>('');
-  
+
   dateForm = this.fb.group({
     startDate: ['', Validators.required],
-    endDate: ['', Validators.required]
+    endDate: ['', Validators.required],
   });
-  
+
   headerActions = [
     {
       label: 'Clear',
       icon: 'clear',
       color: 'warn' as const,
-      action: () => this.clearAll()
-    }
+      action: () => this.clearAll(),
+    },
   ];
 
   onFileSelected(event: Event): void {
@@ -72,7 +72,7 @@ export class OnemapComponent {
 
   private processCsvFile(csvContent: string): void {
     this.uploadError.set('');
-    
+
     // Validate headers
     const lines = csvContent.split('\n');
     if (lines.length < 2) {
@@ -80,11 +80,13 @@ export class OnemapComponent {
       return;
     }
 
-    const headers = lines[0].split(',').map(h => h.trim());
+    const headers = lines[0].split(',').map((h) => h.trim());
     const validation = this.oneMapService.validateCsvHeaders(headers);
-    
+
     if (!validation.valid) {
-      this.uploadError.set(`Invalid CSV format. Missing required columns: ${validation.missingColumns.join(', ')}\n\nPlease upload a home sign-ups CSV file (like Lawley_Project_Louis.csv), not a pole infrastructure file.`);
+      this.uploadError.set(
+        `Invalid CSV format. Missing required columns: ${validation.missingColumns.join(', ')}\n\nPlease upload a home sign-ups CSV file (like Lawley_Project_Louis.csv), not a pole infrastructure file.`,
+      );
       return;
     }
 
@@ -96,10 +98,10 @@ export class OnemapComponent {
     const today = new Date();
     const defaultStartDate = new Date(2025, 5, 26); // June 26, 2025
     const defaultEndDate = new Date(2025, 6, 9); // July 9, 2025
-    
+
     this.dateForm.patchValue({
       startDate: this.formatDateForInput(defaultStartDate),
-      endDate: this.formatDateForInput(defaultEndDate)
+      endDate: this.formatDateForInput(defaultEndDate),
     });
   }
 
@@ -107,26 +109,24 @@ export class OnemapComponent {
     if (!this.dateForm.valid || this.uploadedData().length === 0) return;
 
     this.isProcessing.set(true);
-    
+
     const startDate = new Date(this.dateForm.value.startDate!);
     const endDate = new Date(this.dateForm.value.endDate!);
-    
+
     // Set end date to end of day
     endDate.setHours(23, 59, 59, 999);
 
     setTimeout(() => {
-      const processed = this.oneMapService.processData(
-        this.uploadedData(),
-        startDate,
-        endDate
-      );
-      
+      const processed = this.oneMapService.processData(this.uploadedData(), startDate, endDate);
+
       this.processedData.set(processed);
       this.isProcessing.set(false);
     }, 100);
   }
 
-  downloadReport(reportType: 'firstEntry' | 'duplicatesPreWindow' | 'noDropAllocated' | 'duplicateDropsRemoved'): void {
+  downloadReport(
+    reportType: 'firstEntry' | 'duplicatesPreWindow' | 'noDropAllocated' | 'duplicateDropsRemoved',
+  ): void {
     const data = this.processedData();
     if (!data) return;
 
@@ -164,7 +164,7 @@ export class OnemapComponent {
     this.processedData.set(null);
     this.uploadError.set('');
     this.dateForm.reset();
-    
+
     // Clear file input
     const fileInput = document.getElementById('csvFileInput') as HTMLInputElement;
     if (fileInput) {

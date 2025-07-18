@@ -8,11 +8,11 @@
   right: ff-spacing(lg);
   z-index: 1000;
   transition: all 0.3s ease;
-  
+
   &.panel-open {
     right: 420px; // 400px panel + 20px offset
   }
-  
+
   .task-badge {
     position: absolute;
     top: -4px;
@@ -45,10 +45,10 @@
   display: flex;
   flex-direction: column;
   transition: width 0.3s ease;
-  
+
   &.minimized {
     width: 300px;
-    
+
     .panel-header {
       min-height: 48px;
     }
@@ -63,25 +63,25 @@
   padding: ff-spacing(md);
   border-bottom: 1px solid theme.ff-rgb(border);
   background: theme.ff-rgba(muted, 0.5);
-  
+
   .header-content {
     display: flex;
     flex-direction: column;
     gap: ff-spacing(xs);
-    
+
     h3 {
       margin: 0;
       font-size: theme.ff-rem(18);
       font-weight: 500;
       color: theme.ff-rgb(foreground);
     }
-    
+
     .route-name {
       font-size: theme.ff-rem(12);
       color: theme.ff-rgb(muted-foreground);
     }
   }
-  
+
   .header-actions {
     display: flex;
     gap: ff-spacing(xs);
@@ -91,20 +91,21 @@
 // Panel content
 .panel-content {
   flex: 1;
-  overflow-y: auto;
-  padding: ff-spacing(md);
-  
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
   .stats-row {
-    margin-bottom: ff-spacing(lg);
-    
+    margin: ff-spacing(md) ff-spacing(md) ff-spacing(lg);
+
     mat-chip-set {
       gap: ff-spacing(sm);
     }
-    
+
     mat-chip {
       background: theme.ff-rgba(primary, 0.1);
       color: theme.ff-rgb(primary);
-      
+
       mat-icon {
         font-size: 16px;
         width: 16px;
@@ -119,18 +120,18 @@
 mat-expansion-panel {
   margin-bottom: ff-spacing(md);
   background: theme.ff-rgb(card);
-  
+
   mat-panel-title {
     display: flex;
     align-items: center;
     gap: ff-spacing(sm);
-    
+
     mat-icon {
       font-size: 20px;
       width: 20px;
       height: 20px;
     }
-    
+
     mat-chip {
       margin-left: auto;
       font-size: 11px;
@@ -148,26 +149,26 @@ mat-expansion-panel {
     border-radius: theme.ff-var(radius);
     cursor: pointer;
     min-height: 60px;
-    
+
     &:hover {
       background: theme.ff-rgba(muted, 0.5);
     }
-    
+
     p {
       margin: 0;
       white-space: pre-wrap;
     }
-    
+
     .placeholder {
       color: theme.ff-rgb(muted-foreground);
       font-style: italic;
     }
   }
-  
+
   .full-width {
     width: 100%;
   }
-  
+
   .notes-actions {
     display: flex;
     justify-content: flex-end;
@@ -183,39 +184,39 @@ mat-expansion-panel {
     gap: ff-spacing(sm);
     align-items: flex-start;
     margin-bottom: ff-spacing(md);
-    
+
     .task-input {
       flex: 1;
     }
-    
+
     .priority-select {
       width: 100px;
     }
   }
-  
+
   .task-list {
     mat-list-item {
       transition: opacity 0.3s ease;
-      
+
       &.completed {
         opacity: 0.6;
-        
+
         [matListItemTitle] {
           text-decoration: line-through;
         }
       }
-      
+
       .task-status-icon {
         cursor: pointer;
         transition: color 0.2s ease;
-        
+
         &:hover {
           color: theme.ff-rgb(primary);
         }
       }
     }
   }
-  
+
   .no-tasks {
     text-align: center;
     color: theme.ff-rgb(muted-foreground);
@@ -229,10 +230,176 @@ mat-expansion-panel {
   mat-list-item {
     border-left: 3px solid theme.ff-rgb(destructive);
     margin-bottom: ff-spacing(sm);
-    
+
     .error-time {
       font-size: theme.ff-rem(12);
       color: theme.ff-rgb(muted-foreground);
+    }
+  }
+}
+
+// Chat styles
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0; // Allow flex shrinking
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: ff-spacing(md);
+    display: flex;
+    flex-direction: column;
+    gap: ff-spacing(md);
+
+    .chat-message {
+      display: flex;
+      flex-direction: column;
+      gap: ff-spacing(xs);
+
+      &.user-message {
+        align-items: flex-end;
+
+        .message-content {
+          background: theme.ff-rgba(primary, 0.1);
+          margin-left: ff-spacing(3xl);
+        }
+      }
+
+      &.agent-message {
+        align-items: flex-start;
+
+        .message-content {
+          background: theme.ff-rgba(muted, 0.5);
+          margin-right: ff-spacing(3xl);
+        }
+
+        &.loading {
+          flex-direction: row;
+          align-items: center;
+          gap: ff-spacing(sm);
+          color: theme.ff-rgb(muted-foreground);
+        }
+      }
+
+      .message-header {
+        display: flex;
+        align-items: center;
+        gap: ff-spacing(xs);
+        font-size: theme.ff-rem(12);
+        color: theme.ff-rgb(muted-foreground);
+
+        mat-icon {
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
+        }
+
+        .message-time {
+          margin-left: ff-spacing(sm);
+        }
+      }
+
+      .message-content {
+        padding: ff-spacing(sm) ff-spacing(md);
+        border-radius: theme.ff-var(radius);
+        max-width: 100%;
+        word-wrap: break-word;
+
+        // Basic markdown support
+        pre {
+          background: theme.ff-rgba(muted, 0.3);
+          padding: ff-spacing(sm);
+          border-radius: 4px;
+          overflow-x: auto;
+          margin: ff-spacing(sm) 0;
+        }
+
+        code {
+          background: theme.ff-rgba(muted, 0.3);
+          padding: 2px 4px;
+          border-radius: 3px;
+          font-family: 'Consolas', 'Monaco', monospace;
+          font-size: 0.9em;
+        }
+      }
+    }
+
+    .chat-empty {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: theme.ff-rgb(muted-foreground);
+
+      mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        opacity: 0.3;
+        margin-bottom: ff-spacing(md);
+      }
+
+      p {
+        margin: ff-spacing(xs) 0;
+      }
+
+      .hint {
+        font-size: theme.ff-rem(12);
+        opacity: 0.7;
+      }
+    }
+  }
+
+  .chat-input-container {
+    border-top: 1px solid theme.ff-rgb(border);
+    padding: ff-spacing(md);
+    background: theme.ff-rgb(background);
+
+    .chat-input {
+      width: 100%;
+      margin-bottom: ff-spacing(sm);
+    }
+
+    .chat-actions {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
+
+// Tabs styling
+.dev-panel-tabs {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  ::ng-deep {
+    .mat-mdc-tab-header {
+      flex-shrink: 0;
+    }
+
+    .mat-mdc-tab-body-wrapper {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .mat-mdc-tab-body {
+      height: 100%;
+
+      .mat-mdc-tab-body-content {
+        height: 100%;
+        overflow: auto;
+        padding: ff-spacing(md);
+        
+        // No padding for chat container
+        .chat-container {
+          margin: -#{ff-spacing(md)};
+        }
+      }
     }
   }
 }
@@ -242,17 +409,18 @@ mat-expansion-panel {
   .dev-panel-toggle {
     bottom: ff-spacing(xl);
     right: ff-spacing(md);
-    
+
     &.panel-open {
       right: ff-spacing(md);
     }
   }
-  
+
   .dev-panel-container {
     width: 100%;
-    
+
     &.minimized {
       width: 100%;
     }
   }
 }
+

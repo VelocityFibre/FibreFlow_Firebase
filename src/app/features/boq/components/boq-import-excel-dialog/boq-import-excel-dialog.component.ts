@@ -707,8 +707,8 @@ export class BOQImportExcelDialogComponent implements OnInit {
         totalPrice: item.quantity * item.unitPrice,
         status: 'Planned',
         needsQuote: item.unitPrice === 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        // Timestamps will be added by the service
+        // Don't include them here as the service handles this automatically
       }));
 
       // Import using BOQ service direct method

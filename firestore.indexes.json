@@ -183,6 +183,20 @@
           "order": "DESCENDING"
         }
       ]
+    },
+    {
+      "collectionGroup": "planned-poles",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "projectId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "poleNumber",
+          "order": "ASCENDING"
+        }
+      ]
     }
   ],
   "fieldOverrides": []

@@ -1,0 +1,223 @@
+<app-page-header
+  title="Action Items"
+  subtitle="Manage action items from all meetings"
+  [actions]="headerActions">
+</app-page-header>
+
+<div class="container">
+  <!-- Statistics Cards -->
+  <div class="stats-cards" *ngIf="stats()">
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ stats().total }}</div>
+        <div class="stat-label">Total Items</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ stats().pending }}</div>
+        <div class="stat-label">Pending</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ stats().completed }}</div>
+        <div class="stat-label">Completed</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ stats().high }}</div>
+        <div class="stat-label">High Priority</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ stats().overdue }}</div>
+        <div class="stat-label">Overdue</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Filters -->
+  <mat-card class="filter-card">
+    <mat-card-content>
+      <div class="filter-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Priority</mat-label>
+          <mat-select [(ngModel)]="selectedPriority">
+            <mat-option value="all">All Priorities</mat-option>
+            <mat-option value="high">High</mat-option>
+            <mat-option value="medium">Medium</mat-option>
+            <mat-option value="low">Low</mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select [(ngModel)]="selectedStatus">
+            <mat-option value="all">All Status</mat-option>
+            <mat-option value="pending">Pending</mat-option>
+            <mat-option value="completed">Completed</mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search</mat-label>
+          <input matInput [(ngModel)]="searchText" placeholder="Search action items...">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- Action Items Table -->
+  <mat-card *ngIf="!loading()" class="table-card">
+    <mat-card-content>
+      <table mat-table [dataSource]="filteredActionItems()" class="action-items-table">
+        
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef width="50"></th>
+          <td mat-cell *matCellDef="let item">
+            <mat-checkbox 
+              [checked]="item.completed"
+              (change)="toggleComplete(item)"
+              [disabled]="item.isEditing">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- Action Item Column -->
+        <ng-container matColumnDef="actionItem">
+          <th mat-header-cell *matHeaderCellDef>Action Item</th>
+          <td mat-cell *matCellDef="let item" class="action-item-cell">
+            <div *ngIf="!item.isEditing" [class.completed]="item.completed">
+              {{ item.text }}
+            </div>
+            <mat-form-field *ngIf="item.isEditing" appearance="outline" class="edit-field">
+              <textarea matInput [(ngModel)]="item.text" rows="2"></textarea>
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <!-- Meeting Column -->
+        <ng-container matColumnDef="meeting">
+          <th mat-header-cell *matHeaderCellDef>Meeting</th>
+          <td mat-cell *matCellDef="let item" class="meeting-cell">
+            <div class="meeting-title">{{ item.meetingTitle }}</div>
+            <div class="meeting-date">{{ item.meetingDate | date:'short' }}</div>
+          </td>
+        </ng-container>
+
+        <!-- Priority Column -->
+        <ng-container matColumnDef="priority">
+          <th mat-header-cell *matHeaderCellDef>Priority</th>
+          <td mat-cell *matCellDef="let item">
+            <mat-chip *ngIf="!item.isEditing" 
+              [color]="getPriorityColor(item.priority)" 
+              selected>
+              {{ item.priority | titlecase }}
+            </mat-chip>
+            <mat-form-field *ngIf="item.isEditing" appearance="outline" class="small-field">
+              <mat-select [(ngModel)]="item.priority">
+                <mat-option value="high">High</mat-option>
+                <mat-option value="medium">Medium</mat-option>
+                <mat-option value="low">Low</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <!-- Assignee Column -->
+        <ng-container matColumnDef="assignee">
+          <th mat-header-cell *matHeaderCellDef>Assignee</th>
+          <td mat-cell *matCellDef="let item">
+            <div *ngIf="!item.isEditing" class="assignee">
+              <mat-icon>person</mat-icon>
+              {{ item.assignee || 'Unassigned' }}
+            </div>
+            <mat-form-field *ngIf="item.isEditing" appearance="outline" class="small-field">
+              <input matInput [(ngModel)]="item.assignee" placeholder="Assignee">
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <!-- Due Date Column -->
+        <ng-container matColumnDef="dueDate">
+          <th mat-header-cell *matHeaderCellDef>Due Date</th>
+          <td mat-cell *matCellDef="let item" [class.overdue]="isOverdue(item)">
+            <div *ngIf="!item.isEditing" class="due-date">
+              <mat-icon>event</mat-icon>
+              {{ formatDate(item.dueDate) }}
+            </div>
+            <mat-form-field *ngIf="item.isEditing" appearance="outline" class="small-field">
+              <input matInput [matDatepicker]="picker" [(ngModel)]="item.dueDate">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let item">
+            <mat-chip [ngClass]="item.completed ? 'completed' : 'pending'">
+              {{ item.completed ? 'Completed' : 'Pending' }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let item">
+            <div class="action-buttons">
+              <button *ngIf="!item.isEditing" 
+                mat-icon-button 
+                (click)="startEdit(item)"
+                matTooltip="Edit">
+                <mat-icon>edit</mat-icon>
+              </button>
+              
+              <button *ngIf="item.isEditing" 
+                mat-icon-button 
+                color="primary"
+                (click)="saveEdit(item)"
+                matTooltip="Save">
+                <mat-icon>save</mat-icon>
+              </button>
+              
+              <button *ngIf="item.isEditing" 
+                mat-icon-button 
+                (click)="cancelEdit(item)"
+                matTooltip="Cancel">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="filteredActionItems().length === 0 && !loading()">
+        <mat-icon>assignment</mat-icon>
+        <h3>No Action Items Found</h3>
+        <p>{{ allActionItems().length > 0 ? 'Try adjusting your filters' : 'No action items in any meetings yet' }}</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

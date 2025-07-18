@@ -1,0 +1,314 @@
+<div class="page-container">
+  <!-- Header -->
+  <div class="page-header">
+    <h1>Task Management (Grid View)</h1>
+    <div class="header-actions">
+      <button mat-button (click)="toggleView()">
+        <mat-icon>table_rows</mat-icon>
+        Switch to Basic View
+      </button>
+      <button mat-raised-button color="primary" routerLink="/tasks/new">
+        <mat-icon>add</mat-icon>
+        Add New Task
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <mat-card class="filters-card">
+    <mat-card-content>
+      <div class="filters-grid">
+        <!-- Project Filter -->
+        <mat-form-field appearance="outline">
+          <mat-label>Project</mat-label>
+          <mat-select [(ngModel)]="selectedProjectId" (selectionChange)="onProjectChange()">
+            <mat-option value="">All Projects</mat-option>
+            <mat-option *ngFor="let project of projects()" [value]="project.id">
+              {{ project.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Assignee Filter -->
+        <mat-form-field appearance="outline">
+          <mat-label>Assignee</mat-label>
+          <mat-select [(ngModel)]="selectedAssigneeId" (selectionChange)="onAssigneeChange()">
+            <mat-option value="">All Assignees</mat-option>
+            <mat-option *ngFor="let staff of staff()" [value]="staff.id">
+              {{ staff.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Status Filter -->
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onStatusChange()">
+            <mat-option value="all">All Status</mat-option>
+            <mat-option [value]="TaskStatus.PENDING">Pending</mat-option>
+            <mat-option [value]="TaskStatus.IN_PROGRESS">In Progress</mat-option>
+            <mat-option [value]="TaskStatus.COMPLETED">Completed</mat-option>
+            <mat-option [value]="TaskStatus.BLOCKED">Blocked</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Priority Filter -->
+        <mat-form-field appearance="outline">
+          <mat-label>Priority</mat-label>
+          <mat-select [(ngModel)]="selectedPriority" (selectionChange)="onPriorityChange()">
+            <mat-option value="all">All Priorities</mat-option>
+            <mat-option [value]="TaskPriority.LOW">Low</mat-option>
+            <mat-option [value]="TaskPriority.MEDIUM">Medium</mat-option>
+            <mat-option [value]="TaskPriority.HIGH">High</mat-option>
+            <mat-option [value]="TaskPriority.CRITICAL">Critical</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Due Date Filter -->
+        <mat-form-field appearance="outline">
+          <mat-label>Due Date</mat-label>
+          <mat-select [(ngModel)]="dueDateFilter" (selectionChange)="onDueDateChange()">
+            <mat-option value="all">All</mat-option>
+            <mat-option value="overdue">Overdue</mat-option>
+            <mat-option value="today">Due Today</mat-option>
+            <mat-option value="week">Due This Week</mat-option>
+            <mat-option value="month">Due This Month</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Search -->
+        <mat-form-field appearance="outline">
+          <mat-label>Search</mat-label>
+          <input matInput [(ngModel)]="searchTerm" (input)="onSearchChange()" placeholder="Search tasks...">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <!-- Show Completed -->
+        <mat-checkbox [(ngModel)]="showCompleted" (change)="onShowCompletedChange()">
+          Show Completed Tasks
+        </mat-checkbox>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <button mat-button (click)="showBulkActions = !showBulkActions" [disabled]="selectedCount() === 0">
+            <mat-icon>checklist</mat-icon>
+            Bulk Actions ({{ selectedCount() }})
+          </button>
+          <button mat-button [matMenuTriggerFor]="exportMenu">
+            <mat-icon>download</mat-icon>
+            Export
+          </button>
+          <mat-menu #exportMenu="matMenu">
+            <button mat-menu-item (click)="exportData('csv')">
+              <mat-icon>description</mat-icon>
+              Export as CSV
+            </button>
+            <button mat-menu-item (click)="exportData('excel')">
+              <mat-icon>table_chart</mat-icon>
+              Export as Excel
+            </button>
+          </mat-menu>
+          <button mat-button (click)="toggleAnalytics()">
+            <mat-icon>{{ showAnalytics ? 'analytics' : 'bar_chart' }}</mat-icon>
+            {{ showAnalytics ? 'Hide' : 'Show' }} Analytics
+          </button>
+          <button mat-button (click)="refreshData()">
+            <mat-icon>refresh</mat-icon>
+            Refresh
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Stats Summary -->
+  <div class="stats-grid">
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ totalCount() }}</div>
+        <div class="stat-label">Total Tasks</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ selectedCount() }}</div>
+        <div class="stat-label">Selected</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ filteredCount() }}</div>
+        <div class="stat-label">Filtered</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ completedCount() }}</div>
+        <div class="stat-label">Completed</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ overdueCount() }}</div>
+        <div class="stat-label">Overdue</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- AG-Grid -->
+  <mat-card class="grid-card">
+    <mat-card-content>
+      <ag-grid-angular
+        class="ag-theme-material"
+        [rowData]="rowData()"
+        [columnDefs]="columnDefs"
+        [defaultColDef]="defaultColDef"
+        [animateRows]="true"
+        [rowSelection]="'multiple'"
+        [suppressRowClickSelection]="true"
+        [enableRangeSelection]="true"
+        [enableCellTextSelection]="true"
+        [pagination]="true"
+        [paginationPageSize]="pageSize"
+        [paginationPageSizeSelector]="[25, 50, 100, 200]"
+        [rowHeight]="48"
+        [headerHeight]="56"
+        [suppressCellFocus]="false"
+        [stopEditingWhenCellsLoseFocus]="true"
+        [enableCellEditingOnBackspace]="true"
+        (gridReady)="onGridReady($event)"
+        (selectionChanged)="onSelectionChanged()"
+        (rowClicked)="onRowClicked($event)"
+        (rowDoubleClicked)="onRowDoubleClicked($event)"
+        (cellValueChanged)="onCellValueChanged($event)"
+        [isExternalFilterPresent]="isExternalFilterPresent"
+        [doesExternalFilterPass]="doesExternalFilterPass"
+        style="width: 100%; height: 600px;">
+      </ag-grid-angular>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Bulk Actions Panel -->
+  <mat-expansion-panel *ngIf="showBulkActions" class="bulk-actions-panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon>checklist</mat-icon>
+        Bulk Actions ({{ selectedCount() }} tasks selected)
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="bulk-actions-content">
+      <button mat-raised-button color="primary" (click)="bulkAssignTasks()" [disabled]="selectedCount() === 0">
+        <mat-icon>person_add</mat-icon>
+        Assign Tasks
+      </button>
+      <button mat-raised-button (click)="bulkUpdateStatus()" [disabled]="selectedCount() === 0">
+        <mat-icon>update</mat-icon>
+        Update Status
+      </button>
+      <button mat-raised-button (click)="bulkUpdatePriority()" [disabled]="selectedCount() === 0">
+        <mat-icon>priority_high</mat-icon>
+        Set Priority
+      </button>
+      <button mat-raised-button color="warn" (click)="bulkDelete()" [disabled]="selectedCount() === 0">
+        <mat-icon>delete</mat-icon>
+        Delete Selected
+      </button>
+      <button mat-raised-button (click)="exportSelected()" [disabled]="selectedCount() === 0">
+        <mat-icon>download</mat-icon>
+        Export Selected
+      </button>
+    </div>
+  </mat-expansion-panel>
+
+  <!-- Analytics Panel -->
+  <mat-card *ngIf="showAnalytics" class="analytics-panel">
+    <mat-card-header>
+      <mat-card-title>Task Analytics Dashboard</mat-card-title>
+      <mat-card-subtitle>Real-time task insights and performance metrics</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-tab-group>
+        <!-- Overview Tab -->
+        <mat-tab label="Overview">
+          <div class="analytics-grid">
+            <div class="chart-card">
+              <h3>Status Distribution</h3>
+              <canvas #statusChart></canvas>
+            </div>
+            <div class="chart-card">
+              <h3>Priority Distribution</h3>
+              <canvas #priorityChart></canvas>
+            </div>
+            <div class="chart-card">
+              <h3>Project Breakdown</h3>
+              <canvas #projectChart></canvas>
+            </div>
+            <div class="chart-card">
+              <h3>Time Tracking</h3>
+              <canvas #timeChart></canvas>
+            </div>
+            <div class="chart-card">
+              <h3>Completion Rate</h3>
+              <canvas #completionChart></canvas>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Performance Tab -->
+        <mat-tab label="Performance">
+          <div class="performance-metrics">
+            <div class="metric-grid">
+              <div class="metric-card">
+                <h3>Task Completion Rate</h3>
+                <div class="metric-value">{{ (completedCount() / totalCount() * 100 | number:'1.1-1') || 0 }}%</div>
+                <p>Tasks completed successfully</p>
+              </div>
+              <div class="metric-card">
+                <h3>Overdue Tasks</h3>
+                <div class="metric-value">{{ overdueCount() }}</div>
+                <p>Tasks past their due date</p>
+              </div>
+              <div class="metric-card">
+                <h3>Average Progress</h3>
+                <div class="metric-value">{{ averageProgress() }}%</div>
+                <p>Average completion percentage</p>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Export Tab -->
+        <mat-tab label="Advanced Export">
+          <div class="export-options">
+            <h3>Excel Export Options</h3>
+            <mat-checkbox [(ngModel)]="exportOptions.includeCharts">Include Charts</mat-checkbox>
+            <mat-checkbox [(ngModel)]="exportOptions.includeAnalytics">Include Analytics</mat-checkbox>
+            <mat-checkbox [(ngModel)]="exportOptions.includeTimeTracking">Include Time Tracking</mat-checkbox>
+            <mat-checkbox [(ngModel)]="exportOptions.includeProjectBreakdown">Include Project Breakdown</mat-checkbox>
+            <mat-checkbox [(ngModel)]="exportOptions.autoFilter">Enable Auto-Filter</mat-checkbox>
+            <mat-checkbox [(ngModel)]="exportOptions.conditionalFormatting">Apply Conditional Formatting</mat-checkbox>
+            
+            <div class="export-actions">
+              <button mat-raised-button color="primary" (click)="exportToExcel()">
+                <mat-icon>table_chart</mat-icon>
+                Export to Excel
+              </button>
+              <button mat-raised-button (click)="exportData('csv')">
+                <mat-icon>description</mat-icon>
+                Export as CSV
+              </button>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Processing Overlay -->
+  <div class="processing-overlay" *ngIf="processing()">
+    <div class="processing-content">
+      <mat-spinner></mat-spinner>
+      <p>{{ processingMessage() }}</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,75 @@
+.pivot-table-container {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 16px;
+}
+
+.pivot-container {
+  width: 100%;
+  min-height: 500px;
+  
+  // Override PivotTable.js styles for better theming
+  :deep(.pvtUi) {
+    font-family: inherit;
+    font-size: 14px;
+  }
+  
+  :deep(.pvtTable) {
+    border-collapse: collapse;
+    font-size: 13px;
+    
+    th, td {
+      padding: 8px;
+      border: 1px solid #ddd;
+    }
+    
+    th {
+      background-color: #f5f5f5;
+      font-weight: 500;
+    }
+    
+    tr:hover {
+      background-color: #f9f9f9;
+    }
+  }
+  
+  :deep(.pvtAxisContainer, .pvtVals) {
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+    padding: 8px;
+    margin: 4px;
+  }
+  
+  :deep(.pvtAxisContainer li) {
+    padding: 4px 8px;
+    background: white;
+    border: 1px solid #ddd;
+    margin: 2px;
+    cursor: move;
+    list-style: none;
+  }
+  
+  :deep(.pvtFilterBox) {
+    z-index: 1000;
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+}
+
+.no-data {
+  text-align: center;
+  padding: 48px;
+  color: #666;
+}
+
+.error-message {
+  text-align: center;
+  padding: 24px;
+  color: #d32f2f;
+  background-color: #ffebee;
+  border: 1px solid #e57373;
+  border-radius: 4px;
+  margin: 16px 0;
+}

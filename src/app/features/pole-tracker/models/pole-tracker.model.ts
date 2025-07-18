@@ -8,10 +8,15 @@ export interface PoleTracker {
   projectCode: string; // From project
   projectName?: string; // For display
 
-  // Pole Identification
-  poleNumber?: string; // Physical pole number
+  // Pole Identification (Data Integrity Rules: SPEC-DATA-001)
+  poleNumber: string; // Physical pole number - MUST be globally unique
   alternativePoleId?: string; // Alternative ID if pole number not found
   groupNumber?: string; // If poles are grouped
+
+  // Drop Relationship Management (Max 12 drops per pole)
+  connectedDrops?: string[]; // Array of drop numbers connected to this pole
+  dropCount?: number; // Calculated field: connectedDrops.length
+  maxCapacity: number; // Always 12 (physical cable limit)
 
   // Network Details
   pon?: string; // PON (Passive Optical Network) identifier
@@ -25,6 +30,7 @@ export interface PoleTracker {
   contractorId: string;
   contractorName?: string; // For display
   workingTeam: string;
+  ratePaid?: number; // Rate paid to contractor for this pole installation
 
   // Image Uploads (6 types)
   uploads: {
@@ -99,6 +105,7 @@ export enum UploadType {
 // Helper type for display
 export interface PoleTrackerListItem extends PoleTracker {
   uploadProgress: number; // 0-100 percentage of uploads completed
+  uploadedCount: number; // Count of uploaded photos (0-6)
   allUploadsComplete: boolean;
 }
 
@@ -130,4 +137,49 @@ export interface PoleTrackerStats {
     };
   };
   installationProgress: number; // percentage
+
+  // Drop Capacity Statistics (Data Integrity)
+  poleCapacityStats: {
+    totalDrops: number;
+    polesAtCapacity: number; // Poles with 12 drops
+    polesNearCapacity: number; // Poles with 10+ drops
+    averageDropsPerPole: number;
+    capacityUtilization: number; // percentage
+  };
+}
+
+// Home/Drop models for data integrity
+export interface HomeSignup {
+  id?: string;
+  dropNumber: string; // MUST be globally unique
+  connectedToPole: string; // Foreign key to PoleTracker.poleNumber
+  address: string;
+  status: string;
+  poleValidated?: boolean; // Validation status
+  createdAt: Timestamp | Date;
+  updatedAt: Timestamp | Date;
+}
+
+export interface HomesConnected {
+  id?: string;
+  dropNumber: string; // MUST be globally unique
+  connectedToPole: string; // Foreign key to PoleTracker.poleNumber
+  address: string;
+  connectionDate: Timestamp | Date;
+  status: string;
+  poleValidated?: boolean; // Validation status
+  createdAt: Timestamp | Date;
+  updatedAt: Timestamp | Date;
+}
+
+export interface HomesActivated {
+  id?: string;
+  dropNumber: string; // MUST be globally unique
+  connectedToPole: string; // Foreign key to PoleTracker.poleNumber
+  address: string;
+  activationDate: Timestamp | Date;
+  status: string;
+  poleValidated?: boolean; // Validation status
+  createdAt: Timestamp | Date;
+  updatedAt: Timestamp | Date;
 }

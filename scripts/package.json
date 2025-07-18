@@ -6,6 +6,7 @@
     "set-cors": "node set-cors-with-adc.js"
   },
   "dependencies": {
-    "@google-cloud/storage": "^7.7.0"
+    "@google-cloud/storage": "^7.7.0",
+    "node-fetch": "^2.7.0"
   }
 }

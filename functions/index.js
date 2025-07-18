@@ -1,8 +1,42 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const cors = require('cors')({ origin: true });
+const Anthropic = require('@anthropic-ai/sdk');
+const winston = require('winston');
+const _ = require('lodash');
 
 // Initialize admin SDK
 admin.initializeApp();
+
+// Import agent functions
+const agentFunctions = require('./src/agent');
+
+// Initialize logger
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.printf(({ timestamp, level, message }) => {
+      return `${timestamp} [${level.toUpperCase()}] ${message}`;
+    })
+  ),
+  transports: [
+    new winston.transports.Console()
+  ]
+});
+
+// Initialize Anthropic client
+let anthropic = null;
+function getAnthropicClient() {
+  if (!anthropic) {
+    const apiKey = functions.config().anthropic?.api_key || process.env.ANTHROPIC_API_KEY;
+    if (!apiKey) {
+      throw new Error('Anthropic API key not configured. Set functions:config:set anthropic.api_key="your_key"');
+    }
+    anthropic = new Anthropic({ apiKey });
+  }
+  return anthropic;
+}
 
 // Map collection names to entity types
 const COLLECTION_TO_ENTITY_MAP = {
@@ -207,6 +241,808 @@ exports.auditSubcollections = functions.firestore
     }
   });
 
+// =============================================================================
+// FIBREFLOW ORCHESTRATOR AGENT API
+// =============================================================================
+
+// User configuration with data permissions (from orchestrator)
+const AGENT_USERS = {
+  'lead-dev-key': {
+    name: 'Lead Dev',
+    role: 'lead',
+    canWrite: true,
+    canLearn: true,
+    dataAccess: ['projects', 'contractors', 'inventory', 'admin']
+  },
+  'dept-head-key': {
+    name: 'Dept Head',
+    role: 'developer',
+    canWrite: false,
+    canLearn: false,
+    dataAccess: ['projects', 'contractors', 'reports']
+  },
+  'project-manager-key': {
+    name: 'Project Manager',
+    role: 'manager',
+    canWrite: false,
+    canLearn: false,
+    dataAccess: ['projects', 'contractors', 'scheduling']
+  },
+  'admin-user-key': {
+    name: 'Admin User',
+    role: 'admin',
+    canWrite: false,
+    canLearn: false,
+    dataAccess: ['inventory', 'reports']
+  },
+  'app-ui-key': {
+    name: 'FibreFlow App',
+    role: 'app',
+    canWrite: false,
+    canLearn: false,
+    dataAccess: ['projects', 'contractors', 'inventory']
+  }
+};
+
+// Auth helper for orchestrator
+function authenticateAgent(req) {
+  const apiKey = req.headers['x-api-key'] || req.query.key || req.body?.apiKey;
+  const user = AGENT_USERS[apiKey];
+  
+  if (!user) {
+    throw new Error('Invalid API key');
+  }
+  
+  return user;
+}
+
+// Main orchestrator chat endpoint (Callable Function with HTTP support)
+exports.orchestratorChat = functions
+  .runWith({
+    // Allow unauthenticated access
+    invoker: 'allUsers'
+  })
+  .https.onCall(async (data, context) => {
+  console.log('orchestratorChat called with data:', data);
+  console.log('orchestratorChat context auth:', context?.auth);
+  console.log('orchestratorChat raw request:', context?.rawRequest?.headers);
+  
+  try {
+    // Handle both direct calls and hosting proxy calls
+    let message, apiKey, contextData;
+    
+    // Check if data is wrapped (from hosting proxy)
+    if (data.data) {
+      ({ message, apiKey, contextData } = data.data);
+    } else {
+      ({ message, apiKey, contextData } = data);
+    }
+    
+    if (!message) {
+      console.error('No message provided');
+      throw new functions.https.HttpsError('invalid-argument', 'Message is required');
+    }
+
+    // Authenticate using API key (don't require Firebase auth)
+    const user = AGENT_USERS[apiKey || 'app-ui-key'];
+    if (!user) {
+      console.error('Invalid API key:', apiKey);
+      throw new functions.https.HttpsError('unauthenticated', 'Invalid API key');
+    }
+
+    logger.info(`📨 [${user.name}] ${user.canWrite ? '✏️' : '👁️'} "${message}"`);
+
+    let anthropicClient;
+    try {
+      anthropicClient = getAnthropicClient();
+    } catch (error) {
+      console.error('Failed to get Anthropic client:', error);
+      throw new functions.https.HttpsError('failed-precondition', 'Anthropic API key not configured');
+    }
+    
+    // Search for relevant patterns first
+    const patterns = await searchPatterns(message, { limit: 3 });
+    const firestoreContext = await searchFirestoreContext(message, user.dataAccess, { limit: 3 });
+    
+    // Build system prompt with role-based context
+    let systemPrompt = `You are the FibreFlow Orchestrator Agent. Help with project management, contractors, inventory, and technical issues.
+
+USER CONTEXT:
+- Name: ${user.name}
+- Role: ${user.role}
+- Permissions: ${user.canWrite ? 'Read/Write' : 'Read-only'}
+- Data Access: ${user.dataAccess.join(', ')}
+
+RELEVANT PATTERNS:
+${patterns.map(p => `- ${p.problem}: ${p.solution}`).join('\n')}
+
+RELEVANT FIBREFLOW DATA:
+${firestoreContext.map(c => `- ${c.collection}: ${c.name || c.title || c.id} (${c.status || 'active'})`).join('\n')}
+
+Instructions:
+- Be concise and practical
+- Respect user's data access permissions
+- ${user.canWrite ? 'You can suggest changes and updates' : 'Provide read-only insights only'}
+- Focus on FibreFlow project management context`;
+
+    // Enhanced context for agent decisions
+    const enrichedContext = {
+      ...contextData,
+      user: user.name,
+      role: user.role,
+      readOnly: !user.canWrite,
+      dataAccess: user.dataAccess,
+      timestamp: new Date().toISOString()
+    };
+
+    const response = await anthropicClient.messages.create({
+      model: 'claude-3-5-sonnet-20241022',
+      max_tokens: 4096,
+      temperature: 0.1,
+      system: systemPrompt,
+      messages: [{ role: 'user', content: message }]
+    });
+
+    // Store conversation if user has write permissions
+    if (user.canWrite) {
+      const conversation = {
+        sessionId: `orchestrator-${Date.now()}`,
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        userMessage: message,
+        claudeResponse: response.content[0].text,
+        context: enrichedContext,
+        patterns: patterns,
+        user: user.name,
+        role: user.role,
+        source: 'orchestrator'
+      };
+
+      await admin.firestore()
+        .collection('orchestrator-conversations')
+        .add(conversation);
+    }
+
+    // Return data in callable function format
+    return {
+      success: true,
+      response: response.content[0].text,
+      context: enrichedContext,
+      mode: user.canWrite ? 'full-access' : 'read-only',
+      user: user.name,
+      patternsUsed: patterns.length,
+      contextUsed: firestoreContext.length
+    };
+
+  } catch (error) {
+    logger.error('Orchestrator chat error:', error);
+    if (error.code) {
+      // Already an HttpsError
+      throw error;
+    }
+    // Convert to HttpsError
+    throw new functions.https.HttpsError('internal', error.message);
+  }
+});
+
+// Data query endpoint with role-based filtering
+exports.orchestratorDataQuery = functions.https.onRequest(async (req, res) => {
+  // Set CORS headers explicitly
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key');
+  res.set('Access-Control-Max-Age', '3600');
+
+  // Handle preflight OPTIONS request
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+
+  return cors(req, res, async () => {
+    try {
+      if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method not allowed' });
+      }
+
+      const user = authenticateAgent(req);
+      const { query, context = {} } = req.body;
+      
+      if (!query) {
+        return res.status(400).json({ error: 'Query is required' });
+      }
+
+      logger.info(`🔍 [${user.name}] Data query: "${query}"`);
+      
+      // Check if user has data access permissions
+      if (!user.dataAccess || user.dataAccess.length === 0) {
+        return res.status(403).json({ 
+          error: 'No data access permissions',
+          message: 'Contact admin for data access'
+        });
+      }
+      
+      // Query Firestore based on user's permissions
+      const results = await queryFirestoreWithPermissions(query, user.dataAccess);
+      
+      res.json({
+        success: true,
+        query,
+        results: results,
+        user: user.name,
+        dataAccess: user.dataAccess,
+        timestamp: new Date().toISOString()
+      });
+
+    } catch (error) {
+      logger.error('Orchestrator data query error:', error);
+      if (error.message === 'Invalid API key') {
+        return res.status(401).json({ error: 'Invalid API key' });
+      }
+      res.status(500).json({ 
+        error: 'Data query failed',
+        details: error.message 
+      });
+    }
+  });
+});
+
+// Health check with user info
+exports.orchestratorHealth = functions.https.onRequest(async (req, res) => {
+  // Set CORS headers explicitly
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key');
+  res.set('Access-Control-Max-Age', '3600');
+
+  // Handle preflight OPTIONS request
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+
+  return cors(req, res, async () => {
+    try {
+      const user = authenticateAgent(req);
+      
+      res.json({ 
+        status: 'ok',
+        service: 'FibreFlow Orchestrator',
+        user: user.name,
+        role: user.role,
+        permissions: {
+          canWrite: user.canWrite,
+          canLearn: user.canLearn,
+          dataAccess: user.dataAccess
+        },
+        timestamp: new Date().toISOString()
+      });
+
+    } catch (error) {
+      if (error.message === 'Invalid API key') {
+        return res.status(401).json({ error: 'Invalid API key' });
+      }
+      res.status(500).json({ error: error.message });
+    }
+  });
+});
+
+// Quick ask endpoint for Cursor integration
+exports.orchestratorAsk = functions.https.onRequest(async (req, res) => {
+  // Set CORS headers explicitly
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-API-Key');
+  res.set('Access-Control-Max-Age', '3600');
+
+  // Handle preflight OPTIONS request
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+
+  return cors(req, res, async () => {
+    try {
+      const question = req.params?.[0] || req.query.q || req.body?.question;
+      if (!question) {
+        return res.status(400).json({ error: 'Question parameter required' });
+      }
+
+      // Default to read-only unless valid write key
+      let user;
+      try {
+        user = authenticateAgent(req);
+      } catch {
+        user = { 
+          name: 'Anonymous', 
+          role: 'guest',
+          canWrite: false, 
+          canLearn: false,
+          dataAccess: ['projects'] // Limited access for anonymous
+        };
+      }
+      
+      logger.info(`🔍 [${user.name}] Quick query: "${question}"`);
+      
+      const anthropicClient = getAnthropicClient();
+      
+      // Get basic context
+      const contextData = await searchFirestoreContext(question, user.dataAccess, { limit: 2 });
+      
+      const systemPrompt = `You are a helpful FibreFlow assistant. Provide concise, practical answers.
+      
+Available data: ${contextData.map(c => `${c.collection}: ${c.name || c.id}`).join(', ')}
+
+Keep responses brief and actionable.`;
+
+      const response = await anthropicClient.messages.create({
+        model: 'claude-3-haiku-20240307', // Faster model for quick queries
+        max_tokens: 1024,
+        temperature: 0.1,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: question }]
+      });
+
+      // Return plain text for Cursor compatibility
+      res.type('text/plain');
+      res.send(response.content[0].text || 'Completed successfully');
+      
+    } catch (error) {
+      logger.error('Orchestrator ask error:', error);
+      res.status(500).send(`Error: ${error.message}`);
+    }
+  });
+});
+
+// =============================================================================
+// CLAUDE AGENT API ENDPOINTS (Updated)
+// =============================================================================
+
+// Main Claude agent chat endpoint
+exports.claudeChat = functions.https.onRequest(async (req, res) => {
+  return cors(req, res, async () => {
+    try {
+      if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method not allowed' });
+      }
+
+      const { message, sessionId, context } = req.body;
+      if (!message) {
+        return res.status(400).json({ error: 'Message is required' });
+      }
+
+      const anthropicClient = getAnthropicClient();
+      
+      // Search for relevant patterns first
+      const patterns = await searchPatterns(message, { limit: 3 });
+      const contextData = await searchProjectContext(message, { limit: 3 });
+      
+      // Build system prompt with context
+      let systemPrompt = `You are a FibreFlow assistant. Help with project management, contractors, inventory, and technical issues.
+
+RELEVANT PATTERNS:
+${patterns.map(p => `- ${p.problem}: ${p.solution}`).join('\n')}
+
+RELEVANT CONTEXT:
+${contextData.map(c => `- ${c.name}: ${c.description || c.status}`).join('\n')}
+
+Be concise and practical in your responses.`;
+
+      const response = await anthropicClient.messages.create({
+        model: 'claude-3-5-sonnet-20241022',
+        max_tokens: 4096,
+        temperature: 0.1,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: message }]
+      });
+
+      // Store conversation
+      const conversation = {
+        sessionId: sessionId || `session-${Date.now()}`,
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        userMessage: message,
+        claudeResponse: response.content[0].text,
+        context: context || {},
+        patterns: patterns,
+        source: 'claude-functions'
+      };
+
+      await admin.firestore()
+        .collection('claude-conversations')
+        .add(conversation);
+
+      res.json({
+        success: true,
+        response: response.content[0].text,
+        sessionId: conversation.sessionId,
+        patternsUsed: patterns.length,
+        contextUsed: contextData.length
+      });
+
+    } catch (error) {
+      logger.error('Claude chat error:', error);
+      res.status(500).json({ 
+        error: 'Claude chat failed',
+        details: error.message 
+      });
+    }
+  });
+});
+
+// Search patterns endpoint
+exports.searchPatterns = functions.https.onRequest(async (req, res) => {
+  return cors(req, res, async () => {
+    try {
+      const { query, limit = 5 } = req.query;
+      if (!query) {
+        return res.status(400).json({ error: 'Query parameter required' });
+      }
+
+      const patterns = await searchPatterns(query, { limit: parseInt(limit) });
+      
+      res.json({
+        success: true,
+        patterns: patterns,
+        count: patterns.length,
+        query: query
+      });
+
+    } catch (error) {
+      logger.error('Pattern search error:', error);
+      res.status(500).json({ 
+        error: 'Pattern search failed',
+        details: error.message 
+      });
+    }
+  });
+});
+
+// Store new pattern endpoint  
+exports.storePattern = functions.https.onRequest(async (req, res) => {
+  return cors(req, res, async () => {
+    try {
+      if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method not allowed' });
+      }
+
+      const { problem, solution, type, context, confidence = 0.8 } = req.body;
+      if (!problem || !solution) {
+        return res.status(400).json({ error: 'Problem and solution are required' });
+      }
+
+      const pattern = {
+        problem,
+        solution,
+        type: type || 'general',
+        context: context || {},
+        confidence,
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        source: 'claude-functions',
+        usageCount: 0
+      };
+
+      const docRef = await admin.firestore()
+        .collection('claude-patterns')
+        .add(pattern);
+
+      res.json({
+        success: true,
+        patternId: docRef.id,
+        pattern: pattern
+      });
+
+    } catch (error) {
+      logger.error('Store pattern error:', error);
+      res.status(500).json({ 
+        error: 'Store pattern failed',
+        details: error.message 
+      });
+    }
+  });
+});
+
+// Search project context endpoint
+exports.searchContext = functions.https.onRequest(async (req, res) => {
+  return cors(req, res, async () => {
+    try {
+      const { query, collections = 'projects,contractors,inventory', limit = 5 } = req.query;
+      if (!query) {
+        return res.status(400).json({ error: 'Query parameter required' });
+      }
+
+      const searchCollections = collections.split(',');
+      const context = await searchProjectContext(query, { 
+        collections: searchCollections, 
+        limit: parseInt(limit) 
+      });
+      
+      res.json({
+        success: true,
+        context: context,
+        count: context.length,
+        query: query,
+        collections: searchCollections
+      });
+
+    } catch (error) {
+      logger.error('Context search error:', error);
+      res.status(500).json({ 
+        error: 'Context search failed',
+        details: error.message 
+      });
+    }
+  });
+});
+
+// Get conversation history endpoint
+exports.getConversations = functions.https.onRequest(async (req, res) => {
+  return cors(req, res, async () => {
+    try {
+      const { sessionId, limit = 10 } = req.query;
+      
+      let query = admin.firestore()
+        .collection('claude-conversations')
+        .orderBy('timestamp', 'desc')
+        .limit(parseInt(limit));
+      
+      if (sessionId) {
+        query = query.where('sessionId', '==', sessionId);
+      }
+
+      const snapshot = await query.get();
+      const conversations = [];
+      
+      snapshot.forEach(doc => {
+        conversations.push({
+          id: doc.id,
+          ...doc.data()
+        });
+      });
+
+      res.json({
+        success: true,
+        conversations: conversations,
+        count: conversations.length
+      });
+
+    } catch (error) {
+      logger.error('Get conversations error:', error);
+      res.status(500).json({ 
+        error: 'Get conversations failed',
+        details: error.message 
+      });
+    }
+  });
+});
+
+// =============================================================================
+// HELPER FUNCTIONS
+// =============================================================================
+
+// Enhanced Firestore search with permissions
+async function searchFirestoreContext(query, dataAccess, options = {}) {
+  try {
+    const { limit = 5 } = options;
+    const results = [];
+    
+    // Define collection mappings
+    const collectionMappings = {
+      'projects': 'projects',
+      'contractors': 'contractors',
+      'inventory': 'stockItems',
+      'admin': ['audit-logs', 'system-config'],
+      'reports': ['dailyProgress', 'audit-logs'],
+      'scheduling': ['projects', 'contractors']
+    };
+    
+    // Get actual collections based on permissions
+    const allowedCollections = [];
+    for (const permission of dataAccess) {
+      if (collectionMappings[permission]) {
+        if (Array.isArray(collectionMappings[permission])) {
+          allowedCollections.push(...collectionMappings[permission]);
+        } else {
+          allowedCollections.push(collectionMappings[permission]);
+        }
+      }
+    }
+    
+    // Remove duplicates
+    const uniqueCollections = [...new Set(allowedCollections)];
+    
+    for (const collection of uniqueCollections) {
+      try {
+        const snapshot = await admin.firestore()
+          .collection(collection)
+          .limit(Math.ceil(limit / uniqueCollections.length))
+          .get();
+
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const text = JSON.stringify(data).toLowerCase();
+          if (text.includes(query.toLowerCase())) {
+            results.push({
+              id: doc.id,
+              collection: collection,
+              name: data.name || data.title || data.projectName,
+              status: data.status,
+              ...data
+            });
+          }
+        });
+      } catch (collectionError) {
+        logger.warn(`Collection ${collection} search failed:`, collectionError);
+      }
+    }
+
+    return results.slice(0, limit);
+  } catch (error) {
+    logger.error('Search Firestore context error:', error);
+    return [];
+  }
+}
+
+// Query Firestore with user permissions
+async function queryFirestoreWithPermissions(query, dataAccess) {
+  try {
+    const results = {};
+    
+    // Define what each permission can access
+    const permissionToCollections = {
+      'projects': ['projects', 'phases', 'tasks'],
+      'contractors': ['contractors', 'contractor-projects'],
+      'inventory': ['stockItems', 'stockMovements', 'materials'],
+      'admin': ['audit-logs', 'system-config', 'users'],
+      'reports': ['dailyProgress', 'audit-logs'],
+      'scheduling': ['projects', 'contractors']
+    };
+    
+    // Get collections user can access
+    const allowedCollections = [];
+    for (const permission of dataAccess) {
+      if (permissionToCollections[permission]) {
+        allowedCollections.push(...permissionToCollections[permission]);
+      }
+    }
+    
+    // Remove duplicates
+    const uniqueCollections = [...new Set(allowedCollections)];
+    
+    // Query each allowed collection
+    for (const collection of uniqueCollections) {
+      try {
+        const snapshot = await admin.firestore()
+          .collection(collection)
+          .limit(20)
+          .get();
+        
+        const documents = [];
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          // Simple text search
+          if (JSON.stringify(data).toLowerCase().includes(query.toLowerCase())) {
+            documents.push({
+              id: doc.id,
+              ...data
+            });
+          }
+        });
+        
+        if (documents.length > 0) {
+          results[collection] = documents;
+        }
+      } catch (collectionError) {
+        logger.warn(`Collection ${collection} query failed:`, collectionError);
+      }
+    }
+    
+    return results;
+  } catch (error) {
+    logger.error('Query Firestore with permissions error:', error);
+    return {};
+  }
+}
+
+async function searchPatterns(query, options = {}) {
+  try {
+    const { limit = 5 } = options;
+    const snapshot = await admin.firestore()
+      .collection('claude-patterns')
+      .orderBy('confidence', 'desc')
+      .limit(limit * 3) // Get more to filter
+      .get();
+
+    const patterns = [];
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const text = `${data.problem} ${data.solution} ${data.type}`.toLowerCase();
+      if (text.includes(query.toLowerCase())) {
+        patterns.push({
+          id: doc.id,
+          ...data
+        });
+      }
+    });
+
+    return patterns.slice(0, limit);
+  } catch (error) {
+    logger.error('Search patterns helper error:', error);
+    return [];
+  }
+}
+
+async function searchProjectContext(query, options = {}) {
+  try {
+    const { collections = ['projects', 'contractors', 'inventory'], limit = 5 } = options;
+    const results = [];
+    
+    for (const collection of collections) {
+      try {
+        const snapshot = await admin.firestore()
+          .collection(collection)
+          .limit(limit)
+          .get();
+
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const text = JSON.stringify(data).toLowerCase();
+          if (text.includes(query.toLowerCase())) {
+            results.push({
+              id: doc.id,
+              collection: collection,
+              ...data
+            });
+          }
+        });
+      } catch (collectionError) {
+        logger.warn(`Collection ${collection} search failed:`, collectionError);
+      }
+    }
+
+    return results.slice(0, limit);
+  } catch (error) {
+    logger.error('Search context helper error:', error);
+    return [];
+  }
+}
+
+// Test orchestrator deployment
+exports.testOrchestrator = functions.https.onRequest(async (req, res) => {
+  try {
+    res.json({ 
+      success: true, 
+      message: 'Orchestrator agent is deployed and working!',
+      timestamp: new Date().toISOString(),
+      availableEndpoints: [
+        'orchestratorChat',
+        'orchestratorDataQuery', 
+        'orchestratorHealth',
+        'orchestratorAsk'
+      ]
+    });
+  } catch (error) {
+    console.error('Test orchestrator error:', error);
+    res.status(500).json({ 
+      error: error.message,
+      stack: error.stack 
+    });
+  }
+});
+
+// Simple test callable function
+exports.testCallable = functions
+  .runWith({
+    invoker: 'allUsers'
+  })
+  .https.onCall(async (data, context) => {
+    console.log('testCallable invoked with:', data);
+    return {
+      success: true,
+      message: 'Callable function is working!',
+      receivedData: data,
+      timestamp: new Date().toISOString()
+    };
+  });
+
 // Test function to verify deployment
 exports.testAuditSystem = functions.https.onRequest(async (req, res) => {
   try {
@@ -247,3 +1083,12 @@ exports.testAuditSystem = functions.https.onRequest(async (req, res) => {
     });
   }
 });
+// Export agent functions
+exports.agentChat = agentFunctions.agentChat;
+exports.agentChatHttp = agentFunctions.agentChatHttp;
+exports.searchAgentMemory = agentFunctions.searchAgentMemory;
+exports.getAgentStats = agentFunctions.getAgentStats;
+
+// Test function for debugging
+const testFunctions = require('./src/test-agent-db');
+exports.testAgentDatabase = testFunctions.testAgentDatabase;

@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule, Router } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -32,6 +33,7 @@ interface TaskDisplay extends Task {
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
     ReactiveFormsModule,
     MatCardModule,
     MatButtonModule,
@@ -51,6 +53,7 @@ export class TaskManagementComponent implements OnInit {
   private staffService = inject(StaffService);
   private dateFormat = inject(DateFormatService);
   private notification = inject(NotificationService);
+  private router = inject(Router);
 
   constructor() {
     console.log('Task Management Component - Constructor called');
@@ -174,6 +177,19 @@ export class TaskManagementComponent implements OnInit {
 
   refreshTasks() {
     this.loadData();
+  }
+
+  navigateToGridView() {
+    console.log('Navigating to grid view...');
+    this.router.navigate(['/task-grid']).then(
+      success => {
+        console.log('Navigation success:', success);
+      },
+      error => {
+        console.error('Navigation error:', error);
+        this.notification.error('Failed to navigate to grid view');
+      }
+    );
   }
 
   async toggleTaskCompletion(task: TaskDisplay) {

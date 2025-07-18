@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { OneMapRecord, ProcessedOneMapData } from '../models/onemap.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OneMapService {
   private readonly REQUIRED_COLUMNS = [
@@ -18,7 +18,7 @@ export class OneMapService {
     'Address',
     'Field Agent Name (Home Sign Ups)',
     'Last Modified Home Sign Ups By',
-    'Last Modified Home Sign Ups Date'
+    'Last Modified Home Sign Ups Date',
   ];
 
   private readonly COLUMN_MAPPING: { [key: string]: string } = {
@@ -26,38 +26,38 @@ export class OneMapService {
     '1map NAD ID': 'oneMapNadId',
     'Pole Number': 'poleNumber',
     'Drop Number': 'dropNumber',
-    'Status': 'status',
+    Status: 'status',
     'Flow Name Groups': 'flowNameGroups',
-    'Sections': 'sections',
-    'PONs': 'pons',
-    'Location': 'location',
-    'Address': 'address',
+    Sections: 'sections',
+    PONs: 'pons',
+    Location: 'location',
+    Address: 'address',
     'Field Agent Name (Home Sign Ups)': 'fieldAgentName',
     'Last Modified Home Sign Ups By': 'lastModifiedBy',
-    'Last Modified Home Sign Ups Date': 'lastModifiedDate'
+    'Last Modified Home Sign Ups Date': 'lastModifiedDate',
   };
 
   validateCsvHeaders(headers: string[]): { valid: boolean; missingColumns: string[] } {
     const missingColumns: string[] = [];
-    
+
     // Check for required columns (some might have slight variations)
-    this.REQUIRED_COLUMNS.forEach(required => {
-      const found = headers.some(header => {
+    this.REQUIRED_COLUMNS.forEach((required) => {
+      const found = headers.some((header) => {
         const normalizedHeader = header.trim().toLowerCase();
         const normalizedRequired = required.toLowerCase();
-        
+
         // Direct match
         if (normalizedHeader === normalizedRequired) return true;
-        
+
         // Contains match
         if (normalizedHeader.includes(normalizedRequired)) return true;
-        
+
         // Special cases
         if (required === 'Location Address' && normalizedHeader.includes('location')) return true;
-        
+
         return false;
       });
-      
+
       if (!found) {
         missingColumns.push(required);
       }
@@ -65,7 +65,7 @@ export class OneMapService {
 
     return {
       valid: missingColumns.length === 0,
-      missingColumns
+      missingColumns,
     };
   }
 
@@ -73,13 +73,13 @@ export class OneMapService {
     const lines = csvContent.split('\n');
     if (lines.length < 2) return [];
 
-    const headers = lines[0].split(',').map(h => h.trim());
+    const headers = lines[0].split(',').map((h) => h.trim());
     const records: OneMapRecord[] = [];
 
     // Create column index mapping
     const columnIndices: { [key: string]: number } = {};
     headers.forEach((header, index) => {
-      Object.keys(this.COLUMN_MAPPING).forEach(key => {
+      Object.keys(this.COLUMN_MAPPING).forEach((key) => {
         if (header.includes(key)) {
           columnIndices[this.COLUMN_MAPPING[key]] = index;
         }
@@ -89,9 +89,9 @@ export class OneMapService {
     // Parse data rows
     for (let i = 1; i < lines.length; i++) {
       if (!lines[i].trim()) continue;
-      
+
       const values = this.parseCsvLine(lines[i]);
-      
+
       const record: OneMapRecord = {
         propertyId: values[columnIndices['propertyId']] || '',
         oneMapNadId: values[columnIndices['oneMapNadId']] || '',
@@ -105,7 +105,7 @@ export class OneMapService {
         address: values[columnIndices['address']] || '',
         fieldAgentName: values[columnIndices['fieldAgentName']] || '',
         lastModifiedBy: values[columnIndices['lastModifiedBy']] || '',
-        lastModifiedDate: values[columnIndices['lastModifiedDate']] || ''
+        lastModifiedDate: values[columnIndices['lastModifiedDate']] || '',
       };
 
       records.push(record);
@@ -121,7 +121,7 @@ export class OneMapService {
 
     for (let i = 0; i < line.length; i++) {
       const char = line[i];
-      
+
       if (char === '"') {
         inQuotes = !inQuotes;
       } else if (char === ',' && !inQuotes) {
@@ -131,7 +131,7 @@ export class OneMapService {
         current += char;
       }
     }
-    
+
     result.push(current.trim());
     return result;
   }
@@ -140,18 +140,23 @@ export class OneMapService {
     // Step 1: Initial Data Filtering
     // Filter records where Status = "Home Sign Ups: Approved & Installation Scheduled"
     // Exclude records where Status contains "Pole Permissions"
-    let filteredRecords = records.filter(record => 
-      record.status === 'Home Sign Ups: Approved & Installation Scheduled' &&
-      !record.status.includes('Pole Permissions')
+    let filteredRecords = records.filter(
+      (record) =>
+        record.status === 'Home Sign Ups: Approved & Installation Scheduled' &&
+        !record.status.includes('Pole Permissions'),
     );
 
     // Step 2: Data Quality Control
     // 2a. Handle Missing Drop Numbers
     // Identify and move ALL rows without a Drop Number to "No_Drop_Allocated"
-    const noDropAllocated = filteredRecords.filter(record => !record.dropNumber || record.dropNumber.trim() === '');
-    const recordsWithDrops = filteredRecords.filter(record => record.dropNumber && record.dropNumber.trim() !== '');
+    const noDropAllocated = filteredRecords.filter(
+      (record) => !record.dropNumber || record.dropNumber.trim() === '',
+    );
+    const recordsWithDrops = filteredRecords.filter(
+      (record) => record.dropNumber && record.dropNumber.trim() !== '',
+    );
 
-    // 2b. Handle Duplicate Drop Numbers  
+    // 2b. Handle Duplicate Drop Numbers
     // For rows with duplicate Drop Numbers, compare "Last Modified Home Sign Ups Date"
     // Keep only the row with the earliest date for each Drop Number
     // Move newer duplicates to "Duplicate_Drops_Removed"
@@ -159,7 +164,7 @@ export class OneMapService {
     const duplicateDropsRemoved: OneMapRecord[] = [];
 
     // Group records by drop number
-    recordsWithDrops.forEach(record => {
+    recordsWithDrops.forEach((record) => {
       const dropNumber = record.dropNumber.trim();
       if (!dropNumberMap.has(dropNumber)) {
         dropNumberMap.set(dropNumber, []);
@@ -181,7 +186,7 @@ export class OneMapService {
           const dateB = this.parseDate(b.lastModifiedDate);
           return dateA.getTime() - dateB.getTime();
         });
-        
+
         // Keep the earliest (first in sorted array)
         cleanRecords.push(sorted[0]);
         // Move newer duplicates to removed list
@@ -190,11 +195,11 @@ export class OneMapService {
     });
 
     // Step 3: First Approval Date Analysis
-    // From the remaining clean data, for each unique Drop Number, 
+    // From the remaining clean data, for each unique Drop Number,
     // identify the earliest "Last Modified Home Sign Ups Date"
     // This becomes the "first approval date" for that Drop
     const dropFirstApprovalMap = new Map<string, Date>();
-    cleanRecords.forEach(record => {
+    cleanRecords.forEach((record) => {
       const date = this.parseDate(record.lastModifiedDate);
       const dropNumber = record.dropNumber.trim();
       const existing = dropFirstApprovalMap.get(dropNumber);
@@ -210,18 +215,18 @@ export class OneMapService {
 
     // Get all records for each drop and categorize based on first approval date
     const allRecordsForAnalysis = [...cleanRecords];
-    
-    allRecordsForAnalysis.forEach(record => {
+
+    allRecordsForAnalysis.forEach((record) => {
       const dropNumber = record.dropNumber.trim();
       const firstApprovalDate = dropFirstApprovalMap.get(dropNumber);
-      
+
       if (firstApprovalDate) {
         if (firstApprovalDate >= startDate && firstApprovalDate <= endDate) {
           // Sheet 1: "FirstEntry_StartDate-EndDate"
           // Include ALL rows for Drops whose first approval date falls within the date range
           firstEntryRecords.push(record);
         } else if (firstApprovalDate < startDate) {
-          // Sheet 2: "Duplicates_PreWindow"  
+          // Sheet 2: "Duplicates_PreWindow"
           // Include ALL rows for Drops whose first approval date is before StartDate
           duplicatesPreWindow.push(record);
         }
@@ -232,18 +237,18 @@ export class OneMapService {
       firstEntryRecords,
       duplicatesPreWindow,
       noDropAllocated,
-      duplicateDropsRemoved
+      duplicateDropsRemoved,
     };
   }
 
   private parseDate(dateString: string): Date {
     if (!dateString) return new Date(0);
-    
+
     // Handle ISO format with timezone
     if (dateString.includes('T')) {
       return new Date(dateString);
     }
-    
+
     // Handle other formats if needed
     return new Date(dateString);
   }
@@ -265,34 +270,36 @@ export class OneMapService {
       'Address',
       'Field Agent Name (Home Sign Ups)',
       'Last Modified Home Sign Ups By',
-      'Last Modified Home Sign Ups Date'
+      'Last Modified Home Sign Ups Date',
     ];
 
     // Create CSV content
     const csvContent = [
       headers.join(','),
-      ...records.map(record => [
-        this.escapeCsvValue(record.propertyId),
-        this.escapeCsvValue(record.oneMapNadId),
-        this.escapeCsvValue(record.poleNumber),
-        this.escapeCsvValue(record.dropNumber),
-        this.escapeCsvValue(record.status),
-        this.escapeCsvValue(record.flowNameGroups),
-        this.escapeCsvValue(record.sections),
-        this.escapeCsvValue(record.pons),
-        this.escapeCsvValue(record.location),
-        this.escapeCsvValue(record.address),
-        this.escapeCsvValue(record.fieldAgentName),
-        this.escapeCsvValue(record.lastModifiedBy),
-        this.escapeCsvValue(record.lastModifiedDate)
-      ].join(','))
+      ...records.map((record) =>
+        [
+          this.escapeCsvValue(record.propertyId),
+          this.escapeCsvValue(record.oneMapNadId),
+          this.escapeCsvValue(record.poleNumber),
+          this.escapeCsvValue(record.dropNumber),
+          this.escapeCsvValue(record.status),
+          this.escapeCsvValue(record.flowNameGroups),
+          this.escapeCsvValue(record.sections),
+          this.escapeCsvValue(record.pons),
+          this.escapeCsvValue(record.location),
+          this.escapeCsvValue(record.address),
+          this.escapeCsvValue(record.fieldAgentName),
+          this.escapeCsvValue(record.lastModifiedBy),
+          this.escapeCsvValue(record.lastModifiedDate),
+        ].join(','),
+      ),
     ].join('\n');
 
     // Create blob and download
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
-    
+
     link.setAttribute('href', url);
     link.setAttribute('download', filename);
     link.style.visibility = 'hidden';
@@ -303,12 +310,12 @@ export class OneMapService {
 
   private escapeCsvValue(value: string): string {
     if (!value) return '';
-    
+
     // Escape quotes and wrap in quotes if contains comma, newline, or quotes
     if (value.includes(',') || value.includes('\n') || value.includes('"')) {
       return '"' + value.replace(/"/g, '""') + '"';
     }
-    
+
     return value;
   }
 }

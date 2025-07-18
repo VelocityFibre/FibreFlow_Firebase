@@ -9,7 +9,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatBadgeModule } from '@angular/material/badge';
 import { AuthService } from '../../core/services/auth.service';
+import { DevNoteService } from '../../core/services/dev-note.service';
 import { demoConfig } from '../../config/demo.config';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { computed } from '@angular/core';
 
 interface NavItem {
   label: string;
@@ -63,7 +66,7 @@ interface NavItem {
             <mat-nav-list class="nav-list">
               <a
                 mat-list-item
-                *ngFor="let item of mainItems"
+                *ngFor="let item of mainItems()"
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
@@ -201,6 +204,30 @@ interface NavItem {
             </mat-nav-list>
           </div>
 
+          <!-- Analytics Category -->
+          <div class="nav-category">
+            <h3 class="category-title">Analytics</h3>
+            <mat-nav-list class="nav-list">
+              <a
+                mat-list-item
+                *ngFor="let item of analyticsItems"
+                [routerLink]="item.route"
+                routerLinkActive="active-link"
+                class="nav-item"
+              >
+                <mat-icon
+                  matListItemIcon
+                  [matBadge]="item.badge"
+                  [matBadgeHidden]="!item.badge || item.badge === 0"
+                  matBadgeColor="warn"
+                  matBadgeSize="small"
+                  >{{ item.icon }}</mat-icon
+                >
+                <span matListItemTitle>{{ item.label }}</span>
+              </a>
+            </mat-nav-list>
+          </div>
+
           <!-- Mobile Pages Category -->
           <div class="nav-category">
             <h3 class="category-title">Mobile Pages</h3>
@@ -231,7 +258,7 @@ interface NavItem {
             <mat-nav-list class="nav-list">
               <a
                 mat-list-item
-                *ngFor="let item of settingsItems"
+                *ngFor="let item of settingsItems()"
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
@@ -400,8 +427,12 @@ interface NavItem {
 })
 export class AppShellComponent {
   private authService = inject(AuthService);
+  private devNoteService = inject(DevNoteService);
 
   pendingTasksCount = 0;
+  
+  // Get dev stats for badge count
+  devStats = toSignal(this.devNoteService.getDevStats());
 
   // Helper method to filter items based on demo config
   private filterItems(items: NavItem[]): NavItem[] {
@@ -421,10 +452,11 @@ export class AppShellComponent {
   }
 
   // Main category items
-  mainItems: NavItem[] = this.filterItems([
+  mainItems = computed(() => this.filterItems([
     { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
     { label: 'Meetings', icon: 'groups', route: '/meetings' },
-  ]);
+    { label: 'Action Items', icon: 'task_alt', route: '/action-items' },
+  ]));
 
   // Staff category items
   staffItems: NavItem[] = this.filterItems([
@@ -439,8 +471,7 @@ export class AppShellComponent {
   // Project Management category items
   projectItems: NavItem[] = this.filterItems([
     { label: 'Projects', icon: 'folder', route: '/projects' },
-    { label: 'Pole Tracker (Desktop)', icon: 'cell_tower', route: '/pole-tracker' },
-    { label: 'Pole Tracker (Mobile)', icon: 'phone_android', route: '/pole-tracker/mobile' },
+    { label: 'Pole Tracker (Desktop)', icon: 'cell_tower', route: '/pole-tracker/list' },
     { label: 'Phases', icon: 'timeline', route: '/phases' },
     { label: 'Steps', icon: 'linear_scale', route: '/steps', badge: 0 },
     { label: 'All Tasks', icon: 'task_alt', route: '/tasks' },
@@ -476,19 +507,31 @@ export class AppShellComponent {
     { label: 'Contractors', icon: 'engineering', route: '/contractors' },
   ]);
 
+  // Analytics category items
+  analyticsItems: NavItem[] = this.filterItems([
+    { label: 'Pole Permission Analytics', icon: 'analytics', route: '/analytics/pole-permissions' },
+  ]);
+
   // Mobile Pages category items
   mobileItems: NavItem[] = this.filterItems([
-    { label: 'Pole Map View', icon: 'map', route: '/pole-tracker/mobile' },
+    { label: 'Pole Tracker (Mobile)', icon: 'smartphone', route: '/pole-tracker/mobile' },
+    { label: 'Pole Map View', icon: 'map', route: '/pole-tracker/mobile/map' },
     { label: 'Quick Capture', icon: 'camera_alt', route: '/pole-tracker/mobile/capture' },
     { label: 'My Assignments', icon: 'assignment_ind', route: '/pole-tracker/mobile/assignments' },
     { label: 'Nearby Poles', icon: 'near_me', route: '/pole-tracker/mobile/nearby' },
   ]);
 
   // Settings category items
-  settingsItems: NavItem[] = this.filterItems([
+  settingsItems = computed(() => this.filterItems([
     { label: 'Company Info', icon: 'business', route: '/settings/company' },
     { label: 'Settings', icon: 'settings', route: '/settings' },
     { label: 'Audit Trail', icon: 'history', route: '/audit-trail' },
     { label: 'Debug Logs', icon: 'bug_report', route: '/debug-logs' },
-  ]);
+    { 
+      label: 'Dev Tasks', 
+      icon: 'assignment', 
+      route: '/dev-tasks',
+      badge: this.devStats()?.pendingTasks || 0
+    },
+  ]));
 }

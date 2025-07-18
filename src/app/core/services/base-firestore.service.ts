@@ -279,7 +279,7 @@ export abstract class BaseFirestoreService<T extends BaseEntity> {
   }
 
   // Standardized CRUD Operations
-  
+
   /**
    * Get all documents from collection
    */
@@ -304,7 +304,7 @@ export abstract class BaseFirestoreService<T extends BaseEntity> {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     } as WithFieldValue<T>;
-    
+
     const docRef = await this.addDocWithAudit(this.collection, timestampedData);
     return docRef.id;
   }
@@ -318,7 +318,7 @@ export abstract class BaseFirestoreService<T extends BaseEntity> {
       ...data,
       updatedAt: serverTimestamp(),
     } as UpdateData<T>;
-    
+
     await this.updateDocWithAudit(docRef, timestampedData);
   }
 
@@ -331,7 +331,7 @@ export abstract class BaseFirestoreService<T extends BaseEntity> {
   }
 
   // Query Helper Methods
-  
+
   /**
    * Get documents with custom query constraints
    */

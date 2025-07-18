@@ -350,6 +350,7 @@ master_controls:
     antiHall: "REQUIRED for new patterns"
     deployment: "ONLY through deploy command"
     testing: "ONLY on live Firebase"
+    data_integrity: "ENFORCE pole/drop linking rules ALWAYS"
   
   # Behavior modifiers
   ai_behavior_settings:

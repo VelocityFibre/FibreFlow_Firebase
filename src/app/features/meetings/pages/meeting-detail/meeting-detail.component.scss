@@ -33,10 +33,18 @@
       height: 24px;
       color: rgb(var(--ff-primary));
 
-      &.success { color: rgb(var(--ff-success)); }
-      &.warning { color: rgb(var(--ff-warning)); }
-      &.danger { color: rgb(var(--ff-destructive)); }
-      &.info { color: rgb(var(--ff-info)); }
+      &.success {
+        color: rgb(var(--ff-success));
+      }
+      &.warning {
+        color: rgb(var(--ff-warning));
+      }
+      &.danger {
+        color: rgb(var(--ff-destructive));
+      }
+      &.info {
+        color: rgb(var(--ff-info));
+      }
     }
 
     .overview-content {
@@ -146,51 +154,101 @@
   padding: 0 24px;
 }
 
-.action-item {
-  ::ng-deep .mat-mdc-list-item {
-    height: auto;
-    min-height: 72px;
-    padding: 16px 24px;
-  }
+// CSS Grid Layout for Action Items
+.action-items-grid {
+  display: grid;
+  grid-template-columns: 40px 1fr 100px 160px 140px;
+  gap: 0;
 
-  &.completed {
-    .action-text {
-      text-decoration: line-through;
-      opacity: 0.7;
+  .action-items-header-row {
+    display: contents;
+
+    > div {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgb(var(--ff-muted-foreground));
+      border-bottom: 1px solid rgb(var(--ff-border));
+      background: rgb(var(--ff-muted) / 0.1);
+
+      &:first-child {
+        border-radius: var(--ff-radius) 0 0 0;
+      }
+      &:last-child {
+        border-radius: 0 var(--ff-radius) 0 0;
+      }
     }
   }
 
-  .completed-icon {
-    color: rgb(var(--ff-success));
+  .action-item-row {
+    display: contents;
+
+    > div {
+      padding: 16px;
+      border-bottom: 1px solid rgb(var(--ff-border));
+      display: flex;
+      align-items: center;
+      min-height: 60px;
+
+      &:first-child {
+        justify-content: center;
+      }
+    }
+
+    &:hover > div {
+      background: rgb(var(--ff-muted) / 0.05);
+    }
+
+    &.completed {
+      .completed-text {
+        text-decoration: line-through;
+        opacity: 0.7;
+      }
+    }
   }
 
-  .action-item-content {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
+  // Individual cell styles
+  .checkbox-cell {
+    justify-content: center;
 
+    .completed-icon {
+      color: rgb(var(--ff-success));
+    }
+  }
+
+  .text-cell {
     .action-text {
-      flex: 1;
       font-size: 14px;
       font-weight: 400;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: break-word;
     }
+  }
+
+  .priority-cell {
+    justify-content: center;
 
     .priority-chip {
       height: 24px;
       font-size: 12px;
       padding: 0 8px;
       border: none;
+      white-space: nowrap;
 
-      &.success { 
+      &.success {
         background: rgb(var(--ff-success) / 0.1);
         color: rgb(var(--ff-success));
       }
-      &.warning { 
+      &.warning {
         background: rgb(var(--ff-warning) / 0.1);
         color: rgb(var(--ff-warning));
       }
-      &.danger { 
+      &.danger {
         background: rgb(var(--ff-destructive) / 0.1);
         color: rgb(var(--ff-destructive));
       }
@@ -204,26 +262,44 @@
     }
   }
 
-  .action-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  .assignee-cell {
+    gap: 6px;
     font-size: 12px;
     color: rgb(var(--ff-muted-foreground));
 
-    > div {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-
-      mat-icon {
-        font-size: 14px;
-        width: 14px;
-        height: 14px;
-      }
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
     }
 
-    .due-date.overdue {
+    .assignee-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .due-date-cell {
+    gap: 6px;
+    font-size: 12px;
+    color: rgb(var(--ff-muted-foreground));
+
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    .due-date-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &.overdue {
       color: rgb(var(--ff-destructive));
     }
   }
@@ -380,5 +456,34 @@
 
   .action-items-header {
     padding: 0 16px;
+  }
+
+  // Mobile layout for action items grid
+  .action-items-grid {
+    grid-template-columns: 40px 1fr 80px;
+
+    .action-items-header-row {
+      .header-assignee,
+      .header-due-date {
+        display: none;
+      }
+    }
+
+    .action-item-row {
+      .assignee-cell,
+      .due-date-cell {
+        display: none;
+      }
+    }
+
+    // Add mobile meta info below main content
+    .action-item-row::after {
+      content: attr(data-assignee) ' • ' attr(data-due-date);
+      grid-column: 2;
+      padding: 0 16px 12px;
+      font-size: 11px;
+      color: rgb(var(--ff-muted-foreground));
+      border-bottom: 1px solid rgb(var(--ff-border));
+    }
   }
 }

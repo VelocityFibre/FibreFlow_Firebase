@@ -49,6 +49,12 @@ antiHall/
 *.env
 **/node_modules
 
+# Files with API keys - never commit these
+src/app/core/services/direct-anthropic.service.ts
+test-anthropic-api.js
+test-browser-api.html
+functions/firebase-debug.log
+
 # Service Account Keys - NEVER commit these!
 *-service-account.json
 fibreflow-service-account.json
@@ -75,3 +81,5 @@ OneMap/antiHall_validation_report.json
 # Backup files
 backups/
 *.backup.json
+OneMap/output/*.csv
+OneMap/output/*.json

@@ -3,33 +3,34 @@ import {
   Firestore,
   collection,
   collectionData,
-  doc,
-  docData,
-  addDoc,
-  updateDoc,
-  deleteDoc,
   query,
   where,
   orderBy,
   CollectionReference,
-  DocumentReference,
   serverTimestamp,
+  addDoc,
 } from '@angular/fire/firestore';
 import { Observable, from, map, catchError, of, switchMap } from 'rxjs';
 import { BOQItem, BOQSummary } from '../models/boq.model';
-// import { toDate, TypedCollectionReference } from '@core/types';
-// import { handleErrorOperator } from '@core/utils/error-handling';
+import { BaseFirestoreService } from '../../../core/services/base-firestore.service';
+import { EntityType } from '../../../core/models/audit-log.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class BOQService {
-  private readonly collectionName = 'boqItems';
+export class BOQService extends BaseFirestoreService<BOQItem> {
+  protected override firestore = inject(Firestore);
+  protected collectionName = 'boqItems';
+
+  protected getEntityType(): EntityType {
+    return 'boq';
+  }
+
+  // Keep reference for complex queries
   private boqCollection: CollectionReference<BOQItem>;
 
-  private firestore = inject(Firestore);
-
   constructor() {
+    super();
     this.boqCollection = collection(
       this.firestore,
       this.collectionName,
@@ -39,12 +40,11 @@ export class BOQService {
   // Get all BOQ items
   getBOQItems(): Observable<BOQItem[]> {
     try {
-      const q = query(this.boqCollection, orderBy('createdAt', 'desc'));
-      return collectionData(q, { idField: 'id' }).pipe(
+      return this.getOrderedByDate('desc').pipe(
         catchError((error) => {
           console.warn('Index not ready, using in-memory sorting:', error.message);
           // Fallback to unordered query if index is not ready
-          return collectionData(this.boqCollection, { idField: 'id' }).pipe(
+          return this.getAll().pipe(
             map((items) => {
               // Sort in memory
               return items.sort((a, b) => {
@@ -63,7 +63,7 @@ export class BOQService {
         }),
       );
     } catch (error) {
-      return collectionData(this.boqCollection, { idField: 'id' }).pipe(
+      return this.getAll().pipe(
         catchError((error) => {
           console.error('Error in getBOQItems:', error);
           return of([]);
@@ -75,13 +75,11 @@ export class BOQService {
   // Get BOQ items by project
   getBOQItemsByProject(projectId: string): Observable<BOQItem[]> {
     try {
-      const q = query(this.boqCollection, where('projectId', '==', projectId), orderBy('itemCode'));
-      return collectionData(q, { idField: 'id' }).pipe(
+      return this.getWithQuery([where('projectId', '==', projectId), orderBy('itemCode')]).pipe(
         catchError((error) => {
           console.warn('Index not ready, using in-memory sorting:', error.message);
           // Fallback to just projectId filter without ordering
-          const fallbackQuery = query(this.boqCollection, where('projectId', '==', projectId));
-          return collectionData(fallbackQuery, { idField: 'id' }).pipe(
+          return this.getWithFilter('projectId', '==', projectId).pipe(
             map((items) => {
               // Sort in memory by itemCode
               return items.sort((a, b) => (a.itemCode || '').localeCompare(b.itemCode || ''));
@@ -101,8 +99,7 @@ export class BOQService {
 
   // Get single BOQ item
   getBOQItem(id: string): Observable<BOQItem | undefined> {
-    const docRef = doc(this.boqCollection, id);
-    return docData(docRef, { idField: 'id' }).pipe(
+    return this.getById(id).pipe(
       catchError((error) => {
         console.error('Error in getBOQItem:', error);
         return of(undefined);
@@ -132,12 +129,9 @@ export class BOQService {
       ...item,
       remainingQuantity: item.requiredQuantity - item.allocatedQuantity,
       totalPrice: item.requiredQuantity * item.unitPrice,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     };
 
-    return from(addDoc(this.boqCollection, newItem)).pipe(
-      map((docRef) => docRef.id),
+    return from(this.create(newItem)).pipe(
       catchError((error) => {
         console.error('Error in addBOQItem:', error);
         throw error;
@@ -147,11 +141,8 @@ export class BOQService {
 
   // Update BOQ item
   updateBOQItem(id: string, item: Partial<BOQItem>): Observable<void> {
-    const docRef = doc(this.boqCollection, id);
-    const updateData = {
-      ...item,
-      updatedAt: new Date(),
-    };
+    // Use inherited update method for automatic timestamp handling
+    const updateData = { ...item };
 
     // Recalculate if quantities or prices changed
     if (item.requiredQuantity !== undefined || item.allocatedQuantity !== undefined) {
@@ -166,7 +157,7 @@ export class BOQService {
       updateData.totalPrice = quantity * price;
     }
 
-    return from(updateDoc(docRef, updateData)).pipe(
+    return from(this.update(id, updateData)).pipe(
       catchError((error) => {
         console.error('Error in updateBOQItem:', error);
         throw error;
@@ -176,8 +167,7 @@ export class BOQService {
 
   // Delete BOQ item
   deleteBOQItem(id: string): Observable<void> {
-    const docRef = doc(this.boqCollection, id);
-    return from(deleteDoc(docRef)).pipe(
+    return from(this.delete(id)).pipe(
       catchError((error) => {
         console.error('Error in deleteBOQItem:', error);
         throw error;
@@ -293,8 +283,8 @@ export class BOQService {
           !row['Item Rate'] ||
           row['Item Rate'] === '0' ||
           this.parsePrice(row['Item Rate'] || '0') === 0,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: serverTimestamp() as any,
+        updatedAt: serverTimestamp() as any,
       };
 
       validItems.push(item);

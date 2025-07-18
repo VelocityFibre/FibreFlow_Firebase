@@ -19,7 +19,7 @@ import { EntityType } from '../../../core/models/audit-log.model';
 })
 export class StaffService extends BaseFirestoreService<StaffMember> {
   protected collectionName = 'staff';
-  
+
   // Cache for staff list
   private staffCache$?: Observable<StaffMember[]>;
 

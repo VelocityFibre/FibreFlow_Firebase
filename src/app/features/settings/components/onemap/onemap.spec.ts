@@ -8,9 +8,8 @@ describe('Onemap', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Onemap]
-    })
-    .compileComponents();
+      imports: [Onemap],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(Onemap);
     component = fixture.componentInstance;

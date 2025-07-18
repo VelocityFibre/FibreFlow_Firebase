@@ -1,11 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import {
-  Firestore,
-  where,
-  orderBy,
-  QueryConstraint,
-  Timestamp,
-} from '@angular/fire/firestore';
+import { Firestore, where, orderBy, QueryConstraint, Timestamp } from '@angular/fire/firestore';
 import { Observable, map, take } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { Client, ClientFilter, ClientSortOptions } from '../models/client.model';

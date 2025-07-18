@@ -54,11 +54,14 @@ import { Timestamp } from '@angular/fire/firestore';
             </mat-option>
           </mat-select>
           <mat-hint *ngIf="selectedContractor()">
-            <mat-chip-set>
-              <mat-chip *ngFor="let service of selectedContractor()!.capabilities?.services || []">
-                {{ service }}
-              </mat-chip>
-            </mat-chip-set>
+            <div class="services-section">
+              <span class="services-label">Services & Capabilities:</span>
+              <mat-chip-set>
+                <mat-chip *ngFor="let service of selectedContractor()!.capabilities?.services || []">
+                  {{ service }}
+                </mat-chip>
+              </mat-chip-set>
+            </div>
           </mat-hint>
         </mat-form-field>
 
@@ -188,16 +191,36 @@ import { Timestamp } from '@angular/fire/firestore';
         color: rgba(0, 0, 0, 0.87);
       }
 
-      mat-chip-set {
-        margin-top: 8px;
-        margin-bottom: 16px;
+      .services-section {
+        margin-top: 12px;
+        margin-bottom: 20px;
+        padding: 12px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        border-left: 3px solid #3f51b5;
+      }
+
+      .services-label {
+        font-size: 12px;
+        font-weight: 500;
+        color: #666;
         display: block;
+        margin-bottom: 8px;
+      }
+
+      mat-chip-set {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
       }
 
       mat-chip {
         font-size: 11px !important;
-        min-height: 22px !important;
-        padding: 0 8px !important;
+        min-height: 24px !important;
+        padding: 0 10px !important;
+        background-color: #e3f2fd !important;
+        color: #1976d2 !important;
+        border-radius: 12px !important;
       }
 
       .mat-mdc-form-field-hint {

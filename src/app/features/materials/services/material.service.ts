@@ -34,7 +34,7 @@ export class MaterialService extends BaseFirestoreService<MasterMaterial> {
   protected override firestore = inject(Firestore); // Still needed for batch operations
   private logger = inject(RemoteLoggerService);
   protected collectionName = 'materials';
-  
+
   protected getEntityType(): EntityType {
     return 'material';
   }
@@ -154,7 +154,9 @@ export class MaterialService extends BaseFirestoreService<MasterMaterial> {
   }
 
   // Add new material
-  async addMaterial(material: Omit<MasterMaterial, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  async addMaterial(
+    material: Omit<MasterMaterial, 'id' | 'createdAt' | 'updatedAt'>,
+  ): Promise<string> {
     await this.logger.debug('MaterialService.addMaterial called', 'MaterialService', material);
 
     try {
@@ -203,7 +205,9 @@ export class MaterialService extends BaseFirestoreService<MasterMaterial> {
   }
 
   // Import multiple materials
-  async importMaterials(materials: Omit<MasterMaterial, 'id' | 'createdAt' | 'updatedAt'>[]): Promise<void> {
+  async importMaterials(
+    materials: Omit<MasterMaterial, 'id' | 'createdAt' | 'updatedAt'>[],
+  ): Promise<void> {
     const batch = writeBatch(this.firestore);
     const existingCodes = new Set<string>();
 

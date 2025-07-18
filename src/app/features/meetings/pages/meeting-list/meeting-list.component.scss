@@ -66,7 +66,7 @@
       color: rgb(var(--ff-primary));
       text-decoration: none;
       font-weight: 500;
-      
+
       &:hover {
         text-decoration: underline;
       }
@@ -206,7 +206,7 @@
 // Danger text for delete button
 .danger-text {
   color: rgb(var(--ff-destructive)) !important;
-  
+
   mat-icon {
     color: rgb(var(--ff-destructive)) !important;
   }

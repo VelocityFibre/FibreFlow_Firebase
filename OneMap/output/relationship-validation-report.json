@@ -1,0 +1,92 @@
+{
+  "validationDate": "2025-07-16T11:06:55.821377",
+  "statistics": {
+    "totalPoles": 4468,
+    "totalDrops": 23708,
+    "polesWithDrops": 2965,
+    "polesWithoutDrops": 1503,
+    "dropsWithValidPole": 23708,
+    "orphanedDrops": 0,
+    "polesAtCapacity": 0,
+    "polesOverCapacity": 0,
+    "averageDropsPerPole": 8.0
+  },
+  "errors": [],
+  "warnings": [],
+  "orphanedDrops": [],
+  "capacityIssues": [],
+  "analysis": {
+    "topPolesbyDropCount": [
+      {
+        "poleId": "LAW.P.A002",
+        "dropCount": 8,
+        "poleType": "feeder",
+        "status": "Permission not granted"
+      },
+      {
+        "poleId": "LAW.P.A003",
+        "dropCount": 8,
+        "poleType": "distribution",
+        "status": "Permission not granted"
+      },
+      {
+        "poleId": "LAW.P.A005",
+        "dropCount": 8,
+        "poleType": "feeder",
+        "status": "Permission not granted"
+      },
+      {
+        "poleId": "LAW.P.A006",
+        "dropCount": 8,
+        "poleType": "distribution",
+        "status": "Permission not granted"
+      },
+      {
+        "poleId": "LAW.P.A007",
+        "dropCount": 8,
+        "poleType": "distribution",
+        "status": "Permission not granted"
+      },
+      {
+        "poleId": "LAW.P.A008",
+        "dropCount": 8,
+        "poleType": "distribution",
+        "status": "Permission not granted"
+      },
+      {
+        "poleId": "LAW.P.A009",
+        "dropCount": 8,
+        "poleType": "distribution",
+        "status": "Permission not granted"
+      },
+      {
+        "poleId": "LAW.P.A010",
+        "dropCount": 8,
+        "poleType": "distribution",
+        "status": "Permission not granted"
+      },
+      {
+        "poleId": "LAW.P.A012",
+        "dropCount": 8,
+        "poleType": "feeder",
+        "status": "Permission not granted"
+      },
+      {
+        "poleId": "LAW.P.A013",
+        "dropCount": 8,
+        "poleType": "feeder",
+        "status": "Permission not granted"
+      }
+    ],
+    "poleTypeSummary": {
+      "feeder": {
+        "count": 2107,
+        "totalDrops": 10111
+      },
+      "distribution": {
+        "count": 2361,
+        "totalDrops": 13597
+      }
+    }
+  }
+}

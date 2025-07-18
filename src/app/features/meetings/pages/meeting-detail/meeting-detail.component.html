@@ -95,42 +95,59 @@
                   </mat-panel-title>
                 </mat-expansion-panel-header>
 
-                <mat-list>
-                  <mat-list-item
-                    *ngFor="let item of pendingActionItems(); let i = index"
-                    class="action-item"
-                  >
-                    <mat-checkbox
-                      matListItemIcon
-                      [checked]="selectedActionItems().has(i)"
-                      (change)="toggleActionItem(i)"
-                    ></mat-checkbox>
+                <div class="action-items-grid">
+                  <div class="action-items-header-row">
+                    <div class="header-checkbox"></div>
+                    <div class="header-text">Action Item</div>
+                    <div class="header-priority">Priority</div>
+                    <div class="header-assignee">Assignee</div>
+                    <div class="header-due-date">Due Date</div>
+                  </div>
 
-                    <div matListItemTitle class="action-item-content">
-                      <span class="action-text">{{ item.text }}</span>
+                  <div
+                    *ngFor="let item of pendingActionItems(); let i = index"
+                    class="action-item-row"
+                    [attr.data-assignee]="item.assignee"
+                    [attr.data-due-date]="
+                      item.dueDate ? formatDueDate(item.dueDate) : 'No due date'
+                    "
+                  >
+                    <div class="checkbox-cell">
+                      <mat-checkbox
+                        [checked]="selectedActionItems().has(i)"
+                        (change)="toggleActionItem(i)"
+                      ></mat-checkbox>
+                    </div>
+
+                    <div class="text-cell">
+                      <span class="action-text" [title]="item.text">{{ item.text }}</span>
+                    </div>
+
+                    <div class="priority-cell">
                       <mat-chip [ngClass]="getPriorityColor(item.priority)" class="priority-chip">
                         <mat-icon>{{ getPriorityIcon(item.priority) }}</mat-icon>
                         {{ item.priority }}
                       </mat-chip>
                     </div>
 
-                    <div matListItemMeta class="action-meta">
-                      <div class="assignee">
-                        <mat-icon>person</mat-icon>
-                        {{ item.assignee }}
-                      </div>
-                      <div
-                        class="due-date"
-                        [class.overdue]="
-                          item.dueDate && formatDueDate(item.dueDate).includes('Overdue')
-                        "
-                      >
-                        <mat-icon>event</mat-icon>
-                        {{ item.dueDate ? formatDueDate(item.dueDate) : 'No due date' }}
-                      </div>
+                    <div class="assignee-cell">
+                      <mat-icon>person</mat-icon>
+                      <span class="assignee-text" [title]="item.assignee">{{ item.assignee }}</span>
                     </div>
-                  </mat-list-item>
-                </mat-list>
+
+                    <div
+                      class="due-date-cell"
+                      [class.overdue]="
+                        item.dueDate && formatDueDate(item.dueDate).includes('Overdue')
+                      "
+                    >
+                      <mat-icon>event</mat-icon>
+                      <span class="due-date-text">{{
+                        item.dueDate ? formatDueDate(item.dueDate) : 'No due date'
+                      }}</span>
+                    </div>
+                  </div>
+                </div>
               </mat-expansion-panel>
 
               <!-- Completed Action Items -->
@@ -141,25 +158,35 @@
                   </mat-panel-title>
                 </mat-expansion-panel-header>
 
-                <mat-list>
-                  <mat-list-item
+                <div class="action-items-grid completed">
+                  <div
                     *ngFor="let item of completedActionItems()"
-                    class="action-item completed"
+                    class="action-item-row completed"
                   >
-                    <mat-icon matListItemIcon class="completed-icon">check_circle</mat-icon>
-
-                    <div matListItemTitle class="action-item-content">
-                      <span class="action-text">{{ item.text }}</span>
+                    <div class="checkbox-cell">
+                      <mat-icon class="completed-icon">check_circle</mat-icon>
                     </div>
 
-                    <div matListItemMeta class="action-meta">
-                      <div class="assignee">
-                        <mat-icon>person</mat-icon>
-                        {{ item.assignee }}
-                      </div>
+                    <div class="text-cell">
+                      <span class="action-text completed-text" [title]="item.text">{{
+                        item.text
+                      }}</span>
                     </div>
-                  </mat-list-item>
-                </mat-list>
+
+                    <div class="priority-cell">
+                      <!-- Empty for completed items -->
+                    </div>
+
+                    <div class="assignee-cell">
+                      <mat-icon>person</mat-icon>
+                      <span class="assignee-text" [title]="item.assignee">{{ item.assignee }}</span>
+                    </div>
+
+                    <div class="due-date-cell">
+                      <!-- Empty for completed items -->
+                    </div>
+                  </div>
+                </div>
               </mat-expansion-panel>
             </mat-accordion>
 

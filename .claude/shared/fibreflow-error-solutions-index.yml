@@ -29,6 +29,22 @@ error_categories:
       description: "jj git push shows nothing changed"
       solution_file: "fibreflow-jj-push-workflow-issue.yml"
       quick_fix: "jj bookmark move master --to @"
+  
+  angular_material:
+    multi_select_dropdown:
+      description: "mat-select multiple dropdown doesn't close after selection"
+      solution_file: "fibreflow-angular-material-dropdown-issue.yml"
+      quick_fix: "Add Done button inside dropdown with servicesSelect.close()"
+      pattern: "Add explicit close button for better UX"
+  
+  angular_routing:
+    NG04002_nested_routes:
+      description: "Cannot match any routes error with lazy-loaded nested routes"
+      solution_file: "fibreflow-angular-routing-nested-error.yml"
+      quick_fix: "Create direct route in app.routes.ts instead of nested children"
+      pattern: "Avoid complex nested routing for simple navigation"
+      example_error: "Cannot match any routes. URL Segment: 'tasks/management/grid'"
+      root_cause: "Angular strips leading slashes in nested lazy-loaded routes"
 
 # Quick Lookup Commands
 quick_commands:
@@ -60,6 +76,21 @@ workflows:
     1: "Check bookmarks: jj bookmark list"
     2: "Move master: jj bookmark move master --to @"
     3: "Push: jj git push --branch master"
+  
+  when_dropdown_wont_close:
+    1: "Identify if it's mat-select multiple"
+    2: "Remove setTimeout/openedChange approaches"
+    3: "Add Done button inside dropdown"
+    4: "Implement clean close() method"
+    5: "Style button with Material Design"
+  
+  when_route_not_matching:
+    1: "Check if error shows 'Cannot match any routes'"
+    2: "Identify if using nested/lazy-loaded routes"
+    3: "Create direct route in app.routes.ts"
+    4: "Use loadComponent instead of loadChildren"
+    5: "Update navigation links to use direct route"
+    6: "Example: '/tasks/management/grid' → '/task-grid'"
 
 # Learning Pattern
 learning_pattern:

@@ -14,6 +14,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { PoleTrackerService } from '../../services/pole-tracker.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { PoleTracker, ImageUpload } from '../../models/pole-tracker.model';
+import { PlannedPole } from '../../models/mobile-pole-tracker.model';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
@@ -38,13 +39,13 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
       <!-- Header -->
       <div class="page-header">
         <div class="header-left">
-          <h1>{{ pole()?.vfPoleId || 'Pole Details' }}</h1>
-          <mat-chip [class]="'type-' + pole()?.poleType">
-            {{ pole()?.poleType | titlecase }} Pole
+          <h1>{{ getDisplayValue('vfPoleId') || getDisplayValue('poleId') || 'Pole Details' }}</h1>
+          <mat-chip [class]="'type-' + getDisplayValue('poleType')">
+            {{ getDisplayValue('poleType') | titlecase }} Pole
           </mat-chip>
         </div>
         <div class="header-actions">
-          <a mat-button routerLink="/pole-tracker">
+          <a mat-button (click)="goBackToList()">
             <mat-icon>arrow_back</mat-icon>
             Back to List
           </a>
@@ -69,97 +70,136 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
             <div class="info-grid">
               <div class="info-item">
                 <label>VF Pole ID</label>
-                <span class="value">{{ pole()!.vfPoleId }}</span>
+                <span class="value">{{ getDisplayValue('vfPoleId') }}</span>
+              </div>
+              <div class="info-item">
+                <label>Pole Number</label>
+                <span class="value">{{ getDisplayValue('poleNumber') }}</span>
+              </div>
+              <div class="info-item">
+                <label>PON</label>
+                <span class="value">{{ getDisplayValue('ponNumber') || getDisplayValue('pon') || 'N/A' }}</span>
+              </div>
+              <div class="info-item">
+                <label>Zone</label>
+                <span class="value">{{ getDisplayValue('zoneNumber') || getDisplayValue('zone') || 'N/A' }}</span>
               </div>
               <div class="info-item">
                 <label>Project</label>
-                <span class="value">{{ pole()!.projectName || pole()!.projectCode }}</span>
-              </div>
-              <div class="info-item">
-                <label>Date Installed</label>
-                <span class="value">
-                  {{ formatDate(pole()!.dateInstalled) }}
-                </span>
+                <span class="value">{{ getDisplayValue('projectName') || getDisplayValue('projectCode') }}</span>
               </div>
               <div class="info-item">
                 <label>Location</label>
-                <span class="value">{{ pole()!.location }}</span>
+                <span class="value">{{ getLocationDisplay() }}</span>
               </div>
-              <div class="info-item">
-                <label>Contractor</label>
-                <span class="value">{{ pole()!.contractorName || pole()!.contractorId }}</span>
-              </div>
-              <div class="info-item">
-                <label>Working Team</label>
-                <span class="value">{{ pole()!.workingTeam }}</span>
-              </div>
-              @if (pole()!.alternativePoleId) {
+              @if (!isPlannedPole()) {
                 <div class="info-item">
-                  <label>Alternative Pole ID</label>
-                  <span class="value">{{ pole()!.alternativePoleId }}</span>
+                  <label>Date Installed</label>
+                  <span class="value">
+                    {{ formatDate(getDisplayValue('dateInstalled')) }}
+                  </span>
+                </div>
+                <div class="info-item">
+                  <label>Contractor</label>
+                  <span class="value">{{ getDisplayValue('contractorName') || getDisplayValue('contractorId') || getDisplayValue('assignedContractorName') }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Working Team</label>
+                  <span class="value">{{ getDisplayValue('workingTeam') || getDisplayValue('assignedTeamName') }}</span>
+                </div>
+              } @else {
+                <div class="info-item">
+                  <label>Status</label>
+                  <span class="value">{{ getDisplayValue('status') | titlecase }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Height</label>
+                  <span class="value">{{ getDisplayValue('height') || 'N/A' }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Diameter</label>
+                  <span class="value">{{ getDisplayValue('diameter') || 'N/A' }}</span>
                 </div>
               }
-              @if (pole()!.groupNumber) {
+              @if (getDisplayValue('alternativePoleId')) {
+                <div class="info-item">
+                  <label>Alternative Pole ID</label>
+                  <span class="value">{{ getDisplayValue('alternativePoleId') }}</span>
+                </div>
+              }
+              @if (getDisplayValue('groupNumber')) {
                 <div class="info-item">
                   <label>Group Number</label>
-                  <span class="value">{{ pole()!.groupNumber }}</span>
+                  <span class="value">{{ getDisplayValue('groupNumber') }}</span>
+                </div>
+              }
+              @if (getDisplayValue('connectedDrops') && getDisplayValue('connectedDrops').length > 0) {
+                <div class="info-item full-width">
+                  <label>Connected Drops ({{ getDisplayValue('connectedDrops').length }})</label>
+                  <div class="drops-container">
+                    @for (drop of getDisplayValue('connectedDrops'); track drop) {
+                      <mat-chip class="drop-chip">{{ drop }}</mat-chip>
+                    }
+                  </div>
                 </div>
               }
             </div>
           </mat-card-content>
         </mat-card>
 
-        <!-- Upload Progress -->
-        <mat-card class="progress-card">
-          <mat-card-header>
-            <mat-card-title>Upload Progress</mat-card-title>
-            <div class="progress-summary">
-              {{ uploadedCount() }}/6 Images Uploaded ({{ uploadProgress() }}%)
-            </div>
-          </mat-card-header>
+        <!-- Upload Progress - Only for regular pole trackers -->
+        @if (!isPlannedPole()) {
+          <mat-card class="progress-card">
+            <mat-card-header>
+              <mat-card-title>Upload Progress</mat-card-title>
+              <div class="progress-summary">
+                {{ uploadedCount() }}/6 Images Uploaded ({{ uploadProgress() }}%)
+              </div>
+            </mat-card-header>
           <mat-card-content>
             <div class="upload-status-grid">
-              <div class="upload-status" [class.uploaded]="pole()!.uploads.before?.uploaded">
+              <div class="upload-status" [class.uploaded]="getUploadStatus('before')">
                 <mat-icon>{{
-                  pole()!.uploads.before?.uploaded ? 'check_circle' : 'radio_button_unchecked'
+                  getUploadStatus('before') ? 'check_circle' : 'radio_button_unchecked'
                 }}</mat-icon>
                 <span>Before View</span>
               </div>
-              <div class="upload-status" [class.uploaded]="pole()!.uploads.front?.uploaded">
+              <div class="upload-status" [class.uploaded]="getUploadStatus('front')">
                 <mat-icon>{{
-                  pole()!.uploads.front?.uploaded ? 'check_circle' : 'radio_button_unchecked'
+                  getUploadStatus('front') ? 'check_circle' : 'radio_button_unchecked'
                 }}</mat-icon>
                 <span>Front View</span>
               </div>
-              <div class="upload-status" [class.uploaded]="pole()!.uploads.side?.uploaded">
+              <div class="upload-status" [class.uploaded]="getUploadStatus('side')">
                 <mat-icon>{{
-                  pole()!.uploads.side?.uploaded ? 'check_circle' : 'radio_button_unchecked'
+                  getUploadStatus('side') ? 'check_circle' : 'radio_button_unchecked'
                 }}</mat-icon>
                 <span>Side View</span>
               </div>
-              <div class="upload-status" [class.uploaded]="pole()!.uploads.depth?.uploaded">
+              <div class="upload-status" [class.uploaded]="getUploadStatus('depth')">
                 <mat-icon>{{
-                  pole()!.uploads.depth?.uploaded ? 'check_circle' : 'radio_button_unchecked'
+                  getUploadStatus('depth') ? 'check_circle' : 'radio_button_unchecked'
                 }}</mat-icon>
                 <span>Depth View</span>
               </div>
-              <div class="upload-status" [class.uploaded]="pole()!.uploads.concrete?.uploaded">
+              <div class="upload-status" [class.uploaded]="getUploadStatus('concrete')">
                 <mat-icon>{{
-                  pole()!.uploads.concrete?.uploaded ? 'check_circle' : 'radio_button_unchecked'
+                  getUploadStatus('concrete') ? 'check_circle' : 'radio_button_unchecked'
                 }}</mat-icon>
                 <span>Concrete View</span>
               </div>
-              <div class="upload-status" [class.uploaded]="pole()!.uploads.compaction?.uploaded">
+              <div class="upload-status" [class.uploaded]="getUploadStatus('compaction')">
                 <mat-icon>{{
-                  pole()!.uploads.compaction?.uploaded ? 'check_circle' : 'radio_button_unchecked'
+                  getUploadStatus('compaction') ? 'check_circle' : 'radio_button_unchecked'
                 }}</mat-icon>
                 <span>Compaction View</span>
               </div>
             </div>
           </mat-card-content>
         </mat-card>
+        }
 
-        <!-- Image Gallery -->
+        <!-- Image Gallery - Show for all poles (planned and regular) -->
         <mat-card class="gallery-card">
           <mat-card-header>
             <mat-card-title>Image Gallery</mat-card-title>
@@ -170,7 +210,7 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
                 <div class="image-item">
                   <div class="image-header">
                     <h4>{{ getUploadTitle(uploadType) }}</h4>
-                    @if (getUploadData(uploadType)?.uploaded) {
+                    @if (getUploadStatus(uploadType)) {
                       <mat-icon color="primary" matTooltip="Uploaded">check_circle</mat-icon>
                     } @else {
                       <mat-icon color="warn" matTooltip="Not uploaded">cancel</mat-icon>
@@ -214,34 +254,35 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
           </mat-card-content>
         </mat-card>
 
-        <!-- Quality Check -->
+        <!-- Quality Check - Only for regular pole trackers -->
+        @if (!isPlannedPole()) {
         <mat-card class="quality-card">
           <mat-card-header>
             <mat-card-title>Quality Check</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <div class="quality-status">
-              <div class="status-indicator" [class.checked]="pole()!.qualityChecked">
-                <mat-icon>{{ pole()!.qualityChecked ? 'verified' : 'pending' }}</mat-icon>
+              <div class="status-indicator" [class.checked]="getDisplayValue('qualityChecked')">
+                <mat-icon>{{ getDisplayValue('qualityChecked') ? 'verified' : 'pending' }}</mat-icon>
                 <span>{{
-                  pole()!.qualityChecked ? 'Quality Checked' : 'Pending Quality Check'
+                  getDisplayValue('qualityChecked') ? 'Quality Checked' : 'Pending Quality Check'
                 }}</span>
               </div>
 
-              @if (pole()!.qualityChecked) {
+              @if (getDisplayValue('qualityChecked')) {
                 <div class="quality-details">
                   <div class="quality-info">
                     <label>Checked By:</label>
-                    <span>{{ pole()!.qualityCheckedByName || pole()!.qualityCheckedBy }}</span>
+                    <span>{{ getDisplayValue('qualityCheckedByName') || getDisplayValue('qualityCheckedBy') }}</span>
                   </div>
                   <div class="quality-info">
                     <label>Check Date:</label>
-                    <span>{{ formatDate(pole()!.qualityCheckDate!) }}</span>
+                    <span>{{ formatDate(getDisplayValue('qualityCheckDate')) }}</span>
                   </div>
-                  @if (pole()!.qualityCheckNotes) {
+                  @if (getDisplayValue('qualityCheckNotes')) {
                     <div class="quality-info notes">
                       <label>Notes:</label>
-                      <span>{{ pole()!.qualityCheckNotes }}</span>
+                      <span>{{ getDisplayValue('qualityCheckNotes') }}</span>
                     </div>
                   }
                 </div>
@@ -259,6 +300,38 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
             </div>
           </mat-card-content>
         </mat-card>
+        }
+
+        <!-- Import Information - Only for planned poles -->
+        @if (isPlannedPole()) {
+          <mat-card class="import-card">
+            <mat-card-header>
+              <mat-card-title>Import Information</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="info-grid">
+                <div class="info-item">
+                  <label>Import Batch ID:</label>
+                  <span>{{ getDisplayValue('importBatchId') }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Imported At:</label>
+                  <span>{{ formatDate(getDisplayValue('importedAt')) }}</span>
+                </div>
+                <div class="info-item">
+                  <label>Imported By:</label>
+                  <span>{{ getDisplayValue('importedBy') }}</span>
+                </div>
+                @if (getDisplayValue('metadata')?.importFileName) {
+                  <div class="info-item">
+                    <label>Source File:</label>
+                    <span>{{ getDisplayValue('metadata').importFileName }}</span>
+                  </div>
+                }
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
 
         <!-- Metadata -->
         <mat-card class="metadata-card">
@@ -269,19 +342,19 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
             <div class="metadata-grid">
               <div class="metadata-item">
                 <label>Created By:</label>
-                <span>{{ pole()!.createdByName || pole()!.createdBy }}</span>
+                <span>{{ getDisplayValue('createdByName') || getDisplayValue('createdBy') || getDisplayValue('importedBy') }}</span>
               </div>
               <div class="metadata-item">
                 <label>Created At:</label>
-                <span>{{ formatDate(pole()!.createdAt) }}</span>
+                <span>{{ formatDate(getDisplayValue('createdAt') || getDisplayValue('importedAt')) }}</span>
               </div>
               <div class="metadata-item">
                 <label>Last Updated By:</label>
-                <span>{{ pole()!.updatedByName || pole()!.updatedBy }}</span>
+                <span>{{ getDisplayValue('updatedByName') || getDisplayValue('updatedBy') || getDisplayValue('lastModifiedBy') }}</span>
               </div>
               <div class="metadata-item">
                 <label>Last Updated:</label>
-                <span>{{ formatDate(pole()!.updatedAt) }}</span>
+                <span>{{ formatDate(getDisplayValue('updatedAt') || getDisplayValue('lastModified')) }}</span>
               </div>
             </div>
           </mat-card-content>
@@ -332,7 +405,8 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
       .progress-card,
       .gallery-card,
       .quality-card,
-      .metadata-card {
+      .metadata-card,
+      .import-card {
         margin-bottom: 24px;
       }
 
@@ -356,6 +430,24 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
 
       .info-item .value {
         font-size: 16px;
+      }
+
+      .info-item.full-width {
+        grid-column: 1 / -1;
+      }
+
+      .drops-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .drop-chip {
+        font-size: 12px;
+        height: 24px;
+        background-color: #e3f2fd;
+        color: #1976d2;
       }
 
       .progress-summary {
@@ -576,22 +668,52 @@ export class PoleTrackerDetailComponent implements OnInit {
   private poleTrackerService = inject(PoleTrackerService);
   private authService = inject(AuthService);
 
-  pole = signal<PoleTracker | null>(null);
+  pole = signal<PoleTracker | PlannedPole | null>(null);
+  isPlannedPole = signal<boolean>(false);
   loading = signal(true);
   poleId = '';
 
   uploadTypes = ['before', 'front', 'side', 'depth', 'concrete', 'compaction'] as const;
 
   uploadedCount = () => {
-    const uploads = this.pole()?.uploads;
+    const pole = this.pole();
+    if (!pole) return 0;
+    
+    const uploads = (pole as any).uploads;
     if (!uploads) return 0;
-    return Object.values(uploads).filter((upload) => upload.uploaded).length;
+    
+    return Object.values(uploads).filter((upload: any) => upload.uploaded).length;
   };
 
   uploadProgress = () => {
     const count = this.uploadedCount();
     return Math.round((count / 6) * 100);
   };
+
+  getDisplayValue(field: string): any {
+    const pole = this.pole();
+    if (!pole) return 'N/A';
+    return (pole as any)[field] || 'N/A';
+  }
+
+  getLocationDisplay(): string {
+    const pole = this.pole();
+    if (!pole) return 'N/A';
+    
+    // For planned poles, location might be an object
+    if (this.isPlannedPole()) {
+      const plannedPole = pole as any;
+      if (plannedPole.location && typeof plannedPole.location === 'object') {
+        return `${plannedPole.location.latitude}, ${plannedPole.location.longitude}`;
+      }
+      if (plannedPole.plannedLocation) {
+        return `${plannedPole.plannedLocation.lat}, ${plannedPole.plannedLocation.lng}`;
+      }
+    }
+    
+    // For regular pole trackers or string location
+    return (pole as any).location || 'N/A';
+  }
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -601,15 +723,44 @@ export class PoleTrackerDetailComponent implements OnInit {
   }
 
   loadPole() {
-    this.poleTrackerService.getPoleTracker(this.poleId).subscribe({
-      next: (pole) => {
-        this.pole.set(pole);
-        this.loading.set(false);
+    // First try to load from planned-poles collection
+    this.poleTrackerService.getPlannedPoleById(this.poleId).subscribe({
+      next: (plannedPole) => {
+        if (plannedPole) {
+          this.pole.set(plannedPole as any);
+          this.isPlannedPole.set(true);
+          this.loading.set(false);
+        } else {
+          // Fallback to pole-trackers collection
+          this.poleTrackerService.getPoleTracker(this.poleId).subscribe({
+            next: (pole) => {
+              this.pole.set(pole);
+              this.isPlannedPole.set(false);
+              this.loading.set(false);
+            },
+            error: (error) => {
+              console.error('Error loading pole:', error);
+              this.snackBar.open('Error loading pole details', 'Close', { duration: 3000 });
+              this.loading.set(false);
+            },
+          });
+        }
       },
       error: (error) => {
-        console.error('Error loading pole:', error);
-        this.snackBar.open('Error loading pole details', 'Close', { duration: 3000 });
-        this.loading.set(false);
+        console.error('Error loading planned pole:', error);
+        // Fallback to pole-trackers collection
+        this.poleTrackerService.getPoleTracker(this.poleId).subscribe({
+          next: (pole) => {
+            this.pole.set(pole);
+            this.isPlannedPole.set(false);
+            this.loading.set(false);
+          },
+          error: (error) => {
+            console.error('Error loading pole:', error);
+            this.snackBar.open('Error loading pole details', 'Close', { duration: 3000 });
+            this.loading.set(false);
+          },
+        });
       },
     });
   }
@@ -629,7 +780,17 @@ export class PoleTrackerDetailComponent implements OnInit {
   getUploadData(uploadType: string): ImageUpload | undefined {
     const pole = this.pole();
     if (!pole) return undefined;
-    return pole.uploads[uploadType as keyof typeof pole.uploads];
+    
+    // Check if uploads exist on either planned pole or regular pole tracker
+    const uploads = (pole as any).uploads;
+    if (!uploads) return undefined;
+    
+    return uploads[uploadType as keyof typeof uploads];
+  }
+
+  getUploadStatus(uploadType: string): boolean {
+    const uploadData = this.getUploadData(uploadType);
+    return uploadData?.uploaded || false;
   }
 
   viewFullImage(imageUrl: string) {
@@ -672,8 +833,9 @@ export class PoleTrackerDetailComponent implements OnInit {
   }
 
   canMarkQualityChecked(): boolean {
-    const pole = this.pole();
-    if (!pole) return false;
+    if (this.isPlannedPole()) return false; // Planned poles can't be quality checked
+    const pole = this.pole() as PoleTracker;
+    if (!pole?.uploads) return false;
 
     // Check if all images are uploaded
     return Object.values(pole.uploads).every((upload) => upload.uploaded);
@@ -717,5 +879,22 @@ export class PoleTrackerDetailComponent implements OnInit {
           });
       }
     });
+  }
+
+  goBackToList() {
+    // Try to get saved filters from session storage
+    const savedFilters = sessionStorage.getItem('poleTrackerFilters');
+    if (savedFilters) {
+      try {
+        const queryParams = JSON.parse(savedFilters);
+        this.router.navigate(['/pole-tracker'], { queryParams });
+      } catch (error) {
+        // If parsing fails, go to basic list
+        this.router.navigate(['/pole-tracker']);
+      }
+    } else {
+      // No saved filters, go to basic list
+      this.router.navigate(['/pole-tracker']);
+    }
   }
 }

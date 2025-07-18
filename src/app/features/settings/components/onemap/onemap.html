@@ -1,7 +1,8 @@
 <app-page-header
   title="OneMap Data Processing"
   subtitle="Import and process OneMap CSV data"
-  [actions]="headerActions">
+  [actions]="headerActions"
+>
 </app-page-header>
 
 <div class="container">
@@ -20,16 +21,17 @@
           type="file"
           accept=".csv"
           (change)="onFileSelected($event)"
-          style="display: none">
+          style="display: none"
+        />
       </div>
-      
+
       @if (uploadError()) {
         <div class="error-message">
           <mat-icon>error</mat-icon>
           <span style="white-space: pre-line">{{ uploadError() }}</span>
         </div>
       }
-      
+
       @if (uploadedData().length > 0) {
         <div class="success-message">
           <mat-icon>check_circle</mat-icon>
@@ -49,22 +51,23 @@
         <form [formGroup]="dateForm" class="date-form">
           <mat-form-field>
             <mat-label>Start Date</mat-label>
-            <input matInput type="date" formControlName="startDate">
+            <input matInput type="date" formControlName="startDate" />
             <mat-error>Start date is required</mat-error>
           </mat-form-field>
-          
+
           <mat-form-field>
             <mat-label>End Date</mat-label>
-            <input matInput type="date" formControlName="endDate">
+            <input matInput type="date" formControlName="endDate" />
             <mat-error>End date is required</mat-error>
           </mat-form-field>
         </form>
-        
+
         <button
           mat-raised-button
           color="primary"
           [disabled]="!dateForm.valid || isProcessing()"
-          (click)="processData()">
+          (click)="processData()"
+        >
           <mat-icon>play_arrow</mat-icon>
           Process Data
         </button>
@@ -83,42 +86,49 @@
           <!-- Primary Analysis Reports -->
           <div class="report-category">
             <h3>Primary Analysis</h3>
-            
+
             <div class="report-item">
               <div class="report-info">
                 <h4>New Signups ({{ processedData()!.firstEntryRecords.length }} records)</h4>
-                <p>Drops with first approval during {{ dateForm.value.startDate | date:'MMM d' }} - {{ dateForm.value.endDate | date:'MMM d, yyyy' }}</p>
+                <p>
+                  Drops with first approval during {{ dateForm.value.startDate | date: 'MMM d' }} -
+                  {{ dateForm.value.endDate | date: 'MMM d, yyyy' }}
+                </p>
               </div>
               <button
                 mat-flat-button
                 color="primary"
                 [disabled]="processedData()!.firstEntryRecords.length === 0"
-                (click)="downloadReport('firstEntry')">
+                (click)="downloadReport('firstEntry')"
+              >
                 <mat-icon>download</mat-icon>
                 Download
               </button>
             </div>
-            
+
             <div class="report-item">
               <div class="report-info">
-                <h4>Existing Signups ({{ processedData()!.duplicatesPreWindow.length }} records)</h4>
-                <p>Drops approved before {{ dateForm.value.startDate | date:'MMM d, yyyy' }}</p>
+                <h4>
+                  Existing Signups ({{ processedData()!.duplicatesPreWindow.length }} records)
+                </h4>
+                <p>Drops approved before {{ dateForm.value.startDate | date: 'MMM d, yyyy' }}</p>
               </div>
               <button
                 mat-flat-button
                 color="primary"
                 [disabled]="processedData()!.duplicatesPreWindow.length === 0"
-                (click)="downloadReport('duplicatesPreWindow')">
+                (click)="downloadReport('duplicatesPreWindow')"
+              >
                 <mat-icon>download</mat-icon>
                 Download
               </button>
             </div>
           </div>
-          
+
           <!-- Data Quality Reports -->
           <div class="report-category">
             <h3>Data Quality Control</h3>
-            
+
             <div class="report-item">
               <div class="report-info">
                 <h4>No Drop Allocated ({{ processedData()!.noDropAllocated.length }} records)</h4>
@@ -128,22 +138,29 @@
                 mat-flat-button
                 color="accent"
                 [disabled]="processedData()!.noDropAllocated.length === 0"
-                (click)="downloadReport('noDropAllocated')">
+                (click)="downloadReport('noDropAllocated')"
+              >
                 <mat-icon>download</mat-icon>
                 Download
               </button>
             </div>
-            
+
             <div class="report-item">
               <div class="report-info">
-                <h4>Duplicate Drops Removed ({{ processedData()!.duplicateDropsRemoved.length }} records)</h4>
+                <h4>
+                  Duplicate Drops Removed ({{
+                    processedData()!.duplicateDropsRemoved.length
+                  }}
+                  records)
+                </h4>
                 <p>Newer duplicate entries removed from analysis</p>
               </div>
               <button
                 mat-flat-button
                 color="accent"
                 [disabled]="processedData()!.duplicateDropsRemoved.length === 0"
-                (click)="downloadReport('duplicateDropsRemoved')">
+                (click)="downloadReport('duplicateDropsRemoved')"
+              >
                 <mat-icon>download</mat-icon>
                 Download
               </button>

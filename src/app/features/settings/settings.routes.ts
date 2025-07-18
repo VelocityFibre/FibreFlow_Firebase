@@ -26,10 +26,7 @@ export const settingsRoutes: Routes = [
       },
       {
         path: 'onemap',
-        loadComponent: () =>
-          import('./components/onemap/onemap').then(
-            (m) => m.OnemapComponent,
-          ),
+        loadComponent: () => import('./components/onemap/onemap').then((m) => m.OnemapComponent),
         title: 'OneMap Data Processing - FibreFlow',
       },
       {

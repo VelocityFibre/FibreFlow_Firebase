@@ -43,17 +43,23 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/jquery-ui/dist/themes/ui-lightness/jquery-ui.css",
+              "node_modules/pivottable/dist/pivot.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/jquery-ui/dist/jquery-ui.min.js",
+              "node_modules/pivottable/dist/pivot.js"
+            ]
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "1.5MB",
-                  "maximumError": "2MB"
+                  "maximumWarning": "2MB",
+                  "maximumError": "2.5MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -118,9 +124,15 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/jquery-ui/dist/themes/ui-lightness/jquery-ui.css",
+              "node_modules/pivottable/dist/pivot.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/jquery-ui/dist/jquery-ui.min.js",
+              "node_modules/pivottable/dist/pivot.js"
+            ]
           }
         },
         "lint": {

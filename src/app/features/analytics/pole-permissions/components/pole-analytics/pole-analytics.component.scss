@@ -1,0 +1,141 @@
+@use '../../../../../../styles/theme-functions' as theme;
+@use '../../../../../../styles/spacing' as spacing;
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+.container {
+  padding: spacing.ff-spacing(lg);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+// Statistics Grid
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: spacing.ff-spacing(md);
+  margin-bottom: spacing.ff-spacing(xl);
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat-card {
+  .stat-content {
+    display: flex;
+    align-items: center;
+    gap: spacing.ff-spacing(md);
+
+    mat-icon {
+      font-size: 2.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      color: theme.ff-rgba(primary, 0.8);
+    }
+
+    .stat-details {
+      flex: 1;
+    }
+
+    .stat-value {
+      font-size: theme.ff-rem(24);
+      font-weight: 600;
+      color: theme.ff-rgb(foreground);
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-size: theme.ff-rem(14);
+      color: theme.ff-rgba(foreground, 0.7);
+      margin-top: spacing.ff-spacing(xs);
+    }
+  }
+}
+
+// Features Grid
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: spacing.ff-spacing(lg);
+  margin-bottom: spacing.ff-spacing(xl);
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feature-card {
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:not(.disabled):hover {
+    transform: translateY(-4px);
+    box-shadow: theme.ff-shadow(lg);
+  }
+
+  &.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  mat-card-header {
+    margin-bottom: spacing.ff-spacing(md);
+
+    mat-icon[mat-card-avatar] {
+      font-size: 2rem;
+      width: 2rem;
+      height: 2rem;
+      margin-right: spacing.ff-spacing(md);
+    }
+  }
+
+  mat-card-content {
+    p {
+      margin: 0;
+      color: theme.ff-rgba(foreground, 0.8);
+    }
+  }
+
+  mat-card-actions {
+    button {
+      mat-icon {
+        margin-left: spacing.ff-spacing(xs);
+      }
+    }
+  }
+}
+
+// Information Card
+.info-card {
+  mat-card-content {
+    p {
+      margin-bottom: spacing.ff-spacing(lg);
+      line-height: 1.6;
+      color: theme.ff-rgba(foreground, 0.8);
+    }
+
+    .info-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: spacing.ff-spacing(md);
+
+      .info-item {
+        display: flex;
+        align-items: center;
+        gap: spacing.ff-spacing(sm);
+
+        mat-icon {
+          flex-shrink: 0;
+        }
+
+        span {
+          color: theme.ff-rgb(foreground);
+        }
+      }
+    }
+  }
+}

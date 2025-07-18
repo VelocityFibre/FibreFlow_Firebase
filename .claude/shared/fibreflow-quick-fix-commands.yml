@@ -53,6 +53,27 @@ fix:
   jj_quick_push: |
     # One-line push to master
     jj bookmark move master --to @ && jj git push --branch master
+    
+  angular_dropdown_close: |
+    # Fix mat-select multiple dropdown not closing
+    # Add this inside <mat-select> after mat-options:
+    # <div class="dropdown-actions">
+    #   <button mat-flat-button color="primary" type="button" (click)="closeDropdown()">
+    #     Done
+    #   </button>
+    # </div>
+    # Component method: closeDropdown() { this.selectRef.close(); }
+  
+  angular_simple_route: |
+    # Fix NG04002 "Cannot match any routes" - Add direct route to app.routes.ts:
+    # {
+    #   path: 'feature-page',
+    #   loadComponent: () => 
+    #     import('./features/module/page.component').then(m => m.PageComponent),
+    #   canActivate: [authGuard],
+    #   data: { title: 'Page Title' }
+    # }
+    # Then update navigation: routerLink="/feature-page"
 
 # Validation Commands
 validate:
@@ -144,3 +165,5 @@ instant_solutions:
   "Error: Cannot release storage": "Change storage: [{}] to storage: {}"
   "Error: GH013": "Add to .gitignore && jj file untrack <file>"
   "Nothing changed": "jj bookmark move master --to @"
+  "Dropdown won't close": "Add Done button inside mat-select with close() method"
+  "Error: NG04002 routes": "Create direct route in app.routes.ts instead of nested"

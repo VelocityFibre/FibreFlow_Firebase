@@ -57,6 +57,6 @@ export const appConfig: ApplicationConfig = {
     }),
     provideAuth(() => getAuth()),
     provideStorage(() => getStorage()),
-    provideFunctions(() => getFunctions()),
+    provideFunctions(() => getFunctions(undefined, 'us-central1')),
   ],
 };

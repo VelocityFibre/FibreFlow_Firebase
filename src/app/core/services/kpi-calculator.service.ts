@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { Project, PhaseType, ProjectKPITargets, KPITarget } from '../models/project.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class KpiCalculatorService {
-  
   /**
    * Calculate timeline for each KPI based on dependencies and phases
    */
@@ -16,35 +15,31 @@ export class KpiCalculatorService {
 
     const kpiTargets = project.metadata.kpiTargets;
     const projectStartDate = new Date(project.startDate as any);
-    
+
     // Calculate start dates based on phases and dependencies
     const calculatedTargets: ProjectKPITargets = {
       polePermissions: this.calculateKPIStartDate(
-        kpiTargets.polePermissions, 
-        projectStartDate, 
-        project
-      ),
-      homeSignups: this.calculateKPIStartDate(
-        kpiTargets.homeSignups, 
-        projectStartDate, 
-        project
-      ),
-      polesPlanted: this.calculateKPIStartDate(
-        kpiTargets.polesPlanted, 
-        projectStartDate, 
+        kpiTargets.polePermissions,
+        projectStartDate,
         project,
-        kpiTargets.polePermissions
+      ),
+      homeSignups: this.calculateKPIStartDate(kpiTargets.homeSignups, projectStartDate, project),
+      polesPlanted: this.calculateKPIStartDate(
+        kpiTargets.polesPlanted,
+        projectStartDate,
+        project,
+        kpiTargets.polePermissions,
       ),
       fibreStringing: this.calculateKPIStartDate(
-        kpiTargets.fibreStringing, 
-        projectStartDate, 
+        kpiTargets.fibreStringing,
+        projectStartDate,
         project,
-        kpiTargets.polesPlanted
+        kpiTargets.polesPlanted,
       ),
       trenchingMeters: this.calculateKPIStartDate(
-        kpiTargets.trenchingMeters, 
-        projectStartDate, 
-        project
+        kpiTargets.trenchingMeters,
+        projectStartDate,
+        project,
       ),
       calculatedDuration: 0,
     };
@@ -56,12 +51,12 @@ export class KpiCalculatorService {
       calculatedTargets.polesPlanted.estimatedEndDate,
       calculatedTargets.fibreStringing.estimatedEndDate,
       calculatedTargets.trenchingMeters.estimatedEndDate,
-    ].filter(date => date) as Date[];
+    ].filter((date) => date) as Date[];
 
     if (endDates.length > 0) {
-      const latestEndDate = new Date(Math.max(...endDates.map(d => d.getTime())));
+      const latestEndDate = new Date(Math.max(...endDates.map((d) => d.getTime())));
       const durationInDays = Math.ceil(
-        (latestEndDate.getTime() - projectStartDate.getTime()) / (1000 * 60 * 60 * 24)
+        (latestEndDate.getTime() - projectStartDate.getTime()) / (1000 * 60 * 60 * 24),
       );
       calculatedTargets.calculatedDuration = durationInDays;
       calculatedTargets.estimatedEndDate = latestEndDate;
@@ -77,7 +72,7 @@ export class KpiCalculatorService {
     kpiTarget: KPITarget,
     projectStartDate: Date,
     project: Project,
-    dependsOnKPI?: KPITarget
+    dependsOnKPI?: KPITarget,
   ): KPITarget {
     let startDate = new Date(projectStartDate);
 
@@ -87,7 +82,7 @@ export class KpiCalculatorService {
       const dependencyDuration = dependsOnKPI.estimatedDays || 0;
       const dependencyStart = dependsOnKPI.estimatedStartDate || projectStartDate;
       const daysToWait = Math.ceil(dependencyDuration * 0.3);
-      
+
       startDate = new Date(dependencyStart);
       startDate.setDate(startDate.getDate() + daysToWait);
     } else {
@@ -102,9 +97,9 @@ export class KpiCalculatorService {
     }
 
     // Calculate end date
-    const estimatedDays = kpiTarget.estimatedDays || 
-      Math.ceil(kpiTarget.totalTarget / kpiTarget.dailyTarget);
-    
+    const estimatedDays =
+      kpiTarget.estimatedDays || Math.ceil(kpiTarget.totalTarget / kpiTarget.dailyTarget);
+
     const endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + estimatedDays);
 
@@ -142,7 +137,10 @@ export class KpiCalculatorService {
   /**
    * Calculate current progress vs targets
    */
-  calculateProgress(currentValue: number, target: KPITarget): {
+  calculateProgress(
+    currentValue: number,
+    target: KPITarget,
+  ): {
     percentage: number;
     isOnTrack: boolean;
     daysAhead: number;
@@ -158,11 +156,11 @@ export class KpiCalculatorService {
     }
 
     const percentage = Math.round((currentValue / target.totalTarget) * 100);
-    
+
     // Calculate days elapsed
     const today = new Date();
     const daysElapsed = Math.ceil(
-      (today.getTime() - new Date(target.actualStartDate).getTime()) / (1000 * 60 * 60 * 24)
+      (today.getTime() - new Date(target.actualStartDate).getTime()) / (1000 * 60 * 60 * 24),
     );
 
     // Calculate expected progress

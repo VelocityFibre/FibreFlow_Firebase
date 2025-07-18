@@ -89,7 +89,7 @@ export class MeetingDetailComponent implements OnInit {
 
   // Page header configuration
   get headerActions(): PageHeaderAction[] {
-    return [
+    const actions: PageHeaderAction[] = [
       {
         label: 'Back to List',
         icon: 'arrow_back',
@@ -104,14 +104,29 @@ export class MeetingDetailComponent implements OnInit {
         action: () => this.openRecording(),
         disabled: !this.meeting()?.recordingUrl,
       },
-      {
-        label: 'Delete Meeting',
-        icon: 'delete',
-        color: 'warn',
-        variant: 'stroked',
-        action: () => this.deleteMeeting(),
-      },
     ];
+
+    // Add manage action items button if meeting has action items
+    if (this.meeting()?.actionItems && this.meeting()!.actionItems!.length > 0) {
+      actions.push({
+        label: 'Manage Action Items',
+        icon: 'task_alt',
+        color: 'accent',
+        action: () => this.router.navigate(['/action-items'], { 
+          queryParams: { meetingId: this.meeting()!.id } 
+        }),
+      });
+    }
+
+    actions.push({
+      label: 'Delete Meeting',
+      icon: 'delete',
+      color: 'warn',
+      variant: 'stroked',
+      action: () => this.deleteMeeting(),
+    });
+
+    return actions;
   }
 
   ngOnInit(): void {

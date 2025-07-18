@@ -1,0 +1,54 @@
+<div class="pivot-table-container">
+  <div class="pivot-table-header">
+    <h3>Pole Tracker Summary</h3>
+    <p class="data-count">Data Records: {{ data?.length || 0 }}</p>
+  </div>
+  
+  <div class="pivot-table-content">
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+    
+    <div *ngIf="summaryData?.totalPoles > 0" class="summary-cards">
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-card-title>Total Poles</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="summary-number">{{ summaryData.totalPoles }}</div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-card-title>By Project</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngFor="let project of summaryData.byProject | keyvalue" class="summary-item">
+            <span class="label">{{ project.key }}:</span>
+            <span class="value">{{ project.value }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="summary-card">
+        <mat-card-header>
+          <mat-card-title>By Status</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngFor="let status of summaryData.byStatus | keyvalue" class="summary-item">
+            <span class="label">{{ status.key }}:</span>
+            <span class="value">{{ status.value }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    
+    <div #pivotContainer class="pivot-container">
+      <div *ngIf="summaryData?.totalPoles === 0" class="no-data-message">
+        <p>No data available for analysis.</p>
+        <p>Please select a project with pole data.</p>
+      </div>
+    </div>
+  </div>
+</div>

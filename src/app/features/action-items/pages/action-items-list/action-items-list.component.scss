@@ -1,0 +1,219 @@
+@use '../../../../../styles/theme-functions' as *;
+@use '../../../../../styles/spacing' as *;
+
+.container {
+  padding: ff-spacing(lg);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+// Statistics Cards
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: ff-spacing(md);
+  margin-bottom: ff-spacing(xl);
+}
+
+.stat-card {
+  text-align: center;
+  
+  .stat-value {
+    font-size: ff-rem(32);
+    font-weight: 600;
+    color: ff-rgb(primary);
+    margin-bottom: ff-spacing(xs);
+  }
+  
+  .stat-label {
+    font-size: ff-rem(14);
+    color: ff-rgb(muted-foreground);
+  }
+}
+
+// Filter Card
+.filter-card {
+  margin-bottom: ff-spacing(xl);
+  
+  .filter-row {
+    display: flex;
+    gap: ff-spacing(md);
+    align-items: flex-end;
+    flex-wrap: wrap;
+    
+    mat-form-field {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .filter-actions {
+      display: flex;
+      gap: ff-spacing(sm);
+      align-items: center;
+    }
+  }
+}
+
+// Table
+.table-card {
+  mat-card-content {
+    padding: 0;
+  }
+}
+
+.action-items-table {
+  width: 100%;
+  
+  .mat-mdc-header-row {
+    background-color: ff-rgba(muted, 0.3);
+  }
+  
+  .mat-mdc-row {
+    &:hover {
+      background-color: ff-rgba(muted, 0.1);
+    }
+  }
+  
+  // Column specific styles
+  .action-item-cell {
+    max-width: 400px;
+    
+    .action-item-text {
+      font-weight: 500;
+      margin-bottom: ff-spacing(xs);
+    }
+    
+    .action-item-notes {
+      display: flex;
+      align-items: center;
+      gap: ff-spacing(xs);
+      font-size: ff-rem(12);
+      color: ff-rgb(muted-foreground);
+      
+      mat-icon {
+        font-size: ff-rem(14);
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
+  
+  .meeting-cell {
+    .meeting-title {
+      font-weight: 500;
+      margin-bottom: ff-spacing(xs);
+    }
+    
+    .meeting-date {
+      font-size: ff-rem(12);
+      color: ff-rgb(muted-foreground);
+    }
+  }
+  
+  .assignee {
+    display: flex;
+    align-items: center;
+    gap: ff-spacing(xs);
+    
+    mat-icon {
+      font-size: ff-rem(18);
+      color: ff-rgb(muted-foreground);
+    }
+  }
+  
+  .due-date {
+    display: flex;
+    align-items: center;
+    gap: ff-spacing(xs);
+    
+    mat-icon {
+      font-size: ff-rem(18);
+      color: ff-rgb(muted-foreground);
+    }
+    
+    &.overdue {
+      color: ff-rgb(destructive);
+      
+      mat-icon {
+        color: ff-rgb(destructive);
+      }
+    }
+  }
+  
+  // Chip colors
+  mat-chip {
+    &.success {
+      background-color: ff-rgba(success, 0.1);
+      color: ff-rgb(success);
+    }
+    
+    &.info {
+      background-color: ff-rgba(info, 0.1);
+      color: ff-rgb(info);
+    }
+    
+    &.warning {
+      background-color: ff-rgba(warning, 0.1);
+      color: ff-rgb(warning);
+    }
+    
+    &.danger {
+      background-color: ff-rgba(destructive, 0.1);
+      color: ff-rgb(destructive);
+    }
+    
+    &.muted {
+      background-color: ff-rgba(muted, 0.5);
+      color: ff-rgb(muted-foreground);
+    }
+  }
+}
+
+// Empty State
+.empty-state {
+  text-align: center;
+  padding: ff-spacing(3xl) ff-spacing(lg);
+  
+  mat-icon {
+    font-size: ff-rem(64);
+    width: 64px;
+    height: 64px;
+    color: ff-rgb(muted-foreground);
+    margin-bottom: ff-spacing(lg);
+  }
+  
+  h3 {
+    font-size: ff-rem(20);
+    font-weight: 500;
+    margin: 0 0 ff-spacing(sm);
+  }
+  
+  p {
+    color: ff-rgb(muted-foreground);
+    margin: 0 0 ff-spacing(xl);
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .container {
+    padding: ff-spacing(md);
+  }
+  
+  .stats-cards {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  
+  .filter-row {
+    flex-direction: column;
+    
+    mat-form-field {
+      width: 100%;
+    }
+    
+    .filter-actions {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }
+}

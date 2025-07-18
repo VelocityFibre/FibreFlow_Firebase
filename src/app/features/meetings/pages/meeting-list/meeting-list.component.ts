@@ -171,6 +171,12 @@ export class MeetingListComponent implements OnInit {
       action: () => this.syncMeetings(),
     },
     {
+      label: 'Manage Action Items',
+      icon: 'task_alt',
+      color: 'accent',
+      action: () => this.router.navigate(['/action-items']),
+    },
+    {
       label: 'Export',
       icon: 'download',
       color: 'primary',

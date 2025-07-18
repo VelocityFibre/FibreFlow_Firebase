@@ -5,18 +5,16 @@ import {
   doc,
   setDoc,
   updateDoc,
-  deleteDoc,
+  getDoc,
   query,
   where,
   orderBy,
   collectionData,
-  docData,
   CollectionReference,
   Timestamp,
   serverTimestamp,
   writeBatch,
   limit,
-  getDoc,
 } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
 import { Observable, map, switchMap, of, combineLatest } from 'rxjs';
@@ -35,14 +33,21 @@ import {
   isOutgoingMovement,
 } from '../models/stock-movement.model';
 import { MaterialService } from '../../materials/services/material.service';
+import { BaseFirestoreService } from '../../../core/services/base-firestore.service';
+import { EntityType } from '../../../core/models/audit-log.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class StockService {
-  private firestore = inject(Firestore);
+export class StockService extends BaseFirestoreService<StockItem> {
+  protected override firestore = inject(Firestore);
+  protected collectionName = 'stockItems';
   private auth = inject(Auth);
   private materialService = inject(MaterialService);
+
+  protected getEntityType(): EntityType {
+    return 'stock';
+  }
 
   private stockItemsCollection = collection(
     this.firestore,
@@ -175,7 +180,7 @@ export class StockService {
     if (stockItems.length === 0) return of([]);
 
     // Get unique item codes
-    const itemCodes = [...new Set(stockItems.map((item) => item.itemCode))];
+    const itemCodes = Array.from(new Set(stockItems.map((item) => item.itemCode)));
 
     // Fetch material data for all item codes
     const materialObservables = itemCodes.map((code) =>
@@ -209,8 +214,8 @@ export class StockService {
   }
 
   getStockItemById(id: string): Observable<StockItem | undefined> {
-    const docRef = doc(this.stockItemsCollection, id);
-    return docData(docRef, { idField: 'id' }).pipe(
+    // Use inherited getById method and enrich with material data
+    return this.getById(id).pipe(
       switchMap((item) => {
         if (!item) return of(undefined);
 
@@ -293,29 +298,21 @@ export class StockService {
   }
 
   async updateStockItem(id: string, updates: Partial<StockItem>): Promise<void> {
-    const docRef = doc(this.stockItemsCollection, id);
-    const user = this.auth.currentUser;
-
-    await updateDoc(docRef, {
-      ...updates,
-      updatedAt: serverTimestamp(),
-      updatedBy: user?.uid || 'system',
-    });
+    // Use inherited update method for automatic audit logging
+    await this.update(id, updates);
   }
 
   async deleteStockItem(id: string): Promise<void> {
-    const docRef = doc(this.stockItemsCollection, id);
-    await deleteDoc(docRef);
+    // Use inherited delete method for automatic audit logging
+    await this.delete(id);
   }
 
   // Get a single stock item (for non-observable use)
   async getStockItemOnce(id: string): Promise<StockItem | undefined> {
-    const docRef = doc(this.stockItemsCollection, id);
-    const snapshot = await getDoc(docRef);
-    if (snapshot.exists()) {
-      return { ...snapshot.data(), id: snapshot.id } as StockItem;
-    }
-    return undefined;
+    // Use inherited getById method and convert to promise
+    return await this.getById(id)
+      .pipe(map((item) => item || undefined))
+      .toPromise();
   }
 
   // Update allocated stock

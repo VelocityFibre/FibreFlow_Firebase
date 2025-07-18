@@ -2,11 +2,11 @@ import { Injectable, inject } from '@angular/core';
 import { DevNote, DevTask, PageError } from '../models/dev-note.model';
 import { AuthService } from './auth.service';
 import { Observable, map, of, switchMap, from, take } from 'rxjs';
-import { 
-  where, 
-  orderBy, 
-  Firestore, 
-  collection, 
+import {
+  where,
+  orderBy,
+  Firestore,
+  collection,
   CollectionReference,
   doc,
   updateDoc,
@@ -15,7 +15,7 @@ import {
   getDocs,
   Timestamp,
   collectionData,
-  docData
+  docData,
 } from '@angular/fire/firestore';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { BaseFirestoreService } from './base-firestore.service';
@@ -26,9 +26,9 @@ import { EntityType } from '../models/audit-log.model';
 })
 export class DevNoteService extends BaseFirestoreService<DevNote> {
   private authService = inject(AuthService);
-  
+
   protected collectionName = 'devNotes';
-  
+
   protected getEntityType(): EntityType {
     return 'devNote' as EntityType;
   }
@@ -46,9 +46,7 @@ export class DevNoteService extends BaseFirestoreService<DevNote> {
       switchMap((notes) => {
         if (notes.length > 0) {
           // Return real-time observable for existing note
-          return this.getById(notes[0].id!).pipe(
-            map(note => note!)
-          );
+          return this.getById(notes[0].id!).pipe(map((note) => note!));
         }
 
         // Create new note for this route
@@ -66,8 +64,8 @@ export class DevNoteService extends BaseFirestoreService<DevNote> {
 
         // Create and return real-time observable
         return from(this.create(newNote)).pipe(
-          switchMap(id => this.getById(id)),
-          map(note => note!)
+          switchMap((id) => this.getById(id)),
+          map((note) => note!),
         );
       }),
     );
@@ -110,6 +108,22 @@ export class DevNoteService extends BaseFirestoreService<DevNote> {
           }
         : task,
     );
+
+    await this.update(note.id, {
+      tasks: updatedTasks,
+      lastUpdated: Timestamp.fromDate(new Date()),
+      updatedBy: this.authService.currentUser()?.email || 'system',
+    });
+  }
+
+  /**
+   * Delete a task
+   */
+  async deleteTask(route: string, taskId: string): Promise<void> {
+    const note = await this.getOrCreateForRoute(route, route).pipe(take(1)).toPromise();
+    if (!note || !note.id) return;
+
+    const updatedTasks = note.tasks.filter((task) => task.id !== taskId);
 
     await this.update(note.id, {
       tasks: updatedTasks,
@@ -187,7 +201,6 @@ export class DevNoteService extends BaseFirestoreService<DevNote> {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
   }
 
-  // Note: getAll(), getWithQuery(), create() and update() methods 
+  // Note: getAll(), getWithQuery(), create() and update() methods
   // are inherited from BaseFirestoreService and provide real-time updates
-
 }

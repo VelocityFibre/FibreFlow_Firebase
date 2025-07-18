@@ -16,7 +16,12 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Observable, switchMap } from 'rxjs';
 
 import { SupplierService } from '../../../../core/suppliers/services/supplier.service';
-import { Supplier, SupplierContact, SupplierStatus, VerificationStatus } from '../../../../core/suppliers/models';
+import {
+  Supplier,
+  SupplierContact,
+  SupplierStatus,
+  VerificationStatus,
+} from '../../../../core/suppliers/models';
 
 @Component({
   selector: 'app-supplier-detail',

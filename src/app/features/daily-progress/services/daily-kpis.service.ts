@@ -205,7 +205,7 @@ export class DailyKpisService {
             stringing288Total: 0,
           } as DailyKPIs;
         }
-        
+
         const doc = snapshot.docs[0];
         const data = doc.data();
         return {

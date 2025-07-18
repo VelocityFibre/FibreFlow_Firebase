@@ -9,20 +9,25 @@ import {
   query,
   where,
   orderBy,
+  limit,
   getDocs,
   getDoc,
+  getCountFromServer,
   serverTimestamp,
   CollectionReference,
   DocumentReference,
   Timestamp,
 } from '@angular/fire/firestore';
-import { Observable, from, map, of, switchMap, catchError } from 'rxjs';
+import { Observable, from, map, of, switchMap, catchError, throwError } from 'rxjs';
 import {
   PoleTracker,
   PoleTrackerFilter,
   PoleTrackerStats,
   PoleType,
   PoleTrackerListItem,
+  HomeSignup,
+  HomesConnected,
+  HomesActivated,
 } from '../models/pole-tracker.model';
 import { PlannedPole, PoleInstallation, ImportBatch } from '../models/mobile-pole-tracker.model';
 import { ProjectService } from '../../../core/services/project.service';
@@ -58,13 +63,163 @@ export class PoleTrackerService {
     return `${prefix}.P.A${poleNumber}`;
   }
 
-  // Create a new pole tracker entry
+  // Data Integrity Validation Methods (SPEC-DATA-001)
+
+  // Validate pole number uniqueness across all pole collections
+  async validatePoleNumberUniqueness(poleNumber: string, excludeId?: string): Promise<boolean> {
+    const collections = ['pole-trackers', 'planned-poles'];
+
+    for (const collectionName of collections) {
+      const q = query(
+        collection(this.firestore, collectionName),
+        where('poleNumber', '==', poleNumber),
+      );
+
+      const snapshot = await getDocs(q);
+
+      // If we find any document with this pole number
+      if (!snapshot.empty) {
+        // If we're updating and this is the same document, it's okay
+        if (excludeId && snapshot.docs.some((doc) => doc.id === excludeId)) {
+          continue;
+        }
+        return false; // Pole number already exists
+      }
+    }
+
+    return true; // Pole number is unique
+  }
+
+  // Validate drop number uniqueness across all drop collections
+  async validateDropNumberUniqueness(dropNumber: string, excludeId?: string): Promise<boolean> {
+    const collections = ['home-signups', 'homes-connected', 'homes-activated'];
+
+    for (const collectionName of collections) {
+      const q = query(
+        collection(this.firestore, collectionName),
+        where('dropNumber', '==', dropNumber),
+      );
+
+      const snapshot = await getDocs(q);
+
+      // If we find any document with this drop number
+      if (!snapshot.empty) {
+        // If we're updating and this is the same document, it's okay
+        if (excludeId && snapshot.docs.some((doc) => doc.id === excludeId)) {
+          continue;
+        }
+        return false; // Drop number already exists
+      }
+    }
+
+    return true; // Drop number is unique
+  }
+
+  // Check pole capacity (max 12 drops)
+  async checkPoleCapacity(poleNumber: string): Promise<{ count: number; canAddMore: boolean }> {
+    const collections = ['home-signups', 'homes-connected', 'homes-activated'];
+    let totalDrops = 0;
+
+    for (const collectionName of collections) {
+      const q = query(
+        collection(this.firestore, collectionName),
+        where('connectedToPole', '==', poleNumber),
+      );
+
+      const snapshot = await getDocs(q);
+      totalDrops += snapshot.size;
+    }
+
+    return {
+      count: totalDrops,
+      canAddMore: totalDrops < 12,
+    };
+  }
+
+  // Validate pole exists for drop assignment
+  async validatePoleExists(poleNumber: string): Promise<boolean> {
+    const collections = ['pole-trackers', 'planned-poles'];
+
+    for (const collectionName of collections) {
+      const q = query(
+        collection(this.firestore, collectionName),
+        where('poleNumber', '==', poleNumber),
+      );
+
+      const snapshot = await getDocs(q);
+      if (!snapshot.empty) {
+        return true; // Pole exists
+      }
+    }
+
+    return false; // Pole not found
+  }
+
+  // Update pole's connected drops array
+  async updatePoleConnectedDrops(poleNumber: string): Promise<void> {
+    // Get all drops connected to this pole
+    const collections = ['home-signups', 'homes-connected', 'homes-activated'];
+    const connectedDrops: string[] = [];
+
+    for (const collectionName of collections) {
+      const q = query(
+        collection(this.firestore, collectionName),
+        where('connectedToPole', '==', poleNumber),
+      );
+
+      const snapshot = await getDocs(q);
+      snapshot.docs.forEach((doc) => {
+        const data = doc.data();
+        if (data['dropNumber']) {
+          connectedDrops.push(data['dropNumber']);
+        }
+      });
+    }
+
+    // Update pole record with connected drops
+    const poleCollections = ['pole-trackers', 'planned-poles'];
+
+    for (const collectionName of poleCollections) {
+      const q = query(
+        collection(this.firestore, collectionName),
+        where('poleNumber', '==', poleNumber),
+      );
+
+      const snapshot = await getDocs(q);
+      snapshot.docs.forEach(async (poleDoc) => {
+        await updateDoc(poleDoc.ref, {
+          connectedDrops: connectedDrops,
+          dropCount: connectedDrops.length,
+          updatedAt: serverTimestamp(),
+        });
+      });
+    }
+  }
+
+  // Create a new pole tracker entry with validation
   createPoleTracker(data: Partial<PoleTracker>): Observable<string> {
-    return from(this.generateVFPoleId(data.projectId!)).pipe(
+    // Validate required fields
+    if (!data.poleNumber) {
+      return throwError(() => new Error('Pole number is required'));
+    }
+
+    // Validate pole number uniqueness
+    return from(this.validatePoleNumberUniqueness(data.poleNumber)).pipe(
+      switchMap((isUnique) => {
+        if (!isUnique) {
+          return throwError(() => new Error(`Pole number ${data.poleNumber} already exists`));
+        }
+
+        return from(this.generateVFPoleId(data.projectId!));
+      }),
       switchMap((vfPoleId) => {
         const poleData: PoleTracker = {
           ...data,
           vfPoleId,
+          poleNumber: data.poleNumber!,
+          connectedDrops: [],
+          dropCount: 0,
+          maxCapacity: 12,
           uploads: {
             before: { uploaded: false },
             front: { uploaded: false },
@@ -76,7 +231,7 @@ export class PoleTrackerService {
           qualityChecked: false,
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
-        } as PoleTracker;
+        } as any;
 
         const docRef = doc(collection(this.firestore, this.collectionName));
         return from(setDoc(docRef, poleData)).pipe(map(() => docRef.id));
@@ -122,6 +277,7 @@ export class PoleTrackerService {
           return {
             ...data,
             uploadProgress,
+            uploadedCount: completedUploads,
             allUploadsComplete: completedUploads === totalUploads,
           } as PoleTrackerListItem;
         });
@@ -142,8 +298,27 @@ export class PoleTrackerService {
     );
   }
 
-  // Update pole tracker
+  // Update pole tracker with validation
   updatePoleTracker(id: string, data: Partial<PoleTracker>): Observable<void> {
+    // If updating pole number, validate uniqueness
+    if (data.poleNumber) {
+      return from(this.validatePoleNumberUniqueness(data.poleNumber, id)).pipe(
+        switchMap((isUnique) => {
+          if (!isUnique) {
+            return throwError(() => new Error(`Pole number ${data.poleNumber} already exists`));
+          }
+
+          const docRef = doc(this.firestore, this.collectionName, id);
+          const updateData = {
+            ...data,
+            updatedAt: serverTimestamp(),
+          };
+          return from(updateDoc(docRef, updateData));
+        }),
+      );
+    }
+
+    // Regular update without pole number change
     const docRef = doc(this.firestore, this.collectionName, id);
     const updateData = {
       ...data,
@@ -212,6 +387,13 @@ export class PoleTrackerService {
           polesByType: {},
           polesByContractor: {},
           installationProgress: 0,
+          poleCapacityStats: {
+            totalDrops: 0,
+            polesAtCapacity: 0,
+            polesNearCapacity: 0,
+            averageDropsPerPole: 0,
+            capacityUtilization: 0,
+          },
         };
 
         // Count by type
@@ -236,6 +418,23 @@ export class PoleTrackerService {
         stats.installationProgress =
           stats.totalPoles > 0 ? Math.round((stats.installedPoles / stats.totalPoles) * 100) : 0;
 
+        // Calculate pole capacity statistics
+        const totalDrops = poles.reduce((sum, pole) => sum + (pole.dropCount || 0), 0);
+        const polesAtCapacity = poles.filter((pole) => (pole.dropCount || 0) >= 12).length;
+        const polesNearCapacity = poles.filter((pole) => (pole.dropCount || 0) >= 10).length;
+        const averageDropsPerPole = stats.totalPoles > 0 ? totalDrops / stats.totalPoles : 0;
+        const maxPossibleDrops = stats.totalPoles * 12;
+        const capacityUtilization =
+          maxPossibleDrops > 0 ? (totalDrops / maxPossibleDrops) * 100 : 0;
+
+        stats.poleCapacityStats = {
+          totalDrops,
+          polesAtCapacity,
+          polesNearCapacity,
+          averageDropsPerPole: Math.round(averageDropsPerPole * 100) / 100,
+          capacityUtilization: Math.round(capacityUtilization * 100) / 100,
+        };
+
         return stats;
       }),
     );
@@ -243,7 +442,8 @@ export class PoleTrackerService {
 
   // Get all planned poles (for mobile app)
   getAllPlannedPoles(): Observable<PlannedPole[]> {
-    const q = query(collection(this.firestore, 'planned-poles'), orderBy('clientPoleNumber'));
+    const q = query(collection(this.firestore, 'planned-poles'));
+    // TODO: Add orderBy('poleNumber') after creating single-field index
 
     return from(getDocs(q)).pipe(
       map((snapshot) => {
@@ -267,7 +467,7 @@ export class PoleTrackerService {
     const q = query(
       collection(this.firestore, 'planned-poles'),
       where('projectId', '==', projectId),
-      orderBy('clientPoleNumber'),
+      // TODO: Add orderBy('poleNumber') after creating composite index
     );
 
     return from(getDocs(q)).pipe(
@@ -304,6 +504,65 @@ export class PoleTrackerService {
       catchError((error) => {
         console.error('Error fetching planned pole:', error);
         return of(null);
+      }),
+    );
+  }
+
+  // PERFORMANCE OPTIMIZATION: Paginated query for planned poles
+  getPlannedPolesByProjectPaginated(
+    projectId: string,
+    pageSize: number = 50,
+    pageIndex: number = 0,
+  ): Observable<{ poles: PlannedPole[]; total: number }> {
+    // Get all poles for this project (we'll paginate client-side for now)
+    const q = query(
+      collection(this.firestore, 'planned-poles'),
+      where('projectId', '==', projectId),
+      // Note: orderBy requires composite index, removed for now
+    );
+
+    return from(getDocs(q)).pipe(
+      map((snapshot) => {
+        const allPoles = snapshot.docs.map(
+          (doc) =>
+            ({
+              id: doc.id,
+              ...doc.data(),
+            }) as PlannedPole,
+        );
+
+        // Calculate pagination
+        const total = allPoles.length;
+        const startIndex = pageIndex * pageSize;
+        const endIndex = startIndex + pageSize;
+
+        // Get the current page of poles
+        const paginatedPoles = allPoles.slice(startIndex, endIndex);
+
+        return {
+          poles: paginatedPoles,
+          total: total,
+        };
+      }),
+      catchError((error) => {
+        console.error('Error fetching paginated planned poles:', error);
+        return of({ poles: [], total: 0 });
+      }),
+    );
+  }
+
+  // Get count of planned poles for a project
+  getPlannedPolesCount(projectId: string): Observable<number> {
+    const q = query(
+      collection(this.firestore, 'planned-poles'),
+      where('projectId', '==', projectId),
+    );
+
+    return from(getCountFromServer(q)).pipe(
+      map((snapshot) => snapshot.data().count),
+      catchError((error) => {
+        console.error('Error fetching poles count:', error);
+        return of(0);
       }),
     );
   }

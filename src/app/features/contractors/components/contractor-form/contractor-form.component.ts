@@ -160,20 +160,39 @@ import {
               <h3>Services Offered</h3>
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Select Services</mat-label>
-                <mat-select formControlName="services" multiple required panelClass="services-dropdown-panel" 
-                            #servicesSelect
-                            (openedChange)="onServicesDropdownChange($event)">
+                <mat-select
+                  formControlName="services"
+                  multiple
+                  required
+                  panelClass="services-dropdown-panel"
+                  #servicesSelect
+                >
                   <mat-select-trigger>
                     <mat-chip-set>
-                      <mat-chip *ngFor="let service of capabilitiesForm.get('services')?.value" removable="false">
+                      <mat-chip
+                        *ngFor="let service of capabilitiesForm.get('services')?.value"
+                        removable="false"
+                      >
                         {{ getServiceLabel(service) }}
                       </mat-chip>
                     </mat-chip-set>
-                    <span *ngIf="!capabilitiesForm.get('services')?.value?.length">Select services...</span>
+                    <span *ngIf="!capabilitiesForm.get('services')?.value?.length"
+                      >Select services...</span
+                    >
                   </mat-select-trigger>
                   <mat-option *ngFor="let service of contractorServices" [value]="service.value">
                     {{ service.label }}
                   </mat-option>
+                  <div class="dropdown-actions">
+                    <button
+                      mat-flat-button
+                      color="primary"
+                      type="button"
+                      (click)="closeServicesDropdown()"
+                    >
+                      Done
+                    </button>
+                  </div>
                 </mat-select>
                 <mat-error *ngIf="capabilitiesForm.get('services')?.hasError('required')">
                   Please select at least one service
@@ -413,6 +432,20 @@ import {
         min-height: 24px;
         padding: 2px 8px;
       }
+
+      .dropdown-actions {
+        padding: 8px 16px;
+        border-top: 1px solid #e0e0e0;
+        background-color: #f9f9f9;
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 8px;
+      }
+
+      .dropdown-actions button {
+        min-width: 80px;
+        font-size: 14px;
+      }
     `,
   ],
 })
@@ -565,14 +598,9 @@ export class ContractorFormComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  onServicesDropdownChange(isOpen: boolean) {
-    if (!isOpen) {
-      // Force close the dropdown panel when it should be closed
-      setTimeout(() => {
-        if (this.servicesSelect && this.servicesSelect.panelOpen) {
-          this.servicesSelect.close();
-        }
-      }, 100);
+  closeServicesDropdown() {
+    if (this.servicesSelect) {
+      this.servicesSelect.close();
     }
   }
 }

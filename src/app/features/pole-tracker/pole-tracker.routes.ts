@@ -3,7 +3,7 @@ import { authGuard } from '../../core/guards/auth.guard';
 import { roleGuard } from '../../core/guards/role.guard';
 
 export const poleTrackerRoutes: Routes = [
-  // Default route - goes to desktop list view
+  // Default route - goes to list view (reliable)
   {
     path: '',
     loadComponent: () =>
@@ -13,41 +13,44 @@ export const poleTrackerRoutes: Routes = [
     title: 'Pole Tracker - FibreFlow',
     canActivate: [authGuard],
   },
+
+  // List view route
   {
-    path: 'new',
+    path: 'list',
     loadComponent: () =>
-      import('./pages/pole-tracker-form/pole-tracker-form.component').then(
-        (m) => m.PoleTrackerFormComponent,
+      import('./pages/pole-tracker-list/pole-tracker-list.component').then(
+        (m) => m.PoleTrackerListComponent,
       ),
-    title: 'New Pole Entry - FibreFlow',
-    canActivate: [authGuard],
-  },
-  {
-    path: ':id/edit',
-    loadComponent: () =>
-      import('./pages/pole-tracker-form/pole-tracker-form.component').then(
-        (m) => m.PoleTrackerFormComponent,
-      ),
-    title: 'Edit Pole Entry - FibreFlow',
-    canActivate: [authGuard],
-  },
-  {
-    path: ':id',
-    loadComponent: () =>
-      import('./pages/pole-tracker-detail/pole-tracker-detail.component').then(
-        (m) => m.PoleTrackerDetailComponent,
-      ),
-    title: 'Pole Details - FibreFlow',
+    title: 'Pole Tracker List - FibreFlow',
     canActivate: [authGuard],
   },
 
-  // Mobile routes
+  // Grid view route
+  {
+    path: 'grid',
+    loadComponent: () =>
+      import('./pages/pole-tracker-grid/pole-tracker-grid.component').then(
+        (m) => m.PoleTrackerGridComponent,
+      ),
+    title: 'Pole Tracker Grid - FibreFlow',
+    canActivate: [authGuard],
+  },
+
+  // Mobile routes - MUST come before :id routes
   {
     path: 'mobile',
     canActivate: [authGuard],
     children: [
       {
         path: '',
+        loadComponent: () =>
+          import('./mobile/pole-list-mobile/pole-list-mobile.component').then(
+            (m) => m.PoleListMobileComponent,
+          ),
+        title: 'Pole Tracker Mobile - FibreFlow',
+      },
+      {
+        path: 'map',
         loadComponent: () =>
           import('./mobile/map-view/mobile-map-view.component').then(
             (m) => m.MobileMapViewComponent,
@@ -87,6 +90,37 @@ export const poleTrackerRoutes: Routes = [
         title: 'Nearby Poles - FibreFlow Mobile',
       },
     ],
+  },
+
+  // Static routes
+  {
+    path: 'new',
+    loadComponent: () =>
+      import('./pages/pole-tracker-form/pole-tracker-form.component').then(
+        (m) => m.PoleTrackerFormComponent,
+      ),
+    title: 'New Pole Entry - FibreFlow',
+    canActivate: [authGuard],
+  },
+  {
+    path: ':id/edit',
+    loadComponent: () =>
+      import('./pages/pole-tracker-form/pole-tracker-form.component').then(
+        (m) => m.PoleTrackerFormComponent,
+      ),
+    title: 'Edit Pole Entry - FibreFlow',
+    canActivate: [authGuard],
+  },
+
+  // Dynamic routes - MUST come last
+  {
+    path: ':id',
+    loadComponent: () =>
+      import('./pages/pole-tracker-detail/pole-tracker-detail.component').then(
+        (m) => m.PoleTrackerDetailComponent,
+      ),
+    title: 'Pole Details - FibreFlow',
+    canActivate: [authGuard],
   },
   // Shared/Admin routes
   {

@@ -25,9 +25,9 @@ export interface Project {
   currentPhaseName?: string;
 
   // Dates
-  startDate: Timestamp | Date;
-  expectedEndDate: Timestamp | Date;
-  actualEndDate?: Timestamp | Date;
+  startDate: Timestamp;
+  expectedEndDate: Timestamp;
+  actualEndDate?: Timestamp;
 
   // People
   projectManagerId: string;
@@ -51,8 +51,8 @@ export interface Project {
   allowNightWork: boolean;
 
   // Metadata
-  createdAt: Timestamp | Date;
-  updatedAt: Timestamp | Date;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
   createdBy: string;
   lastModifiedBy: string;
   metadata?: ProjectMetadata;
@@ -65,12 +65,12 @@ export interface Phase {
   name: string;
   status: PhaseStatus;
   order: number;
-  startDate?: Timestamp | Date;
-  endDate?: Timestamp | Date;
+  startDate?: Timestamp;
+  endDate?: Timestamp;
   dependencies?: string[]; // IDs of dependent phases
   progress: number; // 0-100
-  createdAt: Timestamp | Date;
-  updatedAt: Timestamp | Date;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 }
 
 export interface Step {
@@ -81,16 +81,16 @@ export interface Step {
   description?: string;
   status: StepStatus;
   order: number;
-  startDate?: Timestamp | Date;
-  endDate?: Timestamp | Date;
+  startDate?: Timestamp;
+  endDate?: Timestamp;
   progress: number; // 0-100
   feedback?: string;
   assignedTeamId?: string;
   estimatedHours: number;
   actualHours?: number;
   dependencies?: string[]; // IDs of dependent steps
-  createdAt: Timestamp | Date;
-  updatedAt: Timestamp | Date;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 }
 
 export interface Task {
@@ -104,15 +104,15 @@ export interface Task {
   priority: Priority;
   assigneeId?: string;
   assigneeName?: string;
-  dueDate?: Timestamp | Date;
-  completedDate?: Timestamp | Date;
+  dueDate?: Timestamp;
+  completedDate?: Timestamp;
   estimatedHours?: number;
   actualHours?: number;
   dependencies?: string[]; // IDs of dependent tasks
   attachments?: Attachment[];
   comments?: Comment[];
-  createdAt: Timestamp | Date;
-  updatedAt: Timestamp | Date;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
 }
 
 // Enums and Supporting Types
@@ -183,46 +183,46 @@ export interface ProjectMetadata {
   numberOfSites?: number;
   networkType?: string;
   tags?: string[];
-  
+
   // KPI Targets with Daily Rates and Smart Start Dates
   kpiTargets?: ProjectKPITargets;
 }
 
 export interface ProjectKPITargets {
   // Core KPI Targets (Required)
-  polePermissions: KPITarget;      // Start immediately
-  homeSignups: KPITarget;          // Start immediately  
-  polesPlanted: KPITarget;         // Start after permissions phase
-  fibreStringing: KPITarget;       // Start after poles planted
-  trenchingMeters: KPITarget;      // Start with civils phase
-  homesConnected: KPITarget;       // Start after fibre stringing
-  
+  polePermissions: KPITarget; // Start immediately
+  homeSignups: KPITarget; // Start immediately
+  polesPlanted: KPITarget; // Start after permissions phase
+  fibreStringing: KPITarget; // Start after poles planted
+  trenchingMeters: KPITarget; // Start with civils phase
+  homesConnected: KPITarget; // Start after fibre stringing
+
   // Calculated Project Timeline
-  calculatedDuration?: number;      // Total days based on targets
-  estimatedEndDate?: Date;         // Based on start date + duration
+  calculatedDuration?: number; // Total days based on targets
+  estimatedEndDate?: Date; // Based on start date + duration
 }
 
 export interface KPITarget {
   // Target Values
-  totalTarget: number;             // Total quantity to complete
-  dailyTarget: number;             // Target per working day
-  unit: string;                    // 'poles', 'meters', 'homes', etc.
-  
+  totalTarget: number; // Total quantity to complete
+  dailyTarget: number; // Target per working day
+  unit: string; // 'poles', 'meters', 'homes', etc.
+
   // Smart Start Logic
-  startPhase: PhaseType;           // When this KPI should start
-  dependsOn?: string[];            // Other KPIs that must start first
-  startDelayDays?: number;         // Days after phase/dependency starts
-  
+  startPhase: PhaseType; // When this KPI should start
+  dependsOn?: string[]; // Other KPIs that must start first
+  startDelayDays?: number; // Days after phase/dependency starts
+
   // Calculated Timeline
-  estimatedDays?: number;          // totalTarget / dailyTarget
-  estimatedStartDate?: Date;       // Calculated based on dependencies
-  estimatedEndDate?: Date;         // Start + estimated days
-  
+  estimatedDays?: number; // totalTarget / dailyTarget
+  estimatedStartDate?: Date; // Calculated based on dependencies
+  estimatedEndDate?: Date; // Start + estimated days
+
   // Progress Tracking (populated during project execution)
-  actualStartDate?: Date;          // When first KPI entry was made
-  currentTotal?: number;           // Current progress
-  averageDailyActual?: number;     // Actual daily rate so far
-  onTrack?: boolean;               // Is progress on schedule
+  actualStartDate?: Date; // When first KPI entry was made
+  currentTotal?: number; // Current progress
+  averageDailyActual?: number; // Actual daily rate so far
+  onTrack?: boolean; // Is progress on schedule
 }
 
 export interface Attachment {
@@ -474,5 +474,5 @@ export const DEFAULT_KPI_CONFIGURATIONS: { [key: string]: Partial<KPITarget> } =
     startPhase: PhaseType.WORK_IN_PROGRESS,
     dependsOn: ['fibreStringing'],
     startDelayDays: 21, // Wait for fibre to be strung before connecting homes
-  }
+  },
 };

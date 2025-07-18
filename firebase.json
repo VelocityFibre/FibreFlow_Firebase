@@ -9,6 +9,14 @@
     ],
     "rewrites": [
       {
+        "source": "/api/orchestrator/**",
+        "function": "orchestratorChat"
+      },
+      {
+        "source": "/api/health",
+        "function": "orchestratorHealth"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
@@ -19,7 +27,16 @@
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "max-age=3600"
+            "value": "max-age=300, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/index.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
           }
         ]
       }

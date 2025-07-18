@@ -40,6 +40,22 @@
 
 ## 📋 Backlog (Ready to Start)
 
+### DEV-100: Pole Analytics Module (New Feature)
+- **Type**: Feature
+- **Priority**: High  
+- **Component**: Analytics / Data Processing
+- **Effort**: 5 weeks (1 developer)
+- **Added**: 2025-07-15
+- **Details**: Create comprehensive pole permission analytics platform for OneMap data processing
+- **Specification**: SPEC-ANALYTICS-001
+- **Dev Plan**: docs/DEV_PLAN_POLE_ANALYTICS.md
+- **Notes**: 
+  - Separate from existing OneMap tab (keep both)
+  - Future-proof for CSV-to-API migration
+  - 5-phase development plan ready
+  - Integration with pole-tracker and contractors
+  - Route: /analytics/pole-permissions
+
 ### DEV-002: Stock Allocation Dialog
 - **Type**: Feature
 - **Priority**: Medium

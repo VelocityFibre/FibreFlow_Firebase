@@ -1,9 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import {
-  Firestore,
-  serverTimestamp,
-  Timestamp,
-} from '@angular/fire/firestore';
+import { Firestore, serverTimestamp, Timestamp } from '@angular/fire/firestore';
 import { Observable, map, of } from 'rxjs';
 import {
   Role,

@@ -54,9 +54,11 @@
   overflow: hidden;
 
   &.primary {
-    background: linear-gradient(135deg, 
-      theme.ff-rgba(primary, 0.1) 0%, 
-      theme.ff-rgba(primary, 0.05) 100%);
+    background: linear-gradient(
+      135deg,
+      theme.ff-rgba(primary, 0.1) 0%,
+      theme.ff-rgba(primary, 0.05) 100%
+    );
     border: 1px solid theme.ff-rgba(primary, 0.2);
   }
 
@@ -179,7 +181,7 @@
 
   .metric-value {
     font-weight: 600;
-    
+
     &.high {
       color: theme.ff-rgb(success);
     }

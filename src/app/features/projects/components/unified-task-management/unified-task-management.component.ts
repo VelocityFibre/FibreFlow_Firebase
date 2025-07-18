@@ -186,7 +186,6 @@ type ViewFilter = 'all' | 'uncompleted' | 'flagged';
         </mat-card>
       }
 
-
       <!-- Phases with Steps and Tasks (matching tasks page structure) -->
       @if (!loading() && databaseTasks().length > 0) {
         <div class="phases-section">
@@ -1326,7 +1325,6 @@ export class UnifiedTaskManagementComponent implements OnInit {
     this.phasesWithTracking.set(phasesWithTracking);
     console.log('Updated phases with tracking:', phasesWithTracking);
   }
-
 
   async reinitializeTasks() {
     const confirmDialog = confirm(

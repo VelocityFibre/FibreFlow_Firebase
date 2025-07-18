@@ -48,7 +48,7 @@
     padding: 16px;
     background: white;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
     mat-icon {
       font-size: 32px;
@@ -75,13 +75,15 @@
     }
 
     &.text-danger {
-      mat-icon, .stat-value {
+      mat-icon,
+      .stat-value {
         color: #f44336;
       }
     }
 
     &.text-warning {
-      mat-icon, .stat-value {
+      mat-icon,
+      .stat-value {
         color: #ff9800;
       }
     }
@@ -107,7 +109,7 @@
   background: white;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   .loading-container {
     display: flex;
@@ -162,7 +164,7 @@
   mat-chip {
     font-size: 12px;
     height: 24px;
-    
+
     &.priority-high {
       background-color: #ffebee;
       color: #c62828;

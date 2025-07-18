@@ -1,0 +1,81 @@
+<app-page-header
+  [title]="'Pole Permission Analytics'"
+  [subtitle]="'Analyze OneMap data for pole permissions and agent tracking'"
+  [actions]="headerActions"
+>
+</app-page-header>
+
+<div class="container">
+  <!-- Summary Stats -->
+  <div class="stats-grid">
+    <mat-card *ngFor="let stat of stats" class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon [color]="stat.icon === 'verified' ? 'primary' : ''">{{ stat.icon }}</mat-icon>
+          <div class="stat-details">
+            <div class="stat-value">{{ stat.value }}</div>
+            <div class="stat-label">{{ stat.label }}</div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Feature Cards -->
+  <div class="features-grid">
+    <mat-card
+      *ngFor="let feature of features"
+      class="feature-card"
+      [class.disabled]="feature.disabled"
+      [routerLink]="feature.disabled ? null : feature.route"
+      [style.cursor]="feature.disabled ? 'not-allowed' : 'pointer'"
+    >
+      <mat-card-header>
+        <mat-icon mat-card-avatar [color]="feature.disabled ? '' : feature.color">
+          {{ feature.icon }}
+        </mat-icon>
+        <mat-card-title>{{ feature.title }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ feature.description }}</p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-button [color]="feature.color" [disabled]="feature.disabled">
+          {{ feature.disabled ? 'Coming Soon' : 'Get Started' }}
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Information Section -->
+  <mat-card class="info-card">
+    <mat-card-header>
+      <mat-card-title>About Pole Analytics</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        The Pole Analytics module processes OneMap CSV data to track pole permission approvals,
+        analyze field agent performance, and generate time-based reports for project management.
+      </p>
+      <div class="info-features">
+        <div class="info-item">
+          <mat-icon color="primary">check_circle</mat-icon>
+          <span>Process 5,000+ records in seconds</span>
+        </div>
+        <div class="info-item">
+          <mat-icon color="primary">check_circle</mat-icon>
+          <span>Automatic duplicate removal</span>
+        </div>
+        <div class="info-item">
+          <mat-icon color="primary">check_circle</mat-icon>
+          <span>Agent validation and tracking</span>
+        </div>
+        <div class="info-item">
+          <mat-icon color="primary">check_circle</mat-icon>
+          <span>Multiple export formats</span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

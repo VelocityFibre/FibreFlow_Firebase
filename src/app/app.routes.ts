@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { demoConfig } from './config/demo.config';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { authGuard } from './core/guards/auth.guard';
 
 const allRoutes: Routes = [
   {
@@ -70,11 +71,9 @@ const allRoutes: Routes = [
   },
   {
     path: 'analytics',
-    loadComponent: () =>
-      import('./shared/components/placeholder-page/placeholder-page.component').then(
-        (m) => m.PlaceholderPageComponent,
-      ),
-    data: { title: 'Analytics' },
+    loadChildren: () =>
+      import('./features/analytics/analytics.routes').then((m) => m.ANALYTICS_ROUTES),
+    data: { title: 'Analytics', preload: true },
   },
   {
     path: 'daily-progress',
@@ -82,6 +81,12 @@ const allRoutes: Routes = [
       import('./features/daily-progress/daily-progress.routes').then(
         (m) => m.DAILY_PROGRESS_ROUTES,
       ),
+  },
+  {
+    path: 'dev-tasks',
+    loadChildren: () =>
+      import('./features/dev-tasks/dev-tasks.routes').then((m) => m.DEV_TASKS_ROUTES),
+    data: { title: 'Development Tasks' },
   },
   // Placeholder routes for pages to be implemented
   {
@@ -155,8 +160,24 @@ const allRoutes: Routes = [
     data: { title: 'Meetings' },
   },
   {
+    path: 'action-items',
+    loadChildren: () => 
+      import('./features/action-items/action-items.routes').then((m) => m.ACTION_ITEMS_ROUTES),
+    canActivate: [authGuard],
+    data: { title: 'Action Items Management' },
+  },
+  {
     path: 'tasks',
     loadChildren: () => import('./features/tasks/tasks.routes').then((m) => m.tasksRoutes),
+  },
+  {
+    path: 'task-grid',
+    loadComponent: () =>
+      import('./features/tasks/pages/task-management-grid/task-management-grid.component').then(
+        (m) => m.TaskManagementGridComponent,
+      ),
+    canActivate: [authGuard],
+    data: { title: 'Task Management Grid' },
   },
   {
     path: 'stock',

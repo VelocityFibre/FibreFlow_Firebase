@@ -229,7 +229,7 @@ import { StaffGroup, StaffMember, WorkingHours } from '../../models/staff.model'
             </mat-step>
 
             <!-- Step 3: Emergency Contact -->
-            <mat-step [stepControl]="emergencyForm">
+            <mat-step>
               <form [formGroup]="emergencyForm">
                 <ng-template matStepLabel>Emergency Contact</ng-template>
 
@@ -655,7 +655,7 @@ export class StaffFormComponent implements OnInit {
         });
       } else {
         // Ensure all required fields are present for creation
-        const createData = {
+        const createData: any = {
           employeeId: staffData.employeeId || '',
           name: staffData.name || '',
           email: staffData.email || '',
@@ -679,9 +679,17 @@ export class StaffFormComponent implements OnInit {
             averageTaskCompletionTime: 0,
           },
           isActive: true,
-          emergencyContact: staffData.emergencyContact,
           createdBy: 'system', // TODO: Replace with actual user ID when auth is implemented
         };
+
+        // Only add emergencyContact if it exists
+        if (staffData.emergencyContact) {
+          createData.emergencyContact = staffData.emergencyContact;
+        }
+
+        // Log the final data being sent
+        console.log('Final createData being sent to service:', createData);
+        console.log('Emergency contact included?', !!createData.emergencyContact);
 
         this.staffService.createStaff(createData).subscribe({
           next: () => {
@@ -690,7 +698,17 @@ export class StaffFormComponent implements OnInit {
           },
           error: (error) => {
             console.error('Error creating staff member:', error);
-            this.snackBar.open('Error creating staff member', 'Close', { duration: 3000 });
+            console.error('Error details:', error);
+
+            // Show more specific error message if available
+            let errorMessage = 'Error creating staff member';
+            if (error?.message) {
+              errorMessage = error.message;
+            } else if (error?.error?.message) {
+              errorMessage = error.error.message;
+            }
+
+            this.snackBar.open(errorMessage, 'Close', { duration: 5000 });
             this.isSubmitting = false;
           },
         });

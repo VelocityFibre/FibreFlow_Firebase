@@ -62,9 +62,12 @@ Master config: `.claude/shared/fibreflow-master-config.yml`
 - ❌ NEVER create complex abstractions early
 - ❌ NEVER work on multiple features at once
 - ❌ NEVER skip antiHall validation
+- ❌ NEVER bypass pole/drop data integrity rules
 - ✅ ALWAYS validate patterns with antiHall
 - ✅ ALWAYS deploy to test
 - ✅ ALWAYS follow existing patterns
+- ✅ ALWAYS enforce pole number uniqueness (max 12 drops per pole)
+- ✅ ALWAYS enforce drop number uniqueness (1 drop per pole relationship)
 
 **Validate Before Implementing**:
 ```bash
@@ -183,6 +186,7 @@ npm run check "code or pattern to verify"
 - **Database Schema**: `docs/DATABASE_STRUCTURE.md` - Firestore structure
 - **PRP Template**: `docs/PRP_TEMPLATE.md` - Feature planning
 - **Sync Meetings Guide**: `docs/SYNC_MEETINGS_GUIDE.md` - Fireflies sync instructions
+- **Vision: LLM Search**: `docs/VISION_LLM_POWERED_SEARCH.md` - Future of search in FibreFlow
 - **Commands**: `.claude/commands/` - Slash commands
 - **antiHall**: `antiHall/` - Hallucination prevention
 
@@ -441,6 +445,75 @@ deploy "Added item list and form"
 
 ---
 
+## CRITICAL ROUTING LESSONS LEARNED (2025-01-17)
+
+### ⚠️ ANGULAR ROUTING ISSUES - MUST READ BEFORE CREATING NEW PAGES
+
+**Problem Experienced**: Spent 30+ minutes debugging `NG04002: 'tasks/management/grid'` error when creating task management grid view. The nested lazy-loaded route structure failed repeatedly.
+
+**Root Cause**: Angular's nested lazy-loaded routes can lose path context, causing routing to fail with cryptic errors.
+
+### ❌ WHAT NOT TO DO (This Will Waste Time):
+
+```typescript
+// In feature.routes.ts (e.g., tasks.routes.ts)
+{
+  path: 'management/grid',  // Nested route under lazy-loaded module
+  loadComponent: () => import('./pages/grid/grid.component').then(m => m.GridComponent)
+}
+// Accessing via: /tasks/management/grid
+// Result: NG04002 error, route not found
+```
+
+### ✅ CORRECT APPROACH (Simple & Works):
+
+```typescript
+// In app.routes.ts (main routes file)
+{
+  path: 'task-grid',  // Simple, direct, top-level route
+  loadComponent: () => import('./features/tasks/pages/task-management-grid/task-management-grid.component')
+    .then(m => m.TaskManagementGridComponent),
+  canActivate: [authGuard],
+  data: { title: 'Task Management Grid' }
+}
+// Access via: /task-grid
+// Result: Works immediately!
+```
+
+### Why This Happens:
+1. **Lazy loading complexity** - Multiple layers of lazy-loaded modules cause path resolution issues
+2. **Route context loss** - Child routes lose their parent context, stripping leading slashes
+3. **Angular Router limitations** - Deeply nested routes are harder to debug and maintain
+
+### MANDATORY APPROACH FOR ALL NEW PAGES:
+
+1. **START SIMPLE** - Create a direct route in `app.routes.ts` first
+2. **TEST IT WORKS** - Verify the route loads correctly
+3. **ADD COMPLEXITY ONLY IF NEEDED** - Most pages don't need nested routing
+4. **DOCUMENT ANY ISSUES** - Add notes here if you encounter routing problems
+
+### Examples of Simple Routes That Work:
+
+```typescript
+// Good examples from our codebase
+{ path: 'task-grid', loadComponent: () => import('...') }        // ✅ Works
+{ path: 'pole-tracker', loadChildren: () => import('...') }      // ✅ Works
+{ path: 'daily-progress', loadChildren: () => import('...') }    // ✅ Works
+
+// Avoid these patterns
+{ path: 'feature/sub-feature/page' }                             // ❌ Too nested
+{ path: 'management/grid' } // under lazy module                 // ❌ Context loss
+```
+
+### Quick Decision Tree:
+- **New standalone page?** → Add to `app.routes.ts` with simple path
+- **Part of existing feature?** → Try simple path first, test thoroughly
+- **Must be nested?** → Document why, test extensively, prepare for issues
+
+**Remember**: The simplest solution that works is the best solution. Don't overcomplicate routing!
+
+---
+
 ## Common Development Patterns
 
 ### Creating a New Service
@@ -606,3 +679,150 @@ Remember: Good context = Good code = No repeated struggles
 ---
 
 *Last updated: 2025-07-14*
+---
+
+## Agent Notes
+### Pattern Learning - 2025-07-16
+**Context**: general
+**Patterns Learned**: 1
+
+- **intent_pattern**: User intent: memory_search
+  - Solution: Actions: prepare_context
+  - Confidence: 0.8
+
+
+### Pattern Learning - 2025-07-16
+**Context**: general
+**Patterns Learned**: 1
+
+- **intent_pattern**: User intent: development_task
+  - Solution: Actions: prepare_context, launch_claude_code
+  - Confidence: 0.8
+
+
+### Pattern Learning - 2025-07-16
+**Context**: general
+**Patterns Learned**: 1
+
+- **intent_pattern**: User intent: general_help
+  - Solution: Actions: provide_assistance
+  - Confidence: 0.8
+
+
+### Pattern Learning - 2025-07-16
+**Context**: general
+**Patterns Learned**: 1
+
+- **intent_pattern**: User intent: development_task
+  - Solution: Actions: prepare_context, launch_claude_code
+  - Confidence: 0.8
+
+
+### Pattern Learning - 2025-07-16
+**Context**: general
+**Patterns Learned**: 1
+
+- **intent_pattern**: User intent: pattern_query
+  - Solution: Actions: 
+  - Confidence: 0.8
+
+
+### Pattern Learning - 2025-07-16
+**Context**: general
+**Patterns Learned**: 1
+
+- **intent_pattern**: User intent: development_task
+  - Solution: Actions: prepare_context
+  - Confidence: 0.8
+
+
+### Pattern Learning - 2025-07-16
+**Context**: general
+**Patterns Learned**: 1
+
+- **intent_pattern**: User intent: memory_search
+  - Solution: Actions: prepare_context
+  - Confidence: 0.8
+
+
+### Pattern Learning - 2025-07-16
+**Context**: general
+**Patterns Learned**: 1
+
+- **intent_pattern**: User intent: general_help
+  - Solution: Actions: provide_assistance
+  - Confidence: 0.8
+
+
+### Pattern Learning - 2025-07-16
+**Context**: general
+**Patterns Learned**: 1
+
+- **intent_pattern**: User intent: general_help
+  - Solution: Actions: provide_assistance
+  - Confidence: 0.8
+
+
+### Pattern Learning - 2025-07-16
+**Context**: general
+**Patterns Learned**: 1
+
+- **intent_pattern**: User intent: status_check
+  - Solution: Actions: show_status
+  - Confidence: 0.8
+
+
+### Pattern Learning - 2025-07-16
+**Context**: general
+**Patterns Learned**: 1
+
+- **intent_pattern**: User intent: general_help
+  - Solution: Actions: provide_assistance
+  - Confidence: 0.8
+
+
+### Pattern Learning - 2025-07-16
+**Context**: general
+**Patterns Learned**: 1
+
+- **intent_pattern**: User intent: memory_search
+  - Solution: Actions: search_past_solutions
+  - Confidence: 0.8
+
+
+### Pattern Learning - 2025-07-16
+**Context**: general
+**Patterns Learned**: 1
+
+- **intent_pattern**: User intent: general_help
+  - Solution: Actions: provide_assistance
+  - Confidence: 0.8
+
+
+### Pattern Learning - 2025-07-16
+**Context**: general
+**Patterns Learned**: 1
+
+- **intent_pattern**: User intent: development_task
+  - Solution: Actions: prepare_context, launch_claude
+  - Confidence: 0.8
+
+
+### Pattern Learning - 2025-07-16
+**Context**: general
+**Patterns Learned**: 1
+
+- **intent_pattern**: User intent: general_help
+  - Solution: Actions: provide_assistance
+  - Confidence: 0.8
+
+
+
+### Pattern Learning - 2025-07-16
+**Context**: general
+**Patterns Learned**: 1
+
+- **intent_pattern**: User intent: general_help
+  - Solution: Actions: provide_assistance
+  - Confidence: 0.8
+

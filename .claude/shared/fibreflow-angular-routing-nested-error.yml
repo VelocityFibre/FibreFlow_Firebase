@@ -1,0 +1,136 @@
+# Angular Routing NG04002 Error - Nested Routes Issue
+version: 1.0
+name: Angular Routing Nested Routes Error
+description: Solution for "Cannot match any routes" error with lazy-loaded nested routes
+
+# Error Details
+error:
+  code: "NG04002"
+  message: "Cannot match any routes. URL Segment: 'tasks/management/grid'"
+  console_error: |
+    ERROR Error: NG04002: Cannot match any routes. URL Segment: 'tasks/management/grid'
+    at Recognizer.noMatchError
+    at Recognizer.recognize
+  
+# Root Cause
+root_cause:
+  issue: "Angular strips leading slashes in nested lazy-loaded routes"
+  details:
+    - "When using loadChildren with nested routes, Angular may not resolve paths correctly"
+    - "The router tries to match 'tasks/management/grid' without the leading slash"
+    - "Nested children arrays in route configurations can cause resolution issues"
+    - "Complex routing hierarchies are harder to debug and maintain"
+
+# Failed Approaches
+failed_attempts:
+  attempt_1:
+    description: "Nested children array in tasks.routes.ts"
+    code: |
+      {
+        path: 'management',
+        children: [
+          {
+            path: 'grid',
+            loadComponent: () => import('./grid.component')
+          }
+        ]
+      }
+    why_it_fails: "Lazy loading doesn't properly resolve nested paths"
+  
+  attempt_2:
+    description: "LoadChildren for management module"
+    code: |
+      {
+        path: 'management',
+        loadChildren: () => import('./management.routes')
+      }
+    why_it_fails: "Additional module nesting complicates route resolution"
+  
+  attempt_3:
+    description: "PathMatch configurations"
+    code: |
+      {
+        path: 'management/grid',
+        pathMatch: 'full',
+        loadComponent: () => import('./grid.component')
+      }
+    why_it_fails: "Still tries to match without leading slash"
+
+# Working Solution
+solution:
+  approach: "Create direct route in app.routes.ts"
+  benefits:
+    - "Simpler route structure"
+    - "Faster loading (no module nesting)"
+    - "Direct bookmarkable URLs"
+    - "Easier to debug and maintain"
+  
+  implementation:
+    step_1:
+      description: "Add direct route to app.routes.ts"
+      code: |
+        {
+          path: 'task-grid',
+          loadComponent: () =>
+            import('./features/tasks/pages/task-management-grid/task-management-grid.component').then(
+              (m) => m.TaskManagementGridComponent,
+            ),
+          canActivate: [authGuard],
+          data: { title: 'Task Management Grid' },
+        }
+    
+    step_2:
+      description: "Update navigation links"
+      old: |
+        <a routerLink="/tasks/management/grid">Grid View</a>
+        this.router.navigate(['/tasks/management/grid']);
+      new: |
+        <a routerLink="/task-grid">Grid View</a>
+        this.router.navigate(['/task-grid']);
+    
+    step_3:
+      description: "Remove complex nested routing"
+      action: "Delete unnecessary nested route configurations"
+
+# Prevention Guidelines
+prevention:
+  - "Prefer flat route structures over deeply nested ones"
+  - "Use direct routes for main feature pages"
+  - "Keep lazy loading simple - one level deep maximum"
+  - "Test routes immediately after adding them"
+  - "Use meaningful, simple route paths"
+
+# Quick Reference
+quick_fix:
+  command: "Add to app.routes.ts"
+  pattern: |
+    {
+      path: 'feature-name',
+      loadComponent: () => import('./path/to/component').then(m => m.ComponentName),
+      canActivate: [authGuard],
+      data: { title: 'Page Title' }
+    }
+
+# Related Issues
+related:
+  - "Lazy loading performance"
+  - "Route guards with nested routes"
+  - "Route parameter passing in nested structures"
+
+# Testing
+testing:
+  verify_fix:
+    - "Navigate to the route directly via URL"
+    - "Click navigation link"
+    - "Use router.navigate() programmatically"
+    - "Check browser back/forward buttons work"
+    - "Verify page refreshes maintain route"
+
+# Long-term Strategy
+strategy:
+  recommendation: "Keep routing simple and flat"
+  guidelines:
+    - "Main features get top-level routes"
+    - "Sub-features use query params or route params"
+    - "Avoid more than 2 levels of nesting"
+    - "Document all routes in page-contexts.yml"

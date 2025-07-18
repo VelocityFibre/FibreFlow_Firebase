@@ -3,33 +3,25 @@ import {
   Firestore,
   collection,
   collectionData,
-  doc,
-  docData,
-  addDoc,
-  updateDoc,
-  deleteDoc,
   query,
   where,
   orderBy,
-  // limit,
   CollectionReference,
-  // DocumentReference,
   Timestamp,
   getDoc,
   getDocs,
+  doc,
+  addDoc,
+  updateDoc,
+  limit,
 } from '@angular/fire/firestore';
-import { Observable, /* from, */ map, combineLatest, switchMap } from 'rxjs';
+import { Observable, map, combineLatest, switchMap } from 'rxjs';
 import {
   Project,
   Phase,
   Step,
   Task,
   ProjectStatus,
-  // PhaseStatus,
-  // StepStatus,
-  // TaskStatus,
-  // PhaseType,
-  // FIBER_PROJECT_PHASES,
   ProjectHierarchy,
   PhaseHierarchy,
   StepHierarchy,
@@ -37,19 +29,24 @@ import {
 import { ProjectInitializationService } from './project-initialization.service';
 import { PhaseService } from './phase.service';
 import { ClientService } from '../../features/clients/services/client.service';
-import { AuditTrailService } from './audit-trail.service';
+import { BaseFirestoreService } from './base-firestore.service';
+import { EntityType } from '../models/audit-log.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ProjectService {
-  private firestore = inject(Firestore);
+export class ProjectService extends BaseFirestoreService<Project> {
+  protected override firestore = inject(Firestore);
   private projectInitService = inject(ProjectInitializationService);
   private phaseService = inject(PhaseService);
   private clientService = inject(ClientService);
-  private auditService = inject(AuditTrailService);
+  protected collectionName = 'projects';
 
-  // Collection references
+  protected getEntityType(): EntityType {
+    return 'project';
+  }
+
+  // Collection references for subcollections
   private projectsCollection = collection(
     this.firestore,
     'projects',
@@ -77,27 +74,20 @@ export class ProjectService {
   // Project CRUD Operations
 
   getProjects(): Observable<Project[]> {
-    const q = query(this.projectsCollection, orderBy('createdAt', 'desc'));
-    return collectionData(q, { idField: 'id' });
+    return this.getOrderedByDate('desc');
   }
 
   getActiveProjects(): Observable<Project[]> {
-    const q = query(
-      this.projectsCollection,
-      where('status', '==', ProjectStatus.ACTIVE),
-      orderBy('createdAt', 'desc'),
-    );
-    return collectionData(q, { idField: 'id' });
+    return this.getWithFilter('status', '==', ProjectStatus.ACTIVE);
   }
 
   getProjectById(id: string): Observable<Project | undefined> {
-    const projectDoc = doc(this.projectsCollection, id);
-    return docData(projectDoc, { idField: 'id' });
+    return this.getById(id);
   }
 
   // Alias for getProjectById for compatibility
   getProject(id: string): Observable<Project | undefined> {
-    return this.getProjectById(id);
+    return this.getById(id);
   }
 
   // Get a single project (for non-observable use)
@@ -148,44 +138,38 @@ export class ProjectService {
   async createProject(project: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
     console.log('🏗️ ProjectService.createProject called with:', project);
 
-    const now = Timestamp.now();
-    const newProject: Omit<Project, 'id'> = {
+    // Check for duplicate project code
+    if (project.projectCode) {
+      const existingProjectQuery = query(
+        this.projectsCollection,
+        where('projectCode', '==', project.projectCode),
+        limit(1),
+      );
+      const existingSnapshot = await getDocs(existingProjectQuery);
+
+      if (!existingSnapshot.empty) {
+        throw new Error(`Project with code ${project.projectCode} already exists`);
+      }
+    }
+
+    const newProject = {
       ...project,
       overallProgress: 0,
       activeTasksCount: 0,
       completedTasksCount: 0,
       currentPhaseProgress: 0,
-      createdAt: now,
-      updatedAt: now,
     };
 
     console.log('📦 Prepared project data:', newProject);
 
-    const docRef = await addDoc(this.projectsCollection, newProject);
-
-    // Log audit trail for project creation
-    try {
-      console.log('📝 Attempting to log audit trail for project creation...');
-      await this.auditService.logUserAction(
-        'project',
-        docRef.id,
-        project.name || 'Untitled Project',
-        'create',
-        undefined,
-        { ...newProject, id: docRef.id },
-        'success',
-      );
-      console.log('✅ Audit trail logged successfully for project creation');
-    } catch (error) {
-      console.error('❌ Error logging project creation audit trail:', error);
-    }
+    const projectId = await this.create(newProject);
 
     // Create default phases and tasks from template
     try {
       // Initialize phases and tasks for the project
-      console.log(`Initializing phases and tasks for project ${docRef.id}...`);
-      await this.projectInitService.initializeProjectPhasesAndTasks(docRef.id);
-      console.log(`Successfully initialized phases and tasks for project ${docRef.id}`);
+      console.log(`Initializing phases and tasks for project ${projectId}...`);
+      await this.projectInitService.initializeProjectPhasesAndTasks(projectId);
+      console.log(`Successfully initialized phases and tasks for project ${projectId}`);
     } catch (error) {
       console.error('Error creating phases and tasks:', error);
       // Don't throw - project is already created
@@ -200,118 +184,40 @@ export class ProjectService {
       }
     }
 
-    return docRef.id;
+    return projectId;
   }
 
   async updateProject(id: string, updates: Partial<Project>): Promise<void> {
-    try {
-      // First get the current project to check clientId and for audit logging
-      const projectDoc = doc(this.projectsCollection, id);
-      const currentProject = await getDoc(projectDoc);
-      const currentData = currentProject.data() as Project;
+    // Get current project data for client metrics
+    const currentProject = await this.getProjectOnce(id);
 
-      const updatedData = {
-        ...updates,
-        updatedAt: Timestamp.now(),
-      };
+    await this.update(id, updates);
 
-      await updateDoc(projectDoc, updatedData);
-
-      // Log audit trail for project update
+    // Update client metrics if clientId exists
+    const clientId = updates.clientId || currentProject?.clientId;
+    if (clientId) {
       try {
-        await this.auditService.logUserAction(
-          'project',
-          id,
-          currentData?.name || 'Untitled Project',
-          'update',
-          currentData,
-          { ...currentData, ...updatedData },
-          'success',
-        );
+        await this.updateClientMetricsForProject(clientId);
       } catch (error) {
-        console.error('Error logging project update audit trail:', error);
+        console.error('Error updating client metrics after project update:', error);
       }
-
-      // Update client metrics if clientId exists
-      const clientId = updates.clientId || currentData?.clientId;
-
-      if (clientId) {
-        try {
-          await this.updateClientMetricsForProject(clientId);
-        } catch (error) {
-          console.error('Error updating client metrics after project update:', error);
-        }
-      }
-    } catch (error) {
-      // Log failed update
-      try {
-        await this.auditService.logUserAction(
-          'project',
-          id,
-          'Unknown Project',
-          'update',
-          undefined,
-          updates,
-          'failed',
-          error instanceof Error ? error.message : 'Unknown error',
-        );
-      } catch (auditError) {
-        console.error('Error logging failed project update audit trail:', auditError);
-      }
-      throw error;
     }
   }
 
   async deleteProject(id: string): Promise<void> {
-    try {
-      // First get the project to get clientId before deletion
-      const projectDoc = doc(this.projectsCollection, id);
-      const projectSnapshot = await getDoc(projectDoc);
-      const projectData = projectSnapshot.data() as Project;
+    // Get project data for client metrics before deletion
+    const projectData = await this.getProjectOnce(id);
 
-      // Note: In production, you'd want to delete all subcollections too
-      await deleteDoc(projectDoc);
+    // Note: In production, you'd want to delete all subcollections too
+    await this.delete(id);
 
-      // Log audit trail for project deletion
+    // Update client metrics if clientId exists
+    if (projectData?.clientId) {
       try {
-        await this.auditService.logUserAction(
-          'project',
-          id,
-          projectData?.name || 'Untitled Project',
-          'delete',
-          projectData,
-          undefined,
-          'success',
-        );
+        await this.updateClientMetricsForProject(projectData.clientId);
       } catch (error) {
-        console.error('Error logging project deletion audit trail:', error);
+        console.error('Error updating client metrics after project deletion:', error);
       }
-
-      // Update client metrics if clientId exists
-      if (projectData?.clientId) {
-        try {
-          await this.updateClientMetricsForProject(projectData.clientId);
-        } catch (error) {
-          console.error('Error updating client metrics after project deletion:', error);
-        }
-      }
-    } catch (error) {
-      // Log failed deletion
-      try {
-        await this.auditService.logUserAction(
-          'project',
-          id,
-          'Unknown Project',
-          'delete',
-          undefined,
-          undefined,
-          'failed',
-          error instanceof Error ? error.message : 'Unknown error',
-        );
-      } catch (auditError) {
-        console.error('Error logging failed project deletion audit trail:', auditError);
-      }
-      throw error;
     }
   }
 

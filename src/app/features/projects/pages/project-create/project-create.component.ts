@@ -16,7 +16,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProjectService } from '../../../../core/services/project.service';
 import { ClientService } from '../../../../features/clients/services/client.service';
 import { Client } from '../../../../features/clients/models/client.model';
-import { Observable } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import {
   ProjectType,
   ProjectStatus,
@@ -54,7 +54,13 @@ import {
           </button>
           <div>
             <h1 class="page-title">{{ isEditMode ? 'Edit Project' : 'Create New Project' }}</h1>
-            <p class="page-subtitle">{{ isEditMode ? 'Update project details' : 'Set up a new fiber optic infrastructure project' }}</p>
+            <p class="page-subtitle">
+              {{
+                isEditMode
+                  ? 'Update project details'
+                  : 'Set up a new fiber optic infrastructure project'
+              }}
+            </p>
           </div>
         </div>
       </div>
@@ -195,25 +201,41 @@ import {
                 <mat-icon style="margin-right: 8px; vertical-align: middle;">trending_up</mat-icon>
                 Scope of Work (SOW)
               </mat-card-title>
-              <mat-card-subtitle>Set daily targets for key performance indicators</mat-card-subtitle>
+              <mat-card-subtitle
+                >Set daily targets for key performance indicators</mat-card-subtitle
+              >
             </mat-card-header>
             <mat-card-content>
               <div class="form-section">
                 <div class="form-row">
                   <mat-form-field appearance="outline">
                     <mat-label>Pole Permissions Target</mat-label>
-                    <input matInput type="number" formControlName="polePermissionsTotal" placeholder="50" />
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="polePermissionsTotal"
+                      placeholder="50"
+                    />
                     <span matSuffix>permissions</span>
-                    <mat-error *ngIf="projectForm.get('polePermissionsTotal')?.hasError('required')">
+                    <mat-error
+                      *ngIf="projectForm.get('polePermissionsTotal')?.hasError('required')"
+                    >
                       Pole permissions target is required
                     </mat-error>
                   </mat-form-field>
 
                   <mat-form-field appearance="outline">
                     <mat-label>Permissions Per Day</mat-label>
-                    <input matInput type="number" formControlName="polePermissionsDaily" placeholder="5" />
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="polePermissionsDaily"
+                      placeholder="5"
+                    />
                     <span matSuffix>per day</span>
-                    <mat-error *ngIf="projectForm.get('polePermissionsDaily')?.hasError('required')">
+                    <mat-error
+                      *ngIf="projectForm.get('polePermissionsDaily')?.hasError('required')"
+                    >
                       Daily target is required
                     </mat-error>
                   </mat-form-field>
@@ -222,7 +244,12 @@ import {
                 <div class="form-row">
                   <mat-form-field appearance="outline">
                     <mat-label>Home Signups Target</mat-label>
-                    <input matInput type="number" formControlName="homeSignupsTotal" placeholder="100" />
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="homeSignupsTotal"
+                      placeholder="100"
+                    />
                     <span matSuffix>homes</span>
                     <mat-error *ngIf="projectForm.get('homeSignupsTotal')?.hasError('required')">
                       Home signups target is required
@@ -231,7 +258,12 @@ import {
 
                   <mat-form-field appearance="outline">
                     <mat-label>Signups Per Day</mat-label>
-                    <input matInput type="number" formControlName="homeSignupsDaily" placeholder="8" />
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="homeSignupsDaily"
+                      placeholder="8"
+                    />
                     <span matSuffix>per day</span>
                     <mat-error *ngIf="projectForm.get('homeSignupsDaily')?.hasError('required')">
                       Daily target is required
@@ -242,7 +274,12 @@ import {
                 <div class="form-row">
                   <mat-form-field appearance="outline">
                     <mat-label>Poles to Plant</mat-label>
-                    <input matInput type="number" formControlName="polesPlantedTotal" placeholder="50" />
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="polesPlantedTotal"
+                      placeholder="50"
+                    />
                     <span matSuffix>poles</span>
                     <mat-error *ngIf="projectForm.get('polesPlantedTotal')?.hasError('required')">
                       Poles target is required
@@ -251,7 +288,12 @@ import {
 
                   <mat-form-field appearance="outline">
                     <mat-label>Poles Per Day</mat-label>
-                    <input matInput type="number" formControlName="polesPlantedDaily" placeholder="3" />
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="polesPlantedDaily"
+                      placeholder="3"
+                    />
                     <span matSuffix>per day</span>
                     <mat-error *ngIf="projectForm.get('polesPlantedDaily')?.hasError('required')">
                       Daily target is required
@@ -262,7 +304,12 @@ import {
                 <div class="form-row">
                   <mat-form-field appearance="outline">
                     <mat-label>Fibre Stringing (meters)</mat-label>
-                    <input matInput type="number" formControlName="fibreStringingTotal" placeholder="2000" />
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="fibreStringingTotal"
+                      placeholder="2000"
+                    />
                     <span matSuffix>meters</span>
                     <mat-error *ngIf="projectForm.get('fibreStringingTotal')?.hasError('required')">
                       Fibre stringing target is required
@@ -271,7 +318,12 @@ import {
 
                   <mat-form-field appearance="outline">
                     <mat-label>Stringing Per Day</mat-label>
-                    <input matInput type="number" formControlName="fibreStringingDaily" placeholder="150" />
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="fibreStringingDaily"
+                      placeholder="150"
+                    />
                     <span matSuffix>meters/day</span>
                     <mat-error *ngIf="projectForm.get('fibreStringingDaily')?.hasError('required')">
                       Daily target is required
@@ -282,18 +334,32 @@ import {
                 <div class="form-row">
                   <mat-form-field appearance="outline">
                     <mat-label>Trenching (meters)</mat-label>
-                    <input matInput type="number" formControlName="trenchingMetersTotal" placeholder="500" />
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="trenchingMetersTotal"
+                      placeholder="500"
+                    />
                     <span matSuffix>meters</span>
-                    <mat-error *ngIf="projectForm.get('trenchingMetersTotal')?.hasError('required')">
+                    <mat-error
+                      *ngIf="projectForm.get('trenchingMetersTotal')?.hasError('required')"
+                    >
                       Trenching target is required
                     </mat-error>
                   </mat-form-field>
 
                   <mat-form-field appearance="outline">
                     <mat-label>Trenching Per Day</mat-label>
-                    <input matInput type="number" formControlName="trenchingMetersDaily" placeholder="50" />
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="trenchingMetersDaily"
+                      placeholder="50"
+                    />
                     <span matSuffix>meters/day</span>
-                    <mat-error *ngIf="projectForm.get('trenchingMetersDaily')?.hasError('required')">
+                    <mat-error
+                      *ngIf="projectForm.get('trenchingMetersDaily')?.hasError('required')"
+                    >
                       Daily target is required
                     </mat-error>
                   </mat-form-field>
@@ -302,7 +368,12 @@ import {
                 <div class="form-row">
                   <mat-form-field appearance="outline">
                     <mat-label>Homes Connected</mat-label>
-                    <input matInput type="number" formControlName="homesConnectedTotal" placeholder="200" />
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="homesConnectedTotal"
+                      placeholder="200"
+                    />
                     <span matSuffix>homes</span>
                     <mat-error *ngIf="projectForm.get('homesConnectedTotal')?.hasError('required')">
                       Homes connected target is required
@@ -311,7 +382,12 @@ import {
 
                   <mat-form-field appearance="outline">
                     <mat-label>Homes Per Day</mat-label>
-                    <input matInput type="number" formControlName="homesConnectedDaily" placeholder="10" />
+                    <input
+                      matInput
+                      type="number"
+                      formControlName="homesConnectedDaily"
+                      placeholder="10"
+                    />
                     <span matSuffix>homes/day</span>
                     <mat-error *ngIf="projectForm.get('homesConnectedDaily')?.hasError('required')">
                       Daily target is required
@@ -323,7 +399,7 @@ import {
                   <mat-icon>info</mat-icon>
                   <div>
                     <strong>Estimated Project Timeline:</strong>
-                    <br>
+                    <br />
                     Based on your KPI targets, this project is estimated to take
                     <strong>{{ getEstimatedDuration() }} working days</strong>
                   </div>
@@ -418,7 +494,15 @@ import {
             <mat-icon *ngIf="isSubmitting">
               <mat-progress-spinner diameter="20" mode="indeterminate"></mat-progress-spinner>
             </mat-icon>
-            {{ isSubmitting ? (isEditMode ? 'Updating...' : 'Creating...') : (isEditMode ? 'Update Project' : 'Create Project') }}
+            {{
+              isSubmitting
+                ? isEditMode
+                  ? 'Updating...'
+                  : 'Creating...'
+                : isEditMode
+                  ? 'Update Project'
+                  : 'Create Project'
+            }}
           </button>
         </div>
       </form>
@@ -603,15 +687,15 @@ export class ProjectCreateComponent implements OnInit {
 
   constructor() {
     // Watch for client selection changes
-    this.projectForm.get('clientOrganization')?.valueChanges.subscribe(clientId => {
+    this.projectForm.get('clientOrganization')?.valueChanges.subscribe((clientId) => {
       if (clientId) {
-        this.clientService.getClient(clientId).subscribe(client => {
+        this.clientService.getClient(clientId).subscribe((client) => {
           if (client) {
             // Auto-populate client fields
             this.projectForm.patchValue({
               clientContact: client.contactPerson || '',
               clientEmail: client.email || '',
-              clientPhone: client.phone || ''
+              clientPhone: client.phone || '',
             });
           }
         });
@@ -629,7 +713,7 @@ export class ProjectCreateComponent implements OnInit {
   }
 
   loadProject(projectId: string) {
-    this.projectService.getProject(projectId).subscribe(project => {
+    this.projectService.getProject(projectId).subscribe((project) => {
       if (project) {
         // Populate form with existing project data
         this.projectForm.patchValue({
@@ -639,21 +723,31 @@ export class ProjectCreateComponent implements OnInit {
           projectType: project.projectType,
           priorityLevel: project.priorityLevel,
           location: project.location,
-          
+
           clientOrganization: project.clientId,
           clientContact: project.clientContact,
           clientEmail: project.clientEmail,
           clientPhone: project.clientPhone,
-          
-          startDate: project.startDate instanceof Date ? project.startDate : (project.startDate as any)?.toDate ? (project.startDate as any).toDate() : project.startDate,
-          expectedEndDate: project.expectedEndDate instanceof Date ? project.expectedEndDate : (project.expectedEndDate as any)?.toDate ? (project.expectedEndDate as any).toDate() : project.expectedEndDate,
+
+          startDate:
+            project.startDate instanceof Date
+              ? project.startDate
+              : (project.startDate as any)?.toDate
+                ? (project.startDate as any).toDate()
+                : project.startDate,
+          expectedEndDate:
+            project.expectedEndDate instanceof Date
+              ? project.expectedEndDate
+              : (project.expectedEndDate as any)?.toDate
+                ? (project.expectedEndDate as any).toDate()
+                : project.expectedEndDate,
           budget: project.budget,
-          
+
           projectManagerName: project.projectManagerName,
           workingHours: project.workingHours,
           allowWeekendWork: project.allowWeekendWork || false,
           allowNightWork: project.allowNightWork || false,
-          
+
           // KPI Targets
           polePermissionsTotal: project.metadata?.kpiTargets?.polePermissions?.totalTarget || '',
           polePermissionsDaily: project.metadata?.kpiTargets?.polePermissions?.dailyTarget || '',
@@ -682,24 +776,32 @@ export class ProjectCreateComponent implements OnInit {
       Math.ceil(form.trenchingMetersTotal / form.trenchingMetersDaily || 0),
       Math.ceil(form.homesConnectedTotal / form.homesConnectedDaily || 0),
     ];
-    return Math.max(...kpiDurations.filter(d => d > 0));
+    return Math.max(...kpiDurations.filter((d) => d > 0));
   }
 
   async onSubmit() {
-    if (this.projectForm.invalid) return;
+    if (this.projectForm.invalid || this.isSubmitting) return;
 
+    // Prevent duplicate submissions
     this.isSubmitting = true;
+    this.projectForm.disable(); // Disable the entire form
 
     try {
       const formValue = this.projectForm.value;
+
+      // Get the selected client to populate client fields correctly
+      const selectedClient = await firstValueFrom(
+        this.clientService.getClient(formValue.clientOrganization),
+      );
 
       // Prepare project data
       const projectData: any = {
         ...formValue,
 
-        // Set client fields
-        clientId: formValue.clientOrganization, // Now contains the selected client ID
-        clientName: formValue.clientContact,
+        // Set client fields correctly
+        clientId: formValue.clientOrganization, // The selected client ID
+        clientName: selectedClient?.contactPerson || formValue.clientContact,
+        clientOrganization: selectedClient?.name || '', // Store the actual client organization name
 
         // Scope of Work (SOW)
         metadata: {
@@ -708,7 +810,9 @@ export class ProjectCreateComponent implements OnInit {
               ...DEFAULT_KPI_CONFIGURATIONS['polePermissions'],
               totalTarget: formValue.polePermissionsTotal,
               dailyTarget: formValue.polePermissionsDaily,
-              estimatedDays: Math.ceil(formValue.polePermissionsTotal / formValue.polePermissionsDaily),
+              estimatedDays: Math.ceil(
+                formValue.polePermissionsTotal / formValue.polePermissionsDaily,
+              ),
             },
             homeSignups: {
               ...DEFAULT_KPI_CONFIGURATIONS['homeSignups'],
@@ -726,25 +830,31 @@ export class ProjectCreateComponent implements OnInit {
               ...DEFAULT_KPI_CONFIGURATIONS['fibreStringing'],
               totalTarget: formValue.fibreStringingTotal,
               dailyTarget: formValue.fibreStringingDaily,
-              estimatedDays: Math.ceil(formValue.fibreStringingTotal / formValue.fibreStringingDaily),
+              estimatedDays: Math.ceil(
+                formValue.fibreStringingTotal / formValue.fibreStringingDaily,
+              ),
             },
             trenchingMeters: {
               ...DEFAULT_KPI_CONFIGURATIONS['trenchingMeters'],
               totalTarget: formValue.trenchingMetersTotal,
               dailyTarget: formValue.trenchingMetersDaily,
-              estimatedDays: Math.ceil(formValue.trenchingMetersTotal / formValue.trenchingMetersDaily),
+              estimatedDays: Math.ceil(
+                formValue.trenchingMetersTotal / formValue.trenchingMetersDaily,
+              ),
             },
             homesConnected: {
-              ...DEFAULT_KPI_CONFIGURATIONS['homesConnected'] || {
+              ...(DEFAULT_KPI_CONFIGURATIONS['homesConnected'] || {
                 name: 'Homes Connected',
                 unit: 'homes',
                 icon: 'home',
                 color: '#10B981',
                 enabled: true,
-              },
+              }),
               totalTarget: formValue.homesConnectedTotal,
               dailyTarget: formValue.homesConnectedDaily,
-              estimatedDays: Math.ceil(formValue.homesConnectedTotal / formValue.homesConnectedDaily),
+              estimatedDays: Math.ceil(
+                formValue.homesConnectedTotal / formValue.homesConnectedDaily,
+              ),
             },
             calculatedDuration: this.getEstimatedDuration(),
           },
@@ -782,14 +892,30 @@ export class ProjectCreateComponent implements OnInit {
           throw new Error('Project created but no ID returned');
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(`Error ${this.isEditMode ? 'updating' : 'creating'} project:`, error);
+      // Re-enable form on error
+      this.projectForm.enable();
+
+      // Handle specific error cases
+      let errorMessage = `Failed to ${this.isEditMode ? 'update' : 'create'} project.`;
+
+      if (error?.message?.includes('already exists')) {
+        errorMessage = `A project with code "${this.projectForm.value.projectCode}" already exists. Please use a different project code.`;
+      } else if (error?.message) {
+        errorMessage += ` ${error.message}`;
+      } else {
+        errorMessage += ' Please try again.';
+      }
+
       // Only show error if we actually failed to create/update the project
       // Check if we're already on a project page (which would indicate success)
       if (!this.router.url.includes('/projects/')) {
-        alert(`Failed to ${this.isEditMode ? 'update' : 'create'} project. Please try again.`);
+        alert(errorMessage);
       }
     } finally {
+      // Note: Don't re-enable form here as we're navigating away on success
+      // Only reset the flag in case of error (handled above)
       this.isSubmitting = false;
     }
   }

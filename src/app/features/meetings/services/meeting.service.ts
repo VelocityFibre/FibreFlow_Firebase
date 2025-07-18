@@ -67,10 +67,13 @@ export class MeetingService {
   }
 
   getMeetingsWithPendingActions(): Observable<Meeting[]> {
-    return this.getMeetings([where('actionItems', '!=', [])]).pipe(
+    // Get all meetings and filter client-side for those with action items
+    return this.getMeetings().pipe(
       map((meetings) =>
         meetings.filter((m) =>
-          m.actionItems?.some(
+          m.actionItems && 
+          m.actionItems.length > 0 &&
+          m.actionItems.some(
             (a) => !a.completed && !a.convertedToTaskId && !a.convertedToPersonalTodoId,
           ),
         ),
