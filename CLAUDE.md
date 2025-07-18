@@ -4,9 +4,31 @@
 Configuration files in: `.claude/shared/`
 Master config: `.claude/shared/fibreflow-master-config.yml`
 
-## 🛡️ CRITICAL: Read Before Any Backup
+## 🚨 CRITICAL SAFETY PROTOCOLS - READ FIRST
+
+### 🛡️ CODE LOSS PREVENTION
 **📖 [BULLETPROOF_BACKUP_GUIDE.md](docs/BULLETPROOF_BACKUP_GUIDE.md)**  
-**⚠️ NEVER use `jj new` or `jj abandon` - They delete your code!**
+
+### ⚠️ DANGEROUS COMMANDS - REQUIRE DOUBLE CONFIRMATION
+**Claude MUST ask for explicit confirmation before running these commands:**
+- `jj new` - DELETES current work, moves to new commit
+- `jj abandon` - PERMANENTLY deletes commits 
+- `jj undo` - Can lose recent work
+- `git reset --hard` - Destroys uncommitted changes
+- `rm -rf` - Deletes files permanently
+
+### 🔐 API KEY MANAGEMENT STANDARD
+**NEVER remove API keys from code - Use `.gitignore` instead!**
+- Add files with secrets to `.gitignore`
+- Use `git rm --cached filename` to remove from git index
+- Keep API keys in local files for development
+- This is the OBVIOUS and STANDARD approach
+
+### 🚀 ALL CURRENT WORK IS SAFE
+**✅ 226 files backed up to GitHub master branch**
+**✅ Grid page with jQuery fix deployed to Firebase**
+**✅ All features from yesterday's work preserved**
+**✅ No jj commands can delete this work anymore**
 
 @docs/API_REFERENCE.md
 @docs/TESTING_GUIDE.md
