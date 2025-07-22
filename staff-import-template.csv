@@ -1,0 +1,6 @@
+employeeId,name,email,phone,primaryGroup,position,roleId,skills,certifications,emergencyContactName,emergencyContactPhone,emergencyContactRelationship
+VF001,John Doe,john.doe@example.com,+27 82 123 4567,ProjectManager,Project Manager,pm,"Project Management,Leadership","PMP,Prince2",Jane Doe,+27 82 987 6543,Spouse
+VF002,Jane Smith,jane.smith@example.com,+27 83 234 5678,Technician,Field Technician,engineer,"Fiber Optic Installation,Cable Splicing","Fiber Optic Certification,Safety Training",John Smith,+27 83 876 5432,Spouse
+VF003,Mike Johnson,mike.johnson@example.com,+27 84 345 6789,Admin,Administrator,admin,"Data Entry,Customer Service","Office Administration,MS Office",Sarah Johnson,+27 84 765 4321,Spouse
+VF004,Sarah Williams,sarah.williams@example.com,+27 85 456 7890,Technician,Site Supervisor,site-supervisor,"Team Leadership,Site Management","Site Supervision,Safety Training",Mike Williams,+27 85 654 3210,Spouse
+VF005,David Brown,david.brown@example.com,+27 86 567 8901,ProjectManager,Regional PM,rpm,"Regional Management,Strategy","PMP,MBA",Lisa Brown,+27 86 543 2109,Spouse

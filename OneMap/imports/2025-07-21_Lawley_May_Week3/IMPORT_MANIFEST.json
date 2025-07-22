@@ -1,0 +1,61 @@
+{
+  "importName": "Lawley May Week 3 Import",
+  "importDate": "2025-07-21",
+  "sourceFile": "Lawley May Week 3 22052025 - First Report.csv",
+  "totalRecords": 746,
+  "importSessions": [
+    {
+      "id": "IMP_2025-07-21_1753084532655",
+      "records": 323,
+      "status": "partial",
+      "timestamp": "2025-07-21T07:55:32.831Z"
+    },
+    {
+      "id": "IMP_2025-07-21_1753084414458",
+      "records": 10,
+      "status": "test",
+      "timestamp": "2025-07-21T07:53:38.118Z"
+    },
+    {
+      "id": "IMP_2025-07-21_1753088586481",
+      "records": 52,
+      "status": "partial",
+      "timestamp": "2025-07-21T08:43:06.481Z"
+    },
+    {
+      "id": "IMP_2025-07-21_1753088791385",
+      "records": 361,
+      "status": "completed",
+      "timestamp": "2025-07-21T08:46:31.385Z"
+    }
+  ],
+  "stagingCollection": "onemap-processing-staging",
+  "recordsStaged": 746,
+  "recordsReadyForSync": 543,
+  "recordsNeedingAttention": 203,
+  "issues": {
+    "missingPoleNumbers": 203,
+    "missingFieldAgents": 269,
+    "duplicatePoles": 27
+  },
+  "nextSteps": [
+    "Sync 543 records to production",
+    "Investigate 27 duplicate poles",
+    "Get pole numbers for 203 records",
+    "Assign agents to 269 records"
+  ],
+  "relatedFiles": {
+    "reports": [
+      "import_report_IMP_2025-07-21_1753084532655.md",
+      "sync_report_IMP_2025-07-21_1753084186138.txt",
+      "sync_report_IMP_2025-07-21_1753084414458.txt",
+      "batch_import_completion_IMP_2025-07-21_1753088791385.txt",
+      "full_import_report_2025-07-21_1753089028125.md"
+    ],
+    "scripts": [
+      "process-1map-sync-simple.js",
+      "complete-import-batch.js",
+      "sync-to-production.js"
+    ]
+  }
+}

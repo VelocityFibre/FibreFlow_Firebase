@@ -1,0 +1,38 @@
+
+1MAP SYNC REPORT (Simplified)
+=============================
+Import ID: IMP_2025-07-21_1753084414458
+Date: 2025-07-21T07:53:38.118Z
+
+SUMMARY
+-------
+Total Records: 10
+New Records: 10
+Updated Records: 0
+Unchanged Records: 0
+Skipped (no Property ID): 0
+Errors: 0
+
+
+NEW RECORDS (showing first 10)
+-------------------------------
+- Property: 249111, Pole: LAW.P.B167
+- Property: 249083, Pole: LAW.P.B171
+- Property: 249071, Pole: LAW.P.B098
+- Property: 249067, Pole: LAW.P.B097
+- Property: 249076, Pole: LAW.P.B096
+- Property: 249097, Pole: LAW.P.B170
+- Property: 249094, Pole: LAW.P.B173
+- Property: 249100, Pole: LAW.P.B174
+- Property: 249091, Pole: LAW.P.B172
+- Property: 249069, Pole: LAW.P.B103
+
+
+
+
+
+STATUS
+------
+✅ Data imported to: onemap-processing-staging
+📊 Total staged records: 10
+⏳ Ready for review before production sync

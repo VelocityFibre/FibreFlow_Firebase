@@ -369,6 +369,20 @@ page_contexts:
       validation_mode: "Import validation with detailed error reporting"
       reference_config: "fibreflow-data-integrity-rules.yml"
     
+    tracking_hierarchy_update_2025_07_22:
+      description: "Broader entity tracking for complete lifecycle visibility"
+      priority_order:
+        1: "Pole Number - Primary when available (e.g., LAW.P.B167)"
+        2: "Drop Number - When no pole assigned (e.g., DR1234)"
+        3: "Location Address - Early stage records (e.g., 74 Market St)"
+        4: "Property ID - Last resort tracking (e.g., 12345)"
+      benefits:
+        - "Captures ALL workflow stages, not just pole-assigned"
+        - "Tracks survey requests without poles"
+        - "Includes home sign-ups pre-pole assignment"
+        - "Complete pipeline visibility"
+      implementation: "See OneMap/CLAUDE.md for full details"
+    
     components:
       main: "OnemapComponent"
       service: "OneMapService" 
@@ -384,6 +398,7 @@ page_contexts:
       - "Date range analysis for first approvals"
       - "Data categorization (new vs existing)"
       - "4 basic report generation"
+      - "NEW: Broader entity tracking across full lifecycle"
     
     status: "production - keep unchanged"
     
@@ -392,6 +407,7 @@ page_contexts:
       - "4 reports: new, existing, no drop, duplicates"
       - "Do not modify - create separate pole analytics module"
       - "CRITICAL: Add drop number uniqueness validation"
+      - "UPDATED: Now tracks all entities (poles, drops, addresses, properties)"
 
   # Pole Analytics - Dedicated Analytics Platform (New Module)
   pole_analytics:

@@ -51,6 +51,9 @@
     "ag-grid-angular": "^34.0.2",
     "ag-grid-community": "^34.0.2",
     "chart.js": "^4.5.0",
+    "csv-parser": "^3.2.0",
+    "csv-stringify": "^6.6.0",
+    "csv-writer": "^1.6.0",
     "docx": "^9.5.1",
     "dotenv": "^17.0.1",
     "exceljs": "^4.4.0",
@@ -67,7 +70,6 @@
     "pivottable": "^2.23.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "xlsx": "^0.18.5",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
@@ -83,6 +85,7 @@
     "@types/jasmine": "~5.1.0",
     "@typescript-eslint/eslint-plugin": "7.11.0",
     "@typescript-eslint/parser": "7.11.0",
+    "csv-parse": "^6.1.0",
     "eslint": "8.57.1",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.1",
@@ -96,6 +99,7 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "lint-staged": "^15.5.2",
     "prettier": "^3.5.3",
-    "typescript": "~5.8.3"
+    "typescript": "~5.8.3",
+    "xlsx": "^0.18.5"
   }
 }

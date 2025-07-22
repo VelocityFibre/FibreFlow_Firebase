@@ -1,0 +1,16 @@
+
+BATCH IMPORT COMPLETION REPORT
+==============================
+Date: 2025-07-21T09:06:38.901Z
+Import ID: IMP_2025-07-21_1753088791385
+
+RESULTS
+-------
+CSV Total: 746
+Previously Imported: 385
+Newly Imported: 361
+Errors: 0
+Final Staging Total: 746
+
+STATUS: ✅ COMPLETE
+

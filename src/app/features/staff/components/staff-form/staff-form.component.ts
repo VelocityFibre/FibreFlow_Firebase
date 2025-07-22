@@ -106,11 +106,13 @@ import { StaffGroup, StaffMember, WorkingHours } from '../../models/staff.model'
                     <mat-form-field appearance="outline" class="full-width">
                       <mat-label>Primary Group</mat-label>
                       <mat-select formControlName="primaryGroup">
-                        <mat-option value="Admin">Admin</mat-option>
-                        <mat-option value="ProjectManager">Project Manager</mat-option>
-                        <mat-option value="Technician">Technician</mat-option>
-                        <mat-option value="Supplier">Supplier</mat-option>
-                        <mat-option value="Client">Client</mat-option>
+                        <mat-option value="Management">Management</mat-option>
+                        <mat-option value="Regional Project Manager">Regional Project Manager</mat-option>
+                        <mat-option value="Project Manager">Project Manager</mat-option>
+                        <mat-option value="Site Supervisor">Site Supervisor</mat-option>
+                        <mat-option value="Senior Technician">Senior Technician</mat-option>
+                        <mat-option value="Assistant Technician">Assistant Technician</mat-option>
+                        <mat-option value="Planner">Planner</mat-option>
                       </mat-select>
                       <mat-error *ngIf="basicInfoForm.get('primaryGroup')?.hasError('required')">
                         Please select a group

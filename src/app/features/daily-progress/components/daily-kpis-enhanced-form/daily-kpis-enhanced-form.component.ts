@@ -52,6 +52,18 @@ import { StaffMember } from '../../../staff/models/staff.model';
   ],
   template: `
     <div class="enhanced-kpis-form-container">
+      <!-- Connection Status Indicator -->
+      <div class="connection-status" [class.offline]="!isOnline()">
+        <mat-icon>{{ isOnline() ? 'cloud_done' : 'cloud_off' }}</mat-icon>
+        <span>{{ isOnline() ? 'Connected' : 'Offline - Data may not save' }}</span>
+      </div>
+
+      <!-- Auto-save Status Indicator -->
+      <div class="autosave-status" *ngIf="kpiForm.dirty">
+        <mat-icon>save</mat-icon>
+        <span>Auto-saving changes...</span>
+      </div>
+      
       <mat-card class="header-card">
         <mat-card-header>
           <mat-card-title>Enhanced Daily KPIs Update</mat-card-title>
@@ -688,6 +700,72 @@ import { StaffMember } from '../../../staff/models/staff.model';
         padding: 24px;
         max-width: 1400px;
         margin: 0 auto;
+        position: relative;
+      }
+
+      .connection-status {
+        position: fixed;
+        top: 70px;
+        right: 20px;
+        z-index: 1000;
+        background: var(--mat-sys-surface-variant);
+        border: 1px solid var(--mat-sys-outline);
+        border-radius: 8px;
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+
+      .connection-status mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        color: var(--mat-sys-primary);
+      }
+
+      .connection-status.offline {
+        background: var(--mat-sys-error-container);
+        border-color: var(--mat-sys-error);
+        color: var(--mat-sys-on-error-container);
+      }
+
+      .connection-status.offline mat-icon {
+        color: var(--mat-sys-error);
+      }
+
+      .autosave-status {
+        position: fixed;
+        top: 110px;
+        right: 20px;
+        z-index: 1000;
+        background: var(--mat-sys-tertiary-container);
+        border: 1px solid var(--mat-sys-tertiary);
+        border-radius: 8px;
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: var(--mat-sys-on-tertiary-container);
+        transition: all 0.3s ease;
+        opacity: 0.8;
+      }
+
+      .autosave-status mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        color: var(--mat-sys-tertiary);
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
       }
 
       .header-card {
@@ -892,6 +970,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
   contractorsLoaded = signal(false);
   loading = signal(false);
   selectedDate = signal(new Date());
+  isOnline = signal(navigator.onLine);
 
   // Form
   kpiForm!: FormGroup;
@@ -905,6 +984,39 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
     this.loadContractors();
     this.loadStaffMembers();
     this.setupFormListeners();
+    this.setupConnectionMonitoring();
+    
+    // Check for unsaved changes after form is initialized
+    setTimeout(() => {
+      this.loadFromLocalStorage();
+    }, 1000);
+  }
+
+  private setupConnectionMonitoring() {
+    // Monitor online/offline status
+    window.addEventListener('online', () => {
+      this.isOnline.set(true);
+      this.snackBar.open('✓ Connection restored', 'Close', { 
+        duration: 3000,
+        panelClass: ['success-snackbar']
+      });
+    });
+
+    window.addEventListener('offline', () => {
+      this.isOnline.set(false);
+      this.snackBar.open('⚠️ No internet connection - Changes may not save', 'Close', { 
+        duration: 0,
+        panelClass: ['warning-snackbar']
+      });
+    });
+
+    // Prevent accidental navigation with unsaved changes
+    window.addEventListener('beforeunload', (event) => {
+      if (this.kpiForm.dirty && !this.loading()) {
+        event.preventDefault();
+        event.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+      }
+    });
   }
 
   private initializeForm() {
@@ -1012,8 +1124,16 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
       .subscribe(() => {
         if (!this.isLoadingData) {
           this.loadExistingKPIData();
+          this.loadFromLocalStorage(); // Check for unsaved changes when project changes
         }
       });
+
+    // Auto-save to localStorage on form changes (every 3 seconds after user stops typing)
+    this.kpiForm.valueChanges.pipe(debounceTime(3000)).subscribe((formValue) => {
+      if (!this.isLoadingData && formValue.projectId && formValue.date) {
+        this.autoSaveToLocalStorage(formValue);
+      }
+    });
   }
 
   private calculateTotalCost() {
@@ -1241,21 +1361,63 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
     // Clean up any undefined values to prevent Firestore errors
     const cleanedData = this.removeUndefinedFields(dataToSave);
 
+    // Show saving status
+    this.snackBar.open('Saving KPIs to cloud...', '', { duration: 0 });
+    
     this.kpisService.createKPI(cleanedData.projectId!, cleanedData).subscribe({
       next: (result: any) => {
+        // Firebase has confirmed the write is on the server
         this.loading.set(false);
-        this.snackBar.open('KPIs saved successfully!', 'Close', { duration: 3000 });
+        this.snackBar.dismiss();
+        
+        // Clear the localStorage draft since data is now saved to Firebase
+        this.clearLocalStorageDraft();
+        
+        this.snackBar.open('✓ KPIs saved to cloud successfully!', 'Close', { 
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+        
+        // Mark form as pristine since it's now saved
+        this.kpiForm.markAsPristine();
+        
+        // Safe to navigate - data is confirmed on server
         this.router.navigate(['/daily-progress/kpis-summary']);
       },
       error: (error: any) => {
         this.loading.set(false);
+        this.snackBar.dismiss();
         console.error('Error saving KPIs:', error);
-        this.snackBar.open('Error saving KPIs', 'Close', { duration: 3000 });
+        
+        // More detailed error message
+        let errorMessage = 'Error saving KPIs';
+        if (!navigator.onLine) {
+          errorMessage = 'No internet connection. Please check your connection and try again.';
+        } else if (error.code === 'permission-denied') {
+          errorMessage = 'Permission denied. Please contact support.';
+        } else if (error.message) {
+          errorMessage = `Error: ${error.message}`;
+        }
+        
+        this.snackBar.open(errorMessage, 'Retry', { 
+          duration: 10000,
+          panelClass: ['error-snackbar']
+        }).onAction().subscribe(() => {
+          // Retry the save
+          this.onSubmit();
+        });
       },
     });
   }
 
   cancel() {
+    // Check if form has unsaved changes
+    if (this.kpiForm.dirty && !this.loading()) {
+      const confirmLeave = confirm('You have unsaved changes. Are you sure you want to leave?');
+      if (!confirmLeave) {
+        return;
+      }
+    }
     this.router.navigate(['/daily-progress/kpis-summary']);
   }
 
@@ -1269,5 +1431,112 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
       }
     });
     return cleaned;
+  }
+
+  // Auto-save and localStorage methods
+  private autoSaveToLocalStorage(formValue: any): void {
+    if (formValue.projectId && formValue.date) {
+      const saveKey = `kpi_draft_${formValue.projectId}_${this.formatDateForStorage(formValue.date)}`;
+      const dataToSave = {
+        ...formValue,
+        lastSaved: new Date().toISOString(),
+        userId: this.authService.currentUser()?.uid
+      };
+      
+      try {
+        localStorage.setItem(saveKey, JSON.stringify(dataToSave));
+        console.log('📝 KPIs auto-saved locally at', new Date().toLocaleTimeString(), 
+                   '- Project:', formValue.projectId, 'Date:', this.formatDateForStorage(formValue.date));
+        
+        // Show brief confirmation (only if form has substantial data)
+        if (!this.isFormMostlyEmpty()) {
+          // Very brief toast (1 second)
+          this.snackBar.open('💾 Changes auto-saved', '', { 
+            duration: 1000,
+            panelClass: ['info-snackbar']
+          });
+        }
+      } catch (error) {
+        console.warn('Failed to auto-save to localStorage:', error);
+        // Warn user if localStorage is full/unavailable
+        this.snackBar.open('⚠️ Unable to auto-save changes locally', 'Close', { 
+          duration: 5000,
+          panelClass: ['warning-snackbar']
+        });
+      }
+    }
+  }
+
+  private loadFromLocalStorage(): void {
+    const projectId = this.kpiForm.get('projectId')?.value;
+    const date = this.kpiForm.get('date')?.value;
+    
+    if (projectId && date) {
+      const saveKey = `kpi_draft_${projectId}_${this.formatDateForStorage(date)}`;
+      const savedData = localStorage.getItem(saveKey);
+      
+      if (savedData) {
+        try {
+          const parsedData = JSON.parse(savedData);
+          const lastSaved = new Date(parsedData.lastSaved);
+          const now = new Date();
+          const hoursSinceLastSave = (now.getTime() - lastSaved.getTime()) / (1000 * 60 * 60);
+          
+          // Only restore if saved within last 24 hours and form is relatively empty
+          if (hoursSinceLastSave < 24 && this.isFormMostlyEmpty()) {
+            const shouldRestore = confirm(
+              `💾 Found unsaved changes from ${lastSaved.toLocaleString()}.\n\nWould you like to restore these changes?`
+            );
+            
+            if (shouldRestore) {
+              // Remove metadata before patching form
+              delete parsedData.lastSaved;
+              delete parsedData.userId;
+              this.kpiForm.patchValue(parsedData, { emitEvent: false });
+              
+              this.snackBar.open('✓ Restored unsaved changes', 'Close', {
+                duration: 5000,
+                panelClass: ['success-snackbar']
+              });
+            }
+          } else if (hoursSinceLastSave >= 24) {
+            // Remove old data
+            localStorage.removeItem(saveKey);
+          }
+        } catch (error) {
+          console.error('Failed to restore from localStorage:', error);
+          // Remove corrupted data
+          localStorage.removeItem(saveKey);
+        }
+      }
+    }
+  }
+
+  private clearLocalStorageDraft(): void {
+    const projectId = this.kpiForm.get('projectId')?.value;
+    const date = this.kpiForm.get('date')?.value;
+    
+    if (projectId && date) {
+      const saveKey = `kpi_draft_${projectId}_${this.formatDateForStorage(date)}`;
+      localStorage.removeItem(saveKey);
+      console.log('🗑️ Cleared localStorage draft after successful save');
+    }
+  }
+
+  private formatDateForStorage(date: Date | string): string {
+    return new Date(date).toISOString().split('T')[0];
+  }
+
+  private isFormMostlyEmpty(): boolean {
+    const formValue = this.kpiForm.value;
+    // Check if most KPI fields are empty (0 or null/undefined)
+    const kpiFields = this.kpiDefinitions.map(kpi => kpi.key);
+    const filledFields = kpiFields.filter(field => {
+      const value = formValue[field];
+      return value !== null && value !== undefined && value !== 0 && value !== '';
+    });
+    
+    // If less than 3 fields are filled, consider it mostly empty
+    return filledFields.length < 3;
   }
 }

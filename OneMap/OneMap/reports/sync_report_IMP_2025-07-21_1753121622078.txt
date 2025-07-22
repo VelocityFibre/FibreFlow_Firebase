@@ -1,0 +1,35 @@
+
+1MAP SYNC REPORT (Simplified)
+=============================
+Import ID: IMP_2025-07-21_1753121622078
+Date: 2025-07-21T18:15:31.512Z
+
+SUMMARY
+-------
+Total Records: 753
+New Records: 7
+Updated Records: 0
+Unchanged Records: 746
+Skipped (no Property ID): 0
+Errors: 0
+
+
+NEW RECORDS (showing first 10)
+-------------------------------
+- Property: 270902, Pole: N/A
+- Property: 270908, Pole: N/A
+- Property: 270907, Pole: N/A
+- Property: 270906, Pole: N/A
+- Property: 270904, Pole: N/A
+- Property: 270905, Pole: N/A
+- Property: 270903, Pole: N/A
+
+
+
+
+
+STATUS
+------
+✅ Data imported to: onemap-processing-staging
+📊 Total staged records: 7
+⏳ Ready for review before production sync

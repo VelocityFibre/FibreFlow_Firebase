@@ -1,0 +1,14 @@
+
+⚠️  PRODUCTION SYNC WARNING
+==========================
+This will sync data to your LIVE production database.
+
+Mode: DRY RUN (safe)
+Limit: No limit (all records)
+
+Press Ctrl+C to cancel, or wait 5 seconds to continue...
+
+🚀 Starting production sync...
+📋 Sync ID: SYNC_2025-07-21_1753112840639
+⚙️  Mode: DRY RUN
+📊 Found 746 staged records to process

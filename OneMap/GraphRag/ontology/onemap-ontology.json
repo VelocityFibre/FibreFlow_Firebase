@@ -1,0 +1,206 @@
+{
+  "name": "OneMap Fiber Network Ontology",
+  "version": "1.0.0",
+  "description": "Knowledge graph ontology for fiber optic infrastructure tracking",
+  "entities": {
+    "Pole": {
+      "description": "Physical fiber optic pole infrastructure",
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true,
+          "format": "LAW.P.B###",
+          "description": "Unique pole identifier"
+        },
+        "status": {
+          "type": "enum",
+          "values": ["approved", "installed", "maintenance", "decommissioned"],
+          "required": true
+        },
+        "location": {
+          "type": "geopoint",
+          "required": true,
+          "description": "GPS coordinates"
+        },
+        "installed_date": {
+          "type": "date",
+          "required": false
+        },
+        "capacity": {
+          "type": "integer",
+          "default": 12,
+          "description": "Maximum drops this pole can serve"
+        }
+      }
+    },
+    "Drop": {
+      "description": "Service connection from pole to property",
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true,
+          "format": "DR####",
+          "description": "Unique drop identifier"
+        },
+        "status": {
+          "type": "enum", 
+          "values": ["planned", "installed", "active", "inactive"],
+          "required": true
+        },
+        "address": {
+          "type": "string",
+          "required": true,
+          "description": "Service address"
+        },
+        "installation_date": {
+          "type": "date",
+          "required": false
+        }
+      }
+    },
+    "Property": {
+      "description": "Customer property/premises",
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true,
+          "description": "Property identifier"
+        },
+        "owner": {
+          "type": "string",
+          "required": false
+        },
+        "address": {
+          "type": "string",
+          "required": true
+        },
+        "property_type": {
+          "type": "enum",
+          "values": ["residential", "commercial", "industrial"],
+          "default": "residential"
+        }
+      }
+    },
+    "Address": {
+      "description": "Geographic address location",
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true
+        },
+        "street_number": {
+          "type": "string",
+          "required": true
+        },
+        "street_name": {
+          "type": "string", 
+          "required": true
+        },
+        "suburb": {
+          "type": "string",
+          "required": true
+        },
+        "coordinates": {
+          "type": "geopoint",
+          "required": false
+        }
+      }
+    }
+  },
+  "relationships": {
+    "SERVES": {
+      "description": "Pole provides service to drop",
+      "from": "Pole",
+      "to": "Drop",
+      "cardinality": "one_to_many",
+      "constraints": {
+        "max_target_connections": 12,
+        "validation": "pole_capacity_check"
+      },
+      "properties": {
+        "connection_date": {
+          "type": "date",
+          "required": false
+        },
+        "cable_length": {
+          "type": "number",
+          "unit": "meters",
+          "required": false
+        }
+      }
+    },
+    "CONNECTS_TO": {
+      "description": "Drop connects to property",
+      "from": "Drop",
+      "to": "Property", 
+      "cardinality": "one_to_one",
+      "constraints": {
+        "max_source_connections": 1,
+        "max_target_connections": 1
+      },
+      "properties": {
+        "connection_type": {
+          "type": "enum",
+          "values": ["aerial", "underground"],
+          "default": "aerial"
+        }
+      }
+    },
+    "LOCATED_AT": {
+      "description": "Property is located at address",
+      "from": "Property",
+      "to": "Address",
+      "cardinality": "many_to_one",
+      "constraints": {
+        "max_source_connections": 1
+      }
+    },
+    "REPLACED_BY": {
+      "description": "Infrastructure replacement tracking",
+      "from": "Pole|Drop|Property",
+      "to": "Pole|Drop|Property",
+      "cardinality": "one_to_one",
+      "properties": {
+        "replacement_date": {
+          "type": "date",
+          "required": true
+        },
+        "reason": {
+          "type": "string",
+          "required": false
+        }
+      }
+    }
+  },
+  "validation_rules": [
+    {
+      "name": "pole_capacity_check",
+      "description": "Ensure pole doesn't exceed maximum drop capacity",
+      "query": "MATCH (p:Pole)-[:SERVES]->(d:Drop) WITH p, COUNT(d) as drop_count WHERE drop_count > p.capacity RETURN p.id, drop_count, p.capacity"
+    },
+    {
+      "name": "orphaned_drops",
+      "description": "Find drops not connected to active poles",
+      "query": "MATCH (d:Drop) WHERE NOT (d)<-[:SERVES]-(:Pole {status: 'active'}) RETURN d.id, d.address"
+    },
+    {
+      "name": "duplicate_connections",
+      "description": "Find properties with multiple drop connections",
+      "query": "MATCH (p:Property)<-[:CONNECTS_TO]-(d:Drop) WITH p, COUNT(d) as drop_count WHERE drop_count > 1 RETURN p.id, drop_count"
+    }
+  ],
+  "common_queries": {
+    "network_impact_analysis": {
+      "description": "Find all infrastructure affected by pole maintenance",
+      "cypher": "MATCH (p:Pole {id: $pole_id})-[:SERVES]->(d:Drop)-[:CONNECTS_TO]->(prop:Property) RETURN p, d, prop, COUNT(*) as impact_count"
+    },
+    "capacity_planning": {
+      "description": "Find poles approaching capacity limits",
+      "cypher": "MATCH (p:Pole)-[r:SERVES]->(d:Drop) WITH p, COUNT(r) as drop_count WHERE drop_count > (p.capacity * 0.8) RETURN p.id, drop_count, p.capacity, (p.capacity - drop_count) as remaining"
+    },
+    "geographic_clustering": {
+      "description": "Find infrastructure density by area",
+      "cypher": "MATCH (p:Pole)-[:SERVES]->(d:Drop)-[:CONNECTS_TO]->(prop:Property)-[:LOCATED_AT]->(addr:Address) WITH addr.suburb as area, COUNT(DISTINCT p) as poles, COUNT(d) as drops, COUNT(prop) as properties RETURN area, poles, drops, properties ORDER BY drops DESC"
+    }
+  }
+}

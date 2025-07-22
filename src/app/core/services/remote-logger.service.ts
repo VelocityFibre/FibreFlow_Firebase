@@ -7,6 +7,7 @@ import {
   CollectionReference,
   Timestamp,
 } from '@angular/fire/firestore';
+import { AuthService } from './auth.service';
 
 export interface LogEntry {
   level: 'info' | 'warn' | 'error' | 'debug';
@@ -18,6 +19,11 @@ export interface LogEntry {
   data?: Record<string, unknown>;
   stack?: string;
   sessionId: string;
+  // User information
+  userId?: string;
+  userEmail?: string;
+  userDisplayName?: string;
+  userRole?: string;
 }
 
 @Injectable({
@@ -25,6 +31,7 @@ export interface LogEntry {
 })
 export class RemoteLoggerService {
   private firestore = inject(Firestore);
+  private authService = inject(AuthService);
   private sessionId = this.generateSessionId();
   private logsCollection?: CollectionReference;
 
@@ -49,6 +56,10 @@ export class RemoteLoggerService {
     data?: Record<string, unknown>,
   ): Promise<void> {
     try {
+      // Get current user information
+      const currentUser = this.authService.currentUser();
+      const currentUserProfile = this.authService.currentUserProfile();
+      
       const logEntry: LogEntry = {
         level,
         message,
@@ -58,6 +69,17 @@ export class RemoteLoggerService {
         timestamp: serverTimestamp() as any,
         sessionId: this.sessionId,
       };
+
+      // Add user information if available
+      if (currentUser) {
+        logEntry.userId = currentUser.uid;
+        logEntry.userEmail = currentUser.email;
+        logEntry.userDisplayName = currentUser.displayName;
+      }
+      
+      if (currentUserProfile) {
+        logEntry.userRole = currentUserProfile.userGroup;
+      }
 
       // Only add data field if it exists
       if (data && Object.keys(data).length > 0) {
@@ -91,6 +113,10 @@ export class RemoteLoggerService {
 
   async logError(error: Error, component?: string, context?: string): Promise<void> {
     try {
+      // Get current user information
+      const currentUser = this.authService.currentUser();
+      const currentUserProfile = this.authService.currentUserProfile();
+      
       const logEntry: LogEntry = {
         level: 'error',
         message: `${context ? context + ': ' : ''}${error.message}`,
@@ -108,6 +134,17 @@ export class RemoteLoggerService {
         },
         sessionId: this.sessionId,
       };
+
+      // Add user information if available
+      if (currentUser) {
+        logEntry.userId = currentUser.uid;
+        logEntry.userEmail = currentUser.email;
+        logEntry.userDisplayName = currentUser.displayName;
+      }
+      
+      if (currentUserProfile) {
+        logEntry.userRole = currentUserProfile.userGroup;
+      }
 
       // Enhanced console logging for errors
       console.error(`🔴 [${component || 'App'}] ERROR: ${logEntry.message}`, {

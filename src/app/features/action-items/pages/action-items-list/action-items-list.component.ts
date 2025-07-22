@@ -99,14 +99,7 @@ export class ActionItemsListComponent implements OnInit {
 
   // Page header configuration
   get headerActions(): PageHeaderAction[] {
-    const actions: PageHeaderAction[] = [
-      {
-        label: 'Import from Meetings',
-        icon: 'sync',
-        color: 'primary',
-        action: () => this.importFromMeetings()
-      }
-    ];
+    const actions: PageHeaderAction[] = [];
 
     if (this.selection.hasValue()) {
       actions.push({
@@ -174,50 +167,14 @@ export class ActionItemsListComponent implements OnInit {
     this.loadActionItems();
   }
 
-  // Action methods
-  async importFromMeetings() {
-    this.loading.set(true);
-    
-    try {
-      const user = this.authService.currentUser();
-      if (!user) {
-        this.snackBar.open('Please login to import action items', 'Close', {
-          duration: 3000
-        });
-        this.loading.set(false);
-        return;
-      }
-      
-      const count = await this.actionItemsService.importUnmanagedActionItems(
-        user.uid,
-        user.email || 'unknown@fibreflow.com'
-      );
-      
-      if (count > 0) {
-        this.snackBar.open(`Imported ${count} new action items`, 'Close', {
-          duration: 3000
-        });
-      } else {
-        this.snackBar.open('No new action items to import', 'Close', {
-          duration: 3000
-        });
-      }
-      
-      this.loadActionItems();
-      this.loadStats();
-    } catch (error) {
-      console.error('Error importing action items:', error);
-      this.snackBar.open('Error importing action items', 'Close', {
-        duration: 3000
-      });
-    } finally {
-      this.loading.set(false);
-    }
-  }
+  // Action methods (importFromMeetings removed - handled by scheduled sync)
 
-  editActionItem(item: ActionItemManagement) {
-    // TODO: Open edit dialog
-    console.log('Edit action item:', item);
+  async editActionItem(item: ActionItemManagement) {
+    // Edit functionality moved to AG-Grid view
+    // Redirect to grid view for editing
+    this.snackBar.open('Please use the grid view for editing', 'Close', {
+      duration: 3000
+    });
   }
 
   async updateStatus(item: ActionItemManagement, status: ActionItemStatus) {
@@ -252,9 +209,12 @@ export class ActionItemsListComponent implements OnInit {
     }
   }
 
-  bulkUpdate() {
-    // TODO: Open bulk update dialog
-    console.log('Bulk update:', this.selection.selected);
+  async bulkUpdate() {
+    // Bulk update functionality moved to AG-Grid view
+    // Redirect to grid view for bulk operations
+    this.snackBar.open('Please use the grid view for bulk updates', 'Close', {
+      duration: 3000
+    });
   }
 
   // Utility methods

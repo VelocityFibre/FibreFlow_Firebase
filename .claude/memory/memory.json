@@ -1,0 +1,228 @@
+{
+  "facts": [
+    {
+      "id": "fact_1753280357428",
+      "content": "FibreFlow and VF OneMap use separate Firebase projects - cannot authenticate across them without service account",
+      "category": "FibreFlow and VF OneMap use separate Firebase projects - cannot authenticate across them without service account",
+      "metadata": {
+        "source": "cli"
+      },
+      "timestamp": "2025-07-23T14:19:17.428Z",
+      "confidence": 1,
+      "active": true,
+      "version": 1,
+      "historical": false,
+      "important": false
+    },
+    {
+      "id": "fact_1753280357458",
+      "content": "FibreFlow uses Firebase project: fibreflow-73daf",
+      "category": "FibreFlow uses Firebase project: fibreflow-73daf",
+      "metadata": {
+        "source": "cli"
+      },
+      "timestamp": "2025-07-23T14:19:17.458Z",
+      "confidence": 1,
+      "active": true,
+      "version": 1,
+      "historical": false,
+      "important": false
+    },
+    {
+      "id": "fact_1753280357490",
+      "content": "VF OneMap uses Firebase project: vf-onemap",
+      "category": "VF OneMap uses Firebase project: vf-onemap",
+      "metadata": {
+        "source": "cli"
+      },
+      "timestamp": "2025-07-23T14:19:17.490Z",
+      "confidence": 1,
+      "active": true,
+      "version": 1,
+      "historical": false,
+      "important": false
+    },
+    {
+      "id": "fact_1753280357524",
+      "content": "Storage uploads must use the same project's bucket as the authentication",
+      "category": "Storage uploads must use the same project's bucket as the authentication",
+      "metadata": {
+        "source": "cli"
+      },
+      "timestamp": "2025-07-23T14:19:17.524Z",
+      "confidence": 1,
+      "active": true,
+      "version": 1,
+      "historical": false,
+      "important": false
+    },
+    {
+      "id": "fact_1753281146209",
+      "content": "When encountering cross-project authentication issues, fix the root cause by updating storage configuration to match the authentication project",
+      "category": "When encountering cross-project authentication issues, fix the root cause by updating storage configuration to match the authentication project",
+      "metadata": {
+        "source": "cli"
+      },
+      "timestamp": "2025-07-23T14:32:26.209Z",
+      "confidence": 1,
+      "active": true,
+      "version": 1,
+      "historical": false,
+      "important": false
+    },
+    {
+      "id": "fact_1753281719648",
+      "content": "Memory system documentation is in CLAUDE.md (quick ref) and .claude/MEMORY_SYSTEM_GUIDE.md (full guide)",
+      "category": "Memory system documentation is in CLAUDE.md (quick ref) and .claude/MEMORY_SYSTEM_GUIDE.md (full guide)",
+      "metadata": {
+        "source": "cli"
+      },
+      "timestamp": "2025-07-23T14:41:59.648Z",
+      "confidence": 1,
+      "active": true,
+      "version": 1,
+      "historical": false,
+      "important": false
+    },
+    {
+      "id": "fact_1753281794685",
+      "content": "Memory system uses Zep-inspired methodology: Facts (discrete info), Patterns (reusable solutions), Knowledge Graph (relationships), Sessions (dev summaries)",
+      "category": "Memory system uses Zep-inspired methodology: Facts (discrete info), Patterns (reusable solutions), Knowledge Graph (relationships), Sessions (dev summaries)",
+      "metadata": {
+        "source": "cli"
+      },
+      "timestamp": "2025-07-23T14:43:14.685Z",
+      "confidence": 1,
+      "active": true,
+      "version": 1,
+      "historical": false,
+      "important": false
+    },
+    {
+      "id": "fact_1753282320254",
+      "content": "Memory system v2 adds conflict detection, time relevance, category management, and prevents duplicate/conflicting memories",
+      "category": "Memory system v2 adds conflict detection, time relevance, category management, and prevents duplicate/conflicting memories",
+      "metadata": {
+        "source": "cli"
+      },
+      "timestamp": "2025-07-23T14:52:00.254Z",
+      "confidence": 1,
+      "active": true,
+      "version": 1
+    },
+    {
+      "id": "fact_1753282346950",
+      "content": "FibreFlow uses Firebase project: different-project-id",
+      "category": "FibreFlow uses Firebase project: different-project-id",
+      "metadata": {
+        "source": "cli"
+      },
+      "timestamp": "2025-07-23T14:52:26.950Z",
+      "confidence": 1,
+      "active": true,
+      "version": 1
+    },
+    {
+      "id": "fact_1753282733928",
+      "content": "Memory review is manual and intelligent - use 'review' command with criteria (all/duplicates/outdated/unused) instead of auto-archiving by age",
+      "category": "Memory review is manual and intelligent - use 'review' command with criteria (all/duplicates/outdated/unused) instead of auto-archiving by age",
+      "metadata": {
+        "source": "cli"
+      },
+      "timestamp": "2025-07-23T14:58:53.928Z",
+      "confidence": 1,
+      "active": true,
+      "version": 1
+    }
+  ],
+  "patterns": {
+    "routing": [
+      {
+        "pattern": "Use simple routes in app.routes.ts to avoid NG04002 errors",
+        "context": "CLI input",
+        "timestamp": "2025-07-23T14:19:17.556Z",
+        "usage_count": 0,
+        "version": 1
+      },
+      {
+        "pattern": "Nested lazy-loaded routes lose path context",
+        "context": "CLI input",
+        "timestamp": "2025-07-23T14:19:17.590Z",
+        "usage_count": 0,
+        "version": 1
+      }
+    ],
+    "firebase": [
+      {
+        "pattern": "Always use AngularFire methods, not direct Firebase SDK",
+        "context": "CLI input",
+        "timestamp": "2025-07-23T14:19:17.622Z",
+        "usage_count": 0,
+        "version": 1
+      }
+    ],
+    "storage": [
+      {
+        "pattern": "Check storage bucket configuration matches authentication project",
+        "context": "CLI input",
+        "timestamp": "2025-07-23T14:19:17.655Z",
+        "usage_count": 0,
+        "version": 1
+      }
+    ],
+    "errors": [
+      {
+        "pattern": "Firebase Storage: CORS errors when uploading from FibreFlow to VF OneMap bucket indicate cross-project auth issue",
+        "context": "CLI input",
+        "timestamp": "2025-07-23T14:33:41.482Z",
+        "usage_count": 0,
+        "version": 1
+      }
+    ],
+    "workflow": [
+      {
+        "pattern": "Before suggesting solutions, check: node .claude/memory-system.js context 'task description'",
+        "context": "CLI input",
+        "timestamp": "2025-07-23T14:42:36.786Z",
+        "usage_count": 0,
+        "version": 1
+      },
+      {
+        "pattern": "When user corrects approach, add: node .claude/memory-system.js fact 'lesson learned'",
+        "context": "CLI input",
+        "timestamp": "2025-07-23T14:42:49.473Z",
+        "usage_count": 0,
+        "version": 1
+      },
+      {
+        "pattern": "After finding good solution, add: node .claude/memory-system.js pattern category 'solution'",
+        "context": "CLI input",
+        "timestamp": "2025-07-23T14:43:01.012Z",
+        "usage_count": 0,
+        "version": 1
+      }
+    ]
+  },
+  "preferences": [
+    {
+      "rule": "Always ask before making architectural changes",
+      "timestamp": "2025-07-23T14:19:17.688Z",
+      "active": true
+    },
+    {
+      "rule": "Fix root cause, not symptoms",
+      "timestamp": "2025-07-23T14:19:17.728Z",
+      "active": true
+    },
+    {
+      "rule": "Prefer simple solutions over complex ones",
+      "timestamp": "2025-07-23T14:19:17.761Z",
+      "active": true
+    },
+    {
+      "rule": "Never create server-side workarounds without permission",
+      "timestamp": "2025-07-23T14:19:17.794Z",
+      "active": true
+    }
+  ]
+}

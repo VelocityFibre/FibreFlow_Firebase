@@ -1,0 +1,38 @@
+
+RESUME PRODUCTION SYNC REPORT
+=============================
+Sync ID: RESUME_2025-07-21_1753114603319
+Date: 2025-07-21T16:17:01.803Z
+Mode: RESUME (continuing from previous sync)
+
+SUMMARY
+-------
+Total Processed: 266
+Newly Synced: 31
+Already Synced (skipped): 0
+Errors: 235
+
+SYNC DETAILS
+------------
+- New records in planned-poles: 29
+- New records in pole-trackers: 2
+
+
+ERRORS (235)
+-------
+- Property 247519: Value for argument "data" is not a valid Firestore document. Cannot use "undefined" as a Firestore value (found in field "oneMapData.sections"). If you want to ignore undefined values, enable `ignoreUndefinedProperties`.
+- Property 247495: Value for argument "data" is not a valid Firestore document. Cannot use "undefined" as a Firestore value (found in field "oneMapData.sections"). If you want to ignore undefined values, enable `ignoreUndefinedProperties`.
+- Property 247489: Value for argument "data" is not a valid Firestore document. Cannot use "undefined" as a Firestore value (found in field "oneMapData.sections"). If you want to ignore undefined values, enable `ignoreUndefinedProperties`.
+- Property 247464: Value for argument "data" is not a valid Firestore document. Cannot use "undefined" as a Firestore value (found in field "oneMapData.sections"). If you want to ignore undefined values, enable `ignoreUndefinedProperties`.
+- Property 247456: Value for argument "data" is not a valid Firestore document. Cannot use "undefined" as a Firestore value (found in field "oneMapData.sections"). If you want to ignore undefined values, enable `ignoreUndefinedProperties`.
+- Property 247461: Value for argument "data" is not a valid Firestore document. Cannot use "undefined" as a Firestore value (found in field "oneMapData.sections"). If you want to ignore undefined values, enable `ignoreUndefinedProperties`.
+- Property 247245: Value for argument "data" is not a valid Firestore document. Cannot use "undefined" as a Firestore value (found in field "oneMapData.sections"). If you want to ignore undefined values, enable `ignoreUndefinedProperties`.
+- Property 247283: Value for argument "data" is not a valid Firestore document. Cannot use "undefined" as a Firestore value (found in field "oneMapData.sections"). If you want to ignore undefined values, enable `ignoreUndefinedProperties`.
+- Property 247302: Value for argument "data" is not a valid Firestore document. Cannot use "undefined" as a Firestore value (found in field "oneMapData.sections"). If you want to ignore undefined values, enable `ignoreUndefinedProperties`.
+- Property 247329: Value for argument "data" is not a valid Firestore document. Cannot use "undefined" as a Firestore value (found in field "oneMapData.sections"). If you want to ignore undefined values, enable `ignoreUndefinedProperties`.
+
+✅ SYNC COMPLETED
+-----------------
+All remaining records have been synced to production.
+Total in production: 31 records
+Check the live FibreFlow app to verify.

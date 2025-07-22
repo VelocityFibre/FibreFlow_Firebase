@@ -1,0 +1,68 @@
+{
+  "entities": {
+    "project": {
+      "FibreFlow": {
+        "properties": {
+          "description": "Main fiber optic management system"
+        },
+        "created": "2025-07-23T14:19:17.828Z",
+        "updated": "2025-07-23T14:19:17.828Z"
+      },
+      "VF OneMap": {
+        "properties": {
+          "description": "Separate OneMap data processing system"
+        },
+        "created": "2025-07-23T14:19:17.862Z",
+        "updated": "2025-07-23T14:19:17.862Z"
+      }
+    },
+    "service": {
+      "PoleTrackerService": {
+        "properties": {
+          "description": "Handles pole tracking operations"
+        },
+        "created": "2025-07-23T14:19:17.894Z",
+        "updated": "2025-07-23T14:19:17.894Z"
+      },
+      "GoogleMapsService": {
+        "properties": {
+          "description": "Provides map functionality"
+        },
+        "created": "2025-07-23T14:19:17.928Z",
+        "updated": "2025-07-23T14:19:17.928Z"
+      }
+    },
+    "component": {
+      "PoleTrackerComponent": {
+        "properties": {
+          "description": "Main pole tracking UI"
+        },
+        "created": "2025-07-23T14:19:17.961Z",
+        "updated": "2025-07-23T14:19:17.961Z"
+      }
+    }
+  },
+  "relationships": [
+    {
+      "from": "PoleTrackerComponent",
+      "to": "PoleTrackerService",
+      "type": "uses",
+      "metadata": {},
+      "timestamp": "2025-07-23T14:19:17.994Z"
+    },
+    {
+      "from": "PoleTrackerComponent",
+      "to": "GoogleMapsService",
+      "type": "uses",
+      "metadata": {},
+      "timestamp": "2025-07-23T14:19:18.030Z"
+    },
+    {
+      "from": "FibreFlow",
+      "to": "VF OneMap",
+      "type": "separate-from",
+      "metadata": {},
+      "timestamp": "2025-07-23T14:19:18.066Z"
+    }
+  ]
+}

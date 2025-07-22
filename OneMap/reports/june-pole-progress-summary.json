@@ -1,0 +1,146 @@
+{
+  "date": "2025-07-22T14:04:07.038Z",
+  "period": "June 3rd to June 5th, 2025",
+  "summary": {
+    "totalPolesTracked": 2454,
+    "newPolesAdded": 601,
+    "polesWithProgress": 742,
+    "polesWithNewDrops": 590,
+    "addressesWithNewPoles": 41,
+    "addressesWithNewDrops": 29,
+    "addressesWithStatusChange": 52
+  },
+  "topActivePoles": [
+    {
+      "pole": "LAW.P.E291",
+      "recordsAdded": 5,
+      "dropsAdded": 4,
+      "june3Total": 0,
+      "june5Total": 5,
+      "june3Drops": 0,
+      "june5Drops": 4
+    },
+    {
+      "pole": "LAW.P.C656",
+      "recordsAdded": 4,
+      "dropsAdded": 4,
+      "june3Total": 2,
+      "june5Total": 6,
+      "june3Drops": 0,
+      "june5Drops": 4
+    },
+    {
+      "pole": "LAW.P.C671",
+      "recordsAdded": 4,
+      "dropsAdded": 4,
+      "june3Total": 1,
+      "june5Total": 5,
+      "june3Drops": 0,
+      "june5Drops": 4
+    },
+    {
+      "pole": "LAW.P.C599",
+      "recordsAdded": 4,
+      "dropsAdded": 4,
+      "june3Total": 1,
+      "june5Total": 5,
+      "june3Drops": 0,
+      "june5Drops": 4
+    },
+    {
+      "pole": "LAW.P.E255",
+      "recordsAdded": 4,
+      "dropsAdded": 4,
+      "june3Total": 0,
+      "june5Total": 4,
+      "june3Drops": 0,
+      "june5Drops": 4
+    },
+    {
+      "pole": "LAW.P.E290",
+      "recordsAdded": 6,
+      "dropsAdded": 0,
+      "june3Total": 0,
+      "june5Total": 6,
+      "june3Drops": 0,
+      "june5Drops": 0
+    }
+  ],
+  "progressExamples": [
+    {
+      "type": "New Pole",
+      "address": "SEVENTH AVENUE OPEN SPACE  364 WESTONARIA 1779 GT 79800008 JHB [-26.3723974753549, 27.803668986963]",
+      "change": "Assigned to pole LAW.P.A945"
+    },
+    {
+      "type": "Status Change",
+      "address": "SEVENTH AVENUE OPEN SPACE  364 WESTONARIA 1779 GT 79800008 JHB [-26.3723974753549, 27.803668986963]",
+      "change": "No status → Pole Permission: Approved"
+    },
+    {
+      "type": "New Drop",
+      "address": "90 MAHLANGU STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "change": "Assigned drop DR1752639 on pole "
+    },
+    {
+      "type": "Status Change",
+      "address": "90 MAHLANGU STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "change": "Pole Permission: Approved → Home Sign Ups: Approved & Installation Scheduled"
+    },
+    {
+      "type": "New Pole",
+      "address": "8563 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "change": "Assigned to pole LAW.P.C553"
+    },
+    {
+      "type": "New Drop",
+      "address": "8563 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "change": "Assigned drop DR1751631 on pole LAW.P.C553"
+    },
+    {
+      "type": "Status Change",
+      "address": "8563 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "change": "No status → Pole Permission: Approved"
+    },
+    {
+      "type": "New Drop",
+      "address": "91 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "change": "Assigned drop DR1750080 on pole LAW.P.C414"
+    },
+    {
+      "type": "Status Change",
+      "address": "91 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "change": "No status → Home Sign Ups: Approved & Installation Scheduled"
+    },
+    {
+      "type": "New Drop",
+      "address": "93 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "change": "Assigned drop DR1750094 on pole LAW.P.C415"
+    },
+    {
+      "type": "Status Change",
+      "address": "93 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "change": "No status → Home Sign Ups: Approved & Installation Scheduled"
+    },
+    {
+      "type": "Status Change",
+      "address": "89 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "change": "No status → Home Sign Ups: Approved & Installation Scheduled"
+    },
+    {
+      "type": "Status Change",
+      "address": "85 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "change": "No status → Home Sign Ups: Approved & Installation Scheduled"
+    },
+    {
+      "type": "Status Change",
+      "address": "79 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "change": "No status → Home Sign Ups: Approved & Installation Scheduled"
+    },
+    {
+      "type": "Status Change",
+      "address": "7925 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "change": "No status → Pole Permission: Approved"
+    }
+  ]
+}

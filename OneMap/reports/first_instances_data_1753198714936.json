@@ -1,0 +1,19 @@
+{
+  "summary": {
+    "total_records": 0,
+    "unique_poles": 0,
+    "records_without_poles": 0,
+    "first_pole_permissions": 0,
+    "first_poles_planted": 0,
+    "first_home_signups": 0,
+    "first_home_installs": 0,
+    "total_home_signups": 0
+  },
+  "first_instances": {
+    "pole_permission_approved": [],
+    "pole_planted": [],
+    "home_signup": [],
+    "home_install": [],
+    "total_home_signups": 0
+  }
+}

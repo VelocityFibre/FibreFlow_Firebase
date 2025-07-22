@@ -191,13 +191,23 @@ export class ActionItemsManagementService {
     }
 
     // Update the document
-    await updateDoc(docRef, {
+    const updateData: any = {
       'updates': { ...currentItem.updates, ...updates },
       'status': updates.status || currentItem.status,
       'history': [...currentItem.history, historyEntry],
       'updatedAt': new Date().toISOString(),
       'updatedBy': userId
-    });
+    };
+    
+    // Handle text update separately as it's in originalActionItem
+    if ('text' in updates && updates.text !== undefined) {
+      updateData['originalActionItem.text'] = updates.text;
+      historyEntry.field = 'text';
+      historyEntry.oldValue = currentItem.originalActionItem.text;
+      historyEntry.newValue = updates.text;
+    }
+    
+    await updateDoc(docRef, updateData);
   }
 
   /**

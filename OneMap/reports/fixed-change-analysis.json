@@ -1,0 +1,1878 @@
+{
+  "analysisDate": "2025-07-21T17:08:56.427Z",
+  "period": "May 22 to May 26, 2025",
+  "summary": {
+    "day1Total": 746,
+    "day3Total": 752,
+    "newProperties": 7,
+    "statusChanges": 182,
+    "missingResolved": 182,
+    "poleAssignments": 0,
+    "completions": 0
+  },
+  "changes": {
+    "newProperties": [
+      {
+        "propertyId": "270902",
+        "status": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "270908",
+        "status": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "270907",
+        "status": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "270904",
+        "status": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "270906",
+        "status": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "270905",
+        "status": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "270903",
+        "status": "",
+        "poleNumber": ""
+      }
+    ],
+    "statusChanges": [
+      {
+        "propertyId": "249079",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "249049",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "249053",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "248979",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "249003",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "249060",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "248959",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "248958",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "249001",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "249002",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "248596",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "249000",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "248535",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "248494",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "248999",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "248404",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "248342",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264775",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245486",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245826",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245531",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245487",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245532",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243780",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "251484",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243748",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "242966",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "242954",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "242953",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243892",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243891",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243893",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "247420",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "247463",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "248493",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "247197",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "242956",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "242955",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "247589",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "249324",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "247682",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "247180",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243913",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "244672",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "244446",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "247703",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "247372",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243360",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "247351",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "247196",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "247179",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "246974",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243894",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "244448",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "244454",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "244452",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "244453",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243914",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "242960",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "242963",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "242970",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "242962",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "242969",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "242971",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "263612",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264336",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "263630",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264484",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "259460",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "259461",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "244525",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245939",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245829",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243719",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243720",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243722",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243721",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243677",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264487",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264514",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264516",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264544",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264486",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264441",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264440",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264485",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "242952",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "242951",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "242967",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "242968",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "242961",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243911",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "239286",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "239285",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "242965",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243274",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243530",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243529",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243533",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243569",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243716",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243584",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243583",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243532",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243546",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243534",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243531",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243717",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "246957",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245827",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243715",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243557",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243558",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "243566",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245536",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245533",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245535",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245823",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245825",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245824",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245822",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245820",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245821",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245819",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264648",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264647",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264773",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264772",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264577",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264578",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264576",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264582",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264581",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264579",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264580",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264575",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264573",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245839",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "251483",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "245828",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "244548",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264590",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264592",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264591",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264588",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264586",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264587",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264589",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264585",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264584",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264583",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264617",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264615",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264616",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264614",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264613",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264607",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264605",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264604",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264603",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264606",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264602",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264601",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264600",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264597",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264596",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264598",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264599",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264593",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264594",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264609",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264610",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264608",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264611",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264619",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264618",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264612",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264621",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264620",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264337",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "244674",
+        "from": "Missing",
+        "to": ""
+      },
+      {
+        "propertyId": "264774",
+        "from": "Missing",
+        "to": ""
+      }
+    ],
+    "poleAssignments": [],
+    "missingResolved": [
+      {
+        "propertyId": "249079",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "249049",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "249053",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "248979",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "249003",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "249060",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "248959",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "248958",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "249001",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "249002",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "248596",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "249000",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "248535",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "248494",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "248999",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "248404",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "248342",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264775",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245486",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245826",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245531",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245487",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245532",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243780",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "251484",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243748",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "242966",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "242954",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "242953",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243892",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243891",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243893",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "247420",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "247463",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "248493",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "247197",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "242956",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "242955",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "247589",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "249324",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "247682",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "247180",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243913",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "244672",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "244446",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "247703",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "247372",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243360",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "247351",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "247196",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "247179",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "246974",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243894",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "244448",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "244454",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "244452",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "244453",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243914",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "242960",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "242963",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "242970",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "242962",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "242969",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "242971",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "263612",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264336",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "263630",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264484",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "259460",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "259461",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "244525",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245939",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245829",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243719",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243720",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243722",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243721",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243677",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264487",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264514",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264516",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264544",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264486",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264441",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264440",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264485",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "242952",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "242951",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "242967",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "242968",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "242961",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243911",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "239286",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "239285",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "242965",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243274",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243530",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243529",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243533",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243569",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243716",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243584",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243583",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243532",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243546",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243534",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243531",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243717",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "246957",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245827",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243715",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243557",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243558",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "243566",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245536",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245533",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245535",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245823",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245825",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245824",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245822",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245820",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245821",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245819",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264648",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264647",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264773",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264772",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264577",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264578",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264576",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264582",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264581",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264579",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264580",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264575",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264573",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245839",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "251483",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "245828",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "244548",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264590",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264592",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264591",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264588",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264586",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264587",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264589",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264585",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264584",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264583",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264617",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264615",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264616",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264614",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264613",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264607",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264605",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264604",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264603",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264606",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264602",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264601",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264600",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264597",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264596",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264598",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264599",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264593",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264594",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264609",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264610",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264608",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264611",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264619",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264618",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264612",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264621",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264620",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264337",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "244674",
+        "newStatus": "",
+        "poleNumber": ""
+      },
+      {
+        "propertyId": "264774",
+        "newStatus": "",
+        "poleNumber": ""
+      }
+    ],
+    "completions": []
+  }
+}

@@ -1,6 +1,6 @@
 import { Timestamp } from '@angular/fire/firestore';
 
-export type StaffGroup = 'Admin' | 'ProjectManager' | 'Technician' | 'Supplier' | 'Client';
+export type StaffGroup = 'Management' | 'Regional Project Manager' | 'Project Manager' | 'Site Supervisor' | 'Senior Technician' | 'Assistant Technician' | 'Planner';
 
 export type AvailabilityStatus = 'available' | 'busy' | 'offline' | 'vacation';
 

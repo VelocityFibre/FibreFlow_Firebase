@@ -530,12 +530,14 @@ export class StaffListComponent implements OnInit, AfterViewInit {
   }
 
   formatGroup(group: StaffGroup): string {
-    const groupNames: Record<StaffGroup, string> = {
-      Admin: 'Admin',
-      ProjectManager: 'Project Manager',
-      Technician: 'Technician',
-      Supplier: 'Supplier',
-      Client: 'Client',
+    const groupNames: Partial<Record<StaffGroup, string>> = {
+      'Management': 'Management',
+      'Regional Project Manager': 'Regional Project Manager',
+      'Project Manager': 'Project Manager',
+      'Site Supervisor': 'Site Supervisor',
+      'Senior Technician': 'Senior Technician',
+      'Assistant Technician': 'Assistant Technician',
+      'Planner': 'Planner',
     };
     return groupNames[group] || group;
   }

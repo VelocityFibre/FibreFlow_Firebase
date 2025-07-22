@@ -26,6 +26,11 @@ interface LogEntry {
   data?: string;
   stack?: string;
   sessionId: string;
+  // User information
+  userId?: string;
+  userEmail?: string;
+  userDisplayName?: string;
+  userRole?: string;
 }
 
 @Component({
@@ -69,6 +74,18 @@ interface LogEntry {
                   <ng-container matColumnDef="component">
                     <th mat-header-cell *matHeaderCellDef>Component</th>
                     <td mat-cell *matCellDef="let log">{{ log.component || 'App' }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="user">
+                    <th mat-header-cell *matHeaderCellDef>User</th>
+                    <td mat-cell *matCellDef="let log">
+                      <div class="user-info">
+                        <div *ngIf="log.userDisplayName || log.userEmail">
+                          {{ log.userDisplayName || log.userEmail || 'Unknown' }}
+                        </div>
+                        <small *ngIf="log.userRole" class="user-role">{{ log.userRole }}</small>
+                      </div>
+                    </td>
                   </ng-container>
 
                   <ng-container matColumnDef="message">
@@ -119,6 +136,18 @@ interface LogEntry {
                     <td mat-cell *matCellDef="let log">{{ log.component || 'App' }}</td>
                   </ng-container>
 
+                  <ng-container matColumnDef="user">
+                    <th mat-header-cell *matHeaderCellDef>User</th>
+                    <td mat-cell *matCellDef="let log">
+                      <div class="user-info">
+                        <div *ngIf="log.userDisplayName || log.userEmail">
+                          {{ log.userDisplayName || log.userEmail || 'Unknown' }}
+                        </div>
+                        <small *ngIf="log.userRole" class="user-role">{{ log.userRole }}</small>
+                      </div>
+                    </td>
+                  </ng-container>
+
                   <ng-container matColumnDef="message">
                     <th mat-header-cell *matHeaderCellDef>Error Details</th>
                     <td mat-cell *matCellDef="let log">
@@ -136,10 +165,10 @@ interface LogEntry {
                     </td>
                   </ng-container>
 
-                  <tr mat-header-row *matHeaderRowDef="['timestamp', 'component', 'message']"></tr>
+                  <tr mat-header-row *matHeaderRowDef="['timestamp', 'component', 'user', 'message']"></tr>
                   <tr
                     mat-row
-                    *matRowDef="let row; columns: ['timestamp', 'component', 'message']"
+                    *matRowDef="let row; columns: ['timestamp', 'component', 'user', 'message']"
                     class="error-row"
                   ></tr>
                 </table>
@@ -235,6 +264,21 @@ interface LogEntry {
       .error-stack {
         margin-top: 12px;
       }
+
+      .user-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .user-role {
+        color: #666;
+        font-size: 11px;
+        background: #f5f5f5;
+        padding: 2px 6px;
+        border-radius: 3px;
+        display: inline-block;
+      }
     `,
   ],
 })
@@ -244,7 +288,7 @@ export class DebugLogsComponent implements OnInit {
   allLogs$!: Observable<LogEntry[]>;
   errorLogs$!: Observable<LogEntry[]>;
 
-  displayedColumns = ['timestamp', 'level', 'component', 'message', 'url'];
+  displayedColumns = ['timestamp', 'level', 'component', 'user', 'message', 'url'];
 
   ngOnInit() {
     this.loadLogs();

@@ -12,10 +12,10 @@ export const POLE_PERMISSIONS_ROUTES: Routes = [
   {
     path: 'upload',
     loadComponent: () =>
-      import('./components/wizard/pole-analytics-wizard.component').then(
-        (m) => m.PoleAnalyticsWizardComponent,
+      import('./components/upload/onemap-upload.component').then(
+        (m) => m.OnemapUploadComponent,
       ),
-    title: 'Upload Data - Pole Analytics',
+    title: 'Upload OneMap CSV Files',
   },
   {
     path: 'process',

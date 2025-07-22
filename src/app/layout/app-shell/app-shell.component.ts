@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
@@ -8,11 +8,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../../core/services/auth.service';
 import { DevNoteService } from '../../core/services/dev-note.service';
 import { demoConfig } from '../../config/demo.config';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { computed } from '@angular/core';
+import { switchMap, of } from 'rxjs';
 
 interface NavItem {
   label: string;
@@ -41,6 +43,7 @@ interface NavItem {
     MatButtonModule,
     MatDividerModule,
     MatBadgeModule,
+    MatTooltipModule,
   ],
   template: `
     <mat-sidenav-container class="sidenav-container">
@@ -56,6 +59,22 @@ interface NavItem {
               loading="lazy"
             />
           </div>
+        </div>
+
+        <!-- User Profile Section -->
+        <div class="user-section" *ngIf="currentUser()">
+          <mat-divider></mat-divider>
+          <div class="user-info">
+            <mat-icon class="user-avatar">account_circle</mat-icon>
+            <div class="user-details">
+              <div class="user-name">{{ currentUser()?.displayName }}</div>
+              <div class="user-email">{{ currentUser()?.email }}</div>
+            </div>
+          </div>
+          <button mat-icon-button class="logout-btn" (click)="logout()" matTooltip="Logout">
+            <mat-icon>logout</mat-icon>
+          </button>
+          <mat-divider></mat-divider>
         </div>
 
         <!-- Navigation -->
@@ -330,6 +349,65 @@ interface NavItem {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       }
 
+      /* User profile section */
+      .user-section {
+        padding: 16px;
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 0;
+        position: relative;
+      }
+
+      .user-avatar {
+        font-size: 40px;
+        width: 40px;
+        height: 40px;
+        color: #64b5f6;
+      }
+
+      .user-details {
+        flex: 1;
+        overflow: hidden;
+      }
+
+      .user-name {
+        color: #ffffff;
+        font-weight: 500;
+        font-size: 14px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .user-email {
+        color: #90a4ae;
+        font-size: 12px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .logout-btn {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #90a4ae;
+        
+        &:hover {
+          color: #ffffff;
+        }
+      }
+
+      .mat-divider {
+        border-top-color: rgba(255, 255, 255, 0.12);
+      }
+
       .nav-content {
         flex: 1;
         overflow-y: auto;
@@ -428,11 +506,32 @@ interface NavItem {
 export class AppShellComponent {
   private authService = inject(AuthService);
   private devNoteService = inject(DevNoteService);
+  private router = inject(Router);
 
   pendingTasksCount = 0;
   
-  // Get dev stats for badge count
-  devStats = toSignal(this.devNoteService.getDevStats());
+  // Get dev stats for badge count - only load if authenticated
+  devStats = toSignal(
+    this.authService.user$.pipe(
+      switchMap(user => 
+        user ? this.devNoteService.getDevStats() : of(null)
+      )
+    ),
+    { initialValue: null }
+  );
+  
+  // Current user signal
+  currentUser = this.authService.currentUser;
+  
+  // Logout function
+  async logout() {
+    try {
+      await this.authService.logout();
+      this.router.navigate(['/login']);
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  }
 
   // Helper method to filter items based on demo config
   private filterItems(items: NavItem[]): NavItem[] {

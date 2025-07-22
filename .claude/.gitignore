@@ -1,0 +1,16 @@
+# Environment files with API keys
+.env
+.env.local
+
+# Node modules
+node_modules/
+
+# Memory files (if any sensitive data)
+memory/*.json.backup
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db

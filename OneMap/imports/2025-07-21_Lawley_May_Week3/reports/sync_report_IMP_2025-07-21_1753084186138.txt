@@ -1,0 +1,41 @@
+
+1MAP SYNC REPORT
+================
+Import ID: IMP_2025-07-21_1753084186138
+Date: 2025-07-21T07:49:48.758Z
+File: test-10-records.csv
+
+SUMMARY
+-------
+Total Records: 10
+New Records: 10
+Updated Records: 0
+Unchanged Records: 0
+Errors: 10
+
+
+NEW RECORDS (10)
+-----------
+
+
+
+
+
+
+ERRORS (10)
+------
+- undefined: Element at index 0 should not be an empty string.
+- undefined: Element at index 0 should not be an empty string.
+- undefined: Element at index 0 should not be an empty string.
+- undefined: Element at index 0 should not be an empty string.
+- undefined: Element at index 0 should not be an empty string.
+- undefined: Element at index 0 should not be an empty string.
+- undefined: Element at index 0 should not be an empty string.
+- undefined: Element at index 0 should not be an empty string.
+- undefined: Element at index 0 should not be an empty string.
+- undefined: Element at index 0 should not be an empty string.
+
+
+NEXT STEPS
+----------
+✓ No changes to sync

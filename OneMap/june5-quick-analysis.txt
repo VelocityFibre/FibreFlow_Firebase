@@ -1,0 +1,13 @@
+
+# June 5th Import Analysis
+- CSV Records: 6039
+- Unique Property IDs: 6039
+- Current Staging: 9144
+- Estimated New: ~0
+- Duplicate Rate: ~100.0%
+
+## Sample Property IDs from June 5th:
+249111, 249083, 249071, 249067, 249076
+
+## Next Step:
+Run full import to add the ~0 new records

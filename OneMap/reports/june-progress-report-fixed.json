@@ -1,0 +1,79 @@
+{
+  "summary": {
+    "june3Records": 3487,
+    "june5Records": 6039,
+    "matchingPropertyIds": 3484,
+    "statusChanges": 1,
+    "newPoleAssignments": 0,
+    "dropsAdded": 8,
+    "agentChanges": 0,
+    "ponChanges": 0,
+    "zoneChanges": 0
+  },
+  "changes": {
+    "statusChanges": [
+      {
+        "propertyId": "279830",
+        "pole": "LAW.P.C463",
+        "address": "30 LETSATSI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "from": "Pole Permission: Approved",
+        "to": "Home Sign Ups: Approved & Installation Scheduled"
+      }
+    ],
+    "newPoleAssignments": [],
+    "dropsAdded": [
+      {
+        "propertyId": "284378",
+        "pole": "LAW.P.C502",
+        "address": "82 SHILOWA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "newDrop": "DR1750573"
+      },
+      {
+        "propertyId": "279313",
+        "pole": "LAW.P.E419",
+        "address": "59 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+        "newDrop": "DR1748591"
+      },
+      {
+        "propertyId": "277244",
+        "pole": "LAW.P.D795",
+        "address": "57 REBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "newDrop": "DR1733546"
+      },
+      {
+        "propertyId": "277268",
+        "pole": "LAW.P.D794",
+        "address": "53 REBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "newDrop": "DR1733538"
+      },
+      {
+        "propertyId": "277305",
+        "pole": "LAW.P.D793",
+        "address": "47 REBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "newDrop": "DR1733519"
+      },
+      {
+        "propertyId": "277342",
+        "pole": "LAW.P.D792",
+        "address": "43 REBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "newDrop": "DR1733528"
+      },
+      {
+        "propertyId": "275760",
+        "pole": "LAW.P.E432",
+        "address": "53 MOLAO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "newDrop": "DR1733820"
+      },
+      {
+        "propertyId": "279830",
+        "pole": "LAW.P.C463",
+        "address": "30 LETSATSI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "newDrop": "DR1750355"
+      }
+    ],
+    "agentChanges": [],
+    "ponChanges": [],
+    "zoneChanges": []
+  },
+  "generatedAt": "2025-07-22T14:02:41.258Z"
+}

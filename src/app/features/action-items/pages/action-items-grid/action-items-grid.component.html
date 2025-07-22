@@ -1,0 +1,120 @@
+<app-page-header
+  title="Action Items Management"
+  subtitle="Manage and track action items from all meetings. Double-click cells to edit.">
+</app-page-header>
+
+<div class="action-items-grid-container">
+  <!-- Statistics Cards -->
+  <div class="stats-cards" *ngIf="stats()">
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-value">{{ stats()!.total }}</div>
+        <div class="stat-label">Total Items</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card pending">
+      <mat-card-content>
+        <div class="stat-value">{{ stats()!.pending }}</div>
+        <div class="stat-label">Pending</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card in-progress">
+      <mat-card-content>
+        <div class="stat-value">{{ stats()!.inProgress }}</div>
+        <div class="stat-label">In Progress</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card overdue">
+      <mat-card-content>
+        <div class="stat-value">{{ stats()!.overdue }}</div>
+        <div class="stat-label">Overdue</div>
+      </mat-card-content>
+    </mat-card>
+    
+    <mat-card class="stat-card completed">
+      <mat-card-content>
+        <div class="stat-value">{{ stats()!.completed }}</div>
+        <div class="stat-label">Completed</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Filters and Actions -->
+  <mat-card class="filter-card">
+    <mat-card-content>
+      <div class="filter-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Search</mat-label>
+          <input matInput [(ngModel)]="searchText" (ngModelChange)="applyQuickFilter()" 
+                 placeholder="Search action items...">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select [(ngModel)]="selectedStatus">
+            <mat-option value="">All</mat-option>
+            <mat-option *ngFor="let status of statusOptions.slice(1)" [value]="status">
+              {{ status | titlecase }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Priority</mat-label>
+          <mat-select [(ngModel)]="selectedPriority">
+            <mat-option value="">All</mat-option>
+            <mat-option *ngFor="let priority of priorityOptions.slice(1)" [value]="priority">
+              {{ priority | titlecase }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <div class="filter-actions">
+          <button mat-stroked-button (click)="clearFilters()">
+            <mat-icon>clear</mat-icon>
+            Clear
+          </button>
+          <button mat-raised-button color="primary" (click)="exportToExcel()">
+            <mat-icon>download</mat-icon>
+            Export to Excel
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- AG-Grid -->
+  <mat-card class="grid-card">
+    <mat-card-content>
+      <div class="grid-container">
+        <div *ngIf="loading()" class="loading-overlay">
+          <mat-spinner></mat-spinner>
+          <p>Loading action items...</p>
+        </div>
+        
+        <div *ngIf="!loading() && filteredItems().length === 0" class="no-data">
+          <mat-icon>info</mat-icon>
+          <p>No action items found. The daily sync will import new items from meetings.</p>
+        </div>
+        
+        <ag-grid-angular
+          *ngIf="filteredItems().length > 0"
+          class="ag-theme-material"
+          [rowData]="filteredItems()"
+          [columnDefs]="columnDefs"
+          [defaultColDef]="defaultColDef"
+          [animateRows]="true"
+          [pagination]="true"
+          [paginationPageSize]="50"
+          [paginationPageSizeSelector]="[20, 50, 100, 500]"
+          (gridReady)="onGridReady($event)"
+          (cellValueChanged)="onCellValueChanged($event)">
+        </ag-grid-angular>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

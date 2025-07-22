@@ -1092,3 +1092,213 @@ exports.getAgentStats = agentFunctions.getAgentStats;
 // Test function for debugging
 const testFunctions = require('./src/test-agent-db');
 exports.testAgentDatabase = testFunctions.testAgentDatabase;
+
+// =============================================================================
+// SCHEDULED ACTION ITEMS SYNC
+// =============================================================================
+
+// Scheduled function to sync action items daily at 9 AM
+exports.syncActionItemsDaily = functions.pubsub
+  .schedule('0 9 * * *') // 9 AM daily (UTC)
+  .timeZone('Africa/Johannesburg') // Set to South Africa timezone
+  .onRun(async (context) => {
+    logger.info('🔄 Starting daily action items sync...');
+    
+    try {
+      const db = admin.firestore();
+      
+      // Get all meetings with action items
+      const meetingsSnapshot = await db.collection('meetings').get();
+      logger.info(`📊 Found ${meetingsSnapshot.size} meetings to check`);
+      
+      // Get existing managed action items
+      const managedSnapshot = await db.collection('actionItemsManagement').get();
+      logger.info(`📋 Existing managed action items: ${managedSnapshot.size}`);
+      
+      // Build existing items map for deduplication
+      const existingMap = new Map();
+      managedSnapshot.forEach(doc => {
+        const data = doc.data();
+        const key = `${data.meetingId}-${data.originalActionItem.text}`;
+        existingMap.set(key, data);
+      });
+      
+      let importCount = 0;
+      let totalActionItems = 0;
+      
+      // Process each meeting
+      for (const meetingDoc of meetingsSnapshot.docs) {
+        const meetingData = meetingDoc.data();
+        const meetingId = meetingDoc.id;
+        
+        if (meetingData.actionItems && meetingData.actionItems.length > 0) {
+          totalActionItems += meetingData.actionItems.length;
+          
+          for (const actionItem of meetingData.actionItems) {
+            const key = `${meetingId}-${actionItem.text}`;
+            
+            // Only import if not already exists (prevents duplicates)
+            if (!existingMap.has(key)) {
+              const managedItem = {
+                meetingId,
+                meetingTitle: meetingData.title,
+                meetingDate: meetingData.dateTime,
+                originalActionItem: actionItem,
+                updates: {
+                  priority: actionItem.priority || 'medium',
+                  assignee: actionItem.assignee || '',
+                  assigneeEmail: actionItem.assigneeEmail || '',
+                  dueDate: actionItem.dueDate || null,
+                  status: actionItem.completed ? 'completed' : 'pending',
+                  notes: '',
+                  tags: []
+                },
+                status: actionItem.completed ? 'completed' : 'pending',
+                history: [{
+                  id: Date.now().toString(36) + Math.random().toString(36).substr(2),
+                  timestamp: new Date().toISOString(),
+                  userId: 'system',
+                  userEmail: 'system@fibreflow.com',
+                  action: 'created',
+                  notes: 'Action item imported from meeting (daily sync)'
+                }],
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                createdBy: 'system',
+                updatedBy: 'system'
+              };
+              
+              // Add to Firestore
+              await db.collection('actionItemsManagement').add(managedItem);
+              importCount++;
+            }
+          }
+        }
+      }
+      
+      logger.info(`✅ Daily sync complete!`);
+      logger.info(`📊 Total action items in meetings: ${totalActionItems}`);
+      logger.info(`📋 Previously managed: ${managedSnapshot.size}`);
+      logger.info(`🆕 Newly imported: ${importCount}`);
+      logger.info(`📈 Total now managed: ${managedSnapshot.size + importCount}`);
+      
+      // Log sync results to a collection for monitoring
+      await db.collection('sync-logs').add({
+        type: 'action-items-sync',
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        results: {
+          totalMeetings: meetingsSnapshot.size,
+          totalActionItems,
+          previouslyManaged: managedSnapshot.size,
+          newlyImported: importCount,
+          totalManaged: managedSnapshot.size + importCount
+        },
+        status: 'success'
+      });
+      
+      return null;
+    } catch (error) {
+      logger.error('❌ Daily action items sync error:', error);
+      
+      // Log error to collection for monitoring
+      await admin.firestore().collection('sync-logs').add({
+        type: 'action-items-sync',
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        error: error.message,
+        status: 'error'
+      });
+      
+      throw error;
+    }
+  });
+
+// Manual trigger for action items sync (for testing)
+exports.syncActionItemsManual = functions.https.onCall(async (data, context) => {
+  logger.info('🔄 Manual action items sync triggered');
+  
+  try {
+    const db = admin.firestore();
+    
+    // Get all meetings with action items
+    const meetingsSnapshot = await db.collection('meetings').get();
+    
+    // Get existing managed action items
+    const managedSnapshot = await db.collection('actionItemsManagement').get();
+    
+    // Build existing items map for deduplication
+    const existingMap = new Map();
+    managedSnapshot.forEach(doc => {
+      const data = doc.data();
+      const key = `${data.meetingId}-${data.originalActionItem.text}`;
+      existingMap.set(key, data);
+    });
+    
+    let importCount = 0;
+    let totalActionItems = 0;
+    
+    // Process each meeting
+    for (const meetingDoc of meetingsSnapshot.docs) {
+      const meetingData = meetingDoc.data();
+      const meetingId = meetingDoc.id;
+      
+      if (meetingData.actionItems && meetingData.actionItems.length > 0) {
+        totalActionItems += meetingData.actionItems.length;
+        
+        for (const actionItem of meetingData.actionItems) {
+          const key = `${meetingId}-${actionItem.text}`;
+          
+          // Only import if not already exists
+          if (!existingMap.has(key)) {
+            const managedItem = {
+              meetingId,
+              meetingTitle: meetingData.title,
+              meetingDate: meetingData.dateTime,
+              originalActionItem: actionItem,
+              updates: {
+                priority: actionItem.priority || 'medium',
+                assignee: actionItem.assignee || '',
+                assigneeEmail: actionItem.assigneeEmail || '',
+                dueDate: actionItem.dueDate || null,
+                status: actionItem.completed ? 'completed' : 'pending',
+                notes: '',
+                tags: []
+              },
+              status: actionItem.completed ? 'completed' : 'pending',
+              history: [{
+                id: Date.now().toString(36) + Math.random().toString(36).substr(2),
+                timestamp: new Date().toISOString(),
+                userId: context.auth?.uid || 'system',
+                userEmail: context.auth?.token?.email || 'system@fibreflow.com',
+                action: 'created',
+                notes: 'Action item imported from meeting (manual sync)'
+              }],
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              createdBy: context.auth?.uid || 'system',
+              updatedBy: context.auth?.uid || 'system'
+            };
+            
+            // Add to Firestore
+            await db.collection('actionItemsManagement').add(managedItem);
+            importCount++;
+          }
+        }
+      }
+    }
+    
+    return {
+      success: true,
+      results: {
+        totalMeetings: meetingsSnapshot.size,
+        totalActionItems,
+        previouslyManaged: managedSnapshot.size,
+        newlyImported: importCount,
+        totalManaged: managedSnapshot.size + importCount
+      }
+    };
+    
+  } catch (error) {
+    logger.error('❌ Manual action items sync error:', error);
+    throw new functions.https.HttpsError('internal', error.message);
+  }
+});

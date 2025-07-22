@@ -1,0 +1,25 @@
+{
+  "sessions": [
+    {
+      "id": "session_1753280358102",
+      "title": "Storage Authentication Issue",
+      "summary": "Discovered cross-project Firebase auth limitations when uploading to VF OneMap storage from FibreFlow",
+      "learnings": [],
+      "timestamp": "2025-07-23T14:19:18.102Z"
+    },
+    {
+      "id": "session_1753280358134",
+      "title": "Routing Best Practices",
+      "summary": "Learned that nested lazy routes cause NG04002 errors, should use simple top-level routes",
+      "learnings": [],
+      "timestamp": "2025-07-23T14:19:18.134Z"
+    },
+    {
+      "id": "session_1753281806391",
+      "title": "Memory System Implementation",
+      "summary": "Implemented local Zep-inspired memory system with Facts, Patterns, Knowledge Graph, and Sessions. Added documentation to CLAUDE.md and created comprehensive guide. Ready for immediate use with future Zep Cloud migration path.",
+      "learnings": [],
+      "timestamp": "2025-07-23T14:43:26.391Z"
+    }
+  ]
+}

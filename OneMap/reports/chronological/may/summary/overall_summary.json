@@ -1,0 +1,56 @@
+{
+  "processedDates": [
+    "2025-05-22",
+    "2025-05-23",
+    "2025-05-26",
+    "2025-05-27",
+    "2025-05-29",
+    "2025-05-30"
+  ],
+  "totalDays": 6,
+  "startDate": "2025-05-22",
+  "endDate": "2025-05-30",
+  "finalStats": {
+    "date": "2025-05-30",
+    "totalProperties": 1292,
+    "milestones": {
+      "Pole Permission: Approved": 968,
+      "Pole Permission: Planted": 0,
+      "Home Sign Ups: Approved & Installation Scheduled": 87,
+      "Home Sign Ups: Installed": 0
+    },
+    "growth": 284
+  },
+  "growthOverTime": [
+    {
+      "date": "2025-05-22",
+      "total": 746,
+      "growth": 746
+    },
+    {
+      "date": "2025-05-23",
+      "total": 746,
+      "growth": 0
+    },
+    {
+      "date": "2025-05-26",
+      "total": 752,
+      "growth": 6
+    },
+    {
+      "date": "2025-05-27",
+      "total": 753,
+      "growth": 1
+    },
+    {
+      "date": "2025-05-29",
+      "total": 1008,
+      "growth": 255
+    },
+    {
+      "date": "2025-05-30",
+      "total": 1292,
+      "growth": 284
+    }
+  ]
+}

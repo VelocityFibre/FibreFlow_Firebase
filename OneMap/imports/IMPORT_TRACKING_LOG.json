@@ -1,0 +1,200 @@
+{
+  "project": {
+    "name": "Lawley Fiber Installation",
+    "id": "LAW-001",
+    "tracking_started": "2025-07-21"
+  },
+  "imports": [
+    {
+      "import_id": "IMP_2025-07-21_001",
+      "import_date": "2025-07-21T09:00:00Z",
+      "source_file": "Lawley May Week 3 22052025 - First Report.csv",
+      "file_date": "2025-05-22",
+      "record_count": 746,
+      "import_type": "initial",
+      "metrics": {
+        "total_records": 746,
+        "valid_records": 746,
+        "invalid_records": 0,
+        "with_pole_numbers": 543,
+        "without_pole_numbers": 203,
+        "with_gps": 632,
+        "without_gps": 114,
+        "with_agents": 477,
+        "without_agents": 269
+      },
+      "status_breakdown": {
+        "Pole Permission: Approved": 475,
+        "Missing": 182,
+        "Home Sign Ups: Approved & Installation Scheduled": 73,
+        "Home Sign Ups: Declined": 10,
+        "Home Installation: Installed": 3,
+        "Home Sign Ups: Approved & Installation Re-scheduled": 2,
+        "Home Installation: Declined": 1
+      },
+      "sync_results": {
+        "synced_to_production": 545,
+        "planned_poles": 541,
+        "pole_trackers": 4,
+        "failed": 0,
+        "skipped": 201
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "comparison_id": "CMP_2025-07-21_001",
+      "comparison_date": "2025-07-21T17:00:00Z",
+      "period": {
+        "from": "2025-05-22",
+        "to": "2025-05-26",
+        "days": 4
+      },
+      "files_compared": [
+        "Lawley May Week 3 22052025 - First Report.csv",
+        "Lawley May Week 4 26052025.csv"
+      ],
+      "changes_detected": {
+        "net_records": 6,
+        "records_added": 7,
+        "records_removed": 1,
+        "status_changes": 182,
+        "pole_assignments": 0,
+        "agent_changes": 0,
+        "completions": 0
+      },
+      "status_transitions": {
+        "Missing_to_Blank": 182
+      },
+      "key_findings": [
+        "All 182 Missing status changed to blank",
+        "7 new properties added on May 26 at 15:15",
+        "No field work progress detected"
+      ]
+    },
+    {
+      "comparison_id": "CMP_2025-07-21_1753120450124",
+      "comparison_date": "2025-07-21T17:54:10.124Z",
+      "period": {
+        "from": "2025-05-22",
+        "to": "2025-05-23"
+      },
+      "files_compared": [
+        "2025-05-22.csv",
+        "2025-05-23.csv"
+      ],
+      "changes_detected": {
+        "net_records": 0,
+        "records_added": 0,
+        "records_removed": 0,
+        "status_changes": 182,
+        "pole_assignments": 0,
+        "agent_changes": 0,
+        "completions": 0
+      }
+    },
+    {
+      "comparison_id": "CMP_2025-07-21_1753120450292",
+      "comparison_date": "2025-07-21T17:54:10.292Z",
+      "period": {
+        "from": "2025-05-23",
+        "to": "2025-05-26"
+      },
+      "files_compared": [
+        "2025-05-23.csv",
+        "2025-05-26.csv"
+      ],
+      "changes_detected": {
+        "net_records": 6,
+        "records_added": 7,
+        "records_removed": 1,
+        "status_changes": 0,
+        "pole_assignments": 0,
+        "agent_changes": 0,
+        "completions": 0
+      }
+    },
+    {
+      "comparison_id": "CMP_2025-07-21_1753120450440",
+      "comparison_date": "2025-07-21T17:54:10.440Z",
+      "period": {
+        "from": "2025-05-26",
+        "to": "2025-05-27"
+      },
+      "files_compared": [
+        "2025-05-26.csv",
+        "2025-05-27.csv"
+      ],
+      "changes_detected": {
+        "net_records": 1,
+        "records_added": 1,
+        "records_removed": 0,
+        "status_changes": 0,
+        "pole_assignments": 0,
+        "agent_changes": 0,
+        "completions": 0
+      }
+    },
+    {
+      "comparison_id": "CMP_2025-07-21_1753120450625",
+      "comparison_date": "2025-07-21T17:54:10.625Z",
+      "period": {
+        "from": "2025-05-27",
+        "to": "2025-05-29"
+      },
+      "files_compared": [
+        "2025-05-27.csv",
+        "2025-05-29.csv"
+      ],
+      "changes_detected": {
+        "net_records": 255,
+        "records_added": 255,
+        "records_removed": 0,
+        "status_changes": 0,
+        "pole_assignments": 0,
+        "agent_changes": 0,
+        "completions": 0
+      }
+    },
+    {
+      "comparison_id": "CMP_2025-07-21_1753120450882",
+      "comparison_date": "2025-07-21T17:54:10.882Z",
+      "period": {
+        "from": "2025-05-29",
+        "to": "2025-05-30"
+      },
+      "files_compared": [
+        "2025-05-29.csv",
+        "2025-05-30.csv"
+      ],
+      "changes_detected": {
+        "net_records": 284,
+        "records_added": 284,
+        "records_removed": 0,
+        "status_changes": 0,
+        "pole_assignments": 0,
+        "agent_changes": 0,
+        "completions": 0
+      }
+    }
+  ],
+  "running_totals": {
+    "total_imports": 4,
+    "total_comparisons": 6,
+    "total_unique_properties": 1292,
+    "current_active_properties": 1292,
+    "cumulative_completions": 4,
+    "cumulative_poles_assigned": 1048,
+    "outstanding_missing_status": 0,
+    "outstanding_no_pole": 244,
+    "last_updated": "2025-07-21T18:36:00.000Z",
+    "production_sync": {
+      "sync_id": "SYNC_2025-07-21_1753122775078",
+      "date": "2025-07-21T18:36:16.688Z",
+      "records_synced": 1048,
+      "new_records_created": 505,
+      "records_updated": 2,
+      "skipped": 785
+    }
+  }
+}

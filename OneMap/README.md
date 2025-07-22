@@ -1,5 +1,12 @@
 # OneMap Module - Data Processing Hub
 
+> **📍 BREAKTHROUGH (2025-07-23)**: CSV-first processing is 100-1000x faster than Firebase!
+> See `BREAKTHROUGH_NOTE_2025-07-23.md`. Start with these 4 scripts:
+> - `split-csv-by-pole.js` - Separate permissions from poles
+> - `compare-split-csvs.js` - Find changes between dates
+> - `process-split-chronologically.js` - Automate timeline analysis
+> - `fix-csv-parsing.js` - Handle CSV data quality
+
 ## Overview
 OneMap is a multi-purpose data processing directory for FibreFlow that handles:
 1. **CSV to Firebase Import Workflows** - Converting external CSV data to Firebase documents

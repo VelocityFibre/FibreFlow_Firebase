@@ -210,11 +210,7 @@
       <div class="empty-state" *ngIf="filteredItems().length === 0">
         <mat-icon>assignment</mat-icon>
         <h3>No Action Items</h3>
-        <p>Import action items from meetings to get started</p>
-        <button mat-raised-button color="primary" (click)="importFromMeetings()">
-          <mat-icon>sync</mat-icon>
-          Import from Meetings
-        </button>
+        <p>Action items are automatically synced from meetings daily</p>
       </div>
     </mat-card-content>
   </mat-card>

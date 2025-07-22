@@ -1,0 +1,22 @@
+{
+  "date": "2025-05-22",
+  "fileName": "Lawley May Week 3 22052025 - First Report.csv",
+  "totalRecords": 746,
+  "uniquePropertyIds": 746,
+  "milestones": {
+    "Pole Permission: Approved": 476,
+    "Pole Permission: Planted": 0,
+    "Home Sign Ups: Approved & Installation Scheduled": 75,
+    "Home Sign Ups: Installed": 0
+  },
+  "changes": {
+    "new": 746,
+    "changed": 0,
+    "missing": 0,
+    "unchanged": 0
+  },
+  "summary": {
+    "growth": 746,
+    "totalProperties": 746
+  }
+}

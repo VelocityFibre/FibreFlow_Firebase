@@ -1,0 +1,3914 @@
+{
+  "date": "2025-05-30",
+  "comparedWith": "2025-05-22",
+  "permissions": {
+    "prevCount": 154,
+    "currCount": 190,
+    "changes": {
+      "new": [
+        {
+          "location": "112 HERRING CIRCLE LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.389467,27.814578",
+          "status": "",
+          "propertyId": "276791"
+        },
+        {
+          "location": "8413 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.383470,27.814576",
+          "status": "",
+          "propertyId": "276801"
+        },
+        {
+          "location": "8414 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.383443,27.814572",
+          "status": "",
+          "propertyId": "276799"
+        },
+        {
+          "location": "8563 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.384053,27.814086",
+          "status": "",
+          "propertyId": "276804"
+        },
+        {
+          "location": "8567 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.384388,27.814200",
+          "status": "",
+          "propertyId": "276805"
+        },
+        {
+          "location": "8417 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.383590,27.814342",
+          "status": "",
+          "propertyId": "276798"
+        },
+        {
+          "location": "7197 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "gps": "-26.378601,27.812696",
+          "status": "",
+          "propertyId": "276293"
+        },
+        {
+          "location": "6956 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "gps": "-26.378707,27.808774",
+          "status": "",
+          "propertyId": "276104"
+        },
+        {
+          "location": "6892 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "gps": "-26.377991,27.808694",
+          "status": "",
+          "propertyId": "270902"
+        },
+        {
+          "location": "6893 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "gps": "-26.378058,27.808567",
+          "status": "",
+          "propertyId": "276106"
+        },
+        {
+          "location": "6935 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "gps": "-26.378338,27.810564",
+          "status": "",
+          "propertyId": "276110"
+        },
+        {
+          "location": "6936 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "gps": "-26.378497,27.810589",
+          "status": "",
+          "propertyId": "276111"
+        },
+        {
+          "location": "7530 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.382238,27.811152",
+          "status": "",
+          "propertyId": "276797"
+        },
+        {
+          "location": "7530 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.382230,27.811154",
+          "status": "",
+          "propertyId": "276796"
+        },
+        {
+          "location": "6678 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.379957,27.807536",
+          "status": "",
+          "propertyId": "276108"
+        },
+        {
+          "location": "6679 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.380007,27.807359",
+          "status": "",
+          "propertyId": "276109"
+        },
+        {
+          "location": "6682 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.380232,27.807436",
+          "status": "",
+          "propertyId": "276107"
+        },
+        {
+          "location": "6546 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "gps": "-26.379348,27.808298",
+          "status": "",
+          "propertyId": "276105"
+        },
+        {
+          "location": "SIXTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.3841784, 27.7943392]",
+          "gps": "-26.384178,27.794339",
+          "status": "Home Sign Ups: Approved & Installation Scheduled",
+          "propertyId": "279834"
+        },
+        {
+          "location": "15 LULAMISANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.384230,27.792772",
+          "status": "",
+          "propertyId": "279242"
+        },
+        {
+          "location": "3 BAHOLA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.383658,27.792636",
+          "status": "",
+          "propertyId": "279243"
+        },
+        {
+          "location": "7692 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.383908,27.809156",
+          "status": "",
+          "propertyId": "276295"
+        },
+        {
+          "location": "7641 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.383078,27.808879",
+          "status": "",
+          "propertyId": "277335"
+        },
+        {
+          "location": "7891 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.383803,27.811116",
+          "status": "",
+          "propertyId": "270908"
+        },
+        {
+          "location": "7923 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.383782,27.811274",
+          "status": "",
+          "propertyId": "270907"
+        },
+        {
+          "location": "7886 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.383256,27.810785",
+          "status": "",
+          "propertyId": "270904"
+        },
+        {
+          "location": "7888 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.383109,27.810758",
+          "status": "",
+          "propertyId": "270905"
+        },
+        {
+          "location": "7890 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.383867,27.810738",
+          "status": "",
+          "propertyId": "276793"
+        },
+        {
+          "location": "20 WALTER ROAD LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.387861,27.809340",
+          "status": "",
+          "propertyId": "277331"
+        },
+        {
+          "location": "5 BASS PLACE LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.388958,27.808268",
+          "status": "Home Sign Ups: Approved & Installation Scheduled",
+          "propertyId": "264475"
+        },
+        {
+          "location": "616 BASS PLACE LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.389242,27.808006",
+          "status": "",
+          "propertyId": "276294"
+        },
+        {
+          "location": "2 BARRACUDA ROAD LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.389442,27.807009",
+          "status": "",
+          "propertyId": "277333"
+        },
+        {
+          "location": "644 BARRACUDA ROAD LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.389640,27.807003",
+          "status": "",
+          "propertyId": "270903"
+        },
+        {
+          "location": "40 KIPPER CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.390314,27.806186",
+          "status": "",
+          "propertyId": "277334"
+        },
+        {
+          "location": "22 BASS PLACE LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.389218,27.808971",
+          "status": "",
+          "propertyId": "277332"
+        },
+        {
+          "location": "10 CARP PLACE LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.389993,27.812404",
+          "status": "",
+          "propertyId": "276792"
+        },
+        {
+          "location": "10 IMPERIAL CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.390886,27.810580",
+          "status": "",
+          "propertyId": "276790"
+        }
+      ],
+      "statusChanged": [
+        {
+          "location": "74 MARKET STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37055498741314, 27.804962412252753]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.3706184, 27.8054672]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "SEVENTH AVENUE OPEN SPACE 364 WESTONARIA 1779 GT 79800008 JHB [-26.37149680066281, 27.803933085111947]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37223779646667, 27.80403777882401]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "SEVENTH AVENUE OPEN SPACE 364 WESTONARIA 1779 GT 79800008 JHB [-26.3723974753549, 27.803668986963]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37321354818264, 27.80418961703205]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.373958364616538, 27.804163413601632]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37386501904803, 27.804310823655314]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.3738589363389, 27.8043230049552]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.374185462935266, 27.804395285309663]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37408182269747, 27.8050750980323]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37420348863805, 27.807171268999383]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.374018339199807, 27.805422512401574]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "SECOND AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37343864599242, 27.80939371844734]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "SECOND AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.374390885556934, 27.810858273691295]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "40 MUSSEL CRACKER CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8221 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8226 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8227 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8580 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7925 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8386 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "UNNAMED LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.383163519669175, 27.812873806143713]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "UNNAMED LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.38316303702214, 27.81287741159725]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "UNNAMED LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.3832089, 27.8125464]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7351 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7355 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7131 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7108 LOUIS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "SECOND AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.375376503639636, 27.81138706276722]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7100 LOUIS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "LOUIS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.377765468023043, 27.808217086979596]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "6386 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "6293 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "6412 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "6917 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "6892 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "LOUIS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.3777699, 27.8088079]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "6369 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "6368 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "6329 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "6847 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7137 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7173 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "6933 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7165 SECOND AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7343 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "6995 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7097 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.380787034377363, 27.81186947454195]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7097 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7540 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7859 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7847 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7842 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7836 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7837 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7836 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7557 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7518 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7559 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7565 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "ANGLER STREET OPEN SPACE 364 WESTONARIA 1779 GT 79800121 JHB [-26.39028065853392, 27.791465080690333]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "ANGLER STREET OPEN SPACE 364 WESTONARIA 1779 GT 79800121 JHB [-26.390155124817205, 27.791616471410414]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8171 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8117 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8120 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8076 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8104 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8107 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8107 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7817 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7652 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "MOKOENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.3833765, 27.8084186]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7659 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7659 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "MOKOENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.3835383, 27.8087267]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7644 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7644 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7641 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "MOKOENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.383450000082735, 27.8110448088172]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7886 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7838 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7890 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7992 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7819 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "TSAKANE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.38452229546135, 27.81070212086099]",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7977 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "7996 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8085 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8079 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8078 FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8098 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8093 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8089 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8078 FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8087 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8086 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8086 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8086 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8097 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8064 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8045 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8033 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8038 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8025 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8016 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8229 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "38 BONITO CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8206 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8201 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "34 WALTER ROAD LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "18 BONITO CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "21 BLUEHEAD CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "583 BLUEHEAD CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "579 BLUEHEAD CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "579 BLUEHEAD CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "18 BLUEHEAD CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "21 BLUEHEAD CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "18 BLUEHEAD CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8132 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8130 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8163 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "8175 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "5 WALTER ROAD LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "641 BASS PLACE LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "640 BASS PLACE LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "640 BASS PLACE LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "640 BASS PLACE LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "640 BASS PLACE LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "640 BASS PLACE LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "640 BASS PLACE LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "3 BASS PLACE LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "639 BASS PLACE LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "617 BASS PLACE LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "619 BASS PLACE LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "819 KIPPER CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "622 BASS PLACE LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        },
+        {
+          "location": "3 MARLIN CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "oldStatus": "Missing",
+          "newStatus": ""
+        }
+      ],
+      "disappeared": [
+        {
+          "location": "640 BASS PLACE LAWLEY LENASIA 1824 GT 79800121 JHB",
+          "gps": "-26.388958,27.808268",
+          "status": "Home Sign Ups: Approved & Installation Scheduled",
+          "note": "Likely got pole assignment"
+        }
+      ],
+      "unchanged": 13
+    }
+  },
+  "poles": {
+    "prevCount": 509,
+    "currCount": 918,
+    "changes": {
+      "newPoles": [
+        {
+          "poleNumber": "LAW.P.C509",
+          "location": "8242 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1750527"
+        },
+        {
+          "poleNumber": "LAW.P.C565",
+          "location": "8618 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C567",
+          "location": "8597 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C566",
+          "location": "8600 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C537",
+          "location": "8537 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C536",
+          "location": "8540 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C540",
+          "location": "8534 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C377",
+          "location": "8414 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1751536"
+        },
+        {
+          "poleNumber": "LAW.P.C548",
+          "location": "8521 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C541",
+          "location": "8530 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C547",
+          "location": "8522 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C553",
+          "location": "8563 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1751631"
+        },
+        {
+          "poleNumber": "LAW.P.C489",
+          "location": "8562 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1750484"
+        },
+        {
+          "poleNumber": "LAW.P.C554",
+          "location": "8566 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1751573"
+        },
+        {
+          "poleNumber": "LAW.P.C555",
+          "location": "8569 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1751566"
+        },
+        {
+          "poleNumber": "LAW.P.C412",
+          "location": "7931 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Home Sign Ups: Approved & Installation Scheduled",
+          "dropNumber": "DR1750062"
+        },
+        {
+          "poleNumber": "LAW.P.C487",
+          "location": "8557 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Home Sign Ups: Approved & Installation Scheduled",
+          "dropNumber": "DR1750464"
+        },
+        {
+          "poleNumber": "LAW.P.C480",
+          "location": "MOLAMBO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.383935255673112, 27.81320819145355]",
+          "status": "Home Sign Ups: Approved & Installation Scheduled",
+          "dropNumber": "DR1750463"
+        },
+        {
+          "poleNumber": "LAW.P.C492",
+          "location": "8427 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C495",
+          "location": "8428 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Home Sign Ups: Approved & Installation Scheduled",
+          "dropNumber": "DR1750437"
+        },
+        {
+          "poleNumber": "LAW.P.C376",
+          "location": "8417 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1751556"
+        },
+        {
+          "poleNumber": "LAW.P.C375",
+          "location": "8416 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Home Sign Ups: Approved & Installation Re-scheduled",
+          "dropNumber": "DR1751562"
+        },
+        {
+          "poleNumber": "LAW.P.C374",
+          "location": "MOLAMBO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.3831567, 27.813956]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C491",
+          "location": "8390 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Home Sign Ups: Approved & Installation Scheduled",
+          "dropNumber": "DR1750499"
+        },
+        {
+          "poleNumber": "LAW.P.C494",
+          "location": "8393 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C349",
+          "location": "8380 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C350",
+          "location": "8380 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C337",
+          "location": "MOLAMBO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.3821989, 27.8147889]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C344",
+          "location": "MOLAMBO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.382583525952498, 27.814851510027452]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1751331"
+        },
+        {
+          "poleNumber": "LAW.P.C379",
+          "location": "MOLAMBO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.38191019120591, 27.815251859385757]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C360",
+          "location": "MOLAMBO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.38198963917646, 27.81507644723691]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C316",
+          "location": "8297 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C133",
+          "location": "UNNAMED LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.381180541576146, 27.8148943032951]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C132",
+          "location": "80 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C162",
+          "location": "61 KGOTSO STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748650"
+        },
+        {
+          "poleNumber": "LAW.P.C129",
+          "location": "88 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C130",
+          "location": "86 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C131",
+          "location": "84 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C128",
+          "location": "92 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748514"
+        },
+        {
+          "poleNumber": "LAW.P.C127",
+          "location": "94 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C126",
+          "location": "23 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748519"
+        },
+        {
+          "poleNumber": "LAW.P.C124",
+          "location": "52 LESEDI STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748504"
+        },
+        {
+          "poleNumber": "LAW.P.C125",
+          "location": "27 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C099",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.3812232, 27.8127322]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C123",
+          "location": "102 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748503"
+        },
+        {
+          "poleNumber": "LAW.P.C159",
+          "location": "7423 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748657"
+        },
+        {
+          "poleNumber": "LAW.P.C158",
+          "location": "7421 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748658"
+        },
+        {
+          "poleNumber": "LAW.P.C150",
+          "location": "7423 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748362"
+        },
+        {
+          "poleNumber": "LAW.P.C151",
+          "location": "7408 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748584"
+        },
+        {
+          "poleNumber": "LAW.P.C152",
+          "location": "7408 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748583"
+        },
+        {
+          "poleNumber": "LAW.P.C153",
+          "location": "7413 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748569"
+        },
+        {
+          "poleNumber": "LAW.P.C168",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.380758545492895, 27.813311742662442]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748571"
+        },
+        {
+          "poleNumber": "LAW.P.C169",
+          "location": "7414 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748567"
+        },
+        {
+          "poleNumber": "LAW.P.C170",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.380690088056525, 27.813734484069084]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748632"
+        },
+        {
+          "poleNumber": "LAW.P.C163",
+          "location": "61 KGOTSO STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748640"
+        },
+        {
+          "poleNumber": "LAW.P.C166",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.380775429462574, 27.814402316107113]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C171",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.380656250063375, 27.813940703870276]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748628"
+        },
+        {
+          "poleNumber": "LAW.P.C157",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.380433390583292, 27.814196155493093]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748625"
+        },
+        {
+          "poleNumber": "LAW.P.C155",
+          "location": "7451 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748634"
+        },
+        {
+          "poleNumber": "LAW.P.C154",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.380526070805374, 27.81360045616771]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748568"
+        },
+        {
+          "poleNumber": "LAW.P.E420",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37999553139777, 27.81410591451852]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748702"
+        },
+        {
+          "poleNumber": "LAW.P.E421",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.380036088331718, 27.81381576576354]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C181",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37992815514454, 27.813305659607025]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C182",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.380100418442936, 27.813341992882574]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748781"
+        },
+        {
+          "poleNumber": "LAW.P.C178",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37999013162677, 27.8128848013547]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748794"
+        },
+        {
+          "poleNumber": "LAW.P.C179",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.379814066672992, 27.81285546171182]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748766"
+        },
+        {
+          "poleNumber": "LAW.P.C183",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.379749273549876, 27.81326931211525]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C188",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.379815855708333, 27.814075140630244]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748703"
+        },
+        {
+          "poleNumber": "LAW.P.C190",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.379757987837824, 27.81432650746359]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C194",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.379656165335298, 27.814618969929516]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C193",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37972844572528, 27.814636565438608]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C147",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37959982131301, 27.815310158409606]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C192",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.379574950437608, 27.81443951163785]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C302",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37903096332832, 27.815196492918222]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C149",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37926067489822, 27.81524631023522]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C148",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37937318757213, 27.81525442613557]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C142",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.380299778397134, 27.815438013984018]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C145",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.379951397795228, 27.815372267490684]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C196",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.379945049412488, 27.81467717690128]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E418",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.379928524389, 27.81450738062012]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C175",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.380369863458736, 27.8145884447383]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E422",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.380314079163593, 27.81477290238042]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C176",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.38052385417284, 27.814811928968027]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E419",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.38074385451797, 27.814855248169092]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C167",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.3807163, 27.8145711]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C139",
+          "location": "UNNAMED LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.380819310976424, 27.815477715638657]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C141",
+          "location": "UNNAMED LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.380544065740196, 27.81545547880668]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C300",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.378588161309633, 27.815109409850912]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C301",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.378814793551058, 27.815153765680883]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C299",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.378265047587494, 27.8150492748381]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C298",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.378026829152418, 27.815003227320865]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A099",
+          "location": "143 JOY STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A102",
+          "location": "121 JOY STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A100",
+          "location": "135 JOY STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A101",
+          "location": "SECOND AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37602530453177, 27.81008546434654]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E325",
+          "location": "SECOND AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37607227935363, 27.809658842465197]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A103",
+          "location": "SECOND AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.376240042984655, 27.80977609815639]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A105",
+          "location": "345 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A104",
+          "location": "121 JOY STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A106",
+          "location": "343 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A107",
+          "location": "339 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A108",
+          "location": "337 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A228",
+          "location": "109 JOY STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A597",
+          "location": "LOUIS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37671987202951, 27.80621929888712]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A595",
+          "location": "LOUIS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.376676397852734, 27.80648776991401]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A115",
+          "location": "5332 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A109",
+          "location": "5324 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A110",
+          "location": "5325 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A025",
+          "location": "6378 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B206",
+          "location": "6301 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B207",
+          "location": "LOUIS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37736735568621, 27.80702706951495]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A116",
+          "location": "5334 KABELO STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A119",
+          "location": "5283 EUCALYPTUS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A121",
+          "location": "5274 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A120",
+          "location": "5285 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A125",
+          "location": "5281 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A768",
+          "location": "5230 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A763",
+          "location": "5232 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A766",
+          "location": "5229 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A767",
+          "location": "5230 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A765",
+          "location": "4915 MAFIKILE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A764",
+          "location": "4915 MAFIKILE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B196",
+          "location": "6294 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D871",
+          "location": "6483 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D829",
+          "location": "6443 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D827",
+          "location": "6445 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B191",
+          "location": "LOUIS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.3781673, 27.8057195]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1743429"
+        },
+        {
+          "poleNumber": "LAW.P.B192",
+          "location": "6407 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B222",
+          "location": "LOUIS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37835248145249, 27.805233388331683]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B224",
+          "location": "6417 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B223",
+          "location": "6438 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D786",
+          "location": "6435 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D823",
+          "location": "6475 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D824",
+          "location": "6450 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D825",
+          "location": "6476 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D828",
+          "location": "6440 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D826",
+          "location": "6446 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E404",
+          "location": "6448 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D865",
+          "location": "6517 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D863",
+          "location": "6493 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D864",
+          "location": "6517 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D853",
+          "location": "6497 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D854",
+          "location": "6493 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D867",
+          "location": "6490 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D861",
+          "location": "6519 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D868",
+          "location": "6522 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D855",
+          "location": "6486 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D869",
+          "location": "6485 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1733957"
+        },
+        {
+          "poleNumber": "LAW.P.D870",
+          "location": "6522 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D886",
+          "location": "6567 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D883",
+          "location": "6562 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D885",
+          "location": "6526 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D887",
+          "location": "6529 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E408",
+          "location": "6533 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E409",
+          "location": "6538 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D880",
+          "location": "6558 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A003",
+          "location": "6901 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A078",
+          "location": "6327 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A075",
+          "location": "6330 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A073",
+          "location": "6342 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C110",
+          "location": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.379588879770328, 27.812206880123384]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748371"
+        },
+        {
+          "poleNumber": "LAW.P.A067",
+          "location": "6961 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1738492"
+        },
+        {
+          "poleNumber": "LAW.P.A066",
+          "location": "6961 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1738495"
+        },
+        {
+          "poleNumber": "LAW.P.D559",
+          "location": "7039 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1733163"
+        },
+        {
+          "poleNumber": "LAW.P.D558",
+          "location": "7041 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1733182"
+        },
+        {
+          "poleNumber": "LAW.P.D557",
+          "location": "8 LEBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D556",
+          "location": "12 LEBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1733191"
+        },
+        {
+          "poleNumber": "LAW.P.D565",
+          "location": "7001 LEBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1733153"
+        },
+        {
+          "poleNumber": "LAW.P.D564",
+          "location": "6998 LEBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1733131"
+        },
+        {
+          "poleNumber": "LAW.P.D566",
+          "location": "7003 LEBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1733139"
+        },
+        {
+          "poleNumber": "LAW.P.D567",
+          "location": "7004 LEBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D569",
+          "location": "6987 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1733225"
+        },
+        {
+          "poleNumber": "LAW.P.D570",
+          "location": "6983 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1732061"
+        },
+        {
+          "poleNumber": "LAW.P.D537",
+          "location": "6982 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1732063"
+        },
+        {
+          "poleNumber": "LAW.P.E440",
+          "location": "7010 LEBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1733240"
+        },
+        {
+          "poleNumber": "LAW.P.E439",
+          "location": "7004 LEBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D536",
+          "location": "7015 LEBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1732077"
+        },
+        {
+          "poleNumber": "LAW.P.D548",
+          "location": "59 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D549",
+          "location": "57 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D550",
+          "location": "53 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D552",
+          "location": "47 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D551",
+          "location": "49 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D555",
+          "location": "7046 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D553",
+          "location": "7047 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D554",
+          "location": "7045 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C438",
+          "location": "7842 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1750210"
+        },
+        {
+          "poleNumber": "LAW.P.D643",
+          "location": "7549 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Home Sign Ups: Approved & Installation Scheduled",
+          "dropNumber": "DR1734283"
+        },
+        {
+          "poleNumber": "LAW.P.D544",
+          "location": "69 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D543",
+          "location": "7062 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D542",
+          "location": "7063 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D541",
+          "location": "7064 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D576",
+          "location": "6829 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1734160"
+        },
+        {
+          "poleNumber": "LAW.P.D538",
+          "location": "7069 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1732279"
+        },
+        {
+          "poleNumber": "LAW.P.D539",
+          "location": "7070 LEBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D540",
+          "location": "7071 LEBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D577",
+          "location": "6827 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1734142"
+        },
+        {
+          "poleNumber": "LAW.P.D522",
+          "location": "MOKOENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.381428875372436, 27.808934282218715]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1732134"
+        },
+        {
+          "poleNumber": "LAW.P.D523",
+          "location": "6963 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1732132"
+        },
+        {
+          "poleNumber": "LAW.P.D526",
+          "location": "7029 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D527",
+          "location": "7031 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D525",
+          "location": "7032 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D533",
+          "location": "7022 LEBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1732165"
+        },
+        {
+          "poleNumber": "LAW.P.D530",
+          "location": "7027 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D529",
+          "location": "6971 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1732092"
+        },
+        {
+          "poleNumber": "LAW.P.D531",
+          "location": "6972 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D532",
+          "location": "7019 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1732178"
+        },
+        {
+          "poleNumber": "LAW.P.D535",
+          "location": "6978 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1732089"
+        },
+        {
+          "poleNumber": "LAW.P.D524",
+          "location": "6963 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1732150"
+        },
+        {
+          "poleNumber": "LAW.P.D903",
+          "location": "6758 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1735911"
+        },
+        {
+          "poleNumber": "LAW.P.D904",
+          "location": "6779 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E434",
+          "location": "6693 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E433",
+          "location": "6690 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D843",
+          "location": "6717 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1733867"
+        },
+        {
+          "poleNumber": "LAW.P.D844",
+          "location": "6720 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1733890"
+        },
+        {
+          "poleNumber": "LAW.P.D808",
+          "location": "6626 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D847",
+          "location": "6712 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D846",
+          "location": "6696 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D848",
+          "location": "6697 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D590",
+          "location": "6698 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D812",
+          "location": "6631 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D611",
+          "location": "6636 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D610",
+          "location": "6637 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D592",
+          "location": "6705 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1734103"
+        },
+        {
+          "poleNumber": "LAW.P.D591",
+          "location": "6710 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D593",
+          "location": "6705 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D594",
+          "location": "6703 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E435",
+          "location": "6700 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D589",
+          "location": "6699 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D587",
+          "location": "6775 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D588",
+          "location": "6700 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1734114"
+        },
+        {
+          "poleNumber": "LAW.P.D586",
+          "location": "6774 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1734061"
+        },
+        {
+          "poleNumber": "LAW.P.D581",
+          "location": "6769 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1734052"
+        },
+        {
+          "poleNumber": "LAW.P.D582",
+          "location": "6770 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D609",
+          "location": "6639 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D614",
+          "location": "6645 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D615",
+          "location": "6645 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D795",
+          "location": "6584 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D794",
+          "location": "6582 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D612",
+          "location": "6635 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D811",
+          "location": "6630 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E431",
+          "location": "6651 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D793",
+          "location": "6579 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D792",
+          "location": "6577 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D809",
+          "location": "6628 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D806",
+          "location": "6625 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D790",
+          "location": "6575 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E429",
+          "location": "6568 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D798",
+          "location": "6608 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D797",
+          "location": "6609 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D799",
+          "location": "6669 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D801",
+          "location": "6615 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D802",
+          "location": "6619 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E428",
+          "location": "6667 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D788",
+          "location": "6571 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D789",
+          "location": "6574 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D804",
+          "location": "6662 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D803",
+          "location": "6620 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E427",
+          "location": "6623 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D805",
+          "location": "6624 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D841",
+          "location": "6725 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D840",
+          "location": "6687 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D839",
+          "location": "6685 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D842",
+          "location": "6687 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E436",
+          "location": "6785 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D900",
+          "location": "6786 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D897",
+          "location": "6751 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E438",
+          "location": "6790 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E437",
+          "location": "6794 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D831",
+          "location": "6675 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E432",
+          "location": "6684 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D836",
+          "location": "6684 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1733826"
+        },
+        {
+          "poleNumber": "LAW.P.D838",
+          "location": "6685 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D835",
+          "location": "6681 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D837",
+          "location": "6730 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D834",
+          "location": "6672 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D833",
+          "location": "6673 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D858",
+          "location": "6508 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D857",
+          "location": "6508 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D856",
+          "location": "6505 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1734036"
+        },
+        {
+          "poleNumber": "LAW.P.D851",
+          "location": "6504 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D849",
+          "location": "6503 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D889",
+          "location": "6735 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1735994"
+        },
+        {
+          "poleNumber": "LAW.P.D872",
+          "location": "6550 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D873",
+          "location": "6550 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D877",
+          "location": "6552 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D850",
+          "location": "6502 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D852",
+          "location": "6500 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D859",
+          "location": "6510 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D862",
+          "location": "6498 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D860",
+          "location": "6516 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D822",
+          "location": "6454 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E406",
+          "location": "6471 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D821",
+          "location": "6455 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D820",
+          "location": "6455 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E405",
+          "location": "6457 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D818",
+          "location": "6466 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D815",
+          "location": "6462 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D816",
+          "location": "6463 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E407",
+          "location": "6461 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D796",
+          "location": "6608 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1733674"
+        },
+        {
+          "poleNumber": "LAW.P.D813",
+          "location": "LOUIS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.3797731, 27.8062246]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D814",
+          "location": "6462 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D817",
+          "location": "6464 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D819",
+          "location": "6467 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D783",
+          "location": "6429 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D782",
+          "location": "6426 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D781",
+          "location": "6426 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1733572"
+        },
+        {
+          "poleNumber": "LAW.P.D784",
+          "location": "6431 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D785",
+          "location": "6434 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A755",
+          "location": "SIXTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.377691252625368, 27.80287678449769]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A756",
+          "location": "SIXTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37765214318346, 27.803127368556275]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A757",
+          "location": "SIXTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.377613629397093, 27.803388693630417]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A758",
+          "location": "5240 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A760",
+          "location": "5237 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A759",
+          "location": "5239 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A732",
+          "location": "LOUIS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.377045315099977, 27.803972590971373]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A735",
+          "location": "33 NTSOOA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A736",
+          "location": "SIXTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37715550786159, 27.80329242983508]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A753",
+          "location": "SIXTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.377740440873115, 27.80258604487363]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A730",
+          "location": "LOUIS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37696079830831, 27.80451671989501]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.A729",
+          "location": "LOUIS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.376937261966987, 27.804643205983137]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E387",
+          "location": "SIXTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.3827666, 27.7961499]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B355",
+          "location": "SIXTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.3829442, 27.7963987]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B359",
+          "location": "SIXTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.383276401231313, 27.79602915750786]",
+          "status": "Home Sign Ups: Approved & Installation Scheduled",
+          "dropNumber": "DR1745999"
+        },
+        {
+          "poleNumber": "LAW.P.B366",
+          "location": "SIXTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.3833337, 27.7954776]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B364",
+          "location": "SIXTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.383105060302935, 27.795265948462095]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B365",
+          "location": "SIXTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.38287920501527, 27.795232509556325]",
+          "status": "Home Sign Ups: Approved & Installation Scheduled",
+          "dropNumber": "DR1745948"
+        },
+        {
+          "poleNumber": "LAW.P.B367",
+          "location": "SIXTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.3829968, 27.7951294]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B412",
+          "location": "60 HINGALWI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B872",
+          "location": "23 LULAMISANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1747075"
+        },
+        {
+          "poleNumber": "LAW.P.E367",
+          "location": "3540 LULAMISANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C097",
+          "location": "3541 LULAMISANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1748308"
+        },
+        {
+          "poleNumber": "LAW.P.B855",
+          "location": "35 LULAMISANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B856",
+          "location": "44 AMALUNGELO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B916",
+          "location": "51 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B870",
+          "location": "27 LULAMISANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B871",
+          "location": "25 LULAMISANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B875",
+          "location": "35 AMALUNGELO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1747051"
+        },
+        {
+          "poleNumber": "LAW.P.B879",
+          "location": "25 AMALUNGELO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1747031"
+        },
+        {
+          "poleNumber": "LAW.P.B876",
+          "location": "27 AMALUNGELO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1747034"
+        },
+        {
+          "poleNumber": "LAW.P.B859",
+          "location": "36 AMALUNGELO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B887",
+          "location": "41 MANYATHELA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B977",
+          "location": "7 LULAMISANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1749308"
+        },
+        {
+          "poleNumber": "LAW.P.B976",
+          "location": "5 LULAMISANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B844",
+          "location": "3676 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C057",
+          "location": "3598 LULAMISANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1749757"
+        },
+        {
+          "poleNumber": "LAW.P.B830",
+          "location": "ANGLER STREET OPEN SPACE 364 WESTONARIA 1779 GT 79800121 JHB [-26.388126325263922, 27.793704307802788]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C053",
+          "location": "3591 DLAMINI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1749829"
+        },
+        {
+          "poleNumber": "LAW.P.C056",
+          "location": "3593 DLAMINI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B852",
+          "location": "3665 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B590",
+          "location": "ANGLER STREET OPEN SPACE 364 WESTONARIA 1779 GT 79800121 JHB [-26.387674519199955, 27.79503299155389]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B582",
+          "location": "ANGLER STREET OPEN SPACE 364 WESTONARIA 1779 GT 79800121 JHB [-26.38741430142434, 27.796407121383293]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B581",
+          "location": "ANGLER STREET OPEN SPACE 364 WESTONARIA 1779 GT 79800121 JHB [-26.38726240767981, 27.79650187562682]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B592",
+          "location": "ANGLER STREET OPEN SPACE 364 WESTONARIA 1779 GT 79800121 JHB [-26.388090709222976, 27.795097365667726]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1747212"
+        },
+        {
+          "poleNumber": "LAW.P.B532",
+          "location": "ANGLER STREET OPEN SPACE 364 WESTONARIA 1779 GT 79800121 JHB [-26.3856733, 27.7995133]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1745334"
+        },
+        {
+          "poleNumber": "LAW.P.B531",
+          "location": "ANGLER STREET OPEN SPACE 364 WESTONARIA 1779 GT 79800121 JHB [-26.385700337030638, 27.79914686502073]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1745343"
+        },
+        {
+          "poleNumber": "LAW.P.B529",
+          "location": "ANGLER STREET OPEN SPACE 364 WESTONARIA 1779 GT 79800121 JHB [-26.3855867, 27.798935]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1745275"
+        },
+        {
+          "poleNumber": "LAW.P.B536",
+          "location": "ANGLER STREET LAWLEY LENASIA 1824 GT 79800121 JHB [-26.3857569, 27.7997633]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1745363"
+        },
+        {
+          "poleNumber": "LAW.P.B390",
+          "location": "ANGLER STREET OPEN SPACE 364 WESTONARIA 1779 GT 79800121 JHB [-26.385310604226085, 27.798665864845]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B389",
+          "location": "ANGLER STREET OPEN SPACE 364 WESTONARIA 1779 GT 79800121 JHB [-26.385304736943926, 27.79803500975951]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1746066"
+        },
+        {
+          "poleNumber": "LAW.P.B503",
+          "location": "ANGLER STREET OPEN SPACE 364 WESTONARIA 1779 GT 79800121 JHB [-26.38543614016681, 27.797517859082106]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B500",
+          "location": "ANGLER STREET OPEN SPACE 364 WESTONARIA 1779 GT 79800121 JHB [-26.385634473701256, 27.79743329095901]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B507",
+          "location": "ANGLER STREET OPEN SPACE 364 WESTONARIA 1779 GT 79800121 JHB [-26.384405762470966, 27.797335801504417]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B382",
+          "location": "SIXTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.383897353024906, 27.79760399209515]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.B510",
+          "location": "SIXTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.384066199503458, 27.797246477790594]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E276",
+          "location": "ANGLER STREET LAWLEY LENASIA 1824 GT 79800121 JHB [-26.38446, 27.8011483]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1737074"
+        },
+        {
+          "poleNumber": "LAW.P.E149",
+          "location": "ANGLER STREET LAWLEY LENASIA 1824 GT 79800121 JHB [-26.38487667581985, 27.80135933109704]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1735458"
+        },
+        {
+          "poleNumber": "LAW.P.E150",
+          "location": "ANGLER STREET LAWLEY LENASIA 1824 GT 79800121 JHB [-26.38492722445755, 27.80111220718502]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1735463"
+        },
+        {
+          "poleNumber": "LAW.P.E145",
+          "location": "ANGLER STREET LAWLEY LENASIA 1824 GT 79800121 JHB [-26.385267444357865, 27.801398931061545]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E142",
+          "location": "ANGLER STREET LAWLEY LENASIA 1824 GT 79800121 JHB [-26.385294277664133, 27.801719930688545]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.E143",
+          "location": "ANGLER STREET LAWLEY LENASIA 1824 GT 79800121 JHB [-26.385325195163823, 27.801622011127442]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D680",
+          "location": "7790 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D653",
+          "location": "7619 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D719",
+          "location": "MOKOENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.38352906492905, 27.807506755817666]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D718",
+          "location": "7 MOTLOTLO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D661",
+          "location": "7580 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1734485"
+        },
+        {
+          "poleNumber": "LAW.P.D726",
+          "location": "7640 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1734878"
+        },
+        {
+          "poleNumber": "LAW.P.D724",
+          "location": "23 MOTLOTLO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D700",
+          "location": "7667 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D711",
+          "location": "7668 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D691",
+          "location": "7740 AWELANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D696",
+          "location": "7749 AWELANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D736",
+          "location": "16 SEKUKUNE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D705",
+          "location": "7697 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1734725"
+        },
+        {
+          "poleNumber": "LAW.P.D706",
+          "location": "7697 AWELANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D734",
+          "location": "50 MOTLOTLO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D729",
+          "location": "33 MOTLOTLO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D730",
+          "location": "7642 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C431",
+          "location": "7887 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Home Installation: Installed",
+          "dropNumber": "DR1750231"
+        },
+        {
+          "poleNumber": "LAW.P.C423",
+          "location": "7913 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1750159"
+        },
+        {
+          "poleNumber": "LAW.P.C428",
+          "location": "7908 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1750149"
+        },
+        {
+          "poleNumber": "LAW.P.C429",
+          "location": "7911 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1750132"
+        },
+        {
+          "poleNumber": "LAW.P.C458",
+          "location": "7985 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1750323"
+        },
+        {
+          "poleNumber": "LAW.P.C426",
+          "location": "7918 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C425",
+          "location": "KGWEDI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.38388345264435, 27.811817307906097]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C457",
+          "location": "7987 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1750329"
+        },
+        {
+          "poleNumber": "LAW.P.C460",
+          "location": "7986 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C418",
+          "location": "7938 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C461",
+          "location": "8004 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C463",
+          "location": "TSAKANE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.384980324652737, 27.811547259686552]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C466",
+          "location": "8005 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C468",
+          "location": "7940 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1750398"
+        },
+        {
+          "poleNumber": "LAW.P.C470",
+          "location": "7943 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1750310"
+        },
+        {
+          "poleNumber": "LAW.P.C657",
+          "location": "7954 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C656",
+          "location": "7950 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.C464",
+          "location": "TSAKANE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.38499283462119, 27.811277479887487]",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D677",
+          "location": "7764 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1734572"
+        },
+        {
+          "poleNumber": "LAW.P.D675",
+          "location": "7766 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "Not assigned"
+        },
+        {
+          "poleNumber": "LAW.P.D670",
+          "location": "7807 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+          "status": "Pole Permission: Approved",
+          "dropNumber": "DR1734508"
+        }
+      ],
+      "statusChanged": [
+        {
+          "poleNumber": "LAW.P.D716",
+          "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+          "newStatus": "Pole Permission: Approved"
+        }
+      ],
+      "dropsChanged": [
+        {
+          "poleNumber": "LAW.P.C323",
+          "oldDrop": "None",
+          "newDrop": "DR1751329"
+        }
+      ],
+      "unchanged": 507
+    }
+  },
+  "conversions": [
+    {
+      "poleNumber": "LAW.P.B167",
+      "location": "74 MARKET STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.B171",
+      "location": "74 MARKET STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.B098",
+      "location": "74 MARKET STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.B097",
+      "location": "74 MARKET STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.B096",
+      "location": "74 MARKET STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.B170",
+      "location": "74 MARKET STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.B173",
+      "location": "74 MARKET STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.B174",
+      "location": "74 MARKET STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.B172",
+      "location": "74 MARKET STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.B103",
+      "location": "74 MARKET STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.A945",
+      "location": "SEVENTH AVENUE OPEN SPACE 364 WESTONARIA 1779 GT 79800008 JHB [-26.3723974753549, 27.803668986963]",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.A849",
+      "location": "FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.374018339199807, 27.805422512401574]",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C512",
+      "location": "8227 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C512",
+      "location": "8227 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C406",
+      "location": "7925 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C474",
+      "location": "8386 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C102",
+      "location": "7355 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C103",
+      "location": "7355 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C253",
+      "location": "7131 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.A196",
+      "location": "SECOND AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.375376503639636, 27.81138706276722]",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.B208",
+      "location": "6386 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.B209",
+      "location": "6386 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.B195",
+      "location": "6293 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.A776",
+      "location": "6412 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.A028",
+      "location": "6369 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.A039",
+      "location": "6847 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C258",
+      "location": "7137 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.A062",
+      "location": "6933 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.D563",
+      "location": "6995 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.D562",
+      "location": "6995 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.D562",
+      "location": "6995 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.D561",
+      "location": "7097 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C326",
+      "location": "7859 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C441",
+      "location": "7847 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C438",
+      "location": "7842 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C434",
+      "location": "7837 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C683",
+      "location": "8117 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C665",
+      "location": "8076 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C659",
+      "location": "8107 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C658",
+      "location": "8107 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.D664",
+      "location": "7817 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C442",
+      "location": "7890 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C654",
+      "location": "7819 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Home Installation: Declined",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C449",
+      "location": "7977 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C450",
+      "location": "7996 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C653",
+      "location": "7819 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C676",
+      "location": "8086 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.D694",
+      "location": "8078 FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C674",
+      "location": "8078 FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C668",
+      "location": "8078 FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C669",
+      "location": "8098 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C669",
+      "location": "8078 FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C672",
+      "location": "8078 FOURTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C675",
+      "location": "8087 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C671",
+      "location": "8097 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C605",
+      "location": "8064 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C600",
+      "location": "8045 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C595",
+      "location": "8033 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C594",
+      "location": "8033 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C590",
+      "location": "8038 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C584",
+      "location": "8025 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C513",
+      "location": "8229 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C629",
+      "location": "8206 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C626",
+      "location": "8201 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C726",
+      "location": "583 BLUEHEAD CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C616",
+      "location": "8132 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C623",
+      "location": "8163 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C695",
+      "location": "8175 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C691",
+      "location": "8175 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    },
+    {
+      "poleNumber": "LAW.P.C693",
+      "location": "8175 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "previousStatus": "Missing",
+      "currentStatus": "Pole Permission: Approved",
+      "note": "Was in permissions, now has pole"
+    }
+  ]
+}

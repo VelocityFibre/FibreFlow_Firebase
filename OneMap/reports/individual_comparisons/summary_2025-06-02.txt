@@ -1,0 +1,41 @@
+Date Comparison Report: 2025-06-02
+Compared with: 2025-05-30
+============================================================
+
+Overall Statistics:
+-----------------
+Total Records: 2743
+Permissions: 974
+Poles: 1769
+
+Permission Changes:
+-----------------
+Previous Count: 190
+Current Count: 885
+Net Change: 695
+
+New Permissions: 695
+Status Changes: 0
+
+Sample New Permissions (first 5):
+  - 1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB
+    GPS: -26.374851,27.805921, Property: 284720
+  - 1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB
+    GPS: -26.374850,27.805909, Property: 284721
+  - 1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB
+    GPS: -26.374938,27.806772, Property: 283329
+  - 1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB
+    GPS: -26.374939,27.806779, Property: 283328
+  - 1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB
+    GPS: -26.373607,27.808192, Property: 283818
+
+
+Pole Changes:
+------------
+Previous Count: 918
+Current Count: 1480
+Net Change: 562
+
+New Poles: 0
+Reappeared: 0
+Pole Assignments: 0

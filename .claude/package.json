@@ -1,0 +1,19 @@
+{
+  "name": "fibreflow-claude-tools",
+  "version": "1.0.0",
+  "description": "Claude AI tools and memory systems for FibreFlow development",
+  "private": true,
+  "scripts": {
+    "memory": "node memory-system-v2.js",
+    "zep": "node zep-bridge.js",
+    "zep:setup": "node zep-bridge.js setup",
+    "zep:migrate": "node zep-bridge.js migrate"
+  },
+  "dependencies": {
+    "@getzep/zep-cloud": "^2.0.0",
+    "dotenv": "^16.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

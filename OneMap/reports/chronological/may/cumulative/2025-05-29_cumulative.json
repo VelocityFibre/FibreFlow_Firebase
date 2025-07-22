@@ -1,0 +1,57 @@
+[
+  {
+    "date": "2025-05-22",
+    "totalProperties": 746,
+    "milestones": {
+      "Pole Permission: Approved": 476,
+      "Pole Permission: Planted": 0,
+      "Home Sign Ups: Approved & Installation Scheduled": 75,
+      "Home Sign Ups: Installed": 0
+    },
+    "growth": 746
+  },
+  {
+    "date": "2025-05-23",
+    "totalProperties": 746,
+    "milestones": {
+      "Pole Permission: Approved": 476,
+      "Pole Permission: Planted": 0,
+      "Home Sign Ups: Approved & Installation Scheduled": 75,
+      "Home Sign Ups: Installed": 0
+    },
+    "growth": 0
+  },
+  {
+    "date": "2025-05-26",
+    "totalProperties": 752,
+    "milestones": {
+      "Pole Permission: Approved": 476,
+      "Pole Permission: Planted": 0,
+      "Home Sign Ups: Approved & Installation Scheduled": 75,
+      "Home Sign Ups: Installed": 0
+    },
+    "growth": 6
+  },
+  {
+    "date": "2025-05-27",
+    "totalProperties": 753,
+    "milestones": {
+      "Pole Permission: Approved": 476,
+      "Pole Permission: Planted": 0,
+      "Home Sign Ups: Approved & Installation Scheduled": 75,
+      "Home Sign Ups: Installed": 0
+    },
+    "growth": 1
+  },
+  {
+    "date": "2025-05-29",
+    "totalProperties": 1008,
+    "milestones": {
+      "Pole Permission: Approved": 691,
+      "Pole Permission: Planted": 0,
+      "Home Sign Ups: Approved & Installation Scheduled": 82,
+      "Home Sign Ups: Installed": 0
+    },
+    "growth": 255
+  }
+]

@@ -1,0 +1,215 @@
+@use '../../../../../styles/component-theming' as theme;
+@use '../../../../../styles/spacing' as spacing;
+
+.action-items-grid-container {
+  padding: spacing.ff-spacing(lg);
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+// Statistics Cards
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: spacing.ff-spacing(md);
+  margin-bottom: spacing.ff-spacing(lg);
+
+  .stat-card {
+    text-align: center;
+    
+    .stat-value {
+      font-size: theme.ff-rem(32);
+      font-weight: 700;
+      color: theme.ff-rgb(primary);
+      margin-bottom: spacing.ff-spacing(xs);
+    }
+    
+    .stat-label {
+      font-size: theme.ff-rem(14);
+      color: theme.ff-rgb(muted-foreground);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    &.pending .stat-value {
+      color: theme.ff-rgb(warning);
+    }
+    
+    &.in-progress .stat-value {
+      color: theme.ff-rgb(info);
+    }
+    
+    &.overdue .stat-value {
+      color: theme.ff-rgb(destructive);
+    }
+    
+    &.completed .stat-value {
+      color: theme.ff-rgb(success);
+    }
+  }
+}
+
+// Filter Card
+.filter-card {
+  margin-bottom: spacing.ff-spacing(lg);
+  
+  .filter-row {
+    display: flex;
+    gap: spacing.ff-spacing(md);
+    align-items: center;
+    flex-wrap: wrap;
+    
+    mat-form-field {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .filter-actions {
+      display: flex;
+      gap: spacing.ff-spacing(sm);
+      margin-left: auto;
+    }
+  }
+}
+
+// Grid Card
+.grid-card {
+  .grid-container {
+    position: relative;
+    height: calc(100vh - 420px);
+    min-height: 400px;
+    
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: theme.ff-rgba(background, 0.8);
+      z-index: 10;
+      
+      p {
+        margin-top: spacing.ff-spacing(md);
+        color: theme.ff-rgb(muted-foreground);
+      }
+    }
+    
+    ag-grid-angular {
+      height: 100%;
+      width: 100%;
+    }
+    
+    .no-data {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 400px;
+      color: theme.ff-rgb(muted-foreground);
+      
+      mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        margin-bottom: spacing.ff-spacing(md);
+      }
+      
+      p {
+        font-size: theme.ff-rem(16);
+        text-align: center;
+      }
+    }
+  }
+}
+
+// AG-Grid Theme Customizations
+::ng-deep {
+  .ag-theme-material {
+    // Priority cell colors
+    .priority-high {
+      color: theme.ff-rgb(destructive);
+      font-weight: 600;
+    }
+    
+    .priority-medium {
+      color: theme.ff-rgb(warning);
+    }
+    
+    .priority-low {
+      color: theme.ff-rgb(info);
+    }
+    
+    // Status cell colors
+    .status-pending {
+      color: theme.ff-rgb(warning);
+    }
+    
+    .status-in_progress {
+      color: theme.ff-rgb(info);
+    }
+    
+    .status-completed {
+      color: theme.ff-rgb(success);
+    }
+    
+    .status-blocked {
+      color: theme.ff-rgb(destructive);
+    }
+    
+    .status-cancelled {
+      color: theme.ff-rgb(muted-foreground);
+    }
+    
+    // Overdue cells
+    .overdue {
+      color: theme.ff-rgb(destructive);
+      font-weight: 600;
+    }
+    
+    // Row hover
+    .ag-row-hover {
+      background-color: theme.ff-rgba(primary, 0.05);
+    }
+    
+    // Selected row
+    .ag-row-selected {
+      background-color: theme.ff-rgba(primary, 0.1);
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .action-items-grid-container {
+    padding: spacing.ff-spacing(md);
+  }
+  
+  .stats-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .filter-card .filter-row {
+    flex-direction: column;
+    
+    mat-form-field {
+      width: 100%;
+    }
+    
+    .filter-actions {
+      width: 100%;
+      justify-content: stretch;
+      
+      button {
+        flex: 1;
+      }
+    }
+  }
+  
+  .grid-card .grid-container {
+    height: calc(100vh - 500px);
+  }
+}

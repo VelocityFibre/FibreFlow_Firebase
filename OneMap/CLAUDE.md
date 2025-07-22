@@ -11,7 +11,18 @@
 - `python3 analyze_gps_duplicates.py` - GPS-based duplicate detection (PRIMARY)
 - `python3 split_large_csv.py` - Split large files for processing
 
-**Current Status**: Business context understood, implementing GPS-based payment verification
+**Graph Analysis Integration (NEW 2025-07-23)**:
+- `cd GraphAnalysis && node quick-test.js` - Test graph analysis system
+- `node GraphAnalysis/enhanced-daily-compare.js day1.csv day2.csv` - Enhanced comparison
+- Graph system complements CSV processing with relationship intelligence
+
+**NEW: 1Map Sync System**:
+- `node process-1map-sync-simple.js` - Import CSV to staging database
+- `node complete-import-batch.js` - Complete partial imports in batches
+- `node sync-to-production.js` - Sync staging to FibreFlow production
+- `cat imports/INDEX.md` - View all import tracking
+
+**Current Status**: ✅ Data imported to staging (746 records), ⏳ Ready for production sync
 
 ---
 
@@ -55,6 +66,38 @@ Always validate claims with actual data before making statements.
 - ✓ Unique properties: 14,579 (verified) 
 - ✓ Duplicate poles: 1,811 at multiple addresses (verified)
 - ✓ Workflow tracking via Flow Name Groups (verified)
+
+### Tracking Hierarchy (CRITICAL UPDATE 2025-07-22)
+The system now uses a **broader tracking hierarchy** to capture ALL entities, not just poles:
+
+**Tracking Priority Order**:
+1. **Pole Number** → Primary identifier when available (e.g., "LAW.P.B167")
+2. **Drop Number** → Used when no pole assigned yet (e.g., "DR1234")
+3. **Location Address** → For early stage records (e.g., "74 Market Street")
+4. **Property ID** → Last resort for tracking (e.g., "12345")
+
+**What This Means**:
+- ✅ Early stage records WITHOUT poles ARE tracked
+- ✅ Home sign-ups without pole numbers ARE included
+- ✅ Survey requests at addresses ARE counted
+- ✅ ALL workflow stages are captured, not just pole-assigned ones
+
+**Example Tracking**:
+```
+June 1: Address "74 Market St" - "Survey Requested" ✅ Counted (tracked by address)
+June 2: Drop DR1234 - "Home Sign Up" ✅ Counted (tracked by drop)
+June 3: Pole LAW.P.B167 - "Permission Approved" ✅ Counted (tracked by pole)
+```
+
+**Pre-loading Structure**:
+```javascript
+trackingStatuses = new Map([
+  ["pole:LAW.P.B167", { status, date, ... }],
+  ["drop:DR1234", { status, date, ... }],
+  ["address:74 Market Street", { status, date, ... }],
+  ["property:12345", { status, date, ... }]
+]);
+```
 
 ### Key Scripts
 1. `validate_analysis.py` - Validates all analysis claims
@@ -152,13 +195,28 @@ Always validate claims with actual data before making statements.
 - [x] Understand business context (agent payments)
 - [x] Identify GPS as reliable location source
 
+### NEW: 1Map to FibreFlow Sync System (2025-07-21)
+- [x] Import tracking system implemented
+- [x] Complete CSV import (746 records) to Firebase staging
+- [x] Data quality analysis (90/100 score)
+- [x] Field mapping research and validation
+- [x] Production sync script prepared
+
+### Current Import Status: Lawley May Week 3 (2025-07-21)
+- **Source**: `Lawley May Week 3 22052025 - First Report.csv`
+- **Total Records**: 746 (100% imported to staging)
+- **Ready for Production**: 543 records (have pole numbers)
+- **Issues**: 203 missing pole numbers, 27 duplicate poles, 269 missing agents
+- **Quality Score**: 90/100 🟢 Excellent
+- **Directory**: `imports/2025-07-21_Lawley_May_Week3/`
+
 ### In Progress
-- [ ] GPS-based duplicate analysis script
-- [ ] Payment verification reports
-- [ ] Agent accountability tracking
+- [ ] Production sync (543 records ready)
+- [ ] Duplicate pole investigation
+- [ ] Missing data resolution
 
 ### Future Actions
-- [ ] Create OneMap module in FibreFlow
+- [ ] Create OneMap module in FibreFlow UI
 - [ ] Implement real-time duplicate prevention
 - [ ] Automated payment verification system
 
@@ -169,22 +227,38 @@ Always validate claims with actual data before making statements.
 ```
 OneMap/
 ├── CLAUDE.md (this file)
-├── Raw Data/
-│   ├── Lawley_Project_Louis.csv (original)
-│   └── Lawley_Essential.csv (filtered)
-├── Analysis/
+├── docs/                              # NEW: All documentation
+│   ├── INDEX.md                      # Documentation index
+│   ├── GOOGLE_DRIVE_LOCATION.md      # Cloud storage info
+│   ├── 1MAP_SYNC_ARCHITECTURE.md     # System design
+│   ├── MAPPING_REVIEW_VS_LIVE_DB.md  # Field mappings
+│   └── [Analysis & Technical docs]   # All other docs
+├── imports/                           # Import Tracking System
+│   ├── INDEX.md                      # Master tracking index
+│   └── 2025-07-21_Lawley_May_Week3/  # Current import
+│       ├── IMPORT_MANIFEST.json      # Complete metadata
+│       ├── README.md                 # Quick overview
+│       ├── source/                   # Original CSV
+│       ├── reports/                  # All 5 import reports
+│       ├── scripts/                  # Processing scripts
+│       └── logs/                     # Processing logs
+├── downloads/                         # Original CSV downloads
+│   └── Lawley May Week 3 22052025 - First Report.csv
+├── Analysis/                          # Python analysis scripts
 │   ├── analyze_duplicates.py
 │   ├── reanalyze_with_workflow.py
 │   └── validate_analysis.py
-├── Reports/
-│   ├── REANALYSIS_SUMMARY.md (latest findings)
-│   ├── WORKFLOW_REANALYSIS_REPORT.md
-│   └── POLE_DUPLICATE_ANALYSIS.md
-├── Tools/
-│   ├── split_large_csv.py
-│   └── filter_essential_columns.py
-└── split_data/ (chunked files)
+├── reports/                           # Generated reports
+├── scripts/                           # Processing scripts
+│   ├── process-1map-sync-simple.js   # CSV to staging
+│   ├── complete-import-batch.js      # Batch completion
+│   └── sync-to-production.js         # Production sync
+└── split_data/                        # Chunked files
 ```
+
+## 📍 Google Drive Location
+**URL**: https://drive.google.com/drive/u/1/folders/1NzpzLYIvTLaSD--RdhRDQLfktCuHD-W3  
+**Details**: See `docs/GOOGLE_DRIVE_LOCATION.md`
 
 ---
 
@@ -241,5 +315,121 @@ When discovering new information:
 
 ---
 
-*Last Updated: 2025-01-09*
-*Status: Analysis Complete, Awaiting Design Approval*
+---
+
+## Import Tracking System Usage
+
+### For Current Import (2025-07-21):
+```bash
+# View current status
+cat imports/INDEX.md
+
+# Check specific import details
+cd imports/2025-07-21_Lawley_May_Week3/
+cat README.md
+cat IMPORT_MANIFEST.json
+
+# Re-run scripts if needed
+node scripts/sync-to-production.js --dry-run
+```
+
+### For Future Imports:
+1. Each new CSV gets its own dated directory
+2. All reports automatically linked to source
+3. Scripts preserved for reproducibility
+4. Issues tracked from start to finish
+
+---
+
+*Last Updated: 2025-07-23*
+*Status: ✅ CSV Processing Breakthrough - 100-1000x Performance Improvement*
+
+> **📍 MAJOR UPDATE (2025-07-23)**: Discovered CSV-first processing beats Firebase by 100-1000x. 
+> The 4 scripts created today (`split-csv-by-pole.js`, `compare-split-csvs.js`, 
+> `process-split-chronologically.js`, `fix-csv-parsing.js`) are now the PRIMARY processing method.
+> See `BREAKTHROUGH_NOTE_2025-07-23.md` for details.
+
+---
+
+## 🚀 NEW DEVELOPMENT PLAN (2025-07-23) - Direct Firebase Import Strategy
+
+### Voice Note Summary from Kobus Discussion
+**Key Insight**: Import problems were due to pre-processing attempts, not Firebase limitations. Solution is to import raw data first, then process in database.
+
+📋 **Full Implementation Details**: See [`FIREBASE_IMPORT_DEVELOPMENT_PLAN.md`](./FIREBASE_IMPORT_DEVELOPMENT_PLAN.md) for complete technical specifications, code examples, and step-by-step setup instructions.
+
+### Implementation Plan
+
+#### 1. **Create Separate Firebase Database**
+- **Database Name**: VF (Velocity Fibre)
+- **Purpose**: Dedicated database for OneMap imports
+- **Status**: To be implemented
+
+#### 2. **Import Strategy (Changed Approach)**
+**Old**: Pre-process → Import → Fail/Timeout
+**New**: Import Raw → Process in Database → Success
+
+**Steps**:
+1. Upload CSV to Firebase Storage (not local)
+2. Import directly from Storage to Firestore
+3. Use Property ID (unique) for deduplication
+4. Process/clean data AFTER it's in database
+
+#### 3. **Google Tasks Setup**
+- **When Needed**: For imports > 60 seconds
+- **Purpose**: Handle long-running import operations
+- **Alternative**: Direct uploads may not need this
+
+#### 4. **Google Cloud CLI Integration**
+- Install gcloud CLI for easier management
+- Use for BigQuery operations
+- Manage Firebase Storage uploads
+
+#### 5. **BigQuery Setup (Parallel Track)**
+- **Purpose**: Advanced analytics on imported data
+- **Benefits**: SQL queries, data cleaning, aggregations
+- **Integration**: Import to Firestore → Export to BigQuery
+
+#### 6. **Firebase Storage Workflow**
+**New Standard Process**:
+```bash
+# 1. Upload CSV to Firebase Storage
+gsutil cp downloads/*.csv gs://vf-onemap-imports/
+
+# 2. Import from Storage to Firestore
+# (Script to be created)
+
+# 3. No more local imports!
+```
+
+### Technical Architecture
+
+```
+Local CSV Files
+    ↓
+Firebase Storage (gs://vf-onemap-imports/)
+    ↓
+Cloud Function / Direct Import
+    ↓
+Firestore Database (VF)
+    ↓
+BigQuery (for analytics)
+```
+
+### Action Items
+- [ ] Set up VF Firebase project/database
+- [ ] Configure Firebase Storage bucket
+- [ ] Create Storage → Firestore import function
+- [ ] Install and configure gcloud CLI
+- [ ] Set up BigQuery dataset
+- [ ] Update all import scripts for new workflow
+- [ ] Test with first CSV (earliest by date)
+
+### Benefits of New Approach
+1. **No Timeouts**: Storage → Firestore is server-side
+2. **Scalable**: Handles any file size
+3. **Reliable**: Using Google's infrastructure
+4. **Analytics Ready**: Direct BigQuery integration
+5. **Simple**: Import first, process later
+
+---

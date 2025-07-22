@@ -15,6 +15,7 @@ import {
   Timestamp,
   DocumentReference,
   CollectionReference,
+  waitForPendingWrites,
 } from '@angular/fire/firestore';
 import { Observable, from, map, catchError } from 'rxjs';
 import { DailyKPIs } from '../models/daily-kpis.model';
@@ -47,8 +48,14 @@ export class DailyKpisService {
       updatedAt: Timestamp.fromDate(new Date()),
     };
 
-    return from(addDoc(kpisCollection, firestoreData)).pipe(
-      map((docRef: DocumentReference) => docRef.id),
+    // Create the document and wait for server sync
+    return from(
+      addDoc(kpisCollection, firestoreData).then(async (docRef) => {
+        // Wait for all pending writes to complete (ensures server sync)
+        await waitForPendingWrites(this.firestore);
+        return docRef.id;
+      })
+    ).pipe(
       catchError(handleError('createKPI', '')),
     );
   }
@@ -68,7 +75,13 @@ export class DailyKpisService {
       }),
     };
 
-    return from(updateDoc(kpiDocRef, firestoreUpdates)).pipe(catchError(handleError('updateKPI')));
+    // Update the document and wait for server sync
+    return from(
+      updateDoc(kpiDocRef, firestoreUpdates).then(async () => {
+        // Wait for all pending writes to complete (ensures server sync)
+        await waitForPendingWrites(this.firestore);
+      })
+    ).pipe(catchError(handleError('updateKPI')));
   }
 
   /**

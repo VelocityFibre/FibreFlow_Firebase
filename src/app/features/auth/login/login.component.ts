@@ -22,11 +22,8 @@ export class LoginComponent {
   error: string | null = null;
 
   constructor() {
-    // Check if already logged in (in dev mode, always true)
-    if (this.authService.isAuthenticated()) {
-      // Already authenticated, redirecting...
-      this.router.navigate(['/']);
-    }
+    // Don't check authentication in constructor to avoid race conditions
+    // The auth guard will handle redirecting authenticated users
   }
 
   async loginWithGoogle() {

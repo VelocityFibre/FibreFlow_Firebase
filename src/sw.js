@@ -1,8 +1,8 @@
 // FibreFlow Service Worker
 // Provides offline support and caching for the application
 
-const CACHE_NAME = 'fibreflow-v8-2025-07-07-mobile';
-const RUNTIME_CACHE = 'fibreflow-runtime-v8';
+const CACHE_NAME = 'fibreflow-v10-2025-07-21-auth';
+const RUNTIME_CACHE = 'fibreflow-runtime-v10';
 
 // Assets to cache on install
 const PRECACHE_ASSETS = [
@@ -73,60 +73,63 @@ self.addEventListener('fetch', (event) => {
   // Handle navigation requests (HTML pages)
   if (request.mode === 'navigate') {
     event.respondWith(
-      caches.match('/index.html')
-        .then((response) => {
-          return response || fetch(request);
-        })
+      fetch(request)
         .catch(() => {
-          // Return offline page if available
+          // Return cached index.html only if offline
           return caches.match('/index.html');
         })
     );
     return;
   }
-
-  // Skip caching for chunk files to avoid version mismatches
-  if (url.pathname.includes('chunk-') && url.pathname.endsWith('.js')) {
+  
+  // Handle chunk files - always fetch fresh to avoid version mismatches
+  if (url.pathname.includes('chunk-') || url.pathname.includes('.js')) {
     event.respondWith(
-      fetch(request).catch(() => {
-        // If chunk fetch fails, try to return index.html to trigger app reload
-        return caches.match('/index.html');
-      })
+      fetch(request)
+        .then((response) => {
+          // Don't cache chunk files to avoid version conflicts
+          return response;
+        })
+        .catch(() => {
+          // If offline and it's a JS file, try cache as last resort
+          return caches.match(request);
+        })
     );
     return;
   }
 
-  // Handle other requests with cache-first strategy
+  // For all other requests, use network-first strategy
   event.respondWith(
-    caches.match(request)
+    fetch(request)
       .then((response) => {
-        if (response) {
-          console.log('FibreFlow SW: Serving from cache:', request.url);
+        // Don't cache if not a valid response
+        if (!response || response.status !== 200 || response.type !== 'basic') {
           return response;
         }
 
-        // Not in cache, fetch from network
-        return fetch(request)
-          .then((fetchResponse) => {
-            // Don't cache if not a valid response
-            if (!fetchResponse || fetchResponse.status !== 200 || fetchResponse.type !== 'basic') {
-              return fetchResponse;
+        // Clone the response
+        const responseToCache = response.clone();
+
+        // Cache runtime assets (but not chunks)
+        if (!url.pathname.includes('chunk-')) {
+          caches.open(RUNTIME_CACHE)
+            .then((cache) => {
+              cache.put(request, responseToCache);
+            });
+        }
+
+        return response;
+      })
+      .catch(() => {
+        // Network failed, check if we have a cached version
+        return caches.match(request)
+          .then((cachedResponse) => {
+            if (cachedResponse) {
+              console.log('FibreFlow SW: Serving from cache (offline):', request.url);
+              return cachedResponse;
             }
-
-            // Clone the response
-            const responseToCache = fetchResponse.clone();
-
-            // Cache runtime assets
-            caches.open(RUNTIME_CACHE)
-              .then((cache) => {
-                cache.put(request, responseToCache);
-              });
-
-            return fetchResponse;
-          })
-          .catch(() => {
-            // Network failed, check if we have a cached version
-            return caches.match(request);
+            // No cache available
+            throw new Error('Network error and no cache available');
           });
       })
   );

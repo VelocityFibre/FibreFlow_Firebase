@@ -1,0 +1,1291 @@
+{
+  "summary": {
+    "june3Records": 3487,
+    "june5Records": 6039,
+    "netIncrease": 2552,
+    "changesSummary": {
+      "newRecords": 2350,
+      "statusChanges": 180,
+      "agentChanges": 264,
+      "newPoleAssignments": 0,
+      "dropChanges": 294,
+      "gpsUpdates": 528
+    }
+  },
+  "statusChanges": [
+    {
+      "propertyId": "287780",
+      "address": "95 CATFISH CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C929",
+      "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "newStatus": "Pole Permission: Approved",
+      "agent": "Angelique mashele"
+    },
+    {
+      "propertyId": "293135",
+      "address": "12 SIYAPHAMBILI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C512",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "293163",
+      "address": "14 SIYAPHAMBILI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C512",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "293149",
+      "address": "20 SIYAPHAMBILI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C509",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "293094",
+      "address": "15 SIYAPHAMBILI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C587",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "293049",
+      "address": "137 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C588",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "293079",
+      "address": "88 MAHLANGU STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C588",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "291680",
+      "address": "141 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.E459",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "291654",
+      "address": "143 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.E460",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "294987",
+      "address": "99 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C418",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "276213",
+      "address": "8563 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C553",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Re-scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "291986",
+      "address": "15 LETSATSI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C488",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "292116",
+      "address": "11 LETSATSI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.E457",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "295007",
+      "address": "97 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C417",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "291879",
+      "address": "95 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C417",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "295032",
+      "address": "93 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C415",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "293721",
+      "address": "85 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C412",
+      "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "newStatus": "Pole Permission: Approved",
+      "agent": "Yolanda"
+    },
+    {
+      "propertyId": "286293",
+      "address": "3 LETSATSI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C480",
+      "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "newStatus": "Pole Permission: Approved",
+      "agent": "Yolanda"
+    },
+    {
+      "propertyId": "292215",
+      "address": "3 LETSATSI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C480",
+      "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "newStatus": "Pole Permission: Approved",
+      "agent": "Lorraine"
+    },
+    {
+      "propertyId": "291554",
+      "address": "80 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C477",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "292659",
+      "address": "75 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C408",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "291387",
+      "address": "76 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C476",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "291604",
+      "address": "76 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C476",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "291307",
+      "address": "74 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C474",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "286486",
+      "address": "10 LETSATSI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C491",
+      "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "newStatus": "Pole Permission: Approved",
+      "agent": "Yolanda"
+    },
+    {
+      "propertyId": "276287",
+      "address": "8428 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C495",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "276271",
+      "address": "8421 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C374",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Re-scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "291312",
+      "address": "43 KGWEDI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C350",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "291216",
+      "address": "45 KGWEDI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C350",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "291450",
+      "address": "48 KGWEDI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C474",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "292616",
+      "address": "71 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C406",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "291411",
+      "address": "67 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C328",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "293441",
+      "address": "63 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C326",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "291350",
+      "address": "62 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C359",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "292120",
+      "address": "61 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C326",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "291339",
+      "address": "36 RAMODIKE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C304",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "292401",
+      "address": "42 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C318",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "291340",
+      "address": "36 RAMODIKE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C304",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "291447",
+      "address": "34 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C305",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "291543",
+      "address": "55A AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.C101",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "291524",
+      "address": "55A AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.C101",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "291541",
+      "address": "2 LEBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.D560",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "292385",
+      "address": "46 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C320",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "292199",
+      "address": "60 RAMODIKE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C322",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "292223",
+      "address": "58 RAMODIKE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C322",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "292254",
+      "address": "54 RAMODIKE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C321",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "292323",
+      "address": "50 RAMODIKE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C319",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "292319",
+      "address": "55 RAMODIKE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C334",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "292299",
+      "address": "55 RAMODIKE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C335",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    },
+    {
+      "propertyId": "292238",
+      "address": "67 RAMODIKE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C441",
+      "oldStatus": "Pole Permission: Approved",
+      "newStatus": "Home Sign Ups: Approved & Installation Scheduled",
+      "agent": ""
+    }
+  ],
+  "newPoleAssignments": [],
+  "agentChanges": [
+    {
+      "propertyId": "281749",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.A508",
+      "oldAgent": "Tumesang Evelyn Molahlehi",
+      "newAgent": "Yolanda"
+    },
+    {
+      "propertyId": "281738",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.A507",
+      "oldAgent": "Yolanda",
+      "newAgent": "Tumesang Evelyn Molahlehi"
+    },
+    {
+      "propertyId": "281731",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.A489",
+      "oldAgent": "Yolanda",
+      "newAgent": "Nompumelelo"
+    },
+    {
+      "propertyId": "281597",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.A249",
+      "oldAgent": "Yolanda",
+      "newAgent": "Nompumelelo"
+    },
+    {
+      "propertyId": "287780",
+      "address": "95 CATFISH CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C929",
+      "oldAgent": "None",
+      "newAgent": "Angelique mashele"
+    },
+    {
+      "propertyId": "286881",
+      "address": "5 EEL PLACE LAWLEY LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.D106",
+      "oldAgent": "karma",
+      "newAgent": "Mpumi"
+    },
+    {
+      "propertyId": "243563",
+      "address": "8019 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C588",
+      "oldAgent": "Zanele hele",
+      "newAgent": "Nathan"
+    },
+    {
+      "propertyId": "276514",
+      "address": "8598 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C567",
+      "oldAgent": "Elizabeth",
+      "newAgent": "Lerato"
+    },
+    {
+      "propertyId": "276480",
+      "address": "8599 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C566",
+      "oldAgent": "Elizabeth",
+      "newAgent": "Lerato"
+    },
+    {
+      "propertyId": "281156",
+      "address": "57 MAHLANGU STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C556",
+      "oldAgent": "Nompumelelo",
+      "newAgent": "Zanele hele"
+    },
+    {
+      "propertyId": "276443",
+      "address": "8537 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C537",
+      "oldAgent": "Zanele hele",
+      "newAgent": "Elizabeth"
+    },
+    {
+      "propertyId": "284460",
+      "address": "5 AMEMONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C536",
+      "oldAgent": "Lerato",
+      "newAgent": "Yolanda"
+    },
+    {
+      "propertyId": "284140",
+      "address": "51 MAHLANGU STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C540",
+      "oldAgent": "Lerato",
+      "newAgent": "Zanele hele"
+    },
+    {
+      "propertyId": "291520",
+      "address": "44 LETSATSI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C377",
+      "oldAgent": "Vinolia",
+      "newAgent": "Yolanda"
+    },
+    {
+      "propertyId": "285506",
+      "address": "27 MAHLANGU STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C547",
+      "oldAgent": "Lerato",
+      "newAgent": "Yolanda"
+    },
+    {
+      "propertyId": "285736",
+      "address": "37 AMEMONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C550",
+      "oldAgent": "Zanele hele",
+      "newAgent": "Yolanda"
+    },
+    {
+      "propertyId": "291467",
+      "address": "28 AMEMONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C489",
+      "oldAgent": "Vinolia",
+      "newAgent": "Zanele hele"
+    },
+    {
+      "propertyId": "291934",
+      "address": "15 LETSATSI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C488",
+      "oldAgent": "Yolanda",
+      "newAgent": "Nonkululeko"
+    },
+    {
+      "propertyId": "285804",
+      "address": "24 AMEMONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C553",
+      "oldAgent": "Vinolia",
+      "newAgent": "Zanele hele"
+    },
+    {
+      "propertyId": "276300",
+      "address": "8567 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C554",
+      "oldAgent": "Zanele hele",
+      "newAgent": "Vinolia"
+    },
+    {
+      "propertyId": "276400",
+      "address": "8566 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C554",
+      "oldAgent": "Zanele hele",
+      "newAgent": "Vinolia"
+    },
+    {
+      "propertyId": "293721",
+      "address": "85 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C412",
+      "oldAgent": "None",
+      "newAgent": "Yolanda"
+    },
+    {
+      "propertyId": "286293",
+      "address": "3 LETSATSI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C480",
+      "oldAgent": "None",
+      "newAgent": "Yolanda"
+    },
+    {
+      "propertyId": "292215",
+      "address": "3 LETSATSI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C480",
+      "oldAgent": "None",
+      "newAgent": "Lorraine"
+    },
+    {
+      "propertyId": "293457",
+      "address": "80 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C478",
+      "oldAgent": "Pieter",
+      "newAgent": "Thembi"
+    },
+    {
+      "propertyId": "292650",
+      "address": "75 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C408",
+      "oldAgent": "Zanele hele",
+      "newAgent": "Nonkululeko"
+    },
+    {
+      "propertyId": "286486",
+      "address": "10 LETSATSI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C491",
+      "oldAgent": "None",
+      "newAgent": "Yolanda"
+    },
+    {
+      "propertyId": "276028",
+      "address": "8380 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C349",
+      "oldAgent": "Zanele hele",
+      "newAgent": "Almerinda"
+    },
+    {
+      "propertyId": "276078",
+      "address": "8382 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C350",
+      "oldAgent": "Lerato",
+      "newAgent": "simphiwe mashaba"
+    },
+    {
+      "propertyId": "292599",
+      "address": "71 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C406",
+      "oldAgent": "manuel",
+      "newAgent": "Lorraine"
+    },
+    {
+      "propertyId": "243685",
+      "address": "UNNAMED LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.38320753829164, 27.8125509417166]",
+      "poleNumber": "LAW.P.C405",
+      "oldAgent": "manuel",
+      "newAgent": "Nathan"
+    },
+    {
+      "propertyId": "242918",
+      "address": "7864 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C328",
+      "oldAgent": "manuel",
+      "newAgent": "nathan"
+    },
+    {
+      "propertyId": "283546",
+      "address": "33 RAMODIKE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.C342",
+      "oldAgent": "Cecilia",
+      "newAgent": "Nompumelelo"
+    },
+    {
+      "propertyId": "283297",
+      "address": "3 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.C137",
+      "oldAgent": "Cecilia",
+      "newAgent": "Yolanda"
+    },
+    {
+      "propertyId": "283240",
+      "address": "1 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.C134",
+      "oldAgent": "Cecilia",
+      "newAgent": "Nompumelelo"
+    },
+    {
+      "propertyId": "279056",
+      "address": "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.381474421293476, 27.81300019443119]",
+      "poleNumber": "LAW.P.C124",
+      "oldAgent": "Cecilia",
+      "newAgent": "Yolanda"
+    },
+    {
+      "propertyId": "283109",
+      "address": "85 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.C160",
+      "oldAgent": "Yolanda",
+      "newAgent": "Cecilia"
+    },
+    {
+      "propertyId": "280955",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.A099",
+      "oldAgent": "itumeleng",
+      "newAgent": "Tumesang Evelyn Molahlehi"
+    },
+    {
+      "propertyId": "280594",
+      "address": "SECOND AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37597114071963, 27.811972853613373]",
+      "poleNumber": "LAW.P.A165",
+      "oldAgent": "Nompumelelo",
+      "newAgent": "Yolanda"
+    },
+    {
+      "propertyId": "281590",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.A102",
+      "oldAgent": "itumeleng",
+      "newAgent": "Disemelo"
+    },
+    {
+      "propertyId": "280958",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.E325",
+      "oldAgent": "itumeleng",
+      "newAgent": "Tumesang Evelyn Molahlehi"
+    },
+    {
+      "propertyId": "278968",
+      "address": "341 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.A106",
+      "oldAgent": "Disemelo",
+      "newAgent": "itumelè"
+    },
+    {
+      "propertyId": "278916",
+      "address": "339 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.A107",
+      "oldAgent": "Disemelo",
+      "newAgent": "itumelèng"
+    },
+    {
+      "propertyId": "281846",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.A575",
+      "oldAgent": "itumeleng",
+      "newAgent": "Disemelo"
+    },
+    {
+      "propertyId": "281742",
+      "address": "LOUIS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.376383146852444, 27.807682644028386]",
+      "poleNumber": "LAW.P.A615",
+      "oldAgent": "Lerato",
+      "newAgent": "Cecilia"
+    },
+    {
+      "propertyId": "282084",
+      "address": "41 EUCALYPTUS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.A112",
+      "oldAgent": "Nompumelelo",
+      "newAgent": "Tumesang Evelyn Molahlehi"
+    },
+    {
+      "propertyId": "282077",
+      "address": "39 EUCALYPTUS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.A112",
+      "oldAgent": "Nompumelelo",
+      "newAgent": "Yolanda"
+    },
+    {
+      "propertyId": "282054",
+      "address": "294 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+      "poleNumber": "LAW.P.B205",
+      "oldAgent": "Yolanda",
+      "newAgent": "Nompumelelo"
+    },
+    {
+      "propertyId": "277402",
+      "address": "296 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.B207",
+      "oldAgent": "itumeleng",
+      "newAgent": "Disemelo"
+    },
+    {
+      "propertyId": "278663",
+      "address": "309 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "poleNumber": "LAW.P.A119",
+      "oldAgent": "itumeleng",
+      "newAgent": "Disemelo"
+    }
+  ],
+  "newRecords": [
+    {
+      "propertyId": "290857",
+      "address": "49 CHURCH STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290856",
+      "address": "49 CHURCH STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290326",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290785",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290625",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290327",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290325",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290396",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290395",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290394",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290952",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290392",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290390",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290391",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290393",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290389",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "294488",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "LAW.P.A692",
+      "status": "Pole Permission: Approved",
+      "agent": "itumeleng"
+    },
+    {
+      "propertyId": "290387",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290388",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290774",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "291247",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "291246",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "291248",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290995",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290775",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "287477",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "LAW.P.A627",
+      "status": "Pole Permission: Approved",
+      "agent": "Ana Jane"
+    },
+    {
+      "propertyId": "292792",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "LAW.P.A628",
+      "status": "Pole Permission: Approved",
+      "agent": "Disemelo"
+    },
+    {
+      "propertyId": "290400",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290399",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290398",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290397",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290784",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "292799",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "LAW.P.A647",
+      "status": "Pole Permission: Approved",
+      "agent": "Disemelo"
+    },
+    {
+      "propertyId": "292804",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "LAW.P.A648",
+      "status": "Pole Permission: Approved",
+      "agent": "Disemelo"
+    },
+    {
+      "propertyId": "292778",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "LAW.P.A354",
+      "status": "Pole Permission: Approved",
+      "agent": "Disemelo"
+    },
+    {
+      "propertyId": "292785",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "LAW.P.A356",
+      "status": "Pole Permission: Approved",
+      "agent": "Disemelo"
+    },
+    {
+      "propertyId": "290780",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "290770",
+      "address": "1 KWENA STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB",
+      "pole": "",
+      "status": "",
+      "agent": ""
+    },
+    {
+      "propertyId": "295292",
+      "address": "103 PIRANHA CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+      "pole": "LAW.P.D496",
+      "status": "Pole Permission: Approved",
+      "agent": "Mpumi"
+    },
+    {
+      "propertyId": "294464",
+      "address": "25 PIKE CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+      "pole": "LAW.P.D294",
+      "status": "Pole Permission: Approved",
+      "agent": "lebohang"
+    },
+    {
+      "propertyId": "294651",
+      "address": "9 PIKE CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+      "pole": "LAW.P.D298",
+      "status": "Pole Permission: Approved",
+      "agent": "Lebohang"
+    },
+    {
+      "propertyId": "294750",
+      "address": "7 PIKE CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+      "pole": "LAW.P.D297",
+      "status": "Pole Permission: Approved",
+      "agent": "Lebohang"
+    },
+    {
+      "propertyId": "294824",
+      "address": "3 PIKE CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+      "pole": "LAW.P.D296",
+      "status": "Pole Permission: Approved",
+      "agent": "Lebohang"
+    },
+    {
+      "propertyId": "294631",
+      "address": "10 PIRANHA CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+      "pole": "LAW.P.D281",
+      "status": "Pole Permission: Approved",
+      "agent": "cloudia"
+    },
+    {
+      "propertyId": "294932",
+      "address": "16 PIRANHA CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+      "pole": "LAW.P.D295",
+      "status": "Pole Permission: Approved",
+      "agent": "Lebohang"
+    },
+    {
+      "propertyId": "294897",
+      "address": "17 PIRANHA CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+      "pole": "LAW.P.D224",
+      "status": "Pole Permission: Approved",
+      "agent": "Cloudia"
+    },
+    {
+      "propertyId": "295057",
+      "address": "21 PIRANHA CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+      "pole": "LAW.P.D223",
+      "status": "Pole Permission: Approved",
+      "agent": "Cloudia"
+    },
+    {
+      "propertyId": "294972",
+      "address": "33 PIRANHA CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+      "pole": "LAW.P.D220",
+      "status": "Pole Permission: Approved",
+      "agent": "cloudia"
+    },
+    {
+      "propertyId": "295000",
+      "address": "22 PIRANHA CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+      "pole": "LAW.P.D306",
+      "status": "Pole Permission: Approved",
+      "agent": "Lebohang"
+    },
+    {
+      "propertyId": "295107",
+      "address": "30 PIRANHA CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+      "pole": "LAW.P.D215",
+      "status": "Pole Permission: Approved",
+      "agent": "Lebohang"
+    }
+  ],
+  "keyTransitions": {
+    "approvedCount": 39,
+    "inProgressCount": 0,
+    "completedCount": 0,
+    "approved": [
+      {
+        "propertyId": "287780",
+        "address": "95 CATFISH CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB",
+        "poleNumber": "LAW.P.C929",
+        "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Angelique mashele"
+      },
+      {
+        "propertyId": "293721",
+        "address": "85 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "poleNumber": "LAW.P.C412",
+        "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Yolanda"
+      },
+      {
+        "propertyId": "286293",
+        "address": "3 LETSATSI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "poleNumber": "LAW.P.C480",
+        "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Yolanda"
+      },
+      {
+        "propertyId": "292215",
+        "address": "3 LETSATSI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "poleNumber": "LAW.P.C480",
+        "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Lorraine"
+      },
+      {
+        "propertyId": "286486",
+        "address": "10 LETSATSI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "poleNumber": "LAW.P.C491",
+        "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Yolanda"
+      },
+      {
+        "propertyId": "294892",
+        "address": "110 RAMODIKE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "poleNumber": "LAW.P.D626",
+        "oldStatus": "Pole Permission: Declined",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Yolanda"
+      },
+      {
+        "propertyId": "279604",
+        "address": "SIXTH AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.38283756327547, 27.79530327666914]",
+        "poleNumber": "LAW.P.B365",
+        "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Lerato"
+      },
+      {
+        "propertyId": "280948",
+        "address": "ZANDILE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.38511593756364, 27.807756480682333]",
+        "poleNumber": "LAW.P.D690",
+        "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Ana Jane"
+      },
+      {
+        "propertyId": "294666",
+        "address": "36 AWELANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "poleNumber": "LAW.P.D694",
+        "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "disemelo"
+      },
+      {
+        "propertyId": "294957",
+        "address": "33 SCABELO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "poleNumber": "LAW.P.D695",
+        "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Yolanda"
+      },
+      {
+        "propertyId": "294659",
+        "address": "42 AWELANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "poleNumber": "LAW.P.D695",
+        "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Zanele hele"
+      },
+      {
+        "propertyId": "279162",
+        "address": "25 MOTLOTLO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "poleNumber": "LAW.P.D727",
+        "oldStatus": "Home Sign Ups: Declined",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Zanele hele"
+      },
+      {
+        "propertyId": "279367",
+        "address": "13 MOTLOTLO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "poleNumber": "LAW.P.D721",
+        "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Zanele hele"
+      },
+      {
+        "propertyId": "294172",
+        "address": "2 MOTLOTLO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "poleNumber": "LAW.P.D721",
+        "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Zanele hele"
+      },
+      {
+        "propertyId": "294585",
+        "address": "36 MOTLOTLO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "poleNumber": "LAW.P.D714",
+        "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Zanele hele"
+      },
+      {
+        "propertyId": "281418",
+        "address": "32 MOTLOTLO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "poleNumber": "LAW.P.D714",
+        "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Zanele hele"
+      },
+      {
+        "propertyId": "294440",
+        "address": "28 MOTLOTLO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "poleNumber": "LAW.P.D714",
+        "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Zanele hele"
+      },
+      {
+        "propertyId": "278684",
+        "address": "22 SEKUKUNE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "poleNumber": "LAW.P.D673",
+        "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Zanele hele"
+      },
+      {
+        "propertyId": "277165",
+        "address": "7758 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "poleNumber": "LAW.P.D673",
+        "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Simphiwe mashaba"
+      },
+      {
+        "propertyId": "281416",
+        "address": "40 MOTLOTLO STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB",
+        "poleNumber": "LAW.P.D713",
+        "oldStatus": "Home Sign Ups: Approved & Installation Scheduled",
+        "newStatus": "Pole Permission: Approved",
+        "agent": "Zanele hele"
+      }
+    ],
+    "inProgress": [],
+    "completed": []
+  }
+}

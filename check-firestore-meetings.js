@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const serviceAccount = require('./fibreflow-73daf-firebase-adminsdk-zth5r-c283f4c87f.json');
+const serviceAccount = require('./fibreflow-service-account.json');
 
 // Initialize admin SDK
 admin.initializeApp({

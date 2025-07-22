@@ -1,11 +1,32 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { UserProfile } from '../models/user-profile';
+import { 
+  Auth, 
+  GoogleAuthProvider, 
+  signInWithPopup, 
+  signOut, 
+  onAuthStateChanged,
+  User
+} from '@angular/fire/auth';
+import { 
+  Firestore, 
+  doc, 
+  setDoc, 
+  getDoc,
+  serverTimestamp 
+} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private auth = inject(Auth);
+  private firestore = inject(Firestore);
+  
+  // Toggle this to enable real authentication
+  private USE_REAL_AUTH = true; // Google auth is now configured
+  
   // Mock user for development - always logged in as admin
   private mockUser = {
     uid: 'dev-user',
@@ -24,13 +45,14 @@ export class AuthService {
   };
 
   // Signal-based state management
+  // Initialize as null when using real auth, mock user only in dev mode
   private userSignal = signal<{
     uid: string;
     email: string;
     displayName: string;
-  } | null>(this.mockUser);
+  } | null>(this.USE_REAL_AUTH ? null : this.mockUser);
 
-  private userProfileSignal = signal<UserProfile | null>(this.mockUserProfile);
+  private userProfileSignal = signal<UserProfile | null>(this.USE_REAL_AUTH ? null : this.mockUserProfile);
 
   // Public signals for components
   readonly currentUser = this.userSignal.asReadonly();
@@ -46,29 +68,113 @@ export class AuthService {
   readonly currentUserProfile$ = toObservable(this.userProfileSignal);
 
   constructor() {
-    console.log('🔐 Auth Service initialized in MOCK MODE - Always logged in as admin');
+    if (this.USE_REAL_AUTH) {
+      console.log('🔐 Auth Service initialized with REAL Firebase Authentication');
+      this.initializeRealAuth();
+    } else {
+      console.log('🔐 Auth Service initialized in MOCK MODE - Always logged in as admin');
+      // Set mock user immediately for development
+      this.userSignal.set(this.mockUser);
+      this.userProfileSignal.set(this.mockUserProfile);
+    }
   }
 
-  // Mock login - always succeeds
+  private initializeRealAuth() {
+    onAuthStateChanged(this.auth, async (user) => {
+      if (user) {
+        // User is signed in
+        const userData = {
+          uid: user.uid,
+          email: user.email || '',
+          displayName: user.displayName || user.email || 'User',
+        };
+        this.userSignal.set(userData);
+        
+        // Load or create user profile
+        const profile = await this.loadUserProfile(user.uid);
+        this.userProfileSignal.set(profile);
+      } else {
+        // User is signed out
+        this.userSignal.set(null);
+        this.userProfileSignal.set(null);
+      }
+    });
+  }
+
+  private async loadUserProfile(uid: string): Promise<UserProfile> {
+    const userDoc = doc(this.firestore, 'users', uid);
+    const docSnap = await getDoc(userDoc);
+    
+    if (docSnap.exists()) {
+      return docSnap.data() as UserProfile;
+    } else {
+      // Create default profile for new users
+      const newProfile: UserProfile = {
+        uid,
+        email: this.auth.currentUser?.email || '',
+        displayName: this.auth.currentUser?.displayName || 'User',
+        userGroup: 'client', // Default role
+        isActive: true,
+        createdAt: new Date(),
+        lastLogin: new Date(),
+      };
+      
+      await setDoc(userDoc, {
+        ...newProfile,
+        createdAt: serverTimestamp(),
+        lastLogin: serverTimestamp(),
+      });
+      
+      return newProfile;
+    }
+  }
+
+  // Real Google login
   async loginWithGoogle(): Promise<{ uid: string; email: string; displayName: string }> {
-    console.log('🔐 Mock Google login - would open Google popup in production');
-    // In production, this would use:
-    // const provider = new GoogleAuthProvider();
-    // return signInWithPopup(this.auth, provider);
+    if (!this.USE_REAL_AUTH) {
+      console.log('🔐 Mock Google login - would open Google popup in production');
+      this.userSignal.set(this.mockUser);
+      this.userProfileSignal.set(this.mockUserProfile);
+      return this.mockUser;
+    }
 
-    // For now, just return the mock user
-    this.userSignal.set(this.mockUser);
-    this.userProfileSignal.set(this.mockUserProfile);
-    return this.mockUser;
+    try {
+      console.log('🔐 Initiating Google login...');
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(this.auth, provider);
+      
+      const userData = {
+        uid: result.user.uid,
+        email: result.user.email || '',
+        displayName: result.user.displayName || result.user.email || 'User',
+      };
+      
+      console.log('✅ Google login successful:', userData.email);
+      
+      // User profile will be loaded by onAuthStateChanged listener
+      return userData;
+    } catch (error: any) {
+      console.error('❌ Google login failed:', error);
+      throw new Error(error.message || 'Google login failed');
+    }
   }
 
-  // Mock logout
+  // Real logout
   async logout(): Promise<void> {
-    console.log('🔐 Mock logout - would clear session in production');
-    // In production: return this.auth.signOut();
+    if (!this.USE_REAL_AUTH) {
+      console.log('🔐 Mock logout - would clear session in production');
+      console.log('⚠️ Dev mode: User remains logged in');
+      return;
+    }
 
-    // For development, we stay logged in
-    console.log('⚠️ Dev mode: User remains logged in');
+    try {
+      console.log('🔐 Logging out user...');
+      await signOut(this.auth);
+      console.log('✅ User logged out successfully');
+    } catch (error: any) {
+      console.error('❌ Logout failed:', error);
+      throw new Error(error.message || 'Logout failed');
+    }
   }
 
   // Get current user synchronously

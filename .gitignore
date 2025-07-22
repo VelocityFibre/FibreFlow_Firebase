@@ -77,9 +77,25 @@ OneMap/.venv/
 OneMap/duplicate_analysis_report.md
 OneMap/pole_duplicate_data.json
 OneMap/antiHall_validation_report.json
+OneMap/downloads/*.csv
+OneMap/downloads/*.zip
+OneMap/downloads/**/*.csv
+OneMap/reports/**/*.csv
+OneMap/reports/**/*.json
+OneMap/imports/**/*.csv
+
+# Graph analysis data (generated files)
+OneMap/GraphAnalysis/data/
+OneMap/GraphAnalysis/reports/*.json
+OneMap/GraphAnalysis/reports/*.md
 
 # Backup files
 backups/
 *.backup.json
 OneMap/output/*.csv
 OneMap/output/*.json
+
+# Large files and archives
+.claude/neo4j-community.tar.gz
+.claude/graphiti/tests/evals/data/longmemeval_data/*.json
+.serena/cache/typescript/*.pkl

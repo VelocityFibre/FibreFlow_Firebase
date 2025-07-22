@@ -1,0 +1,39 @@
+
+1MAP SYNC REPORT (Simplified)
+=============================
+Import ID: IMP_2025-07-21_1753121983752
+Date: 2025-07-21T18:23:36.345Z
+
+SUMMARY
+-------
+Total Records: 1292
+New Records: 320
+Updated Records: 0
+Unchanged Records: 972
+Skipped (no Property ID): 0
+Errors: 0
+
+
+NEW RECORDS (showing first 10)
+-------------------------------
+- Property: 279316, Pole: LAW.P.C133
+- Property: 279285, Pole: LAW.P.C132
+- Property: 279188, Pole: LAW.P.C162
+- Property: 279175, Pole: LAW.P.C129
+- Property: 279196, Pole: LAW.P.C130
+- Property: 279260, Pole: LAW.P.C131
+- Property: 279158, Pole: LAW.P.C128
+- Property: 279136, Pole: LAW.P.C127
+- Property: 279131, Pole: LAW.P.C126
+- Property: 279056, Pole: LAW.P.C124
+
+... and 310 more
+
+
+
+
+STATUS
+------
+✅ Data imported to: onemap-processing-staging
+📊 Total staged records: 320
+⏳ Ready for review before production sync
