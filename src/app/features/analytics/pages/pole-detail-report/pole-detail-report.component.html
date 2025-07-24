@@ -1,0 +1,168 @@
+<div class="pole-detail-report-container">
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="loading()">
+    <mat-card>
+      <mat-card-content>
+        <div class="loading-content">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Loading pole report...</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-state" *ngIf="!loading() && error()">
+    <mat-card>
+      <mat-card-content>
+        <div class="error-content">
+          <mat-icon color="warn">error_outline</mat-icon>
+          <h3>{{ error() }}</h3>
+          <button mat-button color="primary" (click)="refreshReport()">
+            <mat-icon>refresh</mat-icon>
+            Try Again
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Report Content -->
+  <div class="report-content" *ngIf="!loading() && !error() && report()">
+    <!-- Header Card -->
+    <mat-card class="header-card">
+      <mat-card-header>
+        <mat-card-title-group>
+          <mat-card-title>
+            <mat-icon>cell_tower</mat-icon>
+            Pole {{ poleNumber() }} Timeline Report
+          </mat-card-title>
+          <mat-card-subtitle>
+            Generated: {{ formatDate(report()!.generatedAt) }}
+            <mat-chip *ngIf="report()!.version === 'previous'" color="accent">
+              Previous Version
+            </mat-chip>
+          </mat-card-subtitle>
+        </mat-card-title-group>
+        
+        <div class="header-actions">
+          <button mat-icon-button (click)="refreshReport()">
+            <mat-icon>refresh</mat-icon>
+          </button>
+          <button mat-icon-button [matMenuTriggerFor]="exportMenu">
+            <mat-icon>download</mat-icon>
+          </button>
+        </div>
+      </mat-card-header>
+    </mat-card>
+
+    <!-- Summary Card -->
+    <mat-card class="summary-card">
+      <mat-card-header>
+        <mat-card-title>Summary</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="summary-grid">
+          <div class="summary-item">
+            <mat-icon>event</mat-icon>
+            <div class="summary-details">
+              <span class="label">First Appearance</span>
+              <span class="value">{{ report()!.summary.firstAppearance || 'N/A' }}</span>
+            </div>
+          </div>
+          
+          <div class="summary-item">
+            <mat-icon>update</mat-icon>
+            <div class="summary-details">
+              <span class="label">Last Update</span>
+              <span class="value">{{ report()!.summary.lastUpdate || 'N/A' }}</span>
+            </div>
+          </div>
+          
+          <div class="summary-item">
+            <mat-icon>timeline</mat-icon>
+            <div class="summary-details">
+              <span class="label">Time Span</span>
+              <span class="value">{{ getTimeSpanText(report()!.summary.timeSpan) }}</span>
+            </div>
+          </div>
+          
+          <div class="summary-item">
+            <mat-icon>water_drop</mat-icon>
+            <div class="summary-details">
+              <span class="label">Connected Drops</span>
+              <span class="value">{{ report()!.summary.totalDrops }}</span>
+            </div>
+          </div>
+          
+          <div class="summary-item">
+            <mat-icon>location_on</mat-icon>
+            <div class="summary-details">
+              <span class="label">Addresses</span>
+              <span class="value">{{ report()!.summary.addresses.length }}</span>
+            </div>
+          </div>
+          
+          <div class="summary-item">
+            <mat-icon>assignment</mat-icon>
+            <div class="summary-details">
+              <span class="label">Total Records</span>
+              <span class="value">{{ report()!.summary.totalRecords }}</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Addresses -->
+    <mat-card class="addresses-card" *ngIf="report()!.summary.addresses.length > 0">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>location_on</mat-icon>
+          Addresses
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-chip-listbox>
+          <mat-chip *ngFor="let address of report()!.summary.addresses">
+            {{ address }}
+          </mat-chip>
+        </mat-chip-listbox>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Tabs for detailed information -->
+    <mat-tab-group>
+      <mat-tab label="Timeline">
+        <app-pole-timeline [timeline]="report()!.timeline"></app-pole-timeline>
+      </mat-tab>
+      
+      <mat-tab label="Connected Drops" [disabled]="report()!.drops.length === 0">
+        <app-connected-drops [drops]="report()!.drops"></app-connected-drops>
+      </mat-tab>
+      
+      <mat-tab label="Agent Activity" [disabled]="report()!.agents.length === 0">
+        <app-agent-activity [agents]="report()!.agents"></app-agent-activity>
+      </mat-tab>
+      
+      <mat-tab label="Data Quality" *ngIf="report()!.dataQuality && report()!.dataQuality!.length > 0">
+        <div class="tab-content">
+          <!-- TODO: Create data quality component -->
+          <p>Data quality component coming soon</p>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+  <!-- Export Menu -->
+  <mat-menu #exportMenu="matMenu">
+    <button mat-menu-item (click)="exportPDF()">
+      <mat-icon>picture_as_pdf</mat-icon>
+      <span>Export as PDF</span>
+    </button>
+    <button mat-menu-item (click)="exportExcel()">
+      <mat-icon>table_chart</mat-icon>
+      <span>Export as Excel</span>
+    </button>
+  </mat-menu>
+</div>

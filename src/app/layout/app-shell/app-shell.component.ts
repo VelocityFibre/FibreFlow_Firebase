@@ -609,6 +609,7 @@ export class AppShellComponent {
   // Analytics category items
   analyticsItems: NavItem[] = this.filterItems([
     { label: 'Pole Permission Analytics', icon: 'analytics', route: '/analytics/pole-permissions' },
+    { label: 'Image Upload', icon: 'cloud_upload', route: '/images/upload' },
   ]);
 
   // Mobile Pages category items

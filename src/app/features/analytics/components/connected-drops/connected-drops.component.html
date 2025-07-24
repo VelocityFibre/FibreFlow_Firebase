@@ -1,0 +1,171 @@
+<div class="connected-drops-container">
+  <!-- Summary Stats -->
+  <div class="stats-overview">
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-item">
+          <mat-icon>water_drop</mat-icon>
+          <div class="stat-details">
+            <span class="stat-value">{{ dropStats().total }}</span>
+            <span class="stat-label">Total Drops</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-item">
+          <mat-icon color="primary">check_circle</mat-icon>
+          <div class="stat-details">
+            <span class="stat-value">{{ dropStats().completed }}</span>
+            <span class="stat-label">Completed</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-item">
+          <mat-icon color="accent">pending</mat-icon>
+          <div class="stat-details">
+            <span class="stat-value">{{ dropStats().inProgress }}</span>
+            <span class="stat-label">In Progress</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-item">
+          <mat-icon>schedule</mat-icon>
+          <div class="stat-details">
+            <span class="stat-value">{{ dropStats().completionRate }}%</span>
+            <span class="stat-label">Completion Rate</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Drops Table -->
+  <mat-card class="drops-table-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>water_drop</mat-icon>
+        Connected Drops
+      </mat-card-title>
+      <div class="header-actions">
+        <button mat-icon-button (click)="exportDrops()" matTooltip="Export drops data">
+          <mat-icon>download</mat-icon>
+        </button>
+      </div>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <div class="table-container" *ngIf="connectedDrops().length > 0">
+        <table mat-table [dataSource]="connectedDrops()" class="drops-table">
+          
+          <!-- Drop Number Column -->
+          <ng-container matColumnDef="dropNumber">
+            <th mat-header-cell *matHeaderCellDef>Drop Number</th>
+            <td mat-cell *matCellDef="let drop">
+              <mat-chip [highlighted]="true">
+                {{ drop.dropNumber || 'N/A' }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Address Column -->
+          <ng-container matColumnDef="address">
+            <th mat-header-cell *matHeaderCellDef>Address</th>
+            <td mat-cell *matCellDef="let drop">
+              <div class="address-cell">
+                <span class="address">{{ drop.address || '-' }}</span>
+                <mat-icon class="location-icon" *ngIf="drop.address">location_on</mat-icon>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let drop">
+              <div class="status-cell">
+                <mat-icon [color]="getStatusColor(drop.status || '')">
+                  {{ getStatusIcon(drop.status || '') }}
+                </mat-icon>
+                <span>{{ drop.status || 'Unknown' }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Agent Column -->
+          <ng-container matColumnDef="agent">
+            <th mat-header-cell *matHeaderCellDef>Agent</th>
+            <td mat-cell *matCellDef="let drop">
+              {{ drop.agent || '-' }}
+            </td>
+          </ng-container>
+
+          <!-- Last Update Column -->
+          <ng-container matColumnDef="lastUpdate">
+            <th mat-header-cell *matHeaderCellDef>Last Update</th>
+            <td mat-cell *matCellDef="let drop">
+              {{ formatDate(drop.lastUpdate) }}
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let drop">
+              <button mat-icon-button (click)="viewDropDetails(drop)" 
+                      matTooltip="View drop details">
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+
+      <!-- Empty state -->
+      <div class="empty-state" *ngIf="connectedDrops().length === 0">
+        <mat-icon>water_drop_outline</mat-icon>
+        <p>No connected drops found for this pole</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Grouped by Status View (Alternative) -->
+  <div class="grouped-drops" *ngIf="false">
+    <div class="status-group" *ngFor="let group of dropsByStatus()">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon [color]="getStatusColor(group.status)">
+              {{ getStatusIcon(group.status) }}
+            </mat-icon>
+            {{ group.status }}
+            <mat-chip>{{ group.count }}</mat-chip>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="drops-list">
+            <mat-chip-listbox>
+              <mat-chip *ngFor="let drop of group.drops" 
+                       [matTooltip]="drop.address || 'No address'">
+                {{ drop.dropNumber }}
+              </mat-chip>
+            </mat-chip-listbox>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

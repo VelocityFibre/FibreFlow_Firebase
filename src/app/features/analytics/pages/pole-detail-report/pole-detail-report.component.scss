@@ -1,0 +1,178 @@
+@use '../../../../styles/component-theming' as theme;
+
+.pole-detail-report-container {
+  padding: theme.ff-spacing(lg);
+  max-width: 1400px;
+  margin: 0 auto;
+
+  .loading-state,
+  .error-state {
+    .loading-content,
+    .error-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: theme.ff-spacing(md);
+      padding: theme.ff-spacing(xl);
+      
+      mat-icon {
+        font-size: theme.ff-rem(48);
+        width: 48px;
+        height: 48px;
+      }
+      
+      h3 {
+        margin: 0;
+        text-align: center;
+      }
+    }
+  }
+
+  .report-content {
+    display: flex;
+    flex-direction: column;
+    gap: theme.ff-spacing(lg);
+
+    .header-card {
+      mat-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        
+        mat-card-title-group {
+          flex: 1;
+          
+          mat-card-title {
+            display: flex;
+            align-items: center;
+            gap: theme.ff-spacing(sm);
+            
+            mat-icon {
+              color: theme.ff-rgb(primary);
+            }
+          }
+          
+          mat-card-subtitle {
+            display: flex;
+            align-items: center;
+            gap: theme.ff-spacing(sm);
+            margin-top: theme.ff-spacing(sm);
+          }
+        }
+        
+        .header-actions {
+          display: flex;
+          gap: theme.ff-spacing(sm);
+        }
+      }
+    }
+
+    .summary-card {
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: theme.ff-spacing(lg);
+        
+        .summary-item {
+          display: flex;
+          align-items: center;
+          gap: theme.ff-spacing(md);
+          padding: theme.ff-spacing(md);
+          border-radius: theme.ff-rem(8);
+          background: theme.ff-rgba(surface, 0.5);
+          border: 1px solid theme.ff-rgba(outline-variant, 0.3);
+          
+          mat-icon {
+            color: theme.ff-rgb(primary);
+            font-size: theme.ff-rem(24);
+            width: 24px;
+            height: 24px;
+          }
+          
+          .summary-details {
+            display: flex;
+            flex-direction: column;
+            gap: theme.ff-spacing(xs);
+            
+            .label {
+              font-size: theme.ff-rem(12);
+              color: theme.ff-rgba(foreground, 0.7);
+              font-weight: 500;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+            }
+            
+            .value {
+              font-size: theme.ff-rem(16);
+              font-weight: 600;
+              color: theme.ff-rgb(foreground);
+            }
+          }
+        }
+      }
+    }
+
+    .addresses-card {
+      mat-card-title {
+        display: flex;
+        align-items: center;
+        gap: theme.ff-spacing(sm);
+        
+        mat-icon {
+          color: theme.ff-rgb(primary);
+        }
+      }
+      
+      mat-chip-listbox {
+        display: flex;
+        flex-wrap: wrap;
+        gap: theme.ff-spacing(sm);
+        
+        mat-chip {
+          max-width: 100%;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+
+    mat-tab-group {
+      background: theme.ff-rgb(surface);
+      border-radius: theme.ff-rem(8);
+      overflow: hidden;
+      
+      .tab-content {
+        padding: theme.ff-spacing(lg);
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: theme.ff-rgba(foreground, 0.6);
+      }
+    }
+  }
+}
+
+// Mobile responsiveness
+@media (max-width: 768px) {
+  .pole-detail-report-container {
+    padding: theme.ff-spacing(md);
+    
+    .summary-grid {
+      grid-template-columns: 1fr !important;
+    }
+    
+    .header-card {
+      mat-card-header {
+        flex-direction: column;
+        align-items: stretch !important;
+        gap: theme.ff-spacing(md);
+        
+        .header-actions {
+          align-self: flex-end;
+        }
+      }
+    }
+  }
+}

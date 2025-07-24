@@ -1,0 +1,18 @@
+{
+  "facts": [
+    {
+      "id": "fact_1753344657445",
+      "content": "FibreFlow has an integrated memory system using Zep Cloud for temporal knowledge graphs. Memory updates are MANUAL, not automatic. Developers must explicitly prompt Claude with phrases like 'Add to memory', 'Remember this', or 'Save fact'. The system supports three types: facts (project knowledge), patterns (dev practices), and episodes (problem-solution pairs). Full documentation in CLAUDE.md section 'MEMORY SYSTEM - TEMPORAL KNOWLEDGE GRAPHS'.",
+      "category": "FibreFlow has an integrated memory system using Zep Cloud for temporal knowledge graphs. Memory updates are MANUAL, not automatic. Developers must explicitly prompt Claude with phrases like 'Add to memory', 'Remember this', or 'Save fact'. The system supports three types: facts (project knowledge), patterns (dev practices), and episodes (problem-solution pairs). Full documentation in CLAUDE.md section 'MEMORY SYSTEM - TEMPORAL KNOWLEDGE GRAPHS'.",
+      "metadata": {
+        "source": "cli"
+      },
+      "timestamp": "2025-07-24T08:10:57.445Z",
+      "confidence": 1,
+      "active": true,
+      "version": 1
+    }
+  ],
+  "patterns": {},
+  "preferences": []
+}

@@ -1,0 +1,221 @@
+@use '../../../../styles/component-theming' as theme;
+
+.connected-drops-container {
+  display: flex;
+  flex-direction: column;
+  gap: theme.ff-spacing(lg);
+  padding: theme.ff-spacing(lg);
+
+  .stats-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: theme.ff-spacing(md);
+    
+    .stat-card {
+      .stat-item {
+        display: flex;
+        align-items: center;
+        gap: theme.ff-spacing(md);
+        
+        mat-icon {
+          font-size: theme.ff-rem(32);
+          width: 32px;
+          height: 32px;
+          color: theme.ff-rgb(primary);
+        }
+        
+        .stat-details {
+          display: flex;
+          flex-direction: column;
+          gap: theme.ff-spacing(xs);
+          
+          .stat-value {
+            font-size: theme.ff-rem(24);
+            font-weight: 600;
+            color: theme.ff-rgb(foreground);
+          }
+          
+          .stat-label {
+            font-size: theme.ff-rem(12);
+            color: theme.ff-rgba(foreground, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+        }
+      }
+    }
+  }
+
+  .drops-table-card {
+    mat-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+      mat-card-title {
+        display: flex;
+        align-items: center;
+        gap: theme.ff-spacing(sm);
+        
+        mat-icon {
+          color: theme.ff-rgb(primary);
+        }
+      }
+      
+      .header-actions {
+        display: flex;
+        gap: theme.ff-spacing(sm);
+      }
+    }
+
+    .table-container {
+      overflow-x: auto;
+      
+      .drops-table {
+        width: 100%;
+        
+        .address-cell {
+          display: flex;
+          align-items: center;
+          gap: theme.ff-spacing(sm);
+          
+          .address {
+            flex: 1;
+            min-width: 150px;
+          }
+          
+          .location-icon {
+            font-size: theme.ff-rem(16);
+            width: 16px;
+            height: 16px;
+            color: theme.ff-rgba(foreground, 0.5);
+          }
+        }
+        
+        .status-cell {
+          display: flex;
+          align-items: center;
+          gap: theme.ff-spacing(sm);
+          
+          mat-icon {
+            font-size: theme.ff-rem(20);
+            width: 20px;
+            height: 20px;
+          }
+        }
+        
+        mat-chip {
+          max-width: 150px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: theme.ff-spacing(3xl);
+      
+      mat-icon {
+        font-size: theme.ff-rem(48);
+        width: 48px;
+        height: 48px;
+        color: theme.ff-rgba(foreground, 0.3);
+      }
+      
+      p {
+        margin-top: theme.ff-spacing(md);
+        color: theme.ff-rgba(foreground, 0.6);
+      }
+    }
+  }
+
+  .grouped-drops {
+    display: flex;
+    flex-direction: column;
+    gap: theme.ff-spacing(lg);
+    
+    .status-group {
+      mat-card-header {
+        mat-card-title {
+          display: flex;
+          align-items: center;
+          gap: theme.ff-spacing(sm);
+          
+          mat-chip {
+            margin-left: theme.ff-spacing(sm);
+          }
+        }
+      }
+      
+      .drops-list {
+        mat-chip-listbox {
+          display: flex;
+          flex-wrap: wrap;
+          gap: theme.ff-spacing(sm);
+          
+          mat-chip {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            
+            &:hover {
+              transform: translateY(-1px);
+              box-shadow: theme.ff-shadow(md);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Mobile responsiveness
+@media (max-width: 768px) {
+  .connected-drops-container {
+    padding: theme.ff-spacing(md);
+    
+    .stats-overview {
+      grid-template-columns: repeat(2, 1fr);
+      gap: theme.ff-spacing(sm);
+      
+      .stat-card .stat-item {
+        mat-icon {
+          font-size: theme.ff-rem(24);
+          width: 24px;
+          height: 24px;
+        }
+        
+        .stat-details {
+          .stat-value {
+            font-size: theme.ff-rem(18);
+          }
+          
+          .stat-label {
+            font-size: theme.ff-rem(10);
+          }
+        }
+      }
+    }
+    
+    .drops-table-card {
+      mat-card-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: theme.ff-spacing(md);
+        
+        .header-actions {
+          align-self: flex-end;
+        }
+      }
+      
+      .table-container {
+        .drops-table {
+          .address-cell .address {
+            min-width: 100px;
+          }
+        }
+      }
+    }
+  }
+}

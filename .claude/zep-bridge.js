@@ -135,8 +135,7 @@ async function addFact(category, content) {
   }
   
   // Add memory to session
-  await zep.memory.add({
-    sessionId: sessionId,
+  await zep.memory.add(sessionId, {
     messages: [{
       roleType: 'system',
       content: content,
@@ -176,8 +175,7 @@ async function addPattern(name, description) {
   }
   
   // Add memory to session
-  await zep.memory.add({
-    sessionId: sessionId,
+  await zep.memory.add(sessionId, {
     messages: [{
       roleType: 'system',
       content: `Pattern: ${name}\n${description}`,
@@ -221,8 +219,7 @@ async function addEpisode(title, jsonData) {
   });
   
   // Add memory to session
-  await zep.memory.add({
-    sessionId: sessionId,
+  await zep.memory.add(sessionId, {
     messages: [{
       roleType: 'system',
       content: JSON.stringify(data, null, 2),

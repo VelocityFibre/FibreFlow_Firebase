@@ -1,0 +1,53 @@
+{
+  "scripts": [
+    {
+      "name": "generate-pole-report.js",
+      "version": "1.0.0",
+      "description": "Generates detailed report for a specific pole number",
+      "originalPath": "GraphAnalysis/tools/pole-status-report.js",
+      "copiedDate": "2025-07-24",
+      "usage": "node generate-pole-report.js <pole_number>",
+      "output": "JSON report with timeline, drops, agents, addresses"
+    },
+    {
+      "name": "analyze-pole-history.js",
+      "version": "1.0.0",
+      "description": "Analyzes complete history and timeline for a pole",
+      "originalPath": "GraphAnalysis/tools/analyze-pole-history.js",
+      "copiedDate": "2025-07-24",
+      "usage": "node analyze-pole-history.js <pole_number>",
+      "output": "Console output with chronological timeline and analysis"
+    },
+    {
+      "name": "find-active-poles.js",
+      "version": "1.0.0",
+      "description": "Finds poles with highest activity levels",
+      "originalPath": "GraphAnalysis/tools/find-active-poles.js",
+      "copiedDate": "2025-07-24",
+      "usage": "node find-active-poles.js",
+      "output": "Top 15 most active poles with activity scores"
+    }
+  ],
+  "dataSource": {
+    "type": "CSV",
+    "path": "../../GraphAnalysis/data/master/master_csv_latest_validated.csv",
+    "totalRecords": 14495,
+    "lastUpdated": "2025-07-24"
+  },
+  "reports": [
+    {
+      "reportId": "pole-LAW.P.A508-complete-timeline",
+      "poleNumber": "LAW.P.A508",
+      "generatedDate": "2025-07-24",
+      "generatedBy": "analyze-pole-history.js",
+      "format": "markdown"
+    },
+    {
+      "reportId": "pole-LAW.P.A707-complete-timeline",
+      "poleNumber": "LAW.P.A707",
+      "generatedDate": "2025-07-24",
+      "generatedBy": "analyze-pole-history.js",
+      "format": "markdown"
+    }
+  ]
+}

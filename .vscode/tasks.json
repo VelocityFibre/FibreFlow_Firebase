@@ -37,6 +37,31 @@
           }
         }
       }
+    },
+    {
+      "label": "Quick Backup",
+      "type": "shell",
+      "command": "./scripts/auto-backup.sh",
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Check Large Files",
+      "type": "shell",
+      "command": "./scripts/check-large-files.sh",
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
     }
   ]
 }

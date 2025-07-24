@@ -1,0 +1,12 @@
+{
+  "lastProcessingRun": null,
+  "schedule": "Daily at 3:00 AM SAST",
+  "processingHistory": [],
+  "configuration": {
+    "retentionPolicy": "Keep current + 1 previous version",
+    "errorHandling": "Show data quality warnings",
+    "exportFormats": ["PDF", "Excel"],
+    "csvCheckFrequency": "Daily",
+    "mobileSupport": "Planned for future module"
+  }
+}

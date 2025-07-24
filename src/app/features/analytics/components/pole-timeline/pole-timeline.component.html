@@ -1,0 +1,111 @@
+<div class="pole-timeline-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>timeline</mat-icon>
+        Status Timeline
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{ timelineEvents().length }} events tracked
+      </mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <!-- Desktop view - Table -->
+      <div class="desktop-view" *ngIf="timelineEvents().length > 0">
+        <table mat-table [dataSource]="timelineEvents()" class="timeline-table">
+          
+          <!-- Date Column -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Date/Time</th>
+            <td mat-cell *matCellDef="let event">
+              <div class="date-time">
+                <span class="date">{{ formatDate(event.date) }}</span>
+                <span class="time" *ngIf="event.time">{{ formatTime(event.time) }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let event">
+              <div class="status-cell">
+                <mat-icon [color]="getStatusColor(event.status)">
+                  {{ getStatusIcon(event.status) }}
+                </mat-icon>
+                <span>{{ event.status }}</span>
+              </div>
+              <div class="status-change" *ngIf="event.previousStatus">
+                <mat-icon class="change-icon">arrow_forward</mat-icon>
+                <span class="previous">from: {{ event.previousStatus }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Drop Column -->
+          <ng-container matColumnDef="drop">
+            <th mat-header-cell *matHeaderCellDef>Drop</th>
+            <td mat-cell *matCellDef="let event">
+              <mat-chip *ngIf="event.drop" [highlighted]="true">
+                {{ event.drop }}
+              </mat-chip>
+              <span *ngIf="!event.drop" class="no-data">-</span>
+            </td>
+          </ng-container>
+
+          <!-- Agent Column -->
+          <ng-container matColumnDef="agent">
+            <th mat-header-cell *matHeaderCellDef>Agent</th>
+            <td mat-cell *matCellDef="let event">
+              {{ event.agent || '-' }}
+            </td>
+          </ng-container>
+
+          <!-- Details Column -->
+          <ng-container matColumnDef="details">
+            <th mat-header-cell *matHeaderCellDef>Details</th>
+            <td mat-cell *matCellDef="let event">
+              <button mat-icon-button [matTooltip]="event.workflow || 'No workflow details'">
+                <mat-icon>info</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+
+      <!-- Grouped timeline view (alternative) -->
+      <div class="grouped-timeline" *ngIf="false">
+        <div class="date-group" *ngFor="let group of groupedEvents()">
+          <h3 class="date-header">{{ formatDate(group.date) }}</h3>
+          <div class="events">
+            <div class="timeline-event" *ngFor="let event of group.events">
+              <div class="event-time">{{ formatTime(event.time) }}</div>
+              <div class="event-content">
+                <mat-icon [color]="getStatusColor(event.status)">
+                  {{ getStatusIcon(event.status) }}
+                </mat-icon>
+                <div class="event-details">
+                  <div class="status">{{ event.status }}</div>
+                  <div class="meta">
+                    <span *ngIf="event.drop">Drop: {{ event.drop }}</span>
+                    <span *ngIf="event.agent">Agent: {{ event.agent }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      <div class="empty-state" *ngIf="timelineEvents().length === 0">
+        <mat-icon>timeline</mat-icon>
+        <p>No timeline events available</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -225,37 +225,104 @@ EOF
 - Deployments affect live applications
 - **Therefore: Version control affects live applications**
 
-## 🧠 MEMORY SYSTEM - LEARNING & CONTEXT
+## 🧠 MEMORY SYSTEM - TEMPORAL KNOWLEDGE GRAPHS
 
-### Claude Memory System Active
-**📖 [Full Documentation](.claude/MEMORY_SYSTEM_GUIDE.md)**
+### 🚀 Zep Cloud Integration (Primary)
+**Status**: ✅ OPERATIONAL - Integration completed 2025-07-24  
+**SDK Fix**: ✅ Corrected method signature: `zep.memory.add(sessionId, {messages})`  
+**CLI Tools**: ✅ Working bridge with add-fact, add-pattern, add-episode, search  
+**📖 [Full Documentation](.claude/ZEP_INTEGRATION_SUMMARY.md)**
 
-**Quick Commands:**
-```bash
-# Before working on a task
-node .claude/memory-system-v2.js context "task description"
+### ⚠️ IMPORTANT: Memory is NOT Automatic!
+**You must manually save important learnings. Here's how:**
 
-# After learning something new (checks for conflicts)
-node .claude/memory-system-v2.js fact "new learning"
+#### How to Prompt Claude to Save Memories:
 
-# When finding a pattern
-node .claude/memory-system-v2.js pattern category "pattern"
-
-# Search memories
-node .claude/memory-system-v2.js search "topic"
-
-# List categories
-node .claude/memory-system-v2.js list-categories
-
-# Review memories interactively
-node .claude/memory-system-v2.js review all
+**1. For Facts (Project Knowledge):**
+```
+"Add to memory: Firebase project ID is fibreflow-73daf"
+"Remember this: PoleTracker uses Google Maps API"
+"Save fact: Maximum 12 drops per pole"
 ```
 
-**When to Update Memory:**
-- After fixing a tricky issue
-- When you correct my approach
-- After discovering project constraints
-- When establishing new patterns
+**2. For Patterns (Development Practices):**
+```
+"Add pattern: Always use signals instead of BehaviorSubject"
+"Remember pattern: Test on live Firebase, never use ng serve"
+"Save this approach: Simple solutions over complex abstractions"
+```
+
+**3. For Episodes (Problem-Solution Pairs):**
+```
+"Add episode: Fixed auth by using same Firebase project for storage"
+"Remember this solution: Circular dependency fixed by removing service injection"
+"Save this fix: NG0200 error was actually circular DI, not change detection"
+```
+
+**Claude will then run the appropriate command:**
+```bash
+# Facts
+node .claude/zep-bridge.js add-fact category "fact content"
+
+# Patterns  
+node .claude/zep-bridge.js add-pattern "pattern-name" "description"
+
+# Episodes
+node .claude/zep-bridge.js add-episode "title" '{"problem":"...","solution":"..."}'
+
+# Search
+node .claude/zep-bridge.js search "topic"
+```
+
+### 📁 Local Memory System (Backup)
+**Status**: Available - JSON-based with conflict detection  
+**📖 [Local System Guide](.claude/MEMORY_SYSTEM_GUIDE.md)**
+
+**Memory Architecture:**
+```
+.claude/
+├── memory/                    # Memory storage
+│   ├── memory.json           # Local memory (backup)
+│   └── archive/              # Archived memories
+├── zep-bridge.js             # Zep Cloud CLI
+├── memory-system-v2.js       # Local memory system
+├── ZEP_INTEGRATION_SUMMARY.md # Zep documentation
+└── MEMORY_SYSTEM_GUIDE.md    # Local system guide
+```
+
+**When to Save Memories:**
+- ✅ After fixing a tricky issue → "Add episode: [describe fix]"
+- ✅ When discovering project constraints → "Add fact: [constraint]"
+- ✅ After establishing new patterns → "Add pattern: [pattern name]"
+- ✅ When learning system behavior → "Remember: [behavior]"
+
+## 🚀 Quick Backup & Deploy
+
+### One-Command Backup (SAFE - No data loss)
+```bash
+# Auto backup with safety checks
+./scripts/auto-backup.sh
+
+# Or use quick alias (add to ~/.bashrc)
+alias backup-all='jj describe -m "Backup: $(date +%Y-%m-%d) - $(jj st | grep -c "A\|M\|D") files changed" && jj bookmark set master -r @ && jj git push --branch master'
+```
+
+### Manual Backup Steps
+```bash
+# 1. Check status
+jj st
+
+# 2. Create commit
+jj describe -m "Your commit message"
+
+# 3. Update master
+jj bookmark set master -r @
+
+# 4. Push to GitHub
+jj git push --branch master
+```
+
+**📖 Full Guide**: `.claude/workflows/backup-checklist.md`
 
 ## 🛑 ARCHITECTURAL CHANGES - ASK FIRST!
 
@@ -423,6 +490,8 @@ ngOnInit() {
 - `/create-feature` - Scaffold new feature with proper structure
 - `/check-implementation` - Verify feature completeness
 - `/dev-task` - View development backlog and tasks
+- `/new_plan` - Start PLANIR workflow for comprehensive feature planning
+- `/new_task` - Quick task implementation with streamlined planning
 - `node scripts/sync-meetings-improved.js` - Sync meetings from Fireflies to Firebase
 
 **Page Context Commands**:
@@ -447,6 +516,90 @@ ngOnInit() {
 8. Validate on live site: https://fibreflow.web.app
 9. Use `/check-implementation` to verify completeness
 10. Link implementation back to specification
+
+## 📋 **NEW TASK WORKFLOW - The PLANIR Method** (2025-07-24)
+
+**Use `/new_plan` or `/new_task` to activate this workflow**
+
+### **PLANIR**: **P**lan → **L**isten → **A**nalyze → **N**otate → **I**mplement → **R**eview
+
+### Phase 1: PLANNING & REFINEMENT
+1. **Listen & Understand**
+   - Fully understand the user's request
+   - Ask clarifying questions
+   - Identify constraints and requirements
+
+2. **Brainstorm & Analyze**
+   - Consider multiple approaches
+   - Identify potential challenges
+   - Suggest best practices
+
+3. **Advise & Refine**
+   - Present options with pros/cons
+   - Recommend optimal approach
+   - Get feedback and iterate
+
+4. **Clarify & Confirm**
+   - Ensure mutual understanding
+   - Confirm scope and deliverables
+   - Address any concerns
+
+5. **Summarize & Document**
+   - Create clear, actionable plan
+   - Include success criteria
+   - Define checkpoints
+
+### Phase 2: PLAN APPROVAL & STORAGE
+1. **Seek Approval**
+   - Present final plan
+   - Wait for explicit "approved" or "let's proceed"
+   
+2. **Save Approved Plan**
+   - Location: `/docs/plans/approved/`
+   - Naming: `FEATURE_PLAN_APPROVED_YYYY-MM-DD.md`
+   - Example: `POLE_ANALYTICS_PLAN_APPROVED_2025-07-24.md`
+
+3. **Create Implementation Checklist**
+   - Extract actionable items from plan
+   - Add to TodoWrite tool
+   - Set priorities and dependencies
+
+### Phase 3: IMPLEMENTATION WITH FEEDBACK
+1. **Work from Plan**
+   - Follow approved plan strictly
+   - Mark todos as "in_progress" when starting
+   - Complete one item at a time
+
+2. **Checkpoint Feedback**
+   - After each major step: "✅ Completed: [step]. Next: [next step]"
+   - If issues arise: "⚠️ Issue with [step]: [description]. Suggested solution: [solution]"
+   - Wait for user acknowledgment before proceeding to major changes
+
+3. **Progress Tracking**
+   - Update todos to "completed" immediately after each step
+   - Provide percentage complete updates
+   - Flag any deviations from plan
+
+### 📁 Plan Storage Structure
+```
+docs/
+├── plans/
+│   ├── drafts/           # Work-in-progress plans
+│   ├── approved/         # User-approved plans
+│   └── completed/        # Implemented plans (archived)
+```
+
+### 🔄 Example Workflow
+```
+User: /new_plan
+Claude: "I'm ready to help you plan a new feature. What would you like to build?"
+
+User: "A reporting system for pole data"
+Claude: [Enters PLANIR workflow - asks clarifying questions, creates plan, seeks approval]
+
+User: "Approved!"
+Claude: [Saves plan, creates todos, begins implementation with checkpoints]
+```
 
 **Critical Rules**:
 - 🚨 **FUNDAMENTAL**: ALWAYS consider full system impact (working directory → build → deployment → live app)
@@ -680,6 +833,41 @@ features/
 - **Services**: `service-name.service.ts`
 - **Models**: `model-name.model.ts`
 - **Guards**: `guard-name.guard.ts`
+- **Documentation/Planning**: `FEATURE_PURPOSE_DESCRIPTION_YYYY-MM-DD.md` (e.g., `POLE_REPORTS_IMPLEMENTATION_PLAN_2025-07-24.md`)
+  - Use CAPS_WITH_UNDERSCORES for clarity
+  - Include feature name, purpose, and date
+  - Be specific and descriptive in naming
+
+### 📂 Data & Report File Organization (CRITICAL)
+**ALWAYS follow this structure for data files and reports:**
+
+```
+OneMap/
+├── data/                     # Raw data files (CSV, Excel)
+│   ├── daily/               # Daily uploads
+│   │   └── YYYY-MM-DD/     # Date-organized
+│   └── archive/            # Historical data
+├── Reports/                 # Generated reports (capital R)
+│   ├── poles/              # Pole-specific reports
+│   ├── drops/              # Drop analysis reports
+│   ├── daily-processing/   # Daily processing reports
+│   └── analysis/           # General analytics
+├── docs/                   # Technical documentation
+├── scripts/               # Processing scripts
+└── config/               # Configuration files
+```
+
+**File Placement Rules:**
+1. **Analysis Reports** → `OneMap/Reports/[category]/`
+2. **Raw Data** → `OneMap/data/[type]/`
+3. **Processing Scripts** → `OneMap/scripts/`
+4. **Documentation** → `OneMap/docs/` (technical) or `/docs/` (project-wide)
+
+**Examples:**
+- ✅ `OneMap/Reports/poles/CORRECTED_POLE_STATUS_ANALYSIS_2025-07-24.md`
+- ✅ `OneMap/Reports/daily-processing/processing_2025-07-24_Lawley.md`
+- ❌ `OneMap/CORRECTED_POLE_STATUS_ANALYSIS_2025-07-24.md` (wrong location!)
+- ❌ `OneMap/some-random-analysis.md` (no structure!)
 
 ### Import Organization
 Always organize imports in this order:

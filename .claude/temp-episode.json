@@ -1,0 +1,15 @@
+{
+  "problem": "Need persistent memory across Claude sessions",
+  "solution": "Integrated Zep Cloud temporal knowledge graphs with manual save prompts",
+  "entities": ["FibreFlow", "Zep Cloud", "Memory System"],
+  "key_features": [
+    "Manual memory updates via prompts",
+    "Three types: facts, patterns, episodes",
+    "Temporal tracking of changes",
+    "Semantic search capabilities"
+  ],
+  "metadata": {
+    "date": "2025-07-24",
+    "documented_in": "CLAUDE.md"
+  }
+}

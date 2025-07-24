@@ -1,0 +1,346 @@
+@use '../../../../styles/component-theming' as theme;
+
+.analytics-dashboard-container {
+  padding: theme.ff-spacing(lg);
+  max-width: 1400px;
+  margin: 0 auto;
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: theme.ff-spacing(xl);
+    
+    .header-content {
+      h1 {
+        display: flex;
+        align-items: center;
+        gap: theme.ff-spacing(sm);
+        margin: 0 0 theme.ff-spacing(sm) 0;
+        font-size: theme.ff-rem(28);
+        font-weight: 600;
+        color: theme.ff-rgb(foreground);
+        
+        mat-icon {
+          color: theme.ff-rgb(primary);
+          font-size: theme.ff-rem(32);
+          width: 32px;
+          height: 32px;
+        }
+      }
+      
+      p {
+        margin: 0;
+        color: theme.ff-rgba(foreground, 0.7);
+        font-size: theme.ff-rem(16);
+      }
+    }
+    
+    .header-actions {
+      display: flex;
+      gap: theme.ff-spacing(sm);
+    }
+  }
+
+  .loading-state {
+    .loading-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: theme.ff-spacing(md);
+      padding: theme.ff-spacing(xl);
+      
+      p {
+        margin: 0;
+        color: theme.ff-rgba(foreground, 0.7);
+      }
+    }
+  }
+
+  .dashboard-content {
+    display: flex;
+    flex-direction: column;
+    gap: theme.ff-spacing(lg);
+
+    .stats-overview {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: theme.ff-spacing(md);
+      
+      .stat-card {
+        .stat-item {
+          display: flex;
+          align-items: center;
+          gap: theme.ff-spacing(md);
+          
+          mat-icon {
+            font-size: theme.ff-rem(32);
+            width: 32px;
+            height: 32px;
+            color: theme.ff-rgb(primary);
+          }
+          
+          .stat-details {
+            display: flex;
+            flex-direction: column;
+            gap: theme.ff-spacing(xs);
+            
+            .stat-value {
+              font-size: theme.ff-rem(24);
+              font-weight: 600;
+              color: theme.ff-rgb(foreground);
+            }
+            
+            .stat-label {
+              font-size: theme.ff-rem(12);
+              color: theme.ff-rgba(foreground, 0.7);
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+            }
+          }
+        }
+      }
+    }
+
+    .filters-card {
+      mat-card-header {
+        mat-card-title {
+          display: flex;
+          align-items: center;
+          gap: theme.ff-spacing(sm);
+          
+          mat-icon {
+            color: theme.ff-rgb(primary);
+          }
+        }
+      }
+      
+      .filters-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: theme.ff-spacing(md);
+        
+        mat-form-field {
+          width: 100%;
+        }
+      }
+    }
+
+    .reports-table-card {
+      mat-card-header {
+        mat-card-title {
+          display: flex;
+          align-items: center;
+          gap: theme.ff-spacing(sm);
+          
+          mat-icon {
+            color: theme.ff-rgb(primary);
+          }
+          
+          mat-chip {
+            margin-left: theme.ff-spacing(sm);
+          }
+        }
+      }
+
+      .table-container {
+        overflow-x: auto;
+        
+        .reports-table {
+          width: 100%;
+          
+          .clickable-row {
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            
+            &:hover {
+              background-color: theme.ff-rgba(surface, 0.5);
+            }
+          }
+          
+          .pole-cell {
+            display: flex;
+            align-items: center;
+            gap: theme.ff-spacing(sm);
+            
+            mat-icon {
+              color: theme.ff-rgb(primary);
+              font-size: theme.ff-rem(20);
+              width: 20px;
+              height: 20px;
+            }
+            
+            .pole-number {
+              font-weight: 500;
+            }
+            
+            .version-chip {
+              font-size: theme.ff-rem(10);
+              height: 20px;
+              line-height: 20px;
+            }
+          }
+          
+          .date-cell {
+            display: flex;
+            align-items: center;
+            gap: theme.ff-spacing(sm);
+            
+            .date {
+              flex: 1;
+            }
+            
+            mat-icon {
+              font-size: theme.ff-rem(16);
+              width: 16px;
+              height: 16px;
+            }
+          }
+          
+          .summary-cell {
+            display: flex;
+            flex-direction: column;
+            gap: theme.ff-spacing(xs);
+            
+            .summary-item {
+              display: flex;
+              align-items: center;
+              gap: theme.ff-spacing(xs);
+              font-size: theme.ff-rem(12);
+              color: theme.ff-rgba(foreground, 0.8);
+              
+              mat-icon {
+                font-size: theme.ff-rem(14);
+                width: 14px;
+                height: 14px;
+                color: theme.ff-rgba(foreground, 0.6);
+              }
+            }
+          }
+          
+          .actions-cell {
+            display: flex;
+            gap: theme.ff-spacing(xs);
+          }
+          
+          mat-chip {
+            display: flex;
+            align-items: center;
+            gap: theme.ff-spacing(xs);
+            
+            mat-icon {
+              font-size: theme.ff-rem(14);
+              width: 14px;
+              height: 14px;
+            }
+          }
+        }
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: theme.ff-spacing(3xl);
+        
+        mat-icon {
+          font-size: theme.ff-rem(64);
+          width: 64px;
+          height: 64px;
+          color: theme.ff-rgba(foreground, 0.3);
+          margin-bottom: theme.ff-spacing(md);
+        }
+        
+        h3 {
+          margin: 0 0 theme.ff-spacing(sm) 0;
+          color: theme.ff-rgba(foreground, 0.8);
+        }
+        
+        p {
+          margin: 0 0 theme.ff-spacing(lg) 0;
+          color: theme.ff-rgba(foreground, 0.6);
+        }
+        
+        button {
+          mat-icon {
+            margin-right: theme.ff-spacing(sm);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Mobile responsiveness
+@media (max-width: 768px) {
+  .analytics-dashboard-container {
+    padding: theme.ff-spacing(md);
+    
+    .page-header {
+      flex-direction: column;
+      align-items: stretch;
+      gap: theme.ff-spacing(md);
+      
+      .header-content {
+        h1 {
+          font-size: theme.ff-rem(24);
+          
+          mat-icon {
+            font-size: theme.ff-rem(28);
+            width: 28px;
+            height: 28px;
+          }
+        }
+        
+        p {
+          font-size: theme.ff-rem(14);
+        }
+      }
+      
+      .header-actions {
+        align-self: flex-end;
+      }
+    }
+    
+    .dashboard-content {
+      .stats-overview {
+        grid-template-columns: repeat(2, 1fr);
+        gap: theme.ff-spacing(sm);
+        
+        .stat-card .stat-item {
+          mat-icon {
+            font-size: theme.ff-rem(24);
+            width: 24px;
+            height: 24px;
+          }
+          
+          .stat-details {
+            .stat-value {
+              font-size: theme.ff-rem(18);
+            }
+            
+            .stat-label {
+              font-size: theme.ff-rem(10);
+            }
+          }
+        }
+      }
+      
+      .filters-card {
+        .filters-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      
+      .reports-table-card {
+        .table-container {
+          .reports-table {
+            .summary-cell {
+              .summary-item {
+                font-size: theme.ff-rem(11);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

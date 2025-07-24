@@ -271,6 +271,12 @@ const allRoutes: Routes = [
     data: { title: 'Audit Trail' },
   },
   {
+    path: 'images',
+    loadChildren: () => import('./features/images/images.routes').then((m) => m.imagesRoutes),
+    canActivate: [authGuard],
+    data: { title: 'Image Upload', preload: true },
+  },
+  {
     path: 'reports',
     loadChildren: () => import('./features/reports/reports.routes').then((m) => m.REPORTS_ROUTES),
     canActivate: [authGuard],
