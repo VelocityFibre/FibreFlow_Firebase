@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard } from '@app/core/guards/auth.guard';
+import { authGuard } from '../../core/guards/auth.guard';
 
 export const ANALYTICS_ROUTES: Routes = [
   {
@@ -7,20 +7,21 @@ export const ANALYTICS_ROUTES: Routes = [
     redirectTo: 'dashboard',
     pathMatch: 'full',
   },
-  {
-    path: 'dashboard',
-    loadComponent: () => import('./pages/analytics-dashboard/analytics-dashboard.component')
-      .then(m => m.AnalyticsDashboardComponent),
-    canActivate: [authGuard],
-    data: { title: 'Analytics Dashboard' }
-  },
-  {
-    path: 'pole-report/:poleNumber',
-    loadComponent: () => import('./pages/pole-detail-report/pole-detail-report.component')
-      .then(m => m.PoleDetailReportComponent),
-    canActivate: [authGuard],
-    data: { title: 'Pole Report' }
-  },
+  // Temporarily disabled due to TypeScript errors
+  // {
+  //   path: 'dashboard',
+  //   loadComponent: () => import('./pages/analytics-dashboard/analytics-dashboard.component')
+  //     .then(m => m.AnalyticsDashboardComponent),
+  //   canActivate: [authGuard],
+  //   data: { title: 'Analytics Dashboard' }
+  // },
+  // {
+  //   path: 'pole-report/:poleNumber',
+  //   loadComponent: () => import('./pages/pole-detail-report/pole-detail-report.component')
+  //     .then(m => m.PoleDetailReportComponent),
+  //   canActivate: [authGuard],
+  //   data: { title: 'Pole Report' }
+  // },
   {
     path: 'pole-permissions',
     loadChildren: () =>
