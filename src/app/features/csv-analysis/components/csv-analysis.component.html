@@ -1,0 +1,400 @@
+<div class="csv-analysis-container">
+  <!-- Page Header -->
+  <mat-card class="header-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>analytics</mat-icon>
+        CSV Analysis Module
+      </mat-card-title>
+      <mat-card-subtitle>
+        Analyze OneMap CSV exports using proven report logic
+      </mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+
+  <!-- File Upload and Configuration -->
+  <mat-card class="config-card">
+    <mat-card-header>
+      <mat-card-title>Upload & Configure</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="configForm" class="config-form">
+        <!-- File Upload -->
+        <div class="file-upload-section">
+          <input
+            type="file"
+            accept=".csv"
+            (change)="onFileSelected($event)"
+            #fileInput
+            hidden
+          />
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="fileInput.click()"
+            type="button"
+          >
+            <mat-icon>upload_file</mat-icon>
+            Select CSV File
+          </button>
+          
+          @if (selectedFile()) {
+            <mat-chip-listbox class="file-info">
+              <mat-chip-option selected>
+                <mat-icon matChipAvatar>description</mat-icon>
+                {{ selectedFile()!.name }}
+                <span class="file-size">({{ (selectedFile()!.size / 1024).toFixed(1) }} KB)</span>
+              </mat-chip-option>
+            </mat-chip-listbox>
+          }
+        </div>
+
+        <!-- Date Range Configuration -->
+        <div class="date-range-section">
+          <mat-form-field>
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+            <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>End Date</mat-label>
+            <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+            <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Report Filename Prefix</mat-label>
+            <input matInput formControlName="filename" placeholder="e.g., Lawley_May_Week3">
+          </mat-form-field>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button
+            mat-raised-button
+            color="accent"
+            (click)="processData()"
+            [disabled]="!csvContent() || configForm.invalid || isProcessing()"
+          >
+            @if (isProcessing()) {
+              <mat-spinner diameter="20"></mat-spinner>
+              Processing...
+            } @else {
+              <mat-icon>play_arrow</mat-icon>
+              Analyze CSV Data
+            }
+          </button>
+
+          <button
+            mat-stroked-button
+            (click)="resetAnalysis()"
+            [disabled]="isProcessing()"
+          >
+            <mat-icon>refresh</mat-icon>
+            Reset
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Analysis Results -->
+  @if (hasAnalysisResults()) {
+    <mat-card class="results-card">
+      <mat-card-header>
+        <mat-card-title>Analysis Results</mat-card-title>
+        <mat-card-subtitle>
+          Generated {{ analysisResult()!.processingDate | date:'medium' }}
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <!-- Quality Score -->
+        <div class="quality-score">
+          <div class="score-display">
+            <span class="score-number" [class]="dataQualityColor()">
+              {{ analysisResult()!.dataQualityScore }}%
+            </span>
+            <span class="score-label">
+              Data Quality: {{ getQualityStatusText() }}
+            </span>
+          </div>
+          
+          @if (analysisResult()!.validationErrors.length > 0) {
+            <mat-chip-listbox class="error-chips">
+              @for (error of analysisResult()!.validationErrors; track error) {
+                <mat-chip-option>
+                  <mat-icon matChipAvatar>warning</mat-icon>
+                  {{ error }}
+                </mat-chip-option>
+              }
+            </mat-chip-listbox>
+          }
+        </div>
+
+        <!-- Summary Statistics -->
+        <div class="summary-stats">
+          <div class="stat-card">
+            <mat-icon>inventory</mat-icon>
+            <div class="stat-content">
+              <span class="stat-number">{{ analysisResult()!.totalRecords }}</span>
+              <span class="stat-label">Total Records</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <mat-icon>new_releases</mat-icon>
+            <div class="stat-content">
+              <span class="stat-number">{{ analysisResult()!.firstEntryRecords.length }}</span>
+              <span class="stat-label">First Entry Records</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <mat-icon>content_copy</mat-icon>
+            <div class="stat-content">
+              <span class="stat-number">{{ analysisResult()!.duplicatesPreWindow.length }}</span>
+              <span class="stat-label">Duplicates Pre-Window</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <mat-icon>warning</mat-icon>
+            <div class="stat-content">
+              <span class="stat-number">{{ analysisResult()!.noDropAllocated.length }}</span>
+              <span class="stat-label">No Drop Allocated</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <mat-icon>delete</mat-icon>
+            <div class="stat-content">
+              <span class="stat-number">{{ analysisResult()!.duplicateDropsRemoved.length }}</span>
+              <span class="stat-label">Duplicate Drops Removed</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Download Actions -->
+        <div class="download-actions">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="downloadAllReports()"
+          >
+            <mat-icon>download</mat-icon>
+            Download All Reports
+          </button>
+
+          <button
+            mat-stroked-button
+            (click)="downloadReport('first-entry')"
+            [disabled]="analysisResult()!.firstEntryRecords.length === 0"
+          >
+            <mat-icon>file_download</mat-icon>
+            First Entry ({{ analysisResult()!.firstEntryRecords.length }})
+          </button>
+
+          <button
+            mat-stroked-button
+            (click)="downloadReport('duplicates-pre-window')"
+            [disabled]="analysisResult()!.duplicatesPreWindow.length === 0"
+          >
+            <mat-icon>file_download</mat-icon>
+            Duplicates Pre-Window ({{ analysisResult()!.duplicatesPreWindow.length }})
+          </button>
+
+          <button
+            mat-stroked-button
+            (click)="downloadReport('no-drop-allocated')"
+            [disabled]="analysisResult()!.noDropAllocated.length === 0"
+          >
+            <mat-icon>file_download</mat-icon>
+            No Drop Allocated ({{ analysisResult()!.noDropAllocated.length }})
+          </button>
+
+          <button
+            mat-stroked-button
+            (click)="downloadReport('duplicate-drops-removed')"
+            [disabled]="analysisResult()!.duplicateDropsRemoved.length === 0"
+          >
+            <mat-icon>file_download</mat-icon>
+            Duplicates Removed ({{ analysisResult()!.duplicateDropsRemoved.length }})
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Detailed Report Tables -->
+    <mat-card class="tables-card">
+      <mat-card-header>
+        <mat-card-title>Detailed Reports</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-tab-group>
+          <!-- First Entry Records -->
+          <mat-tab label="First Entry Records ({{ analysisResult()!.firstEntryRecords.length }})">
+            <div class="table-container">
+              <mat-table [dataSource]="analysisResult()!.firstEntryRecords" class="report-table">
+                <ng-container matColumnDef="propertyId">
+                  <mat-header-cell *matHeaderCellDef>Property ID</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.propertyId }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="poleNumber">
+                  <mat-header-cell *matHeaderCellDef>Pole Number</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.poleNumber }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="dropNumber">
+                  <mat-header-cell *matHeaderCellDef>Drop Number</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.dropNumber }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                  <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.status }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fieldAgentName">
+                  <mat-header-cell *matHeaderCellDef>Field Agent</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.fieldAgentName }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="lastModifiedDate">
+                  <mat-header-cell *matHeaderCellDef>Last Modified</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.lastModifiedDate | date:'short' }}</mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+            </div>
+          </mat-tab>
+
+          <!-- Duplicates Pre-Window -->
+          <mat-tab label="Duplicates Pre-Window ({{ analysisResult()!.duplicatesPreWindow.length }})">
+            <div class="table-container">
+              <mat-table [dataSource]="analysisResult()!.duplicatesPreWindow" class="report-table">
+                <ng-container matColumnDef="propertyId">
+                  <mat-header-cell *matHeaderCellDef>Property ID</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.propertyId }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="poleNumber">
+                  <mat-header-cell *matHeaderCellDef>Pole Number</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.poleNumber }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="dropNumber">
+                  <mat-header-cell *matHeaderCellDef>Drop Number</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.dropNumber }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                  <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.status }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fieldAgentName">
+                  <mat-header-cell *matHeaderCellDef>Field Agent</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.fieldAgentName }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="lastModifiedDate">
+                  <mat-header-cell *matHeaderCellDef>Last Modified</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.lastModifiedDate | date:'short' }}</mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+            </div>
+          </mat-tab>
+
+          <!-- No Drop Allocated -->
+          <mat-tab label="No Drop Allocated ({{ analysisResult()!.noDropAllocated.length }})">
+            <div class="table-container">
+              <mat-table [dataSource]="analysisResult()!.noDropAllocated" class="report-table">
+                <ng-container matColumnDef="propertyId">
+                  <mat-header-cell *matHeaderCellDef>Property ID</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.propertyId }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="poleNumber">
+                  <mat-header-cell *matHeaderCellDef>Pole Number</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.poleNumber }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="dropNumber">
+                  <mat-header-cell *matHeaderCellDef>Drop Number</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.dropNumber || 'N/A' }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                  <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.status }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fieldAgentName">
+                  <mat-header-cell *matHeaderCellDef>Field Agent</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.fieldAgentName }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="lastModifiedDate">
+                  <mat-header-cell *matHeaderCellDef>Last Modified</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.lastModifiedDate | date:'short' }}</mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+            </div>
+          </mat-tab>
+
+          <!-- Duplicate Drops Removed -->
+          <mat-tab label="Duplicate Drops Removed ({{ analysisResult()!.duplicateDropsRemoved.length }})">
+            <div class="table-container">
+              <mat-table [dataSource]="analysisResult()!.duplicateDropsRemoved" class="report-table">
+                <ng-container matColumnDef="propertyId">
+                  <mat-header-cell *matHeaderCellDef>Property ID</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.propertyId }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="poleNumber">
+                  <mat-header-cell *matHeaderCellDef>Pole Number</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.poleNumber }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="dropNumber">
+                  <mat-header-cell *matHeaderCellDef>Drop Number</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.dropNumber }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                  <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.status }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fieldAgentName">
+                  <mat-header-cell *matHeaderCellDef>Field Agent</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.fieldAgentName }}</mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="lastModifiedDate">
+                  <mat-header-cell *matHeaderCellDef>Last Modified</mat-header-cell>
+                  <mat-cell *matCellDef="let record">{{ record.lastModifiedDate | date:'short' }}</mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+              </mat-table>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

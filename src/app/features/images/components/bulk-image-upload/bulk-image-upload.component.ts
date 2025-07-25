@@ -66,6 +66,38 @@ interface ImageBatch {
     ></app-page-header>
 
     <div class="upload-container">
+      <!-- Debug Panel (remove when working) -->
+      @if (debugInfo().length > 0) {
+        <mat-card class="debug-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>bug_report</mat-icon>
+              Debug Information
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="debug-info">
+              @for (info of debugInfo(); track $index) {
+                <div class="debug-line">{{ info }}</div>
+              }
+              @if (lastError()) {
+                <div class="error-line">
+                  <mat-icon>error</mat-icon>
+                  <strong>Last Error:</strong> {{ lastError() }}
+                </div>
+              }
+            </div>
+            <div class="debug-status">
+              <strong>Status Check:</strong>
+              <span>Initialized: {{ isInitialized() ? '✅' : '❌' }}</span>
+              <span>User: {{ currentUser()?.email || '❌ None' }}</span>
+              <span>Site Name: {{ siteName || '❌ Empty' }}</span>
+              <span>Can Upload: {{ canUpload() ? '✅' : '❌' }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+
       <!-- User Status & Batch Info Card -->
       <mat-card class="status-card">
         <mat-card-content>
@@ -138,7 +170,7 @@ interface ImageBatch {
           <div 
             class="dropzone"
             [class.dragover]="isDragging()"
-            [class.disabled]="!currentUser() || isUploading() || !siteName"
+            [class.disabled]="!canUpload()"
             (drop)="onDrop($event)"
             (dragover)="onDragOver($event)"
             (dragleave)="onDragLeave($event)"
@@ -146,16 +178,17 @@ interface ImageBatch {
           >
             <mat-icon class="upload-icon">add_photo_alternate</mat-icon>
             @if (!currentUser()) {
-              <h2>Please login to upload images</h2>
-            } @else if (!siteName) {
-              <h2>Enter site name first</h2>
-              <p>Site name is required to organize your images</p>
+              <h2>🔐 Please login to upload images</h2>
+              <p>Sign in with your Google account to continue</p>
+            } @else if (!siteName || siteName.trim() === '') {
+              <h2>📝 Enter site name first</h2>
+              <p><strong>Required:</strong> Fill in the "Site Name" field above to organize your images</p>
             } @else if (isUploading()) {
-              <h2>Upload in progress...</h2>
+              <h2>⏳ Upload in progress...</h2>
               <p>Please wait for current uploads to complete</p>
             } @else {
-              <h2>Drop pole photos here</h2>
-              <p>or click to browse (JPG, PNG, HEIC supported)</p>
+              <h2>📷 Drop pole photos here</h2>
+              <p>or <strong>click to browse</strong> (JPG, PNG, HEIC supported)</p>
               <small>Perfect for GPS Map Camera photos with coordinates</small>
             }
             <input 
@@ -605,11 +638,59 @@ export class BulkImageUploadComponent {
   siteName = '';
   projectName = '';
   
+  // Debug and error state
+  debugInfo = signal<string[]>([]);
+  lastError = signal<string | null>(null);
+  isInitialized = signal(false);
+  
   constructor() {
+    this.addDebugInfo('🚀 BulkImageUploadComponent initializing...');
+    
     // Subscribe to auth state
     user(this.auth).subscribe(user => {
       this.currentUser.set(user);
+      if (user) {
+        this.addDebugInfo(`✅ User authenticated: ${user.email}`);
+        this.testFirebaseConnection();
+      } else {
+        this.addDebugInfo('❌ No user authenticated');
+      }
     });
+    
+    this.isInitialized.set(true);
+    this.addDebugInfo('✅ Component initialized');
+  }
+  
+  private addDebugInfo(message: string): void {
+    const timestamp = new Date().toLocaleTimeString();
+    const debugMessage = `[${timestamp}] ${message}`;
+    console.log('🔧 Upload Debug:', debugMessage);
+    this.debugInfo.update(info => [...info.slice(-9), debugMessage]); // Keep last 10 messages
+  }
+  
+  private async testFirebaseConnection(): Promise<void> {
+    try {
+      this.addDebugInfo('🧪 Testing Firebase Storage connection...');
+      
+      // Test storage access
+      const testRef = ref(this.storage, 'test-connection');
+      this.addDebugInfo('✅ Storage reference created successfully');
+      
+      // Test Firestore access
+      const testDoc = await addDoc(collection(this.firestore, 'connection-test'), {
+        test: true,
+        timestamp: new Date(),
+        user: this.currentUser()?.email || 'unknown'
+      });
+      this.addDebugInfo('✅ Firestore write test successful');
+      
+      this.lastError.set(null);
+    } catch (error: any) {
+      const errorMsg = `Firebase connection failed: ${error.message}`;
+      this.addDebugInfo(`❌ ${errorMsg}`);
+      this.lastError.set(errorMsg);
+      this.showError(`Connection test failed: ${error.message}`);
+    }
   }
 
   // File management
@@ -628,9 +709,21 @@ export class BulkImageUploadComponent {
 
   hasPendingFiles = computed(() => this.pendingCount() > 0);
 
-  canUpload = computed(() => 
-    this.currentUser() && !this.isUploading() && this.siteName.trim().length > 0
-  );
+  canUpload(): boolean {
+    const hasUser = !!this.currentUser();
+    const notUploading = !this.isUploading();
+    const hasSiteName = this.siteName && this.siteName.trim().length > 0;
+    
+    console.log('🔍 canUpload check:', {
+      hasUser,
+      notUploading,
+      hasSiteName,
+      siteName: this.siteName,
+      result: hasUser && notUploading && hasSiteName
+    });
+    
+    return hasUser && notUploading && hasSiteName;
+  }
 
   canStartUpload = computed(() => 
     this.canUpload() && this.hasPendingFiles()
@@ -686,37 +779,93 @@ export class BulkImageUploadComponent {
   }
 
   onDrop(event: DragEvent): void {
-    if (!this.canUpload()) return;
-    
     event.preventDefault();
     event.stopPropagation();
     this.isDragging.set(false);
+    
+    console.log('📁 Drop event triggered', {
+      canUpload: this.canUpload(),
+      user: this.currentUser()?.email,
+      siteName: this.siteName,
+      isUploading: this.isUploading()
+    });
+    
+    if (!this.siteName || this.siteName.trim() === '') {
+      this.showError('Please enter a site name before uploading files');
+      return;
+    }
+    
+    if (!this.currentUser()) {
+      this.showError('Please sign in to upload images');
+      return;
+    }
+    
+    if (this.isUploading()) {
+      this.showError('Please wait for current upload to complete');
+      return;
+    }
 
     const files = event.dataTransfer?.files;
-    if (files) {
+    if (files && files.length > 0) {
+      console.log(`📁 Processing ${files.length} dropped files`);
       this.addFiles(files);
+    } else {
+      console.log('❌ No files in drop event');
+      this.showError('No files were dropped. Please try again.');
     }
   }
 
   onFileSelected(event: Event): void {
-    if (!this.canUpload()) return;
+    console.log('📂 File input triggered');
+    
+    if (!this.siteName || this.siteName.trim() === '') {
+      this.showError('Please enter a site name before selecting files');
+      return;
+    }
+    
+    if (!this.currentUser()) {
+      this.showError('Please sign in to upload images');
+      return;
+    }
+    
+    if (this.isUploading()) {
+      this.showError('Please wait for current upload to complete');
+      return;
+    }
     
     const input = event.target as HTMLInputElement;
-    if (input.files) {
+    if (input.files && input.files.length > 0) {
+      console.log(`📂 Processing ${input.files.length} selected files`);
       this.addFiles(input.files);
       // Reset input so same file can be selected again
       input.value = '';
+    } else {
+      console.log('❌ No files selected');
+      this.showError('No files were selected. Please try again.');
     }
   }
 
   private addFiles(fileList: FileList): void {
+    this.addDebugInfo(`🔍 Analyzing ${fileList.length} files`);
+    
+    // Log each file for debugging
+    Array.from(fileList).forEach((file, index) => {
+      this.addDebugInfo(`File ${index + 1}: ${file.name} (${file.type}, ${this.formatSize(file.size)})`);
+    });
+    
     const imageFiles = Array.from(fileList).filter(file => {
       const isImage = file.type.startsWith('image/') || 
                      /\.(jpg|jpeg|png|heic|webp)$/i.test(file.name);
+      if (!isImage) {
+        this.addDebugInfo(`❌ Rejected non-image: ${file.name} (${file.type})`);
+      }
       return isImage;
     });
 
+    this.addDebugInfo(`✅ Found ${imageFiles.length} valid image files out of ${fileList.length} total`);
+
     if (imageFiles.length === 0) {
+      this.addDebugInfo('❌ No valid image files found');
       this.showError('Please select image files only (JPG, PNG, HEIC)');
       return;
     }
@@ -725,11 +874,14 @@ export class BulkImageUploadComponent {
     const existingNames = new Set(this.files().map(f => f.name));
     const newFiles = imageFiles.filter(file => {
       if (existingNames.has(file.name)) {
+        this.addDebugInfo(`❌ Duplicate file: ${file.name}`);
         this.showError(`${file.name} is already in the list`);
         return false;
       }
       return true;
     });
+
+    this.addDebugInfo(`📝 Adding ${newFiles.length} new files to upload queue`);
 
     const uploadFiles: UploadImageFile[] = newFiles.map(file => ({
       name: file.name,

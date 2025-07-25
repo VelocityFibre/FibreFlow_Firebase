@@ -483,67 +483,31 @@ import { StaffMember } from '../../../staff/models/staff.model';
                           <h4>🏠 Customer Engagement</h4>
                           <div class="financial-grid">
                             <mat-form-field appearance="outline">
-                              <mat-label>Home Sign-ups Today</mat-label>
+                              <mat-label>Customer Complaints</mat-label>
                               <input
                                 matInput
                                 type="number"
                                 min="0"
-                                formControlName="homeSignupsToday"
-                                (input)="updateHomeTotal('homeSignups')"
+                                formControlName="customerComplaints"
                               />
                             </mat-form-field>
                             <mat-form-field appearance="outline">
-                              <mat-label>Home Sign-ups Total</mat-label>
+                              <mat-label>Customer Compliments</mat-label>
                               <input
                                 matInput
                                 type="number"
                                 min="0"
-                                formControlName="homeSignupsTotal"
-                                readonly
-                              />
-                              <mat-hint>Auto-calculated</mat-hint>
-                            </mat-form-field>
-                            <mat-form-field appearance="outline">
-                              <mat-label>Home Drops Today</mat-label>
-                              <input
-                                matInput
-                                type="number"
-                                min="0"
-                                formControlName="homeDropsToday"
-                                (input)="updateHomeTotal('homeDrops')"
+                                formControlName="customerCompliments"
                               />
                             </mat-form-field>
                             <mat-form-field appearance="outline">
-                              <mat-label>Home Drops Total</mat-label>
+                              <mat-label>Service Interruptions</mat-label>
                               <input
                                 matInput
                                 type="number"
                                 min="0"
-                                formControlName="homeDropsTotal"
-                                readonly
+                                formControlName="serviceInterruptions"
                               />
-                              <mat-hint>Auto-calculated</mat-hint>
-                            </mat-form-field>
-                            <mat-form-field appearance="outline">
-                              <mat-label>Homes Connected Today</mat-label>
-                              <input
-                                matInput
-                                type="number"
-                                min="0"
-                                formControlName="homesConnectedToday"
-                                (input)="updateHomeTotal('homesConnected')"
-                              />
-                            </mat-form-field>
-                            <mat-form-field appearance="outline">
-                              <mat-label>Homes Connected Total</mat-label>
-                              <input
-                                matInput
-                                type="number"
-                                min="0"
-                                formControlName="homesConnectedTotal"
-                                readonly
-                              />
-                              <mat-hint>Auto-calculated</mat-hint>
                             </mat-form-field>
                           </div>
                         </div>
@@ -1298,7 +1262,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
 
   getCoreKPIs() {
     return this.kpiDefinitions.filter((kpi) =>
-      ['permissions', 'status', 'poles'].includes(kpi.category),
+      ['permissions', 'status', 'poles', 'homes'].includes(kpi.category),
     );
   }
 
