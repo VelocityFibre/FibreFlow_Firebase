@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
-import { 
-  CsvRecord, 
-  CsvAnalysisResult, 
+import {
+  CsvRecord,
+  CsvAnalysisResult,
   CsvAnalysisConfig,
   CsvValidationResult,
   ValidationError,
-  CsvAnalysisReport
+  CsvAnalysisReport,
 } from '../models/csv-analysis.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CsvAnalysisService {
-  
   // Copied from proven OneMapService - these columns are battle-tested
   private readonly REQUIRED_COLUMNS = [
     'Property ID',
@@ -54,22 +53,26 @@ export class CsvAnalysisService {
   analyzeCsvData(csvContent: string, config: CsvAnalysisConfig): CsvAnalysisResult {
     // Step 1: Parse CSV using proven parsing logic
     const records = this.parseCsvData(csvContent);
-    
+
     // Step 2: Validate data quality
     const validation = this.validateCsvData(csvContent);
-    
+
     // Step 3: Process using proven business logic (exactly as in OneMapService)
-    const processedData = this.processDataUsingProvenLogic(records, config.startDate, config.endDate);
-    
+    const processedData = this.processDataUsingProvenLogic(
+      records,
+      config.startDate,
+      config.endDate,
+    );
+
     // Step 4: Calculate quality metrics
     const dataQualityScore = this.calculateDataQualityScore(records, validation);
-    
+
     return {
       ...processedData,
       totalRecords: records.length,
       processingDate: new Date(),
       dataQualityScore,
-      validationErrors: validation.errors.map(e => e.error)
+      validationErrors: validation.errors.map((e) => e.error),
     };
   }
 
@@ -188,11 +191,18 @@ export class CsvAnalysisService {
    * Core data processing logic with proven business rules
    * COPIED EXACTLY from proven OneMapService.processData()
    */
-  private processDataUsingProvenLogic(records: CsvRecord[], startDate: Date, endDate: Date): Omit<CsvAnalysisResult, 'totalRecords' | 'processingDate' | 'dataQualityScore' | 'validationErrors'> {
+  private processDataUsingProvenLogic(
+    records: CsvRecord[],
+    startDate: Date,
+    endDate: Date,
+  ): Omit<
+    CsvAnalysisResult,
+    'totalRecords' | 'processingDate' | 'dataQualityScore' | 'validationErrors'
+  > {
     // Step 1: Initial Data Filtering
     // Filter records where Status = "Home Sign Ups: Approved & Installation Scheduled"
     // Exclude records where Status contains "Pole Permissions"
-    let filteredRecords = records.filter(
+    const filteredRecords = records.filter(
       (record) =>
         record.status === 'Home Sign Ups: Approved & Installation Scheduled' &&
         !record.status.includes('Pole Permissions'),
@@ -296,40 +306,42 @@ export class CsvAnalysisService {
   private validateCsvData(csvContent: string): CsvValidationResult {
     const errors: ValidationError[] = [];
     const lines = csvContent.split('\n');
-    
+
     if (lines.length < 2) {
       return {
         valid: false,
         missingColumns: [],
         totalRows: 0,
         validRows: 0,
-        errors: [{ row: 1, column: 'file', error: 'CSV file must have header and data rows', value: '' }]
+        errors: [
+          { row: 1, column: 'file', error: 'CSV file must have header and data rows', value: '' },
+        ],
       };
     }
 
-    const headers = lines[0].split(',').map(h => h.trim());
+    const headers = lines[0].split(',').map((h) => h.trim());
     const headerValidation = this.validateCsvHeaders(headers);
-    
+
     let validRows = 0;
-    
+
     // Validate each data row
     for (let i = 1; i < lines.length; i++) {
       if (!lines[i].trim()) continue;
-      
+
       const values = this.parseCsvLine(lines[i]);
       let rowValid = true;
-      
+
       // Check required fields
       if (!values[0] || values[0].trim() === '') {
         errors.push({
           row: i + 1,
           column: 'Property ID',
           error: 'Property ID is required',
-          value: values[0] || ''
+          value: values[0] || '',
         });
         rowValid = false;
       }
-      
+
       if (rowValid) validRows++;
     }
 
@@ -338,7 +350,7 @@ export class CsvAnalysisService {
       missingColumns: headerValidation.missingColumns,
       totalRows: lines.length - 1,
       validRows,
-      errors
+      errors,
     };
   }
 
@@ -347,37 +359,41 @@ export class CsvAnalysisService {
    */
   private calculateDataQualityScore(records: CsvRecord[], validation: CsvValidationResult): number {
     if (records.length === 0) return 0;
-    
+
     let score = 100;
-    
+
     // Deduct for missing columns
     score -= validation.missingColumns.length * 10;
-    
+
     // Deduct for validation errors
     score -= validation.errors.length * 2;
-    
+
     // Deduct for missing required data
-    const missingPropertyIds = records.filter(r => !r.propertyId).length;
-    const missingDropNumbers = records.filter(r => !r.dropNumber).length;
-    const missingAgentNames = records.filter(r => !r.fieldAgentName).length;
-    
+    const missingPropertyIds = records.filter((r) => !r.propertyId).length;
+    const missingDropNumbers = records.filter((r) => !r.dropNumber).length;
+    const missingAgentNames = records.filter((r) => !r.fieldAgentName).length;
+
     score -= (missingPropertyIds / records.length) * 20;
     score -= (missingDropNumbers / records.length) * 15;
     score -= (missingAgentNames / records.length) * 10;
-    
+
     return Math.max(0, Math.min(100, score));
   }
 
   /**
    * Generate individual report for specific type
    */
-  generateReport(reportType: CsvAnalysisReport['reportType'], records: CsvRecord[], filename: string): CsvAnalysisReport {
+  generateReport(
+    reportType: CsvAnalysisReport['reportType'],
+    records: CsvRecord[],
+    filename: string,
+  ): CsvAnalysisReport {
     return {
       reportType,
       filename: `${reportType}_${filename}`,
       recordCount: records.length,
       generatedDate: new Date(),
-      records
+      records,
     };
   }
 

@@ -1,34 +1,34 @@
 import { Injectable, inject } from '@angular/core';
-import { 
-  Firestore, 
-  collection, 
-  doc, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  query, 
-  where, 
-  orderBy, 
+import {
+  Firestore,
+  collection,
+  doc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
   QueryConstraint,
   collectionData,
   docData,
   serverTimestamp,
-  writeBatch
+  writeBatch,
 } from '@angular/fire/firestore';
 import { Observable, from, map, switchMap, combineLatest } from 'rxjs';
-import { 
-  ActionItemManagement, 
-  ActionItemUpdates, 
-  ActionItemStatus, 
+import {
+  ActionItemManagement,
+  ActionItemUpdates,
+  ActionItemStatus,
   ActionItemHistory,
   ActionItemFilter,
-  ActionItemStats 
+  ActionItemStats,
 } from '../models/action-item-management.model';
 import { MeetingService } from '../../meetings/services/meeting.service';
 import { Meeting, ActionItem } from '../../meetings/models/meeting.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ActionItemsManagementService {
   private firestore = inject(Firestore);
@@ -42,7 +42,7 @@ export class ActionItemsManagementService {
     meeting: Meeting,
     actionItem: ActionItem,
     userId: string,
-    userEmail: string
+    userEmail: string,
   ): Promise<string> {
     const managementItem: Omit<ActionItemManagement, 'id'> = {
       meetingId: meeting.id!,
@@ -56,28 +56,27 @@ export class ActionItemsManagementService {
         dueDate: actionItem.dueDate,
         status: actionItem.completed ? ActionItemStatus.COMPLETED : ActionItemStatus.PENDING,
         notes: '',
-        tags: []
+        tags: [],
       },
       status: actionItem.completed ? ActionItemStatus.COMPLETED : ActionItemStatus.PENDING,
-      history: [{
-        id: this.generateId(),
-        timestamp: new Date().toISOString(),
-        userId,
-        userEmail,
-        action: 'created',
-        notes: 'Action item imported from meeting'
-      }],
+      history: [
+        {
+          id: this.generateId(),
+          timestamp: new Date().toISOString(),
+          userId,
+          userEmail,
+          action: 'created',
+          notes: 'Action item imported from meeting',
+        },
+      ],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       createdBy: userId,
-      updatedBy: userId
+      updatedBy: userId,
     };
 
-    const docRef = await addDoc(
-      collection(this.firestore, this.collectionName), 
-      managementItem
-    );
-    
+    const docRef = await addDoc(collection(this.firestore, this.collectionName), managementItem);
+
     return docRef.id;
   }
 
@@ -85,9 +84,7 @@ export class ActionItemsManagementService {
    * Get all managed action items with optional filters
    */
   getActionItems(filter?: ActionItemFilter): Observable<ActionItemManagement[]> {
-    const constraints: QueryConstraint[] = [
-      orderBy('updatedAt', 'desc')
-    ];
+    const constraints: QueryConstraint[] = [orderBy('updatedAt', 'desc')];
 
     if (filter?.status && filter.status.length > 0) {
       constraints.push(where('status', 'in', filter.status));
@@ -102,27 +99,27 @@ export class ActionItemsManagementService {
     }
 
     const q = query(collection(this.firestore, this.collectionName), ...constraints);
-    
+
     return collectionData(q, { idField: 'id' }).pipe(
-      map(items => {
+      map((items) => {
         let filtered = items as ActionItemManagement[];
-        
+
         // Client-side filtering for complex conditions
         if (filter?.priority && filter.priority.length > 0) {
-          filtered = filtered.filter(item => 
-            filter.priority!.includes(item.updates.priority || item.originalActionItem.priority)
+          filtered = filtered.filter((item) =>
+            filter.priority!.includes(item.updates.priority || item.originalActionItem.priority),
           );
         }
 
         if (filter?.dueDateFrom) {
-          filtered = filtered.filter(item => {
+          filtered = filtered.filter((item) => {
             const dueDate = item.updates.dueDate || item.originalActionItem.dueDate;
             return dueDate && new Date(dueDate) >= new Date(filter.dueDateFrom!);
           });
         }
 
         if (filter?.dueDateTo) {
-          filtered = filtered.filter(item => {
+          filtered = filtered.filter((item) => {
             const dueDate = item.updates.dueDate || item.originalActionItem.dueDate;
             return dueDate && new Date(dueDate) <= new Date(filter.dueDateTo!);
           });
@@ -130,16 +127,17 @@ export class ActionItemsManagementService {
 
         if (filter?.searchText) {
           const searchLower = filter.searchText.toLowerCase();
-          filtered = filtered.filter(item => 
-            item.originalActionItem.text.toLowerCase().includes(searchLower) ||
-            item.updates.notes?.toLowerCase().includes(searchLower) ||
-            item.updates.assignee?.toLowerCase().includes(searchLower) ||
-            item.meetingTitle.toLowerCase().includes(searchLower)
+          filtered = filtered.filter(
+            (item) =>
+              item.originalActionItem.text.toLowerCase().includes(searchLower) ||
+              item.updates.notes?.toLowerCase().includes(searchLower) ||
+              item.updates.assignee?.toLowerCase().includes(searchLower) ||
+              item.meetingTitle.toLowerCase().includes(searchLower),
           );
         }
 
         return filtered;
-      })
+      }),
     );
   }
 
@@ -159,10 +157,10 @@ export class ActionItemsManagementService {
     updates: Partial<ActionItemUpdates>,
     userId: string,
     userEmail: string,
-    notes?: string
+    notes?: string,
   ): Promise<void> {
     const docRef = doc(this.firestore, this.collectionName, id);
-    
+
     // Get current state for history
     const currentItem = await this.getActionItemById(id).toPromise();
     if (!currentItem) throw new Error('Action item not found');
@@ -174,7 +172,7 @@ export class ActionItemsManagementService {
       userId,
       userEmail,
       action: 'updated',
-      notes
+      notes,
     };
 
     // Track specific changes
@@ -192,13 +190,13 @@ export class ActionItemsManagementService {
 
     // Update the document
     const updateData: any = {
-      'updates': { ...currentItem.updates, ...updates },
-      'status': updates.status || currentItem.status,
-      'history': [...currentItem.history, historyEntry],
-      'updatedAt': new Date().toISOString(),
-      'updatedBy': userId
+      updates: { ...currentItem.updates, ...updates },
+      status: updates.status || currentItem.status,
+      history: [...currentItem.history, historyEntry],
+      updatedAt: new Date().toISOString(),
+      updatedBy: userId,
     };
-    
+
     // Handle text update separately as it's in originalActionItem
     if ('text' in updates && updates.text !== undefined) {
       updateData['originalActionItem.text'] = updates.text;
@@ -206,7 +204,7 @@ export class ActionItemsManagementService {
       historyEntry.oldValue = currentItem.originalActionItem.text;
       historyEntry.newValue = updates.text;
     }
-    
+
     await updateDoc(docRef, updateData);
   }
 
@@ -217,10 +215,10 @@ export class ActionItemsManagementService {
     ids: string[],
     updates: Partial<ActionItemUpdates>,
     userId: string,
-    userEmail: string
+    userEmail: string,
   ): Promise<void> {
     const batch = writeBatch(this.firestore);
-    
+
     for (const id of ids) {
       const docRef = doc(this.firestore, this.collectionName, id);
       const historyEntry: ActionItemHistory = {
@@ -229,15 +227,15 @@ export class ActionItemsManagementService {
         userId,
         userEmail,
         action: 'updated',
-        notes: 'Bulk update'
+        notes: 'Bulk update',
       };
 
       batch.update(docRef, {
-        'updates': updates,
-        'status': updates.status,
-        'history': [...(await this.getActionItemById(id).toPromise())!.history, historyEntry],
-        'updatedAt': new Date().toISOString(),
-        'updatedBy': userId
+        updates: updates,
+        status: updates.status,
+        history: [...(await this.getActionItemById(id).toPromise())!.history, historyEntry],
+        updatedAt: new Date().toISOString(),
+        updatedBy: userId,
       });
     }
 
@@ -249,10 +247,10 @@ export class ActionItemsManagementService {
    */
   getActionItemStats(): Observable<ActionItemStats> {
     return this.getActionItems().pipe(
-      map(items => {
+      map((items) => {
         const now = new Date();
         const weekFromNow = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-        
+
         const stats: ActionItemStats = {
           total: items.length,
           pending: 0,
@@ -262,10 +260,10 @@ export class ActionItemsManagementService {
           dueToday: 0,
           dueThisWeek: 0,
           byPriority: { high: 0, medium: 0, low: 0 },
-          byAssignee: {}
+          byAssignee: {},
         };
 
-        items.forEach(item => {
+        items.forEach((item) => {
           // Status counts
           switch (item.status) {
             case ActionItemStatus.PENDING:
@@ -297,12 +295,13 @@ export class ActionItemsManagementService {
           stats.byPriority[priority]++;
 
           // Assignee counts
-          const assignee = item.updates.assignee || item.originalActionItem.assignee || 'Unassigned';
+          const assignee =
+            item.updates.assignee || item.originalActionItem.assignee || 'Unassigned';
           stats.byAssignee[assignee] = (stats.byAssignee[assignee] || 0) + 1;
         });
 
         return stats;
-      })
+      }),
     );
   }
 
@@ -312,12 +311,12 @@ export class ActionItemsManagementService {
   async importUnmanagedActionItems(userId: string, userEmail: string): Promise<number> {
     const meetings = await this.meetingService.getMeetingsWithPendingActions().toPromise();
     const existingItems = await this.getActionItems().toPromise();
-    
+
     const existingMap = new Map(
-      (existingItems || []).map(item => [
+      (existingItems || []).map((item) => [
         `${item.meetingId}-${item.originalActionItem.text}`,
-        item
-      ])
+        item,
+      ]),
     );
 
     let importCount = 0;

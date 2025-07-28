@@ -20,10 +20,10 @@ import { AgentActivity } from '../../models/pole-report.model';
     MatTableModule,
     MatTooltipModule,
     MatButtonModule,
-    MatProgressBarModule
+    MatProgressBarModule,
   ],
   templateUrl: './agent-activity.component.html',
-  styleUrls: ['./agent-activity.component.scss']
+  styleUrls: ['./agent-activity.component.scss'],
 })
 export class AgentActivityComponent {
   @Input() set agents(value: AgentActivity[]) {
@@ -31,21 +31,21 @@ export class AgentActivityComponent {
   }
 
   agentActivities = signal<AgentActivity[]>([]);
-  
+
   displayedColumns = ['agent', 'actions', 'timespan', 'completion', 'lastActivity'];
-  
+
   // Calculate agent statistics
   agentStats = computed(() => {
     const agents = this.agentActivities();
     const totalAgents = agents.length;
-    const activeAgents = agents.filter(a => a.totalActions > 0).length;
+    const activeAgents = agents.filter((a) => a.totalActions > 0).length;
     const totalActions = agents.reduce((sum, a) => sum + a.totalActions, 0);
     const avgActionsPerAgent = totalAgents > 0 ? Math.round(totalActions / totalAgents) : 0;
-    
+
     // Find most active agent
-    const mostActive = agents.reduce((prev, current) => 
-      current.totalActions > prev.totalActions ? current : prev, 
-      agents[0] || null
+    const mostActive = agents.reduce(
+      (prev, current) => (current.totalActions > prev.totalActions ? current : prev),
+      agents[0] || null,
     );
 
     return {
@@ -53,7 +53,7 @@ export class AgentActivityComponent {
       activeAgents,
       totalActions,
       avgActionsPerAgent,
-      mostActive: mostActive?.name || 'N/A'
+      mostActive: mostActive?.name || 'N/A',
     };
   });
 
@@ -86,12 +86,12 @@ export class AgentActivityComponent {
   formatDate(date?: string): string {
     if (!date) return '-';
     const d = new Date(date);
-    return d.toLocaleDateString('en-ZA', { 
-      year: 'numeric', 
-      month: 'short', 
+    return d.toLocaleDateString('en-ZA', {
+      year: 'numeric',
+      month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 
@@ -101,7 +101,7 @@ export class AgentActivityComponent {
     const endDate = new Date(end);
     const diffMs = endDate.getTime() - startDate.getTime();
     const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays === 0) return 'Same day';
     if (diffDays === 1) return '1 day';
     return `${diffDays} days`;
@@ -109,11 +109,15 @@ export class AgentActivityComponent {
 
   getCompletionRate(agent: AgentActivity): number {
     if (agent.totalActions === 0) return 0;
-    const completedActions = agent.statusBreakdown?.filter(s => 
-      s.status.toLowerCase().includes('completed') || 
-      s.status.toLowerCase().includes('approved')
-    ).reduce((sum, s) => sum + s.count, 0) || 0;
-    
+    const completedActions =
+      agent.statusBreakdown
+        ?.filter(
+          (s) =>
+            s.status.toLowerCase().includes('completed') ||
+            s.status.toLowerCase().includes('approved'),
+        )
+        .reduce((sum, s) => sum + s.count, 0) || 0;
+
     return Math.round((completedActions / agent.totalActions) * 100);
   }
 

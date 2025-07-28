@@ -1,4 +1,14 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, AfterViewInit, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  OnChanges,
+  SimpleChanges,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
@@ -8,12 +18,12 @@ import { MatCardModule } from '@angular/material/card';
   standalone: true,
   imports: [CommonModule, MatTableModule, MatCardModule],
   templateUrl: './pivot-table.html',
-  styleUrl: './pivot-table.scss'
+  styleUrl: './pivot-table.scss',
 })
 export class PivotTableComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('pivotContainer', { static: false }) pivotContainer!: ElementRef;
   @Input() data: any[] = [];
-  
+
   errorMessage = '';
   processedData: any[] = [];
   summaryData: any = {};
@@ -42,10 +52,10 @@ export class PivotTableComponent implements OnInit, AfterViewInit, OnChanges, On
     try {
       // Clear any error messages
       this.errorMessage = '';
-      
+
       // Transform data for simple display
       this.processedData = this.transformDataForPivot();
-      
+
       if (this.processedData.length === 0) {
         console.warn('No data available for pivot table');
         this.errorMessage = 'No data available for pivot table. Please select a project first.';
@@ -53,10 +63,9 @@ export class PivotTableComponent implements OnInit, AfterViewInit, OnChanges, On
       }
 
       console.log('Processing', this.processedData.length, 'records');
-      
+
       // Create summary data
       this.summaryData = this.createSummary(this.processedData);
-      
     } catch (error) {
       console.error('Error processing data:', error);
       this.errorMessage = `Error processing data: ${error instanceof Error ? error.message : 'Unknown error'}`;
@@ -68,10 +77,10 @@ export class PivotTableComponent implements OnInit, AfterViewInit, OnChanges, On
       totalPoles: data.length,
       byProject: {},
       byMonth: {},
-      byStatus: {}
+      byStatus: {},
     };
 
-    data.forEach(item => {
+    data.forEach((item) => {
       // By Project
       if (!summary.byProject[item.Project]) {
         summary.byProject[item.Project] = 0;
@@ -104,9 +113,21 @@ export class PivotTableComponent implements OnInit, AfterViewInit, OnChanges, On
     return this.data.map((pole, index) => {
       try {
         const date = this.parseDate(pole.createdAt || pole.dateInstalled);
-        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
-                           'July', 'August', 'September', 'October', 'November', 'December'];
-        
+        const monthNames = [
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December',
+        ];
+
         // Determine upload status more robustly
         let uploadStatus = 'Pending';
         if (pole.allUploadsComplete) {
@@ -119,43 +140,45 @@ export class PivotTableComponent implements OnInit, AfterViewInit, OnChanges, On
           // Basic fields
           'Pole ID': pole.vfPoleId || pole.poleNumber || `Pole-${index + 1}`,
           'Pole Number': pole.poleNumber || 'N/A',
-          'Project': pole.projectName || pole.projectCode || 'Unknown Project',
-          'Contractor': pole.contractorName || 'Unassigned',
-          'Zone': pole.zone || 'N/A',
-          'Type': pole.poleType || 'Unknown',
-          'PON': pole.pon || 'N/A',
-          
+          Project: pole.projectName || pole.projectCode || 'Unknown Project',
+          Contractor: pole.contractorName || 'Unassigned',
+          Zone: pole.zone || 'N/A',
+          Type: pole.poleType || 'Unknown',
+          PON: pole.pon || 'N/A',
+
           // Status fields
           'Upload Status': uploadStatus,
           'QA Status': pole.qualityChecked ? 'Checked' : 'Pending',
           'Installation Status': pole.installationStatus || 'Pending',
-          
+
           // Date fields
-          'Month': monthNames[date.getMonth()],
-          'Year': date.getFullYear().toString(),
-          'Week': this.getWeekNumber(date),
-          'Quarter': 'Q' + Math.floor(date.getMonth() / 3 + 1),
-          'Date': date.toLocaleDateString(),
-          
+          Month: monthNames[date.getMonth()],
+          Year: date.getFullYear().toString(),
+          Week: this.getWeekNumber(date),
+          Quarter: 'Q' + Math.floor(date.getMonth() / 3 + 1),
+          Date: date.toLocaleDateString(),
+
           // Numeric fields
           'Drop Count': Number(pole.dropCount) || 0,
           'Max Capacity': Number(pole.maxCapacity) || 12,
-          'Capacity Used %': pole.dropCount && pole.maxCapacity ? 
-            Math.round((pole.dropCount / pole.maxCapacity) * 100) : 0,
+          'Capacity Used %':
+            pole.dropCount && pole.maxCapacity
+              ? Math.round((pole.dropCount / pole.maxCapacity) * 100)
+              : 0,
           'Upload Progress %': Math.round(pole.uploadProgress || 0),
           'Photos Uploaded': pole.uploadedCount || 0,
           'Days Since Creation': Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24)),
-          
+
           // Additional fields
           'Working Team': pole.workingTeam || 'N/A',
-          'Priority': pole.priority || 'Normal',
-          
+          Priority: pole.priority || 'Normal',
+
           // Location
           'Has GPS': pole.location ? 'Yes' : 'No',
-          'Location': pole.location || 'No GPS',
-          
+          Location: pole.location || 'No GPS',
+
           // Count field for aggregation
-          'Count': 1
+          Count: 1,
         };
 
         return transformedPole;
@@ -163,10 +186,10 @@ export class PivotTableComponent implements OnInit, AfterViewInit, OnChanges, On
         console.warn('Error transforming pole at index', index, ':', error);
         return {
           'Pole ID': `Error-${index}`,
-          'Project': 'Error',
-          'Month': 'Unknown',
-          'Year': new Date().getFullYear().toString(),
-          'Count': 1
+          Project: 'Error',
+          Month: 'Unknown',
+          Year: new Date().getFullYear().toString(),
+          Count: 1,
         };
       }
     });
@@ -174,22 +197,22 @@ export class PivotTableComponent implements OnInit, AfterViewInit, OnChanges, On
 
   private parseDate(dateField: any): Date {
     if (!dateField) return new Date();
-    
+
     // Handle Firestore timestamp
     if (dateField.seconds) {
       return new Date(dateField.seconds * 1000);
     }
-    
+
     // Handle regular Date
     if (dateField instanceof Date) {
       return dateField;
     }
-    
+
     // Handle string date
     if (typeof dateField === 'string') {
       return new Date(dateField);
     }
-    
+
     return new Date();
   }
 

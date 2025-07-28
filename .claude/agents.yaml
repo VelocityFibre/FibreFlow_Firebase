@@ -1,0 +1,73 @@
+# Claude Code Sub-Agents Configuration
+# This file defines all available agents for the /agent command
+
+agents:
+  - name: FibreFlow Architect
+    description: System design and architecture decisions, database schema planning, integration strategies
+    location: project
+    tools:
+      - all
+    source: .claude/agents/fibreflow-architect.md
+
+  - name: Angular Frontend Specialist
+    description: Angular 20 component development, Material Design, reactive forms, theme system
+    location: project
+    tools:
+      - all
+    source: .claude/agents/angular-frontend-specialist.md
+
+  - name: Firebase Backend Expert
+    description: Firestore database operations, Cloud Functions, security rules, real-time sync
+    location: project
+    tools:
+      - all
+    source: .claude/agents/firebase-backend-expert.md
+
+  - name: Pole Tracker Specialist
+    description: Mobile and desktop pole tracking, GPS integration, photo management workflows
+    location: project
+    tools:
+      - all
+    source: .claude/agents/pole-tracker-specialist.md
+
+  - name: Testing Deployment Expert
+    description: Testing strategies, Firebase deployment, performance monitoring, CI/CD
+    location: project
+    tools:
+      - all
+    source: .claude/agents/testing-deployment-expert.md
+
+  - name: BOQ RFQ Specialist
+    description: Bill of Quantities management, Request for Quote workflows, supplier integrations
+    location: project
+    tools:
+      - all
+    source: .claude/agents/boq-rfq-specialist.md
+
+  - name: Data Integrity Guardian
+    description: Business rule enforcement, data validation patterns, audit trail implementation
+    location: project
+    tools:
+      - all
+    source: .claude/agents/data-integrity-guardian.md
+
+  - name: Security Agent
+    description: Simple two-mode security guidance. Private mode for development, Public mode for production
+    location: project
+    tools:
+      - all
+    source: .claude/agents/security-agent.yaml
+
+  - name: OneMap Data Agent
+    description: OneMap CSV processing, reporting, data transformation, vf-onemap-data to FibreFlow syncing
+    location: project
+    tools:
+      - all
+    source: .claude/agents/onemap-data-agent.yaml
+
+  - name: Agent Manager
+    description: Coordinates other agents, helps select the right agent, creates and improves agents
+    location: project
+    tools:
+      - all
+    source: .claude/agents/agent-manager.md

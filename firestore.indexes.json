@@ -1,201 +1,59 @@
 {
   "indexes": [
     {
-      "collectionGroup": "materials",
+      "collectionGroup": "vf-onemap-status-changes",
       "queryScope": "COLLECTION",
       "fields": [
-        {
-          "fieldPath": "isActive",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "itemCode",
-          "order": "ASCENDING"
-        }
+        { "fieldPath": "agent", "order": "ASCENDING" },
+        { "fieldPath": "changeDate", "order": "DESCENDING" }
       ]
     },
     {
-      "collectionGroup": "materials",
+      "collectionGroup": "vf-onemap-status-changes",
       "queryScope": "COLLECTION",
       "fields": [
-        {
-          "fieldPath": "category",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "isActive",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "itemCode",
-          "order": "ASCENDING"
-        }
+        { "fieldPath": "fromStatus", "order": "ASCENDING" },
+        { "fieldPath": "toStatus", "order": "ASCENDING" }
       ]
     },
     {
-      "collectionGroup": "materials",
+      "collectionGroup": "vf-onemap-status-changes",
       "queryScope": "COLLECTION",
       "fields": [
-        {
-          "fieldPath": "supplierId",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "isActive",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "itemCode",
-          "order": "ASCENDING"
-        }
+        { "fieldPath": "changeDate", "order": "ASCENDING" },
+        { "fieldPath": "toStatus", "order": "ASCENDING" }
       ]
     },
     {
-      "collectionGroup": "suppliers",
+      "collectionGroup": "vf-onemap-status-changes",
       "queryScope": "COLLECTION",
       "fields": [
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "companyName",
-          "order": "ASCENDING"
-        }
+        { "fieldPath": "poleNumber", "order": "ASCENDING" },
+        { "fieldPath": "changeDate", "order": "ASCENDING" }
       ]
     },
     {
-      "collectionGroup": "suppliers",
+      "collectionGroup": "vf-onemap-status-changes",
       "queryScope": "COLLECTION",
       "fields": [
-        {
-          "fieldPath": "categories",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "companyName",
-          "order": "ASCENDING"
-        }
+        { "fieldPath": "fromStatus", "order": "ASCENDING" },
+        { "fieldPath": "daysInPreviousStatus", "order": "DESCENDING" }
       ]
     },
     {
-      "collectionGroup": "suppliers",
+      "collectionGroup": "vf-onemap-status-changes",
       "queryScope": "COLLECTION",
       "fields": [
-        {
-          "fieldPath": "verificationStatus",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "companyName",
-          "order": "ASCENDING"
-        }
+        { "fieldPath": "agent", "order": "ASCENDING" },
+        { "fieldPath": "toStatus", "order": "ASCENDING" }
       ]
     },
     {
-      "collectionGroup": "tasks",
+      "collectionGroup": "vf-onemap-status-changes",
       "queryScope": "COLLECTION",
       "fields": [
-        {
-          "fieldPath": "projectId",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "phaseId",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "orderNo",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "stockItems",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "projectId",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "name",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "boqItems",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "projectId",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "itemCode",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "rfqs",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "projectId",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "createdAt",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "contractors",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "companyName",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "contractor-projects",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "projectId",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "createdAt",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "planned-poles",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "projectId",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "poleNumber",
-          "order": "ASCENDING"
-        }
+        { "fieldPath": "propertyId", "order": "ASCENDING" },
+        { "fieldPath": "changeDate", "order": "ASCENDING" }
       ]
     }
   ],

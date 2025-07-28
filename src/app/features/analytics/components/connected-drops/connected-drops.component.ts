@@ -18,10 +18,10 @@ import { ConnectedDrop } from '../../models/pole-report.model';
     MatChipsModule,
     MatTableModule,
     MatTooltipModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './connected-drops.component.html',
-  styleUrls: ['./connected-drops.component.scss']
+  styleUrls: ['./connected-drops.component.scss'],
 })
 export class ConnectedDropsComponent {
   @Input() set drops(value: ConnectedDrop[]) {
@@ -29,26 +29,26 @@ export class ConnectedDropsComponent {
   }
 
   connectedDrops = signal<ConnectedDrop[]>([]);
-  
+
   displayedColumns = ['dropNumber', 'address', 'status', 'agent', 'lastUpdate', 'actions'];
-  
+
   // Group drops by status for better organization
   dropsByStatus = computed(() => {
     const drops = this.connectedDrops();
     const grouped = new Map<string, ConnectedDrop[]>();
-    
-    drops.forEach(drop => {
+
+    drops.forEach((drop) => {
       const status = drop.status || 'Unknown';
       if (!grouped.has(status)) {
         grouped.set(status, []);
       }
       grouped.get(status)!.push(drop);
     });
-    
+
     return Array.from(grouped.entries()).map(([status, drops]) => ({
       status,
       count: drops.length,
-      drops: drops.sort((a, b) => (a.dropNumber || '').localeCompare(b.dropNumber || ''))
+      drops: drops.sort((a, b) => (a.dropNumber || '').localeCompare(b.dropNumber || '')),
     }));
   });
 
@@ -56,16 +56,18 @@ export class ConnectedDropsComponent {
   dropStats = computed(() => {
     const drops = this.connectedDrops();
     const total = drops.length;
-    const completed = drops.filter(d => d.status?.toLowerCase().includes('completed')).length;
-    const inProgress = drops.filter(d => d.status?.toLowerCase().includes('progress')).length;
-    const pending = drops.filter(d => !d.status || d.status.toLowerCase().includes('pending')).length;
-    
+    const completed = drops.filter((d) => d.status?.toLowerCase().includes('completed')).length;
+    const inProgress = drops.filter((d) => d.status?.toLowerCase().includes('progress')).length;
+    const pending = drops.filter(
+      (d) => !d.status || d.status.toLowerCase().includes('pending'),
+    ).length;
+
     return {
       total,
       completed,
       inProgress,
       pending,
-      completionRate: total > 0 ? Math.round((completed / total) * 100) : 0
+      completionRate: total > 0 ? Math.round((completed / total) * 100) : 0,
     };
   });
 
@@ -88,10 +90,10 @@ export class ConnectedDropsComponent {
   formatDate(date?: string): string {
     if (!date) return '-';
     const d = new Date(date);
-    return d.toLocaleDateString('en-ZA', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
+    return d.toLocaleDateString('en-ZA', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
     });
   }
 

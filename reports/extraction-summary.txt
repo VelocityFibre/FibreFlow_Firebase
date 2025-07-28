@@ -1,0 +1,31 @@
+
+GPS DATA EXTRACTION SUMMARY
+===========================
+Date: 2025/07/25, 19:20:19
+User: ettienejvr@gmail.com
+Total Images: 278
+
+Location: Lawley, Gauteng, South Africa
+Postal Code: 1830
+
+Sample Addresses Extracted:
+- Piranha Crescent, Lawley, Lawley, Gauteng 1830, South Africa
+- Lawley Road, Lawley Extento, Lawley, Gauteng 1830, South Africa
+- 2nd Avenue, Elandsfontein, Lawley, Gauteng 1830, South Africa
+- 3rd Avenue, Lawley, Lawley, Gauteng 1830, South Africa
+- Market Street, Lawley Extento, Lawley, Gauteng 1830, South Africa
+
+Files Created:
+1. CSV: ettiene-gps-data-2025-07-25.csv
+2. Excel: ettiene-gps-data-2025-07-25.xlsx
+
+Data includes:
+- GPS coordinates for all 278 pole locations
+- Full addresses from GPS Map Camera overlay
+- Date/time stamps for each capture
+- Generated pole numbers for tracking
+
+Next Steps:
+- Import to FibreFlow database
+- Verify pole locations on map
+- Cross-reference with existing pole data

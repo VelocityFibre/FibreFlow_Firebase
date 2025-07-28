@@ -165,7 +165,10 @@ interface LogEntry {
                     </td>
                   </ng-container>
 
-                  <tr mat-header-row *matHeaderRowDef="['timestamp', 'component', 'user', 'message']"></tr>
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="['timestamp', 'component', 'user', 'message']"
+                  ></tr>
                   <tr
                     mat-row
                     *matRowDef="let row; columns: ['timestamp', 'component', 'user', 'message']"

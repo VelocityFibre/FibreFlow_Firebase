@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Process Ettiene Images</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js';
+        import { getFirestore, collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
+
+        const firebaseConfig = {
+            apiKey: 'AIzaSyD5iG5pNX0ElTHV1Vp7BhKHvO9RGzRzRCM',
+            authDomain: 'fibreflow-73daf.firebaseapp.com',
+            projectId: 'fibreflow-73daf',
+            storageBucket: 'fibreflow-73daf.appspot.com',
+            messagingSenderId: '729020567841',
+            appId: '1:729020567841:web:8b3a77031b9b2b3b2c77c6'
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        window.processNow = async function() {
+            document.getElementById('status').innerHTML = 'Processing...';
+            
+            // Get ALL images first to debug
+            const allSnapshot = await getDocs(collection(db, 'uploaded-images'));
+            console.log('Total images:', allSnapshot.size);
+            
+            const images = [];
+            let ettieneCount = 0;
+            
+            allSnapshot.forEach(doc => {
+                const data = doc.data();
+                console.log(data.uploadedBy, data.fileName);
+                
+                if (data.uploadedBy === 'ettienejvr@gmail.com') {
+                    images.push(data);
+                    ettieneCount++;
+                }
+            });
+            
+            console.log('Ettiene images:', ettieneCount);
+            
+            if (images.length === 0) {
+                document.getElementById('status').innerHTML = 'No images found for ettienejvr@gmail.com. Check console for all uploads.';
+                return;
+            }
+            
+            // Create Excel data
+            const excelData = [['File Name', 'Site', 'Project', 'Upload Date', 'Latitude', 'Longitude', 'GPS Status', 'File Size KB']];
+            
+            let gpsCount = 0;
+            images.forEach(img => {
+                const gpsMatch = img.fileName.match(/GPS[_-]?([-]?\d+\.?\d*)[_,]?([-]?\d+\.?\d*)/i);
+                if (gpsMatch) gpsCount++;
+                
+                excelData.push([
+                    img.fileName,
+                    img.site || 'Unknown',
+                    img.project || 'General',
+                    new Date().toLocaleDateString(),
+                    gpsMatch ? gpsMatch[1] : '',
+                    gpsMatch ? gpsMatch[2] : '',
+                    gpsMatch ? 'Found' : 'Not Found',
+                    Math.round((img.fileSize || 0) / 1024)
+                ]);
+            });
+            
+            // Create workbook
+            const ws = XLSX.utils.aoa_to_sheet(excelData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Ettiene Images');
+            
+            // Download
+            XLSX.writeFile(wb, 'ettiene-images.xlsx');
+            
+            document.getElementById('status').innerHTML = `
+                <h2>✅ Complete!</h2>
+                <p>Processed ${images.length} images</p>
+                <p>GPS found: ${gpsCount} (${(gpsCount/images.length*100).toFixed(1)}%)</p>
+                <p>Excel file downloaded!</p>
+            `;
+        }
+
+        window.login = async () => {
+            const provider = new GoogleAuthProvider();
+            await signInWithPopup(auth, provider);
+            document.getElementById('loginBtn').style.display = 'none';
+            document.getElementById('processBtn').style.display = 'block';
+        }
+    </script>
+</head>
+<body style="font-family: Arial; padding: 40px;">
+    <h1>Process Ettiene's Images</h1>
+    <button id="loginBtn" onclick="login()" style="padding: 10px 20px; font-size: 16px;">Login with Google</button>
+    <button id="processBtn" onclick="processNow()" style="padding: 10px 20px; font-size: 16px; display: none;">Process & Download Excel</button>
+    <div id="status" style="margin-top: 20px;"></div>
+</body>
+</html>

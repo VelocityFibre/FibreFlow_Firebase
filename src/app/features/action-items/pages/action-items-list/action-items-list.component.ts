@@ -18,18 +18,18 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
-import { 
-  PageHeaderComponent, 
-  PageHeaderAction 
+import {
+  PageHeaderComponent,
+  PageHeaderAction,
 } from '../../../../shared/components/page-header/page-header.component';
 import { LoadingSkeletonComponent } from '../../../../shared/components/loading-skeleton/loading-skeleton.component';
 import { ActionItemsManagementService } from '../../services/action-items-management.service';
 import { AuthService } from '../../../../core/services/auth.service';
-import { 
-  ActionItemManagement, 
-  ActionItemStatus, 
+import {
+  ActionItemManagement,
+  ActionItemStatus,
   ActionItemFilter,
-  ActionItemStats 
+  ActionItemStats,
 } from '../../models/action-item-management.model';
 
 @Component({
@@ -55,10 +55,10 @@ import {
     MatSelectModule,
     MatInputModule,
     PageHeaderComponent,
-    LoadingSkeletonComponent
+    LoadingSkeletonComponent,
   ],
   templateUrl: './action-items-list.component.html',
-  styleUrls: ['./action-items-list.component.scss']
+  styleUrls: ['./action-items-list.component.scss'],
 })
 export class ActionItemsListComponent implements OnInit {
   private actionItemsService = inject(ActionItemsManagementService);
@@ -81,7 +81,7 @@ export class ActionItemsListComponent implements OnInit {
   filteredItems = computed(() => {
     const items = this.actionItems();
     const filterValue = this.filter();
-    
+
     // Client-side filtering is handled in the service
     return items;
   });
@@ -94,7 +94,7 @@ export class ActionItemsListComponent implements OnInit {
     'assignee',
     'dueDate',
     'status',
-    'actions'
+    'actions',
   ];
 
   // Page header configuration
@@ -106,7 +106,7 @@ export class ActionItemsListComponent implements OnInit {
         label: `Update ${this.selection.selected.length} Items`,
         icon: 'edit',
         color: 'accent',
-        action: () => this.bulkUpdate()
+        action: () => this.bulkUpdate(),
       });
     }
 
@@ -129,16 +129,16 @@ export class ActionItemsListComponent implements OnInit {
         console.error('Error loading action items:', error);
         this.loading.set(false);
         this.snackBar.open('Error loading action items', 'Close', {
-          duration: 3000
+          duration: 3000,
         });
-      }
+      },
     });
   }
 
   private loadStats() {
     this.actionItemsService.getActionItemStats().subscribe({
       next: (stats) => this.stats.set(stats),
-      error: (error) => console.error('Error loading stats:', error)
+      error: (error) => console.error('Error loading stats:', error),
     });
   }
 
@@ -153,7 +153,7 @@ export class ActionItemsListComponent implements OnInit {
     if (this.isAllSelected()) {
       this.selection.clear();
     } else {
-      this.filteredItems().forEach(row => this.selection.select(row));
+      this.filteredItems().forEach((row) => this.selection.select(row));
     }
   }
 
@@ -173,7 +173,7 @@ export class ActionItemsListComponent implements OnInit {
     // Edit functionality moved to AG-Grid view
     // Redirect to grid view for editing
     this.snackBar.open('Please use the grid view for editing', 'Close', {
-      duration: 3000
+      duration: 3000,
     });
   }
 
@@ -182,29 +182,29 @@ export class ActionItemsListComponent implements OnInit {
       const user = this.authService.currentUser();
       if (!user) {
         this.snackBar.open('Please login to update status', 'Close', {
-          duration: 3000
+          duration: 3000,
         });
         return;
       }
-      
+
       await this.actionItemsService.updateActionItem(
         item.id!,
         { status },
         user.uid,
         user.email || 'unknown@fibreflow.com',
-        `Status changed to ${status}`
+        `Status changed to ${status}`,
       );
-      
+
       this.snackBar.open('Status updated successfully', 'Close', {
-        duration: 3000
+        duration: 3000,
       });
-      
+
       this.loadActionItems();
       this.loadStats();
     } catch (error) {
       console.error('Error updating status:', error);
       this.snackBar.open('Error updating status', 'Close', {
-        duration: 3000
+        duration: 3000,
       });
     }
   }
@@ -213,7 +213,7 @@ export class ActionItemsListComponent implements OnInit {
     // Bulk update functionality moved to AG-Grid view
     // Redirect to grid view for bulk operations
     this.snackBar.open('Please use the grid view for bulk updates', 'Close', {
-      duration: 3000
+      duration: 3000,
     });
   }
 
@@ -236,12 +236,12 @@ export class ActionItemsListComponent implements OnInit {
 
   formatDueDate(dateString: string | undefined): string {
     if (!dateString) return 'No due date';
-    
+
     const date = new Date(dateString);
     const now = new Date();
     const diffTime = date.getTime() - now.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
+
     if (diffDays < 0) {
       return `Overdue by ${Math.abs(diffDays)} days`;
     } else if (diffDays === 0) {

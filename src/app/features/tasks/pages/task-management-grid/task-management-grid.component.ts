@@ -1,4 +1,14 @@
-import { Component, inject, signal, computed, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  computed,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -23,7 +33,13 @@ import { MatNativeDateModule } from '@angular/material/core';
 
 // AG-Grid imports
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef, GridReadyEvent, GridApi, ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
+import {
+  ColDef,
+  GridReadyEvent,
+  GridApi,
+  ModuleRegistry,
+  AllCommunityModule,
+} from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-material.css';
 
@@ -129,16 +145,18 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
   selectedCount = signal(0);
   filteredCount = signal(0);
   completedCount = computed(() => {
-    return this.rowData().filter(t => t.status === TaskStatus.COMPLETED).length;
+    return this.rowData().filter((t) => t.status === TaskStatus.COMPLETED).length;
   });
   overdueCount = computed(() => {
-    return this.rowData().filter(t => t.isOverdue).length;
+    return this.rowData().filter((t) => t.isOverdue).length;
   });
-  
+
   averageProgress = computed(() => {
     const data = this.rowData();
     if (data.length === 0) return 0;
-    return Math.round(data.reduce((sum, t) => sum + (t.completionPercentage || 0), 0) / data.length);
+    return Math.round(
+      data.reduce((sum, t) => sum + (t.completionPercentage || 0), 0) / data.length,
+    );
   });
 
   // UI State
@@ -158,7 +176,7 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
     includeTimeTracking: true,
     includeProjectBreakdown: true,
     autoFilter: true,
-    conditionalFormatting: true
+    conditionalFormatting: true,
   };
 
   // Column Definitions
@@ -179,7 +197,9 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
       pinned: 'left',
       editable: true,
       cellRenderer: (params: any) => {
-        const flagIcon = params.data.isFlagged ? '<mat-icon style="color: #ff9800; font-size: 16px; margin-right: 8px;">flag</mat-icon>' : '';
+        const flagIcon = params.data.isFlagged
+          ? '<mat-icon style="color: #ff9800; font-size: 16px; margin-right: 8px;">flag</mat-icon>'
+          : '';
         return `<div style="display: flex; align-items: center;">${flagIcon}<span style="font-weight: 500;">${params.value}</span></div>`;
       },
     },
@@ -189,7 +209,7 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
       width: 150,
       sortable: true,
       filter: true,
-      valueGetter: (params: any) => params.data.projectName || 'No Project'
+      valueGetter: (params: any) => params.data.projectName || 'No Project',
     },
     {
       field: 'status',
@@ -200,18 +220,23 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
       editable: true,
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: {
-        values: [TaskStatus.PENDING, TaskStatus.IN_PROGRESS, TaskStatus.COMPLETED, TaskStatus.BLOCKED]
+        values: [
+          TaskStatus.PENDING,
+          TaskStatus.IN_PROGRESS,
+          TaskStatus.COMPLETED,
+          TaskStatus.BLOCKED,
+        ],
       },
       cellRenderer: (params: any) => {
         const statusColors: Record<TaskStatus, string> = {
           [TaskStatus.PENDING]: '#9e9e9e',
           [TaskStatus.IN_PROGRESS]: '#2196f3',
           [TaskStatus.COMPLETED]: '#4caf50',
-          [TaskStatus.BLOCKED]: '#f44336'
+          [TaskStatus.BLOCKED]: '#f44336',
         };
         const color = statusColors[params.value as TaskStatus] || '#9e9e9e';
         return `<span class="status-chip" style="background: ${color}; color: white; padding: 4px 12px; border-radius: 16px; font-size: 12px; font-weight: 500;">${params.value}</span>`;
-      }
+      },
     },
     {
       field: 'priority',
@@ -222,18 +247,18 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
       editable: true,
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: {
-        values: [TaskPriority.LOW, TaskPriority.MEDIUM, TaskPriority.HIGH, TaskPriority.CRITICAL]
+        values: [TaskPriority.LOW, TaskPriority.MEDIUM, TaskPriority.HIGH, TaskPriority.CRITICAL],
       },
       cellRenderer: (params: any) => {
         const priorityColors: Record<TaskPriority, string> = {
           [TaskPriority.LOW]: '#4caf50',
           [TaskPriority.MEDIUM]: '#ff9800',
           [TaskPriority.HIGH]: '#f44336',
-          [TaskPriority.CRITICAL]: '#9c27b0'
+          [TaskPriority.CRITICAL]: '#9c27b0',
         };
         const color = priorityColors[params.value as TaskPriority] || '#9e9e9e';
         return `<span class="priority-chip" style="background: ${color}; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 500;">${params.value}</span>`;
-      }
+      },
     },
     {
       field: 'assignedToName',
@@ -242,7 +267,7 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
       sortable: true,
       filter: true,
       editable: true,
-      valueGetter: (params: any) => params.data.assignedToName || 'Unassigned'
+      valueGetter: (params: any) => params.data.assignedToName || 'Unassigned',
     },
     {
       field: 'completionPercentage',
@@ -261,7 +286,7 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
             <span class="progress-text" style="font-size: 12px; color: #666; margin-left: 8px;">${progress}%</span>
           </div>
         `;
-      }
+      },
     },
     {
       field: 'dueDate',
@@ -275,7 +300,7 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
         return new Date(date).toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'short',
-          day: 'numeric'
+          day: 'numeric',
         });
       },
       cellRenderer: (params: any) => {
@@ -286,10 +311,10 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
         const formatted = new Date(date).toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'short',
-          day: 'numeric'
+          day: 'numeric',
         });
         return `<span style="color: ${color}; font-weight: ${isOverdue ? '500' : 'normal'}">${formatted}</span>`;
-      }
+      },
     },
     {
       field: 'estimatedHours',
@@ -297,7 +322,7 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
       width: 100,
       sortable: true,
       editable: true,
-      cellRenderer: (params: any) => params.value || '-'
+      cellRenderer: (params: any) => params.value || '-',
     },
     {
       field: 'actualHours',
@@ -314,7 +339,7 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
           return `<span style="color: ${color}">${actual}</span>`;
         }
         return actual || '-';
-      }
+      },
     },
     {
       field: 'actions',
@@ -335,8 +360,8 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
             </button>
           </div>
         `;
-      }
-    }
+      },
+    },
   ];
 
   defaultColDef: ColDef = {
@@ -352,14 +377,14 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
     (window as any).deleteTask = (id: string) => this.deleteTask(id);
 
     // Restore filters from URL
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.selectedProjectId = params['project'] || '';
       this.selectedAssigneeId = params['assignee'] || '';
       this.selectedStatus = params['status'] || 'all';
       this.selectedPriority = params['priority'] || 'all';
       this.dueDateFilter = params['dueDate'] || 'all';
       this.showCompleted = params['showCompleted'] === 'true';
-      
+
       this.loadData();
     });
   }
@@ -371,10 +396,10 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-    
+
     // Destroy all charts
-    Object.values(this.charts).forEach(chart => chart.destroy());
-    
+    Object.values(this.charts).forEach((chart) => chart.destroy());
+
     // Clean up global functions
     delete (window as any).editTask;
     delete (window as any).toggleFlag;
@@ -385,24 +410,25 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
     this.loading.set(true);
 
     // Load projects
-    this.projectService.getProjects().subscribe(projects => {
+    this.projectService.getProjects().subscribe((projects) => {
       this.projects.set(projects);
     });
 
     // Load staff
-    this.staffService.getStaff().subscribe(staff => {
+    this.staffService.getStaff().subscribe((staff) => {
       this.staff.set(staff);
     });
 
     // Load tasks
-    this.taskService.getAllTasks()
+    this.taskService
+      .getAllTasks()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (tasks) => {
           const taskDisplay = this.transformTasksToDisplay(tasks);
           this.rowData.set(taskDisplay);
           this.loading.set(false);
-          
+
           // Apply external filter if needed
           if (this.gridApi) {
             this.gridApi.onFilterChanged();
@@ -412,7 +438,7 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
           console.error('Error loading tasks:', error);
           this.snackBar.open('Error loading tasks', 'Close', { duration: 3000 });
           this.loading.set(false);
-        }
+        },
       });
   }
 
@@ -421,15 +447,15 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
     const staff = this.staff();
     const now = new Date();
 
-    return tasks.map(task => {
-      const project = projects.find(p => p.id === task.projectId);
-      const assignee = staff.find(s => s.id === task.assignedTo);
-      
+    return tasks.map((task) => {
+      const project = projects.find((p) => p.id === task.projectId);
+      const assignee = staff.find((s) => s.id === task.assignedTo);
+
       // Calculate due date info
       let daysUntilDue = 0;
       let isOverdue = false;
       if (task.dueDate) {
-        const dueDate = task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate as any as Date;
+        const dueDate = task.dueDate.toDate ? task.dueDate.toDate() : (task.dueDate as any as Date);
         daysUntilDue = Math.floor((dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
         isOverdue = daysUntilDue < 0 && task.status !== TaskStatus.COMPLETED;
       }
@@ -445,17 +471,17 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
         priorityDisplay: task.priority,
         daysUntilDue,
         isOverdue,
-        hoursVariance
+        hoursVariance,
       };
     });
   }
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
-    
+
     // Auto-size columns
     this.gridApi.sizeColumnsToFit();
-    
+
     // Update filtered count
     this.updateFilteredCount();
   }
@@ -492,43 +518,49 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
 
   // External filtering
   isExternalFilterPresent = () => {
-    return this.selectedProjectId !== '' || 
-           this.selectedAssigneeId !== '' || 
-           this.selectedStatus !== 'all' ||
-           this.selectedPriority !== 'all' ||
-           this.dueDateFilter !== 'all' ||
-           this.searchTerm !== '' ||
-           !this.showCompleted;
+    return (
+      this.selectedProjectId !== '' ||
+      this.selectedAssigneeId !== '' ||
+      this.selectedStatus !== 'all' ||
+      this.selectedPriority !== 'all' ||
+      this.dueDateFilter !== 'all' ||
+      this.searchTerm !== '' ||
+      !this.showCompleted
+    );
   };
 
   doesExternalFilterPass = (params: any) => {
     const task = params.data;
-    
+
     // Project filter
     if (this.selectedProjectId && task.projectId !== this.selectedProjectId) {
       return false;
     }
-    
+
     // Assignee filter
     if (this.selectedAssigneeId && task.assignedTo !== this.selectedAssigneeId) {
       return false;
     }
-    
+
     // Status filter
     if (this.selectedStatus !== 'all' && task.status !== this.selectedStatus) {
       return false;
     }
-    
+
     // Priority filter
     if (this.selectedPriority !== 'all' && task.priority !== this.selectedPriority) {
       return false;
     }
-    
+
     // Due date filter
     if (this.dueDateFilter !== 'all') {
       const now = new Date();
-      const dueDate = task.dueDate ? (task.dueDate.toDate ? task.dueDate.toDate() : task.dueDate) : null;
-      
+      const dueDate = task.dueDate
+        ? task.dueDate.toDate
+          ? task.dueDate.toDate()
+          : task.dueDate
+        : null;
+
       switch (this.dueDateFilter) {
         case 'overdue':
           if (!dueDate || dueDate >= now) return false;
@@ -540,26 +572,28 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
           if (!dueDate || dueDate > new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)) return false;
           break;
         case 'month':
-          if (!dueDate || dueDate > new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000)) return false;
+          if (!dueDate || dueDate > new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000))
+            return false;
           break;
       }
     }
-    
+
     // Search filter
     if (this.searchTerm) {
       const searchLower = this.searchTerm.toLowerCase();
-      const matchesSearch = task.name.toLowerCase().includes(searchLower) ||
-                           task.description?.toLowerCase().includes(searchLower) ||
-                           task.projectName?.toLowerCase().includes(searchLower) ||
-                           task.assigneeName?.toLowerCase().includes(searchLower);
+      const matchesSearch =
+        task.name.toLowerCase().includes(searchLower) ||
+        task.description?.toLowerCase().includes(searchLower) ||
+        task.projectName?.toLowerCase().includes(searchLower) ||
+        task.assigneeName?.toLowerCase().includes(searchLower);
       if (!matchesSearch) return false;
     }
-    
+
     // Completed filter
     if (!this.showCompleted && task.status === TaskStatus.COMPLETED) {
       return false;
     }
-    
+
     return true;
   };
 
@@ -621,7 +655,7 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
     if (this.selectedPriority !== 'all') queryParams.priority = this.selectedPriority;
     if (this.dueDateFilter !== 'all') queryParams.dueDate = this.dueDateFilter;
     if (this.showCompleted) queryParams.showCompleted = 'true';
-    
+
     this.router.navigate([], { relativeTo: this.route, queryParams });
   }
 
@@ -638,12 +672,14 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
   }
 
   async toggleFlag(id: string) {
-    const task = this.rowData().find(t => t.id === id);
+    const task = this.rowData().find((t) => t.id === id);
     if (task) {
       const updatedTask = { ...task, isFlagged: !task.isFlagged };
       try {
         await this.taskService.update(id, updatedTask);
-        this.snackBar.open(`Task ${updatedTask.isFlagged ? 'flagged' : 'unflagged'}`, 'Close', { duration: 3000 });
+        this.snackBar.open(`Task ${updatedTask.isFlagged ? 'flagged' : 'unflagged'}`, 'Close', {
+          duration: 3000,
+        });
         this.loadData();
       } catch (error: any) {
         console.error('Error updating task flag:', error);
@@ -653,7 +689,7 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
   }
 
   deleteTask(id: string) {
-    const task = this.rowData().find(t => t.id === id);
+    const task = this.rowData().find((t) => t.id === id);
     if (!task) return;
 
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -665,7 +701,7 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
       },
     });
 
-    dialogRef.afterClosed().subscribe(async result => {
+    dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
         try {
           await this.taskService.deleteTask(id);
@@ -682,12 +718,22 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
   // Export methods
   exportData(format: string) {
     if (!this.gridApi) return;
-    
+
     switch (format) {
       case 'csv':
         this.gridApi.exportDataAsCsv({
           fileName: `tasks-${new Date().toISOString().split('T')[0]}.csv`,
-          columnKeys: ['name', 'projectName', 'status', 'priority', 'assignedToName', 'completionPercentage', 'dueDate', 'estimatedHours', 'actualHours']
+          columnKeys: [
+            'name',
+            'projectName',
+            'status',
+            'priority',
+            'assignedToName',
+            'completionPercentage',
+            'dueDate',
+            'estimatedHours',
+            'actualHours',
+          ],
         });
         break;
       case 'excel':
@@ -702,12 +748,8 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
 
     try {
       const analytics = this.taskAnalyticsService.generateAnalytics(this.rowData());
-      await this.taskExportService.exportToExcel(
-        this.rowData(),
-        analytics,
-        this.exportOptions
-      );
-      
+      await this.taskExportService.exportToExcel(this.rowData(), analytics, this.exportOptions);
+
       this.snackBar.open('Excel file generated successfully', 'Close', { duration: 3000 });
     } catch (error) {
       console.error('Error generating Excel:', error);
@@ -725,7 +767,9 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
     if (selectedRows.length === 0) return;
 
     // TODO: Open assignee selection dialog
-    this.snackBar.open(`Assign ${selectedRows.length} tasks - Coming soon!`, 'Close', { duration: 3000 });
+    this.snackBar.open(`Assign ${selectedRows.length} tasks - Coming soon!`, 'Close', {
+      duration: 3000,
+    });
   }
 
   bulkUpdateStatus() {
@@ -734,7 +778,9 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
     if (selectedRows.length === 0) return;
 
     // TODO: Open status selection dialog
-    this.snackBar.open(`Update status for ${selectedRows.length} tasks - Coming soon!`, 'Close', { duration: 3000 });
+    this.snackBar.open(`Update status for ${selectedRows.length} tasks - Coming soon!`, 'Close', {
+      duration: 3000,
+    });
   }
 
   bulkUpdatePriority() {
@@ -743,7 +789,9 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
     if (selectedRows.length === 0) return;
 
     // TODO: Open priority selection dialog
-    this.snackBar.open(`Update priority for ${selectedRows.length} tasks - Coming soon!`, 'Close', { duration: 3000 });
+    this.snackBar.open(`Update priority for ${selectedRows.length} tasks - Coming soon!`, 'Close', {
+      duration: 3000,
+    });
   }
 
   bulkDelete() {
@@ -760,7 +808,7 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
       },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         // TODO: Implement bulk delete
         this.snackBar.open(`Deleted ${selectedRows.length} tasks`, 'Close', { duration: 3000 });
@@ -776,7 +824,7 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
     // Export only selected rows
     this.gridApi.exportDataAsCsv({
       fileName: `selected-tasks-${new Date().toISOString().split('T')[0]}.csv`,
-      onlySelected: true
+      onlySelected: true,
     });
   }
 
@@ -804,9 +852,9 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'bottom' }
-          }
-        }
+            legend: { position: 'bottom' },
+          },
+        },
       });
     }
 
@@ -819,9 +867,9 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { display: false }
-          }
-        }
+            legend: { display: false },
+          },
+        },
       });
     }
 
@@ -835,9 +883,9 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
           maintainAspectRatio: false,
           indexAxis: 'y',
           plugins: {
-            legend: { display: false }
-          }
-        }
+            legend: { display: false },
+          },
+        },
       });
     }
 
@@ -850,9 +898,9 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'bottom' }
-          }
-        }
+            legend: { position: 'bottom' },
+          },
+        },
       });
     }
 
@@ -865,9 +913,9 @@ export class TaskManagementGridComponent implements OnInit, OnDestroy, AfterView
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'bottom' }
-          }
-        }
+            legend: { position: 'bottom' },
+          },
+        },
       });
     }
   }

@@ -46,56 +46,62 @@ export class AgentChatService {
   private contractorService = inject(ContractorService);
   private stockService = inject(StockService);
   private dailyProgressService = inject(DailyProgressService);
-  
+
   // Default API key for app UI access
   private apiKey = 'app-ui-key';
-  
+
   // Project code patterns to detect (case insensitive)
   private projectCodePattern = /\b([A-Za-z]{2,4}-\d{3})\b/gi;
 
   sendMessage(message: string, context?: unknown): Observable<ChatResponse> {
     console.log('Sending message to Firebase agent:', { message });
-    
+
     // Generate session ID for this conversation
     const sessionId = `fibreflow-${Date.now()}`;
-    
+
     // Use Firebase callable function (proper approach)
     return this.tryCallableFunction(message, sessionId, context);
   }
 
-  private tryCallableFunction(message: string, sessionId: string, context?: unknown): Observable<ChatResponse> {
+  private tryCallableFunction(
+    message: string,
+    sessionId: string,
+    context?: unknown,
+  ): Observable<ChatResponse> {
     console.log('Using Firebase callable function...');
-    
+
     try {
       // Ensure Firebase Functions is properly configured
       const agentChat = httpsCallable(this.functions, 'agentChat');
-      
-      return from(agentChat({ 
-        message, 
-        sessionId,
-        userId: 'fibreflow-app',
-        context 
-      })).pipe(
-      map((result: any) => {
-        console.log('Firebase agent callable response:', result);
-        // Firebase callable functions return data directly, not wrapped in .data
-        const responseData = result.data || result;
-        return {
-          success: true,
-          response: responseData.response || responseData.message || 'No response received',
-          mode: 'firebase-agent-callable',
-          user: 'FibreFlow Agent',
-          dataUsed: responseData.dataUsed || [],
-          context: responseData.context,
-          intent: responseData.intent,
-          confidence: responseData.confidence
-        } as ChatResponse;
-      }),
-      catchError((error) => {
-        console.error('Firebase agent callable error:', error);
-        // Final fallback to direct API
-        return this.sendFallbackMessage(message);
-      })
+
+      return from(
+        agentChat({
+          message,
+          sessionId,
+          userId: 'fibreflow-app',
+          context,
+        }),
+      ).pipe(
+        map((result: any) => {
+          console.log('Firebase agent callable response:', result);
+          // Firebase callable functions return data directly, not wrapped in .data
+          const responseData = result.data || result;
+          return {
+            success: true,
+            response: responseData.response || responseData.message || 'No response received',
+            mode: 'firebase-agent-callable',
+            user: 'FibreFlow Agent',
+            dataUsed: responseData.dataUsed || [],
+            context: responseData.context,
+            intent: responseData.intent,
+            confidence: responseData.confidence,
+          } as ChatResponse;
+        }),
+        catchError((error) => {
+          console.error('Firebase agent callable error:', error);
+          // Final fallback to direct API
+          return this.sendFallbackMessage(message);
+        }),
       );
     } catch (setupError) {
       console.error('Firebase Functions setup error:', setupError);
@@ -123,7 +129,7 @@ Be concise and practical in your responses.`;
           success: true,
           response,
           mode: 'fallback-direct',
-          user: 'FibreFlow App (Fallback)'
+          user: 'FibreFlow App (Fallback)',
         };
       }),
       catchError((error) => {
@@ -132,33 +138,33 @@ Be concise and practical in your responses.`;
           success: false,
           response: 'Error: Could not reach the agent. Please check your internet connection.',
         });
-      })
+      }),
     );
   }
 
   // Search agent memory using Firebase Functions
   searchMemory(query: string): Observable<any[]> {
     const searchMemory = httpsCallable(this.functions, 'searchAgentMemory');
-    
+
     return from(searchMemory({ query })).pipe(
       map((result: any) => result.data.results || []),
       catchError((error) => {
         console.error('Memory search error:', error);
         return of([]);
-      })
+      }),
     );
   }
 
   // Get agent statistics
   getAgentStats(): Observable<any> {
     const getStats = httpsCallable(this.functions, 'getAgentStats');
-    
+
     return from(getStats({})).pipe(
       map((result: any) => result.data),
       catchError((error) => {
         console.error('Agent stats error:', error);
         return of({ conversations: 0, patterns: 0, contexts: 0 });
-      })
+      }),
     );
   }
 
@@ -179,4 +185,3 @@ Be concise and practical in your responses.`;
     }
   }
 }
-

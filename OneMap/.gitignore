@@ -1,0 +1,36 @@
+# Credentials and sensitive files
+credentials/
+*.json
+*.key
+*.pem
+service-account*.json
+firebase-admin*.json
+
+# Environment files
+.env
+.env.local
+.env.prod
+.env.*
+
+# Large data files
+*.csv
+*.xlsx
+split_data/
+downloads/
+
+# Temporary files
+temp/
+*.tmp
+*.log
+
+# Node modules
+node_modules/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db

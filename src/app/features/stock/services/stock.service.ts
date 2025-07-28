@@ -182,9 +182,10 @@ export class StockService extends BaseFirestoreService<StockItem> {
     // Get unique item codes
     const itemCodes = Array.from(new Set(stockItems.map((item) => item.itemCode)));
 
-    // Fetch material data for all item codes
+    // TODO: Implement getMaterialByCode when MaterialService is updated
+    // For now, return empty materials
     const materialObservables = itemCodes.map((code) =>
-      this.materialService.getMaterialByCode(code).pipe(map((material) => ({ code, material }))),
+      of({ code, material: null })
     );
 
     return combineLatest(materialObservables).pipe(
@@ -195,18 +196,8 @@ export class StockService extends BaseFirestoreService<StockItem> {
         // Enrich stock items with material data
         return stockItems.map((item) => {
           const material = materialMap.get(item.itemCode);
-          if (material) {
-            return {
-              ...item,
-              materialDetails: {
-                name: material.description,
-                description: material.description,
-                category: material.category,
-                specifications: material.specifications,
-                unitOfMeasure: material.unitOfMeasure,
-              },
-            };
-          }
+          // TODO: Re-enable material enrichment when MaterialService is updated
+          // For now, just return the item without enrichment
           return item;
         });
       }),
@@ -219,23 +210,17 @@ export class StockService extends BaseFirestoreService<StockItem> {
       switchMap((item) => {
         if (!item) return of(undefined);
 
-        // Enrich with material data
-        return this.materialService.getMaterialByCode(item.itemCode).pipe(
+        // TODO: Implement getMaterialByCode when MaterialService is updated
+        // For now, return item without material enrichment
+        return of(null).pipe(
           map((material) => {
             const enrichedItem = {
               ...item,
               availableStock: item.currentStock - item.allocatedStock,
             };
 
-            if (material) {
-              enrichedItem.materialDetails = {
-                name: material.description,
-                description: material.description,
-                category: material.category,
-                specifications: material.specifications,
-                unitOfMeasure: material.unitOfMeasure,
-              };
-            }
+            // TODO: Re-enable material enrichment when MaterialService is updated
+            // For now, skip material enrichment
 
             return enrichedItem;
           }),

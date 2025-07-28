@@ -1,6 +1,7 @@
 <app-page-header
   title="Action Items Management"
-  subtitle="Manage and track action items from all meetings. Double-click cells to edit.">
+  subtitle="Manage and track action items from all meetings. Double-click cells to edit."
+>
 </app-page-header>
 
 <div class="action-items-grid-container">
@@ -12,28 +13,28 @@
         <div class="stat-label">Total Items</div>
       </mat-card-content>
     </mat-card>
-    
+
     <mat-card class="stat-card pending">
       <mat-card-content>
         <div class="stat-value">{{ stats()!.pending }}</div>
         <div class="stat-label">Pending</div>
       </mat-card-content>
     </mat-card>
-    
+
     <mat-card class="stat-card in-progress">
       <mat-card-content>
         <div class="stat-value">{{ stats()!.inProgress }}</div>
         <div class="stat-label">In Progress</div>
       </mat-card-content>
     </mat-card>
-    
+
     <mat-card class="stat-card overdue">
       <mat-card-content>
         <div class="stat-value">{{ stats()!.overdue }}</div>
         <div class="stat-label">Overdue</div>
       </mat-card-content>
     </mat-card>
-    
+
     <mat-card class="stat-card completed">
       <mat-card-content>
         <div class="stat-value">{{ stats()!.completed }}</div>
@@ -48,11 +49,15 @@
       <div class="filter-row">
         <mat-form-field appearance="outline">
           <mat-label>Search</mat-label>
-          <input matInput [(ngModel)]="searchText" (ngModelChange)="applyQuickFilter()" 
-                 placeholder="Search action items...">
+          <input
+            matInput
+            [(ngModel)]="searchText"
+            (ngModelChange)="applyQuickFilter()"
+            placeholder="Search action items..."
+          />
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
-        
+
         <mat-form-field appearance="outline">
           <mat-label>Status</mat-label>
           <mat-select [(ngModel)]="selectedStatus">
@@ -62,7 +67,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        
+
         <mat-form-field appearance="outline">
           <mat-label>Priority</mat-label>
           <mat-select [(ngModel)]="selectedPriority">
@@ -72,7 +77,7 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        
+
         <div class="filter-actions">
           <button mat-stroked-button (click)="clearFilters()">
             <mat-icon>clear</mat-icon>
@@ -95,12 +100,12 @@
           <mat-spinner></mat-spinner>
           <p>Loading action items...</p>
         </div>
-        
+
         <div *ngIf="!loading() && filteredItems().length === 0" class="no-data">
           <mat-icon>info</mat-icon>
           <p>No action items found. The daily sync will import new items from meetings.</p>
         </div>
-        
+
         <ag-grid-angular
           *ngIf="filteredItems().length > 0"
           class="ag-theme-material"
@@ -112,7 +117,8 @@
           [paginationPageSize]="50"
           [paginationPageSizeSelector]="[20, 50, 100, 500]"
           (gridReady)="onGridReady($event)"
-          (cellValueChanged)="onCellValueChanged($event)">
+          (cellValueChanged)="onCellValueChanged($event)"
+        >
         </ag-grid-angular>
       </div>
     </mat-card-content>

@@ -1,5 +1,17 @@
 import { Timestamp } from '@angular/fire/firestore';
 
+// Status History tracking for poles
+export interface StatusHistoryEntry {
+  status: string; // The status value (e.g., "Pole Permission: Approved")
+  changedAt: Timestamp | Date; // When the status changed
+  changedBy?: string; // User ID who made the change
+  changedByName?: string; // Display name of the user
+  source?: string; // Source of the change (e.g., "OneMap Import", "Manual Update")
+  importBatchId?: string; // If from import, which batch
+  notes?: string; // Any additional notes about the change
+  previousStatus?: string; // What the status was before this change
+}
+
 export interface PoleTracker {
   // Core Identity
   id?: string;
@@ -17,6 +29,10 @@ export interface PoleTracker {
   connectedDrops?: string[]; // Array of drop numbers connected to this pole
   dropCount?: number; // Calculated field: connectedDrops.length
   maxCapacity: number; // Always 12 (physical cable limit)
+
+  // Status Management (From OneMap and other sources)
+  status?: string; // Current status (e.g., "Pole Permission: Approved", "Construction: In Progress")
+  statusHistory?: StatusHistoryEntry[]; // Complete history of status changes
 
   // Network Details
   pon?: string; // PON (Passive Optical Network) identifier

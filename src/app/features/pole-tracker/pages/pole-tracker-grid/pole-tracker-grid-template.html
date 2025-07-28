@@ -50,9 +50,23 @@
           </mat-select>
         </mat-form-field>
 
+        <!-- Pole Number Search -->
+        <mat-form-field appearance="outline">
+          <mat-label>Search Pole Number</mat-label>
+          <input matInput [(ngModel)]="poleNumberSearch" (ngModelChange)="onPoleNumberSearchChange()" placeholder="Enter pole number...">
+          <mat-icon matSuffix>search</mat-icon>
+          <button mat-icon-button matSuffix *ngIf="poleNumberSearch" (click)="clearPoleNumberSearch()" matTooltip="Clear search">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-form-field>
+
         <!-- Quick Actions -->
         <div class="quick-actions">
-          <button mat-button (click)="showBulkActions = !showBulkActions" [disabled]="selectedCount() === 0">
+          <button
+            mat-button
+            (click)="showBulkActions = !showBulkActions"
+            [disabled]="selectedCount() === 0"
+          >
             <mat-icon>checklist</mat-icon>
             Bulk Actions ({{ selectedCount() }})
           </button>
@@ -143,7 +157,8 @@
         [getRowClass]="getRowClass"
         [isExternalFilterPresent]="isExternalFilterPresent"
         [doesExternalFilterPass]="doesExternalFilterPass"
-        style="width: 100%; height: 600px;">
+        style="width: 100%; height: 600px"
+      >
       </ag-grid-angular>
     </mat-card-content>
   </mat-card>
@@ -157,7 +172,12 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <div class="bulk-actions-content">
-      <button mat-raised-button color="primary" (click)="bulkAssignContractor()" [disabled]="selectedCount() === 0">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="bulkAssignContractor()"
+        [disabled]="selectedCount() === 0"
+      >
         <mat-icon>engineering</mat-icon>
         Assign Contractor
       </button>
@@ -169,7 +189,12 @@
         <mat-icon>fact_check</mat-icon>
         Mark QA Complete
       </button>
-      <button mat-raised-button color="warn" (click)="bulkDelete()" [disabled]="selectedCount() === 0">
+      <button
+        mat-raised-button
+        color="warn"
+        (click)="bulkDelete()"
+        [disabled]="selectedCount() === 0"
+      >
         <mat-icon>delete</mat-icon>
         Delete Selected
       </button>
@@ -215,7 +240,10 @@
           <div class="interactive-pivot-container">
             <div class="pivot-instructions">
               <mat-icon>info</mat-icon>
-              <span>Drag and drop fields to create custom pivot tables. All pole data fields are available.</span>
+              <span
+                >Drag and drop fields to create custom pivot tables. All pole data fields are
+                available.</span
+              >
             </div>
             <app-pivot-table [data]="rowData()"></app-pivot-table>
           </div>
@@ -227,8 +255,8 @@
             <mat-form-field appearance="outline">
               <mat-label>Date Range</mat-label>
               <mat-date-range-input [rangePicker]="picker">
-                <input matStartDate [(ngModel)]="dateRange.start" placeholder="Start date">
-                <input matEndDate [(ngModel)]="dateRange.end" placeholder="End date">
+                <input matStartDate [(ngModel)]="dateRange.start" placeholder="Start date" />
+                <input matEndDate [(ngModel)]="dateRange.end" placeholder="End date" />
               </mat-date-range-input>
               <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-date-range-picker #picker></mat-date-range-picker>
@@ -246,11 +274,17 @@
           <div class="export-options">
             <h3>Excel Export Options</h3>
             <mat-checkbox [(ngModel)]="exportOptions.includeCharts">Include Charts</mat-checkbox>
-            <mat-checkbox [(ngModel)]="exportOptions.includePivotTables">Include Pivot Tables</mat-checkbox>
-            <mat-checkbox [(ngModel)]="exportOptions.includeFormulas">Include Formulas</mat-checkbox>
+            <mat-checkbox [(ngModel)]="exportOptions.includePivotTables"
+              >Include Pivot Tables</mat-checkbox
+            >
+            <mat-checkbox [(ngModel)]="exportOptions.includeFormulas"
+              >Include Formulas</mat-checkbox
+            >
             <mat-checkbox [(ngModel)]="exportOptions.autoFilter">Enable Auto-Filter</mat-checkbox>
-            <mat-checkbox [(ngModel)]="exportOptions.conditionalFormatting">Apply Conditional Formatting</mat-checkbox>
-            
+            <mat-checkbox [(ngModel)]="exportOptions.conditionalFormatting"
+              >Apply Conditional Formatting</mat-checkbox
+            >
+
             <div class="export-actions">
               <button mat-raised-button color="primary" (click)="exportToExcel()">
                 <mat-icon>table_chart</mat-icon>

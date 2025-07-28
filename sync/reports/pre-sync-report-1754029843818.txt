@@ -1,0 +1,64 @@
+
+PRE-SYNC REPORT
+Generated: 2025/08/01, 08:30:43
+════════════════════════════════════════════════════════════════════════════════
+
+CURRENT STATUS:
+- Poles already in production: 36
+- Records analyzed from staging: 300
+
+WHAT WILL BE SYNCED:
+- Unique poles to sync: 175
+- Total records to process: 180
+- Status history entries to create: 180
+
+WHAT WILL BE SKIPPED:
+- Already synced: 39
+- No pole number: 81
+- Total skipped: 120
+
+STATUS DISTRIBUTION:
+- Pole Permission: Approved: 170
+- Home Sign Ups: Approved & Installation Scheduled: 3
+- Home Installation: In Progress: 7
+
+PROJECT DISTRIBUTION:
+- LAWLEY: 165
+- LAW: 14
+- Lawley: 1
+
+TOP 10 AGENTS:
+1. nathan: 51 records
+2. marchael: 28 records
+3. Adrian: 27 records
+4. manuel: 23 records
+5. marnu: 13 records
+6. Pieter: 12 records
+7. Nathan: 12 records
+8. Manuel: 6 records
+9. byron: 4 records
+10. Pearl Molisa: 2 records
+
+POLES WITH MULTIPLE STATUSES: 2
+- LAW.P.C512: 2 records (Pole Permission: Approved → Home Installation: In Progress)
+- LAW.P.C603: 2 records (Home Installation: In Progress → Pole Permission: Approved)
+
+SAMPLE POLES TO BE SYNCED:
+- LAW.P.A033: Pole Permission: Approved (1 history entries)
+- LAW.P.A032: Pole Permission: Approved (1 history entries)
+- LAW.P.A034: Pole Permission: Approved (1 history entries)
+- LAW.P.A035: Pole Permission: Approved (1 history entries)
+- LAW.P.A036: Pole Permission: Approved (1 history entries)
+- LAW.P.A038: Pole Permission: Approved (1 history entries)
+- LAW.P.A039: Pole Permission: Approved (1 history entries)
+- LAW.P.A040: Pole Permission: Approved (1 history entries)
+- LAW.P.A054: Pole Permission: Approved (1 history entries)
+- LAW.P.C593: Pole Permission: Approved (1 history entries)
+
+RECOMMENDATIONS:
+- Proceed with sync: YES ✅
+- Review conflicts first: YES ⚠️
+- Estimated sync duration: 18 seconds
+
+Full report saved to: /home/ldp/VF/Apps/FibreFlow/sync/reports/pre-sync-report-1754029843818.json
+════════════════════════════════════════════════════════════════════════════════

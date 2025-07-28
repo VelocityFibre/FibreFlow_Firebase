@@ -1,0 +1,15 @@
+GPS EXTRACTION LOG - Started: 2025-07-25
+========================================
+
+Image 1/278: ABKU4865.JPG - CORRUPTED FILE (Cannot read)
+Image 2/278: ABOW5086.JPG - EXTRACTED ✓
+  Address: Barracuda Road, Elandsfontein, Lawley, Gauteng 1830, South Africa
+  GPS: -26.389451, 27.807816
+  Date/Time: 07/23/2025 10:57 AM GMT+02:00
+
+Image 3/278: AEJD0192.JPG - EXTRACTED ✓
+  Address: 3rd Avenue, Elandsfontein, Lawley, Gauteng 1830, South Africa
+  GPS: -26.387176, 27.806611
+  Date/Time: 07/23/2025 10:26 AM GMT+02:00
+
+Image 4/278: AFKK3290.JPG - EMPTY FILE (0 bytes)

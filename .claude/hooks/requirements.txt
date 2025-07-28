@@ -1,0 +1,14 @@
+# Requirements for Claude Code hooks
+# These are installed automatically by uv when running scripts
+
+# For pre_tool_use.py - validation
+jsonschema>=4.20.0
+
+# For post_tool_use.py - logging
+python-json-logger>=2.0.7
+
+# For observability
+rich>=13.7.0
+
+# For data validation
+pydantic>=2.5.0

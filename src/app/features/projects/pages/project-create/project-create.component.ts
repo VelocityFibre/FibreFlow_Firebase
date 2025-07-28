@@ -16,6 +16,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProjectService } from '../../../../core/services/project.service';
 import { ClientService } from '../../../../features/clients/services/client.service';
 import { Client } from '../../../../features/clients/models/client.model';
+import { StaffService } from '../../../../features/staff/services/staff.service';
+import { StaffMember } from '../../../../features/staff/models/staff.model';
 import { Observable, firstValueFrom } from 'rxjs';
 import {
   ProjectType,
@@ -451,13 +453,21 @@ import {
 
                 <mat-form-field appearance="outline">
                   <mat-label>Project Manager</mat-label>
-                  <input
-                    matInput
-                    formControlName="projectManagerName"
-                    placeholder="Project manager name"
-                  />
+                  <mat-select
+                    #projectManagerSelect
+                    formControlName="projectManagerId"
+                    placeholder="Select project manager"
+                  >
+                    <mat-option
+                      *ngFor="let staffMember of staff$ | async"
+                      [value]="staffMember.id"
+                      (click)="projectManagerSelect.close()"
+                    >
+                      {{ staffMember.name }}
+                    </mat-option>
+                  </mat-select>
                   <mat-icon matSuffix>person</mat-icon>
-                  <mat-error *ngIf="projectForm.get('projectManagerName')?.hasError('required')">
+                  <mat-error *ngIf="projectForm.get('projectManagerId')?.hasError('required')">
                     Project manager is required
                   </mat-error>
                 </mat-form-field>
@@ -640,6 +650,7 @@ export class ProjectCreateComponent implements OnInit {
   private fb = inject(FormBuilder);
   private projectService = inject(ProjectService);
   private clientService = inject(ClientService);
+  private staffService = inject(StaffService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
@@ -647,6 +658,7 @@ export class ProjectCreateComponent implements OnInit {
   isEditMode = false;
   projectId: string | null = null;
   clients$: Observable<Client[]> = this.clientService.getActiveClients();
+  staff$: Observable<StaffMember[]> = this.staffService.getStaff();
 
   projectForm: FormGroup = this.fb.group({
     projectCode: ['', Validators.required],
@@ -665,7 +677,8 @@ export class ProjectCreateComponent implements OnInit {
     expectedEndDate: ['', Validators.required],
     budget: [0, [Validators.required, Validators.min(1)]],
 
-    projectManagerName: ['', Validators.required],
+    projectManagerId: ['', Validators.required],
+    projectManagerName: [''], // Keep this for backward compatibility
     workingHours: ['8:00 AM - 5:00 PM SAST'],
     allowWeekendWork: [false],
     allowNightWork: [false],
@@ -696,6 +709,20 @@ export class ProjectCreateComponent implements OnInit {
               clientContact: client.contactPerson || '',
               clientEmail: client.email || '',
               clientPhone: client.phone || '',
+            });
+          }
+        });
+      }
+    });
+
+    // Watch for project manager selection changes
+    this.projectForm.get('projectManagerId')?.valueChanges.subscribe((staffId) => {
+      if (staffId) {
+        this.staffService.getStaffById(staffId).subscribe((staff) => {
+          if (staff) {
+            // Set the project manager name for backward compatibility
+            this.projectForm.patchValue({
+              projectManagerName: staff.name,
             });
           }
         });
@@ -743,6 +770,7 @@ export class ProjectCreateComponent implements OnInit {
                 : project.expectedEndDate,
           budget: project.budget,
 
+          projectManagerId: project.projectManagerId || '',
           projectManagerName: project.projectManagerName,
           workingHours: project.workingHours,
           allowWeekendWork: project.allowWeekendWork || false,
@@ -874,7 +902,6 @@ export class ProjectCreateComponent implements OnInit {
         projectData.status = ProjectStatus.PLANNING;
         projectData.currentPhase = PhaseType.PLANNING;
         projectData.currentPhaseName = 'Planning Phase';
-        projectData.projectManagerId = `pm-${Date.now()}`;
         projectData.budgetUsed = 0;
         projectData.overallProgress = 0;
         projectData.activeTasksCount = 0;

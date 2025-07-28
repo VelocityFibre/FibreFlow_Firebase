@@ -16,10 +16,10 @@ import { PoleTimelineEvent } from '../../models/pole-report.model';
     MatIconModule,
     MatChipsModule,
     MatTableModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   templateUrl: './pole-timeline.component.html',
-  styleUrls: ['./pole-timeline.component.scss']
+  styleUrls: ['./pole-timeline.component.scss'],
 })
 export class PoleTimelineComponent {
   @Input() set timeline(value: PoleTimelineEvent[]) {
@@ -27,25 +27,25 @@ export class PoleTimelineComponent {
   }
 
   timelineEvents = signal<PoleTimelineEvent[]>([]);
-  
+
   displayedColumns = ['date', 'status', 'drop', 'agent', 'details'];
-  
+
   // Group events by date for better visualization
   groupedEvents = computed(() => {
     const events = this.timelineEvents();
     const grouped = new Map<string, PoleTimelineEvent[]>();
-    
-    events.forEach(event => {
+
+    events.forEach((event) => {
       const dateKey = event.date.split('T')[0]; // Get just the date part
       if (!grouped.has(dateKey)) {
         grouped.set(dateKey, []);
       }
       grouped.get(dateKey)!.push(event);
     });
-    
+
     return Array.from(grouped.entries()).map(([date, events]) => ({
       date,
-      events: events.sort((a, b) => (a.time || '').localeCompare(b.time || ''))
+      events: events.sort((a, b) => (a.time || '').localeCompare(b.time || '')),
     }));
   });
 
@@ -67,11 +67,11 @@ export class PoleTimelineComponent {
 
   formatDate(date: string): string {
     const d = new Date(date);
-    return d.toLocaleDateString('en-ZA', { 
-      weekday: 'short', 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
+    return d.toLocaleDateString('en-ZA', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
     });
   }
 

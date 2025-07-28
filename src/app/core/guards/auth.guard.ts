@@ -10,7 +10,7 @@ export const authGuard: CanActivateFn = (_route, state) => {
 
   return authService.user$.pipe(
     take(1),
-    map(user => {
+    map((user) => {
       if (user) {
         console.log('🔓 Auth Guard - User authenticated:', user.email);
         return true;
@@ -21,6 +21,6 @@ export const authGuard: CanActivateFn = (_route, state) => {
         router.navigate(['/login'], { queryParams: { returnUrl } });
         return false;
       }
-    })
+    }),
   );
 };

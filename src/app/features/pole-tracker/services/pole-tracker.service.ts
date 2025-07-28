@@ -18,7 +18,7 @@ import {
   DocumentReference,
   Timestamp,
 } from '@angular/fire/firestore';
-import { Observable, from, map, of, switchMap, catchError, throwError } from 'rxjs';
+import { Observable, from, map, of, switchMap, catchError, throwError, take } from 'rxjs';
 import {
   PoleTracker,
   PoleTrackerFilter,
@@ -28,8 +28,9 @@ import {
   HomeSignup,
   HomesConnected,
   HomesActivated,
+  StatusHistoryEntry,
 } from '../models/pole-tracker.model';
-import { PlannedPole, PoleInstallation, ImportBatch } from '../models/mobile-pole-tracker.model';
+import { PlannedPole, PoleInstallation, ImportBatch, PlannedPoleStatus } from '../models/mobile-pole-tracker.model';
 import { ProjectService } from '../../../core/services/project.service';
 
 @Injectable({
@@ -327,6 +328,113 @@ export class PoleTrackerService {
     return from(updateDoc(docRef, updateData));
   }
 
+  /**
+   * Updates pole status and maintains history
+   * @param poleId The pole ID to update
+   * @param newStatus The new status to set
+   * @param source Source of the status change (e.g., "OneMap Import", "Manual Update")
+   * @param notes Optional notes about the status change
+   * @param changedBy User ID making the change
+   * @param changedByName Display name of the user
+   * @param importBatchId Optional batch ID if from import
+   */
+  updatePoleStatus(
+    poleId: string,
+    newStatus: string,
+    source: string = 'Manual Update',
+    notes?: string,
+    changedBy?: string,
+    changedByName?: string,
+    importBatchId?: string
+  ): Observable<void> {
+    // First get the current pole to check existing status
+    return this.getPoleTracker(poleId).pipe(
+      take(1),
+      switchMap((pole) => {
+        if (!pole) {
+          return throwError(() => new Error(`Pole ${poleId} not found`));
+        }
+
+        const currentStatus = pole.status;
+        const currentHistory = pole.statusHistory || [];
+
+        // Create new history entry
+        const newHistoryEntry: StatusHistoryEntry = {
+          status: newStatus,
+          changedAt: serverTimestamp() as any,
+          changedBy,
+          changedByName,
+          source,
+          importBatchId,
+          notes,
+          previousStatus: currentStatus
+        };
+
+        // Prepare update data
+        const updateData: Partial<PoleTracker> = {
+          status: newStatus,
+          statusHistory: [newHistoryEntry, ...currentHistory], // Add new entry at beginning
+          updatedAt: serverTimestamp() as any,
+          updatedBy: changedBy,
+          updatedByName: changedByName
+        };
+
+        // Update the pole
+        return this.updatePoleTracker(poleId, updateData);
+      })
+    );
+  }
+
+  /**
+   * Updates planned pole status and maintains history
+   * Similar to updatePoleStatus but for planned poles
+   */
+  updatePlannedPoleStatus(
+    poleId: string,
+    newStatus: PlannedPoleStatus | string,
+    source: string = 'Manual Update',
+    notes?: string,
+    changedBy?: string,
+    changedByName?: string,
+    importBatchId?: string
+  ): Observable<void> {
+    return this.getPlannedPoleById(poleId).pipe(
+      take(1),
+      switchMap((pole) => {
+        if (!pole) {
+          return throwError(() => new Error(`Planned pole ${poleId} not found`));
+        }
+
+        const currentStatus = pole.status;
+        const currentHistory = pole.statusHistory || [];
+
+        // Create new history entry
+        const newHistoryEntry: StatusHistoryEntry = {
+          status: newStatus,
+          changedAt: serverTimestamp() as any,
+          changedBy,
+          changedByName,
+          source,
+          importBatchId,
+          notes,
+          previousStatus: currentStatus
+        };
+
+        // Prepare update data
+        const updateData = {
+          status: newStatus as PlannedPoleStatus,
+          statusHistory: [newHistoryEntry, ...currentHistory],
+          lastModified: serverTimestamp(),
+          lastModifiedBy: changedBy || 'system'
+        };
+
+        // Update the planned pole
+        const docRef = doc(this.firestore, 'planned-poles', poleId);
+        return from(updateDoc(docRef, updateData));
+      })
+    );
+  }
+
   // Update image upload status
   updateImageUpload(
     poleId: string,
@@ -492,14 +600,67 @@ export class PoleTrackerService {
     const docRef = doc(this.firestore, 'planned-poles', poleId);
 
     return from(getDoc(docRef)).pipe(
-      map((docSnap) => {
+      switchMap((docSnap) => {
         if (docSnap.exists()) {
-          return {
+          const poleData = {
             id: docSnap.id,
             ...docSnap.data(),
           } as PlannedPole;
+
+          // Try to fetch status history from subcollection
+          const statusHistoryRef = collection(this.firestore, 'planned-poles', poleId, 'statusHistory');
+          // Note: The sync script uses 'timestamp' field, not 'changedAt'
+          const statusHistoryQuery = query(statusHistoryRef, orderBy('timestamp', 'desc'));
+          
+          return from(getDocs(statusHistoryQuery)).pipe(
+            map((historySnapshot) => {
+              let statusHistory: StatusHistoryEntry[] = historySnapshot.docs.map(doc => {
+                const data = doc.data();
+                // Convert Firestore timestamps to serializable format
+                const timestamp = data['timestamp']?.toDate ? data['timestamp'].toDate() : data['timestamp'];
+                
+                // Map the sync script fields to StatusHistoryEntry interface
+                return {
+                  status: data['status'] || 'Unknown',
+                  changedAt: timestamp,
+                  changedBy: data['fieldAgent'] || data['changedBy'],
+                  changedByName: data['fieldAgent'] || data['changedByName'],
+                  source: data['source'] || 'vf-onemap-sync',
+                  importBatchId: data['importBatch'] || data['importBatchId'],
+                  previousStatus: data['previousStatus'],
+                  notes: data['notes'],
+                  // Include additional fields from sync
+                  propertyId: data['propertyId'],
+                  dropNumber: data['dropNumber'],
+                  stagingDocId: data['stagingDocId']
+                } as StatusHistoryEntry & { propertyId?: string; dropNumber?: string; stagingDocId?: string };
+              });
+              
+              console.log(`Found ${statusHistory.length} status history entries for pole ${poleId}`);
+              
+              // If no subcollection data, use the array field if it exists
+              if (statusHistory.length === 0 && poleData.statusHistory) {
+                console.log('Using statusHistory from document field instead of subcollection');
+                statusHistory = poleData.statusHistory;
+              }
+              
+              // Add status history to pole data
+              return {
+                ...poleData,
+                statusHistory
+              } as PlannedPole;
+            }),
+            catchError((subcollectionError) => {
+              console.warn('Error fetching status history subcollection:', subcollectionError);
+              // If subcollection fetch fails, return pole data with empty array
+              return of({
+                ...poleData,
+                statusHistory: []
+              } as PlannedPole);
+            })
+          );
         }
-        return null;
+        return of(null);
       }),
       catchError((error) => {
         console.error('Error fetching planned pole:', error);

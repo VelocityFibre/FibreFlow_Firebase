@@ -361,8 +361,12 @@ export class AuditTrailService implements OnDestroy {
         const docRef = doc(collection(this.firestore, 'audit-logs'));
         // Create a copy of the log without the timestamp field
         const { timestamp, ...logWithoutTimestamp } = log;
+        
+        // Clean up the log data to remove undefined values
+        const cleanedLog = this.removeUndefinedValues(logWithoutTimestamp);
+        
         const logData = {
-          ...logWithoutTimestamp,
+          ...cleanedLog,
           id: docRef.id,
           // Set serverTimestamp directly in the batch operation
           timestamp: serverTimestamp(),
@@ -393,8 +397,8 @@ export class AuditTrailService implements OnDestroy {
       if (this.isValueChanged(oldValue, newValue)) {
         changes.push({
           field: key,
-          oldValue,
-          newValue,
+          oldValue: oldValue === undefined ? null : oldValue,
+          newValue: newValue === undefined ? null : newValue,
           dataType: this.getDataType(newValue),
           displayOldValue: this.formatDisplayValue(oldValue),
           displayNewValue: this.formatDisplayValue(newValue),
@@ -449,6 +453,34 @@ export class AuditTrailService implements OnDestroy {
     return (
       Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
     );
+  }
+
+  /**
+   * Recursively remove undefined values from an object
+   * Firebase doesn't accept undefined values
+   */
+  private removeUndefinedValues(obj: any): any {
+    if (obj === null || obj === undefined) {
+      return null;
+    }
+    
+    if (Array.isArray(obj)) {
+      return obj.map(item => this.removeUndefinedValues(item))
+        .filter(item => item !== undefined);
+    }
+    
+    if (typeof obj === 'object' && obj.constructor === Object) {
+      const cleanedObj: any = {};
+      for (const key of Object.keys(obj)) {
+        const value = obj[key];
+        if (value !== undefined) {
+          cleanedObj[key] = this.removeUndefinedValues(value);
+        }
+      }
+      return cleanedObj;
+    }
+    
+    return obj;
   }
 
   ngOnDestroy(): void {

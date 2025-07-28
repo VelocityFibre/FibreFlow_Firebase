@@ -201,6 +201,15 @@
         "usage_count": 0,
         "version": 1
       }
+    ],
+    "security": [
+      {
+        "pattern": "Firebase Admin SDK Security: When encountering 'service account credentials' error, use Firebase Client SDK with admin auth instead of Admin SDK. Alternatives: Firebase CLI for simple ops, service account for automation (keep secure). Full guide in CLAUDE.md section 🔐",
+        "context": "CLI input",
+        "timestamp": "2025-07-25T14:28:16.902Z",
+        "usage_count": 0,
+        "version": 1
+      }
     ]
   },
   "preferences": [

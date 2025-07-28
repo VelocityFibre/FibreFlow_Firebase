@@ -3,12 +3,12 @@
     <h3>Pole Tracker Summary</h3>
     <p class="data-count">Data Records: {{ data?.length || 0 }}</p>
   </div>
-  
+
   <div class="pivot-table-content">
     <div *ngIf="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
-    
+
     <div *ngIf="summaryData?.totalPoles > 0" class="summary-cards">
       <mat-card class="summary-card">
         <mat-card-header>
@@ -43,7 +43,7 @@
         </mat-card-content>
       </mat-card>
     </div>
-    
+
     <div #pivotContainer class="pivot-container">
       <div *ngIf="summaryData?.totalPoles === 0" class="no-data-message">
         <p>No data available for analysis.</p>

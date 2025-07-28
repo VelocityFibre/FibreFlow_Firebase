@@ -2,6 +2,34 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## ⚡ CRITICAL INSTRUCTIONS FOR CLAUDE
+
+### 🤖 DO THE WORK - DON'T GIVE TASKS!
+**IMPORTANT**: When the user asks for something to be done:
+1. **CHECK** if we already have what's needed (service accounts, files, etc.)
+2. **PLAN** what needs to be done
+3. **ASK** for clarification if needed
+4. **DO IT YOURSELF** - Don't write guides or instructions for the user!
+5. **Complete the task** - Don't tell the user to do it themselves!
+
+**Examples**:
+- ❌ WRONG: "Here's how you can create a service account..."
+- ✅ RIGHT: "Let me check if we have a service account and set it up for you."
+
+- ❌ WRONG: "You need to run this command..."
+- ✅ RIGHT: "I'll run this command for you now..."
+
+### 👂 LISTEN CLOSELY & CLARIFY
+**BEFORE doing anything**:
+1. **READ** the user's request carefully - what do they ACTUALLY want?
+2. **CLARIFY** if you're unsure before proceeding
+3. **CONFIRM** you understand before taking action
+4. **DON'T ASSUME** - if unclear, ask!
+
+**Example**:
+- User: "Set up the service account"
+- Claude: "I'll set up the service account. Just to clarify - do you want me to use an existing service account file or create a new one?"
+
 ## Project Overview
 
 Graphiti is a Python framework for building temporally-aware knowledge graphs designed for AI agents. It enables real-time incremental updates to knowledge graphs without batch recomputation, making it suitable for dynamic environments.

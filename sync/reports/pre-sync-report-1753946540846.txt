@@ -1,0 +1,60 @@
+
+PRE-SYNC REPORT
+Generated: 2025/07/31, 09:22:20
+════════════════════════════════════════════════════════════════════════════════
+
+CURRENT STATUS:
+- Poles already in production: 36
+- Records analyzed from staging: 200
+
+WHAT WILL BE SYNCED:
+- Unique poles to sync: 100
+- Total records to process: 103
+- Status history entries to create: 103
+
+WHAT WILL BE SKIPPED:
+- Already synced: 39
+- No pole number: 58
+- Total skipped: 97
+
+STATUS DISTRIBUTION:
+- Pole Permission: Approved: 102
+- Home Installation: In Progress: 1
+
+PROJECT DISTRIBUTION:
+- LAWLEY: 102
+- LAW: 1
+
+TOP 10 AGENTS:
+1. nathan: 28 records
+2. Adrian: 14 records
+3. marnu: 13 records
+4. marchael: 13 records
+5. Pieter: 12 records
+6. manuel: 10 records
+7. Nathan: 9 records
+8. byron: 3 records
+9. Byron: 1 records
+
+POLES WITH MULTIPLE STATUSES: 0
+
+
+SAMPLE POLES TO BE SYNCED:
+- LAW.P.A033: Pole Permission: Approved (1 history entries)
+- LAW.P.A032: Pole Permission: Approved (1 history entries)
+- LAW.P.A034: Pole Permission: Approved (1 history entries)
+- LAW.P.A035: Pole Permission: Approved (1 history entries)
+- LAW.P.A036: Pole Permission: Approved (1 history entries)
+- LAW.P.A038: Pole Permission: Approved (1 history entries)
+- LAW.P.A039: Pole Permission: Approved (1 history entries)
+- LAW.P.A040: Pole Permission: Approved (1 history entries)
+- LAW.P.A054: Pole Permission: Approved (1 history entries)
+- LAW.P.C593: Pole Permission: Approved (1 history entries)
+
+RECOMMENDATIONS:
+- Proceed with sync: YES ✅
+- Review conflicts first: NO ✅
+- Estimated sync duration: 10 seconds
+
+Full report saved to: /home/ldp/VF/Apps/FibreFlow/sync/reports/pre-sync-report-1753946540846.json
+════════════════════════════════════════════════════════════════════════════════

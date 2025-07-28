@@ -20,7 +20,7 @@ export interface CsvAnalysisResult {
   duplicatesPreWindow: CsvRecord[];
   noDropAllocated: CsvRecord[];
   duplicateDropsRemoved: CsvRecord[];
-  
+
   // Additional analysis metrics
   totalRecords: number;
   processingDate: Date;
@@ -50,7 +50,11 @@ export interface ValidationError {
 }
 
 export interface CsvAnalysisReport {
-  reportType: 'first-entry' | 'duplicates-pre-window' | 'no-drop-allocated' | 'duplicate-drops-removed';
+  reportType:
+    | 'first-entry'
+    | 'duplicates-pre-window'
+    | 'no-drop-allocated'
+    | 'duplicate-drops-removed';
   filename: string;
   recordCount: number;
   generatedDate: Date;

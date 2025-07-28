@@ -63,7 +63,7 @@ import { StaffMember } from '../../../staff/models/staff.model';
         <mat-icon>save</mat-icon>
         <span>Auto-saving changes...</span>
       </div>
-      
+
       <mat-card class="header-card">
         <mat-card-header>
           <mat-card-title>Enhanced Daily KPIs Update</mat-card-title>
@@ -727,9 +727,15 @@ import { StaffMember } from '../../../staff/models/staff.model';
       }
 
       @keyframes pulse {
-        0% { opacity: 1; }
-        50% { opacity: 0.5; }
-        100% { opacity: 1; }
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+        100% {
+          opacity: 1;
+        }
       }
 
       .header-card {
@@ -949,7 +955,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
     this.loadStaffMembers();
     this.setupFormListeners();
     this.setupConnectionMonitoring();
-    
+
     // Check for unsaved changes after form is initialized
     setTimeout(() => {
       this.loadFromLocalStorage();
@@ -960,17 +966,17 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
     // Monitor online/offline status
     window.addEventListener('online', () => {
       this.isOnline.set(true);
-      this.snackBar.open('✓ Connection restored', 'Close', { 
+      this.snackBar.open('✓ Connection restored', 'Close', {
         duration: 3000,
-        panelClass: ['success-snackbar']
+        panelClass: ['success-snackbar'],
       });
     });
 
     window.addEventListener('offline', () => {
       this.isOnline.set(false);
-      this.snackBar.open('⚠️ No internet connection - Changes may not save', 'Close', { 
+      this.snackBar.open('⚠️ No internet connection - Changes may not save', 'Close', {
         duration: 0,
-        panelClass: ['warning-snackbar']
+        panelClass: ['warning-snackbar'],
       });
     });
 
@@ -1327,24 +1333,24 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
 
     // Show saving status
     this.snackBar.open('Saving KPIs to cloud...', '', { duration: 0 });
-    
+
     this.kpisService.createKPI(cleanedData.projectId!, cleanedData).subscribe({
       next: (result: any) => {
         // Firebase has confirmed the write is on the server
         this.loading.set(false);
         this.snackBar.dismiss();
-        
+
         // Clear the localStorage draft since data is now saved to Firebase
         this.clearLocalStorageDraft();
-        
-        this.snackBar.open('✓ KPIs saved to cloud successfully!', 'Close', { 
+
+        this.snackBar.open('✓ KPIs saved to cloud successfully!', 'Close', {
           duration: 3000,
-          panelClass: ['success-snackbar']
+          panelClass: ['success-snackbar'],
         });
-        
+
         // Mark form as pristine since it's now saved
         this.kpiForm.markAsPristine();
-        
+
         // Safe to navigate - data is confirmed on server
         this.router.navigate(['/daily-progress/kpis-summary']);
       },
@@ -1352,7 +1358,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
         this.loading.set(false);
         this.snackBar.dismiss();
         console.error('Error saving KPIs:', error);
-        
+
         // More detailed error message
         let errorMessage = 'Error saving KPIs';
         if (!navigator.onLine) {
@@ -1362,14 +1368,17 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
         } else if (error.message) {
           errorMessage = `Error: ${error.message}`;
         }
-        
-        this.snackBar.open(errorMessage, 'Retry', { 
-          duration: 10000,
-          panelClass: ['error-snackbar']
-        }).onAction().subscribe(() => {
-          // Retry the save
-          this.onSubmit();
-        });
+
+        this.snackBar
+          .open(errorMessage, 'Retry', {
+            duration: 10000,
+            panelClass: ['error-snackbar'],
+          })
+          .onAction()
+          .subscribe(() => {
+            // Retry the save
+            this.onSubmit();
+          });
       },
     });
   }
@@ -1404,28 +1413,34 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
       const dataToSave = {
         ...formValue,
         lastSaved: new Date().toISOString(),
-        userId: this.authService.currentUser()?.uid
+        userId: this.authService.currentUser()?.uid,
       };
-      
+
       try {
         localStorage.setItem(saveKey, JSON.stringify(dataToSave));
-        console.log('📝 KPIs auto-saved locally at', new Date().toLocaleTimeString(), 
-                   '- Project:', formValue.projectId, 'Date:', this.formatDateForStorage(formValue.date));
-        
+        console.log(
+          '📝 KPIs auto-saved locally at',
+          new Date().toLocaleTimeString(),
+          '- Project:',
+          formValue.projectId,
+          'Date:',
+          this.formatDateForStorage(formValue.date),
+        );
+
         // Show brief confirmation (only if form has substantial data)
         if (!this.isFormMostlyEmpty()) {
           // Very brief toast (1 second)
-          this.snackBar.open('💾 Changes auto-saved', '', { 
+          this.snackBar.open('💾 Changes auto-saved', '', {
             duration: 1000,
-            panelClass: ['info-snackbar']
+            panelClass: ['info-snackbar'],
           });
         }
       } catch (error) {
         console.warn('Failed to auto-save to localStorage:', error);
         // Warn user if localStorage is full/unavailable
-        this.snackBar.open('⚠️ Unable to auto-save changes locally', 'Close', { 
+        this.snackBar.open('⚠️ Unable to auto-save changes locally', 'Close', {
           duration: 5000,
-          panelClass: ['warning-snackbar']
+          panelClass: ['warning-snackbar'],
         });
       }
     }
@@ -1434,33 +1449,33 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
   private loadFromLocalStorage(): void {
     const projectId = this.kpiForm.get('projectId')?.value;
     const date = this.kpiForm.get('date')?.value;
-    
+
     if (projectId && date) {
       const saveKey = `kpi_draft_${projectId}_${this.formatDateForStorage(date)}`;
       const savedData = localStorage.getItem(saveKey);
-      
+
       if (savedData) {
         try {
           const parsedData = JSON.parse(savedData);
           const lastSaved = new Date(parsedData.lastSaved);
           const now = new Date();
           const hoursSinceLastSave = (now.getTime() - lastSaved.getTime()) / (1000 * 60 * 60);
-          
+
           // Only restore if saved within last 24 hours and form is relatively empty
           if (hoursSinceLastSave < 24 && this.isFormMostlyEmpty()) {
             const shouldRestore = confirm(
-              `💾 Found unsaved changes from ${lastSaved.toLocaleString()}.\n\nWould you like to restore these changes?`
+              `💾 Found unsaved changes from ${lastSaved.toLocaleString()}.\n\nWould you like to restore these changes?`,
             );
-            
+
             if (shouldRestore) {
               // Remove metadata before patching form
               delete parsedData.lastSaved;
               delete parsedData.userId;
               this.kpiForm.patchValue(parsedData, { emitEvent: false });
-              
+
               this.snackBar.open('✓ Restored unsaved changes', 'Close', {
                 duration: 5000,
-                panelClass: ['success-snackbar']
+                panelClass: ['success-snackbar'],
               });
             }
           } else if (hoursSinceLastSave >= 24) {
@@ -1479,7 +1494,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
   private clearLocalStorageDraft(): void {
     const projectId = this.kpiForm.get('projectId')?.value;
     const date = this.kpiForm.get('date')?.value;
-    
+
     if (projectId && date) {
       const saveKey = `kpi_draft_${projectId}_${this.formatDateForStorage(date)}`;
       localStorage.removeItem(saveKey);
@@ -1494,12 +1509,12 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
   private isFormMostlyEmpty(): boolean {
     const formValue = this.kpiForm.value;
     // Check if most KPI fields are empty (0 or null/undefined)
-    const kpiFields = this.kpiDefinitions.map(kpi => kpi.key);
-    const filledFields = kpiFields.filter(field => {
+    const kpiFields = this.kpiDefinitions.map((kpi) => kpi.key);
+    const filledFields = kpiFields.filter((field) => {
       const value = formValue[field];
       return value !== null && value !== undefined && value !== 0 && value !== '';
     });
-    
+
     // If less than 3 fields are filled, consider it mostly empty
     return filledFields.length < 3;
   }

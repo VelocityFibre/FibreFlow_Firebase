@@ -26,11 +26,45 @@
 .filters-card {
   margin-bottom: 16px;
   
+  mat-card-content {
+    padding: 20px !important;
+  }
+  
   .filters-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
     align-items: center;
+    
+    mat-form-field {
+      width: 100%;
+      
+      .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+      }
+      
+      .mat-mdc-floating-label {
+        white-space: nowrap;
+        overflow: visible;
+        text-overflow: clip;
+        max-width: none;
+      }
+      
+      .mat-mdc-form-field-label-wrapper {
+        overflow: visible;
+      }
+      
+      // For the search field with multiple suffix icons
+      .mat-mdc-text-field-wrapper {
+        .mat-mdc-form-field-icon-suffix {
+          button {
+            mat-icon {
+              font-size: 18px;
+            }
+          }
+        }
+      }
+    }
   }
   
   .quick-actions {
@@ -155,12 +189,23 @@
 
 .pivot-controls {
   display: flex;
-  gap: 16px;
+  gap: 20px;
   padding: 16px;
   flex-wrap: wrap;
   
   mat-form-field {
-    min-width: 150px;
+    min-width: 200px;
+    
+    .mat-mdc-floating-label {
+      white-space: nowrap;
+      overflow: visible;
+      text-overflow: clip;
+      max-width: none;
+    }
+    
+    .mat-mdc-form-field-label-wrapper {
+      overflow: visible;
+    }
   }
 }
 
@@ -209,12 +254,24 @@
 
 .time-series-controls {
   display: flex;
-  gap: 16px;
+  gap: 20px;
   padding: 16px;
   align-items: center;
+  flex-wrap: wrap;
   
   mat-form-field {
     width: 300px;
+    
+    .mat-mdc-floating-label {
+      white-space: nowrap;
+      overflow: visible;
+      text-overflow: clip;
+      max-width: none;
+    }
+    
+    .mat-mdc-form-field-label-wrapper {
+      overflow: visible;
+    }
   }
 }
 

@@ -57,7 +57,9 @@ import { Timestamp } from '@angular/fire/firestore';
             <div class="services-section">
               <span class="services-label">Services & Capabilities:</span>
               <mat-chip-set>
-                <mat-chip *ngFor="let service of selectedContractor()!.capabilities?.services || []">
+                <mat-chip
+                  *ngFor="let service of selectedContractor()!.capabilities?.services || []"
+                >
                   {{ service }}
                 </mat-chip>
               </mat-chip-set>

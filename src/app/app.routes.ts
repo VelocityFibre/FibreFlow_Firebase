@@ -182,7 +182,7 @@ const allRoutes: Routes = [
   },
   {
     path: 'action-items',
-    loadChildren: () => 
+    loadChildren: () =>
       import('./features/action-items/action-items.routes').then((m) => m.ACTION_ITEMS_ROUTES),
     canActivate: [authGuard],
     data: { title: 'Action Items Management' },

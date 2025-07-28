@@ -182,13 +182,13 @@ export class TaskManagementComponent implements OnInit {
   navigateToGridView() {
     console.log('Navigating to grid view...');
     this.router.navigate(['/task-grid']).then(
-      success => {
+      (success) => {
         console.log('Navigation success:', success);
       },
-      error => {
+      (error) => {
         console.error('Navigation error:', error);
         this.notification.error('Failed to navigate to grid view');
-      }
+      },
     );
   }
 

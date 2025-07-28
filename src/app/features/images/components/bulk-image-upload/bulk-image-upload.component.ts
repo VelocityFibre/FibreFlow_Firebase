@@ -10,16 +10,20 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatDialogModule } from '@angular/material/dialog';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
-import { 
-  Storage, 
-  ref, 
-  uploadBytesResumable, 
+import {
+  Storage,
+  ref,
+  uploadBytesResumable,
   getDownloadURL,
-  getMetadata
+  getMetadata,
 } from '@angular/fire/storage';
 import { Firestore, collection, addDoc, serverTimestamp } from '@angular/fire/firestore';
 import { Auth, user } from '@angular/fire/auth';
+import { ImageProcessingService } from '../../services/image-processing.service';
+import { HttpClientModule } from '@angular/common/http';
 
 interface UploadImageFile {
   name: string;
@@ -57,6 +61,9 @@ interface ImageBatch {
     MatTooltipModule,
     MatFormFieldModule,
     MatInputModule,
+    MatDividerModule,
+    MatDialogModule,
+    HttpClientModule,
     PageHeaderComponent,
   ],
   template: `
@@ -140,24 +147,24 @@ interface ImageBatch {
           <div class="labeling-form">
             <mat-form-field appearance="outline" class="site-field">
               <mat-label>Site Name *</mat-label>
-              <input 
-                matInput 
-                [(ngModel)]="siteName" 
+              <input
+                matInput
+                [(ngModel)]="siteName"
                 placeholder="e.g., Lawley, Johannesburg Central"
                 [disabled]="isUploading()"
                 required
-              >
+              />
               <mat-hint>Required - Where are these poles located?</mat-hint>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="project-field">
               <mat-label>Project Name</mat-label>
-              <input 
-                matInput 
-                [(ngModel)]="projectName" 
+              <input
+                matInput
+                [(ngModel)]="projectName"
                 placeholder="e.g., Fiber Installation Phase 2"
                 [disabled]="isUploading()"
-              >
+              />
               <mat-hint>Optional - Project or campaign name</mat-hint>
             </mat-form-field>
           </div>
@@ -167,7 +174,7 @@ interface ImageBatch {
       <!-- Upload Area -->
       <mat-card class="upload-card">
         <mat-card-content>
-          <div 
+          <div
             class="dropzone"
             [class.dragover]="isDragging()"
             [class.disabled]="!canUpload()"
@@ -182,7 +189,10 @@ interface ImageBatch {
               <p>Sign in with your Google account to continue</p>
             } @else if (!siteName || siteName.trim() === '') {
               <h2>📝 Enter site name first</h2>
-              <p><strong>Required:</strong> Fill in the "Site Name" field above to organize your images</p>
+              <p>
+                <strong>Required:</strong> Fill in the "Site Name" field above to organize your
+                images
+              </p>
             } @else if (isUploading()) {
               <h2>⏳ Upload in progress...</h2>
               <p>Please wait for current uploads to complete</p>
@@ -191,14 +201,14 @@ interface ImageBatch {
               <p>or <strong>click to browse</strong> (JPG, PNG, HEIC supported)</p>
               <small>Perfect for GPS Map Camera photos with coordinates</small>
             }
-            <input 
-              #fileInput 
-              type="file" 
+            <input
+              #fileInput
+              type="file"
               accept="image/*,.jpg,.jpeg,.png,.heic"
-              multiple 
+              multiple
               (change)="onFileSelected($event)"
               style="display: none"
-            >
+            />
           </div>
 
           <!-- File List -->
@@ -208,7 +218,7 @@ interface ImageBatch {
                 <h3>Images ({{ files().length }})</h3>
                 <span class="total-size">Total: {{ formatSize(totalSize()) }}</span>
               </div>
-              
+
               @for (file of files(); track file.name) {
                 <div class="file-item" [class.error-item]="file.status === 'error'">
                   <mat-icon>image</mat-icon>
@@ -219,13 +229,13 @@ interface ImageBatch {
                       <span class="error-message">{{ file.error }}</span>
                     }
                   </div>
-                  
+
                   @switch (file.status) {
                     @case ('uploading') {
                       <div class="progress-info">
                         <span class="progress-text">{{ file.progress.toFixed(0) }}%</span>
-                        <mat-progress-bar 
-                          mode="determinate" 
+                        <mat-progress-bar
+                          mode="determinate"
                           [value]="file.progress"
                         ></mat-progress-bar>
                       </div>
@@ -235,7 +245,9 @@ interface ImageBatch {
                       <span class="status-text">Verifying...</span>
                     }
                     @case ('complete') {
-                      <mat-icon class="success" matTooltip="Upload successful">check_circle</mat-icon>
+                      <mat-icon class="success" matTooltip="Upload successful"
+                        >check_circle</mat-icon
+                      >
                     }
                     @case ('error') {
                       <button mat-icon-button (click)="retryUpload(file)" matTooltip="Retry upload">
@@ -245,10 +257,10 @@ interface ImageBatch {
                   }
                 </div>
               }
-              
+
               <div class="actions">
-                <button 
-                  mat-raised-button 
+                <button
+                  mat-raised-button
                   color="primary"
                   (click)="uploadAll()"
                   [disabled]="!canStartUpload()"
@@ -259,18 +271,10 @@ interface ImageBatch {
                     Upload {{ pendingCount() }} Image(s)
                   }
                 </button>
-                <button 
-                  mat-button 
-                  (click)="clearCompleted()"
-                  [disabled]="isUploading()"
-                >
+                <button mat-button (click)="clearCompleted()" [disabled]="isUploading()">
                   Clear Completed
                 </button>
-                <button 
-                  mat-button 
-                  (click)="clearAll()"
-                  [disabled]="isUploading()"
-                >
+                <button mat-button (click)="clearAll()" [disabled]="isUploading()">
                   Clear All
                 </button>
               </div>
@@ -295,13 +299,14 @@ interface ImageBatch {
                   <span>{{ uploadSummary().pending }} Pending</span>
                 </div>
               </div>
-              
+
               @if (uploadSummary().completed > 0 && uploadSummary().pending === 0) {
                 <div class="next-steps">
                   <mat-icon>info</mat-icon>
                   <p>
-                    <strong>Ready for Phase 2:</strong> Your images are stored and ready for GPS data extraction.
-                    Contact support when ready to process {{ uploadSummary().completed }} images.
+                    <strong>Ready for Phase 2:</strong> Your images are stored and ready for GPS
+                    data extraction. Contact support when ready to process
+                    {{ uploadSummary().completed }} images.
                   </p>
                 </div>
               }
@@ -323,7 +328,7 @@ interface ImageBatch {
             <li><strong>HEIC</strong> - iPhone photos</li>
             <li><strong>GPS Map Camera</strong> - Perfect for coordinate extraction</li>
           </ul>
-          
+
           <h4>Important Notes:</h4>
           <ul class="important-list">
             <li><strong>Site name is required</strong> - Helps organize your photos</li>
@@ -331,7 +336,7 @@ interface ImageBatch {
             <li><strong>Wi-Fi recommended</strong> for large batches (278 photos)</li>
             <li><strong>Don't close browser</strong> during upload</li>
           </ul>
-          
+
           <h4>Steps:</h4>
           <ol>
             <li>Enter site name (required) and project name (optional)</li>
@@ -339,7 +344,7 @@ interface ImageBatch {
             <li>Click "Upload" and wait for green checkmarks ✓</li>
             <li>Phase 2: Contact support for GPS data extraction</li>
           </ol>
-          
+
           <div class="info-box success-box">
             <mat-icon>verified</mat-icon>
             <p>
@@ -351,303 +356,311 @@ interface ImageBatch {
       </mat-card>
     </div>
   `,
-  styles: [`
-    .upload-container {
-      padding: 24px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .status-card, .labeling-card, .upload-card, .instructions-card {
-      margin-bottom: 24px;
-    }
-
-    .status-card {
-      background: var(--mat-sys-surface-variant);
-    }
-
-    .status-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .status-chip {
-      background: rgba(var(--mat-sys-success-rgb), 0.2);
-      color: var(--mat-sys-success);
-    }
-
-    .error-chip {
-      background: rgba(var(--mat-sys-error-rgb), 0.2);
-      color: var(--mat-sys-error);
-    }
-
-    .labeling-card mat-card-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .labeling-form {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .site-field, .project-field {
-      flex: 1;
-      min-width: 250px;
-    }
-
-    .dropzone {
-      border: 2px dashed var(--mat-sys-outline);
-      border-radius: 8px;
-      padding: 48px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      background: var(--mat-sys-surface-variant);
-      position: relative;
-    }
-
-    .dropzone:hover:not(.disabled) {
-      border-color: var(--mat-sys-primary);
-      background: rgba(var(--mat-sys-primary-rgb), 0.05);
-    }
-
-    .dropzone.dragover {
-      border-color: var(--mat-sys-primary);
-      background: rgba(var(--mat-sys-primary-rgb), 0.1);
-    }
-
-    .dropzone.disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .upload-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
-      color: var(--mat-sys-primary);
-      margin-bottom: 16px;
-    }
-
-    .file-list {
-      margin-top: 24px;
-      border-top: 1px solid var(--mat-sys-outline-variant);
-      padding-top: 16px;
-    }
-
-    .file-list-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .file-list h3 {
-      margin: 0;
-    }
-
-    .total-size {
-      font-size: 14px;
-      color: var(--mat-sys-on-surface-variant);
-    }
-
-    .file-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      border: 1px solid var(--mat-sys-outline-variant);
-      border-radius: 4px;
-      margin-bottom: 8px;
-      position: relative;
-      transition: all 0.2s ease;
-    }
-
-    .file-item.error-item {
-      border-color: var(--mat-sys-error);
-      background: rgba(var(--mat-sys-error-rgb), 0.05);
-    }
-
-    .file-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .file-name {
-      font-weight: 500;
-    }
-
-    .file-size {
-      font-size: 12px;
-      color: var(--mat-sys-on-surface-variant);
-    }
-
-    .error-message {
-      font-size: 12px;
-      color: var(--mat-sys-error);
-      margin-top: 4px;
-    }
-
-    .progress-info {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 120px;
-    }
-
-    .progress-text {
-      font-size: 12px;
-      font-weight: 500;
-      min-width: 35px;
-    }
-
-    .status-text {
-      font-size: 12px;
-      color: var(--mat-sys-primary);
-      font-weight: 500;
-    }
-
-    .success {
-      color: var(--mat-sys-success);
-    }
-
-    .error {
-      color: var(--mat-sys-error);
-    }
-
-    .actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .upload-summary {
-      margin-top: 24px;
-      padding: 16px;
-      background: var(--mat-sys-surface-variant);
-      border-radius: 8px;
-    }
-
-    .upload-summary h4 {
-      margin: 0 0 12px 0;
-    }
-
-    .summary-stats {
-      display: flex;
-      gap: 24px;
-      margin-bottom: 16px;
-    }
-
-    .stat {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .next-steps {
-      display: flex;
-      gap: 12px;
-      padding: 12px;
-      background: rgba(var(--mat-sys-success-rgb), 0.1);
-      border-radius: 4px;
-      border-left: 4px solid var(--mat-sys-success);
-    }
-
-    .next-steps mat-icon {
-      color: var(--mat-sys-success);
-      flex-shrink: 0;
-    }
-
-    .next-steps p {
-      margin: 0;
-      color: var(--mat-sys-success);
-    }
-
-    .instructions-card {
-      h4 {
-        margin-top: 16px;
-        margin-bottom: 8px;
+  styles: [
+    `
+      .upload-container {
+        padding: 24px;
+        max-width: 900px;
+        margin: 0 auto;
       }
-      
-      ol, ul {
-        margin: 8px 0;
-        padding-left: 24px;
-      }
-      
-      li {
-        margin-bottom: 8px;
-      }
-    }
 
-    .image-types {
-      background: rgba(var(--mat-sys-primary-rgb), 0.1);
-      padding: 12px 12px 12px 32px;
-      border-radius: 4px;
-      margin: 8px 0;
-    }
-
-    .important-list {
-      background: rgba(var(--mat-sys-warning-rgb), 0.1);
-      padding: 12px 12px 12px 32px;
-      border-radius: 4px;
-      margin: 8px 0;
-    }
-
-    .info-box {
-      display: flex;
-      gap: 12px;
-      padding: 16px;
-      border-radius: 4px;
-      margin-top: 16px;
-      
-      mat-icon {
-        flex-shrink: 0;
+      .status-card,
+      .labeling-card,
+      .upload-card,
+      .instructions-card {
+        margin-bottom: 24px;
       }
-      
-      p {
+
+      .status-card {
+        background: var(--mat-sys-surface-variant);
+      }
+
+      .status-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .status-chip {
+        background: rgba(var(--mat-sys-success-rgb), 0.2);
+        color: var(--mat-sys-success);
+      }
+
+      .error-chip {
+        background: rgba(var(--mat-sys-error-rgb), 0.2);
+        color: var(--mat-sys-error);
+      }
+
+      .labeling-card mat-card-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .labeling-form {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .site-field,
+      .project-field {
+        flex: 1;
+        min-width: 250px;
+      }
+
+      .dropzone {
+        border: 2px dashed var(--mat-sys-outline);
+        border-radius: 8px;
+        padding: 48px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: var(--mat-sys-surface-variant);
+        position: relative;
+      }
+
+      .dropzone:hover:not(.disabled) {
+        border-color: var(--mat-sys-primary);
+        background: rgba(var(--mat-sys-primary-rgb), 0.05);
+      }
+
+      .dropzone.dragover {
+        border-color: var(--mat-sys-primary);
+        background: rgba(var(--mat-sys-primary-rgb), 0.1);
+      }
+
+      .dropzone.disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .upload-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        color: var(--mat-sys-primary);
+        margin-bottom: 16px;
+      }
+
+      .file-list {
+        margin-top: 24px;
+        border-top: 1px solid var(--mat-sys-outline-variant);
+        padding-top: 16px;
+      }
+
+      .file-list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+
+      .file-list h3 {
         margin: 0;
       }
-    }
 
-    .success-box {
-      background: rgba(var(--mat-sys-success-rgb), 0.1);
-      color: var(--mat-sys-success);
-    }
+      .total-size {
+        font-size: 14px;
+        color: var(--mat-sys-on-surface-variant);
+      }
 
-    mat-progress-bar {
-      height: 4px;
-      border-radius: 2px;
-    }
-  `],
+      .file-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border: 1px solid var(--mat-sys-outline-variant);
+        border-radius: 4px;
+        margin-bottom: 8px;
+        position: relative;
+        transition: all 0.2s ease;
+      }
+
+      .file-item.error-item {
+        border-color: var(--mat-sys-error);
+        background: rgba(var(--mat-sys-error-rgb), 0.05);
+      }
+
+      .file-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .file-name {
+        font-weight: 500;
+      }
+
+      .file-size {
+        font-size: 12px;
+        color: var(--mat-sys-on-surface-variant);
+      }
+
+      .error-message {
+        font-size: 12px;
+        color: var(--mat-sys-error);
+        margin-top: 4px;
+      }
+
+      .progress-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 120px;
+      }
+
+      .progress-text {
+        font-size: 12px;
+        font-weight: 500;
+        min-width: 35px;
+      }
+
+      .status-text {
+        font-size: 12px;
+        color: var(--mat-sys-primary);
+        font-weight: 500;
+      }
+
+      .success {
+        color: var(--mat-sys-success);
+      }
+
+      .error {
+        color: var(--mat-sys-error);
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .upload-summary {
+        margin-top: 24px;
+        padding: 16px;
+        background: var(--mat-sys-surface-variant);
+        border-radius: 8px;
+      }
+
+      .upload-summary h4 {
+        margin: 0 0 12px 0;
+      }
+
+      .summary-stats {
+        display: flex;
+        gap: 24px;
+        margin-bottom: 16px;
+      }
+
+      .stat {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .next-steps {
+        display: flex;
+        gap: 12px;
+        padding: 12px;
+        background: rgba(var(--mat-sys-success-rgb), 0.1);
+        border-radius: 4px;
+        border-left: 4px solid var(--mat-sys-success);
+      }
+
+      .next-steps mat-icon {
+        color: var(--mat-sys-success);
+        flex-shrink: 0;
+      }
+
+      .next-steps p {
+        margin: 0;
+        color: var(--mat-sys-success);
+      }
+
+      .instructions-card {
+        h4 {
+          margin-top: 16px;
+          margin-bottom: 8px;
+        }
+
+        ol,
+        ul {
+          margin: 8px 0;
+          padding-left: 24px;
+        }
+
+        li {
+          margin-bottom: 8px;
+        }
+      }
+
+      .image-types {
+        background: rgba(var(--mat-sys-primary-rgb), 0.1);
+        padding: 12px 12px 12px 32px;
+        border-radius: 4px;
+        margin: 8px 0;
+      }
+
+      .important-list {
+        background: rgba(var(--mat-sys-warning-rgb), 0.1);
+        padding: 12px 12px 12px 32px;
+        border-radius: 4px;
+        margin: 8px 0;
+      }
+
+      .info-box {
+        display: flex;
+        gap: 12px;
+        padding: 16px;
+        border-radius: 4px;
+        margin-top: 16px;
+
+        mat-icon {
+          flex-shrink: 0;
+        }
+
+        p {
+          margin: 0;
+        }
+      }
+
+      .success-box {
+        background: rgba(var(--mat-sys-success-rgb), 0.1);
+        color: var(--mat-sys-success);
+      }
+
+      mat-progress-bar {
+        height: 4px;
+        border-radius: 2px;
+      }
+    `,
+  ],
 })
 export class BulkImageUploadComponent {
   private storage = inject(Storage);
   private firestore = inject(Firestore);
   private auth = inject(Auth);
   private snackBar = inject(MatSnackBar);
+  private imageProcessing = inject(ImageProcessingService);
 
   // User state
   currentUser = signal<any>(null);
-  
+
   // Labeling inputs
   siteName = '';
   projectName = '';
-  
+
   // Debug and error state
   debugInfo = signal<string[]>([]);
   lastError = signal<string | null>(null);
   isInitialized = signal(false);
-  
+
   constructor() {
     this.addDebugInfo('🚀 BulkImageUploadComponent initializing...');
-    
+
     // Subscribe to auth state
-    user(this.auth).subscribe(user => {
+    user(this.auth).subscribe((user) => {
       this.currentUser.set(user);
       if (user) {
         this.addDebugInfo(`✅ User authenticated: ${user.email}`);
@@ -656,34 +669,34 @@ export class BulkImageUploadComponent {
         this.addDebugInfo('❌ No user authenticated');
       }
     });
-    
+
     this.isInitialized.set(true);
     this.addDebugInfo('✅ Component initialized');
   }
-  
+
   private addDebugInfo(message: string): void {
     const timestamp = new Date().toLocaleTimeString();
     const debugMessage = `[${timestamp}] ${message}`;
     console.log('🔧 Upload Debug:', debugMessage);
-    this.debugInfo.update(info => [...info.slice(-9), debugMessage]); // Keep last 10 messages
+    this.debugInfo.update((info) => [...info.slice(-9), debugMessage]); // Keep last 10 messages
   }
-  
+
   private async testFirebaseConnection(): Promise<void> {
     try {
       this.addDebugInfo('🧪 Testing Firebase Storage connection...');
-      
+
       // Test storage access
       const testRef = ref(this.storage, 'test-connection');
       this.addDebugInfo('✅ Storage reference created successfully');
-      
+
       // Test Firestore access
       const testDoc = await addDoc(collection(this.firestore, 'connection-test'), {
         test: true,
         timestamp: new Date(),
-        user: this.currentUser()?.email || 'unknown'
+        user: this.currentUser()?.email || 'unknown',
       });
       this.addDebugInfo('✅ Firestore write test successful');
-      
+
       this.lastError.set(null);
     } catch (error: any) {
       const errorMsg = `Firebase connection failed: ${error.message}`;
@@ -697,14 +710,18 @@ export class BulkImageUploadComponent {
   files = signal<UploadImageFile[]>([]);
   isDragging = signal(false);
   isUploading = signal(false);
+  isProcessing = signal(false);
+
+  // Processing state
+  processingProgress = signal<string>('');
+  processedCount = signal(0);
+  totalToProcess = signal(0);
 
   // Computed values
-  totalSize = computed(() => 
-    this.files().reduce((sum, file) => sum + file.size, 0)
-  );
+  totalSize = computed(() => this.files().reduce((sum, file) => sum + file.size, 0));
 
-  pendingCount = computed(() => 
-    this.files().filter(f => f.status === 'pending' || f.status === 'error').length
+  pendingCount = computed(
+    () => this.files().filter((f) => f.status === 'pending' || f.status === 'error').length,
   );
 
   hasPendingFiles = computed(() => this.pendingCount() > 0);
@@ -712,33 +729,31 @@ export class BulkImageUploadComponent {
   canUpload(): boolean {
     const hasUser = !!this.currentUser();
     const notUploading = !this.isUploading();
-    const hasSiteName = this.siteName && this.siteName.trim().length > 0;
-    
+    const hasSiteName = !!(this.siteName && this.siteName.trim().length > 0);
+
     console.log('🔍 canUpload check:', {
       hasUser,
       notUploading,
       hasSiteName,
       siteName: this.siteName,
-      result: hasUser && notUploading && hasSiteName
+      result: hasUser && notUploading && hasSiteName,
     });
-    
+
     return hasUser && notUploading && hasSiteName;
   }
 
-  canStartUpload = computed(() => 
-    this.canUpload() && this.hasPendingFiles()
-  );
+  canStartUpload = computed(() => this.canUpload() && this.hasPendingFiles());
 
   uploadProgress = computed(() => {
     const files = this.files();
     if (files.length === 0) return 0;
-    
+
     const totalProgress = files.reduce((sum, file) => {
       if (file.status === 'complete') return sum + 100;
       if (file.status === 'uploading') return sum + file.progress;
       return sum;
     }, 0);
-    
+
     return Math.round(totalProgress / files.length);
   });
 
@@ -746,10 +761,10 @@ export class BulkImageUploadComponent {
     const files = this.files();
     return {
       total: files.length,
-      completed: files.filter(f => f.status === 'complete').length,
-      failed: files.filter(f => f.status === 'error').length,
-      pending: files.filter(f => f.status === 'pending').length,
-      uploading: files.filter(f => f.status === 'uploading' || f.status === 'verifying').length
+      completed: files.filter((f) => f.status === 'complete').length,
+      failed: files.filter((f) => f.status === 'error').length,
+      pending: files.filter((f) => f.status === 'pending').length,
+      uploading: files.filter((f) => f.status === 'uploading' || f.status === 'verifying').length,
     };
   });
 
@@ -766,7 +781,7 @@ export class BulkImageUploadComponent {
 
   onDragOver(event: DragEvent): void {
     if (!this.canUpload()) return;
-    
+
     event.preventDefault();
     event.stopPropagation();
     this.isDragging.set(true);
@@ -782,24 +797,24 @@ export class BulkImageUploadComponent {
     event.preventDefault();
     event.stopPropagation();
     this.isDragging.set(false);
-    
+
     console.log('📁 Drop event triggered', {
       canUpload: this.canUpload(),
       user: this.currentUser()?.email,
       siteName: this.siteName,
-      isUploading: this.isUploading()
+      isUploading: this.isUploading(),
     });
-    
+
     if (!this.siteName || this.siteName.trim() === '') {
       this.showError('Please enter a site name before uploading files');
       return;
     }
-    
+
     if (!this.currentUser()) {
       this.showError('Please sign in to upload images');
       return;
     }
-    
+
     if (this.isUploading()) {
       this.showError('Please wait for current upload to complete');
       return;
@@ -817,22 +832,22 @@ export class BulkImageUploadComponent {
 
   onFileSelected(event: Event): void {
     console.log('📂 File input triggered');
-    
+
     if (!this.siteName || this.siteName.trim() === '') {
       this.showError('Please enter a site name before selecting files');
       return;
     }
-    
+
     if (!this.currentUser()) {
       this.showError('Please sign in to upload images');
       return;
     }
-    
+
     if (this.isUploading()) {
       this.showError('Please wait for current upload to complete');
       return;
     }
-    
+
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       console.log(`📂 Processing ${input.files.length} selected files`);
@@ -847,22 +862,26 @@ export class BulkImageUploadComponent {
 
   private addFiles(fileList: FileList): void {
     this.addDebugInfo(`🔍 Analyzing ${fileList.length} files`);
-    
+
     // Log each file for debugging
     Array.from(fileList).forEach((file, index) => {
-      this.addDebugInfo(`File ${index + 1}: ${file.name} (${file.type}, ${this.formatSize(file.size)})`);
+      this.addDebugInfo(
+        `File ${index + 1}: ${file.name} (${file.type}, ${this.formatSize(file.size)})`,
+      );
     });
-    
-    const imageFiles = Array.from(fileList).filter(file => {
-      const isImage = file.type.startsWith('image/') || 
-                     /\.(jpg|jpeg|png|heic|webp)$/i.test(file.name);
+
+    const imageFiles = Array.from(fileList).filter((file) => {
+      const isImage =
+        file.type.startsWith('image/') || /\.(jpg|jpeg|png|heic|webp)$/i.test(file.name);
       if (!isImage) {
         this.addDebugInfo(`❌ Rejected non-image: ${file.name} (${file.type})`);
       }
       return isImage;
     });
 
-    this.addDebugInfo(`✅ Found ${imageFiles.length} valid image files out of ${fileList.length} total`);
+    this.addDebugInfo(
+      `✅ Found ${imageFiles.length} valid image files out of ${fileList.length} total`,
+    );
 
     if (imageFiles.length === 0) {
       this.addDebugInfo('❌ No valid image files found');
@@ -871,8 +890,8 @@ export class BulkImageUploadComponent {
     }
 
     // Check for duplicates
-    const existingNames = new Set(this.files().map(f => f.name));
-    const newFiles = imageFiles.filter(file => {
+    const existingNames = new Set(this.files().map((f) => f.name));
+    const newFiles = imageFiles.filter((file) => {
       if (existingNames.has(file.name)) {
         this.addDebugInfo(`❌ Duplicate file: ${file.name}`);
         this.showError(`${file.name} is already in the list`);
@@ -883,16 +902,16 @@ export class BulkImageUploadComponent {
 
     this.addDebugInfo(`📝 Adding ${newFiles.length} new files to upload queue`);
 
-    const uploadFiles: UploadImageFile[] = newFiles.map(file => ({
+    const uploadFiles: UploadImageFile[] = newFiles.map((file) => ({
       name: file.name,
       size: file.size,
       file: file,
       progress: 0,
       status: 'pending',
-      retryCount: 0
+      retryCount: 0,
     }));
 
-    this.files.update(files => [...files, ...uploadFiles]);
+    this.files.update((files) => [...files, ...uploadFiles]);
   }
 
   async uploadAll(): Promise<void> {
@@ -902,32 +921,36 @@ export class BulkImageUploadComponent {
     }
 
     this.isUploading.set(true);
-    
+
     // Create batch record
     const batchId = await this.createBatch();
-    
-    const filesToUpload = this.files().filter(f => 
-      f.status === 'pending' || f.status === 'error'
+
+    const filesToUpload = this.files().filter(
+      (f) => f.status === 'pending' || f.status === 'error',
     );
 
     // Upload sequentially for better reliability
     for (const file of filesToUpload) {
       await this.uploadFile(file, batchId);
       // Small delay between uploads
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
     this.isUploading.set(false);
-    
+
     // Update batch record
     await this.updateBatch(batchId);
-    
+
     // Show final summary
     const summary = this.uploadSummary();
     if (summary.failed === 0) {
-      this.showSuccess(`All ${summary.completed} images uploaded successfully! Ready for Phase 2 processing.`);
+      this.showSuccess(
+        `All ${summary.completed} images uploaded successfully! Ready for Phase 2 processing.`,
+      );
     } else {
-      this.showError(`${summary.completed} succeeded, ${summary.failed} failed. Click retry for failed images.`);
+      this.showError(
+        `${summary.completed} succeeded, ${summary.failed} failed. Click retry for failed images.`,
+      );
     }
   }
 
@@ -941,13 +964,13 @@ export class BulkImageUploadComponent {
         userId: user?.uid || 'unknown',
         totalImages: this.files().length,
         completedImages: 0,
-        status: 'uploading'
+        status: 'uploading',
       };
 
       const docRef = await addDoc(collection(this.firestore, 'image-batches'), {
         ...batchData,
         uploadDate: serverTimestamp(),
-        userEmail: user?.email || 'unknown'
+        userEmail: user?.email || 'unknown',
       });
 
       return docRef.id;
@@ -964,38 +987,43 @@ export class BulkImageUploadComponent {
         id: batchId,
         completedImages: summary.completed,
         status: summary.failed > 0 ? 'failed' : 'completed',
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       });
     } catch (error) {
       console.error('Failed to update batch:', error);
     }
   }
 
-  private async uploadFile(uploadFile: UploadImageFile, batchId: string, isRetry = false): Promise<void> {
+  private async uploadFile(
+    uploadFile: UploadImageFile,
+    batchId: string,
+    isRetry = false,
+  ): Promise<void> {
     try {
       // Reset error state
       uploadFile.error = undefined;
       uploadFile.status = 'uploading';
       uploadFile.progress = 0;
-      this.files.update(files => [...files]);
+      this.files.update((files) => [...files]);
 
       // Create unique filename with timestamp
       const timestamp = Date.now();
       const fileName = `${timestamp}_${uploadFile.name}`;
       const storagePath = this.getStoragePath();
       const storageRef = ref(this.storage, `${storagePath}/${fileName}`);
-      
+
       // Create upload task
       const uploadTask = uploadBytesResumable(storageRef, uploadFile.file);
 
       // Wait for upload to complete
       await new Promise<void>((resolve, reject) => {
-        uploadTask.on('state_changed',
+        uploadTask.on(
+          'state_changed',
           (snapshot) => {
             // Progress update
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             uploadFile.progress = progress;
-            this.files.update(files => [...files]);
+            this.files.update((files) => [...files]);
           },
           (error) => {
             // Error
@@ -1005,13 +1033,13 @@ export class BulkImageUploadComponent {
           () => {
             // Complete
             resolve();
-          }
+          },
         );
       });
 
       // Verify upload was successful
       uploadFile.status = 'verifying';
-      this.files.update(files => [...files]);
+      this.files.update((files) => [...files]);
 
       // Get download URL and metadata to verify
       const url = await getDownloadURL(uploadTask.snapshot.ref);
@@ -1026,27 +1054,28 @@ export class BulkImageUploadComponent {
       uploadFile.status = 'complete';
       uploadFile.url = url;
       uploadFile.progress = 100;
-      this.files.update(files => [...files]);
+      this.files.update((files) => [...files]);
 
       // Log successful upload
       await this.logUpload(uploadFile, fileName, url, batchId);
-      
+
       if (!isRetry) {
         this.showSuccess(`${uploadFile.name} uploaded successfully`);
       }
-
     } catch (error: any) {
       console.error('Upload failed:', error);
-      
+
       uploadFile.status = 'error';
       uploadFile.error = this.getErrorMessage(error);
       uploadFile.retryCount = isRetry ? uploadFile.retryCount : uploadFile.retryCount + 1;
-      this.files.update(files => [...files]);
+      this.files.update((files) => [...files]);
 
       // Auto-retry for certain errors
       if (uploadFile.retryCount < this.MAX_RETRIES && this.shouldRetry(error)) {
-        this.showError(`${uploadFile.name} failed, retrying... (${uploadFile.retryCount}/${this.MAX_RETRIES})`);
-        await new Promise(resolve => setTimeout(resolve, this.RETRY_DELAY));
+        this.showError(
+          `${uploadFile.name} failed, retrying... (${uploadFile.retryCount}/${this.MAX_RETRIES})`,
+        );
+        await new Promise((resolve) => setTimeout(resolve, this.RETRY_DELAY));
         return this.uploadFile(uploadFile, batchId, true);
       }
 
@@ -1056,10 +1085,12 @@ export class BulkImageUploadComponent {
 
   private shouldRetry(error: any): boolean {
     // Retry on network errors or timeouts
-    return error.code === 'storage/retry-limit-exceeded' ||
-           error.code === 'storage/canceled' ||
-           error.message?.includes('network') ||
-           error.message?.includes('timeout');
+    return (
+      error.code === 'storage/retry-limit-exceeded' ||
+      error.code === 'storage/canceled' ||
+      error.message?.includes('network') ||
+      error.message?.includes('timeout')
+    );
   }
 
   private getErrorMessage(error: any): string {
@@ -1081,7 +1112,12 @@ export class BulkImageUploadComponent {
     await this.uploadFile(file, batchId);
   }
 
-  private async logUpload(file: UploadImageFile, storagePath: string, url: string, batchId: string): Promise<void> {
+  private async logUpload(
+    file: UploadImageFile,
+    storagePath: string,
+    url: string,
+    batchId: string,
+  ): Promise<void> {
     try {
       const user = this.currentUser();
       await addDoc(collection(this.firestore, 'uploaded-images'), {
@@ -1100,8 +1136,8 @@ export class BulkImageUploadComponent {
         retryCount: file.retryCount,
         metadata: {
           type: file.file.type,
-          lastModified: file.file.lastModified
-        }
+          lastModified: file.file.lastModified,
+        },
       });
     } catch (error) {
       console.error('Failed to log upload:', error);
@@ -1110,9 +1146,7 @@ export class BulkImageUploadComponent {
   }
 
   clearCompleted(): void {
-    this.files.update(files => 
-      files.filter(f => f.status !== 'complete')
-    );
+    this.files.update((files) => files.filter((f) => f.status !== 'complete'));
   }
 
   clearAll(): void {

@@ -8,7 +8,7 @@ export interface PoleReport {
   generatedAt: Date | string;
   dataSource: 'CSV' | 'Firestore';
   version: 'current' | 'previous';
-  
+
   summary: {
     totalRecords: number;
     totalDrops: number;
@@ -18,11 +18,11 @@ export interface PoleReport {
     lastUpdate?: string;
     timeSpan?: number; // days
   };
-  
+
   timeline: PoleTimelineEvent[];
   drops: ConnectedDrop[];
   agents: AgentActivity[];
-  
+
   dataQuality?: DataQualityIssue[];
   gpsCoordinates?: GPSCoordinate[];
 }

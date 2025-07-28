@@ -30,16 +30,16 @@ import { PoleReport } from '../../models/pole-report.model';
     MatChipsModule,
     PoleTimelineComponent,
     ConnectedDropsComponent,
-    AgentActivityComponent
+    AgentActivityComponent,
   ],
   templateUrl: './pole-detail-report.component.html',
-  styleUrls: ['./pole-detail-report.component.scss']
+  styleUrls: ['./pole-detail-report.component.scss'],
 })
 export class PoleDetailReportComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private poleService = inject(PoleAnalyticsService);
   private snackBar = inject(MatSnackBar);
-  
+
   poleNumber = signal<string>('');
   report = signal<PoleReport | null>(null);
   loading = signal(true);
@@ -47,7 +47,7 @@ export class PoleDetailReportComponent implements OnInit {
 
   ngOnInit() {
     // Get pole number from route
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       const poleNumber = params['poleNumber'];
       if (poleNumber) {
         this.poleNumber.set(poleNumber);
@@ -59,7 +59,7 @@ export class PoleDetailReportComponent implements OnInit {
   loadReport(poleNumber: string) {
     this.loading.set(true);
     this.error.set(null);
-    
+
     this.poleService.getPoleReport(poleNumber).subscribe({
       next: (report) => {
         if (report) {
@@ -73,7 +73,7 @@ export class PoleDetailReportComponent implements OnInit {
         console.error('Error loading report:', err);
         this.error.set('Failed to load pole report');
         this.loading.set(false);
-      }
+      },
     });
   }
 
@@ -95,12 +95,12 @@ export class PoleDetailReportComponent implements OnInit {
 
   formatDate(date: string | Date): string {
     const d = new Date(date);
-    return d.toLocaleDateString('en-ZA', { 
-      year: 'numeric', 
-      month: 'long', 
+    return d.toLocaleDateString('en-ZA', {
+      year: 'numeric',
+      month: 'long',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 

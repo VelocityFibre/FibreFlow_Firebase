@@ -15,11 +15,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 
 import { CsvAnalysisService } from '../services/csv-analysis.service';
-import { 
-  CsvAnalysisResult, 
-  CsvAnalysisConfig, 
+import {
+  CsvAnalysisResult,
+  CsvAnalysisConfig,
   CsvRecord,
-  CsvValidationResult 
+  CsvValidationResult,
 } from '../models/csv-analysis.model';
 
 @Component({
@@ -40,10 +40,10 @@ import {
     MatTabsModule,
     MatTableModule,
     MatIconModule,
-    MatChipsModule
+    MatChipsModule,
   ],
   templateUrl: './csv-analysis.component.html',
-  styleUrl: './csv-analysis.component.scss'
+  styleUrl: './csv-analysis.component.scss',
 })
 export class CsvAnalysisComponent {
   private fb = inject(FormBuilder);
@@ -61,7 +61,7 @@ export class CsvAnalysisComponent {
   configForm = this.fb.group({
     startDate: [new Date(), Validators.required],
     endDate: [new Date(), Validators.required],
-    filename: ['', Validators.required]
+    filename: ['', Validators.required],
   });
 
   // Computed properties
@@ -76,11 +76,11 @@ export class CsvAnalysisComponent {
   // Table columns for different report types
   displayedColumns = [
     'propertyId',
-    'poleNumber', 
+    'poleNumber',
     'dropNumber',
     'status',
     'fieldAgentName',
-    'lastModifiedDate'
+    'lastModifiedDate',
   ];
 
   onFileSelected(event: Event): void {
@@ -88,11 +88,11 @@ export class CsvAnalysisComponent {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       this.selectedFile.set(file);
-      
+
       // Auto-populate filename in form
       const filename = file.name.replace('.csv', '');
       this.configForm.patchValue({ filename });
-      
+
       this.readCsvFile(file);
     }
   }
@@ -102,7 +102,7 @@ export class CsvAnalysisComponent {
     reader.onload = (e) => {
       const content = e.target?.result as string;
       this.csvContent.set(content);
-      
+
       // Validate immediately upon loading
       this.validateCsvStructure(content);
     };
@@ -111,32 +111,32 @@ export class CsvAnalysisComponent {
 
   private validateCsvStructure(csvContent: string): void {
     if (!csvContent.trim()) return;
-    
+
     const lines = csvContent.split('\n');
     if (lines.length < 2) {
-      this.snackBar.open('CSV file must have header and data rows', 'Close', { 
+      this.snackBar.open('CSV file must have header and data rows', 'Close', {
         duration: 3000,
-        panelClass: ['error-snackbar']
+        panelClass: ['error-snackbar'],
       });
       return;
     }
 
-    const headers = lines[0].split(',').map(h => h.trim());
+    const headers = lines[0].split(',').map((h) => h.trim());
     const headerValidation = this.csvAnalysisService.validateCsvHeaders(headers);
-    
+
     if (!headerValidation.valid) {
       this.snackBar.open(
-        `Missing required columns: ${headerValidation.missingColumns.join(', ')}`, 
-        'Close', 
-        { 
+        `Missing required columns: ${headerValidation.missingColumns.join(', ')}`,
+        'Close',
+        {
           duration: 5000,
-          panelClass: ['error-snackbar']
-        }
+          panelClass: ['error-snackbar'],
+        },
       );
     } else {
       this.snackBar.open('CSV structure validated successfully', 'Close', {
         duration: 2000,
-        panelClass: ['success-snackbar']
+        panelClass: ['success-snackbar'],
       });
     }
   }
@@ -144,37 +144,37 @@ export class CsvAnalysisComponent {
   processData(): void {
     if (!this.csvContent() || this.configForm.invalid) {
       this.snackBar.open('Please select a CSV file and configure date range', 'Close', {
-        duration: 3000
+        duration: 3000,
       });
       return;
     }
 
     this.isProcessing.set(true);
-    
+
     try {
       const config: CsvAnalysisConfig = {
         startDate: this.configForm.value.startDate!,
         endDate: this.configForm.value.endDate!,
-        filename: this.configForm.value.filename!
+        filename: this.configForm.value.filename!,
       };
 
       // Use proven analysis logic
       const result = this.csvAnalysisService.analyzeCsvData(this.csvContent(), config);
       this.analysisResult.set(result);
-      
+
       this.snackBar.open(
         `Analysis complete! Processed ${result.totalRecords} records with ${result.dataQualityScore}% quality score`,
         'Close',
-        { 
+        {
           duration: 4000,
-          panelClass: ['success-snackbar']
-        }
+          panelClass: ['success-snackbar'],
+        },
       );
     } catch (error) {
       console.error('Analysis error:', error);
       this.snackBar.open('Error processing CSV data', 'Close', {
         duration: 3000,
-        panelClass: ['error-snackbar']
+        panelClass: ['error-snackbar'],
       });
     } finally {
       this.isProcessing.set(false);
@@ -182,7 +182,13 @@ export class CsvAnalysisComponent {
   }
 
   // Download specific report using proven export logic
-  downloadReport(reportType: 'first-entry' | 'duplicates-pre-window' | 'no-drop-allocated' | 'duplicate-drops-removed'): void {
+  downloadReport(
+    reportType:
+      | 'first-entry'
+      | 'duplicates-pre-window'
+      | 'no-drop-allocated'
+      | 'duplicate-drops-removed',
+  ): void {
     const result = this.analysisResult();
     if (!result) return;
 
@@ -210,9 +216,9 @@ export class CsvAnalysisComponent {
 
     // Use proven export function
     this.csvAnalysisService.exportToCsv(records, filename);
-    
+
     this.snackBar.open(`Downloaded ${records.length} records`, 'Close', {
-      duration: 2000
+      duration: 2000,
     });
   }
 
@@ -223,13 +229,13 @@ export class CsvAnalysisComponent {
 
     // Download all 4 report types using proven logic
     this.downloadReport('first-entry');
-    this.downloadReport('duplicates-pre-window'); 
+    this.downloadReport('duplicates-pre-window');
     this.downloadReport('no-drop-allocated');
     this.downloadReport('duplicate-drops-removed');
 
     this.snackBar.open('All reports downloaded successfully', 'Close', {
       duration: 3000,
-      panelClass: ['success-snackbar']
+      panelClass: ['success-snackbar'],
     });
   }
 
@@ -246,7 +252,7 @@ export class CsvAnalysisComponent {
     this.configForm.reset({
       startDate: new Date(),
       endDate: new Date(),
-      filename: ''
+      filename: '',
     });
   }
 

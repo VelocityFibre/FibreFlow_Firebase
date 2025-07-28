@@ -5,16 +5,13 @@
         <mat-icon>timeline</mat-icon>
         Status Timeline
       </mat-card-title>
-      <mat-card-subtitle>
-        {{ timelineEvents().length }} events tracked
-      </mat-card-subtitle>
+      <mat-card-subtitle> {{ timelineEvents().length }} events tracked </mat-card-subtitle>
     </mat-card-header>
-    
+
     <mat-card-content>
       <!-- Desktop view - Table -->
       <div class="desktop-view" *ngIf="timelineEvents().length > 0">
         <table mat-table [dataSource]="timelineEvents()" class="timeline-table">
-          
           <!-- Date Column -->
           <ng-container matColumnDef="date">
             <th mat-header-cell *matHeaderCellDef>Date/Time</th>
@@ -73,7 +70,7 @@
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
       </div>
 

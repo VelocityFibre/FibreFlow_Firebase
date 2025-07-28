@@ -17,7 +17,13 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 // AG-Grid imports
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef, GridReadyEvent, GridApi, ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
+import {
+  ColDef,
+  GridReadyEvent,
+  GridApi,
+  ModuleRegistry,
+  AllCommunityModule,
+} from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-material.css';
 
@@ -27,11 +33,11 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 // Services and models
 import { ActionItemsManagementService } from '../../services/action-items-management.service';
 import { AuthService } from '../../../../core/services/auth.service';
-import { 
-  ActionItemManagement, 
-  ActionItemStatus, 
+import {
+  ActionItemManagement,
+  ActionItemStatus,
   ActionItemFilter,
-  ActionItemStats 
+  ActionItemStats,
 } from '../../models/action-item-management.model';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 
@@ -52,10 +58,10 @@ import { PageHeaderComponent } from '../../../../shared/components/page-header/p
     MatSnackBarModule,
     MatProgressSpinnerModule,
     AgGridAngular,
-    PageHeaderComponent
+    PageHeaderComponent,
   ],
   templateUrl: './action-items-grid.component.html',
-  styleUrls: ['./action-items-grid.component.scss']
+  styleUrls: ['./action-items-grid.component.scss'],
 })
 export class ActionItemsGridComponent implements OnInit, OnDestroy {
   private actionItemsService = inject(ActionItemsManagementService);
@@ -83,7 +89,7 @@ export class ActionItemsGridComponent implements OnInit, OnDestroy {
     sortable: true,
     filter: true,
     resizable: true,
-    floatingFilter: true
+    floatingFilter: true,
   };
 
   columnDefs: ColDef[] = [
@@ -94,56 +100,59 @@ export class ActionItemsGridComponent implements OnInit, OnDestroy {
       wrapText: true,
       autoHeight: true,
       cellStyle: { 'white-space': 'normal' },
-      valueGetter: params => params.data?.originalActionItem?.text || '',
+      valueGetter: (params) => params.data?.originalActionItem?.text || '',
       editable: true,
       cellEditor: 'agLargeTextCellEditor',
-      cellEditorPopup: true
+      cellEditorPopup: true,
     },
     {
       field: 'meetingTitle',
       headerName: 'Meeting',
-      flex: 1
+      flex: 1,
     },
     {
       field: 'meetingDate',
       headerName: 'Meeting Date',
       width: 120,
-      valueFormatter: params => params.value ? new Date(params.value).toLocaleDateString() : ''
+      valueFormatter: (params) => (params.value ? new Date(params.value).toLocaleDateString() : ''),
     },
     {
       field: 'updates.priority',
       headerName: 'Priority',
       width: 100,
-      cellClass: params => `priority-${params.value || 'medium'}`,
-      valueGetter: params => params.data.updates?.priority || params.data.originalActionItem?.priority || 'medium',
+      cellClass: (params) => `priority-${params.value || 'medium'}`,
+      valueGetter: (params) =>
+        params.data.updates?.priority || params.data.originalActionItem?.priority || 'medium',
       editable: true,
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: {
-        values: ['high', 'medium', 'low']
-      }
+        values: ['high', 'medium', 'low'],
+      },
     },
     {
       field: 'updates.assignee',
       headerName: 'Assignee',
       width: 150,
-      valueGetter: params => params.data.updates?.assignee || params.data.originalActionItem?.assignee || 'Unassigned',
+      valueGetter: (params) =>
+        params.data.updates?.assignee || params.data.originalActionItem?.assignee || 'Unassigned',
       editable: true,
-      cellEditor: 'agTextCellEditor'
+      cellEditor: 'agTextCellEditor',
     },
     {
       field: 'updates.dueDate',
       headerName: 'Due Date',
       width: 120,
-      valueGetter: params => params.data.updates?.dueDate || params.data.originalActionItem?.dueDate,
-      valueFormatter: params => params.value ? new Date(params.value).toLocaleDateString() : '',
-      cellClass: params => {
+      valueGetter: (params) =>
+        params.data.updates?.dueDate || params.data.originalActionItem?.dueDate,
+      valueFormatter: (params) => (params.value ? new Date(params.value).toLocaleDateString() : ''),
+      cellClass: (params) => {
         if (!params.value || params.data.status === ActionItemStatus.COMPLETED) return '';
         const dueDate = new Date(params.value);
         const today = new Date();
         return dueDate < today ? 'overdue' : '';
       },
       editable: true,
-      cellEditor: 'agDateStringCellEditor'
+      cellEditor: 'agDateStringCellEditor',
     },
     {
       field: 'status',
@@ -151,10 +160,10 @@ export class ActionItemsGridComponent implements OnInit, OnDestroy {
       width: 120,
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: {
-        values: Object.values(ActionItemStatus)
+        values: Object.values(ActionItemStatus),
       },
       editable: true,
-      cellClass: params => `status-${params.value}`
+      cellClass: (params) => `status-${params.value}`,
     },
     {
       field: 'updates.notes',
@@ -163,8 +172,8 @@ export class ActionItemsGridComponent implements OnInit, OnDestroy {
       editable: true,
       wrapText: true,
       autoHeight: true,
-      cellStyle: { 'white-space': 'normal' }
-    }
+      cellStyle: { 'white-space': 'normal' },
+    },
   ];
 
   // Computed values
@@ -175,21 +184,22 @@ export class ActionItemsGridComponent implements OnInit, OnDestroy {
     const priority = this.selectedPriority();
 
     if (search) {
-      items = items.filter(item => 
-        item.originalActionItem.text.toLowerCase().includes(search) ||
-        item.meetingTitle.toLowerCase().includes(search) ||
-        (item.updates.assignee || '').toLowerCase().includes(search) ||
-        (item.updates.notes || '').toLowerCase().includes(search)
+      items = items.filter(
+        (item) =>
+          item.originalActionItem.text.toLowerCase().includes(search) ||
+          item.meetingTitle.toLowerCase().includes(search) ||
+          (item.updates.assignee || '').toLowerCase().includes(search) ||
+          (item.updates.notes || '').toLowerCase().includes(search),
       );
     }
 
     if (status) {
-      items = items.filter(item => item.status === status);
+      items = items.filter((item) => item.status === status);
     }
 
     if (priority) {
-      items = items.filter(item => 
-        (item.updates.priority || item.originalActionItem.priority) === priority
+      items = items.filter(
+        (item) => (item.updates.priority || item.originalActionItem.priority) === priority,
       );
     }
 
@@ -208,7 +218,7 @@ export class ActionItemsGridComponent implements OnInit, OnDestroy {
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
-    
+
     // Check if data is available
     const currentItems = this.filteredItems();
     console.log('Grid ready with items:', currentItems.length);
@@ -219,9 +229,10 @@ export class ActionItemsGridComponent implements OnInit, OnDestroy {
 
   private loadData() {
     this.loading.set(true);
-    
+
     // Load action items
-    this.actionItemsService.getActionItems()
+    this.actionItemsService
+      .getActionItems()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (items) => {
@@ -233,17 +244,18 @@ export class ActionItemsGridComponent implements OnInit, OnDestroy {
           console.error('Error loading action items:', error);
           this.loading.set(false);
           this.snackBar.open('Error loading action items', 'Close', {
-            duration: 3000
+            duration: 3000,
           });
-        }
+        },
       });
 
     // Load stats
-    this.actionItemsService.getActionItemStats()
+    this.actionItemsService
+      .getActionItemStats()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (stats) => this.stats.set(stats),
-        error: (error) => console.error('Error loading stats:', error)
+        error: (error) => console.error('Error loading stats:', error),
       });
   }
 
@@ -252,16 +264,16 @@ export class ActionItemsGridComponent implements OnInit, OnDestroy {
       const user = this.authService.currentUser();
       if (!user) {
         this.snackBar.open('Please login to update action items', 'Close', {
-          duration: 3000
+          duration: 3000,
         });
         return;
       }
 
       const item = event.data as ActionItemManagement;
       const field = event.column.getColId();
-      
-      let updates: any = {};
-      
+
+      const updates: any = {};
+
       switch (field) {
         case 'originalActionItem.text':
           // Update the action item text
@@ -289,16 +301,15 @@ export class ActionItemsGridComponent implements OnInit, OnDestroy {
         updates,
         user.uid,
         user.email || 'unknown@fibreflow.com',
-        `Updated ${field} via grid`
+        `Updated ${field} via grid`,
       );
 
       this.snackBar.open('Action item updated', 'Close', { duration: 2000 });
       this.loadData(); // Refresh data
-      
     } catch (error) {
       console.error('Error updating action item:', error);
       this.snackBar.open('Error updating action item', 'Close', {
-        duration: 3000
+        duration: 3000,
       });
       // Revert the change
       event.node.setDataValue(event.column.getColId(), event.oldValue);
@@ -307,7 +318,7 @@ export class ActionItemsGridComponent implements OnInit, OnDestroy {
 
   exportToExcel() {
     this.gridApi.exportDataAsExcel({
-      fileName: `action-items-${new Date().toISOString().split('T')[0]}.xlsx`
+      fileName: `action-items-${new Date().toISOString().split('T')[0]}.xlsx`,
     });
   }
 

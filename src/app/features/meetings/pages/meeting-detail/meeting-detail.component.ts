@@ -112,9 +112,10 @@ export class MeetingDetailComponent implements OnInit {
         label: 'Manage Action Items',
         icon: 'task_alt',
         color: 'accent',
-        action: () => this.router.navigate(['/action-items'], { 
-          queryParams: { meetingId: this.meeting()!.id } 
-        }),
+        action: () =>
+          this.router.navigate(['/action-items'], {
+            queryParams: { meetingId: this.meeting()!.id },
+          }),
       });
     }
 
@@ -233,8 +234,10 @@ export class MeetingDetailComponent implements OnInit {
   }
 
   formatDuration(minutes: number): string {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
+    // Round the input to avoid decimal places
+    const totalMinutes = Math.round(minutes);
+    const hours = Math.floor(totalMinutes / 60);
+    const mins = totalMinutes % 60;
     if (hours > 0) {
       return `${hours}h ${mins}m`;
     }

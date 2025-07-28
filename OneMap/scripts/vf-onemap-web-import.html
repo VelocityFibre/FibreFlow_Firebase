@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VF OneMap CSV Import</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            display: none;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .file-input {
+            margin: 20px 0;
+        }
+        .progress {
+            margin: 20px 0;
+            display: none;
+        }
+        .csv-data {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>VF OneMap CSV Import</h1>
+        
+        <div id="authStatus" class="status info">
+            Checking authentication...
+        </div>
+        
+        <div id="loginSection" style="display:none;">
+            <p>Please sign in with your Google account that has access to vf-onemap-data:</p>
+            <button onclick="signIn()">Sign In with Google</button>
+        </div>
+        
+        <div id="importSection" style="display:none;">
+            <h2>Import CSV Data</h2>
+            <div class="file-input">
+                <input type="file" id="csvFile" accept=".csv">
+            </div>
+            <button onclick="importCSV()" id="importBtn">Import to vf-onemap-data</button>
+            <button onclick="testConnection()">Test Connection</button>
+            <button onclick="signOut()">Sign Out</button>
+            
+            <div id="progress" class="progress">
+                <p>Processing: <span id="progressText">0</span> records</p>
+            </div>
+            
+            <div id="results" class="status success" style="display:none;"></div>
+            <div id="errors" class="status error" style="display:none;"></div>
+            
+            <div id="csvPreview" style="display:none;">
+                <h3>CSV Preview (first 5 rows):</h3>
+                <div class="csv-data" id="csvData"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js';
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut as firebaseSignOut } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
+        import { getFirestore, collection, doc, setDoc, getDoc, serverTimestamp, writeBatch } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+        
+        // VF OneMap configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBZHL-ibP5a3FKy3oYvmNdHRlxGMewbcV0",
+            authDomain: "vf-onemap-data.firebaseapp.com",
+            projectId: "vf-onemap-data",
+            storageBucket: "vf-onemap-data.firebasestorage.app",
+            messagingSenderId: "40059977157",
+            appId: "1:40059977157:web:3c3a5bb6db1a0a9f8f6d64"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        // Make functions global
+        window.signIn = async () => {
+            try {
+                const provider = new GoogleAuthProvider();
+                const result = await signInWithPopup(auth, provider);
+                console.log('Signed in as:', result.user.email);
+            } catch (error) {
+                showError('Sign in failed: ' + error.message);
+            }
+        };
+        
+        window.signOut = async () => {
+            try {
+                await firebaseSignOut(auth);
+                console.log('Signed out');
+            } catch (error) {
+                showError('Sign out failed: ' + error.message);
+            }
+        };
+        
+        window.testConnection = async () => {
+            try {
+                showInfo('Testing connection to vf-onemap-data...');
+                
+                // Try to write a test document
+                const testDoc = doc(collection(db, 'connection-test'));
+                await setDoc(testDoc, {
+                    timestamp: serverTimestamp(),
+                    user: auth.currentUser.email,
+                    test: true
+                });
+                
+                // Read it back
+                const snapshot = await getDoc(testDoc);
+                if (snapshot.exists()) {
+                    showSuccess('✅ Connection successful! Can read/write to vf-onemap-data');
+                }
+                
+            } catch (error) {
+                showError('Connection test failed: ' + error.message);
+            }
+        };
+        
+        // Parse CSV
+        function parseCSV(text) {
+            const lines = text.trim().split('\n');
+            const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+            const records = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
+                const record = {};
+                
+                headers.forEach((header, index) => {
+                    record[header] = values[index] ? values[index].replace(/^"|"$/g, '').trim() : '';
+                });
+                
+                if (record['Property ID']) {
+                    records.push(record);
+                }
+            }
+            
+            return records;
+        }
+        
+        window.importCSV = async () => {
+            const fileInput = document.getElementById('csvFile');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                showError('Please select a CSV file');
+                return;
+            }
+            
+            try {
+                document.getElementById('importBtn').disabled = true;
+                showInfo('Reading CSV file...');
+                
+                const text = await file.text();
+                const records = parseCSV(text);
+                
+                showInfo(`Found ${records.length} records. Starting import...`);
+                document.getElementById('progress').style.display = 'block';
+                
+                // Show preview
+                document.getElementById('csvPreview').style.display = 'block';
+                const preview = records.slice(0, 5).map(r => JSON.stringify(r, null, 2)).join('\n\n');
+                document.getElementById('csvData').textContent = preview;
+                
+                // Import in batches
+                const batchSize = 500;
+                const importBatchId = `IMP_${new Date().toISOString().replace(/[:.]/g, '-')}`;
+                let processed = 0;
+                let newCount = 0;
+                let duplicateCount = 0;
+                
+                for (let i = 0; i < records.length; i += batchSize) {
+                    const batch = writeBatch(db);
+                    const chunk = records.slice(i, i + batchSize);
+                    
+                    for (const record of chunk) {
+                        const propertyId = record['Property ID'];
+                        if (!propertyId) continue;
+                        
+                        const docRef = doc(db, 'vf-onemap-processed-records', propertyId);
+                        
+                        // Check if exists
+                        const existing = await getDoc(docRef);
+                        if (!existing.exists()) {
+                            newCount++;
+                        } else {
+                            duplicateCount++;
+                        }
+                        
+                        batch.set(docRef, {
+                            ...record,
+                            importBatchId: importBatchId,
+                            fileName: file.name,
+                            importedAt: serverTimestamp(),
+                            importedBy: auth.currentUser.email
+                        }, { merge: true });
+                        
+                        processed++;
+                        document.getElementById('progressText').textContent = `${processed}/${records.length}`;
+                    }
+                    
+                    await batch.commit();
+                }
+                
+                // Save import summary
+                await setDoc(doc(db, 'vf-onemap-import-batches', importBatchId), {
+                    batchId: importBatchId,
+                    fileName: file.name,
+                    totalRecords: records.length,
+                    newRecords: newCount,
+                    duplicates: duplicateCount,
+                    importedAt: serverTimestamp(),
+                    importedBy: auth.currentUser.email,
+                    status: 'completed'
+                });
+                
+                showSuccess(`✅ Import completed! Total: ${records.length}, New: ${newCount}, Duplicates: ${duplicateCount}`);
+                
+            } catch (error) {
+                showError('Import failed: ' + error.message);
+            } finally {
+                document.getElementById('importBtn').disabled = false;
+                document.getElementById('progress').style.display = 'none';
+            }
+        };
+        
+        // Helper functions
+        function showInfo(message) {
+            const el = document.getElementById('authStatus');
+            el.textContent = message;
+            el.className = 'status info';
+            el.style.display = 'block';
+        }
+        
+        function showSuccess(message) {
+            const el = document.getElementById('results');
+            el.textContent = message;
+            el.style.display = 'block';
+        }
+        
+        function showError(message) {
+            const el = document.getElementById('errors');
+            el.textContent = message;
+            el.style.display = 'block';
+        }
+        
+        // Auth state listener
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                showInfo(`Signed in as: ${user.email}`);
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('importSection').style.display = 'block';
+            } else {
+                showInfo('Please sign in to continue');
+                document.getElementById('loginSection').style.display = 'block';
+                document.getElementById('importSection').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

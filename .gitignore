@@ -61,6 +61,11 @@ fibreflow-service-account.json
 service-account-*.json
 **/.angular
 
+# Firebase service account keys
+.keys/
+*.json
+vf-onemap-data-firebase-key.json
+
 # JJ temporary files
 .jj-return-tofibreflow-service-account.json
 
@@ -83,6 +88,7 @@ OneMap/downloads/**/*.csv
 OneMap/reports/**/*.csv
 OneMap/reports/**/*.json
 OneMap/imports/**/*.csv
+OneMap/uploaded-images/
 
 # Graph analysis data (generated files)
 OneMap/GraphAnalysis/data/
@@ -99,3 +105,10 @@ OneMap/output/*.json
 .claude/neo4j-community.tar.gz
 .claude/graphiti/tests/evals/data/longmemeval_data/*.json
 .serena/cache/typescript/*.pkl
+
+# Qgis files
+Qgis/
+
+# Temporary files
+temp/*.JPG
+temp/*.jpg

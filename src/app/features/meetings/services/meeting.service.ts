@@ -70,12 +70,13 @@ export class MeetingService {
     // Get all meetings and filter client-side for those with action items
     return this.getMeetings().pipe(
       map((meetings) =>
-        meetings.filter((m) =>
-          m.actionItems && 
-          m.actionItems.length > 0 &&
-          m.actionItems.some(
-            (a) => !a.completed && !a.convertedToTaskId && !a.convertedToPersonalTodoId,
-          ),
+        meetings.filter(
+          (m) =>
+            m.actionItems &&
+            m.actionItems.length > 0 &&
+            m.actionItems.some(
+              (a) => !a.completed && !a.convertedToTaskId && !a.convertedToPersonalTodoId,
+            ),
         ),
       ),
     );

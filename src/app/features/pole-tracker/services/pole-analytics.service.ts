@@ -49,7 +49,7 @@ export interface ExportOptions {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PoleAnalyticsService {
   private poleTrackerService = inject(PoleTrackerService);
@@ -57,26 +57,26 @@ export class PoleAnalyticsService {
   // Generate analytics from pole data
   generateAnalytics(poles: PoleTrackerListItem[]): PoleAnalytics {
     const total = poles.length;
-    const installed = poles.filter(p => p.dateInstalled).length;
-    const qualityChecked = poles.filter(p => p.qualityChecked).length;
-    const uploadsComplete = poles.filter(p => p.allUploadsComplete).length;
+    const installed = poles.filter((p) => p.dateInstalled).length;
+    const qualityChecked = poles.filter((p) => p.qualityChecked).length;
+    const uploadsComplete = poles.filter((p) => p.allUploadsComplete).length;
 
     // Group by type
     const byType: Record<string, number> = {};
-    poles.forEach(pole => {
+    poles.forEach((pole) => {
       const type = pole.poleType || 'unknown';
       byType[type] = (byType[type] || 0) + 1;
     });
 
     // Group by contractor with performance metrics
     const byContractor: Record<string, { name: string; count: number; performance: number }> = {};
-    poles.forEach(pole => {
+    poles.forEach((pole) => {
       if (pole.contractorName) {
         if (!byContractor[pole.contractorName]) {
           byContractor[pole.contractorName] = {
             name: pole.contractorName,
             count: 0,
-            performance: 0
+            performance: 0,
           };
         }
         byContractor[pole.contractorName].count++;
@@ -84,17 +84,16 @@ export class PoleAnalyticsService {
     });
 
     // Calculate contractor performance (upload completion rate)
-    Object.keys(byContractor).forEach(contractor => {
-      const contractorPoles = poles.filter(p => p.contractorName === contractor);
-      const completeCount = contractorPoles.filter(p => p.allUploadsComplete).length;
-      byContractor[contractor].performance = contractorPoles.length > 0 
-        ? Math.round((completeCount / contractorPoles.length) * 100)
-        : 0;
+    Object.keys(byContractor).forEach((contractor) => {
+      const contractorPoles = poles.filter((p) => p.contractorName === contractor);
+      const completeCount = contractorPoles.filter((p) => p.allUploadsComplete).length;
+      byContractor[contractor].performance =
+        contractorPoles.length > 0 ? Math.round((completeCount / contractorPoles.length) * 100) : 0;
     });
 
     // Group by zone
     const byZone: Record<string, number> = {};
-    poles.forEach(pole => {
+    poles.forEach((pole) => {
       const zone = pole.zone || 'unassigned';
       byZone[zone] = (byZone[zone] || 0) + 1;
     });
@@ -104,9 +103,9 @@ export class PoleAnalyticsService {
 
     // Upload progress breakdown
     const uploadProgress = {
-      complete: poles.filter(p => p.uploadProgress === 100).length,
-      partial: poles.filter(p => p.uploadProgress > 0 && p.uploadProgress < 100).length,
-      none: poles.filter(p => p.uploadProgress === 0).length
+      complete: poles.filter((p) => p.uploadProgress === 100).length,
+      partial: poles.filter((p) => p.uploadProgress > 0 && p.uploadProgress < 100).length,
+      none: poles.filter((p) => p.uploadProgress === 0).length,
     };
 
     // Generate time series data
@@ -120,24 +119,27 @@ export class PoleAnalyticsService {
         uploadsComplete,
         installationRate: total > 0 ? Math.round((installed / total) * 100) : 0,
         uploadCompletionRate: total > 0 ? Math.round((uploadsComplete / total) * 100) : 0,
-        qualityCheckRate: total > 0 ? Math.round((qualityChecked / total) * 100) : 0
+        qualityCheckRate: total > 0 ? Math.round((qualityChecked / total) * 100) : 0,
       },
       byType,
       byContractor,
       byZone,
       byMonth,
       uploadProgress,
-      timeSeries
+      timeSeries,
     };
   }
 
   // Generate monthly breakdown
-  private generateMonthlyData(poles: PoleTrackerListItem[]): Array<{ month: string; count: number; cumulative: number }> {
+  private generateMonthlyData(
+    poles: PoleTrackerListItem[],
+  ): Array<{ month: string; count: number; cumulative: number }> {
     const monthlyData = new Map<string, number>();
-    
-    poles.forEach(pole => {
+
+    poles.forEach((pole) => {
       if (pole.dateInstalled) {
-        const date = pole.dateInstalled instanceof Date ? pole.dateInstalled : pole.dateInstalled.toDate();
+        const date =
+          pole.dateInstalled instanceof Date ? pole.dateInstalled : pole.dateInstalled.toDate();
         const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
         monthlyData.set(monthKey, (monthlyData.get(monthKey) || 0) + 1);
       }
@@ -156,17 +158,21 @@ export class PoleAnalyticsService {
 
   // Generate time series data for charts
   private generateTimeSeries(poles: PoleTrackerListItem[]): Array<any> {
-    const dailyData = new Map<string, { installed: number; qualityChecked: number; uploadsComplete: number }>();
-    
-    poles.forEach(pole => {
+    const dailyData = new Map<
+      string,
+      { installed: number; qualityChecked: number; uploadsComplete: number }
+    >();
+
+    poles.forEach((pole) => {
       if (pole.dateInstalled) {
-        const date = pole.dateInstalled instanceof Date ? pole.dateInstalled : pole.dateInstalled.toDate();
+        const date =
+          pole.dateInstalled instanceof Date ? pole.dateInstalled : pole.dateInstalled.toDate();
         const dateKey = date.toISOString().split('T')[0];
-        
+
         if (!dailyData.has(dateKey)) {
           dailyData.set(dateKey, { installed: 0, qualityChecked: 0, uploadsComplete: 0 });
         }
-        
+
         const dayStats = dailyData.get(dateKey)!;
         dayStats.installed++;
         if (pole.qualityChecked) dayStats.qualityChecked++;
@@ -178,7 +184,7 @@ export class PoleAnalyticsService {
       .sort((a, b) => a[0].localeCompare(b[0]))
       .map(([dateStr, stats]) => ({
         date: new Date(dateStr),
-        ...stats
+        ...stats,
       }));
   }
 
@@ -187,43 +193,43 @@ export class PoleAnalyticsService {
     poles: PoleTrackerListItem[],
     rowField: string,
     columnField: string,
-    valueField: string
+    valueField: string,
   ): PivotData {
     // Group data by row and column fields
     const pivotMap = new Map<string, Map<string, number>>();
-    
-    poles.forEach(pole => {
+
+    poles.forEach((pole) => {
       const rowValue = this.getFieldValue(pole, rowField);
       const columnValue = this.getFieldValue(pole, columnField);
       const value = this.getNumericValue(pole, valueField);
-      
+
       if (!pivotMap.has(rowValue)) {
         pivotMap.set(rowValue, new Map());
       }
-      
+
       const rowMap = pivotMap.get(rowValue)!;
       rowMap.set(columnValue, (rowMap.get(columnValue) || 0) + value);
     });
 
     // Convert to arrays
     const rows = Array.from(pivotMap.keys()).sort();
-    const columns = Array.from(new Set(
-      Array.from(pivotMap.values()).flatMap(m => Array.from(m.keys()))
-    )).sort();
+    const columns = Array.from(
+      new Set(Array.from(pivotMap.values()).flatMap((m) => Array.from(m.keys()))),
+    ).sort();
 
     const values: number[][] = [];
     const rowTotals: number[] = [];
-    
-    rows.forEach(row => {
+
+    rows.forEach((row) => {
       const rowData: number[] = [];
       let rowTotal = 0;
-      
-      columns.forEach(col => {
+
+      columns.forEach((col) => {
         const value = pivotMap.get(row)?.get(col) || 0;
         rowData.push(value);
         rowTotal += value;
       });
-      
+
       values.push(rowData);
       rowTotals.push(rowTotal);
     });
@@ -231,7 +237,7 @@ export class PoleAnalyticsService {
     // Calculate column totals
     const columnTotals: number[] = [];
     let grandTotal = 0;
-    
+
     columns.forEach((_, colIndex) => {
       const colTotal = values.reduce((sum, row) => sum + row[colIndex], 0);
       columnTotals.push(colTotal);
@@ -244,7 +250,7 @@ export class PoleAnalyticsService {
       values,
       rowTotals,
       columnTotals,
-      grandTotal
+      grandTotal,
     };
   }
 
@@ -257,7 +263,8 @@ export class PoleAnalyticsService {
         return pole.qualityChecked ? 'Checked' : 'Pending';
       case 'month':
         if (pole.dateInstalled) {
-          const date = pole.dateInstalled instanceof Date ? pole.dateInstalled : pole.dateInstalled.toDate();
+          const date =
+            pole.dateInstalled instanceof Date ? pole.dateInstalled : pole.dateInstalled.toDate();
           return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
         }
         return 'No Date';
@@ -283,57 +290,72 @@ export class PoleAnalyticsService {
     return {
       installationProgress: {
         labels: ['Installed', 'Not Installed'],
-        datasets: [{
-          data: [analytics.summary.installed, analytics.summary.total - analytics.summary.installed],
-          backgroundColor: ['#4caf50', '#e0e0e0']
-        }]
+        datasets: [
+          {
+            data: [
+              analytics.summary.installed,
+              analytics.summary.total - analytics.summary.installed,
+            ],
+            backgroundColor: ['#4caf50', '#e0e0e0'],
+          },
+        ],
       },
       polesByType: {
         labels: Object.keys(analytics.byType),
-        datasets: [{
-          label: 'Poles by Type',
-          data: Object.values(analytics.byType),
-          backgroundColor: ['#8d6e63', '#616161', '#455a64', '#5d4037', '#37474f']
-        }]
+        datasets: [
+          {
+            label: 'Poles by Type',
+            data: Object.values(analytics.byType),
+            backgroundColor: ['#8d6e63', '#616161', '#455a64', '#5d4037', '#37474f'],
+          },
+        ],
       },
       contractorPerformance: {
         labels: Object.keys(analytics.byContractor),
-        datasets: [{
-          label: 'Performance %',
-          data: Object.values(analytics.byContractor).map(c => c.performance),
-          backgroundColor: '#3f51b5'
-        }]
+        datasets: [
+          {
+            label: 'Performance %',
+            data: Object.values(analytics.byContractor).map((c) => c.performance),
+            backgroundColor: '#3f51b5',
+          },
+        ],
       },
       uploadCompletion: {
         labels: ['Complete', 'Partial', 'None'],
-        datasets: [{
-          data: [analytics.uploadProgress.complete, analytics.uploadProgress.partial, analytics.uploadProgress.none],
-          backgroundColor: ['#4caf50', '#ff9800', '#f44336']
-        }]
+        datasets: [
+          {
+            data: [
+              analytics.uploadProgress.complete,
+              analytics.uploadProgress.partial,
+              analytics.uploadProgress.none,
+            ],
+            backgroundColor: ['#4caf50', '#ff9800', '#f44336'],
+          },
+        ],
       },
       timeSeries: {
-        labels: analytics.timeSeries.map(d => d.date.toLocaleDateString()),
+        labels: analytics.timeSeries.map((d) => d.date.toLocaleDateString()),
         datasets: [
           {
             label: 'Installed',
-            data: analytics.timeSeries.map(d => d.installed),
+            data: analytics.timeSeries.map((d) => d.installed),
             borderColor: '#4caf50',
-            fill: false
+            fill: false,
           },
           {
             label: 'Quality Checked',
-            data: analytics.timeSeries.map(d => d.qualityChecked),
+            data: analytics.timeSeries.map((d) => d.qualityChecked),
             borderColor: '#2196f3',
-            fill: false
+            fill: false,
           },
           {
             label: 'Uploads Complete',
-            data: analytics.timeSeries.map(d => d.uploadsComplete),
+            data: analytics.timeSeries.map((d) => d.uploadsComplete),
             borderColor: '#ff9800',
-            fill: false
-          }
-        ]
-      }
+            fill: false,
+          },
+        ],
+      },
     };
   }
 }

@@ -1,12 +1,23 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, doc, getDoc, setDoc, addDoc, query, where, getDocs, writeBatch } from '@angular/fire/firestore';
-import { 
-  ImportRecord, 
-  ImportBatch, 
-  ImportReport, 
+import {
+  Firestore,
+  collection,
+  doc,
+  getDoc,
+  setDoc,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  writeBatch,
+} from '@angular/fire/firestore';
+import {
+  ImportRecord,
+  ImportBatch,
+  ImportReport,
   ChangeTrackingRecord,
   FieldChange,
-  ImportConfig 
+  ImportConfig,
 } from '../models/import-record.model';
 
 @Injectable({
@@ -14,7 +25,7 @@ import {
 })
 export class VfOnemapImportService {
   private firestore = inject(Firestore);
-  
+
   // Collection references for vf-onemap-data database
   private csvImportsCollection = collection(this.firestore, 'csv-imports');
   private processedRecordsCollection = collection(this.firestore, 'processed-records');
@@ -28,26 +39,25 @@ export class VfOnemapImportService {
    */
   async importCsvToDatabase(csvRecords: any[], config: ImportConfig): Promise<ImportReport> {
     const startTime = Date.now();
-    
+
     // Step 1: Create import batch
     const batch = await this.createImportBatch(config, csvRecords.length);
-    
+
     try {
       // Step 2: Process each record - check for duplicates and changes
       const processedRecords = await this.processRecords(csvRecords, batch.id);
-      
+
       // Step 3: Import only new/changed records to database
       await this.importRecordsToDatabase(processedRecords);
-      
+
       // Step 4: Generate reports using tested logic (copied from existing scripts)
       const report = await this.generateImportReport(processedRecords, batch.id);
-      
+
       // Step 5: Update batch status
       const processingTime = Date.now() - startTime;
       await this.completeBatch(batch.id, processedRecords, processingTime);
-      
+
       return report;
-      
     } catch (error) {
       console.error('Import failed:', error);
       await this.failBatch(batch.id, error as Error);
@@ -67,18 +77,18 @@ export class VfOnemapImportService {
     try {
       const docRef = doc(this.processedRecordsCollection, propertyId);
       const docSnap = await getDoc(docRef);
-      
+
       if (docSnap.exists()) {
         const existingRecord = docSnap.data() as ImportRecord;
         return {
           exists: true,
           hasChanges: false, // Will be determined in compareRecords()
-          existingRecord
+          existingRecord,
         };
       } else {
         return {
           exists: false,
-          hasChanges: false
+          hasChanges: false,
         };
       }
     } catch (error) {
@@ -91,34 +101,45 @@ export class VfOnemapImportService {
    * Compare two records field by field to detect changes
    * Copied logic pattern from existing OneMap scripts
    */
-  private compareRecords(newRecord: any, existingRecord: ImportRecord): {
+  private compareRecords(
+    newRecord: any,
+    existingRecord: ImportRecord,
+  ): {
     hasChanges: boolean;
     changes: FieldChange[];
   } {
     const changes: FieldChange[] = [];
     const fieldsToCompare = [
-      'poleNumber', 'dropNumber', 'status', 'flowNameGroups',
-      'sections', 'pons', 'location', 'address', 'fieldAgentName',
-      'lastModifiedBy', 'lastModifiedDate'
+      'poleNumber',
+      'dropNumber',
+      'status',
+      'flowNameGroups',
+      'sections',
+      'pons',
+      'location',
+      'address',
+      'fieldAgentName',
+      'lastModifiedBy',
+      'lastModifiedDate',
     ];
 
-    fieldsToCompare.forEach(field => {
+    fieldsToCompare.forEach((field) => {
       const newValue = newRecord[field] || '';
       const oldValue = existingRecord[field] || '';
-      
+
       if (newValue !== oldValue) {
         changes.push({
           fieldName: field,
           oldValue,
           newValue,
-          changeType: oldValue === '' ? 'added' : 'modified'
+          changeType: oldValue === '' ? 'added' : 'modified',
         });
       }
     });
 
     return {
       hasChanges: changes.length > 0,
-      changes
+      changes,
     };
   }
 
@@ -127,24 +148,26 @@ export class VfOnemapImportService {
    */
   private async processRecords(csvRecords: any[], batchId: string): Promise<ImportRecord[]> {
     const processedRecords: ImportRecord[] = [];
-    
+
     for (const csvRecord of csvRecords) {
       const propertyId = csvRecord.propertyId;
       if (!propertyId) continue; // Skip records without unique ID
-      
+
       // Check if record exists
       const existenceCheck = await this.checkRecordExists(propertyId);
-      
+
       let hasChanges = false;
       let changesSummary: string[] = [];
-      
+
       if (existenceCheck.exists && existenceCheck.existingRecord) {
         // Record exists - check for changes
         const comparison = this.compareRecords(csvRecord, existenceCheck.existingRecord);
         hasChanges = comparison.hasChanges;
-        changesSummary = comparison.changes.map(c => `${c.fieldName}: ${c.oldValue} → ${c.newValue}`);
+        changesSummary = comparison.changes.map(
+          (c) => `${c.fieldName}: ${c.oldValue} → ${c.newValue}`,
+        );
       }
-      
+
       // Create import record
       const importRecord: ImportRecord = {
         // CSV data
@@ -161,18 +184,18 @@ export class VfOnemapImportService {
         fieldAgentName: csvRecord.fieldAgentName || '',
         lastModifiedBy: csvRecord.lastModifiedBy || '',
         lastModifiedDate: csvRecord.lastModifiedDate || '',
-        
+
         // Import metadata
         importDate: new Date(),
         importBatchId: batchId,
         isNew: !existenceCheck.exists,
         hasChanges,
-        changesSummary: changesSummary.length > 0 ? changesSummary : undefined
+        changesSummary: changesSummary.length > 0 ? changesSummary : undefined,
       };
-      
+
       processedRecords.push(importRecord);
     }
-    
+
     return processedRecords;
   }
 
@@ -181,52 +204,56 @@ export class VfOnemapImportService {
    */
   private async importRecordsToDatabase(processedRecords: ImportRecord[]): Promise<void> {
     const batch = writeBatch(this.firestore);
-    
+
     // Filter for only new or changed records
-    const recordsToImport = processedRecords.filter(record => record.isNew || record.hasChanges);
-    
-    recordsToImport.forEach(record => {
+    const recordsToImport = processedRecords.filter((record) => record.isNew || record.hasChanges);
+
+    recordsToImport.forEach((record) => {
       const docRef = doc(this.processedRecordsCollection, record.propertyId);
       batch.set(docRef, record);
-      
+
       // Also track changes if record has changes
       if (record.hasChanges) {
         const changeRecord: ChangeTrackingRecord = {
           propertyId: record.propertyId,
           changeDate: new Date(),
           changeType: record.isNew ? 'created' : 'updated',
-          fieldChanges: record.changesSummary?.map(summary => {
-            const [fieldName, change] = summary.split(': ');
-            const [oldValue, newValue] = change.split(' → ');
-            return {
-              fieldName,
-              oldValue,
-              newValue,
-              changeType: 'modified' as const
-            };
-          }) || [],
-          currentVersion: record
+          fieldChanges:
+            record.changesSummary?.map((summary) => {
+              const [fieldName, change] = summary.split(': ');
+              const [oldValue, newValue] = change.split(' → ');
+              return {
+                fieldName,
+                oldValue,
+                newValue,
+                changeType: 'modified' as const,
+              };
+            }) || [],
+          currentVersion: record,
         };
-        
+
         const changeDocRef = doc(this.changeHistoryCollection);
         batch.set(changeDocRef, changeRecord);
       }
     });
-    
+
     // Commit all changes at once
     await batch.commit();
-    
+
     console.log(`Imported ${recordsToImport.length} records to vf-onemap-data database`);
   }
 
   /**
    * Generate import report using tested report logic (copied from existing scripts)
    */
-  private async generateImportReport(processedRecords: ImportRecord[], batchId: string): Promise<ImportReport> {
-    const newRecords = processedRecords.filter(r => r.isNew);
-    const changedRecords = processedRecords.filter(r => r.hasChanges && !r.isNew);
-    const unchangedRecords = processedRecords.filter(r => !r.isNew && !r.hasChanges);
-    
+  private async generateImportReport(
+    processedRecords: ImportRecord[],
+    batchId: string,
+  ): Promise<ImportReport> {
+    const newRecords = processedRecords.filter((r) => r.isNew);
+    const changedRecords = processedRecords.filter((r) => r.hasChanges && !r.isNew);
+    const unchangedRecords = processedRecords.filter((r) => !r.isNew && !r.hasChanges);
+
     const report: ImportReport = {
       batchId,
       reportType: 'daily-summary',
@@ -238,16 +265,16 @@ export class VfOnemapImportService {
         newRecords: newRecords.length,
         changedRecords: changedRecords.length,
         unchangedRecords: unchangedRecords.length,
-        errorRecords: 0
-      }
+        errorRecords: 0,
+      },
     };
-    
+
     // Save report to database
     await addDoc(this.importReportsCollection, report);
-    
+
     // Generate separate reports for each type (using tested logic pattern)
     await this.generateSpecificReports(batchId, newRecords, changedRecords);
-    
+
     return report;
   }
 
@@ -255,11 +282,10 @@ export class VfOnemapImportService {
    * Generate specific report types (copied pattern from existing scripts)
    */
   private async generateSpecificReports(
-    batchId: string, 
-    newRecords: ImportRecord[], 
-    changedRecords: ImportRecord[]
+    batchId: string,
+    newRecords: ImportRecord[],
+    changedRecords: ImportRecord[],
   ): Promise<void> {
-    
     // New Records Report
     if (newRecords.length > 0) {
       const newRecordsReport: ImportReport = {
@@ -273,13 +299,13 @@ export class VfOnemapImportService {
           newRecords: newRecords.length,
           changedRecords: 0,
           unchangedRecords: 0,
-          errorRecords: 0
-        }
+          errorRecords: 0,
+        },
       };
-      
+
       await addDoc(this.importReportsCollection, newRecordsReport);
     }
-    
+
     // Changed Records Report
     if (changedRecords.length > 0) {
       const changedRecordsReport: ImportReport = {
@@ -293,10 +319,10 @@ export class VfOnemapImportService {
           newRecords: 0,
           changedRecords: changedRecords.length,
           unchangedRecords: 0,
-          errorRecords: 0
-        }
+          errorRecords: 0,
+        },
       };
-      
+
       await addDoc(this.importReportsCollection, changedRecordsReport);
     }
   }
@@ -304,7 +330,10 @@ export class VfOnemapImportService {
   /**
    * Create import batch metadata
    */
-  private async createImportBatch(config: ImportConfig, totalRecords: number): Promise<ImportBatch> {
+  private async createImportBatch(
+    config: ImportConfig,
+    totalRecords: number,
+  ): Promise<ImportBatch> {
     const batch: ImportBatch = {
       id: config.batchId,
       filename: config.csvFilePath,
@@ -315,9 +344,9 @@ export class VfOnemapImportService {
       unchangedRecords: 0,
       errorRecords: 0,
       processingTimeMs: 0,
-      status: 'processing'
+      status: 'processing',
     };
-    
+
     await setDoc(doc(this.importBatchesCollection, batch.id), batch);
     return batch;
   }
@@ -326,22 +355,22 @@ export class VfOnemapImportService {
    * Complete import batch with final statistics
    */
   private async completeBatch(
-    batchId: string, 
-    processedRecords: ImportRecord[], 
-    processingTimeMs: number
+    batchId: string,
+    processedRecords: ImportRecord[],
+    processingTimeMs: number,
   ): Promise<void> {
-    const newRecords = processedRecords.filter(r => r.isNew).length;
-    const changedRecords = processedRecords.filter(r => r.hasChanges && !r.isNew).length;
-    const unchangedRecords = processedRecords.filter(r => !r.isNew && !r.hasChanges).length;
-    
+    const newRecords = processedRecords.filter((r) => r.isNew).length;
+    const changedRecords = processedRecords.filter((r) => r.hasChanges && !r.isNew).length;
+    const unchangedRecords = processedRecords.filter((r) => !r.isNew && !r.hasChanges).length;
+
     const batchUpdate: Partial<ImportBatch> = {
       newRecords,
       changedRecords,
       unchangedRecords,
       processingTimeMs,
-      status: 'completed'
+      status: 'completed',
     };
-    
+
     await setDoc(doc(this.importBatchesCollection, batchId), batchUpdate, { merge: true });
   }
 
@@ -349,10 +378,14 @@ export class VfOnemapImportService {
    * Mark batch as failed
    */
   private async failBatch(batchId: string, error: Error): Promise<void> {
-    await setDoc(doc(this.importBatchesCollection, batchId), {
-      status: 'failed',
-      error: error.message
-    }, { merge: true });
+    await setDoc(
+      doc(this.importBatchesCollection, batchId),
+      {
+        status: 'failed',
+        error: error.message,
+      },
+      { merge: true },
+    );
   }
 
   /**
@@ -366,20 +399,17 @@ export class VfOnemapImportService {
   }> {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
-    
-    const batchesQuery = query(
-      this.importBatchesCollection,
-      where('importDate', '>=', cutoffDate)
-    );
-    
+
+    const batchesQuery = query(this.importBatchesCollection, where('importDate', '>=', cutoffDate));
+
     const batchesSnapshot = await getDocs(batchesQuery);
-    const batches = batchesSnapshot.docs.map(doc => doc.data() as ImportBatch);
-    
+    const batches = batchesSnapshot.docs.map((doc) => doc.data() as ImportBatch);
+
     return {
       totalBatches: batches.length,
       totalRecords: batches.reduce((sum, batch) => sum + batch.totalRecords, 0),
       newRecords: batches.reduce((sum, batch) => sum + batch.newRecords, 0),
-      changedRecords: batches.reduce((sum, batch) => sum + batch.changedRecords, 0)
+      changedRecords: batches.reduce((sum, batch) => sum + batch.changedRecords, 0),
     };
   }
 
@@ -392,7 +422,7 @@ export class VfOnemapImportService {
     // Create CSV header
     const headers = [
       'Property ID',
-      '1map NAD ID', 
+      '1map NAD ID',
       'Pole Number',
       'Drop Number',
       'Status',
@@ -407,7 +437,7 @@ export class VfOnemapImportService {
       'Import Date',
       'Is New',
       'Has Changes',
-      'Changes Summary'
+      'Changes Summary',
     ];
 
     // Create CSV content using proven escaping logic
@@ -431,7 +461,7 @@ export class VfOnemapImportService {
           this.escapeCsvValue(record.importDate.toISOString()),
           this.escapeCsvValue(record.isNew ? 'Yes' : 'No'),
           this.escapeCsvValue(record.hasChanges ? 'Yes' : 'No'),
-          this.escapeCsvValue(record.changesSummary?.join('; ') || '')
+          this.escapeCsvValue(record.changesSummary?.join('; ') || ''),
         ].join(','),
       ),
     ].join('\n');

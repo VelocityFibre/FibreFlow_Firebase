@@ -1,26 +1,33 @@
-const admin = require('firebase-admin');
-const fs = require('fs').promises;
-const path = require('path');
+import admin from 'firebase-admin';
+import { promises as fs } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Initialize Firebase Admin
-if (!admin.apps.length) {
-  // Check if running locally with service account
-  const serviceAccountPath = path.join(__dirname, '../fibreflow-73daf-firebase-adminsdk-ypqad-2d3e7e15bb.json');
-  
-  try {
-    const serviceAccount = require(serviceAccountPath);
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount)
-    });
-    console.log('✅ Initialized Firebase Admin with service account');
-  } catch (error) {
-    // Try default credentials
-    admin.initializeApp();
-    console.log('✅ Initialized Firebase Admin with default credentials');
+async function initializeAdmin() {
+  if (!admin.apps.length) {
+    // Check if running locally with service account
+    const serviceAccountPath = path.join(__dirname, '../fibreflow-73daf-firebase-adminsdk-ypqad-2d3e7e15bb.json');
+    
+    try {
+      const serviceAccountData = await fs.readFile(serviceAccountPath, 'utf8');
+      const serviceAccount = JSON.parse(serviceAccountData);
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount)
+      });
+      console.log('✅ Initialized Firebase Admin with service account');
+    } catch (error) {
+      // Try default credentials
+      admin.initializeApp();
+      console.log('✅ Initialized Firebase Admin with default credentials');
+    }
   }
+  
+  return admin.firestore();
 }
-
-const db = admin.firestore();
 
 // Collections to backup
 const COLLECTIONS = [
@@ -80,7 +87,7 @@ function convertTimestamps(obj) {
 }
 
 // Get all documents from a collection
-async function getCollectionData(collectionName) {
+async function getCollectionData(db, collectionName) {
   console.log(`  📥 Backing up ${collectionName}...`);
   
   const snapshot = await db.collection(collectionName).get();
@@ -99,7 +106,7 @@ async function getCollectionData(collectionName) {
 }
 
 // Get subcollection data for all documents in a parent collection
-async function getSubcollectionsData(parentCollection, subcollectionNames) {
+async function getSubcollectionsData(db, parentCollection, subcollectionNames) {
   const result = {};
   
   // First get all parent documents
@@ -141,6 +148,8 @@ async function getSubcollectionsData(parentCollection, subcollectionNames) {
 async function backupAllData() {
   console.log('🚀 Starting Complete Firebase Backup\n');
   
+  const db = await initializeAdmin();
+  
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
   const backupDir = path.join(__dirname, `../backups/complete-firebase-backup-${timestamp}`);
   
@@ -165,7 +174,7 @@ async function backupAllData() {
     
     for (const collection of COLLECTIONS) {
       try {
-        backup.data[collection] = await getCollectionData(collection);
+        backup.data[collection] = await getCollectionData(db, collection);
         backup.metadata.collections.push(collection);
         backup.metadata.totalDocuments += backup.data[collection].length;
       } catch (error) {
@@ -179,7 +188,7 @@ async function backupAllData() {
     for (const [parentCollection, subcollectionNames] of Object.entries(SUBCOLLECTIONS)) {
       if (backup.data[parentCollection] && backup.data[parentCollection].length > 0) {
         console.log(`  📂 Checking subcollections for ${parentCollection}...`);
-        const subcollectionData = await getSubcollectionsData(parentCollection, subcollectionNames);
+        const subcollectionData = await getSubcollectionsData(db, parentCollection, subcollectionNames);
         
         for (const [subcollectionName, data] of Object.entries(subcollectionData)) {
           if (Object.keys(data).length > 0) {
@@ -331,13 +340,11 @@ async function backupAllData() {
 }
 
 // Run backup
-if (require.main === module) {
-  backupAllData()
-    .then(() => process.exit(0))
-    .catch(error => {
-      console.error(error);
-      process.exit(1);
-    });
-}
+backupAllData()
+  .then(() => process.exit(0))
+  .catch(error => {
+    console.error(error);
+    process.exit(1);
+  });
 
-module.exports = { backupAllData };
+export { backupAllData };

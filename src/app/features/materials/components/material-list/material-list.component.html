@@ -1,0 +1,54 @@
+
+<div class="container">
+  <h1>Materials</h1>
+  <button mat-raised-button color="primary" (click)="addMaterial()">Add Material</button>
+
+  <table mat-table [dataSource]="materials" class="mat-elevation-z8">
+
+    <!-- Item Code Column -->
+    <ng-container matColumnDef="itemCode">
+      <th mat-header-cell *matHeaderCellDef> Item Code </th>
+      <td mat-cell *matCellDef="let element"> {{element.itemCode}} </td>
+    </ng-container>
+
+    <!-- Description Column -->
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef> Description </th>
+      <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+    </ng-container>
+
+    <!-- Category Column -->
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef> Category </th>
+      <td mat-cell *matCellDef="let element"> {{element.category}} </td>
+    </ng-container>
+
+    <!-- Unit of Measure Column -->
+    <ng-container matColumnDef="unitOfMeasure">
+      <th mat-header-cell *matHeaderCellDef> Unit of Measure </th>
+      <td mat-cell *matCellDef="let element"> {{element.unitOfMeasure}} </td>
+    </ng-container>
+
+    <!-- Unit Cost Column -->
+    <ng-container matColumnDef="unitCost">
+      <th mat-header-cell *matHeaderCellDef> Unit Cost </th>
+      <td mat-cell *matCellDef="let element"> {{element.unitCost | currency}} </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button (click)="editMaterial(element)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteMaterial(element)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

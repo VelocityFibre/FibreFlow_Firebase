@@ -10,7 +10,7 @@ export class AdminGuard implements CanActivate {
   private router = inject(Router);
 
   canActivate(): boolean {
-    const user = this.authService.currentUser;
+    const user = this.authService.currentUser();
 
     // TODO: Replace with your actual admin email
     const isAdmin = user?.email === 'admin@fibreflow.com';

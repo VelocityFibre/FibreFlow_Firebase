@@ -12,7 +12,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { Observable, startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { Observable, of, startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 
 import { StockService } from '../../services/stock.service';
 import {
@@ -447,10 +447,8 @@ export class StockFormComponent implements OnInit {
       distinctUntilChanged(),
       switchMap((value) => {
         const searchTerm = typeof value === 'string' ? value : value?.itemCode || '';
-        return this.materialService.getMaterials({
-          searchTerm: searchTerm,
-          isActive: true,
-        });
+        // TODO: Implement material search/filter when MaterialService is updated
+        return of(this.materialService.getMaterials());
       }),
     );
   }
@@ -470,8 +468,8 @@ export class StockFormComponent implements OnInit {
       description: material.specifications || '',
       unitOfMeasure: this.mapMaterialUoMToStockUoM(material.unitOfMeasure),
       standardCost: material.unitCost || 0,
-      minimumStock: material.minimumStockLevel || 0,
-      reorderLevel: material.reorderPoint || 0,
+      minimumStock: material.minimumStock || 0,
+      reorderLevel: 0, // TODO: Add reorderLevel to material model
     });
 
     // Try to map category

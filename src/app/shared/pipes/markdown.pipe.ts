@@ -55,4 +55,3 @@ export class MarkdownPipe implements PipeTransform {
     return text.replace(/[&<>"']/g, (m) => map[m]);
   }
 }
-

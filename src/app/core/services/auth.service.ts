@@ -1,21 +1,15 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { UserProfile } from '../models/user-profile';
-import { 
-  Auth, 
-  GoogleAuthProvider, 
-  signInWithPopup, 
-  signOut, 
+import {
+  Auth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
   onAuthStateChanged,
-  User
+  User,
 } from '@angular/fire/auth';
-import { 
-  Firestore, 
-  doc, 
-  setDoc, 
-  getDoc,
-  serverTimestamp 
-} from '@angular/fire/firestore';
+import { Firestore, doc, setDoc, getDoc, serverTimestamp } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -23,10 +17,21 @@ import {
 export class AuthService {
   private auth = inject(Auth);
   private firestore = inject(Firestore);
-  
+
   // Toggle this to enable real authentication
-  private USE_REAL_AUTH = true; // Google auth is now configured
-  
+  // 
+  // 🚨 AUTHENTICATION TEMPORARILY DISABLED FOR DEVELOPMENT
+  // 
+  // Current state: Mock authentication mode (auto-login as admin)
+  // Users will NOT need to sign in with Google while this is false
+  // 
+  // To re-enable Google authentication for production:
+  // 1. Change USE_REAL_AUTH to true
+  // 2. Redeploy the application
+  // 3. Users will be required to sign in with their Gmail accounts
+  //
+  private USE_REAL_AUTH = false; // Set to true for production Google auth
+
   // Mock user for development - always logged in as admin
   private mockUser = {
     uid: 'dev-user',
@@ -52,7 +57,9 @@ export class AuthService {
     displayName: string;
   } | null>(this.USE_REAL_AUTH ? null : this.mockUser);
 
-  private userProfileSignal = signal<UserProfile | null>(this.USE_REAL_AUTH ? null : this.mockUserProfile);
+  private userProfileSignal = signal<UserProfile | null>(
+    this.USE_REAL_AUTH ? null : this.mockUserProfile,
+  );
 
   // Public signals for components
   readonly currentUser = this.userSignal.asReadonly();
@@ -89,7 +96,7 @@ export class AuthService {
           displayName: user.displayName || user.email || 'User',
         };
         this.userSignal.set(userData);
-        
+
         // Load or create user profile
         const profile = await this.loadUserProfile(user.uid);
         this.userProfileSignal.set(profile);
@@ -104,7 +111,7 @@ export class AuthService {
   private async loadUserProfile(uid: string): Promise<UserProfile> {
     const userDoc = doc(this.firestore, 'users', uid);
     const docSnap = await getDoc(userDoc);
-    
+
     if (docSnap.exists()) {
       return docSnap.data() as UserProfile;
     } else {
@@ -118,13 +125,13 @@ export class AuthService {
         createdAt: new Date(),
         lastLogin: new Date(),
       };
-      
+
       await setDoc(userDoc, {
         ...newProfile,
         createdAt: serverTimestamp(),
         lastLogin: serverTimestamp(),
       });
-      
+
       return newProfile;
     }
   }
@@ -142,15 +149,15 @@ export class AuthService {
       console.log('🔐 Initiating Google login...');
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(this.auth, provider);
-      
+
       const userData = {
         uid: result.user.uid,
         email: result.user.email || '',
         displayName: result.user.displayName || result.user.email || 'User',
       };
-      
+
       console.log('✅ Google login successful:', userData.email);
-      
+
       // User profile will be loaded by onAuthStateChanged listener
       return userData;
     } catch (error: any) {

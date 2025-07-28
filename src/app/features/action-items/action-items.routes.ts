@@ -3,18 +3,18 @@ import { Routes } from '@angular/router';
 export const ACTION_ITEMS_ROUTES: Routes = [
   {
     path: '',
-    loadComponent: () => 
+    loadComponent: () =>
       import('./pages/action-items-grid/action-items-grid.component').then(
-        m => m.ActionItemsGridComponent
+        (m) => m.ActionItemsGridComponent,
       ),
-    data: { title: 'Action Items Management' }
+    data: { title: 'Action Items Management' },
   },
   {
     path: 'list',
-    loadComponent: () => 
+    loadComponent: () =>
       import('./pages/action-items-list/action-items-list.component').then(
-        m => m.ActionItemsListComponent
+        (m) => m.ActionItemsListComponent,
       ),
-    data: { title: 'Action Items List View' }
-  }
+    data: { title: 'Action Items List View' },
+  },
 ];

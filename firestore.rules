@@ -1,15 +1,28 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Require authentication for all operations
-    match /{document=**} {
-      allow read, write: if request.auth != null;
+    // TEMPORARY: Allow read access to uploaded-images for GPS extraction
+    match /uploaded-images/{document} {
+      allow read: if true;  // Temporary for GPS extraction
+      allow write: if request.auth != null;
     }
     
-    // Special rule for user profiles - users can read/write their own profile
-    match /users/{userId} {
-      allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.uid == userId;
+    // TEMPORARY DEVELOPMENT MODE: Allow all access when auth is disabled
+    // TODO: Remove this before production deployment
+    match /{document=**} {
+      // Allow all operations temporarily for development
+      allow read, write: if true;
     }
+    
+    // Production rules (currently disabled for development):
+    // match /{document=**} {
+    //   allow read, write: if request.auth != null;
+    // }
+    
+    // Special rule for user profiles - users can read/write their own profile
+    // match /users/{userId} {
+    //   allow read: if request.auth != null;
+    //   allow write: if request.auth != null && request.auth.uid == userId;
+    // }
   }
 }

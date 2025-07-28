@@ -398,7 +398,7 @@ interface NavItem {
         top: 50%;
         transform: translateY(-50%);
         color: #90a4ae;
-        
+
         &:hover {
           color: #ffffff;
         }
@@ -509,20 +509,18 @@ export class AppShellComponent {
   private router = inject(Router);
 
   pendingTasksCount = 0;
-  
+
   // Get dev stats for badge count - only load if authenticated
   devStats = toSignal(
     this.authService.user$.pipe(
-      switchMap(user => 
-        user ? this.devNoteService.getDevStats() : of(null)
-      )
+      switchMap((user) => (user ? this.devNoteService.getDevStats() : of(null))),
     ),
-    { initialValue: null }
+    { initialValue: null },
   );
-  
+
   // Current user signal
   currentUser = this.authService.currentUser;
-  
+
   // Logout function
   async logout() {
     try {
@@ -551,11 +549,13 @@ export class AppShellComponent {
   }
 
   // Main category items
-  mainItems = computed(() => this.filterItems([
-    { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
-    { label: 'Meetings', icon: 'groups', route: '/meetings' },
-    { label: 'Action Items', icon: 'task_alt', route: '/action-items' },
-  ]));
+  mainItems = computed(() =>
+    this.filterItems([
+      { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
+      { label: 'Meetings', icon: 'groups', route: '/meetings' },
+      { label: 'Action Items', icon: 'task_alt', route: '/action-items' },
+    ]),
+  );
 
   // Staff category items
   staffItems: NavItem[] = this.filterItems([
@@ -622,16 +622,18 @@ export class AppShellComponent {
   ]);
 
   // Settings category items
-  settingsItems = computed(() => this.filterItems([
-    { label: 'Company Info', icon: 'business', route: '/settings/company' },
-    { label: 'Settings', icon: 'settings', route: '/settings' },
-    { label: 'Audit Trail', icon: 'history', route: '/audit-trail' },
-    { label: 'Debug Logs', icon: 'bug_report', route: '/debug-logs' },
-    { 
-      label: 'Dev Tasks', 
-      icon: 'assignment', 
-      route: '/dev-tasks',
-      badge: this.devStats()?.pendingTasks || 0
-    },
-  ]));
+  settingsItems = computed(() =>
+    this.filterItems([
+      { label: 'Company Info', icon: 'business', route: '/settings/company' },
+      { label: 'Settings', icon: 'settings', route: '/settings' },
+      { label: 'Audit Trail', icon: 'history', route: '/audit-trail' },
+      { label: 'Debug Logs', icon: 'bug_report', route: '/debug-logs' },
+      {
+        label: 'Dev Tasks',
+        icon: 'assignment',
+        route: '/dev-tasks',
+        badge: this.devStats()?.pendingTasks || 0,
+      },
+    ]),
+  );
 }

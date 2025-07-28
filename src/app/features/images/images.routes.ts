@@ -5,17 +5,18 @@ export const imagesRoutes: Routes = [
   {
     path: '',
     redirectTo: 'upload',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'upload',
-    loadComponent: () => 
-      import('./components/bulk-image-upload/bulk-image-upload.component')
-        .then(m => m.BulkImageUploadComponent),
+    loadComponent: () =>
+      import('./components/bulk-image-upload/bulk-image-upload.component').then(
+        (m) => m.BulkImageUploadComponent,
+      ),
     canActivate: [authGuard],
-    data: { 
+    data: {
       title: 'Bulk Image Upload',
-      description: 'Upload pole photos with GPS metadata for processing'
-    }
-  }
+      description: 'Upload pole photos with GPS metadata for processing',
+    },
+  },
 ];

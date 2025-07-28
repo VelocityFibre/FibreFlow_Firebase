@@ -1,0 +1,61 @@
+
+<div class="container">
+  <h1>Add/Edit Material</h1>
+  <form [formGroup]="materialForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Item Code</mat-label>
+      <input matInput formControlName="itemCode">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Description</mat-label>
+      <input matInput formControlName="description">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Category</mat-label>
+      <mat-select formControlName="category">
+        <mat-option *ngFor="let category of categories" [value]="category">
+          {{category}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Subcategory</mat-label>
+      <input matInput formControlName="subcategory">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Unit of Measure</mat-label>
+      <mat-select formControlName="unitOfMeasure">
+        <mat-option value="each">Each</mat-option>
+        <mat-option value="meters">Meters</mat-option>
+        <mat-option value="feet">Feet</mat-option>
+        <mat-option value="units">Units</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Unit Cost</mat-label>
+      <input matInput type="number" formControlName="unitCost">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Default Spool Length</mat-label>
+      <input matInput type="number" formControlName="defaultSpoolLength">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Minimum Stock</mat-label>
+      <input matInput type="number" formControlName="minimumStock">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Specifications</mat-label>
+      <textarea matInput formControlName="specifications"></textarea>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="!materialForm.valid">Save</button>
+  </form>
+</div>

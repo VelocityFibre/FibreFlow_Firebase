@@ -1,4 +1,5 @@
 import { Timestamp } from '@angular/fire/firestore';
+import { StatusHistoryEntry } from './pole-tracker.model';
 
 export type PoleType = 'wooden' | 'concrete' | 'steel' | 'composite';
 
@@ -35,6 +36,7 @@ export interface PlannedPole {
   importDate: Timestamp | Date;
   notes?: string;
   status: PlannedPoleStatus;
+  statusHistory?: StatusHistoryEntry[]; // Complete history of status changes
   metadata?: {
     importedBy: string;
     importedByName?: string;

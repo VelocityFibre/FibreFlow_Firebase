@@ -13,13 +13,13 @@ export interface ImportRecord {
   fieldAgentName: string;
   lastModifiedBy: string;
   lastModifiedDate: string;
-  
+
   // Import metadata
   importDate: Date;
   importBatchId: string;
-  isNew: boolean;        // true if first time seeing this record
-  hasChanges: boolean;   // true if data changed from previous import
-  changesSummary?: string[];  // List of fields that changed
+  isNew: boolean; // true if first time seeing this record
+  hasChanges: boolean; // true if data changed from previous import
+  changesSummary?: string[]; // List of fields that changed
 }
 
 export interface ImportBatch {

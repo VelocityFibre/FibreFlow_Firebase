@@ -1,28 +1,119 @@
 # OneMap Module - Context Engineering Document
 
+## ⚡ CRITICAL INSTRUCTIONS FOR CLAUDE
+
+### 🤖 DO THE WORK - DON'T GIVE TASKS!
+**IMPORTANT**: When the user asks for something to be done:
+1. **CHECK** if we already have what's needed (service accounts, files, etc.)
+2. **PLAN** what needs to be done
+3. **ASK** for clarification if needed
+4. **DO IT YOURSELF** - Don't write guides or instructions for the user!
+5. **Complete the task** - Don't tell the user to do it themselves!
+
+**Examples**:
+- ❌ WRONG: "Here's how you can create a service account..."
+- ✅ RIGHT: "Let me check if we have a service account and set it up for you."
+
+- ❌ WRONG: "You need to run this command..."
+- ✅ RIGHT: "I'll run this command for you now..."
+
+### 👂 LISTEN CLOSELY & CLARIFY
+**BEFORE doing anything**:
+1. **READ** the user's request carefully - what do they ACTUALLY want?
+2. **CLARIFY** if you're unsure before proceeding
+3. **CONFIRM** you understand before taking action
+4. **DON'T ASSUME** - if unclear, ask!
+
+**Example**:
+- User: "Set up the service account"
+- Claude: "I'll set up the service account. Just to clarify - do you want me to use an existing service account file or create a new one?"
+
 ## Quick Start for Claude
 
 **Philosophy**: First principles thinking. Understand the problem completely before solving.
 
-**Essential Commands**:
-- `python3 analyze_duplicates.py` - Original duplicate analysis
-- `python3 reanalyze_with_workflow.py` - Workflow-aware analysis
-- `python3 validate_analysis.py` - antiHall validation
-- `python3 analyze_gps_duplicates.py` - GPS-based duplicate detection (PRIMARY)
-- `python3 split_large_csv.py` - Split large files for processing
+## 📁 ORGANIZED SCRIPT STRUCTURE
 
-**Graph Analysis Integration (NEW 2025-07-23)**:
-- `cd GraphAnalysis && node quick-test.js` - Test graph analysis system
-- `node GraphAnalysis/enhanced-daily-compare.js day1.csv day2.csv` - Enhanced comparison
-- Graph system complements CSV processing with relationship intelligence
+### 🎯 PRIMARY WORKFLOW COMMANDS
 
-**NEW: 1Map Sync System**:
-- `node process-1map-sync-simple.js` - Import CSV to staging database
-- `node complete-import-batch.js` - Complete partial imports in batches
-- `node sync-to-production.js` - Sync staging to FibreFlow production
-- `cat imports/INDEX.md` - View all import tracking
+#### CSV Processing (Local Operations)
+```bash
+cd scripts/csv-processing/
+node split-csv-by-pole.js "large-file.csv"     # Split large CSV
+node compare-split-csvs.js "day1.csv" "day2.csv"  # Compare files
+node validate-csv-structure.js "file.csv"      # Validate format
+```
 
-**Current Status**: ✅ Data imported to staging (746 records), ⏳ Ready for production sync
+#### Firebase Import (CSV → Database)
+```bash
+cd scripts/firebase-import/
+node bulk-import-with-photo-tracking.js "downloads/filename.csv"  # PRIMARY IMPORT SCRIPT (with photo quality tracking)
+node bulk-import-with-history.js "downloads/filename.csv"         # Alternative: Basic import (no photo tracking)
+node sync-to-production.js --batch-id IMP_123456789               # Sync to production
+```
+
+**📸 PHOTO TRACKING ENHANCEMENT (Added 2025-07-31)**:
+The primary import script now includes comprehensive photo quality tracking:
+- Tracks which specific poles have photos (e.g., LAW.P.B167 → photo ID 1732480)
+- Identifies poles missing photos (critical for payment verification)
+- Generates 3 reports: summary trends, per-pole details, critical missing photos
+- Current baseline: 26.3% overall, 0% completed installations have photos ⚠️
+- See `photos/PHOTO_QUALITY_TRACKING_MISSION.md` for full details
+
+#### Reporting (Database → Reports)
+```bash
+cd scripts/reporting/
+node generate-firebase-report.js              # Database summary
+node detect-changes-firebase.js --since "2025-01-30"  # Change detection
+node generate-pole-report-firebase.js "LAW.P.C123"    # Pole analysis
+```
+
+#### Analysis Tools (Python)
+```bash
+cd scripts/data_analysis/
+python3 analyze_duplicates.py                 # Find duplicates
+python3 reanalyze_with_workflow.py           # Workflow analysis
+
+cd scripts/payment_verification/
+python3 analyze_gps_duplicates.py            # GPS-based duplicates
+python3 run_payment_verification.py          # Payment validation
+```
+
+### 🔄 COMPLETE WORKFLOW
+
+```
+1. Raw CSV File
+   ↓
+2. [Optional] CSV Processing (scripts/csv-processing/)
+   ↓
+3. Firebase Import (scripts/firebase-import/bulk-import-with-history.js)
+   ↓
+4. Generate Reports (scripts/reporting/generate-firebase-report.js)
+   ↓
+5. Cross-Reference Validation (Compare CSV vs Firebase)
+   ↓
+6. Sync to Production (scripts/firebase-import/sync-to-production.js)
+```
+
+**Current Status**: ✅ June 23 imported (12,667 records), ✅ **STAGING-ONLY STRATEGY APPROVED**
+
+## 🚨 CRITICAL STRATEGY DECISION (2025-01-31)
+
+### ❌ DO NOT SYNC TO PRODUCTION  
+**Decision**: Keep OneMap data in staging (vf-onemap-data) only
+
+**Why**: 
+- Historical data vs active work mismatch
+- Would double production database size
+- Performance and cost concerns
+- Most data not relevant to operations
+
+**See**: `/OneMap/DATA_SYNC_STRATEGY_2025-01-31.md` for full analysis
+
+## 🎯 SCRIPT ORGANIZATION COMPLETED (2025-01-31)
+**Status**: ✅ FIXED - All 82+ scripts properly organized into directories
+**Summary**: See `ORGANIZATION_COMPLETE_2025-01-31.md` for full details
+**Key Fix**: Use `scripts/firebase-import/bulk-import-with-history.js` for imports (not basic script)
 
 ---
 

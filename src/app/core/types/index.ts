@@ -3,8 +3,8 @@
  */
 
 // Type guards and utilities
-export * from './type-guards';
-export * from './type-utils';
+export * from '../utils/type-guards';
+export * from '../utils/type-utils';
 
 // Branded types for entity IDs
 export * from './branded.types';

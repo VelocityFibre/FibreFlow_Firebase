@@ -79,7 +79,12 @@
         <!-- Search -->
         <mat-form-field appearance="outline">
           <mat-label>Search</mat-label>
-          <input matInput [(ngModel)]="searchTerm" (input)="onSearchChange()" placeholder="Search tasks...">
+          <input
+            matInput
+            [(ngModel)]="searchTerm"
+            (input)="onSearchChange()"
+            placeholder="Search tasks..."
+          />
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
 
@@ -90,7 +95,11 @@
 
         <!-- Quick Actions -->
         <div class="quick-actions">
-          <button mat-button (click)="showBulkActions = !showBulkActions" [disabled]="selectedCount() === 0">
+          <button
+            mat-button
+            (click)="showBulkActions = !showBulkActions"
+            [disabled]="selectedCount() === 0"
+          >
             <mat-icon>checklist</mat-icon>
             Bulk Actions ({{ selectedCount() }})
           </button>
@@ -183,7 +192,8 @@
         (cellValueChanged)="onCellValueChanged($event)"
         [isExternalFilterPresent]="isExternalFilterPresent"
         [doesExternalFilterPass]="doesExternalFilterPass"
-        style="width: 100%; height: 600px;">
+        style="width: 100%; height: 600px"
+      >
       </ag-grid-angular>
     </mat-card-content>
   </mat-card>
@@ -197,7 +207,12 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <div class="bulk-actions-content">
-      <button mat-raised-button color="primary" (click)="bulkAssignTasks()" [disabled]="selectedCount() === 0">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="bulkAssignTasks()"
+        [disabled]="selectedCount() === 0"
+      >
         <mat-icon>person_add</mat-icon>
         Assign Tasks
       </button>
@@ -209,7 +224,12 @@
         <mat-icon>priority_high</mat-icon>
         Set Priority
       </button>
-      <button mat-raised-button color="warn" (click)="bulkDelete()" [disabled]="selectedCount() === 0">
+      <button
+        mat-raised-button
+        color="warn"
+        (click)="bulkDelete()"
+        [disabled]="selectedCount() === 0"
+      >
         <mat-icon>delete</mat-icon>
         Delete Selected
       </button>
@@ -260,7 +280,9 @@
             <div class="metric-grid">
               <div class="metric-card">
                 <h3>Task Completion Rate</h3>
-                <div class="metric-value">{{ (completedCount() / totalCount() * 100 | number:'1.1-1') || 0 }}%</div>
+                <div class="metric-value">
+                  {{ ((completedCount() / totalCount()) * 100 | number: '1.1-1') || 0 }}%
+                </div>
                 <p>Tasks completed successfully</p>
               </div>
               <div class="metric-card">
@@ -282,12 +304,20 @@
           <div class="export-options">
             <h3>Excel Export Options</h3>
             <mat-checkbox [(ngModel)]="exportOptions.includeCharts">Include Charts</mat-checkbox>
-            <mat-checkbox [(ngModel)]="exportOptions.includeAnalytics">Include Analytics</mat-checkbox>
-            <mat-checkbox [(ngModel)]="exportOptions.includeTimeTracking">Include Time Tracking</mat-checkbox>
-            <mat-checkbox [(ngModel)]="exportOptions.includeProjectBreakdown">Include Project Breakdown</mat-checkbox>
+            <mat-checkbox [(ngModel)]="exportOptions.includeAnalytics"
+              >Include Analytics</mat-checkbox
+            >
+            <mat-checkbox [(ngModel)]="exportOptions.includeTimeTracking"
+              >Include Time Tracking</mat-checkbox
+            >
+            <mat-checkbox [(ngModel)]="exportOptions.includeProjectBreakdown"
+              >Include Project Breakdown</mat-checkbox
+            >
             <mat-checkbox [(ngModel)]="exportOptions.autoFilter">Enable Auto-Filter</mat-checkbox>
-            <mat-checkbox [(ngModel)]="exportOptions.conditionalFormatting">Apply Conditional Formatting</mat-checkbox>
-            
+            <mat-checkbox [(ngModel)]="exportOptions.conditionalFormatting"
+              >Apply Conditional Formatting</mat-checkbox
+            >
+
             <div class="export-actions">
               <button mat-raised-button color="primary" (click)="exportToExcel()">
                 <mat-icon>table_chart</mat-icon>

@@ -56,7 +56,11 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
       <div class="page-header">
         <h1>Pole Tracker</h1>
         <div class="header-actions">
-          <a mat-button routerLink="/pole-tracker/grid" [queryParams]="{project: selectedProjectId}">
+          <a
+            mat-button
+            routerLink="/pole-tracker/grid"
+            [queryParams]="{ project: selectedProjectId }"
+          >
             <mat-icon>grid_on</mat-icon>
             Grid View
           </a>
@@ -74,7 +78,12 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
             <!-- Search -->
             <mat-form-field appearance="outline">
               <mat-label>Search Pole ID or Location</mat-label>
-              <input matInput [ngModel]="searchTerm" (ngModelChange)="searchSubject.next($event)" placeholder="e.g., LAW.P.A001" />
+              <input
+                matInput
+                [ngModel]="searchTerm"
+                (ngModelChange)="searchSubject.next($event)"
+                placeholder="e.g., LAW.P.A001"
+              />
               <mat-icon matPrefix>search</mat-icon>
             </mat-form-field>
 
@@ -106,7 +115,10 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
             <!-- Upload Status Filter -->
             <mat-form-field appearance="outline">
               <mat-label>Upload Status</mat-label>
-              <mat-select [(ngModel)]="uploadStatusFilter" (selectionChange)="onUploadStatusChange()">
+              <mat-select
+                [(ngModel)]="uploadStatusFilter"
+                (selectionChange)="onUploadStatusChange()"
+              >
                 <mat-option value="all">All</mat-option>
                 <mat-option value="complete">Complete</mat-option>
                 <mat-option value="incomplete">Incomplete</mat-option>
@@ -191,7 +203,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
               <!-- Project Column -->
               <ng-container matColumnDef="project">
                 <th mat-header-cell *matHeaderCellDef>Project</th>
-                <td mat-cell *matCellDef="let pole">{{ pole.projectName || pole.projectCode }}</td>
+                <td mat-cell *matCellDef="let pole" class="text-column" [matTooltip]="pole.projectName || pole.projectCode">
+                  <span class="text-content">{{ pole.projectName || pole.projectCode }}</span>
+                </td>
               </ng-container>
 
               <!-- Date Installed Column -->
@@ -227,15 +241,15 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
               <!-- Contractor Column -->
               <ng-container matColumnDef="contractor">
                 <th mat-header-cell *matHeaderCellDef>Contractor</th>
-                <td mat-cell *matCellDef="let pole">
-                  {{ pole.contractorName || pole.contractorId }}
+                <td mat-cell *matCellDef="let pole" class="text-column" [matTooltip]="pole.contractorName || pole.contractorId">
+                  <span class="text-content">{{ pole.contractorName || pole.contractorId }}</span>
                 </td>
               </ng-container>
 
               <!-- Upload Progress Column -->
               <ng-container matColumnDef="uploadProgress">
-                <th mat-header-cell *matHeaderCellDef>Upload Progress</th>
-                <td mat-cell *matCellDef="let pole">
+                <th mat-header-cell *matHeaderCellDef>Upload Status</th>
+                <td mat-cell *matCellDef="let pole" class="upload-progress-column">
                   <div class="progress-container">
                     <mat-progress-bar
                       mode="determinate"
@@ -243,7 +257,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
                       [color]="pole.uploadProgress === 100 ? 'primary' : 'accent'"
                     >
                     </mat-progress-bar>
-                    <span class="progress-text">{{ pole.uploadedCount || 0 }}/6 photos</span>
+                    <span class="progress-text">{{ pole.uploadedCount || 0 }}/6</span>
                   </div>
                 </td>
               </ng-container>
@@ -333,10 +347,33 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
         margin-bottom: 24px;
       }
 
+      .filters-card mat-card-content {
+        padding: 20px !important;
+      }
+
       .filters-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+      }
+
+      .filters-grid mat-form-field {
+        width: 100%;
+      }
+
+      .filters-grid mat-form-field .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+      }
+
+      .filters-grid mat-form-field .mat-mdc-floating-label {
+        white-space: nowrap;
+        overflow: visible;
+        text-overflow: clip;
+        max-width: none;
+      }
+
+      .filters-grid mat-form-field .mat-mdc-form-field-label-wrapper {
+        overflow: visible;
       }
 
       .stats-grid {
@@ -368,7 +405,80 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
       .full-width-table {
         width: 100%;
-        min-width: 1000px;
+        min-width: 1200px;
+        table-layout: fixed;
+      }
+
+      .full-width-table th,
+      .full-width-table td {
+        padding: 8px 12px !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* Column specific widths */
+      .full-width-table .mat-column-vfPoleId {
+        width: 120px;
+      }
+
+      .full-width-table .mat-column-poleNumber {
+        width: 100px;
+      }
+
+      .full-width-table .mat-column-pon {
+        width: 80px;
+      }
+
+      .full-width-table .mat-column-zone {
+        width: 80px;
+      }
+
+      .full-width-table .mat-column-location {
+        width: 140px;
+      }
+
+      .full-width-table .mat-column-project {
+        width: 150px;
+        max-width: 150px;
+      }
+
+      .full-width-table .mat-column-dateInstalled {
+        width: 110px;
+      }
+
+      .full-width-table .mat-column-type {
+        width: 100px;
+      }
+
+      .full-width-table .mat-column-contractor {
+        width: 160px;
+        max-width: 160px;
+      }
+
+      .full-width-table .mat-column-uploadProgress {
+        width: 140px;
+        max-width: 140px;
+      }
+
+      .full-width-table .mat-column-qualityCheck {
+        width: 80px;
+      }
+
+      .full-width-table .mat-column-actions {
+        width: 100px;
+      }
+
+      /* Text column styling */
+      .text-column {
+        max-width: 0;
+      }
+
+      .text-content {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .pole-link {
@@ -381,20 +491,28 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
         text-decoration: underline;
       }
 
+      .upload-progress-column {
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+      }
+
       .progress-container {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
+        width: 100%;
       }
 
       .progress-container mat-progress-bar {
         flex: 1;
+        min-width: 60px;
       }
 
       .progress-text {
-        font-size: 12px;
+        font-size: 11px;
         color: #666;
-        min-width: 35px;
+        min-width: 30px;
+        flex-shrink: 0;
       }
 
       mat-chip {
@@ -425,14 +543,10 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
         font-family: monospace;
         font-size: 12px;
         color: #1976d2;
-      }
-
-      .table-container {
-        overflow-x: auto;
-      }
-
-      table {
-        min-width: 1200px;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     `,
   ],
@@ -445,7 +559,7 @@ export class PoleTrackerListComponent implements OnInit, OnDestroy {
   private snackBar = inject(MatSnackBar);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-  
+
   // Debouncing for search
   searchSubject = new Subject<string>();
   private destroy$ = new Subject<void>();
@@ -496,35 +610,37 @@ export class PoleTrackerListComponent implements OnInit, OnDestroy {
       const search = this.searchTerm.toLowerCase();
       filtered = filtered.filter(
         (pole) =>
-          pole.vfPoleId?.toLowerCase().includes(search) ||
-          pole.poleNumber?.toLowerCase().includes(search) ||
-          (typeof pole.location === 'string' && pole.location?.toLowerCase().includes(search)) ||
-          pole.pon?.toLowerCase().includes(search) ||
-          pole.zone?.toLowerCase().includes(search) ||
-          pole.contractorName?.toLowerCase().includes(search),
+          (pole.vfPoleId && pole.vfPoleId.toLowerCase().includes(search)) ||
+          (pole.poleNumber && pole.poleNumber.toLowerCase().includes(search)) ||
+          (pole.location && typeof pole.location === 'string' && pole.location.toLowerCase().includes(search)) ||
+          (pole.pon && pole.pon.toLowerCase().includes(search)) ||
+          (pole.zone && pole.zone.toLowerCase().includes(search)) ||
+          (pole.contractorName && pole.contractorName.toLowerCase().includes(search))
       );
     }
 
     return filtered;
   });
-  
+
   // Paginated poles for display
   paginatedPoles = computed(() => {
     const filtered = this.filteredPoles();
-    
+
     // If we're searching and have loaded all data, paginate client-side
     if (this.searchTerm && filtered.length > 0) {
       const startIndex = this.pageIndex * this.pageSize;
       const endIndex = startIndex + this.pageSize;
       return filtered.slice(startIndex, endIndex);
     }
-    
+
     // Otherwise, the data is already paginated from the server
     return filtered;
   });
 
   // Stats are calculated from the current page only (for performance)
-  qualityCheckedCount = computed(() => this.paginatedPoles().filter((p) => p.qualityChecked).length);
+  qualityCheckedCount = computed(
+    () => this.paginatedPoles().filter((p) => p.qualityChecked).length,
+  );
   completeUploadsCount = computed(
     () => this.paginatedPoles().filter((p) => p.allUploadsComplete).length,
   );
@@ -538,26 +654,28 @@ export class PoleTrackerListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // Set up search debouncing
-    this.searchSubject.pipe(
-      takeUntil(this.destroy$),
-      debounceTime(300), // Wait 300ms after user stops typing
-      distinctUntilChanged()
-    ).subscribe((searchTerm) => {
-      this.searchTerm = searchTerm;
-      this.pageIndex = 0;
-      this.updateUrlParams();
-      // Don't reload data on search - let the computed signal filter locally
-    });
-    
+    this.searchSubject
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(300), // Wait 300ms after user stops typing
+        distinctUntilChanged(),
+      )
+      .subscribe((searchTerm) => {
+        this.searchTerm = searchTerm;
+        this.pageIndex = 0;
+        this.updateUrlParams();
+        // Don't reload data on search - let the computed signal filter locally
+      });
+
     // Restore filters from URL parameters
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.selectedProjectId = params['project'] || '';
       this.selectedContractorId = params['contractor'] || '';
       this.searchTerm = params['search'] || '';
       this.uploadStatusFilter = params['uploadStatus'] || 'all';
       this.pageIndex = +params['page'] || 0;
       this.pageSize = +params['pageSize'] || 50;
-      
+
       // Save current filters to session storage if they exist
       if (Object.keys(params).length > 0) {
         const queryParams: any = {};
@@ -567,10 +685,10 @@ export class PoleTrackerListComponent implements OnInit, OnDestroy {
         if (this.uploadStatusFilter !== 'all') queryParams.uploadStatus = this.uploadStatusFilter;
         if (this.pageIndex > 0) queryParams.page = this.pageIndex;
         if (this.pageSize !== 50) queryParams.pageSize = this.pageSize;
-        
+
         sessionStorage.setItem('poleTrackerFilters', JSON.stringify(queryParams));
       }
-      
+
       this.loadData();
     });
   }
@@ -606,119 +724,14 @@ export class PoleTrackerListComponent implements OnInit, OnDestroy {
 
     // If searching, load all data (no pagination) to search across all results
     if (this.searchTerm) {
-      this.poleTrackerService
-        .getPlannedPolesByProject(this.selectedProjectId)
-        .subscribe({
-          next: (allPoles) => {
-            this.totalPolesCount = allPoles.length;
-            
-            // Convert PlannedPole to PoleTrackerListItem format
-            const poleTrackerItems: PoleTrackerListItem[] = allPoles.map((pole) => {
-              const poleData = pole as any;
-              
-              // Calculate upload progress for planned poles (if they have uploads)
-              const uploads = poleData.uploads || {
-                before: { uploaded: false },
-                front: { uploaded: false },
-                side: { uploaded: false },
-                depth: { uploaded: false },
-                concrete: { uploaded: false },
-                compaction: { uploaded: false },
-              };
-              
-              const uploadedCount = Object.values(uploads).filter((upload: any) => upload.uploaded).length;
-              const uploadProgress = Math.round((uploadedCount / 6) * 100);
-              
-              // Convert location to string if it's an object
-              let locationString = '';
-              if (poleData.location) {
-                if (typeof poleData.location === 'string') {
-                  locationString = poleData.location;
-                } else if (poleData.location.latitude && poleData.location.longitude) {
-                  locationString = `${poleData.location.latitude}, ${poleData.location.longitude}`;
-                } else if (poleData.location.lat && poleData.location.lng) {
-                  locationString = `${poleData.location.lat}, ${poleData.location.lng}`;
-                }
-              } else if (poleData.plannedLocation) {
-                if (poleData.plannedLocation.lat && poleData.plannedLocation.lng) {
-                  locationString = `${poleData.plannedLocation.lat}, ${poleData.plannedLocation.lng}`;
-                }
-              }
-              
-              return {
-                id: poleData.id,
-                vfPoleId: poleData.vfPoleId || poleData.poleNumber,
-                projectId: poleData.projectId,
-                projectCode: poleData.projectCode || 'Law-001',
-                poleNumber: poleData.poleNumber,
-                pon: poleData.ponNumber || '-',
-                zone: poleData.zoneNumber || '-',
-                distributionFeeder: poleData.distributionFeeder || poleData.poleType || '-',
-                poleType: poleData.poleType,
-                location: locationString,
-                contractorId: poleData.contractorId || null,
-                contractorName: poleData.contractorName || null,
-                workingTeam: poleData.workingTeam || 'Import Team',
-                dateInstalled: poleData.dateInstalled || poleData.createdAt,
-                maxCapacity: poleData.maxCapacity || 12,
-                connectedDrops: poleData.connectedDrops || [],
-                dropCount: poleData.dropCount || 0,
-                uploads: uploads,
-                qualityChecked: poleData.qualityChecked || false,
-                qualityCheckedBy: poleData.qualityCheckedBy,
-                qualityCheckedByName: poleData.qualityCheckedByName,
-                qualityCheckDate: poleData.qualityCheckDate,
-                qualityCheckNotes: poleData.qualityCheckNotes,
-                createdAt: poleData.createdAt,
-                updatedAt: poleData.updatedAt,
-                createdBy: poleData.createdBy,
-                createdByName: poleData.createdByName,
-                updatedBy: poleData.updatedBy,
-                updatedByName: poleData.updatedByName,
-                uploadProgress: uploadProgress,
-                uploadedCount: uploadedCount,
-                allUploadsComplete: uploadedCount === 6,
-              };
-            });
-
-            // Apply filters
-            let filteredPoles = poleTrackerItems;
-            
-            if (this.selectedContractorId) {
-              filteredPoles = filteredPoles.filter(
-                (pole) => pole.contractorId === this.selectedContractorId,
-              );
-            }
-            
-            if (this.uploadStatusFilter !== 'all') {
-              filteredPoles = filteredPoles.filter((pole) => {
-                const isComplete = pole.allUploadsComplete;
-                return this.uploadStatusFilter === 'complete' ? isComplete : !isComplete;
-              });
-            }
-
-            this.poles.set(filteredPoles);
-            this.loading.set(false);
-          },
-          error: (error) => {
-            console.error('Error loading all poles for search:', error);
-            this.loading.set(false);
-          }
-        });
-      return;
-    }
-
-    // Use paginated query for better performance when not searching
-    this.poleTrackerService
-      .getPlannedPolesByProjectPaginated(this.selectedProjectId, this.pageSize, this.pageIndex)
-      .subscribe({
-        next: (result) => {
-          this.totalPolesCount = result.total;
+      this.poleTrackerService.getPlannedPolesByProject(this.selectedProjectId).subscribe({
+        next: (allPoles) => {
+          this.totalPolesCount = allPoles.length;
 
           // Convert PlannedPole to PoleTrackerListItem format
-          const poleTrackerItems: PoleTrackerListItem[] = result.poles.map((pole) => {
-            const poleData = pole as any; // Type assertion to access all fields
-            
+          const poleTrackerItems: PoleTrackerListItem[] = allPoles.map((pole) => {
+            const poleData = pole as any;
+
             // Calculate upload progress for planned poles (if they have uploads)
             const uploads = poleData.uploads || {
               before: { uploaded: false },
@@ -728,10 +741,12 @@ export class PoleTrackerListComponent implements OnInit, OnDestroy {
               concrete: { uploaded: false },
               compaction: { uploaded: false },
             };
-            
-            const uploadedCount = Object.values(uploads).filter((upload: any) => upload.uploaded).length;
+
+            const uploadedCount = Object.values(uploads).filter(
+              (upload: any) => upload.uploaded,
+            ).length;
             const uploadProgress = Math.round((uploadedCount / 6) * 100);
-            
+
             // Convert location to string if it's an object
             let locationString = '';
             if (poleData.location) {
@@ -747,7 +762,112 @@ export class PoleTrackerListComponent implements OnInit, OnDestroy {
                 locationString = `${poleData.plannedLocation.lat}, ${poleData.plannedLocation.lng}`;
               }
             }
-            
+
+            return {
+              id: poleData.id,
+              vfPoleId: poleData.vfPoleId || poleData.poleNumber,
+              projectId: poleData.projectId,
+              projectCode: poleData.projectCode || 'Law-001',
+              poleNumber: poleData.poleNumber,
+              pon: poleData.ponNumber || '-',
+              zone: poleData.zoneNumber || '-',
+              distributionFeeder: poleData.distributionFeeder || poleData.poleType || '-',
+              poleType: poleData.poleType,
+              location: locationString,
+              contractorId: poleData.contractorId || null,
+              contractorName: poleData.contractorName || null,
+              workingTeam: poleData.workingTeam || 'Import Team',
+              dateInstalled: poleData.dateInstalled || poleData.createdAt,
+              maxCapacity: poleData.maxCapacity || 12,
+              connectedDrops: poleData.connectedDrops || [],
+              dropCount: poleData.dropCount || 0,
+              uploads: uploads,
+              qualityChecked: poleData.qualityChecked || false,
+              qualityCheckedBy: poleData.qualityCheckedBy,
+              qualityCheckedByName: poleData.qualityCheckedByName,
+              qualityCheckDate: poleData.qualityCheckDate,
+              qualityCheckNotes: poleData.qualityCheckNotes,
+              createdAt: poleData.createdAt,
+              updatedAt: poleData.updatedAt,
+              createdBy: poleData.createdBy,
+              createdByName: poleData.createdByName,
+              updatedBy: poleData.updatedBy,
+              updatedByName: poleData.updatedByName,
+              uploadProgress: uploadProgress,
+              uploadedCount: uploadedCount,
+              allUploadsComplete: uploadedCount === 6,
+            };
+          });
+
+          // Apply filters
+          let filteredPoles = poleTrackerItems;
+
+          if (this.selectedContractorId) {
+            filteredPoles = filteredPoles.filter(
+              (pole) => pole.contractorId === this.selectedContractorId,
+            );
+          }
+
+          if (this.uploadStatusFilter !== 'all') {
+            filteredPoles = filteredPoles.filter((pole) => {
+              const isComplete = pole.allUploadsComplete;
+              return this.uploadStatusFilter === 'complete' ? isComplete : !isComplete;
+            });
+          }
+
+          this.poles.set(filteredPoles);
+          this.loading.set(false);
+        },
+        error: (error) => {
+          console.error('Error loading all poles for search:', error);
+          this.loading.set(false);
+        },
+      });
+      return;
+    }
+
+    // Use paginated query for better performance when not searching
+    this.poleTrackerService
+      .getPlannedPolesByProjectPaginated(this.selectedProjectId, this.pageSize, this.pageIndex)
+      .subscribe({
+        next: (result) => {
+          this.totalPolesCount = result.total;
+
+          // Convert PlannedPole to PoleTrackerListItem format
+          const poleTrackerItems: PoleTrackerListItem[] = result.poles.map((pole) => {
+            const poleData = pole as any; // Type assertion to access all fields
+
+            // Calculate upload progress for planned poles (if they have uploads)
+            const uploads = poleData.uploads || {
+              before: { uploaded: false },
+              front: { uploaded: false },
+              side: { uploaded: false },
+              depth: { uploaded: false },
+              concrete: { uploaded: false },
+              compaction: { uploaded: false },
+            };
+
+            const uploadedCount = Object.values(uploads).filter(
+              (upload: any) => upload.uploaded,
+            ).length;
+            const uploadProgress = Math.round((uploadedCount / 6) * 100);
+
+            // Convert location to string if it's an object
+            let locationString = '';
+            if (poleData.location) {
+              if (typeof poleData.location === 'string') {
+                locationString = poleData.location;
+              } else if (poleData.location.latitude && poleData.location.longitude) {
+                locationString = `${poleData.location.latitude}, ${poleData.location.longitude}`;
+              } else if (poleData.location.lat && poleData.location.lng) {
+                locationString = `${poleData.location.lat}, ${poleData.location.lng}`;
+              }
+            } else if (poleData.plannedLocation) {
+              if (poleData.plannedLocation.lat && poleData.plannedLocation.lng) {
+                locationString = `${poleData.plannedLocation.lat}, ${poleData.plannedLocation.lng}`;
+              }
+            }
+
             return {
               id: poleData.id,
               vfPoleId: poleData.vfPoleId || poleData.poleNumber,
@@ -787,13 +907,13 @@ export class PoleTrackerListComponent implements OnInit, OnDestroy {
 
           // Filter by contractor and upload status
           let filteredPoles = poleTrackerItems;
-          
+
           if (this.selectedContractorId) {
             filteredPoles = filteredPoles.filter(
               (pole) => pole.contractorId === this.selectedContractorId,
             );
           }
-          
+
           // Apply upload status filter
           if (this.uploadStatusFilter !== 'all') {
             filteredPoles = filteredPoles.filter((pole) => {
@@ -822,8 +942,8 @@ export class PoleTrackerListComponent implements OnInit, OnDestroy {
               // Add uploadedCount to regular pole tracker items
               const polesWithCount = poles.map((pole) => ({
                 ...pole,
-                uploadedCount: pole.uploads 
-                  ? Object.values(pole.uploads).filter((upload) => upload.uploaded).length 
+                uploadedCount: pole.uploads
+                  ? Object.values(pole.uploads).filter((upload) => upload.uploaded).length
                   : 0,
               }));
               this.poles.set(polesWithCount);
@@ -876,7 +996,6 @@ export class PoleTrackerListComponent implements OnInit, OnDestroy {
     this.applyFilters();
   }
 
-
   // Handle upload status filter changes
   onUploadStatusChange() {
     this.pageIndex = 0; // Reset to first page
@@ -887,21 +1006,21 @@ export class PoleTrackerListComponent implements OnInit, OnDestroy {
   // Update URL parameters when filters change
   private updateUrlParams() {
     const queryParams: any = {};
-    
+
     if (this.selectedProjectId) queryParams.project = this.selectedProjectId;
     if (this.selectedContractorId) queryParams.contractor = this.selectedContractorId;
     if (this.searchTerm) queryParams.search = this.searchTerm;
     if (this.uploadStatusFilter !== 'all') queryParams.uploadStatus = this.uploadStatusFilter;
     if (this.pageIndex > 0) queryParams.page = this.pageIndex;
     if (this.pageSize !== 50) queryParams.pageSize = this.pageSize;
-    
+
     // Store current filters in session storage for back navigation
     sessionStorage.setItem('poleTrackerFilters', JSON.stringify(queryParams));
-    
+
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams,
-      queryParamsHandling: 'merge'
+      queryParamsHandling: 'merge',
     });
   }
 
@@ -917,7 +1036,7 @@ export class PoleTrackerListComponent implements OnInit, OnDestroy {
     this.updateUrlParams();
     this.applyFilters();
   }
-  
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();

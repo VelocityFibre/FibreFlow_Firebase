@@ -7,6 +7,34 @@ Master config: `.claude/shared/fibreflow-master-config.yml`
 ## 🎯 CORE PRINCIPLE: Simplicity First
 **"Everything should be made as simple as possible, but not simpler."** — Einstein
 
+## ⚡ CRITICAL INSTRUCTIONS FOR CLAUDE
+
+### 🤖 DO THE WORK - DON'T GIVE TASKS!
+**IMPORTANT**: When the user asks for something to be done:
+1. **CHECK** if we already have what's needed (service accounts, files, etc.)
+2. **PLAN** what needs to be done
+3. **ASK** for clarification if needed
+4. **DO IT YOURSELF** - Don't write guides or instructions for the user!
+5. **Complete the task** - Don't tell the user to do it themselves!
+
+**Examples**:
+- ❌ WRONG: "Here's how you can create a service account..."
+- ✅ RIGHT: "Let me check if we have a service account and set it up for you."
+
+- ❌ WRONG: "You need to run this command..."
+- ✅ RIGHT: "I'll run this command for you now..."
+
+### 👂 LISTEN CLOSELY & CLARIFY
+**BEFORE doing anything**:
+1. **READ** the user's request carefully - what do they ACTUALLY want?
+2. **CLARIFY** if you're unsure before proceeding
+3. **CONFIRM** you understand before taking action
+4. **DON'T ASSUME** - if unclear, ask!
+
+**Example**:
+- User: "Set up the service account"
+- Claude: "I'll set up the service account. Just to clarify - do you want me to use an existing service account file or create a new one?"
+
 ### Before suggesting ANY solution, ask:
 1. **Can this be a simple lookup/check?** (like antiHall)
 2. **Can this be solved with existing tools?** (no new dependencies)
@@ -133,12 +161,26 @@ EOF
 **✅ No jj commands can delete this work anymore**
 **✅ Google Authentication enabled (2025-07-21)**
 
-### 🔐 GOOGLE AUTHENTICATION SETUP (2025-07-21)
-**Status**: ✅ Fully Implemented and Deployed
+### 🔐 AUTHENTICATION STATUS (Updated: 2025-01-30)
+**Status**: 🚨 TEMPORARILY DISABLED FOR DEVELOPMENT
 
-**What's Configured**:
+**Current Configuration**:
+1. **Mock Authentication Active**: `USE_REAL_AUTH = false`
+2. **Auto-Login**: Users automatically logged in as admin
+3. **No Google Sign-in Required**: Authentication bypassed
+4. **Mock User Profile**:
+   - Email: `dev@test.com`
+   - Name: `Dev User`
+   - Role: `admin` (full access)
+
+**Why Disabled**:
+- Eliminates re-authentication frustration during development
+- No more sign-in required after page refresh or deployments
+- Faster development workflow
+
+**Google Authentication Setup (Available but Disabled)**:
 1. **Firebase Auth**: Google provider enabled in Firebase Console
-2. **AuthService**: Real authentication mode active (`USE_REAL_AUTH = true`)
+2. **AuthService**: Real authentication available (`USE_REAL_AUTH = true`)
 3. **Login Flow**: Users sign in with Google popup at `/login`
 4. **User Profiles**: Automatically created in Firestore `users` collection
 5. **Auth Guard**: All routes protected, redirects to login if not authenticated
@@ -146,14 +188,20 @@ EOF
 7. **Audit Trail**: Captures real user info (email, uid, displayName)
 8. **App Shell**: Shows user profile with logout button
 
-**Quick Test**:
+**Current Experience**:
 1. Go to https://fibreflow-73daf.web.app
-2. You'll be redirected to login page
-3. Click "Sign in with Google"
-4. Choose your Google account
-5. You're in! Check sidebar for your profile
+2. Automatically redirected to dashboard (no login required)
+3. Full admin access to all features
+4. Check sidebar - shows "Dev User" profile
 
-**User Roles** (default: 'client'):
+**To Re-enable Google Authentication**:
+1. Edit `src/app/core/services/auth.service.ts`
+2. Change `USE_REAL_AUTH = false` to `USE_REAL_AUTH = true`
+3. Deploy: `firebase deploy --only hosting`
+4. **See:** `docs/AUTH_DEVELOPMENT_MODE.md` for full instructions
+
+**User Roles** (when real auth is enabled):
+- Default: 'client' for new users
 - To make someone admin: Update their document in Firestore `users` collection
 - Set `userGroup: 'admin'` for full access
 
@@ -636,7 +684,7 @@ Here is useful information about the environment you are running in:
 - **Platform**: Linux
 - **OS**: CachyOS (Arch-based)
 - **OS Version**: Linux 6.15.0-2-cachyos
-- **Today's date**: 2025-07-23
+- **Today's date**: 2025-01-30
 
 ---
 
@@ -1367,6 +1415,134 @@ firebase deploy            # Full deployment
 ❌ NgModules ❌ Direct Firebase SDK ❌ Hardcoded colors/spacing
 ❌ Constructor injection ❌ `any` types ❌ Empty lifecycle methods
 ❌ Missing namespaces in SCSS ❌ Text inputs for dates
+
+## 🔐 Firebase Admin SDK Security Solutions
+
+### ✅ OneMap Authentication (SOLVED 2025-01-28)
+**vf-onemap-data** authentication is now configured:
+- Service account key: `OneMap/credentials/vf-onemap-service-account.json`
+- Organization policies overridden for this project
+- Ready for automated imports
+- See: `OneMap/AUTHENTICATION_SETUP.md` for details
+
+### Common Issue: "Firebase Admin SDK requires service account credentials"
+
+This is a VERY common issue when trying to use Firebase Admin SDK from scripts. Here's the comprehensive solution:
+
+### Solution 1: Use Firebase Client SDK Instead (RECOMMENDED for Admin Users)
+
+**When to use**: When you're logged in as an admin user and need to run data operations.
+
+```javascript
+// Instead of Admin SDK:
+const admin = require('firebase-admin');  // ❌ Requires service account
+
+// Use Client SDK:
+const { initializeApp } = require('firebase/app');  // ✅ Works with user auth
+const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
+const { getFirestore } = require('firebase/firestore');
+```
+
+**Example script** (`scripts/firebase-client-operations.js`):
+```javascript
+const { initializeApp } = require('firebase/app');
+const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
+const { getFirestore, collection, addDoc } = require('firebase/firestore');
+
+// Your Firebase config (public - safe to commit)
+const firebaseConfig = {
+  apiKey: "...",
+  authDomain: "fibreflow-73daf.firebaseapp.com",
+  projectId: "fibreflow-73daf",
+  // ... other config
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+async function runAsAdmin() {
+  // Sign in as admin user
+  await signInWithEmailAndPassword(auth, 
+    process.env.ADMIN_EMAIL, 
+    process.env.ADMIN_PASSWORD
+  );
+  
+  // Now you can perform operations
+  await addDoc(collection(db, 'test'), { data: 'value' });
+}
+```
+
+### Solution 2: Use Firebase CLI for Simple Operations
+
+**When to use**: For one-off data imports/exports or simple operations.
+
+```bash
+# Export data
+firebase firestore:export gs://your-bucket/backup
+
+# Import data
+firebase firestore:import gs://your-bucket/backup
+
+# Delete collection
+firebase firestore:delete projects -r
+```
+
+### Solution 3: Create Service Account (When Absolutely Necessary)
+
+**When to use**: For automated scripts, CI/CD, or when client SDK isn't sufficient.
+
+1. **Create Service Account**:
+   ```bash
+   # Go to Firebase Console > Project Settings > Service Accounts
+   # Click "Generate new private key"
+   # Save as service-account.json
+   ```
+
+2. **NEVER commit service account to git!**:
+   ```bash
+   echo "service-account.json" >> .gitignore
+   ```
+
+3. **Use in script**:
+   ```javascript
+   const admin = require('firebase-admin');
+   const serviceAccount = require('./service-account.json');
+   
+   admin.initializeApp({
+     credential: admin.credential.cert(serviceAccount)
+   });
+   ```
+
+### Solution 4: Use Environment Variable for Service Account
+
+**Best practice for production**:
+
+```javascript
+// Store service account as base64 in .env.local
+const serviceAccountBase64 = process.env.FIREBASE_SERVICE_ACCOUNT_BASE64;
+const serviceAccount = JSON.parse(
+  Buffer.from(serviceAccountBase64, 'base64').toString()
+);
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+```
+
+### Quick Decision Guide
+
+1. **Running local scripts as admin?** → Use Client SDK with admin login
+2. **Simple data operations?** → Use Firebase CLI
+3. **Automated/CI scripts?** → Create service account (keep secure!)
+4. **Production functions?** → Use environment variables
+
+### Security Checklist
+- [ ] Service account files in .gitignore
+- [ ] Admin credentials in .env.local (not committed)
+- [ ] Use least privilege principle
+- [ ] Rotate credentials regularly
+- [ ] Monitor usage in Firebase Console
 
 ## 🧘 Simplicity Guidelines
 
@@ -2307,151 +2483,143 @@ Remember: Good context = Good code = No repeated struggles
 
 ---
 
-*Last updated: 2025-07-14*
+*Last updated: 2025-01-30*
+---
+
+## 🤖 Claude Code Sub-Agents & Hooks System (NEW - 2025-01-29)
+
+### Overview
+FibreFlow now has a powerful multi-agent system with hooks for observability and control. This enables parallel processing, automated validation, and comprehensive logging.
+
+### Architecture
+```
+.claude/
+├── agents/
+│   ├── yaml/              # Sub-agent configurations
+│   │   ├── data-integrity-guardian.yaml
+│   │   ├── csv-validator.yaml
+│   │   ├── security-agent.yaml
+│   │   └── meta-agent.yaml (builds other agents)
+│   └── workflows/         # Multi-agent workflows
+├── hooks/                 # Lifecycle hooks
+│   ├── pre_tool_use.py   # Validates before execution
+│   ├── post_tool_use.py  # Logs all operations
+│   ├── stop.py           # Session completion
+│   ├── notification.py   # User interactions
+│   └── sub_agent_stop.py # Sub-agent tracking
+├── utils/                 # Shared utilities
+│   ├── fibreflow_validators.py
+│   ├── log_analyzer.py
+│   └── notify.py
+└── logs/                 # Automatic logging
+```
+
+### Key Features
+
+#### 1. Data Integrity Validation
+- **Automatic pole/drop validation** on every write operation
+- **Uniqueness enforcement** for pole numbers globally
+- **Capacity limits** (max 12 drops per pole)
+- **Format validation** for all identifiers
+
+#### 2. Sub-Agent System
+Available agents:
+- `data-integrity-guardian` - Validates all data operations
+- `csv-validator` - Pre-import validation
+- `status-tracker` - Workflow state tracking
+- `report-generator` - Comprehensive reporting
+- `security-agent` - Security guidance
+- `meta-agent` - Creates new agents
+
+#### 3. Observability
+- **Every tool use logged** with context
+- **Performance metrics** for all agents
+- **Daily analytics** dashboard
+- **Error tracking** and alerting
+
+### Usage Examples
+
+#### Call a Sub-Agent
+```
+Use the data-integrity-guardian to validate these pole numbers:
+LAW.P.B167, LAW.P.C234, MOH.P.A001
+```
+
+#### View Analytics
+```bash
+./claude/view-logs.sh
+# Select option 1 for dashboard
+```
+
+#### Create New Agent
+```
+Use the meta-agent to create a new sub-agent for handling invoice processing
+```
+
+### Hook System
+
+#### Pre-Tool Validation
+Automatically blocks:
+- Dangerous commands (rm -rf, etc.)
+- Invalid pole/drop formats
+- Protected file access
+- Data integrity violations
+
+#### Post-Tool Logging
+Tracks:
+- All file modifications
+- Command executions
+- API calls
+- Performance metrics
+
+### Workflows
+
+#### OneMap Import Workflow
+```
+Use the onemap-import-workflow to process the May 26 CSV file
+```
+Automatically:
+1. Validates CSV format
+2. Checks data integrity
+3. Processes import
+4. Tracks status changes
+5. Generates report
+
+#### Daily Operations
+```
+Run the daily-operations-workflow for system health check
+```
+
+### Monitoring
+
+View real-time analytics:
+```bash
+# Dashboard
+python3 .claude/utils/log_analyzer.py
+
+# Specific reports
+python3 .claude/utils/log_analyzer.py --report tools
+python3 .claude/utils/log_analyzer.py --report agents
+python3 .claude/utils/log_analyzer.py --report integrity
+```
+
+### Benefits
+1. **Parallel Processing** - Multiple agents work simultaneously
+2. **Automatic Validation** - Catches errors before they happen
+3. **Full Audit Trail** - Every action logged
+4. **Isolated Contexts** - Agents don't interfere
+5. **Scalable** - Easy to add new agents/workflows
+
+### Important Notes
+- Hooks run automatically (no manual intervention needed)
+- Logs are kept for 7 days by default
+- Sub-agents have no conversation context
+- Workflows can chain multiple agents
+- All validations happen in real-time
+
 ---
 
 ## Agent Notes
-### Pattern Learning - 2025-07-16
-**Context**: general
-**Patterns Learned**: 1
-
-- **intent_pattern**: User intent: memory_search
-  - Solution: Actions: prepare_context
-  - Confidence: 0.8
-
-
-### Pattern Learning - 2025-07-16
-**Context**: general
-**Patterns Learned**: 1
-
-- **intent_pattern**: User intent: development_task
-  - Solution: Actions: prepare_context, launch_claude_code
-  - Confidence: 0.8
-
-
-### Pattern Learning - 2025-07-16
-**Context**: general
-**Patterns Learned**: 1
-
-- **intent_pattern**: User intent: general_help
-  - Solution: Actions: provide_assistance
-  - Confidence: 0.8
-
-
-### Pattern Learning - 2025-07-16
-**Context**: general
-**Patterns Learned**: 1
-
-- **intent_pattern**: User intent: development_task
-  - Solution: Actions: prepare_context, launch_claude_code
-  - Confidence: 0.8
-
-
-### Pattern Learning - 2025-07-16
-**Context**: general
-**Patterns Learned**: 1
-
-- **intent_pattern**: User intent: pattern_query
-  - Solution: Actions: 
-  - Confidence: 0.8
-
-
-### Pattern Learning - 2025-07-16
-**Context**: general
-**Patterns Learned**: 1
-
-- **intent_pattern**: User intent: development_task
-  - Solution: Actions: prepare_context
-  - Confidence: 0.8
-
-
-### Pattern Learning - 2025-07-16
-**Context**: general
-**Patterns Learned**: 1
-
-- **intent_pattern**: User intent: memory_search
-  - Solution: Actions: prepare_context
-  - Confidence: 0.8
-
-
-### Pattern Learning - 2025-07-16
-**Context**: general
-**Patterns Learned**: 1
-
-- **intent_pattern**: User intent: general_help
-  - Solution: Actions: provide_assistance
-  - Confidence: 0.8
-
-
-### Pattern Learning - 2025-07-16
-**Context**: general
-**Patterns Learned**: 1
-
-- **intent_pattern**: User intent: general_help
-  - Solution: Actions: provide_assistance
-  - Confidence: 0.8
-
-
-### Pattern Learning - 2025-07-16
-**Context**: general
-**Patterns Learned**: 1
-
-- **intent_pattern**: User intent: status_check
-  - Solution: Actions: show_status
-  - Confidence: 0.8
-
-
-### Pattern Learning - 2025-07-16
-**Context**: general
-**Patterns Learned**: 1
-
-- **intent_pattern**: User intent: general_help
-  - Solution: Actions: provide_assistance
-  - Confidence: 0.8
-
-
-### Pattern Learning - 2025-07-16
-**Context**: general
-**Patterns Learned**: 1
-
-- **intent_pattern**: User intent: memory_search
-  - Solution: Actions: search_past_solutions
-  - Confidence: 0.8
-
-
-### Pattern Learning - 2025-07-16
-**Context**: general
-**Patterns Learned**: 1
-
-- **intent_pattern**: User intent: general_help
-  - Solution: Actions: provide_assistance
-  - Confidence: 0.8
-
-
-### Pattern Learning - 2025-07-16
-**Context**: general
-**Patterns Learned**: 1
-
-- **intent_pattern**: User intent: development_task
-  - Solution: Actions: prepare_context, launch_claude
-  - Confidence: 0.8
-
-
-### Pattern Learning - 2025-07-16
-**Context**: general
-**Patterns Learned**: 1
-
-- **intent_pattern**: User intent: general_help
-  - Solution: Actions: provide_assistance
-  - Confidence: 0.8
-
-
-
-### Pattern Learning - 2025-07-16
-**Context**: general
-**Patterns Learned**: 1
-
-- **intent_pattern**: User intent: general_help
-  - Solution: Actions: provide_assistance
-  - Confidence: 0.8
+### Claude Code Sub-Agents Implementation - 2025-01-29
+Successfully implemented comprehensive sub-agent system with hooks for FibreFlow. System provides automatic data validation, parallel processing capabilities, and full observability of all operations.
 

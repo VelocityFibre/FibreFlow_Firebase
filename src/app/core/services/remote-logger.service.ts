@@ -59,7 +59,7 @@ export class RemoteLoggerService {
       // Get current user information
       const currentUser = this.authService.currentUser();
       const currentUserProfile = this.authService.currentUserProfile();
-      
+
       const logEntry: LogEntry = {
         level,
         message,
@@ -76,7 +76,7 @@ export class RemoteLoggerService {
         logEntry.userEmail = currentUser.email;
         logEntry.userDisplayName = currentUser.displayName;
       }
-      
+
       if (currentUserProfile) {
         logEntry.userRole = currentUserProfile.userGroup;
       }
@@ -116,7 +116,7 @@ export class RemoteLoggerService {
       // Get current user information
       const currentUser = this.authService.currentUser();
       const currentUserProfile = this.authService.currentUserProfile();
-      
+
       const logEntry: LogEntry = {
         level: 'error',
         message: `${context ? context + ': ' : ''}${error.message}`,
@@ -141,7 +141,7 @@ export class RemoteLoggerService {
         logEntry.userEmail = currentUser.email;
         logEntry.userDisplayName = currentUser.displayName;
       }
-      
+
       if (currentUserProfile) {
         logEntry.userRole = currentUserProfile.userGroup;
       }

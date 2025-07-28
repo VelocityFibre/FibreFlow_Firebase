@@ -1,25 +1,23 @@
 <!-- Dev Panel Toggle Button -->
-@if (isAdmin()) {
-  <button
-    mat-fab
-    class="dev-panel-toggle"
-    [class.panel-open]="isOpen()"
-    (click)="togglePanel()"
-    matTooltip="Dev Panel"
-    matTooltipPosition="left"
-    color="accent"
-  >
-    <mat-icon>code</mat-icon>
-    @if (devStats(); as stats) {
-      @if (stats.pendingTasks > 0) {
-        <span class="task-badge">{{ stats.pendingTasks }}</span>
-      }
+<button
+  mat-fab
+  class="dev-panel-toggle"
+  [class.panel-open]="isOpen()"
+  (click)="togglePanel()"
+  matTooltip="Dev Panel"
+  matTooltipPosition="left"
+  color="accent"
+>
+  <mat-icon>code</mat-icon>
+  @if (devStats(); as stats) {
+    @if (stats.pendingTasks > 0) {
+      <span class="task-badge">{{ stats.pendingTasks }}</span>
     }
-  </button>
-}
+  }
+</button>
 
 <!-- Dev Panel Sidebar -->
-@if (isAdmin() && isOpen()) {
+@if (isOpen()) {
   <div class="dev-panel-container" [class.minimized]="isMinimized()">
     <!-- Header -->
     <div class="panel-header">
@@ -293,4 +291,3 @@
     }
   </div>
 }
-

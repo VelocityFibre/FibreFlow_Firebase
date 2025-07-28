@@ -62,11 +62,18 @@ interface ParsedStaffMember {
                 <li><strong>name</strong> - Full name (required)</li>
                 <li><strong>email</strong> - Email address (required)</li>
                 <li><strong>phone</strong> - Phone number (required)</li>
-                <li><strong>primaryGroup</strong> - Staff group: Management, Regional Project Manager, Project Manager, Site Supervisor, Senior Technician, Assistant Technician, Planner (required)</li>
+                <li>
+                  <strong>primaryGroup</strong> - Staff group: Management, Regional Project Manager,
+                  Project Manager, Site Supervisor, Senior Technician, Assistant Technician, Planner
+                  (required)
+                </li>
                 <li><strong>position</strong> - Job position/title (optional)</li>
                 <li><strong>roleId</strong> - System role ID (optional)</li>
                 <li><strong>skills</strong> - Comma-separated skills in quotes (optional)</li>
-                <li><strong>certifications</strong> - Comma-separated certifications in quotes (optional)</li>
+                <li>
+                  <strong>certifications</strong> - Comma-separated certifications in quotes
+                  (optional)
+                </li>
                 <li><strong>emergencyContactName</strong> - Emergency contact name (optional)</li>
                 <li><strong>emergencyContactPhone</strong> - Emergency contact phone (optional)</li>
                 <li><strong>emergencyContactRelationship</strong> - Relationship (optional)</li>
@@ -359,7 +366,15 @@ export class StaffCsvImportComponent {
   importStatusText = '';
 
   // Valid staff groups
-  validGroups: StaffGroup[] = ['Management', 'Regional Project Manager', 'Project Manager', 'Site Supervisor', 'Senior Technician', 'Assistant Technician', 'Planner'];
+  validGroups: StaffGroup[] = [
+    'Management',
+    'Regional Project Manager',
+    'Project Manager',
+    'Site Supervisor',
+    'Senior Technician',
+    'Assistant Technician',
+    'Planner',
+  ];
 
   onDragOver(event: DragEvent) {
     event.preventDefault();
@@ -374,7 +389,7 @@ export class StaffCsvImportComponent {
   onDrop(event: DragEvent) {
     event.preventDefault();
     this.isDragOver = false;
-    
+
     const files = event.dataTransfer?.files;
     if (files && files.length > 0) {
       this.handleFileSelection(files[0]);
@@ -420,22 +435,26 @@ export class StaffCsvImportComponent {
 
     try {
       const text = await this.readFile(this.selectedFile);
-      const lines = text.split('\n').filter(line => line.trim() !== '');
-      
+      const lines = text.split('\n').filter((line) => line.trim() !== '');
+
       if (lines.length < 2) {
-        this.snackBar.open('CSV file must have at least a header row and one data row', 'Close', { duration: 5000 });
+        this.snackBar.open('CSV file must have at least a header row and one data row', 'Close', {
+          duration: 5000,
+        });
         this.parsing = false;
         return;
       }
 
-      const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-      
+      const headers = lines[0].split(',').map((h) => h.trim().replace(/"/g, ''));
+
       // Validate required headers
       const requiredHeaders = ['employeeId', 'name', 'email', 'phone', 'primaryGroup'];
-      const missingHeaders = requiredHeaders.filter(h => !headers.includes(h));
-      
+      const missingHeaders = requiredHeaders.filter((h) => !headers.includes(h));
+
       if (missingHeaders.length > 0) {
-        this.snackBar.open(`Missing required headers: ${missingHeaders.join(', ')}`, 'Close', { duration: 5000 });
+        this.snackBar.open(`Missing required headers: ${missingHeaders.join(', ')}`, 'Close', {
+          duration: 5000,
+        });
         this.parsing = false;
         return;
       }
@@ -447,11 +466,14 @@ export class StaffCsvImportComponent {
       }
 
       // Separate valid and invalid staff
-      this.validStaff = this.parsedStaff.filter(s => s.errors.length === 0);
-      this.invalidStaff = this.parsedStaff.filter(s => s.errors.length > 0);
+      this.validStaff = this.parsedStaff.filter((s) => s.errors.length === 0);
+      this.invalidStaff = this.parsedStaff.filter((s) => s.errors.length > 0);
 
-      this.snackBar.open(`Parsed ${this.validStaff.length} valid and ${this.invalidStaff.length} invalid staff members`, 'Close', { duration: 3000 });
-      
+      this.snackBar.open(
+        `Parsed ${this.validStaff.length} valid and ${this.invalidStaff.length} invalid staff members`,
+        'Close',
+        { duration: 3000 },
+      );
     } catch (error) {
       console.error('Error parsing CSV:', error);
       this.snackBar.open('Error parsing CSV file', 'Close', { duration: 5000 });
@@ -473,10 +495,10 @@ export class StaffCsvImportComponent {
     const result: string[] = [];
     let current = '';
     let inQuotes = false;
-    
+
     for (let i = 0; i < row.length; i++) {
       const char = row[i];
-      
+
       if (char === '"') {
         inQuotes = !inQuotes;
       } else if (char === ',' && !inQuotes) {
@@ -486,7 +508,7 @@ export class StaffCsvImportComponent {
         current += char;
       }
     }
-    
+
     result.push(current.trim());
     return result;
   }
@@ -499,13 +521,13 @@ export class StaffCsvImportComponent {
       phone: '',
       primaryGroup: 'Management',
       row: rowNumber,
-      errors: []
+      errors: [],
     };
 
     // Map CSV values to staff object
     headers.forEach((header, index) => {
       const value = row[index]?.trim().replace(/"/g, '') || '';
-      
+
       switch (header) {
         case 'employeeId':
           staff.employeeId = value;
@@ -529,10 +551,10 @@ export class StaffCsvImportComponent {
           staff.roleId = value;
           break;
         case 'skills':
-          staff.skills = value ? value.split(',').map(s => s.trim()) : [];
+          staff.skills = value ? value.split(',').map((s) => s.trim()) : [];
           break;
         case 'certifications':
-          staff.certifications = value ? value.split(',').map(c => c.trim()) : [];
+          staff.certifications = value ? value.split(',').map((c) => c.trim()) : [];
           break;
         case 'emergencyContactName':
           staff.emergencyContactName = value;
@@ -557,21 +579,21 @@ export class StaffCsvImportComponent {
     if (!staff.employeeId) {
       staff.errors.push('Employee ID is required');
     }
-    
+
     if (!staff.name) {
       staff.errors.push('Name is required');
     }
-    
+
     if (!staff.email) {
       staff.errors.push('Email is required');
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(staff.email)) {
       staff.errors.push('Invalid email format');
     }
-    
+
     if (!staff.phone) {
       staff.errors.push('Phone number is required');
     }
-    
+
     if (!this.validGroups.includes(staff.primaryGroup)) {
       staff.errors.push(`Invalid primary group. Must be one of: ${this.validGroups.join(', ')}`);
     }
@@ -600,11 +622,13 @@ export class StaffCsvImportComponent {
           roleId: staffData.roleId,
           skills: staffData.skills || [],
           certifications: staffData.certifications || [],
-          emergencyContact: staffData.emergencyContactName ? {
-            name: staffData.emergencyContactName,
-            phone: staffData.emergencyContactPhone || '',
-            relationship: staffData.emergencyContactRelationship || ''
-          } : undefined,
+          emergencyContact: staffData.emergencyContactName
+            ? {
+                name: staffData.emergencyContactName,
+                phone: staffData.emergencyContactPhone || '',
+                relationship: staffData.emergencyContactRelationship || '',
+              }
+            : undefined,
           isActive: true,
           availability: {
             status: 'available',
@@ -626,7 +650,6 @@ export class StaffCsvImportComponent {
         await this.staffService.createStaff(newStaff as StaffMember).toPromise();
         this.importedCount++;
         this.importStatusText = `Imported ${this.importedCount} of ${this.validStaff.length} staff members...`;
-        
       } catch (error) {
         console.error(`Failed to import staff member ${staffData.name}:`, error);
         this.failedCount++;
@@ -635,7 +658,7 @@ export class StaffCsvImportComponent {
 
     this.importing = false;
     this.importStatusText = `Import complete! ${this.importedCount} staff members imported successfully.`;
-    
+
     if (this.failedCount > 0) {
       this.importStatusText += ` ${this.failedCount} imports failed.`;
     }

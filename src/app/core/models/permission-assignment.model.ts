@@ -12,35 +12,35 @@ import { Timestamp } from '@angular/fire/firestore';
 export interface PermissionToAssignment {
   // Unique identifier
   id: string;
-  
+
   // Linking identifiers
-  permissionId: string;        // Reference to original permission record
-  assignmentId?: string;       // Reference to pole assignment (when available)
-  
+  permissionId: string; // Reference to original permission record
+  assignmentId?: string; // Reference to pole assignment (when available)
+
   // Core business data
-  propertyId: string;          // Business identifier
-  oneMapNadId: string;        // OneMap reference
-  poleNumber?: string;         // Assigned pole number (null initially)
-  
+  propertyId: string; // Business identifier
+  oneMapNadId: string; // OneMap reference
+  poleNumber?: string; // Assigned pole number (null initially)
+
   // Location matching
   permissionLocation: LocationData;
   assignmentLocation?: LocationData;
-  
+
   // Agent tracking
   permissionAgent: AgentData;
   assignmentAgent?: AgentData;
-  
+
   // Workflow status
   linkingStatus: LinkingStatus;
-  
+
   // Conflict detection
   conflicts?: ConflictDetails;
-  
+
   // Linking metadata
   linkedDate?: Timestamp | Date;
-  linkedBy?: string;          // User who confirmed the link
+  linkedBy?: string; // User who confirmed the link
   linkingMethod: LinkingMethod;
-  
+
   // Audit trail
   createdAt: Timestamp | Date;
   updatedAt: Timestamp | Date;
@@ -57,7 +57,7 @@ export interface LocationData {
 }
 
 /**
- * Agent information for permission and assignment stages  
+ * Agent information for permission and assignment stages
  */
 export interface AgentData {
   name: string;
@@ -71,19 +71,19 @@ export interface AgentData {
  * Status of the permission-assignment linking
  */
 export enum LinkingStatus {
-  PERMISSION_ONLY = 'PERMISSION_ONLY',     // Permission exists, no pole assigned
-  LINKED = 'LINKED',                       // Successfully linked
-  CONFLICT = 'CONFLICT',                   // Agent or location mismatch
-  DUPLICATE_POLE = 'DUPLICATE_POLE'        // Pole assigned to multiple permissions
+  PERMISSION_ONLY = 'PERMISSION_ONLY', // Permission exists, no pole assigned
+  LINKED = 'LINKED', // Successfully linked
+  CONFLICT = 'CONFLICT', // Agent or location mismatch
+  DUPLICATE_POLE = 'DUPLICATE_POLE', // Pole assigned to multiple permissions
 }
 
 /**
  * Method used to create the link
  */
 export enum LinkingMethod {
-  AUTO = 'AUTO',           // Automatically linked by exact match
-  MANUAL = 'MANUAL',       // Manually confirmed by user
-  GPS_MATCH = 'GPS_MATCH'  // Linked based on GPS proximity
+  AUTO = 'AUTO', // Automatically linked by exact match
+  MANUAL = 'MANUAL', // Manually confirmed by user
+  GPS_MATCH = 'GPS_MATCH', // Linked based on GPS proximity
 }
 
 /**
@@ -94,13 +94,13 @@ export interface ConflictDetails {
   locationMismatch: boolean;
   duplicatePoleAssignment: boolean;
   distanceMeters?: number;
-  
+
   // Detailed conflict info
   permissionAgentName: string;
   assignmentAgentName?: string;
   permissionAddress: string;
   assignmentAddress?: string;
-  
+
   // Resolution suggestions
   suggestedAction: ConflictAction;
   confidence: number; // 0-1 confidence score
@@ -112,7 +112,7 @@ export interface ConflictDetails {
 export enum ConflictAction {
   REVIEW_MANUALLY = 'REVIEW_MANUALLY',
   AUTO_LINK = 'AUTO_LINK',
-  SPLIT_ASSIGNMENT = 'SPLIT_ASSIGNMENT'
+  SPLIT_ASSIGNMENT = 'SPLIT_ASSIGNMENT',
 }
 
 /**
@@ -122,9 +122,9 @@ export interface PermissionConflict {
   id: string;
   permissionAssignmentId: string;
   conflictType: ConflictType;
-  
+
   details: ConflictDetails;
-  
+
   resolution: {
     status: ResolutionStatus;
     resolvedBy?: string;
@@ -132,7 +132,7 @@ export interface PermissionConflict {
     action?: ConflictAction;
     notes?: string;
   };
-  
+
   createdAt: Timestamp | Date;
   updatedAt: Timestamp | Date;
 }
@@ -144,7 +144,7 @@ export enum ConflictType {
   AGENT_MISMATCH = 'AGENT_MISMATCH',
   LOCATION_MISMATCH = 'LOCATION_MISMATCH',
   DUPLICATE_POLE = 'DUPLICATE_POLE',
-  MULTIPLE_MATCHES = 'MULTIPLE_MATCHES'
+  MULTIPLE_MATCHES = 'MULTIPLE_MATCHES',
 }
 
 /**
@@ -153,7 +153,7 @@ export enum ConflictType {
 export enum ResolutionStatus {
   PENDING = 'PENDING',
   RESOLVED = 'RESOLVED',
-  ESCALATED = 'ESCALATED'
+  ESCALATED = 'ESCALATED',
 }
 
 /**
@@ -163,17 +163,17 @@ export interface ReconciliationReport {
   id?: string;
   processedDate: Timestamp | Date;
   permissionsProcessed: number;
-  newLinks: number;  
+  newLinks: number;
   conflicts: number;
   duplicates: number;
   processingTimeMs: number;
-  
+
   details?: {
-    autoLinked: string[];        // IDs of auto-linked records
-    conflictsFound: string[];    // IDs of conflict records
-    duplicatePoles: string[];    // Pole numbers with duplicates
+    autoLinked: string[]; // IDs of auto-linked records
+    conflictsFound: string[]; // IDs of conflict records
+    duplicatePoles: string[]; // Pole numbers with duplicates
   };
-  
+
   createdAt: Timestamp | Date;
 }
 
@@ -195,7 +195,7 @@ export enum MatchReason {
   GPS_PROXIMITY = 'GPS_PROXIMITY',
   AGENT_NAME_SIMILAR = 'AGENT_NAME_SIMILAR',
   ADDRESS_SIMILAR = 'ADDRESS_SIMILAR',
-  ONE_MAP_NAD_MATCH = 'ONE_MAP_NAD_MATCH'
+  ONE_MAP_NAD_MATCH = 'ONE_MAP_NAD_MATCH',
 }
 
 /**
@@ -203,18 +203,18 @@ export enum MatchReason {
  */
 export interface ReconciliationConfig {
   // Matching thresholds
-  autoLinkConfidenceThreshold: number;    // Default: 0.9
-  gpsProximityMeters: number;             // Default: 100
-  locationMismatchMeters: number;         // Default: 200
-  agentNameSimilarityThreshold: number;   // Default: 0.8
-  
+  autoLinkConfidenceThreshold: number; // Default: 0.9
+  gpsProximityMeters: number; // Default: 100
+  locationMismatchMeters: number; // Default: 200
+  agentNameSimilarityThreshold: number; // Default: 0.8
+
   // Processing limits
-  maxRecordsPerRun: number;               // Default: 1000
-  enableAutoLinking: boolean;             // Default: true
-  
+  maxRecordsPerRun: number; // Default: 1000
+  enableAutoLinking: boolean; // Default: true
+
   // Notification settings
-  notifyOnConflicts: boolean;             // Default: true
-  conflictEscalationThreshold: number;    // Default: 0.3 confidence
+  notifyOnConflicts: boolean; // Default: true
+  conflictEscalationThreshold: number; // Default: 0.3 confidence
 }
 
 /**
@@ -226,10 +226,10 @@ export interface LinkingStatusSummary {
   conflictCount: number;
   duplicateCount: number;
   pendingCount: number;
-  
-  linkingRate: number;        // Percentage successfully linked
-  conflictRate: number;       // Percentage with conflicts
-  
+
+  linkingRate: number; // Percentage successfully linked
+  conflictRate: number; // Percentage with conflicts
+
   lastReconciledAt?: Timestamp | Date;
   nextReconciliationAt?: Timestamp | Date;
 }
@@ -253,12 +253,12 @@ export interface BulkProcessingResult {
   successful: number;
   failed: number;
   warnings: number;
-  
+
   errors: {
     recordId: string;
     error: string;
     severity: 'ERROR' | 'WARNING';
   }[];
-  
+
   processingTimeMs: number;
 }

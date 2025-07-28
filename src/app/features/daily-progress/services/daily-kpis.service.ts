@@ -54,10 +54,8 @@ export class DailyKpisService {
         // Wait for all pending writes to complete (ensures server sync)
         await waitForPendingWrites(this.firestore);
         return docRef.id;
-      })
-    ).pipe(
-      catchError(handleError('createKPI', '')),
-    );
+      }),
+    ).pipe(catchError(handleError('createKPI', '')));
   }
 
   /**
@@ -80,7 +78,7 @@ export class DailyKpisService {
       updateDoc(kpiDocRef, firestoreUpdates).then(async () => {
         // Wait for all pending writes to complete (ensures server sync)
         await waitForPendingWrites(this.firestore);
-      })
+      }),
     ).pipe(catchError(handleError('updateKPI')));
   }
 

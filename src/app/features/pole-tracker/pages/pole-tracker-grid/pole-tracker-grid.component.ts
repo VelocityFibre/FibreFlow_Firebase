@@ -1,8 +1,18 @@
-import { Component, inject, signal, computed, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  computed,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -23,7 +33,13 @@ import { MatNativeDateModule } from '@angular/material/core';
 
 // AG-Grid imports
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef, GridReadyEvent, GridApi, ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
+import {
+  ColDef,
+  GridReadyEvent,
+  GridApi,
+  ModuleRegistry,
+  AllCommunityModule,
+} from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-material.css';
 
@@ -87,6 +103,7 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private destroy$ = new Subject<void>();
+  private searchSubject$ = new Subject<string>();
 
   // Chart elements
   @ViewChild('progressChart') progressChartRef!: ElementRef<HTMLCanvasElement>;
@@ -111,6 +128,7 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
   selectedProjectId = '';
   selectedContractorId = '';
   uploadStatusFilter: 'all' | 'complete' | 'incomplete' = 'all';
+  poleNumberSearch = '';
   pageSize = 50;
 
   // Stats
@@ -119,7 +137,7 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
   filteredCount = signal(0);
   completeCount = computed(() => {
     const total = this.rowData().length;
-    const complete = this.rowData().filter(p => p.allUploadsComplete).length;
+    const complete = this.rowData().filter((p) => p.allUploadsComplete).length;
     return total > 0 ? Math.round((complete / total) * 100) : 0;
   });
 
@@ -133,14 +151,14 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
   pivotConfig = {
     rows: 'contractorName',
     columns: 'uploadStatus',
-    values: 'count'
+    values: 'count',
   };
 
   pivotData: PivotData | null = null;
 
   dateRange = {
     start: new Date(new Date().setMonth(new Date().getMonth() - 1)),
-    end: new Date()
+    end: new Date(),
   };
 
   exportOptions = {
@@ -149,7 +167,7 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
     includeFormulas: true,
     autoFilter: true,
     conditionalFormatting: true,
-    includeSummary: true
+    includeSummary: true,
   };
 
   // Column Definitions
@@ -176,13 +194,13 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
     { field: 'pon', headerName: 'PON', width: 100, sortable: true, filter: true },
     { field: 'zone', headerName: 'Zone', width: 100, sortable: true, filter: true },
     { field: 'location', headerName: 'GPS', width: 180, sortable: true },
-    { 
-      field: 'projectName', 
-      headerName: 'Project', 
-      width: 150, 
+    {
+      field: 'projectName',
+      headerName: 'Project',
+      width: 150,
       sortable: true,
       filter: true,
-      valueGetter: (params: any) => params.data.projectName || params.data.projectCode
+      valueGetter: (params: any) => params.data.projectName || params.data.projectCode,
     },
     {
       field: 'dateInstalled',
@@ -193,12 +211,12 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
       valueFormatter: (params: any) => {
         if (!params.value) return '-';
         const date = params.value?.toDate ? params.value.toDate() : params.value;
-        return new Date(date).toLocaleDateString('en-US', { 
-          year: 'numeric', 
-          month: 'short', 
-          day: 'numeric' 
+        return new Date(date).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
         });
-      }
+      },
     },
     {
       field: 'poleType',
@@ -211,18 +229,18 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
           wooden: '#8d6e63',
           concrete: '#616161',
           steel: '#455a64',
-          composite: '#5d4037'
+          composite: '#5d4037',
         };
         return `<span class="status-chip" style="background: ${typeColors[params.value] || '#999'}; color: white;">${params.value}</span>`;
-      }
+      },
     },
-    { 
-      field: 'contractorName', 
-      headerName: 'Contractor', 
-      width: 180, 
+    {
+      field: 'contractorName',
+      headerName: 'Contractor',
+      width: 180,
       sortable: true,
       filter: true,
-      valueGetter: (params: any) => params.data.contractorName || params.data.contractorId || '-'
+      valueGetter: (params: any) => params.data.contractorName || params.data.contractorId || '-',
     },
     {
       field: 'uploadProgress',
@@ -233,7 +251,7 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
         const progress = params.value || 0;
         const count = params.data.uploadedCount || 0;
         const statusClass = progress === 100 ? 'status-complete' : 'status-incomplete';
-        
+
         return `
           <div class="upload-progress-cell">
             <div class="progress-bar">
@@ -242,7 +260,7 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
             <span class="progress-text ${statusClass}">${count}/6 photos</span>
           </div>
         `;
-      }
+      },
     },
     {
       field: 'qualityChecked',
@@ -255,7 +273,7 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
         const color = params.value ? '#4caf50' : '#999';
         const tooltip = params.value ? 'Quality Checked' : 'Pending QA';
         return `<mat-icon style="color: ${color};" title="${tooltip}">${icon}</mat-icon>`;
-      }
+      },
     },
     {
       field: 'actions',
@@ -273,8 +291,8 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
             </button>
           </div>
         `;
-      }
-    }
+      },
+    },
   ];
 
   defaultColDef: ColDef = {
@@ -284,21 +302,42 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
   };
 
   ngOnInit() {
+    // Set up debounced search
+    this.searchSubject$
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(300),
+        distinctUntilChanged()
+      )
+      .subscribe((searchTerm) => {
+        this.poleNumberSearch = searchTerm;
+        this.updateUrlParams();
+        if (this.gridApi) {
+          this.gridApi.onFilterChanged();
+          this.updateFilteredCount();
+        }
+      });
+
     // Restore filters from URL
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.selectedProjectId = params['project'] || '';
       this.selectedContractorId = params['contractor'] || '';
       this.uploadStatusFilter = params['uploadStatus'] || 'all';
-      
+      this.poleNumberSearch = params['search'] || '';
+
       // Save filters to session storage
-      if (this.selectedProjectId) {
-        sessionStorage.setItem('poleTrackerFilters', JSON.stringify({ 
-          project: this.selectedProjectId,
-          contractor: this.selectedContractorId,
-          uploadStatus: this.uploadStatusFilter
-        }));
+      if (this.selectedProjectId || this.poleNumberSearch) {
+        sessionStorage.setItem(
+          'poleTrackerFilters',
+          JSON.stringify({
+            project: this.selectedProjectId,
+            contractor: this.selectedContractorId,
+            uploadStatus: this.uploadStatusFilter,
+            search: this.poleNumberSearch,
+          }),
+        );
       }
-      
+
       this.loadData();
     });
   }
@@ -310,21 +349,21 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
-    
+
     // Destroy all charts
-    Object.values(this.charts).forEach(chart => chart.destroy());
+    Object.values(this.charts).forEach((chart) => chart.destroy());
   }
 
   loadData() {
     this.loading.set(true);
 
     // Load projects
-    this.projectService.getProjects().subscribe(projects => {
+    this.projectService.getProjects().subscribe((projects) => {
       this.projects.set(projects);
     });
 
     // Load contractors
-    this.contractorService.getContractors().subscribe(contractors => {
+    this.contractorService.getContractors().subscribe((contractors) => {
       this.contractors.set(contractors);
     });
 
@@ -340,14 +379,15 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
   loadPoles() {
     if (!this.selectedProjectId) return;
 
-    this.poleTrackerService.getPlannedPolesByProject(this.selectedProjectId)
+    this.poleTrackerService
+      .getPlannedPolesByProject(this.selectedProjectId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (poles) => {
           const poleItems = this.transformPolesToListItems(poles);
           this.rowData.set(poleItems);
           this.loading.set(false);
-          
+
           // Apply external filter if needed
           if (this.gridApi) {
             this.gridApi.onFilterChanged();
@@ -357,14 +397,14 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
           console.error('Error loading poles:', error);
           this.snackBar.open('Error loading poles', 'Close', { duration: 3000 });
           this.loading.set(false);
-        }
+        },
       });
   }
 
   transformPolesToListItems(poles: PlannedPole[]): PoleTrackerListItem[] {
-    return poles.map(pole => {
+    return poles.map((pole) => {
       const poleData = pole as any;
-      
+
       const uploads = poleData.uploads || {
         before: { uploaded: false },
         front: { uploaded: false },
@@ -373,10 +413,10 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
         concrete: { uploaded: false },
         compaction: { uploaded: false },
       };
-      
+
       const uploadedCount = Object.values(uploads).filter((upload: any) => upload.uploaded).length;
       const uploadProgress = Math.round((uploadedCount / 6) * 100);
-      
+
       let locationString = '';
       if (poleData.location) {
         if (typeof poleData.location === 'string') {
@@ -391,7 +431,7 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
           locationString = `${poleData.plannedLocation.lat}, ${poleData.plannedLocation.lng}`;
         }
       }
-      
+
       return {
         id: poleData.id,
         vfPoleId: poleData.vfPoleId || poleData.poleNumber,
@@ -432,12 +472,17 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
-    
+
     // Auto-size columns
     this.gridApi.sizeColumnsToFit();
-    
+
     // Update filtered count
     this.updateFilteredCount();
+
+    // Listen for filter changes to update count
+    this.gridApi.addEventListener('filterChanged', () => {
+      this.updateFilteredCount();
+    });
   }
 
   onSelectionChanged() {
@@ -471,24 +516,36 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
 
   // External filtering
   isExternalFilterPresent = () => {
-    return this.selectedContractorId !== '' || this.uploadStatusFilter !== 'all';
+    return this.selectedContractorId !== '' || this.uploadStatusFilter !== 'all' || this.poleNumberSearch !== '';
   };
 
   doesExternalFilterPass = (params: any) => {
     const pole = params.data;
-    
+
     // Contractor filter
     if (this.selectedContractorId && pole.contractorId !== this.selectedContractorId) {
       return false;
     }
-    
+
     // Upload status filter
     if (this.uploadStatusFilter !== 'all') {
       const isComplete = pole.allUploadsComplete;
       if (this.uploadStatusFilter === 'complete' && !isComplete) return false;
       if (this.uploadStatusFilter === 'incomplete' && isComplete) return false;
     }
-    
+
+    // Pole number search filter
+    if (this.poleNumberSearch) {
+      const searchTerm = this.poleNumberSearch.toLowerCase();
+      const poleNumber = (pole.poleNumber || '').toLowerCase();
+      const vfPoleId = (pole.vfPoleId || '').toLowerCase();
+      
+      // Search in both poleNumber and vfPoleId fields
+      if (!poleNumber.includes(searchTerm) && !vfPoleId.includes(searchTerm)) {
+        return false;
+      }
+    }
+
     return true;
   };
 
@@ -516,7 +573,8 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
     if (this.selectedProjectId) queryParams.project = this.selectedProjectId;
     if (this.selectedContractorId) queryParams.contractor = this.selectedContractorId;
     if (this.uploadStatusFilter !== 'all') queryParams.uploadStatus = this.uploadStatusFilter;
-    
+    if (this.poleNumberSearch) queryParams.search = this.poleNumberSearch;
+
     this.router.navigate([], { relativeTo: this.route, queryParams });
   }
 
@@ -526,14 +584,36 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
     }
   }
 
+  onPoleNumberSearchChange() {
+    // Use the subject for debouncing
+    this.searchSubject$.next(this.poleNumberSearch);
+  }
+
+  clearPoleNumberSearch() {
+    this.poleNumberSearch = '';
+    this.searchSubject$.next('');
+  }
+
   exportData(format: string) {
     if (!this.gridApi) return;
-    
+
     switch (format) {
       case 'csv':
         this.gridApi.exportDataAsCsv({
           fileName: `pole-tracker-${new Date().toISOString().split('T')[0]}.csv`,
-          columnKeys: ['vfPoleId', 'poleNumber', 'pon', 'zone', 'location', 'projectName', 'dateInstalled', 'poleType', 'contractorName', 'uploadProgress', 'qualityChecked']
+          columnKeys: [
+            'vfPoleId',
+            'poleNumber',
+            'pon',
+            'zone',
+            'location',
+            'projectName',
+            'dateInstalled',
+            'poleType',
+            'contractorName',
+            'uploadProgress',
+            'qualityChecked',
+          ],
         });
         break;
       case 'excel':
@@ -555,7 +635,7 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
     if (this.selectedProjectId) queryParams.project = this.selectedProjectId;
     if (this.selectedContractorId) queryParams.contractor = this.selectedContractorId;
     if (this.uploadStatusFilter !== 'all') queryParams.uploadStatus = this.uploadStatusFilter;
-    
+
     this.router.navigate(['/pole-tracker'], { queryParams });
   }
 
@@ -569,7 +649,7 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
       },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.poleTrackerService.deletePoleTracker(pole.id!).subscribe({
           next: () => {
@@ -592,7 +672,11 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
     if (selectedRows.length === 0) return;
 
     // TODO: Open contractor selection dialog
-    this.snackBar.open(`Assign contractor to ${selectedRows.length} poles - Coming soon!`, 'Close', { duration: 3000 });
+    this.snackBar.open(
+      `Assign contractor to ${selectedRows.length} poles - Coming soon!`,
+      'Close',
+      { duration: 3000 },
+    );
   }
 
   bulkUpdateStatus() {
@@ -601,7 +685,9 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
     if (selectedRows.length === 0) return;
 
     // TODO: Open status update dialog
-    this.snackBar.open(`Update status for ${selectedRows.length} poles - Coming soon!`, 'Close', { duration: 3000 });
+    this.snackBar.open(`Update status for ${selectedRows.length} poles - Coming soon!`, 'Close', {
+      duration: 3000,
+    });
   }
 
   bulkQualityCheck() {
@@ -618,10 +704,12 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
       },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         // TODO: Implement bulk quality check
-        this.snackBar.open(`Marked ${selectedRows.length} poles as quality checked`, 'Close', { duration: 3000 });
+        this.snackBar.open(`Marked ${selectedRows.length} poles as quality checked`, 'Close', {
+          duration: 3000,
+        });
       }
     });
   }
@@ -640,7 +728,7 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
       },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         // TODO: Implement bulk delete
         this.snackBar.open(`Deleted ${selectedRows.length} poles`, 'Close', { duration: 3000 });
@@ -656,7 +744,7 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
     // Export only selected rows
     this.gridApi.exportDataAsCsv({
       fileName: `selected-poles-${new Date().toISOString().split('T')[0]}.csv`,
-      onlySelected: true
+      onlySelected: true,
     });
   }
 
@@ -684,9 +772,9 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'bottom' }
-          }
-        }
+            legend: { position: 'bottom' },
+          },
+        },
       });
     }
 
@@ -699,9 +787,9 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { display: false }
-          }
-        }
+            legend: { display: false },
+          },
+        },
       });
     }
 
@@ -715,9 +803,9 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
           maintainAspectRatio: false,
           indexAxis: 'y',
           plugins: {
-            legend: { display: false }
-          }
-        }
+            legend: { display: false },
+          },
+        },
       });
     }
 
@@ -730,9 +818,9 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'bottom' }
-          }
-        }
+            legend: { position: 'bottom' },
+          },
+        },
       });
     }
   }
@@ -754,7 +842,7 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
       this.rowData(),
       this.pivotConfig.rows,
       this.pivotConfig.columns,
-      this.pivotConfig.values
+      this.pivotConfig.values,
     );
   }
 
@@ -771,14 +859,14 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { position: 'bottom' }
+          legend: { position: 'bottom' },
         },
         scales: {
           y: {
-            beginAtZero: true
-          }
-        }
-      }
+            beginAtZero: true,
+          },
+        },
+      },
     });
   }
 
@@ -793,9 +881,9 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
         this.rowData(),
         analytics,
         this.pivotData || undefined,
-        this.exportOptions
+        this.exportOptions,
       );
-      
+
       this.snackBar.open('Excel file generated successfully', 'Close', { duration: 3000 });
     } catch (error) {
       console.error('Error generating Excel:', error);

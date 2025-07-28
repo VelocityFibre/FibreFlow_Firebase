@@ -1,0 +1,28 @@
+📥 DOWNLOADING ALL IMAGES FROM ETTIENE
+
+📷 Found 278 total images
+
+
+📦 Batch 1/14 (20 images)
+[1/278] LEFU9103.JPG... [2/278] UUZQ0214.JPG... [3/278] ORAY5913.JPG... [4/278] UJHM6420.JPG... [5/278] LLDF1597.JPG... [6/278] CKCL1172.JPG... [7/278] UDKC3881.JPG... [8/278] SNZB2490.JPG... [9/278] KGCJ1211.JPG... [10/278] GUFJ6642.JPG... [11/278] PXFC6466.JPG... [12/278] SCPC2411.JPG... [13/278] CCHC6189.JPG... [14/278] CVYD6786.JPG... [15/278] VOEV0130.JPG... [16/278] QHDL4382.JPG... [17/278] HXDI7619.JPG... [18/278] YAJF1719.JPG... [19/278] WSRB6420.JPG... [20/278] QTFA6097.JPG... ⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+⏭️  Skipped (exists)
+❌ Fatal error: ReferenceError: imageNum is not defined
+    at downloadAllImages (/home/ldp/VF/Apps/FibreFlow/scripts/download-all-images.cjs:138:62)

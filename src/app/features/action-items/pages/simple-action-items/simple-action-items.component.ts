@@ -10,13 +10,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/native-date-adapter';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { 
-  PageHeaderComponent, 
-  PageHeaderAction 
+import {
+  PageHeaderComponent,
+  PageHeaderAction,
 } from '../../../../shared/components/page-header/page-header.component';
 import { MeetingService } from '../../../meetings/services/meeting.service';
 import { Meeting, ActionItem } from '../../../meetings/models/meeting.model';
@@ -49,10 +49,10 @@ interface ActionItemDisplay extends ActionItem {
     MatCheckboxModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
-    PageHeaderComponent
+    PageHeaderComponent,
   ],
   templateUrl: './simple-action-items.component.html',
-  styleUrl: './simple-action-items.component.scss'
+  styleUrl: './simple-action-items.component.scss',
 })
 export class SimpleActionItemsComponent implements OnInit {
   private meetingService = inject(MeetingService);
@@ -69,8 +69,8 @@ export class SimpleActionItemsComponent implements OnInit {
   // Computed values
   allActionItems = computed(() => {
     const items: ActionItemDisplay[] = [];
-    
-    this.meetings().forEach(meeting => {
+
+    this.meetings().forEach((meeting) => {
       if (meeting.actionItems && meeting.actionItems.length > 0) {
         meeting.actionItems.forEach((item, index) => {
           items.push({
@@ -79,40 +79,41 @@ export class SimpleActionItemsComponent implements OnInit {
             meetingTitle: meeting.title,
             meetingDate: meeting.dateTime,
             actionIndex: index,
-            isEditing: false
+            isEditing: false,
           });
         });
       }
     });
-    
+
     return items;
   });
 
   filteredActionItems = computed(() => {
     let items = this.allActionItems();
-    
+
     // Filter by priority
     if (this.selectedPriority() !== 'all') {
-      items = items.filter(item => item.priority === this.selectedPriority());
+      items = items.filter((item) => item.priority === this.selectedPriority());
     }
-    
+
     // Filter by status
     if (this.selectedStatus() === 'completed') {
-      items = items.filter(item => item.completed);
+      items = items.filter((item) => item.completed);
     } else if (this.selectedStatus() === 'pending') {
-      items = items.filter(item => !item.completed);
+      items = items.filter((item) => !item.completed);
     }
-    
+
     // Filter by search text
     const search = this.searchText().toLowerCase();
     if (search) {
-      items = items.filter(item => 
-        item.text.toLowerCase().includes(search) ||
-        item.meetingTitle.toLowerCase().includes(search) ||
-        (item.assignee && item.assignee.toLowerCase().includes(search))
+      items = items.filter(
+        (item) =>
+          item.text.toLowerCase().includes(search) ||
+          item.meetingTitle.toLowerCase().includes(search) ||
+          (item.assignee && item.assignee.toLowerCase().includes(search)),
       );
     }
-    
+
     return items;
   });
 
@@ -120,26 +121,35 @@ export class SimpleActionItemsComponent implements OnInit {
     const items = this.allActionItems();
     return {
       total: items.length,
-      completed: items.filter(i => i.completed).length,
-      pending: items.filter(i => !i.completed).length,
-      high: items.filter(i => i.priority === 'high').length,
-      overdue: items.filter(i => {
+      completed: items.filter((i) => i.completed).length,
+      pending: items.filter((i) => !i.completed).length,
+      high: items.filter((i) => i.priority === 'high').length,
+      overdue: items.filter((i) => {
         if (i.completed || !i.dueDate) return false;
         return new Date(i.dueDate) < new Date();
-      }).length
+      }).length,
     };
   });
 
   // Table columns
-  displayedColumns = ['select', 'actionItem', 'meeting', 'priority', 'assignee', 'dueDate', 'status', 'actions'];
+  displayedColumns = [
+    'select',
+    'actionItem',
+    'meeting',
+    'priority',
+    'assignee',
+    'dueDate',
+    'status',
+    'actions',
+  ];
 
   // Page header actions
   headerActions: PageHeaderAction[] = [
     {
       label: 'Refresh',
       icon: 'refresh',
-      action: () => this.loadMeetings()
-    }
+      action: () => this.loadMeetings(),
+    },
   ];
 
   ngOnInit() {
@@ -148,7 +158,7 @@ export class SimpleActionItemsComponent implements OnInit {
 
   loadMeetings() {
     this.loading.set(true);
-    
+
     this.meetingService.getAll().subscribe({
       next: (meetings) => {
         this.meetings.set(meetings);
@@ -158,14 +168,14 @@ export class SimpleActionItemsComponent implements OnInit {
         console.error('Error loading meetings:', error);
         this.snackBar.open('Error loading meetings', 'Close', { duration: 3000 });
         this.loading.set(false);
-      }
+      },
     });
   }
 
   // Edit mode
   startEdit(item: ActionItemDisplay) {
     // Cancel any other edits
-    this.allActionItems().forEach(i => i.isEditing = false);
+    this.allActionItems().forEach((i) => (i.isEditing = false));
     item.isEditing = true;
   }
 
@@ -177,18 +187,14 @@ export class SimpleActionItemsComponent implements OnInit {
 
   async saveEdit(item: ActionItemDisplay) {
     try {
-      await this.meetingService.updateActionItem(
-        item.meetingId,
-        item.actionIndex,
-        {
-          text: item.text,
-          priority: item.priority,
-          assignee: item.assignee,
-          dueDate: item.dueDate,
-          completed: item.completed
-        }
-      );
-      
+      await this.meetingService.updateActionItem(item.meetingId, item.actionIndex, {
+        text: item.text,
+        priority: item.priority,
+        assignee: item.assignee,
+        dueDate: item.dueDate,
+        completed: item.completed,
+      });
+
       item.isEditing = false;
       this.snackBar.open('Action item updated', 'Close', { duration: 3000 });
       this.loadMeetings();
@@ -201,20 +207,14 @@ export class SimpleActionItemsComponent implements OnInit {
   // Quick actions
   async toggleComplete(item: ActionItemDisplay) {
     try {
-      await this.meetingService.updateActionItem(
-        item.meetingId,
-        item.actionIndex,
-        {
-          completed: !item.completed,
-          completedAt: !item.completed ? new Date().toISOString() : undefined
-        }
-      );
-      
-      this.snackBar.open(
-        item.completed ? 'Marked as pending' : 'Marked as completed', 
-        'Close', 
-        { duration: 3000 }
-      );
+      await this.meetingService.updateActionItem(item.meetingId, item.actionIndex, {
+        completed: !item.completed,
+        completedAt: !item.completed ? new Date().toISOString() : undefined,
+      });
+
+      this.snackBar.open(item.completed ? 'Marked as pending' : 'Marked as completed', 'Close', {
+        duration: 3000,
+      });
       this.loadMeetings();
     } catch (error) {
       console.error('Error updating action item:', error);
@@ -224,12 +224,8 @@ export class SimpleActionItemsComponent implements OnInit {
 
   async updatePriority(item: ActionItemDisplay, priority: string) {
     try {
-      await this.meetingService.updateActionItem(
-        item.meetingId,
-        item.actionIndex,
-        { priority }
-      );
-      
+      await this.meetingService.updateActionItem(item.meetingId, item.actionIndex, { priority });
+
       this.snackBar.open('Priority updated', 'Close', { duration: 3000 });
       this.loadMeetings();
     } catch (error) {
@@ -241,10 +237,14 @@ export class SimpleActionItemsComponent implements OnInit {
   // Utility methods
   getPriorityColor(priority: string): string {
     switch (priority) {
-      case 'high': return 'warn';
-      case 'medium': return 'accent';
-      case 'low': return 'primary';
-      default: return '';
+      case 'high':
+        return 'warn';
+      case 'medium':
+        return 'accent';
+      case 'low':
+        return 'primary';
+      default:
+        return '';
     }
   }
 

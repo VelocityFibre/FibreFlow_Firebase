@@ -107,7 +107,9 @@ import { StaffGroup, StaffMember, WorkingHours } from '../../models/staff.model'
                       <mat-label>Primary Group</mat-label>
                       <mat-select formControlName="primaryGroup">
                         <mat-option value="Management">Management</mat-option>
-                        <mat-option value="Regional Project Manager">Regional Project Manager</mat-option>
+                        <mat-option value="Regional Project Manager"
+                          >Regional Project Manager</mat-option
+                        >
                         <mat-option value="Project Manager">Project Manager</mat-option>
                         <mat-option value="Site Supervisor">Site Supervisor</mat-option>
                         <mat-option value="Senior Technician">Senior Technician</mat-option>

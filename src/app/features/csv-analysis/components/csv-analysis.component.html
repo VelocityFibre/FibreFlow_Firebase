@@ -6,9 +6,7 @@
         <mat-icon>analytics</mat-icon>
         CSV Analysis Module
       </mat-card-title>
-      <mat-card-subtitle>
-        Analyze OneMap CSV exports using proven report logic
-      </mat-card-subtitle>
+      <mat-card-subtitle> Analyze OneMap CSV exports using proven report logic </mat-card-subtitle>
     </mat-card-header>
   </mat-card>
 
@@ -21,23 +19,12 @@
       <form [formGroup]="configForm" class="config-form">
         <!-- File Upload -->
         <div class="file-upload-section">
-          <input
-            type="file"
-            accept=".csv"
-            (change)="onFileSelected($event)"
-            #fileInput
-            hidden
-          />
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="fileInput.click()"
-            type="button"
-          >
+          <input type="file" accept=".csv" (change)="onFileSelected($event)" #fileInput hidden />
+          <button mat-raised-button color="primary" (click)="fileInput.click()" type="button">
             <mat-icon>upload_file</mat-icon>
             Select CSV File
           </button>
-          
+
           @if (selectedFile()) {
             <mat-chip-listbox class="file-info">
               <mat-chip-option selected>
@@ -53,21 +40,21 @@
         <div class="date-range-section">
           <mat-form-field>
             <mat-label>Start Date</mat-label>
-            <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+            <input matInput [matDatepicker]="startPicker" formControlName="startDate" />
             <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
             <mat-datepicker #startPicker></mat-datepicker>
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>End Date</mat-label>
-            <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+            <input matInput [matDatepicker]="endPicker" formControlName="endDate" />
             <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
             <mat-datepicker #endPicker></mat-datepicker>
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>Report Filename Prefix</mat-label>
-            <input matInput formControlName="filename" placeholder="e.g., Lawley_May_Week3">
+            <input matInput formControlName="filename" placeholder="e.g., Lawley_May_Week3" />
           </mat-form-field>
         </div>
 
@@ -88,11 +75,7 @@
             }
           </button>
 
-          <button
-            mat-stroked-button
-            (click)="resetAnalysis()"
-            [disabled]="isProcessing()"
-          >
+          <button mat-stroked-button (click)="resetAnalysis()" [disabled]="isProcessing()">
             <mat-icon>refresh</mat-icon>
             Reset
           </button>
@@ -107,7 +90,7 @@
       <mat-card-header>
         <mat-card-title>Analysis Results</mat-card-title>
         <mat-card-subtitle>
-          Generated {{ analysisResult()!.processingDate | date:'medium' }}
+          Generated {{ analysisResult()!.processingDate | date: 'medium' }}
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
@@ -117,11 +100,9 @@
             <span class="score-number" [class]="dataQualityColor()">
               {{ analysisResult()!.dataQualityScore }}%
             </span>
-            <span class="score-label">
-              Data Quality: {{ getQualityStatusText() }}
-            </span>
+            <span class="score-label"> Data Quality: {{ getQualityStatusText() }} </span>
           </div>
-          
+
           @if (analysisResult()!.validationErrors.length > 0) {
             <mat-chip-listbox class="error-chips">
               @for (error of analysisResult()!.validationErrors; track error) {
@@ -179,11 +160,7 @@
 
         <!-- Download Actions -->
         <div class="download-actions">
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="downloadAllReports()"
-          >
+          <button mat-raised-button color="primary" (click)="downloadAllReports()">
             <mat-icon>download</mat-icon>
             Download All Reports
           </button>
@@ -265,17 +242,21 @@
 
                 <ng-container matColumnDef="lastModifiedDate">
                   <mat-header-cell *matHeaderCellDef>Last Modified</mat-header-cell>
-                  <mat-cell *matCellDef="let record">{{ record.lastModifiedDate | date:'short' }}</mat-cell>
+                  <mat-cell *matCellDef="let record">{{
+                    record.lastModifiedDate | date: 'short'
+                  }}</mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
               </mat-table>
             </div>
           </mat-tab>
 
           <!-- Duplicates Pre-Window -->
-          <mat-tab label="Duplicates Pre-Window ({{ analysisResult()!.duplicatesPreWindow.length }})">
+          <mat-tab
+            label="Duplicates Pre-Window ({{ analysisResult()!.duplicatesPreWindow.length }})"
+          >
             <div class="table-container">
               <mat-table [dataSource]="analysisResult()!.duplicatesPreWindow" class="report-table">
                 <ng-container matColumnDef="propertyId">
@@ -305,11 +286,13 @@
 
                 <ng-container matColumnDef="lastModifiedDate">
                   <mat-header-cell *matHeaderCellDef>Last Modified</mat-header-cell>
-                  <mat-cell *matCellDef="let record">{{ record.lastModifiedDate | date:'short' }}</mat-cell>
+                  <mat-cell *matCellDef="let record">{{
+                    record.lastModifiedDate | date: 'short'
+                  }}</mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
               </mat-table>
             </div>
           </mat-tab>
@@ -345,19 +328,26 @@
 
                 <ng-container matColumnDef="lastModifiedDate">
                   <mat-header-cell *matHeaderCellDef>Last Modified</mat-header-cell>
-                  <mat-cell *matCellDef="let record">{{ record.lastModifiedDate | date:'short' }}</mat-cell>
+                  <mat-cell *matCellDef="let record">{{
+                    record.lastModifiedDate | date: 'short'
+                  }}</mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
               </mat-table>
             </div>
           </mat-tab>
 
           <!-- Duplicate Drops Removed -->
-          <mat-tab label="Duplicate Drops Removed ({{ analysisResult()!.duplicateDropsRemoved.length }})">
+          <mat-tab
+            label="Duplicate Drops Removed ({{ analysisResult()!.duplicateDropsRemoved.length }})"
+          >
             <div class="table-container">
-              <mat-table [dataSource]="analysisResult()!.duplicateDropsRemoved" class="report-table">
+              <mat-table
+                [dataSource]="analysisResult()!.duplicateDropsRemoved"
+                class="report-table"
+              >
                 <ng-container matColumnDef="propertyId">
                   <mat-header-cell *matHeaderCellDef>Property ID</mat-header-cell>
                   <mat-cell *matCellDef="let record">{{ record.propertyId }}</mat-cell>
@@ -385,11 +375,13 @@
 
                 <ng-container matColumnDef="lastModifiedDate">
                   <mat-header-cell *matHeaderCellDef>Last Modified</mat-header-cell>
-                  <mat-cell *matCellDef="let record">{{ record.lastModifiedDate | date:'short' }}</mat-cell>
+                  <mat-cell *matCellDef="let record">{{
+                    record.lastModifiedDate | date: 'short'
+                  }}</mat-cell>
                 </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
               </mat-table>
             </div>
           </mat-tab>

@@ -14,12 +14,11 @@ export interface ExcelExportOptions {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ExcelExportService {
-  
   async exportToExcel(
-    poles: PoleTrackerListItem[], 
+    poles: PoleTrackerListItem[],
     analytics: PoleAnalytics,
     pivotData?: PivotData,
     options: ExcelExportOptions = {
@@ -28,11 +27,11 @@ export class ExcelExportService {
       includeFormulas: true,
       autoFilter: true,
       conditionalFormatting: true,
-      includeSummary: true
-    }
+      includeSummary: true,
+    },
   ): Promise<void> {
     const workbook = new ExcelJS.Workbook();
-    
+
     // Set workbook properties
     workbook.creator = 'FibreFlow';
     workbook.lastModifiedBy = 'FibreFlow System';
@@ -44,24 +43,26 @@ export class ExcelExportService {
     if (options.includeSummary) {
       this.addSummarySheet(workbook, analytics);
     }
-    
+
     this.addDataSheet(workbook, poles, options);
-    
+
     if (options.includePivotTables && pivotData) {
       this.addPivotSheet(workbook, pivotData);
     }
-    
+
     this.addAnalyticsSheet(workbook, analytics);
-    
+
     // Generate and save the file
     const buffer = await workbook.xlsx.writeBuffer();
-    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const blob = new Blob([buffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
     saveAs(blob, `pole-tracker-export-${new Date().toISOString().split('T')[0]}.xlsx`);
   }
 
   private addSummarySheet(workbook: ExcelJS.Workbook, analytics: PoleAnalytics) {
     const sheet = workbook.addWorksheet('Summary', {
-      properties: { tabColor: { argb: 'FF3F51B5' } }
+      properties: { tabColor: { argb: 'FF3F51B5' } },
     });
 
     // Title
@@ -73,7 +74,7 @@ export class ExcelExportService {
     titleCell.fill = {
       type: 'pattern',
       pattern: 'solid',
-      fgColor: { argb: 'FF3F51B5' }
+      fgColor: { argb: 'FF3F51B5' },
     };
     titleCell.font.color = { argb: 'FFFFFFFF' };
 
@@ -87,8 +88,16 @@ export class ExcelExportService {
       ['Metric', 'Value', 'Percentage'],
       ['Total Poles', analytics.summary.total, '100%'],
       ['Installed', analytics.summary.installed, `${analytics.summary.installationRate}%`],
-      ['Quality Checked', analytics.summary.qualityChecked, `${analytics.summary.qualityCheckRate}%`],
-      ['Uploads Complete', analytics.summary.uploadsComplete, `${analytics.summary.uploadCompletionRate}%`]
+      [
+        'Quality Checked',
+        analytics.summary.qualityChecked,
+        `${analytics.summary.qualityCheckRate}%`,
+      ],
+      [
+        'Uploads Complete',
+        analytics.summary.uploadsComplete,
+        `${analytics.summary.uploadCompletionRate}%`,
+      ],
     ];
 
     const summaryStartRow = 5;
@@ -97,22 +106,22 @@ export class ExcelExportService {
       row.forEach((value, colIndex) => {
         const cell = sheet.getCell(rowNumber, colIndex + 1);
         cell.value = value;
-        
+
         if (index === 0) {
           // Header row
           cell.font = { bold: true };
           cell.fill = {
             type: 'pattern',
             pattern: 'solid',
-            fgColor: { argb: 'FFE3F2FD' }
+            fgColor: { argb: 'FFE3F2FD' },
           };
         }
-        
+
         cell.border = {
           top: { style: 'thin' },
           left: { style: 'thin' },
           bottom: { style: 'thin' },
-          right: { style: 'thin' }
+          right: { style: 'thin' },
         };
       });
     });
@@ -120,16 +129,20 @@ export class ExcelExportService {
     // Add mini charts (sparklines simulation)
     sheet.getCell('E5').value = 'Progress Indicators';
     sheet.getCell('E5').font = { bold: true };
-    
+
     // Auto-fit columns
-    sheet.columns.forEach(column => {
+    sheet.columns.forEach((column) => {
       column.width = 20;
     });
   }
 
-  private addDataSheet(workbook: ExcelJS.Workbook, poles: PoleTrackerListItem[], options: ExcelExportOptions) {
+  private addDataSheet(
+    workbook: ExcelJS.Workbook,
+    poles: PoleTrackerListItem[],
+    options: ExcelExportOptions,
+  ) {
     const sheet = workbook.addWorksheet('Pole Data', {
-      properties: { tabColor: { argb: 'FF4CAF50' } }
+      properties: { tabColor: { argb: 'FF4CAF50' } },
     });
 
     // Define columns
@@ -147,7 +160,7 @@ export class ExcelExportService {
       { header: 'Photos Uploaded', key: 'uploadedCount', width: 15 },
       { header: 'Quality Checked', key: 'qualityChecked', width: 15 },
       { header: 'Drop Count', key: 'dropCount', width: 12 },
-      { header: 'Capacity Used', key: 'capacityUsed', width: 15 }
+      { header: 'Capacity Used', key: 'capacityUsed', width: 15 },
     ];
 
     // Add data with formulas
@@ -159,16 +172,20 @@ export class ExcelExportService {
         zone: pole.zone || '-',
         location: pole.location,
         projectName: pole.projectName || pole.projectCode,
-        dateInstalled: pole.dateInstalled ? (pole.dateInstalled instanceof Date ? pole.dateInstalled : pole.dateInstalled.toDate()) : null,
+        dateInstalled: pole.dateInstalled
+          ? pole.dateInstalled instanceof Date
+            ? pole.dateInstalled
+            : pole.dateInstalled.toDate()
+          : null,
         poleType: pole.poleType,
         contractorName: pole.contractorName || '-',
         uploadProgress: pole.uploadProgress,
         uploadedCount: pole.uploadedCount,
         qualityChecked: pole.qualityChecked ? 'Yes' : 'No',
         dropCount: pole.dropCount || 0,
-        capacityUsed: options.includeFormulas 
+        capacityUsed: options.includeFormulas
           ? { formula: `=${sheet.getCell(index + 2, 13).address}/12*100` }
-          : `${Math.round((pole.dropCount || 0) / 12 * 100)}%`
+          : `${Math.round(((pole.dropCount || 0) / 12) * 100)}%`,
       });
 
       // Apply conditional formatting
@@ -179,19 +196,19 @@ export class ExcelExportService {
           uploadCell.fill = {
             type: 'pattern',
             pattern: 'solid',
-            fgColor: { argb: 'FFE8F5E9' }
+            fgColor: { argb: 'FFE8F5E9' },
           };
         } else if (pole.uploadProgress > 0) {
           uploadCell.fill = {
             type: 'pattern',
             pattern: 'solid',
-            fgColor: { argb: 'FFFFF3E0' }
+            fgColor: { argb: 'FFFFF3E0' },
           };
         } else {
           uploadCell.fill = {
             type: 'pattern',
             pattern: 'solid',
-            fgColor: { argb: 'FFFFEBEE' }
+            fgColor: { argb: 'FFFFEBEE' },
           };
         }
 
@@ -209,7 +226,7 @@ export class ExcelExportService {
     headerRow.fill = {
       type: 'pattern',
       pattern: 'solid',
-      fgColor: { argb: 'FF4CAF50' }
+      fgColor: { argb: 'FF4CAF50' },
     };
     headerRow.alignment = { vertical: 'middle', horizontal: 'center' };
     headerRow.height = 30;
@@ -218,14 +235,12 @@ export class ExcelExportService {
     if (options.autoFilter) {
       sheet.autoFilter = {
         from: 'A1',
-        to: `N${poles.length + 1}`
+        to: `N${poles.length + 1}`,
       };
     }
 
     // Freeze panes
-    sheet.views = [
-      { state: 'frozen', xSplit: 0, ySplit: 1 }
-    ];
+    sheet.views = [{ state: 'frozen', xSplit: 0, ySplit: 1 }];
 
     // Format date column
     sheet.getColumn('dateInstalled').numFmt = 'dd/mm/yyyy';
@@ -235,7 +250,7 @@ export class ExcelExportService {
 
   private addPivotSheet(workbook: ExcelJS.Workbook, pivotData: PivotData) {
     const sheet = workbook.addWorksheet('Pivot Analysis', {
-      properties: { tabColor: { argb: 'FFFF9800' } }
+      properties: { tabColor: { argb: 'FFFF9800' } },
     });
 
     // Title
@@ -257,7 +272,7 @@ export class ExcelExportService {
       cell.fill = {
         type: 'pattern',
         pattern: 'solid',
-        fgColor: { argb: 'FFFFD54F' }
+        fgColor: { argb: 'FFFFD54F' },
       };
     });
 
@@ -268,7 +283,7 @@ export class ExcelExportService {
     totalColCell.fill = {
       type: 'pattern',
       pattern: 'solid',
-      fgColor: { argb: 'FFFFAB40' }
+      fgColor: { argb: 'FFFFAB40' },
     };
 
     // Data rows
@@ -280,7 +295,7 @@ export class ExcelExportService {
       rowHeaderCell.fill = {
         type: 'pattern',
         pattern: 'solid',
-        fgColor: { argb: 'FFFFD54F' }
+        fgColor: { argb: 'FFFFD54F' },
       };
 
       // Data values
@@ -291,7 +306,10 @@ export class ExcelExportService {
       });
 
       // Row total
-      const rowTotalCell = sheet.getCell(startRow + rowIndex + 1, startCol + pivotData.columns.length);
+      const rowTotalCell = sheet.getCell(
+        startRow + rowIndex + 1,
+        startCol + pivotData.columns.length,
+      );
       rowTotalCell.value = pivotData.rowTotals[rowIndex];
       rowTotalCell.numFmt = '#,##0';
       rowTotalCell.font = { bold: true };
@@ -305,7 +323,7 @@ export class ExcelExportService {
     totalRowHeaderCell.fill = {
       type: 'pattern',
       pattern: 'solid',
-      fgColor: { argb: 'FFFFAB40' }
+      fgColor: { argb: 'FFFFAB40' },
     };
 
     // Column totals
@@ -324,18 +342,18 @@ export class ExcelExportService {
     grandTotalCell.fill = {
       type: 'pattern',
       pattern: 'solid',
-      fgColor: { argb: 'FFFF6F00' }
+      fgColor: { argb: 'FFFF6F00' },
     };
 
     // Auto-fit columns
-    sheet.columns.forEach(column => {
+    sheet.columns.forEach((column) => {
       column.width = 15;
     });
   }
 
   private addAnalyticsSheet(workbook: ExcelJS.Workbook, analytics: PoleAnalytics) {
     const sheet = workbook.addWorksheet('Analytics', {
-      properties: { tabColor: { argb: 'FF2196F3' } }
+      properties: { tabColor: { argb: 'FF2196F3' } },
     });
 
     // By Type Analysis
@@ -351,8 +369,8 @@ export class ExcelExportService {
       const row = typeStartRow + index + 1;
       sheet.getCell(row, 1).value = type;
       sheet.getCell(row, 2).value = count;
-      sheet.getCell(row, 3).value = { 
-        formula: `=B${row}/$B$${typeStartRow + Object.keys(analytics.byType).length + 1}` 
+      sheet.getCell(row, 3).value = {
+        formula: `=B${row}/$B$${typeStartRow + Object.keys(analytics.byType).length + 1}`,
       };
       sheet.getCell(row, 3).numFmt = '0.00%';
     });
@@ -360,8 +378,8 @@ export class ExcelExportService {
     // Total row
     const typeTotalRow = typeStartRow + Object.keys(analytics.byType).length + 1;
     sheet.getCell(typeTotalRow, 1).value = 'Total';
-    sheet.getCell(typeTotalRow, 2).value = { 
-      formula: `=SUM(B${typeStartRow + 1}:B${typeTotalRow - 1})` 
+    sheet.getCell(typeTotalRow, 2).value = {
+      formula: `=SUM(B${typeStartRow + 1}:B${typeTotalRow - 1})`,
     };
     sheet.getCell(typeTotalRow, 1).font = { bold: true };
     sheet.getCell(typeTotalRow, 2).font = { bold: true };
@@ -381,64 +399,68 @@ export class ExcelExportService {
       sheet.getCell(row, 2).value = data.count;
       sheet.getCell(row, 3).value = data.performance / 100;
       sheet.getCell(row, 3).numFmt = '0.00%';
-      
+
       // Apply conditional formatting
       const perfCell = sheet.getCell(row, 3);
       if (data.performance >= 90) {
         perfCell.fill = {
           type: 'pattern',
           pattern: 'solid',
-          fgColor: { argb: 'FFE8F5E9' }
+          fgColor: { argb: 'FFE8F5E9' },
         };
       } else if (data.performance >= 70) {
         perfCell.fill = {
           type: 'pattern',
           pattern: 'solid',
-          fgColor: { argb: 'FFFFF3E0' }
+          fgColor: { argb: 'FFFFF3E0' },
         };
       } else {
         perfCell.fill = {
           type: 'pattern',
           pattern: 'solid',
-          fgColor: { argb: 'FFFFEBEE' }
+          fgColor: { argb: 'FFFFEBEE' },
         };
       }
     });
 
     // Auto-fit columns
-    sheet.columns.forEach(column => {
+    sheet.columns.forEach((column) => {
       column.width = 20;
     });
   }
 
   // Export for Power BI
   async exportForPowerBI(poles: PoleTrackerListItem[]): Promise<void> {
-    const powerBIData = poles.map(pole => ({
+    const powerBIData = poles.map((pole) => ({
       'VF Pole ID': pole.vfPoleId,
       'Pole Number': pole.poleNumber,
-      'PON': pole.pon || '',
-      'Zone': pole.zone || '',
-      'Latitude': pole.location ? pole.location.split(',')[0]?.trim() : '',
-      'Longitude': pole.location ? pole.location.split(',')[1]?.trim() : '',
-      'Project': pole.projectName || pole.projectCode,
-      'Date Installed': pole.dateInstalled ? (pole.dateInstalled instanceof Date ? pole.dateInstalled.toISOString() : pole.dateInstalled.toDate().toISOString()) : '',
+      PON: pole.pon || '',
+      Zone: pole.zone || '',
+      Latitude: pole.location ? pole.location.split(',')[0]?.trim() : '',
+      Longitude: pole.location ? pole.location.split(',')[1]?.trim() : '',
+      Project: pole.projectName || pole.projectCode,
+      'Date Installed': pole.dateInstalled
+        ? pole.dateInstalled instanceof Date
+          ? pole.dateInstalled.toISOString()
+          : pole.dateInstalled.toDate().toISOString()
+        : '',
       'Pole Type': pole.poleType || '',
-      'Contractor': pole.contractorName || '',
+      Contractor: pole.contractorName || '',
       'Upload Progress': pole.uploadProgress,
       'Photos Uploaded': pole.uploadedCount,
       'Quality Checked': pole.qualityChecked ? 1 : 0,
       'Drop Count': pole.dropCount || 0,
-      'Capacity Utilization': Math.round((pole.dropCount || 0) / 12 * 100)
+      'Capacity Utilization': Math.round(((pole.dropCount || 0) / 12) * 100),
     }));
 
     // Create CSV for Power BI
     const headers = Object.keys(powerBIData[0]).join(',');
-    const rows = powerBIData.map(row => 
-      Object.values(row).map(val => 
-        typeof val === 'string' && val.includes(',') ? `"${val}"` : val
-      ).join(',')
+    const rows = powerBIData.map((row) =>
+      Object.values(row)
+        .map((val) => (typeof val === 'string' && val.includes(',') ? `"${val}"` : val))
+        .join(','),
     );
-    
+
     const csv = [headers, ...rows].join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     saveAs(blob, `pole-tracker-powerbi-${new Date().toISOString().split('T')[0]}.csv`);

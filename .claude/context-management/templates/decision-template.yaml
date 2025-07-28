@@ -1,0 +1,104 @@
+# Decision Log Template
+# Copy this file and fill in the details for each significant decision
+
+metadata:
+  date: "2025-01-29"  # YYYY-MM-DD format
+  agent: "Agent Name"  # Which agent made this decision
+  author: "Developer Name"  # Who recorded this
+  category: "architecture"  # architecture | solution | business-rule | security | performance
+  tags: 
+    - "tag1"
+    - "tag2"
+  priority: "high"  # high | medium | low
+  status: "implemented"  # proposed | implemented | deprecated
+
+context:
+  problem_statement: |
+    Clear description of the problem or decision point.
+    What was the challenge or question?
+  
+  environment:
+    - "Angular 20.0.3"
+    - "Firebase 11.9.1"
+    - "Production environment"
+  
+  constraints:
+    - "Must work with existing authentication"
+    - "Cannot modify database structure"
+    - "Performance requirement: < 2s response time"
+
+decision:
+  summary: |
+    Brief summary of the decision made.
+  
+  rationale: |
+    Why this approach was chosen.
+    What alternatives were considered?
+  
+  implementation:
+    description: |
+      How the decision was implemented.
+    
+    code_snippet: |
+      ```typescript
+      // Relevant code example
+      const example = 'implementation';
+      ```
+    
+    files_modified:
+      - "src/app/core/services/example.service.ts"
+      - "src/app/features/example/example.component.ts"
+
+outcomes:
+  benefits:
+    - "Improved performance by 50%"
+    - "Simplified code structure"
+    - "Better error handling"
+  
+  drawbacks:
+    - "Slightly more complex setup"
+    - "Requires additional configuration"
+  
+  metrics:
+    - metric: "Response time"
+      before: "4s"
+      after: "1.8s"
+    - metric: "Code lines"
+      before: "200"
+      after: "150"
+
+lessons_learned:
+  do:
+    - "Always validate input data"
+    - "Use TypeScript strict mode"
+    - "Test with production data"
+  
+  dont:
+    - "Don't skip error handling"
+    - "Don't hardcode values"
+    - "Don't ignore edge cases"
+  
+  patterns_identified:
+    - name: "Service Factory Pattern"
+      description: "Use factory pattern for complex service initialization"
+      applicability: "When services have multiple configuration options"
+    
+    - name: "Lazy Loading Strategy"
+      description: "Defer loading until actually needed"
+      applicability: "For performance-critical features"
+
+follow_up:
+  next_steps:
+    - "Monitor performance in production"
+    - "Create unit tests for edge cases"
+    - "Document in API reference"
+  
+  related_decisions:
+    - "2025-01-28-security-agent-authentication.yaml"
+    - "2025-01-27-firebase-backend-caching.yaml"
+  
+  review_date: "2025-02-29"  # When to review this decision
+
+notes: |
+  Any additional notes, warnings, or context that doesn't fit above.
+  Links to relevant documentation, issues, or discussions.

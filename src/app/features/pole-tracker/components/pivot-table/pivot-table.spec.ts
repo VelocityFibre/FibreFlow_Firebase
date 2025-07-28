@@ -8,9 +8,8 @@ describe('PivotTable', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PivotTable]
-    })
-    .compileComponents();
+      imports: [PivotTable],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(PivotTable);
     component = fixture.componentInstance;

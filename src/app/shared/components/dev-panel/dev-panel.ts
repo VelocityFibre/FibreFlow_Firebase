@@ -214,7 +214,7 @@ export class DevPanel {
 
     try {
       console.log('DevPanel: Calling agent chat service...');
-      
+
       // Send to agent
       const response = await this.agentChat.sendMessage(message).toPromise();
 
@@ -223,18 +223,18 @@ export class DevPanel {
       if (response) {
         // Add agent response with enhanced context info
         let responseContent = response.response || 'No response from agent';
-        
+
         // Add database context indicator if used
         if (response.mode === 'database-enhanced' && response.dataUsed) {
           responseContent += `\n\n*📊 Database context used: ${response.dataUsed.join(', ')}*`;
         }
-        
+
         console.log('DevPanel: Adding agent response to chat:', {
           mode: response.mode,
           dataUsed: response.dataUsed,
-          responseLength: responseContent.length
+          responseLength: responseContent.length,
         });
-        
+
         this.chatMessages.update((messages) => [
           ...messages,
           {
@@ -261,9 +261,9 @@ export class DevPanel {
       console.error('DevPanel: Error details:', {
         name: error?.name,
         message: error?.message,
-        stack: error?.stack
+        stack: error?.stack,
       });
-      
+
       this.chatMessages.update((messages) => [
         ...messages,
         {
@@ -292,7 +292,7 @@ export class DevPanel {
   // Test database connection
   async testAgentDatabase() {
     console.log('Testing agent database connection...');
-    
+
     this.chatMessages.update((messages) => [
       ...messages,
       {
@@ -304,12 +304,12 @@ export class DevPanel {
 
     // Since Firebase Functions are failing with CORS, let's check what we can from the client
     let diagnostics = '**Diagnostic Results:**\n\n';
-    
+
     // Check Firebase configuration
     diagnostics += '**1. Firebase Configuration:**\n';
     diagnostics += '✅ Firebase is initialized\n';
     diagnostics += '✅ Functions instance exists\n';
-    
+
     // Check authentication
     diagnostics += '\n**2. Authentication:**\n';
     const currentUser = this.authService.currentUser();
@@ -319,22 +319,24 @@ export class DevPanel {
     } else {
       diagnostics += '❌ Not authenticated\n';
     }
-    
+
     // Check if we can access local services
     diagnostics += '\n**3. Local Service Access:**\n';
     try {
       // Try to get projects count
       const projects = await this.projectService.getAll().toPromise();
       diagnostics += `✅ ProjectService: ${projects?.length || 0} projects found\n`;
-      
+
       // Look for Law-001
-      const lawley = projects?.find(p => p.projectCode === 'Law-001');
+      const lawley = projects?.find((p) => p.projectCode === 'Law-001');
       if (lawley && lawley.id) {
         diagnostics += `✅ Lawley project found: ${lawley.name}\n`;
-        
+
         // Try to get pole count
         try {
-          const poles = await this.poleTrackerService.getPlannedPolesByProject(lawley.id).toPromise();
+          const poles = await this.poleTrackerService
+            .getPlannedPolesByProject(lawley.id)
+            .toPromise();
           diagnostics += `✅ **Pole count for Law-001: ${poles?.length || 0} poles**\n`;
         } catch (e) {
           diagnostics += '❌ Could not fetch poles\n';
@@ -345,12 +347,12 @@ export class DevPanel {
     } catch (error: any) {
       diagnostics += `❌ Error accessing services: ${error.message}\n`;
     }
-    
+
     // Firebase Functions status
     diagnostics += '\n**4. Firebase Functions Status:**\n';
     diagnostics += '❌ CORS errors on all callable functions\n';
     diagnostics += '❌ This prevents agent from working\n';
-    
+
     // Recommendations
     diagnostics += '\n**5. Recommendations:**\n';
     diagnostics += '1. Check Firebase Functions logs in console\n';
@@ -358,7 +360,7 @@ export class DevPanel {
     diagnostics += '   `firebase functions:config:set anthropic.api_key="your-key"`\n';
     diagnostics += '3. Redeploy functions after setting key\n';
     diagnostics += '4. Consider using HTTP endpoint with proper CORS headers\n';
-    
+
     this.chatMessages.update((messages) => [
       ...messages,
       {
@@ -369,4 +371,3 @@ export class DevPanel {
     ]);
   }
 }
-

@@ -8,13 +8,13 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PageHeaderComponent } from '../../../../../shared/components/page-header/page-header.component';
-import { 
-  Storage, 
-  ref, 
-  uploadBytesResumable, 
+import {
+  Storage,
+  ref,
+  uploadBytesResumable,
   getDownloadURL,
   listAll,
-  getMetadata
+  getMetadata,
 } from '@angular/fire/storage';
 import { Firestore, collection, addDoc, serverTimestamp } from '@angular/fire/firestore';
 import { Auth, user } from '@angular/fire/auth';
@@ -83,7 +83,7 @@ interface UploadFile {
 
       <mat-card class="upload-card">
         <mat-card-content>
-          <div 
+          <div
             class="dropzone"
             [class.dragover]="isDragging()"
             [class.disabled]="!currentUser() || isUploading()"
@@ -102,14 +102,14 @@ interface UploadFile {
               <h2>Drop CSV files here</h2>
               <p>or click to browse</p>
             }
-            <input 
-              #fileInput 
-              type="file" 
-              accept=".csv" 
-              multiple 
+            <input
+              #fileInput
+              type="file"
+              accept=".csv"
+              multiple
               (change)="onFileSelected($event)"
               style="display: none"
-            >
+            />
           </div>
 
           <!-- File List -->
@@ -119,7 +119,7 @@ interface UploadFile {
                 <h3>Files ({{ files().length }})</h3>
                 <span class="total-size">Total: {{ formatSize(totalSize()) }}</span>
               </div>
-              
+
               @for (file of files(); track file.name) {
                 <div class="file-item" [class.error-item]="file.status === 'error'">
                   <mat-icon>description</mat-icon>
@@ -130,13 +130,13 @@ interface UploadFile {
                       <span class="error-message">{{ file.error }}</span>
                     }
                   </div>
-                  
+
                   @switch (file.status) {
                     @case ('uploading') {
                       <div class="progress-info">
                         <span class="progress-text">{{ file.progress.toFixed(0) }}%</span>
-                        <mat-progress-bar 
-                          mode="determinate" 
+                        <mat-progress-bar
+                          mode="determinate"
                           [value]="file.progress"
                         ></mat-progress-bar>
                       </div>
@@ -146,7 +146,9 @@ interface UploadFile {
                       <span class="status-text">Verifying...</span>
                     }
                     @case ('complete') {
-                      <mat-icon class="success" matTooltip="Upload successful">check_circle</mat-icon>
+                      <mat-icon class="success" matTooltip="Upload successful"
+                        >check_circle</mat-icon
+                      >
                     }
                     @case ('error') {
                       <button mat-icon-button (click)="retryUpload(file)" matTooltip="Retry upload">
@@ -156,10 +158,10 @@ interface UploadFile {
                   }
                 </div>
               }
-              
+
               <div class="actions">
-                <button 
-                  mat-raised-button 
+                <button
+                  mat-raised-button
                   color="primary"
                   (click)="uploadAll()"
                   [disabled]="!currentUser() || isUploading() || !hasPendingFiles()"
@@ -170,18 +172,10 @@ interface UploadFile {
                     Upload {{ pendingCount() }} File(s)
                   }
                 </button>
-                <button 
-                  mat-button 
-                  (click)="clearCompleted()"
-                  [disabled]="isUploading()"
-                >
+                <button mat-button (click)="clearCompleted()" [disabled]="isUploading()">
                   Clear Completed
                 </button>
-                <button 
-                  mat-button 
-                  (click)="clearAll()"
-                  [disabled]="isUploading()"
-                >
+                <button mat-button (click)="clearAll()" [disabled]="isUploading()">
                   Clear All
                 </button>
               </div>
@@ -224,7 +218,7 @@ interface UploadFile {
             <li><strong>Don't refresh the page</strong> during uploads</li>
             <li><strong>Keep browser tab active</strong> while uploading</li>
           </ul>
-          
+
           <h4>Steps:</h4>
           <ol>
             <li>Make sure you're logged in (check top of page)</li>
@@ -233,248 +227,251 @@ interface UploadFile {
             <li>Wait for green checkmark ✓ on each file</li>
             <li>If any fail (red ✗), click retry button</li>
           </ol>
-          
+
           <div class="info-box success-box">
             <mat-icon>verified</mat-icon>
             <p>
-              Files are verified after upload to ensure they're safely stored.
-              Only files with green checkmarks are successfully uploaded.
+              Files are verified after upload to ensure they're safely stored. Only files with green
+              checkmarks are successfully uploaded.
             </p>
           </div>
         </mat-card-content>
       </mat-card>
     </div>
   `,
-  styles: [`
-    .upload-container {
-      padding: 24px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .status-card {
-      margin-bottom: 16px;
-      background: var(--mat-sys-surface-variant);
-    }
-
-    .status-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .status-chip {
-      background: rgba(var(--mat-sys-success-rgb), 0.2);
-      color: var(--mat-sys-success);
-    }
-
-    .error-chip {
-      background: rgba(var(--mat-sys-error-rgb), 0.2);
-      color: var(--mat-sys-error);
-    }
-
-    .upload-card {
-      margin-bottom: 24px;
-    }
-
-    .dropzone {
-      border: 2px dashed var(--mat-sys-outline);
-      border-radius: 8px;
-      padding: 48px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      background: var(--mat-sys-surface-variant);
-      position: relative;
-    }
-
-    .dropzone:hover:not(.disabled) {
-      border-color: var(--mat-sys-primary);
-      background: rgba(var(--mat-sys-primary-rgb), 0.05);
-    }
-
-    .dropzone.dragover {
-      border-color: var(--mat-sys-primary);
-      background: rgba(var(--mat-sys-primary-rgb), 0.1);
-    }
-
-    .dropzone.disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .upload-icon {
-      font-size: 48px;
-      width: 48px;
-      height: 48px;
-      color: var(--mat-sys-primary);
-      margin-bottom: 16px;
-    }
-
-    .file-list {
-      margin-top: 24px;
-      border-top: 1px solid var(--mat-sys-outline-variant);
-      padding-top: 16px;
-    }
-
-    .file-list-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .file-list h3 {
-      margin: 0;
-    }
-
-    .total-size {
-      font-size: 14px;
-      color: var(--mat-sys-on-surface-variant);
-    }
-
-    .file-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      border: 1px solid var(--mat-sys-outline-variant);
-      border-radius: 4px;
-      margin-bottom: 8px;
-      position: relative;
-      transition: all 0.2s ease;
-    }
-
-    .file-item.error-item {
-      border-color: var(--mat-sys-error);
-      background: rgba(var(--mat-sys-error-rgb), 0.05);
-    }
-
-    .file-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .file-name {
-      font-weight: 500;
-    }
-
-    .file-size {
-      font-size: 12px;
-      color: var(--mat-sys-on-surface-variant);
-    }
-
-    .error-message {
-      font-size: 12px;
-      color: var(--mat-sys-error);
-      margin-top: 4px;
-    }
-
-    .progress-info {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 120px;
-    }
-
-    .progress-text {
-      font-size: 12px;
-      font-weight: 500;
-      min-width: 35px;
-    }
-
-    .status-text {
-      font-size: 12px;
-      color: var(--mat-sys-primary);
-      font-weight: 500;
-    }
-
-    .success {
-      color: var(--mat-sys-success);
-    }
-
-    .error {
-      color: var(--mat-sys-error);
-    }
-
-    .actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .upload-summary {
-      margin-top: 24px;
-      padding: 16px;
-      background: var(--mat-sys-surface-variant);
-      border-radius: 8px;
-    }
-
-    .upload-summary h4 {
-      margin: 0 0 12px 0;
-    }
-
-    .summary-stats {
-      display: flex;
-      gap: 24px;
-    }
-
-    .stat {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .instructions-card {
-      h4 {
-        margin-top: 16px;
-        margin-bottom: 8px;
+  styles: [
+    `
+      .upload-container {
+        padding: 24px;
+        max-width: 900px;
+        margin: 0 auto;
       }
-      
-      ol, ul {
-        margin: 8px 0;
-        padding-left: 24px;
-      }
-      
-      li {
-        margin-bottom: 8px;
-      }
-    }
 
-    .important-list {
-      background: rgba(var(--mat-sys-warning-rgb), 0.1);
-      padding: 12px 12px 12px 32px;
-      border-radius: 4px;
-      margin: 8px 0;
-    }
-
-    .info-box {
-      display: flex;
-      gap: 12px;
-      padding: 16px;
-      border-radius: 4px;
-      margin-top: 16px;
-      
-      mat-icon {
-        flex-shrink: 0;
+      .status-card {
+        margin-bottom: 16px;
+        background: var(--mat-sys-surface-variant);
       }
-      
-      p {
+
+      .status-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .status-chip {
+        background: rgba(var(--mat-sys-success-rgb), 0.2);
+        color: var(--mat-sys-success);
+      }
+
+      .error-chip {
+        background: rgba(var(--mat-sys-error-rgb), 0.2);
+        color: var(--mat-sys-error);
+      }
+
+      .upload-card {
+        margin-bottom: 24px;
+      }
+
+      .dropzone {
+        border: 2px dashed var(--mat-sys-outline);
+        border-radius: 8px;
+        padding: 48px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: var(--mat-sys-surface-variant);
+        position: relative;
+      }
+
+      .dropzone:hover:not(.disabled) {
+        border-color: var(--mat-sys-primary);
+        background: rgba(var(--mat-sys-primary-rgb), 0.05);
+      }
+
+      .dropzone.dragover {
+        border-color: var(--mat-sys-primary);
+        background: rgba(var(--mat-sys-primary-rgb), 0.1);
+      }
+
+      .dropzone.disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .upload-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        color: var(--mat-sys-primary);
+        margin-bottom: 16px;
+      }
+
+      .file-list {
+        margin-top: 24px;
+        border-top: 1px solid var(--mat-sys-outline-variant);
+        padding-top: 16px;
+      }
+
+      .file-list-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+
+      .file-list h3 {
         margin: 0;
       }
-    }
 
-    .success-box {
-      background: rgba(var(--mat-sys-success-rgb), 0.1);
-      color: var(--mat-sys-success);
-    }
+      .total-size {
+        font-size: 14px;
+        color: var(--mat-sys-on-surface-variant);
+      }
 
-    mat-progress-bar {
-      height: 4px;
-      border-radius: 2px;
-    }
-  `],
+      .file-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border: 1px solid var(--mat-sys-outline-variant);
+        border-radius: 4px;
+        margin-bottom: 8px;
+        position: relative;
+        transition: all 0.2s ease;
+      }
+
+      .file-item.error-item {
+        border-color: var(--mat-sys-error);
+        background: rgba(var(--mat-sys-error-rgb), 0.05);
+      }
+
+      .file-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .file-name {
+        font-weight: 500;
+      }
+
+      .file-size {
+        font-size: 12px;
+        color: var(--mat-sys-on-surface-variant);
+      }
+
+      .error-message {
+        font-size: 12px;
+        color: var(--mat-sys-error);
+        margin-top: 4px;
+      }
+
+      .progress-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 120px;
+      }
+
+      .progress-text {
+        font-size: 12px;
+        font-weight: 500;
+        min-width: 35px;
+      }
+
+      .status-text {
+        font-size: 12px;
+        color: var(--mat-sys-primary);
+        font-weight: 500;
+      }
+
+      .success {
+        color: var(--mat-sys-success);
+      }
+
+      .error {
+        color: var(--mat-sys-error);
+      }
+
+      .actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .upload-summary {
+        margin-top: 24px;
+        padding: 16px;
+        background: var(--mat-sys-surface-variant);
+        border-radius: 8px;
+      }
+
+      .upload-summary h4 {
+        margin: 0 0 12px 0;
+      }
+
+      .summary-stats {
+        display: flex;
+        gap: 24px;
+      }
+
+      .stat {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .instructions-card {
+        h4 {
+          margin-top: 16px;
+          margin-bottom: 8px;
+        }
+
+        ol,
+        ul {
+          margin: 8px 0;
+          padding-left: 24px;
+        }
+
+        li {
+          margin-bottom: 8px;
+        }
+      }
+
+      .important-list {
+        background: rgba(var(--mat-sys-warning-rgb), 0.1);
+        padding: 12px 12px 12px 32px;
+        border-radius: 4px;
+        margin: 8px 0;
+      }
+
+      .info-box {
+        display: flex;
+        gap: 12px;
+        padding: 16px;
+        border-radius: 4px;
+        margin-top: 16px;
+
+        mat-icon {
+          flex-shrink: 0;
+        }
+
+        p {
+          margin: 0;
+        }
+      }
+
+      .success-box {
+        background: rgba(var(--mat-sys-success-rgb), 0.1);
+        color: var(--mat-sys-success);
+      }
+
+      mat-progress-bar {
+        height: 4px;
+        border-radius: 2px;
+      }
+    `,
+  ],
 })
 export class OnemapUploadComponent {
   private storage = inject(Storage);
@@ -484,10 +481,10 @@ export class OnemapUploadComponent {
 
   // User state
   currentUser = signal<any>(null);
-  
+
   constructor() {
     // Subscribe to auth state
-    user(this.auth).subscribe(user => {
+    user(this.auth).subscribe((user) => {
       this.currentUser.set(user);
     });
   }
@@ -498,12 +495,10 @@ export class OnemapUploadComponent {
   isUploading = signal(false);
 
   // Computed values
-  totalSize = computed(() => 
-    this.files().reduce((sum, file) => sum + file.size, 0)
-  );
+  totalSize = computed(() => this.files().reduce((sum, file) => sum + file.size, 0));
 
-  pendingCount = computed(() => 
-    this.files().filter(f => f.status === 'pending' || f.status === 'error').length
+  pendingCount = computed(
+    () => this.files().filter((f) => f.status === 'pending' || f.status === 'error').length,
   );
 
   hasPendingFiles = computed(() => this.pendingCount() > 0);
@@ -511,13 +506,13 @@ export class OnemapUploadComponent {
   uploadProgress = computed(() => {
     const files = this.files();
     if (files.length === 0) return 0;
-    
+
     const totalProgress = files.reduce((sum, file) => {
       if (file.status === 'complete') return sum + 100;
       if (file.status === 'uploading') return sum + file.progress;
       return sum;
     }, 0);
-    
+
     return Math.round(totalProgress / files.length);
   });
 
@@ -525,10 +520,10 @@ export class OnemapUploadComponent {
     const files = this.files();
     return {
       total: files.length,
-      completed: files.filter(f => f.status === 'complete').length,
-      failed: files.filter(f => f.status === 'error').length,
-      pending: files.filter(f => f.status === 'pending').length,
-      uploading: files.filter(f => f.status === 'uploading' || f.status === 'verifying').length
+      completed: files.filter((f) => f.status === 'complete').length,
+      failed: files.filter((f) => f.status === 'error').length,
+      pending: files.filter((f) => f.status === 'pending').length,
+      uploading: files.filter((f) => f.status === 'uploading' || f.status === 'verifying').length,
     };
   });
 
@@ -539,7 +534,7 @@ export class OnemapUploadComponent {
 
   onDragOver(event: DragEvent): void {
     if (!this.currentUser() || this.isUploading()) return;
-    
+
     event.preventDefault();
     event.stopPropagation();
     this.isDragging.set(true);
@@ -553,7 +548,7 @@ export class OnemapUploadComponent {
 
   onDrop(event: DragEvent): void {
     if (!this.currentUser() || this.isUploading()) return;
-    
+
     event.preventDefault();
     event.stopPropagation();
     this.isDragging.set(false);
@@ -566,7 +561,7 @@ export class OnemapUploadComponent {
 
   onFileSelected(event: Event): void {
     if (!this.currentUser() || this.isUploading()) return;
-    
+
     const input = event.target as HTMLInputElement;
     if (input.files) {
       this.addFiles(input.files);
@@ -576,10 +571,11 @@ export class OnemapUploadComponent {
   }
 
   private addFiles(fileList: FileList): void {
-    const csvFiles = Array.from(fileList).filter(file => 
-      file.type === 'text/csv' || 
-      file.type === 'application/vnd.ms-excel' ||
-      file.name.toLowerCase().endsWith('.csv')
+    const csvFiles = Array.from(fileList).filter(
+      (file) =>
+        file.type === 'text/csv' ||
+        file.type === 'application/vnd.ms-excel' ||
+        file.name.toLowerCase().endsWith('.csv'),
     );
 
     if (csvFiles.length === 0) {
@@ -588,8 +584,8 @@ export class OnemapUploadComponent {
     }
 
     // Check for duplicates
-    const existingNames = new Set(this.files().map(f => f.name));
-    const newFiles = csvFiles.filter(file => {
+    const existingNames = new Set(this.files().map((f) => f.name));
+    const newFiles = csvFiles.filter((file) => {
       if (existingNames.has(file.name)) {
         this.showError(`${file.name} is already in the list`);
         return false;
@@ -597,16 +593,16 @@ export class OnemapUploadComponent {
       return true;
     });
 
-    const uploadFiles: UploadFile[] = newFiles.map(file => ({
+    const uploadFiles: UploadFile[] = newFiles.map((file) => ({
       name: file.name,
       size: file.size,
       file: file, // Keep reference to actual File object
       progress: 0,
       status: 'pending',
-      retryCount: 0
+      retryCount: 0,
     }));
 
-    this.files.update(files => [...files, ...uploadFiles]);
+    this.files.update((files) => [...files, ...uploadFiles]);
   }
 
   async uploadAll(): Promise<void> {
@@ -616,25 +612,27 @@ export class OnemapUploadComponent {
     }
 
     this.isUploading.set(true);
-    const filesToUpload = this.files().filter(f => 
-      f.status === 'pending' || f.status === 'error'
+    const filesToUpload = this.files().filter(
+      (f) => f.status === 'pending' || f.status === 'error',
     );
 
     // Upload sequentially for better reliability
     for (const file of filesToUpload) {
       await this.uploadFile(file);
       // Small delay between uploads
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
     this.isUploading.set(false);
-    
+
     // Show final summary
     const summary = this.uploadSummary();
     if (summary.failed === 0) {
       this.showSuccess(`All ${summary.completed} files uploaded successfully!`);
     } else {
-      this.showError(`${summary.completed} succeeded, ${summary.failed} failed. Click retry for failed files.`);
+      this.showError(
+        `${summary.completed} succeeded, ${summary.failed} failed. Click retry for failed files.`,
+      );
     }
   }
 
@@ -644,24 +642,25 @@ export class OnemapUploadComponent {
       uploadFile.error = undefined;
       uploadFile.status = 'uploading';
       uploadFile.progress = 0;
-      this.files.update(files => [...files]);
+      this.files.update((files) => [...files]);
 
       // Create unique filename with timestamp to prevent overwrites
       const timestamp = Date.now();
       const fileName = `${timestamp}_${uploadFile.name}`;
       const storageRef = ref(this.storage, `${this.STORAGE_PATH}/${fileName}`);
-      
+
       // Create upload task
       const uploadTask = uploadBytesResumable(storageRef, uploadFile.file);
 
       // Wait for upload to complete
       await new Promise<void>((resolve, reject) => {
-        uploadTask.on('state_changed',
+        uploadTask.on(
+          'state_changed',
           (snapshot) => {
             // Progress update
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             uploadFile.progress = progress;
-            this.files.update(files => [...files]);
+            this.files.update((files) => [...files]);
           },
           (error) => {
             // Error
@@ -671,13 +670,13 @@ export class OnemapUploadComponent {
           () => {
             // Complete
             resolve();
-          }
+          },
         );
       });
 
       // Verify upload was successful
       uploadFile.status = 'verifying';
-      this.files.update(files => [...files]);
+      this.files.update((files) => [...files]);
 
       // Get download URL and metadata to verify
       const url = await getDownloadURL(uploadTask.snapshot.ref);
@@ -692,27 +691,28 @@ export class OnemapUploadComponent {
       uploadFile.status = 'complete';
       uploadFile.url = url;
       uploadFile.progress = 100;
-      this.files.update(files => [...files]);
+      this.files.update((files) => [...files]);
 
       // Log successful upload
       await this.logUpload(uploadFile, fileName, url);
-      
+
       if (!isRetry) {
         this.showSuccess(`${uploadFile.name} uploaded successfully`);
       }
-
     } catch (error: any) {
       console.error('Upload failed:', error);
-      
+
       uploadFile.status = 'error';
       uploadFile.error = this.getErrorMessage(error);
       uploadFile.retryCount = isRetry ? uploadFile.retryCount : uploadFile.retryCount + 1;
-      this.files.update(files => [...files]);
+      this.files.update((files) => [...files]);
 
       // Auto-retry for certain errors
       if (uploadFile.retryCount < this.MAX_RETRIES && this.shouldRetry(error)) {
-        this.showError(`${uploadFile.name} failed, retrying... (${uploadFile.retryCount}/${this.MAX_RETRIES})`);
-        await new Promise(resolve => setTimeout(resolve, this.RETRY_DELAY));
+        this.showError(
+          `${uploadFile.name} failed, retrying... (${uploadFile.retryCount}/${this.MAX_RETRIES})`,
+        );
+        await new Promise((resolve) => setTimeout(resolve, this.RETRY_DELAY));
         return this.uploadFile(uploadFile, true);
       }
 
@@ -722,10 +722,12 @@ export class OnemapUploadComponent {
 
   private shouldRetry(error: any): boolean {
     // Retry on network errors or timeouts
-    return error.code === 'storage/retry-limit-exceeded' ||
-           error.code === 'storage/canceled' ||
-           error.message?.includes('network') ||
-           error.message?.includes('timeout');
+    return (
+      error.code === 'storage/retry-limit-exceeded' ||
+      error.code === 'storage/canceled' ||
+      error.message?.includes('network') ||
+      error.message?.includes('timeout')
+    );
   }
 
   private getErrorMessage(error: any): string {
@@ -759,7 +761,7 @@ export class OnemapUploadComponent {
         storageUrl: url,
         status: 'uploaded',
         processed: false,
-        retryCount: file.retryCount
+        retryCount: file.retryCount,
       });
     } catch (error) {
       console.error('Failed to log upload:', error);
@@ -768,9 +770,7 @@ export class OnemapUploadComponent {
   }
 
   clearCompleted(): void {
-    this.files.update(files => 
-      files.filter(f => f.status !== 'complete')
-    );
+    this.files.update((files) => files.filter((f) => f.status !== 'complete'));
   }
 
   clearAll(): void {

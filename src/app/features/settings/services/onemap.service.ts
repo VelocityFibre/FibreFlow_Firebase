@@ -140,7 +140,7 @@ export class OneMapService {
     // Step 1: Initial Data Filtering
     // Filter records where Status = "Home Sign Ups: Approved & Installation Scheduled"
     // Exclude records where Status contains "Pole Permissions"
-    let filteredRecords = records.filter(
+    const filteredRecords = records.filter(
       (record) =>
         record.status === 'Home Sign Ups: Approved & Installation Scheduled' &&
         !record.status.includes('Pole Permissions'),

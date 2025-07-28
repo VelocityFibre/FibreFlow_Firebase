@@ -63,11 +63,10 @@
         </button>
       </div>
     </mat-card-header>
-    
+
     <mat-card-content>
       <div class="table-container" *ngIf="agentActivities().length > 0">
         <table mat-table [dataSource]="sortedAgents()" class="agents-table">
-          
           <!-- Agent Column -->
           <ng-container matColumnDef="agent">
             <th mat-header-cell *matHeaderCellDef>Agent</th>
@@ -76,8 +75,10 @@
                 <mat-icon>person</mat-icon>
                 <div class="agent-info">
                   <span class="agent-name">{{ agent.name }}</span>
-                  <span class="activity-level" 
-                        [ngClass]="'level-' + getActivityLevel(agent.totalActions).toLowerCase()">
+                  <span
+                    class="activity-level"
+                    [ngClass]="'level-' + getActivityLevel(agent.totalActions).toLowerCase()"
+                  >
                     {{ getActivityLevel(agent.totalActions) }} Activity
                   </span>
                 </div>
@@ -112,10 +113,17 @@
             <td mat-cell *matCellDef="let agent">
               <div class="completion-cell">
                 <span class="completion-percentage">{{ getCompletionRate(agent) }}%</span>
-                <mat-progress-bar 
-                  mode="determinate" 
+                <mat-progress-bar
+                  mode="determinate"
                   [value]="getCompletionRate(agent)"
-                  [color]="getCompletionRate(agent) > 80 ? 'primary' : getCompletionRate(agent) > 50 ? 'accent' : 'warn'">
+                  [color]="
+                    getCompletionRate(agent) > 80
+                      ? 'primary'
+                      : getCompletionRate(agent) > 50
+                        ? 'accent'
+                        : 'warn'
+                  "
+                >
                 </mat-progress-bar>
               </div>
             </td>
@@ -130,9 +138,12 @@
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
-              (click)="viewAgentDetails(row)"
-              class="clickable-row"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            (click)="viewAgentDetails(row)"
+            class="clickable-row"
+          ></tr>
         </table>
       </div>
 
@@ -159,7 +170,7 @@
           </mat-chip>
         </mat-card-subtitle>
       </mat-card-header>
-      
+
       <mat-card-content>
         <div class="agent-metrics">
           <div class="metric">
@@ -168,7 +179,9 @@
           </div>
           <div class="metric">
             <span class="metric-label">Active Period</span>
-            <span class="metric-value">{{ formatTimespan(agent.firstActivity, agent.lastActivity) }}</span>
+            <span class="metric-value">{{
+              formatTimespan(agent.firstActivity, agent.lastActivity)
+            }}</span>
           </div>
           <div class="metric">
             <span class="metric-label">Last Activity</span>
@@ -177,21 +190,24 @@
         </div>
 
         <!-- Status Breakdown -->
-        <div class="status-breakdown" *ngIf="agent.statusBreakdown && agent.statusBreakdown.length > 0">
+        <div
+          class="status-breakdown"
+          *ngIf="agent.statusBreakdown && agent.statusBreakdown.length > 0"
+        >
           <h4>Status Breakdown</h4>
           <mat-chip-listbox>
-            <mat-chip *ngFor="let status of agent.statusBreakdown" 
-                     [matTooltip]="status.status + ': ' + status.count + ' actions'">
+            <mat-chip
+              *ngFor="let status of agent.statusBreakdown"
+              [matTooltip]="status.status + ': ' + status.count + ' actions'"
+            >
               {{ status.status }} ({{ status.count }})
             </mat-chip>
           </mat-chip-listbox>
         </div>
       </mat-card-content>
-      
+
       <mat-card-actions>
-        <button mat-button (click)="viewAgentDetails(agent)">
-          View Details
-        </button>
+        <button mat-button (click)="viewAgentDetails(agent)">View Details</button>
       </mat-card-actions>
     </mat-card>
   </div>
