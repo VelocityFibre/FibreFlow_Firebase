@@ -1,22 +1,15 @@
 # Daily Processing Report - 2025-07-21
 
 **File Processed**: Lawley July Week 4 21072025.csv
-**Processing Time**: 2025-07-24T07:28:42.155Z
+**Processing Time**: 2025-08-05T11:09:28.474Z
 
 ## Summary Statistics
 
 - **Total Records in File**: 16143
-- **Valid Records Processed**: 5241
-- **Invalid Records Skipped**: 10902
-- **New Records Added**: 181
-- **Existing Records Updated**: 4
-- **Records Unchanged**: 5056
+- **New Records Added**: 356
+- **Existing Records Updated**: 59
+- **Records Unchanged**: 15728
 - **Records Without Property ID**: 0
-
-## ⚠️ Data Quality Warning
-
-This file contained 10902 invalid records that were skipped.
-See validation report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/data/validation-logs/validation_2025-07-21_Lawley July Week 4 21072025.md
 
 ## Changes Made
 
@@ -24,31 +17,2636 @@ See validation report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/data/val
 
 | Field | Changes Count |
 |-------|---------------|
-| lst_mod_dt | 4 |
-| Status | 3 |
-| Flow Name Groups | 3 |
-| lst_mod_by | 3 |
-| date_status_changed | 3 |
-| Client happy with Installation | 3 |
-| Read English Terms and Conditions | 3 |
-| Read Xhosa Terms and Conditions | 3 |
-| Customer Signature. Accept Terms and Conditions | 3 |
-| Home Installations - Actual Device Location (Latitude) | 3 |
-| Home Installations - Actual Device Location (Longitude) | 3 |
-| Photo of Connection Points in the BB/Handhole (other side of jo | 2 |
-| Photo of the Handhole Before Closing | 2 |
-| Photo of the Handhole After Closing | 2 |
-| Photo Showing Location on the Wall (before installation) | 2 |
+| lst_mod_dt | 50 |
+| date_status_changed | 50 |
+| Stand Number | 47 |
+| Latitude Longitude | 47 |
+| CONSENT TO PLANT A POLE | 47 |
+| ISIVUMELWANO SOKUTYALWA KWEPALI | 47 |
+| PONs | 46 |
+| Location Address | 46 |
+| Actual Device Location (Latitude) | 46 |
+| Pole Number | 46 |
+| Survey Date | 46 |
+| Language | 45 |
+| CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM ( | 45 |
+| Owner or Tenant | 44 |
+| Longitude | 43 |
+| Special Conditions (if any) | 42 |
+| Field Agent Name (pole permission) | 42 |
+| lst_mod_by | 41 |
+| Drop Number | 41 |
+| Last Modified Pole Permissions By | 39 |
+| Home Sign Ups - Actual Device Location (Longitude) | 39 |
+| Home Sign Ups - Distance between Actual and Captured Point | 39 |
+| Address Validation | 38 |
+| Contact Person Name and Surname | 38 |
+| Sections | 37 |
+| if Yes | 37 |
+| Alternative Contact Person: Surname | 37 |
+| How Many People | 37 |
+| Last Modified Home Sign Ups Date | 37 |
+| ID Number | 36 |
+| Backyard Dwellings | 36 |
+| Site | 35 |
+| Alternative Contact Number (e.g.0123456789) | 35 |
+| Home Sign Ups - Estimated horizontal accuracy radius in meters | 35 |
+| Passport Number | 35 |
+| How Many Dwellings | 34 |
+| Last Modified Home Sign Ups By | 34 |
+| Contact Person: Name | 33 |
+| Nokia Easy Start ONT Activation Code | 33 |
+| Signature of the Authorised Person | 33 |
+| ONT activation light level | 33 |
+| Actual Device Location (Longitude) | 33 |
+| UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU ( | 33 |
+| Contact Person: Surname | 32 |
+| Contact Number (e.g.0123456789) | 32 |
+| Date of Signature | 32 |
+| If Yes | 32 |
+| Customer Consent Signature | 32 |
+| Home Sign Ups - Actual Device Location (Latitude) | 32 |
+| Number of People Living in the Home | 32 |
+| Number of Sticker Placed on Door | 31 |
+| Field Agent Name (Home Sign Ups) | 31 |
+| Email Address | 31 |
+| Status | 31 |
+| Mini-UPS Serial Number | 31 |
+| Pole Permissions - Estimated horizontal accuracy radius in mete | 30 |
+| Alternative Contact Person: Name | 30 |
+| Photo of Property | 30 |
+| Last Modified Pole Permissions Date | 30 |
+| General Comments | 29 |
+| Home Installations - Actual Device Location (Latitude) | 29 |
+| Home Installations - Actual Device Location (Longitude) | 29 |
+| Home Installations - Estimated horizontal accuracy radius in me | 28 |
+| Last Modified Home Installations Date | 28 |
+| Mark Type of Commercial if Applicable | 27 |
+| How do you access internet at your home currently? | 27 |
+| Home Installations - Distance between Actual and Captured Point | 27 |
+| Marketing Activator Name | 27 |
+| Preferred Place for Router Installation in Home | 25 |
+| Pole Permissions - Distance between Actual and Captured Point | 24 |
+| Primary House of Backyard Dwelling | 24 |
+| Pole Permissions - Actual Device Location (Latitude) | 24 |
+| ONT Barcode | 24 |
+| Home entry point | 23 |
+| Outside cable span: Pole to Pigtail screw | 23 |
+| Gender | 22 |
+| I hereby consent that I have a permanent Municipal electrical c | 21 |
+| Latitude | 20 |
+| Read English Terms and Conditions | 19 |
+| Structure of Backyard Dwelling | 18 |
+| Pole Permissions - Actual Device Location (Longitude) | 18 |
+| Photo of Active Broadband Light (with FT sticker and Drop Numbe | 18 |
+| Access to Property | 17 |
+| Distance between Actual and Captured Point | 16 |
+| Last Modified Home Installations By | 16 |
+| Marketing Activator Surname | 16 |
+| Record any Relevant Comments | 15 |
+| Installer Name | 15 |
+| Consent Form | 13 |
+| Declined | 13 |
+| Powermeter reading (at ONT before activation) | 13 |
+| Has the client been taught where and how to buy a fibertime vou | 12 |
+| Client happy with Installation | 12 |
+| Flow Name Groups | 12 |
+| Residential or Commercial Dwelling | 11 |
+| Powermeter reading (at dome) | 11 |
+| Home Entry Point: Outside (Pigtail screw / Duct entry) | 10 |
+| Photo of the Handhole Before Closing | 10 |
+| Customer Signature. Accept Terms and Conditions | 10 |
+| Photo of the Handhole After Closing | 9 |
+| Estimated horizontal accuracy radius in meters | 9 |
+| Please Specify | 9 |
+| Photo of Connection Points in the BB/Handhole (other side of jo | 9 |
+| Photo Showing Location on the Wall (before installation) | 9 |
+| Read Xhosa Terms and Conditions | 9 |
+| Patched and labelled drop | 8 |
+| Dome Joint Number / BB | 8 |
+| Photo of Splitter Tray in Dome Joint (front side) | 7 |
+| Reason Why it was Declined | 6 |
+| Fiber cable: entry to ONT (after install) | 6 |
+| Overall work area after complete install: including ONT and fib | 6 |
+| Length of Drop Cable | 6 |
+| Number of Cellphone number linked to fibertime network | 6 |
+| Cellphone no 1 | 6 |
+| Cellphone no 2 | 6 |
+| House Number | 5 |
+| Cellphone no 3 | 5 |
+| Cellphone no 4 | 5 |
+| Cellphone no 5 | 5 |
+| Cellphone no 6 | 5 |
+| Cellphone no 7 | 5 |
+| Cellphone no 8 | 5 |
+| Cellphone no 9 | 5 |
+| Cellphone no 10 | 5 |
+| Cellphone no 11 | 5 |
+| Cellphone no 12 | 5 |
+| Cellphone no 13 | 5 |
+| Cellphone no 14 | 5 |
+| Cellphone no 15 | 5 |
+| Cellphone no 16 | 5 |
+| Cellphone no 17 | 5 |
+| Record Relevant Comments | 2 |
+| Any Damages to be Reported | 2 |
+| Cellphone no 18 | 2 |
+| 1map NAD ID | 1 |
+| If there are | 1 |
 
 ### Detailed Changes (First 50)
 
-#### 1. Property ID: 396924
+#### 1. Property ID: 349670
+
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Sections**:
+  - Old: "10"
+  - New: "LAW"
+- **PONs**:
+  - Old: "111"
+  - New: "10"
+- **Location Address**:
+  - Old: "28 REFILWE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+  - New: "111"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "28 REFILWE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh43@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-06 20:27:58.331823+02"
+  - New: "ftlawhh38@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/07/03 12:05:04.838"
+  - New: "2025-07-21 14:40:41.765965+02"
+- **Pole Number**:
+  - Old: "LAW.P.C183"
+  - New: "2025/07/03 12:05:04.838"
+- **Drop Number**:
+  - Old: "DR1748772"
+  - New: "LAW.P.C183"
+- **Language**:
+  - Old: "Xitsonga"
+  - New: "DR1748772"
+- **Survey Date**:
+  - Old: "2025/07/03 12:05:04.838"
+  - New: "Xitsonga"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/07/21 00:00:00"
+- **Contact Person: Name**:
+  - Old: "Nandos"
+  - New: ""
+- **Contact Person: Surname**:
+  - Old: "mucavele"
+  - New: "Nandos"
+- **ID Number**:
+  - Old: ""
+  - New: "mucavele"
+- **Contact Number (e.g.0123456789)**:
+  - Old: "073 687 4684"
+  - New: ""
+- **Address Validation**:
+  - Old: "30 REFILWE STREET"
+  - New: "073 687 4684"
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "30 REFILWE STREET"
+- **Latitude Longitude**:
+  - Old: "LENASIA"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7366"
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: "-26.379716590680413"
+  - New: "7366"
+- **Special Conditions (if any)**:
+  - Old: "27.81322760729209"
+  - New: "-26.379716590680413"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "27.81322760729209"
+- **Date of Signature**:
+  - Old: "Tenant"
+  - New: ""
+- **Latitude**:
+  - Old: ""
+  - New: "Tenant"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "-26.3797165906804"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "27.8132276072921"
+  - New: "-26.3797165906804"
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "27.8132276072921"
+- **if Yes**:
+  - Old: "Yes"
+  - New: "Vodacom MTN Cell C or Telkom"
+- **Gender**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Person: Name**:
+  - Old: "No"
+  - New: "Yes"
+- **Alternative Contact Person: Surname**:
+  - Old: ""
+  - New: "No"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "Male"
+  - New: ""
+- **Primary House of Backyard Dwelling**:
+  - Old: ""
+  - New: "Male"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "Primary House"
+  - New: ""
+- **How do you access internet at your home currently?**:
+  - Old: "4"
+  - New: "Primary House"
+- **Backyard Dwellings**:
+  - Old: "Residential"
+  - New: "4"
+- **If Yes**:
+  - Old: "4"
+  - New: "1"
+- **How Many Dwellings**:
+  - Old: "Vodacom MTN Cell C or Telkom"
+  - New: ""
+- **How Many People**:
+  - Old: "1"
+  - New: "Yes"
+- **Structure of Backyard Dwelling**:
+  - Old: "Zinc"
+  - New: "4"
+- **Consent Form**:
+  - Old: ""
+  - New: "Zinc"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "1"
+  - New: ""
+- **Preferred Place for Router Installation in Home**:
+  - Old: "Living Room"
+  - New: "1"
+- **Number of Sticker Placed on Door**:
+  - Old: ""
+  - New: "Living Room"
+- **Photo of Property**:
+  - Old: "1728550"
+  - New: ""
+- **Customer Consent Signature**:
+  - Old: "1728549"
+  - New: "1728550"
+- **General Comments**:
+  - Old: ""
+  - New: "1728549"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "Karma"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: "-26.37971"
+  - New: "Karma"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "27.813211"
+  - New: "-26.37971"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "1.8"
+  - New: "27.813211"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "1.8"
+- **Last Modified Home Sign Ups By**:
+  - Old: "ftlawhh43@fibertime.com"
+  - New: ""
+- **Last Modified Home Sign Ups Date**:
+  - Old: "2025-07-03 12:05:04.837526+02"
+  - New: "ftlawhh38@fibertime.com"
+- **Contact Person Name and Surname**:
+  - Old: "Nandos mucavele"
+  - New: "2025-07-21T12:40:41.374Z"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: ""
+  - New: "Nandos mucavele"
+
+#### 2. Property ID: 327234
+
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Sections**:
+  - Old: "4"
+  - New: "LAW"
+- **PONs**:
+  - Old: "41"
+  - New: "4"
+- **Location Address**:
+  - Old: "270 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "41"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "270 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh51@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-06-24 11:12:17.309458+02"
+  - New: "ftlawhh41@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/06/24 11:12:14.065"
+  - New: "2025-07-21 15:21:21.698538+02"
+- **Pole Number**:
+  - Old: "LAW.P.A774"
+  - New: "2025/06/24 11:12:14.065"
+- **Drop Number**:
+  - Old: "DR1742557"
+  - New: "LAW.P.A774"
+- **Language**:
+  - Old: "Xitsonga"
+  - New: "DR1742557"
+- **Survey Date**:
+  - Old: "2025/06/24 11:12:14.065"
+  - New: "Xitsonga"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/07/21 00:00:00"
+- **Contact Person: Name**:
+  - Old: "lucky"
+  - New: ""
+- **Contact Person: Surname**:
+  - Old: "mashinzwi"
+  - New: "lucky"
+- **ID Number**:
+  - Old: "2006"
+  - New: "mashinzwi"
+- **Passport Number**:
+  - Old: "12"
+  - New: "0607095348084"
+- **Email Address**:
+  - Old: "07"
+  - New: ""
+- **Address Validation**:
+  - Old: ""
+  - New: "0787661526"
+- **Stand Number**:
+  - Old: "0787661526"
+  - New: "270 SIMELANI AVENUE"
+- **Latitude Longitude**:
+  - Old: "270 SIMELANI AVENUE"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "LAWLEY ESTATE"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "LENASIA"
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: "1824"
+  - New: "6290"
+- **Special Conditions (if any)**:
+  - Old: "6290"
+  - New: "-26.377692154426423"
+- **Field Agent Name (pole permission)**:
+  - Old: "-26.377692154426423"
+  - New: "27.80545879963655"
+- **Signature of the Authorised Person**:
+  - Old: "27.80545879963655"
+  - New: ""
+- **Latitude**:
+  - Old: ""
+  - New: "Owner"
+- **Longitude**:
+  - Old: "Owner"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: ""
+  - New: "-26.3776921544264"
+- **Last Modified Pole Permissions By**:
+  - Old: "-26.3776921544264"
+  - New: "27.8054587996366"
+- **Last Modified Pole Permissions Date**:
+  - Old: "27.8054587996366"
+  - New: ""
+- **if Yes**:
+  - Old: ""
+  - New: "Vodacom MTN Cell C or Telkom"
+- **Alternative Contact Person: Name**:
+  - Old: ""
+  - New: "Yes"
+- **Alternative Contact Person: Surname**:
+  - Old: "Yes"
+  - New: "No"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "No"
+  - New: ""
+- **Primary House of Backyard Dwelling**:
+  - Old: ""
+  - New: "Male"
+- **Number of People Living in the Home**:
+  - Old: "Male"
+  - New: ""
+- **How do you access internet at your home currently?**:
+  - Old: ""
+  - New: "Primary House"
+- **Backyard Dwellings**:
+  - Old: "Primary House"
+  - New: "2"
+- **If Yes**:
+  - Old: "No"
+  - New: ""
+- **How Many Dwellings**:
+  - Old: "Residential"
+  - New: ""
+- **How Many People**:
+  - Old: "Vodacom MTN Cell C or Telkom"
+  - New: "No"
+- **Preferred Place for Router Installation in Home**:
+  - Old: ""
+  - New: "1"
+- **Number of Sticker Placed on Door**:
+  - Old: "1"
+  - New: "Family Room"
+- **Photo of Property**:
+  - Old: "Family Room"
+  - New: ""
+- **Customer Consent Signature**:
+  - Old: ""
+  - New: "1917857"
+- **General Comments**:
+  - Old: ""
+  - New: "1653674"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "1653674"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "Dikgahlo Lesitha"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "Dikgahlo Lesitha"
+  - New: "-26.377663"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "-26.377663"
+  - New: "27.805446"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: "27.805446"
+  - New: "3.5"
+- **Last Modified Home Sign Ups By**:
+  - Old: "3.5"
+  - New: ""
+- **Last Modified Home Sign Ups Date**:
+  - Old: ""
+  - New: "ftlawhh41@fibertime.com"
+- **Contact Person Name and Surname**:
+  - Old: "ftlawhh51@fibertime.com"
+  - New: "2025-07-21T13:21:20.011Z"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: "2025-06-24 11:12:14.064868+02"
+  - New: "lucky mashinzwi"
+- **ONT activation light level**:
+  - Old: "lucky mashinzwi"
+  - New: ""
+
+#### 3. Property ID: 396924
 
 - **lst_mod_dt**:
   - Old: "2025-07-20 13:35:09.699508+02"
   - New: "2025-07-21 10:53:51.836597+02"
 
-#### 2. Property ID: 355147
+#### 4. Property ID: 396952
+
+- **lst_mod_dt**:
+  - Old: "2025-07-20 13:52:52.998919+02"
+  - New: "2025-07-21 10:53:52.053016+02"
+
+#### 5. Property ID: 396838
+
+- **lst_mod_by**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "ftlawhh13@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "2025-07-20 12:41:48.641907+02"
+  - New: "2025-07-21 10:53:50.557898+02"
+
+#### 6. Property ID: 396855
+
+- **lst_mod_dt**:
+  - Old: "2025-07-20 12:50:32.639236+02"
+  - New: "2025-07-21 10:53:51.01725+02"
+
+#### 7. Property ID: 322668
+
+- **Status**:
+  - Old: "Pole Permission: Approved"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Sections**:
+  - Old: "10"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **PONs**:
+  - Old: "114"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Location Address**:
+  - Old: "6 LESEDI STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+  - New: "LAW"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "10"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "114"
+- **Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "6 LESEDI STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh36@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-06-23 13:49:17.986933+02"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025/06/22 11:43:15.056"
+  - New: ""
+- **Pole Number**:
+  - Old: "LAW.P.C237"
+  - New: "ftlawhh38@fibertime.com"
+- **Drop Number**:
+  - Old: "DR1750776"
+  - New: "2025-07-21 14:15:10.64642+02"
+- **Language**:
+  - Old: "English"
+  - New: "2025/07/21 14:15:09.468"
+- **Survey Date**:
+  - Old: "2025/06/22 11:43:15.056"
+  - New: "LAW.P.C237"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "DR1750776"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "English"
+- **Contact Person: Name**:
+  - Old: "KHULISANI"
+  - New: "2025/07/21 00:00:00"
+- **Contact Person: Surname**:
+  - Old: "MPLA"
+  - New: ""
+- **Passport Number**:
+  - Old: "CN158185"
+  - New: "KHULISANI"
+- **Email Address**:
+  - Old: ""
+  - New: "MPLA"
+- **Contact Number (e.g.0123456789)**:
+  - Old: "0721788456"
+  - New: ""
+- **Address Validation**:
+  - Old: "6 LESEDI STREET"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: ""
+- **Latitude Longitude**:
+  - Old: "LENASIA"
+  - New: "0721788456"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "6 LESEDI STREET"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7150"
+  - New: "LAWLEY ESTATE"
+- **Owner or Tenant**:
+  - Old: "-26.37768674273842"
+  - New: "LENASIA"
+- **Special Conditions (if any)**:
+  - Old: "27.812093099823166"
+  - New: "1824"
+- **Field Agent Name (pole permission)**:
+  - Old: "As the person signing this form"
+  - New: "7150"
+- **Signature of the Authorised Person**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "-26.37768674273842"
+- **Date of Signature**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "27.812093099823166"
+- **Latitude**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "As the person signing this form"
+- **Longitude**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "and prior to the transfer of any title in the property"
+- **Last Modified Pole Permissions By**:
+  - Old: "abanik’inkonzo"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Last Modified Pole Permissions Date**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Access to Property**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "abanik’inkonzo"
+- **if Yes**:
+  - Old: ""
+  - New: "-26.377621"
+- **Reason Why it was Declined**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Gender**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Alternative Contact Person: Name**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Alternative Contact Person: Surname**:
+  - Old: "Owner"
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: ""
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Primary House of Backyard Dwelling**:
+  - Old: "simphiwe mashaba"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Number of People Living in the Home**:
+  - Old: "1641264"
+  - New: "Owner"
+- **Residential or Commercial Dwelling**:
+  - Old: "2025/06/22"
+  - New: ""
+- **Mark Type of Commercial if Applicable**:
+  - Old: "-26.3776867427384"
+  - New: "simphiwe mashaba"
+- **How do you access internet at your home currently?**:
+  - Old: "27.8120930998232"
+  - New: "1641264"
+- **Backyard Dwellings**:
+  - Old: "-26.377621"
+  - New: "2025/06/22"
+- **If Yes**:
+  - Old: "2025-06-22 11:43:15.055855+02"
+  - New: "10"
+- **How Many Dwellings**:
+  - Old: "10"
+  - New: "27.8120930998232"
+- **How Many People**:
+  - Old: "ftlawhh36@fibertime.com"
+  - New: "27.812162"
+- **Consent Form**:
+  - Old: ""
+  - New: "ftlawhh36@fibertime.com"
+- **House Number**:
+  - Old: ""
+  - New: "2025-06-22 11:43:15.055855+02"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: ""
+  - New: "Yes"
+- **Preferred Place for Router Installation in Home**:
+  - Old: ""
+  - New: "No"
+- **Photo of Property**:
+  - Old: ""
+  - New: "Female"
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "Primary House"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "5"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "Residential"
+- **Last Modified Home Sign Ups By**:
+  - Old: ""
+  - New: "Vodacom MTN Cell C or Telkom"
+- **Last Modified Home Sign Ups Date**:
+  - Old: ""
+  - New: "No"
+- **Patched and labelled drop**:
+  - Old: ""
+  - New: "1"
+- **Photo of Splitter Tray in Dome Joint (front side)**:
+  - Old: ""
+  - New: "Dining Room"
+- **Photo of the Handhole After Closing**:
+  - Old: ""
+  - New: "1915876"
+- **Home Entry Point: Outside (Pigtail screw / Duct entry)**:
+  - Old: ""
+  - New: "Ana Jane"
+- **Home entry point**:
+  - Old: ""
+  - New: "-26.381859"
+- **Outside cable span: Pole to Pigtail screw**:
+  - Old: ""
+  - New: "27.812569"
+- **ONT Barcode**:
+  - Old: ""
+  - New: "466.4"
+- **Mini-UPS Serial Number**:
+  - Old: "KHULISANI MPLA"
+  - New: ""
+- **Photo of Active Broadband Light (with FT sticker and Drop Numbe**:
+  - Old: ""
+  - New: "ftlawhh38@fibertime.com"
+- **Powermeter reading (at ONT before activation)**:
+  - Old: ""
+  - New: "2025-07-21 14:15:09.468204+02"
+- **Fiber cable: entry to ONT (after install)**:
+  - Old: ""
+  - New: "KHULISANI MPLA"
+
+#### 8. Property ID: 244442
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "105007153"
+- **Status**:
+  - Old: "Pole Permission: Approved"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Site**:
+  - Old: "LAWLEY"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Sections**:
+  - Old: "16"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **PONs**:
+  - Old: "177"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Location Address**:
+  - Old: "6995 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+  - New: "LAW"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "16"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "177"
+- **Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "1 LEBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh7@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-05-01 09:56:12.277951+02"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025/05/01 09:54:24.734"
+  - New: ""
+- **Pole Number**:
+  - Old: "LAW.P.D562"
+  - New: "ftlawhh14@fibertime.com"
+- **Drop Number**:
+  - Old: ""
+  - New: "2025-07-21 09:52:43.344108+02"
+- **Language**:
+  - Old: "English"
+  - New: "2025/07/21 09:52:39.559"
+- **Survey Date**:
+  - Old: "2025/05/01 09:54:24.734"
+  - New: "LAW.P.D563"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "DR1733147"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "English"
+- **Contact Person: Name**:
+  - Old: "sellina"
+  - New: "2025/07/21 00:00:00"
+- **Contact Person: Surname**:
+  - Old: "langa"
+  - New: ""
+- **ID Number**:
+  - Old: "0011181136083"
+  - New: ""
+- **Passport Number**:
+  - Old: ""
+  - New: "sellina"
+- **Email Address**:
+  - Old: ""
+  - New: "langa"
+- **Contact Number (e.g.0123456789)**:
+  - Old: "0638328498"
+  - New: "0011181136083"
+- **Address Validation**:
+  - Old: "6996"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: ""
+- **Latitude Longitude**:
+  - Old: "LENASIA"
+  - New: "0638328498"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "1 LEBONE STREET"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "6995"
+  - New: "LAWLEY ESTATE"
+- **Owner or Tenant**:
+  - Old: "-26.38077158983438"
+  - New: "LENASIA"
+- **Special Conditions (if any)**:
+  - Old: "27.811758508951712"
+  - New: "1824"
+- **Field Agent Name (pole permission)**:
+  - Old: "As the person signing this form"
+  - New: "6995"
+- **Signature of the Authorised Person**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "-26.38077158983438"
+- **Date of Signature**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "27.811758508951712"
+- **Latitude**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "As the person signing this form"
+- **Longitude**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "and prior to the transfer of any title in the property"
+- **Last Modified Pole Permissions By**:
+  - Old: "abanik’inkonzo"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Last Modified Pole Permissions Date**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Access to Property**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "abanik’inkonzo"
+- **if Yes**:
+  - Old: ""
+  - New: "-26.380663"
+- **Reason Why it was Declined**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Gender**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Alternative Contact Person: Name**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Alternative Contact Person: Surname**:
+  - Old: "Owner"
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: ""
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Primary House of Backyard Dwelling**:
+  - Old: "Adrian"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Number of People Living in the Home**:
+  - Old: "1315522"
+  - New: "Owner"
+- **Residential or Commercial Dwelling**:
+  - Old: "2025/05/01"
+  - New: ""
+- **Mark Type of Commercial if Applicable**:
+  - Old: "-26.3807715898344"
+  - New: "Adrian"
+- **How do you access internet at your home currently?**:
+  - Old: "27.8117585089517"
+  - New: "1315522"
+- **Backyard Dwellings**:
+  - Old: "-26.380663"
+  - New: "2025/05/01"
+- **If Yes**:
+  - Old: "2025-05-01 09:54:24.734169+02"
+  - New: "12.6"
+- **How Many Dwellings**:
+  - Old: "12.6"
+  - New: "27.8117585089517"
+- **How Many People**:
+  - Old: "ftlawhh7@fibertime.com"
+  - New: "27.811793"
+- **Consent Form**:
+  - Old: ""
+  - New: "ftlawhh7@fibertime.com"
+- **House Number**:
+  - Old: ""
+  - New: "2025-05-01 09:54:24.734169+02"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: ""
+  - New: "Yes"
+- **Preferred Place for Router Installation in Home**:
+  - Old: ""
+  - New: "No"
+- **Photo of Property**:
+  - Old: ""
+  - New: "Female"
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "Primary House"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "3"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "Residential"
+- **Last Modified Home Sign Ups By**:
+  - Old: ""
+  - New: "Vodacom MTN Cell C or Telkom"
+- **Last Modified Home Sign Ups Date**:
+  - Old: ""
+  - New: "No"
+- **Contact Person Name and Surname**:
+  - Old: ""
+  - New: "0"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: ""
+  - New: "1"
+- **ONT activation light level**:
+  - Old: ""
+  - New: "Zinc"
+- **Patched and labelled drop**:
+  - Old: ""
+  - New: "1"
+- **Photo of Splitter Tray in Dome Joint (front side)**:
+  - Old: ""
+  - New: "Dining Room"
+- **Photo of the Handhole Before Closing**:
+  - Old: ""
+  - New: "1907397"
+- **Photo of the Handhole After Closing**:
+  - Old: ""
+  - New: "1907396"
+- **Home Entry Point: Outside (Pigtail screw / Duct entry)**:
+  - Old: ""
+  - New: "Yolanda"
+- **Home entry point**:
+  - Old: ""
+  - New: "-26.380816"
+- **Outside cable span: Pole to Pigtail screw**:
+  - Old: ""
+  - New: "27.810308"
+- **ONT Barcode**:
+  - Old: ""
+  - New: "144.6"
+- **Mini-UPS Serial Number**:
+  - Old: "sellina langa"
+  - New: ""
+- **Photo of Active Broadband Light (with FT sticker and Drop Numbe**:
+  - Old: ""
+  - New: "ftlawhh14@fibertime.com"
+- **Powermeter reading (at ONT before activation)**:
+  - Old: ""
+  - New: "2025-07-21 09:52:39.559352+02"
+- **Fiber cable: entry to ONT (after install)**:
+  - Old: ""
+  - New: "sellina langa"
+
+#### 9. Property ID: 304044
+
+- **PONs**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Location Address**:
+  - Old: "10"
+  - New: "Home Installation: In Progress"
+- **Actual Device Location (Latitude)**:
+  - Old: "119"
+  - New: "LAW"
+- **Actual Device Location (Longitude)**:
+  - Old: "52A KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "10"
+- **Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "119"
+- **Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "52A KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **date_status_changed**:
+  - Old: "ftlawhh9@fibertime.com"
+  - New: ""
+- **Pole Number**:
+  - Old: "2025-06-26 08:59:38.586531+02"
+  - New: ""
+- **Drop Number**:
+  - Old: "2025/06/26 08:59:27.167"
+  - New: "ftlawhh3@fibertime.com"
+- **Language**:
+  - Old: ""
+  - New: "2025-07-21 10:36:16.070686+02"
+- **Survey Date**:
+  - Old: "DR1751305"
+  - New: "2025/06/26 08:59:27.167"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "isiZulu"
+  - New: ""
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: "2025/06/11 15:44:13.096"
+  - New: "DR1751305"
+- **Contact Person: Name**:
+  - Old: ""
+  - New: "isiZulu"
+- **Contact Person: Surname**:
+  - Old: ""
+  - New: "2025/06/11 15:44:13.096"
+- **ID Number**:
+  - Old: "Hloniphile"
+  - New: ""
+- **Passport Number**:
+  - Old: "Sibisi"
+  - New: ""
+- **Email Address**:
+  - Old: "7002120643084"
+  - New: "Hloniphile"
+- **Contact Number (e.g.0123456789)**:
+  - Old: ""
+  - New: "Sibisi"
+- **Address Validation**:
+  - Old: ""
+  - New: "7002120643084"
+- **Stand Number**:
+  - Old: "0730767742"
+  - New: ""
+- **Latitude Longitude**:
+  - Old: "52A KUNENE STREET"
+  - New: ""
+- **CONSENT TO PLANT A POLE**:
+  - Old: "LAWLEY ESTATE"
+  - New: "0730767742"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "LENASIA"
+  - New: "52A KUNENE STREET"
+- **Owner or Tenant**:
+  - Old: "1824"
+  - New: "LAWLEY ESTATE"
+- **Special Conditions (if any)**:
+  - Old: "7534"
+  - New: "LENASIA"
+- **Field Agent Name (pole permission)**:
+  - Old: "-26.382108427872275"
+  - New: "1824"
+- **Signature of the Authorised Person**:
+  - Old: "27.81171932392521"
+  - New: "7534"
+- **Date of Signature**:
+  - Old: ""
+  - New: "-26.382108427872275"
+- **Latitude**:
+  - Old: ""
+  - New: "27.81171932392521"
+- **Longitude**:
+  - Old: "Owner"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "Owner"
+- **Last Modified Pole Permissions By**:
+  - Old: "-26.3821084278723"
+  - New: ""
+- **Last Modified Pole Permissions Date**:
+  - Old: "27.8117193239252"
+  - New: ""
+- **Access to Property**:
+  - Old: ""
+  - New: "-26.3821084278723"
+- **Declined**:
+  - Old: ""
+  - New: "27.8117193239252"
+- **if Yes**:
+  - Old: ""
+  - New: "1"
+- **Alternative Contact Person: Surname**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "No"
+  - New: ""
+- **Primary House of Backyard Dwelling**:
+  - Old: ""
+  - New: "Yes"
+- **Number of People Living in the Home**:
+  - Old: "Female"
+  - New: "No"
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Female"
+- **Backyard Dwellings**:
+  - Old: "Primary House"
+  - New: ""
+- **If Yes**:
+  - Old: "No"
+  - New: ""
+- **How Many Dwellings**:
+  - Old: "Residential"
+  - New: "Primary House"
+- **How Many People**:
+  - Old: "Vodacom MTN Cell C or Telkom"
+  - New: "Residential"
+- **Structure of Backyard Dwelling**:
+  - Old: ""
+  - New: "Vodacom MTN Cell C or Telkom"
+- **Consent Form**:
+  - Old: ""
+  - New: "No"
+- **Number of Sticker Placed on Door**:
+  - Old: "1"
+  - New: ""
+- **Photo of Property**:
+  - Old: "Bedroom 1"
+  - New: ""
+- **Customer Consent Signature**:
+  - Old: ""
+  - New: "1"
+- **General Comments**:
+  - Old: ""
+  - New: "Bedroom 1"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "1571196"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "Almerinda"
+  - New: "1571196"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "-26.382085"
+  - New: ""
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: "27.811727"
+  - New: "Almerinda"
+- **Last Modified Home Sign Ups By**:
+  - Old: "2.7"
+  - New: "-26.382085"
+- **Last Modified Home Sign Ups Date**:
+  - Old: ""
+  - New: "27.811727"
+- **Contact Person Name and Surname**:
+  - Old: "ftlawhh15@fibertime.com"
+  - New: "2.7"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: "2025-06-11 15:44:13.09629+02"
+  - New: ""
+- **ONT activation light level**:
+  - Old: "Hloniphile Sibisi"
+  - New: "ftlawhh15@fibertime.com"
+- **Record any Relevant Comments**:
+  - Old: ""
+  - New: "2025-06-11 15:44:13.09629+02"
+- **Powermeter reading (at dome)**:
+  - Old: ""
+  - New: "Hloniphile Sibisi"
+- **Home entry point**:
+  - Old: "1669034"
+  - New: ""
+- **Outside cable span: Pole to Pigtail screw**:
+  - Old: "1669028"
+  - New: ""
+- **ONT Barcode**:
+  - Old: "1669030"
+  - New: "1669034"
+- **Mini-UPS Serial Number**:
+  - Old: "1669033"
+  - New: "1908493"
+- **Photo of Active Broadband Light (with FT sticker and Drop Numbe**:
+  - Old: ""
+  - New: "1908491"
+- **Powermeter reading (at ONT before activation)**:
+  - Old: ""
+  - New: "1669033"
+- **Please Specify**:
+  - Old: ""
+  - New: "1908498"
+- **Home Installations - Actual Device Location (Latitude)**:
+  - Old: "Zamisile(fibertime)"
+  - New: ""
+- **Home Installations - Actual Device Location (Longitude)**:
+  - Old: "-26.382056"
+  - New: "1906890"
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: "27.81174"
+  - New: "Mike & Moeketsi (fibertime)"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: "6.2"
+  - New: "-26.382056"
+- **Last Modified Home Installations By**:
+  - Old: ""
+  - New: "27.81174"
+- **Last Modified Home Installations Date**:
+  - Old: "ftlawhh9@fibertime.com"
+  - New: "6.2"
+- **Marketing Activator Name**:
+  - Old: "2025-06-26 08:59:27.167358+02"
+  - New: ""
+- **Marketing Activator Surname**:
+  - Old: ""
+  - New: "ftlawhh3@fibertime.com"
+- **Has the client been taught where and how to buy a fibertime vou**:
+  - Old: ""
+  - New: "2025-07-21T08:35:58.417Z"
+
+#### 10. Property ID: 353463
+
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Sections**:
+  - Old: "16"
+  - New: "LAW"
+- **PONs**:
+  - Old: "180"
+  - New: "16"
+- **Location Address**:
+  - Old: "68 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "180"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "68 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh10@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-05 10:00:19.285879+02"
+  - New: "ftlawhh6@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/07/05 10:00:05.719"
+  - New: "2025-07-21 11:12:26.566725+02"
+- **Pole Number**:
+  - Old: ""
+  - New: "2025/07/05 10:00:05.719"
+- **Drop Number**:
+  - Old: ""
+  - New: "LAW.P.D640"
+- **Language**:
+  - Old: ""
+  - New: "DR1734287"
+- **Survey Date**:
+  - Old: "2025/07/05 10:00:05.719"
+  - New: "isiZulu"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/07/05 10:00:05.719"
+- **Stand Number**:
+  - Old: "7526"
+  - New: ""
+- **Latitude Longitude**:
+  - Old: "-26.38227155473784"
+  - New: "7526"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "27.81064921558439"
+  - New: "-26.38227155473784"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: ""
+  - New: "27.81064921558439"
+- **Longitude**:
+  - Old: "-26.3822715547378"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "27.8106492155844"
+  - New: "-26.3822715547378"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "27.8106492155844"
+- **ONT activation light level**:
+  - Old: "1742606"
+  - New: ""
+- **Record any Relevant Comments**:
+  - Old: ""
+  - New: "1742606"
+- **Patched and labelled drop**:
+  - Old: "1742602"
+  - New: ""
+- **Photo of Splitter Tray in Dome Joint (front side)**:
+  - Old: "1742604"
+  - New: "1742602"
+- **Photo of Connection Points in the BB/Handhole (other side of jo**:
+  - Old: "1742607"
+  - New: "1742604"
+- **Photo of the Handhole Before Closing**:
+  - Old: "1742601"
+  - New: "1742607"
+- **Photo of the Handhole After Closing**:
+  - Old: "1742603"
+  - New: "1742601"
+- **Photo Showing Location on the Wall (before installation)**:
+  - Old: "1742598"
+  - New: "1742603"
+- **Home Entry Point: Outside (Pigtail screw / Duct entry)**:
+  - Old: ""
+  - New: "1742598"
+- **Mini-UPS Serial Number**:
+  - Old: "1742600"
+  - New: ""
+- **Photo of Active Broadband Light (with FT sticker and Drop Numbe**:
+  - Old: ""
+  - New: "1742600"
+- **Fiber cable: entry to ONT (after install)**:
+  - Old: ""
+  - New: "No"
+- **Overall work area after complete install: including ONT and fib**:
+  - Old: "I hereby warrant that I am the authorized representative of the above-mentioned property and have the authority to sign this consent form and grant access to the property. I consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (the “Company/ies”) and/or its affiliates"
+  - New: "Yes"
+- **Dome Joint Number / BB**:
+  - Old: "service providers"
+  - New: "I hereby warrant that I am the authorized representative of the above-mentioned property and have the authority to sign this consent form and grant access to the property. I consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (the “Company/ies”) and/or its affiliates"
+- **Length of Drop Cable**:
+  - Old: "and contractors authorized by it"
+  - New: "service providers"
+- **Client happy with Installation**:
+  - Old: "to attend to the installation of a battery pack and/or back-up power solution (“UPS”) or (“device”) in the property and/or the necessary devices in order to complete the fibre network"
+  - New: "and contractors authorized by it"
+- **Read English Terms and Conditions**:
+  - Old: "including but not limited to a Optical Network device (“ONT”) or Internet of Things device (“IoT”). By my signature and/or initial of this document"
+  - New: "to attend to the installation of a battery pack and/or back-up power solution (“UPS”) or (“device”) in the property and/or the necessary devices in order to complete the fibre network"
+- **Read Xhosa Terms and Conditions**:
+  - Old: "I am aware"
+  - New: "including but not limited to a Optical Network device (“ONT”) or Internet of Things device (“IoT”). By my signature and/or initial of this document"
+- **Customer Signature. Accept Terms and Conditions**:
+  - Old: "have read and/or have been explained and understand the Terms and Conditions"
+  - New: "I am aware"
+- **Installer Name**:
+  - Old: "warnings and risks associated with the installation of this device"
+  - New: "have read and/or have been explained and understand the Terms and Conditions"
+- **Home Installations - Actual Device Location (Latitude)**:
+  - Old: "or any other installation or device installed by any of the aforesaid companies/persons. I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "warnings and risks associated with the installation of this device"
+- **Home Installations - Actual Device Location (Longitude)**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the device in the property or any malfunction of the device and/or any loss or damage that results from any installation done at the property by the Company/ies or any of the aforesaid companies/persons or any use thereof. I confirm and undertake to notify any successor in title of this consent"
+  - New: "or any other installation or device installed by any of the aforesaid companies/persons. I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the device in the property or any malfunction of the device and/or any loss or damage that results from any installation done at the property by the Company/ies or any of the aforesaid companies/persons or any use thereof. I confirm and undertake to notify any successor in title of this consent"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: "shall also notify the Company/ies of the identity of the successor."
+  - New: "and prior to the transfer of any title in the property"
+- **Last Modified Home Installations By**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fibertime Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "shall also notify the Company/ies of the identity of the successor."
+- **Last Modified Home Installations Date**:
+  - Old: "abanik’inkonzo"
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fibertime Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Marketing Activator Name**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "abanik’inkonzo"
+- **Marketing Activator Surname**:
+  - Old: "ukuba bazofaka iipakethe zamalahle (battery pack) okanye isincedisi kwisisombululo samandla (“UPS”) okanye (“isixhobo”) kwisakhiwo kwaye / okanye izixhobo eziyimfuneko ukuqukumbela unxibelelwano lakwa Fiber"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Has the client been taught where and how to buy a fibertime vou**:
+  - Old: "oluquka kodwa lungaphelelanga apho"
+  - New: "ukuba bazofaka iipakethe zamalahle (battery pack) okanye isincedisi kwisisombululo samandla (“UPS”) okanye (“isixhobo”) kwisakhiwo kwaye / okanye izixhobo eziyimfuneko ukuqukumbela unxibelelwano lakwa Fiber"
+- **Number of Cellphone number linked to fibertime network**:
+  - Old: "isixhobo iOptical Network device (“ONT”) okanye isixhobo se Internet of Things (“IoT”). Ngokutyikitya kwam kwaye / okanye ukuqala lo mqulu"
+  - New: "oluquka kodwa lungaphelelanga apho"
+- **Cellphone no 1**:
+  - Old: "ndiyayiqonda"
+  - New: "isixhobo iOptical Network device (“ONT”) okanye isixhobo se Internet of Things (“IoT”). Ngokutyikitya kwam kwaye / okanye ukuqala lo mqulu"
+- **Cellphone no 2**:
+  - Old: "ndifundile / okanye ndichazelwe ndayiqonda imimiselo nemiqathango"
+  - New: "ndiyayiqonda"
+- **Cellphone no 3**:
+  - Old: "izilumkiso"
+  - New: "ndifundile / okanye ndichazelwe ndayiqonda imimiselo nemiqathango"
+- **Cellphone no 4**:
+  - Old: "nemingcipheko eyoyanyaniswa nokufakwa kwesi sixhobo"
+  - New: "izilumkiso"
+- **Cellphone no 5**:
+  - Old: "okanye nakuphi na ukufakwa kwesixhobo zezinkampani zikhankanyiweyo / okanye abantu. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "nemingcipheko eyoyanyaniswa nokufakwa kwesi sixhobo"
+- **Cellphone no 6**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekufakwa isixhobo kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+  - New: "okanye nakuphi na ukufakwa kwesixhobo zezinkampani zikhankanyiweyo / okanye abantu. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Cellphone no 7**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekufakwa isixhobo kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Cellphone no 8**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo."
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Cellphone no 9**:
+  - Old: ""
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo."
+- **Cellphone no 10**:
+  - Old: "innocent(fibertime"
+  - New: "1909564"
+- **Cellphone no 11**:
+  - Old: ""
+  - New: "kg (fibertime"
+- **Cellphone no 12**:
+  - Old: ""
+  - New: "-26.382203"
+- **Cellphone no 13**:
+  - Old: "4180058.5"
+  - New: "27.810603"
+- **Cellphone no 14**:
+  - Old: ""
+  - New: "8.9"
+- **Cellphone no 15**:
+  - Old: "ftlawhh10@fibertime.com"
+  - New: ""
+- **Cellphone no 16**:
+  - Old: "2025-07-05 10:00:05.718962+02"
+  - New: "ftlawhh6@fibertime.com"
+- **Cellphone no 17**:
+  - Old: ""
+  - New: "2025-07-21T09:12:23.914Z"
+
+#### 11. Property ID: 366168
+
+- **Status**:
+  - Old: "Home Sign Ups: Approved & Installation Scheduled"
+  - New: "Home Installation: In Progress"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Sections**:
+  - Old: "16"
+  - New: "Home Installation: In Progress"
+- **PONs**:
+  - Old: "180"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "68 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "16"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "180"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "68 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh41@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-09 16:29:33.615221+02"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025/07/09 16:25:23.471"
+  - New: "ftlawhh6@fibertime.com"
+- **Pole Number**:
+  - Old: "LAW.P.D640"
+  - New: "2025-07-21 11:14:14.528893+02"
+- **Drop Number**:
+  - Old: "DR1734287"
+  - New: "2025/07/21 11:14:03.280"
+- **Language**:
+  - Old: "isiZulu"
+  - New: "LAW.P.D640"
+- **Survey Date**:
+  - Old: "2025/07/09 16:25:23.471"
+  - New: "DR1734287"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "isiZulu"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "2025/07/09 16:25:23.471"
+- **Contact Person: Name**:
+  - Old: "Dlamini"
+  - New: ""
+- **Contact Person: Surname**:
+  - Old: "Sibongakonke Patrick"
+  - New: ""
+- **ID Number**:
+  - Old: "9406305890089"
+  - New: "Dlamini"
+- **Passport Number**:
+  - Old: ""
+  - New: "Sibongakonke Patrick"
+- **Email Address**:
+  - Old: ""
+  - New: "9406305890089"
+- **Contact Number (e.g.0123456789)**:
+  - Old: "0722574983"
+  - New: ""
+- **Address Validation**:
+  - Old: "68 KUNENE STREET"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "0722574983"
+- **Latitude Longitude**:
+  - Old: "LENASIA"
+  - New: "68 KUNENE STREET"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LAWLEY ESTATE"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7526"
+  - New: "LENASIA"
+- **Owner or Tenant**:
+  - Old: "-26.382264398189896"
+  - New: "1824"
+- **Special Conditions (if any)**:
+  - Old: "27.810632906144512"
+  - New: "7526"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "-26.382264398189896"
+- **Signature of the Authorised Person**:
+  - Old: ""
+  - New: "27.810632906144512"
+- **Date of Signature**:
+  - Old: "Owner"
+  - New: ""
+- **Longitude**:
+  - Old: ""
+  - New: "Owner"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "-26.3822643981899"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "27.8106329061445"
+  - New: ""
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "-26.3822643981899"
+- **Last Modified Pole Permissions Date**:
+  - Old: ""
+  - New: "27.8106329061445"
+- **if Yes**:
+  - Old: "No"
+  - New: ""
+- **Gender**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Person: Name**:
+  - Old: "No"
+  - New: ""
+- **Alternative Contact Person: Surname**:
+  - Old: ""
+  - New: "Yes"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "Male"
+  - New: "No"
+- **Number of People Living in the Home**:
+  - Old: ""
+  - New: "Male"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "Primary House"
+  - New: ""
+- **How do you access internet at your home currently?**:
+  - Old: "1"
+  - New: ""
+- **Backyard Dwellings**:
+  - Old: "Residential"
+  - New: "Primary House"
+- **If Yes**:
+  - Old: ""
+  - New: "No"
+- **How Many Dwellings**:
+  - Old: "Other"
+  - New: "Residential"
+- **How Many People**:
+  - Old: ""
+  - New: "Other"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "1"
+  - New: ""
+- **Preferred Place for Router Installation in Home**:
+  - Old: "Living Room"
+  - New: ""
+- **Number of Sticker Placed on Door**:
+  - Old: ""
+  - New: "1"
+- **Photo of Property**:
+  - Old: "1781114"
+  - New: "Living Room"
+- **Customer Consent Signature**:
+  - Old: "1781112"
+  - New: ""
+- **General Comments**:
+  - Old: ""
+  - New: "1781114"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "Pearl Molisa"
+  - New: "1781112"
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: "-26.382226"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "27.810601"
+  - New: "Pearl Molisa"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "5.3"
+  - New: "-26.382226"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "27.810601"
+- **Last Modified Home Sign Ups By**:
+  - Old: "ftlawhh41@fibertime.com"
+  - New: "5.3"
+- **Last Modified Home Sign Ups Date**:
+  - Old: "2025-07-09 16:25:23.470536+02"
+  - New: ""
+- **Contact Person Name and Surname**:
+  - Old: "Dlamini Sibongakonke Patrick"
+  - New: "ftlawhh41@fibertime.com"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: ""
+  - New: "2025-07-09 16:25:23.470536+02"
+- **ONT activation light level**:
+  - Old: ""
+  - New: "Dlamini Sibongakonke Patrick"
+- **Home entry point**:
+  - Old: ""
+  - New: "1909620"
+- **ONT Barcode**:
+  - Old: ""
+  - New: "1909617"
+- **Mini-UPS Serial Number**:
+  - Old: ""
+  - New: "1909618"
+- **Please Specify**:
+  - Old: ""
+  - New: "No"
+- **Read English Terms and Conditions**:
+  - Old: ""
+  - New: "Yes"
+- **Installer Name**:
+  - Old: ""
+  - New: "1909613"
+- **Home Installations - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "kg Fibertime"
+- **Home Installations - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "-26.382232"
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "27.810602"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: ""
+  - New: "4.7"
+- **Last Modified Home Installations Date**:
+  - Old: ""
+  - New: "ftlawhh6@fibertime.com"
+- **Marketing Activator Name**:
+  - Old: ""
+  - New: "2025-07-21 11:14:03.280297+02"
+
+#### 12. Property ID: 292465
+
+- **Status**:
+  - Old: "Home Sign Ups: Approved & Installation Scheduled"
+  - New: "Home Installation: In Progress"
+- **Actual Device Location (Longitude)**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Distance between Actual and Captured Point**:
+  - Old: "16"
+  - New: "Home Installation: In Progress"
+- **Estimated horizontal accuracy radius in meters**:
+  - Old: "180"
+  - New: "LAW"
+- **lst_mod_by**:
+  - Old: "66 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "16"
+- **lst_mod_dt**:
+  - Old: ""
+  - New: "180"
+- **date_status_changed**:
+  - Old: ""
+  - New: "66 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **Language**:
+  - Old: "ftlawhh38@fibertime.com"
+  - New: ""
+- **Survey Date**:
+  - Old: "2025-06-26 17:14:18.004737+02"
+  - New: ""
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025/06/26 17:05:16.909"
+  - New: "ftlawhh6@fibertime.com"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: "LAW.P.D641"
+  - New: "2025-07-21 10:06:50.154385+02"
+- **Contact Person: Name**:
+  - Old: "DR1734292"
+  - New: "2025/07/21 10:06:48.802"
+- **Contact Person: Surname**:
+  - Old: "Sesotho"
+  - New: "LAW.P.D641"
+- **ID Number**:
+  - Old: "2025/06/26 00:00:00"
+  - New: "DR1734292"
+- **Passport Number**:
+  - Old: ""
+  - New: "Sesotho"
+- **Email Address**:
+  - Old: ""
+  - New: "2025/06/26 00:00:00"
+- **Contact Number (e.g.0123456789)**:
+  - Old: "PHAKOA PETRUS"
+  - New: ""
+- **Address Validation**:
+  - Old: "MOLELEKI"
+  - New: ""
+- **Stand Number**:
+  - Old: "5411115858089"
+  - New: "PHAKOA PETRUS"
+- **Latitude Longitude**:
+  - Old: ""
+  - New: "MOLELEKI"
+- **CONSENT TO PLANT A POLE**:
+  - Old: ""
+  - New: "5411115858089"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "0638797424"
+  - New: ""
+- **Owner or Tenant**:
+  - Old: "66 KUNENE STREET"
+  - New: ""
+- **Special Conditions (if any)**:
+  - Old: "LAWLEY ESTATE"
+  - New: "0638797424"
+- **Field Agent Name (pole permission)**:
+  - Old: "LENASIA"
+  - New: "66 KUNENE STREET"
+- **Signature of the Authorised Person**:
+  - Old: "1824"
+  - New: "LAWLEY ESTATE"
+- **Date of Signature**:
+  - Old: "7527"
+  - New: "LENASIA"
+- **Latitude**:
+  - Old: "-26.382297524130426"
+  - New: "1824"
+- **Longitude**:
+  - Old: "27.810842455730516"
+  - New: "7527"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "-26.382297524130426"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "27.810842455730516"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "Owner"
+  - New: ""
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "Owner"
+- **Declined**:
+  - Old: "-26.3822975241304"
+  - New: ""
+- **if Yes**:
+  - Old: "Primary House"
+  - New: ""
+- **Reason Why it was Declined**:
+  - Old: ""
+  - New: "-26.3822975241304"
+- **Gender**:
+  - Old: ""
+  - New: "27.8108424557305"
+- **Number of People Living in the Home**:
+  - Old: "Yes"
+  - New: ""
+- **Residential or Commercial Dwelling**:
+  - Old: "No"
+  - New: ""
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Yes"
+- **How do you access internet at your home currently?**:
+  - Old: "Male"
+  - New: "No"
+- **If Yes**:
+  - Old: "Residential"
+  - New: "Primary House"
+- **How Many People**:
+  - Old: "3"
+  - New: ""
+- **Structure of Backyard Dwelling**:
+  - Old: ""
+  - New: "3"
+- **Consent Form**:
+  - Old: "Vodacom MTN Cell C or Telkom"
+  - New: "Residential"
+- **House Number**:
+  - Old: "No"
+  - New: ""
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: ""
+  - New: "Vodacom MTN Cell C or Telkom"
+- **Preferred Place for Router Installation in Home**:
+  - Old: ""
+  - New: "No"
+- **General Comments**:
+  - Old: "1"
+  - New: ""
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "Bedroom 1"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "1"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "1534391"
+  - New: "Bedroom 1"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "1675520"
+  - New: ""
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "1534391"
+- **Last Modified Home Sign Ups By**:
+  - Old: "Ana Jane"
+  - New: "1675520"
+- **Last Modified Home Sign Ups Date**:
+  - Old: "-26.382441"
+  - New: ""
+- **Contact Person Name and Surname**:
+  - Old: "27.810835"
+  - New: "Ana Jane"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: "16"
+  - New: "-26.382441"
+- **ONT activation light level**:
+  - Old: ""
+  - New: "27.810835"
+- **Record any Relevant Comments**:
+  - Old: "ftlawhh38@fibertime.com"
+  - New: "16"
+- **Powermeter reading (at dome)**:
+  - Old: "2025-06-26T15:14:16.604Z"
+  - New: ""
+- **Patched and labelled drop**:
+  - Old: "PHAKOA PETRUS MOLELEKI"
+  - New: "ftlawhh38@fibertime.com"
+- **Photo of Splitter Tray in Dome Joint (front side)**:
+  - Old: ""
+  - New: "2025-06-26T15:14:16.604Z"
+- **Photo of Connection Points in the BB/Handhole (other side of jo**:
+  - Old: ""
+  - New: "PHAKOA PETRUS MOLELEKI"
+- **Mini-UPS Serial Number**:
+  - Old: "1669069"
+  - New: ""
+- **Photo of Active Broadband Light (with FT sticker and Drop Numbe**:
+  - Old: "1669068"
+  - New: ""
+- **Powermeter reading (at ONT before activation)**:
+  - Old: "1669066"
+  - New: "1669069"
+- **Fiber cable: entry to ONT (after install)**:
+  - Old: "1669067"
+  - New: "1669068"
+- **Record Relevant Comments**:
+  - Old: ""
+  - New: "1669066"
+- **Any Damages to be Reported**:
+  - Old: ""
+  - New: "1669067"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: "masin(fibertime)"
+  - New: ""
+- **Last Modified Home Installations By**:
+  - Old: "-26.38217"
+  - New: "1907790"
+- **Last Modified Home Installations Date**:
+  - Old: "27.810777"
+  - New: "(fibertime)"
+- **Marketing Activator Name**:
+  - Old: "15.6"
+  - New: "-26.38217"
+- **Marketing Activator Surname**:
+  - Old: ""
+  - New: "27.810777"
+- **Has the client been taught where and how to buy a fibertime vou**:
+  - Old: "ftlawhh10@fibertime.com"
+  - New: "15.6"
+- **Number of Cellphone number linked to fibertime network**:
+  - Old: "2025-06-26 09:02:17.776511+02"
+  - New: ""
+- **Cellphone no 1**:
+  - Old: ""
+  - New: "ftlawhh6@fibertime.com"
+- **Cellphone no 2**:
+  - Old: ""
+  - New: "2025-07-21 10:06:48.802408+02"
+
+#### 13. Property ID: 292456
+
+- **Status**:
+  - Old: "Home Sign Ups: Approved & Installation Scheduled"
+  - New: "Home Installation: In Progress"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Sections**:
+  - Old: "16"
+  - New: "Home Installation: In Progress"
+- **PONs**:
+  - Old: "180"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "62 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "16"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "180"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "62 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh15@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-06-05 16:08:14.130154+02"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025/06/05 13:35:08.455"
+  - New: "ftlawhh6@fibertime.com"
+- **Pole Number**:
+  - Old: ""
+  - New: "2025-07-21 09:52:53.77694+02"
+- **Drop Number**:
+  - Old: "DR1734276"
+  - New: "2025/07/21 09:52:09.531"
+- **Language**:
+  - Old: "isiZulu"
+  - New: ""
+- **Survey Date**:
+  - Old: "2025/06/05 13:35:08.455"
+  - New: "DR1734276"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "isiZulu"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "2025/06/05 13:35:08.455"
+- **Contact Person: Name**:
+  - Old: "Richard"
+  - New: ""
+- **Contact Person: Surname**:
+  - Old: "Mbuyisa"
+  - New: ""
+- **ID Number**:
+  - Old: "7303126169086"
+  - New: "Richard"
+- **Passport Number**:
+  - Old: ""
+  - New: "Mbuyisa"
+- **Email Address**:
+  - Old: ""
+  - New: "7303126169086"
+- **Contact Number (e.g.0123456789)**:
+  - Old: "0782672108"
+  - New: ""
+- **Address Validation**:
+  - Old: "62 KUNENE STREET"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "0782672108"
+- **Latitude Longitude**:
+  - Old: "LENASIA"
+  - New: "62 KUNENE STREET"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LAWLEY ESTATE"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7529"
+  - New: "LENASIA"
+- **Owner or Tenant**:
+  - Old: "-26.382235914993608"
+  - New: "1824"
+- **Special Conditions (if any)**:
+  - Old: "27.811047813491832"
+  - New: "7529"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "-26.382235914993608"
+- **Signature of the Authorised Person**:
+  - Old: ""
+  - New: "27.811047813491832"
+- **Date of Signature**:
+  - Old: "Owner"
+  - New: ""
+- **Longitude**:
+  - Old: ""
+  - New: "Owner"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "-26.3822359149936"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "27.8110478134918"
+  - New: ""
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "-26.3822359149936"
+- **Last Modified Pole Permissions Date**:
+  - Old: ""
+  - New: "27.8110478134918"
+- **if Yes**:
+  - Old: "No"
+  - New: ""
+- **Gender**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Person: Name**:
+  - Old: "No"
+  - New: ""
+- **Alternative Contact Person: Surname**:
+  - Old: ""
+  - New: "Yes"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "Male"
+  - New: "No"
+- **Number of People Living in the Home**:
+  - Old: ""
+  - New: "Male"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "Primary House"
+  - New: ""
+- **How do you access internet at your home currently?**:
+  - Old: "4"
+  - New: ""
+- **Backyard Dwellings**:
+  - Old: "Residential"
+  - New: "Primary House"
+- **If Yes**:
+  - Old: ""
+  - New: "No"
+- **How Many Dwellings**:
+  - Old: "Vodacom MTN Cell C or Telkom"
+  - New: "Residential"
+- **How Many People**:
+  - Old: ""
+  - New: "Vodacom MTN Cell C or Telkom"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "1"
+  - New: ""
+- **Preferred Place for Router Installation in Home**:
+  - Old: "Bedroom 1"
+  - New: ""
+- **Number of Sticker Placed on Door**:
+  - Old: ""
+  - New: "1"
+- **Photo of Property**:
+  - Old: ""
+  - New: "Bedroom 1"
+- **Customer Consent Signature**:
+  - Old: "1534332"
+  - New: ""
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "ALMERINDA"
+  - New: "1534332"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "ALMERINDA"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "4180086.4"
+  - New: ""
+- **Last Modified Home Sign Ups By**:
+  - Old: "ftlawhh15@fibertime.com"
+  - New: "4180086.4"
+- **Last Modified Home Sign Ups Date**:
+  - Old: "2025-06-05 13:35:08.45469+02"
+  - New: ""
+- **Contact Person Name and Surname**:
+  - Old: "Richard Mbuyisa"
+  - New: "ftlawhh15@fibertime.com"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: ""
+  - New: "2025-06-05 13:35:08.45469+02"
+- **ONT activation light level**:
+  - Old: ""
+  - New: "Richard Mbuyisa"
+- **Home entry point**:
+  - Old: ""
+  - New: "1907405"
+- **Outside cable span: Pole to Pigtail screw**:
+  - Old: ""
+  - New: "1907404"
+- **ONT Barcode**:
+  - Old: ""
+  - New: "1907402"
+- **Mini-UPS Serial Number**:
+  - Old: ""
+  - New: "1907403"
+- **Please Specify**:
+  - Old: ""
+  - New: "No"
+- **Client happy with Installation**:
+  - Old: ""
+  - New: "Drop cable 30m"
+- **Read English Terms and Conditions**:
+  - Old: ""
+  - New: "Yes"
+- **Installer Name**:
+  - Old: ""
+  - New: "1907398"
+- **Home Installations - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "kg & 2boy"
+- **Home Installations - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "-26.382228"
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "27.811056"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: ""
+  - New: "1.2"
+- **Last Modified Home Installations Date**:
+  - Old: ""
+  - New: "ftlawhh6@fibertime.com"
+- **Marketing Activator Name**:
+  - Old: ""
+  - New: "2025-07-21 09:52:09.530865+02"
+
+#### 14. Property ID: 292498
+
+- **Status**:
+  - Old: "Home Sign Ups: Approved & Installation Re-scheduled"
+  - New: "Home Installation: In Progress"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Sections**:
+  - Old: "16"
+  - New: "Home Installation: In Progress"
+- **PONs**:
+  - Old: "180"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "62 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "16"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "180"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "62 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh15@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-06-05 13:48:21.819645+02"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025/06/05 13:48:21.820"
+  - New: "ftlawhh6@fibertime.com"
+- **Pole Number**:
+  - Old: ""
+  - New: "2025-07-21 09:56:46.055316+02"
+- **Drop Number**:
+  - Old: "DR1734277"
+  - New: "2025/07/21 09:56:41.676"
+- **Language**:
+  - Old: "isiZulu"
+  - New: ""
+- **Survey Date**:
+  - Old: "2025/06/05 13:48:21.820"
+  - New: "DR1734277"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "isiZulu"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "2025/06/05 13:48:21.820"
+- **Contact Person: Name**:
+  - Old: "Richard"
+  - New: ""
+- **Contact Person: Surname**:
+  - Old: "Mbuyisa"
+  - New: ""
+- **ID Number**:
+  - Old: "7303126169086"
+  - New: "Richard"
+- **Passport Number**:
+  - Old: ""
+  - New: "Mbuyisa"
+- **Email Address**:
+  - Old: ""
+  - New: "7303126169086"
+- **Contact Number (e.g.0123456789)**:
+  - Old: "0692286340"
+  - New: ""
+- **Address Validation**:
+  - Old: "62 KUNENE STREET"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "0692286340"
+- **Latitude Longitude**:
+  - Old: "LENASIA"
+  - New: "62 KUNENE STREET"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LAWLEY ESTATE"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7529"
+  - New: "LENASIA"
+- **Owner or Tenant**:
+  - Old: "-26.382224501427984"
+  - New: "1824"
+- **Special Conditions (if any)**:
+  - Old: "27.811092740492832"
+  - New: "7529"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "-26.382224501427984"
+- **Signature of the Authorised Person**:
+  - Old: ""
+  - New: "27.811092740492832"
+- **Date of Signature**:
+  - Old: "Owner"
+  - New: ""
+- **Longitude**:
+  - Old: ""
+  - New: "Owner"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "-26.382224501428"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "27.8110927404928"
+  - New: ""
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "-26.382224501428"
+- **Last Modified Pole Permissions Date**:
+  - Old: ""
+  - New: "27.8110927404928"
+- **if Yes**:
+  - Old: "Yes"
+  - New: ""
+- **Gender**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Person: Name**:
+  - Old: "No"
+  - New: ""
+- **Alternative Contact Person: Surname**:
+  - Old: ""
+  - New: "Yes"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "Male"
+  - New: "No"
+- **Number of People Living in the Home**:
+  - Old: ""
+  - New: "Male"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "Backyard Dwelling"
+  - New: ""
+- **How do you access internet at your home currently?**:
+  - Old: "4"
+  - New: ""
+- **Backyard Dwellings**:
+  - Old: "Residential"
+  - New: "Backyard Dwelling"
+- **If Yes**:
+  - Old: ""
+  - New: "Yes"
+- **How Many Dwellings**:
+  - Old: "Vodacom MTN Cell C or Telkom"
+  - New: "Residential"
+- **How Many People**:
+  - Old: "2"
+  - New: "Vodacom MTN Cell C or Telkom"
+- **Structure of Backyard Dwelling**:
+  - Old: ""
+  - New: "2"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "1"
+  - New: ""
+- **Preferred Place for Router Installation in Home**:
+  - Old: "Family Room"
+  - New: ""
+- **Number of Sticker Placed on Door**:
+  - Old: ""
+  - New: "1"
+- **Photo of Property**:
+  - Old: ""
+  - New: "Family Room"
+- **Customer Consent Signature**:
+  - Old: "-2"
+  - New: ""
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "Almerinda"
+  - New: "-2"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "Almerinda"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "4180089"
+  - New: ""
+- **Last Modified Home Sign Ups By**:
+  - Old: "ftlawhh15@fibertime.com"
+  - New: "4180089"
+- **Last Modified Home Sign Ups Date**:
+  - Old: "2025-06-05 13:48:21.819645+02"
+  - New: ""
+- **Contact Person Name and Surname**:
+  - Old: "Richard Mbuyisa"
+  - New: "ftlawhh15@fibertime.com"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: ""
+  - New: "2025-06-05 13:48:21.819645+02"
+- **ONT activation light level**:
+  - Old: ""
+  - New: "Richard Mbuyisa"
+- **Outside cable span: Pole to Pigtail screw**:
+  - Old: ""
+  - New: "1907505"
+- **ONT Barcode**:
+  - Old: ""
+  - New: "1907503"
+- **Mini-UPS Serial Number**:
+  - Old: ""
+  - New: "1907504"
+- **Please Specify**:
+  - Old: ""
+  - New: "Yes"
+- **Client happy with Installation**:
+  - Old: ""
+  - New: "Drop cable 25m"
+- **Read English Terms and Conditions**:
+  - Old: ""
+  - New: "Yes"
+- **Installer Name**:
+  - Old: ""
+  - New: "1907502"
+- **Home Installations - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "Fibertime"
+- **Home Installations - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "-26.382203"
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "27.811064"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: ""
+  - New: "3.7"
+- **Last Modified Home Installations Date**:
+  - Old: ""
+  - New: "ftlawhh6@fibertime.com"
+- **Marketing Activator Name**:
+  - Old: ""
+  - New: "2025-07-21 09:56:41.676158+02"
+
+#### 15. Property ID: 389188
+
+- **lst_mod_dt**:
+  - Old: "2025-07-17 12:29:41.3148+02"
+  - New: "2025-07-21 10:34:55.350086+02"
+
+#### 16. Property ID: 366247
+
+- **Status**:
+  - Old: "Home Sign Ups: Approved & Installation Scheduled"
+  - New: "Home Installation: In Progress"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Sections**:
+  - Old: "16"
+  - New: "Home Installation: In Progress"
+- **PONs**:
+  - Old: "180"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "76 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "16"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "180"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "76 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh41@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-10 13:33:11.085268+02"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025/07/09 16:49:05.459"
+  - New: "ftlawhh7@fibertime.com"
+- **Pole Number**:
+  - Old: "LAW.P.D638"
+  - New: "2025-07-21 10:46:20.540572+02"
+- **Drop Number**:
+  - Old: "DR1734319"
+  - New: "2025/07/21 10:45:58.397"
+- **Language**:
+  - Old: "isiZulu"
+  - New: "LAW.P.D638"
+- **Survey Date**:
+  - Old: "2025/07/09 16:49:05.459"
+  - New: "DR1734319"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "isiZulu"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "2025/07/09 16:49:05.459"
+- **Contact Person: Name**:
+  - Old: "Myekeni"
+  - New: ""
+- **Contact Person: Surname**:
+  - Old: "Dlodlo"
+  - New: ""
+- **ID Number**:
+  - Old: "7101015706089"
+  - New: "Myekeni"
+- **Passport Number**:
+  - Old: ""
+  - New: "Dlodlo"
+- **Email Address**:
+  - Old: ""
+  - New: "7101015706089"
+- **Contact Number (e.g.0123456789)**:
+  - Old: "0711434301"
+  - New: ""
+- **Address Validation**:
+  - Old: "76 KUNENE STREET"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "0711434301"
+- **Latitude Longitude**:
+  - Old: "LENASIA"
+  - New: "76 KUNENE STREET"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LAWLEY ESTATE"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7522"
+  - New: "LENASIA"
+- **Owner or Tenant**:
+  - Old: "-26.38233603346586"
+  - New: "1824"
+- **Special Conditions (if any)**:
+  - Old: "27.81010847546311"
+  - New: "7522"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "-26.38233603346586"
+- **Signature of the Authorised Person**:
+  - Old: ""
+  - New: "27.81010847546311"
+- **Date of Signature**:
+  - Old: "Owner"
+  - New: ""
+- **Longitude**:
+  - Old: ""
+  - New: "Owner"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "-26.3823360334659"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "27.8101084754631"
+  - New: ""
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "-26.3823360334659"
+- **Last Modified Pole Permissions Date**:
+  - Old: ""
+  - New: "27.8101084754631"
+- **if Yes**:
+  - Old: "No"
+  - New: ""
+- **Gender**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Person: Name**:
+  - Old: "No"
+  - New: ""
+- **Alternative Contact Person: Surname**:
+  - Old: ""
+  - New: "Yes"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "Male"
+  - New: "No"
+- **Number of People Living in the Home**:
+  - Old: ""
+  - New: "Male"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "Primary House"
+  - New: ""
+- **How do you access internet at your home currently?**:
+  - Old: "5"
+  - New: ""
+- **Backyard Dwellings**:
+  - Old: "Residential"
+  - New: "Primary House"
+- **If Yes**:
+  - Old: ""
+  - New: "No"
+- **How Many Dwellings**:
+  - Old: "Rain"
+  - New: "Residential"
+- **How Many People**:
+  - Old: ""
+  - New: "Rain"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "1"
+  - New: ""
+- **Preferred Place for Router Installation in Home**:
+  - Old: "Living Room"
+  - New: ""
+- **Number of Sticker Placed on Door**:
+  - Old: ""
+  - New: "1"
+- **Photo of Property**:
+  - Old: "1781500"
+  - New: "Living Room"
+- **Customer Consent Signature**:
+  - Old: "1781499"
+  - New: ""
+- **General Comments**:
+  - Old: ""
+  - New: "1781500"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "Pearl Molisa"
+  - New: "1781499"
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: "-26.38224"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "27.810119"
+  - New: "Pearl Molisa"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "10.7"
+  - New: "-26.38224"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "27.810119"
+- **Last Modified Home Sign Ups By**:
+  - Old: "ftlawhh41@fibertime.com"
+  - New: "10.7"
+- **Last Modified Home Sign Ups Date**:
+  - Old: "2025-07-09 16:49:05.459487+02"
+  - New: ""
+- **Contact Person Name and Surname**:
+  - Old: "Myekeni Dlodlo"
+  - New: "ftlawhh41@fibertime.com"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: ""
+  - New: "2025-07-09 16:49:05.459487+02"
+- **ONT activation light level**:
+  - Old: ""
+  - New: "Myekeni Dlodlo"
+- **Home entry point**:
+  - Old: ""
+  - New: "1908770"
+- **Outside cable span: Pole to Pigtail screw**:
+  - Old: ""
+  - New: "1908773"
+- **ONT Barcode**:
+  - Old: ""
+  - New: "1908774"
+- **Mini-UPS Serial Number**:
+  - Old: ""
+  - New: "1908775"
+- **Home Installations - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "Moses (Fibertime)"
+- **Home Installations - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "-26.382256"
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "27.810179"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: ""
+  - New: "11.3"
+- **Last Modified Home Installations Date**:
+  - Old: ""
+  - New: "ftlawhh7@fibertime.com"
+- **Marketing Activator Name**:
+  - Old: ""
+  - New: "2025-07-21 10:45:58.396853+02"
+
+#### 17. Property ID: 355147
 
 - **Status**:
   - Old: ""
@@ -96,7 +2694,433 @@ See validation report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/data/val
   - Old: ""
   - New: "2025-07-21 11:14:41.602525+02"
 
-#### 3. Property ID: 351628
+#### 18. Property ID: 353533
+
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Sections**:
+  - Old: "16"
+  - New: "Home Installation: In Progress"
+- **PONs**:
+  - Old: "180"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "72 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "16"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "180"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "72 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh10@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-05 10:31:40.972038+02"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025/07/05 10:31:29.524"
+  - New: "ftlawhh6@fibertime.com"
+- **Pole Number**:
+  - Old: ""
+  - New: "2025-07-21 11:25:01.196076+02"
+- **Drop Number**:
+  - Old: ""
+  - New: "2025/07/05 10:31:29.524"
+- **Survey Date**:
+  - Old: "2025/07/05 10:31:29.524"
+  - New: ""
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "2025/07/05 10:31:29.524"
+- **Stand Number**:
+  - Old: "7524"
+  - New: ""
+- **Latitude Longitude**:
+  - Old: "-26.38232059740548"
+  - New: ""
+- **CONSENT TO PLANT A POLE**:
+  - Old: "27.81036975683017"
+  - New: "7524"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: ""
+  - New: "-26.38232059740548"
+- **Owner or Tenant**:
+  - Old: ""
+  - New: "27.81036975683017"
+- **Longitude**:
+  - Old: "-26.3823205974055"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "27.8103697568302"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "-26.3823205974055"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "27.8103697568302"
+- **ONT activation light level**:
+  - Old: "1742863"
+  - New: ""
+- **Powermeter reading (at dome)**:
+  - Old: ""
+  - New: "1742863"
+- **Patched and labelled drop**:
+  - Old: "1742865"
+  - New: ""
+- **Photo of Splitter Tray in Dome Joint (front side)**:
+  - Old: "1742866"
+  - New: ""
+- **Photo of Connection Points in the BB/Handhole (other side of jo**:
+  - Old: ""
+  - New: "1742865"
+- **Photo of the Handhole Before Closing**:
+  - Old: "1742869"
+  - New: "1742866"
+- **Photo of the Handhole After Closing**:
+  - Old: "1742867"
+  - New: "-1"
+- **Photo Showing Location on the Wall (before installation)**:
+  - Old: "1742868"
+  - New: "1742869"
+- **Home Entry Point: Outside (Pigtail screw / Duct entry)**:
+  - Old: ""
+  - New: "1742867"
+- **Home entry point**:
+  - Old: ""
+  - New: "1742868"
+- **Mini-UPS Serial Number**:
+  - Old: "1742864"
+  - New: ""
+- **Powermeter reading (at ONT before activation)**:
+  - Old: ""
+  - New: "1742864"
+- **Overall work area after complete install: including ONT and fib**:
+  - Old: "I hereby warrant that I am the authorized representative of the above-mentioned property and have the authority to sign this consent form and grant access to the property. I consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (the “Company/ies”) and/or its affiliates"
+  - New: ""
+- **Dome Joint Number / BB**:
+  - Old: "service providers"
+  - New: ""
+- **Length of Drop Cable**:
+  - Old: "and contractors authorized by it"
+  - New: "I hereby warrant that I am the authorized representative of the above-mentioned property and have the authority to sign this consent form and grant access to the property. I consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (the “Company/ies”) and/or its affiliates"
+- **Client happy with Installation**:
+  - Old: "to attend to the installation of a battery pack and/or back-up power solution (“UPS”) or (“device”) in the property and/or the necessary devices in order to complete the fibre network"
+  - New: "service providers"
+- **Read English Terms and Conditions**:
+  - Old: "including but not limited to a Optical Network device (“ONT”) or Internet of Things device (“IoT”). By my signature and/or initial of this document"
+  - New: "and contractors authorized by it"
+- **Read Xhosa Terms and Conditions**:
+  - Old: "I am aware"
+  - New: "to attend to the installation of a battery pack and/or back-up power solution (“UPS”) or (“device”) in the property and/or the necessary devices in order to complete the fibre network"
+- **Customer Signature. Accept Terms and Conditions**:
+  - Old: "have read and/or have been explained and understand the Terms and Conditions"
+  - New: "including but not limited to a Optical Network device (“ONT”) or Internet of Things device (“IoT”). By my signature and/or initial of this document"
+- **Installer Name**:
+  - Old: "warnings and risks associated with the installation of this device"
+  - New: "I am aware"
+- **Home Installations - Actual Device Location (Latitude)**:
+  - Old: "or any other installation or device installed by any of the aforesaid companies/persons. I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "have read and/or have been explained and understand the Terms and Conditions"
+- **Home Installations - Actual Device Location (Longitude)**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the device in the property or any malfunction of the device and/or any loss or damage that results from any installation done at the property by the Company/ies or any of the aforesaid companies/persons or any use thereof. I confirm and undertake to notify any successor in title of this consent"
+  - New: "warnings and risks associated with the installation of this device"
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "or any other installation or device installed by any of the aforesaid companies/persons. I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: "shall also notify the Company/ies of the identity of the successor."
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the device in the property or any malfunction of the device and/or any loss or damage that results from any installation done at the property by the Company/ies or any of the aforesaid companies/persons or any use thereof. I confirm and undertake to notify any successor in title of this consent"
+- **Last Modified Home Installations By**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fibertime Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "and prior to the transfer of any title in the property"
+- **Last Modified Home Installations Date**:
+  - Old: "abanik’inkonzo"
+  - New: "shall also notify the Company/ies of the identity of the successor."
+- **Marketing Activator Name**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fibertime Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Marketing Activator Surname**:
+  - Old: "ukuba bazofaka iipakethe zamalahle (battery pack) okanye isincedisi kwisisombululo samandla (“UPS”) okanye (“isixhobo”) kwisakhiwo kwaye / okanye izixhobo eziyimfuneko ukuqukumbela unxibelelwano lakwa Fiber"
+  - New: "abanik’inkonzo"
+- **Has the client been taught where and how to buy a fibertime vou**:
+  - Old: "oluquka kodwa lungaphelelanga apho"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Number of Cellphone number linked to fibertime network**:
+  - Old: "isixhobo iOptical Network device (“ONT”) okanye isixhobo se Internet of Things (“IoT”). Ngokutyikitya kwam kwaye / okanye ukuqala lo mqulu"
+  - New: "ukuba bazofaka iipakethe zamalahle (battery pack) okanye isincedisi kwisisombululo samandla (“UPS”) okanye (“isixhobo”) kwisakhiwo kwaye / okanye izixhobo eziyimfuneko ukuqukumbela unxibelelwano lakwa Fiber"
+- **Cellphone no 1**:
+  - Old: "ndiyayiqonda"
+  - New: "oluquka kodwa lungaphelelanga apho"
+- **Cellphone no 2**:
+  - Old: "ndifundile / okanye ndichazelwe ndayiqonda imimiselo nemiqathango"
+  - New: "isixhobo iOptical Network device (“ONT”) okanye isixhobo se Internet of Things (“IoT”). Ngokutyikitya kwam kwaye / okanye ukuqala lo mqulu"
+- **Cellphone no 3**:
+  - Old: "izilumkiso"
+  - New: "ndiyayiqonda"
+- **Cellphone no 4**:
+  - Old: "nemingcipheko eyoyanyaniswa nokufakwa kwesi sixhobo"
+  - New: "ndifundile / okanye ndichazelwe ndayiqonda imimiselo nemiqathango"
+- **Cellphone no 5**:
+  - Old: "okanye nakuphi na ukufakwa kwesixhobo zezinkampani zikhankanyiweyo / okanye abantu. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "izilumkiso"
+- **Cellphone no 6**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekufakwa isixhobo kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+  - New: "nemingcipheko eyoyanyaniswa nokufakwa kwesi sixhobo"
+- **Cellphone no 7**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "okanye nakuphi na ukufakwa kwesixhobo zezinkampani zikhankanyiweyo / okanye abantu. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Cellphone no 8**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo."
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekufakwa isixhobo kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Cellphone no 9**:
+  - Old: ""
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Cellphone no 10**:
+  - Old: "innocent(fibertime"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo."
+- **Cellphone no 11**:
+  - Old: "-26.382408"
+  - New: ""
+- **Cellphone no 12**:
+  - Old: "27.810165"
+  - New: "Thabiso(fibertime)"
+- **Cellphone no 13**:
+  - Old: "22.6"
+  - New: "-26.382408"
+- **Cellphone no 14**:
+  - Old: ""
+  - New: "27.810165"
+- **Cellphone no 15**:
+  - Old: "ftlawhh10@fibertime.com"
+  - New: "22.6"
+- **Cellphone no 16**:
+  - Old: "2025-07-05 10:31:29.523744+02"
+  - New: ""
+- **Cellphone no 17**:
+  - Old: ""
+  - New: "ftlawhh6@fibertime.com"
+- **Cellphone no 18**:
+  - Old: ""
+  - New: "2025-07-21T09:24:59.136Z"
+
+#### 19. Property ID: 353417
+
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Sections**:
+  - Old: "16"
+  - New: "Home Installation: In Progress"
+- **PONs**:
+  - Old: "180"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "70 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "16"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "180"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "70 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh10@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-05 09:28:17.584378+02"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025/07/05 09:28:06.315"
+  - New: "ftlawhh6@fibertime.com"
+- **Pole Number**:
+  - Old: ""
+  - New: "2025-07-21 11:27:02.616862+02"
+- **Drop Number**:
+  - Old: ""
+  - New: "2025/07/05 09:28:06.315"
+- **Survey Date**:
+  - Old: "2025/07/05 09:28:06.315"
+  - New: ""
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "2025/07/05 09:28:06.315"
+- **Stand Number**:
+  - Old: "7525"
+  - New: ""
+- **Latitude Longitude**:
+  - Old: "-26.38229357338174"
+  - New: ""
+- **CONSENT TO PLANT A POLE**:
+  - Old: "27.810509085855372"
+  - New: "7525"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: ""
+  - New: "-26.38229357338174"
+- **Owner or Tenant**:
+  - Old: ""
+  - New: "27.810509085855372"
+- **Longitude**:
+  - Old: "-26.3822935733817"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "27.8105090858554"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "-26.3822935733817"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "27.8105090858554"
+- **ONT activation light level**:
+  - Old: "1742309"
+  - New: ""
+- **Powermeter reading (at dome)**:
+  - Old: ""
+  - New: "1742309"
+- **Patched and labelled drop**:
+  - Old: "1742308"
+  - New: ""
+- **Photo of Splitter Tray in Dome Joint (front side)**:
+  - Old: "1742310"
+  - New: ""
+- **Photo of Connection Points in the BB/Handhole (other side of jo**:
+  - Old: "1742313"
+  - New: "1742308"
+- **Photo of the Handhole Before Closing**:
+  - Old: "1742307"
+  - New: "1742310"
+- **Photo of the Handhole After Closing**:
+  - Old: "1742312"
+  - New: "1742313"
+- **Photo Showing Location on the Wall (before installation)**:
+  - Old: "1742311"
+  - New: "1742307"
+- **Home Entry Point: Outside (Pigtail screw / Duct entry)**:
+  - Old: ""
+  - New: "1742312"
+- **Home entry point**:
+  - Old: ""
+  - New: "1742311"
+- **Mini-UPS Serial Number**:
+  - Old: "1742305"
+  - New: ""
+- **Powermeter reading (at ONT before activation)**:
+  - Old: ""
+  - New: "1742305"
+- **Overall work area after complete install: including ONT and fib**:
+  - Old: "I hereby warrant that I am the authorized representative of the above-mentioned property and have the authority to sign this consent form and grant access to the property. I consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (the “Company/ies”) and/or its affiliates"
+  - New: ""
+- **Dome Joint Number / BB**:
+  - Old: "service providers"
+  - New: ""
+- **Length of Drop Cable**:
+  - Old: "and contractors authorized by it"
+  - New: "I hereby warrant that I am the authorized representative of the above-mentioned property and have the authority to sign this consent form and grant access to the property. I consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (the “Company/ies”) and/or its affiliates"
+- **Client happy with Installation**:
+  - Old: "to attend to the installation of a battery pack and/or back-up power solution (“UPS”) or (“device”) in the property and/or the necessary devices in order to complete the fibre network"
+  - New: "service providers"
+- **Read English Terms and Conditions**:
+  - Old: "including but not limited to a Optical Network device (“ONT”) or Internet of Things device (“IoT”). By my signature and/or initial of this document"
+  - New: "and contractors authorized by it"
+- **Read Xhosa Terms and Conditions**:
+  - Old: "I am aware"
+  - New: "to attend to the installation of a battery pack and/or back-up power solution (“UPS”) or (“device”) in the property and/or the necessary devices in order to complete the fibre network"
+- **Customer Signature. Accept Terms and Conditions**:
+  - Old: "have read and/or have been explained and understand the Terms and Conditions"
+  - New: "including but not limited to a Optical Network device (“ONT”) or Internet of Things device (“IoT”). By my signature and/or initial of this document"
+- **Installer Name**:
+  - Old: "warnings and risks associated with the installation of this device"
+  - New: "I am aware"
+- **Home Installations - Actual Device Location (Latitude)**:
+  - Old: "or any other installation or device installed by any of the aforesaid companies/persons. I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "have read and/or have been explained and understand the Terms and Conditions"
+- **Home Installations - Actual Device Location (Longitude)**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the device in the property or any malfunction of the device and/or any loss or damage that results from any installation done at the property by the Company/ies or any of the aforesaid companies/persons or any use thereof. I confirm and undertake to notify any successor in title of this consent"
+  - New: "warnings and risks associated with the installation of this device"
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "or any other installation or device installed by any of the aforesaid companies/persons. I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: "shall also notify the Company/ies of the identity of the successor."
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the device in the property or any malfunction of the device and/or any loss or damage that results from any installation done at the property by the Company/ies or any of the aforesaid companies/persons or any use thereof. I confirm and undertake to notify any successor in title of this consent"
+- **Last Modified Home Installations By**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fibertime Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "and prior to the transfer of any title in the property"
+- **Last Modified Home Installations Date**:
+  - Old: "abanik’inkonzo"
+  - New: "shall also notify the Company/ies of the identity of the successor."
+- **Marketing Activator Name**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fibertime Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Marketing Activator Surname**:
+  - Old: "ukuba bazofaka iipakethe zamalahle (battery pack) okanye isincedisi kwisisombululo samandla (“UPS”) okanye (“isixhobo”) kwisakhiwo kwaye / okanye izixhobo eziyimfuneko ukuqukumbela unxibelelwano lakwa Fiber"
+  - New: "abanik’inkonzo"
+- **Has the client been taught where and how to buy a fibertime vou**:
+  - Old: "oluquka kodwa lungaphelelanga apho"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Number of Cellphone number linked to fibertime network**:
+  - Old: "isixhobo iOptical Network device (“ONT”) okanye isixhobo se Internet of Things (“IoT”). Ngokutyikitya kwam kwaye / okanye ukuqala lo mqulu"
+  - New: "ukuba bazofaka iipakethe zamalahle (battery pack) okanye isincedisi kwisisombululo samandla (“UPS”) okanye (“isixhobo”) kwisakhiwo kwaye / okanye izixhobo eziyimfuneko ukuqukumbela unxibelelwano lakwa Fiber"
+- **Cellphone no 1**:
+  - Old: "ndiyayiqonda"
+  - New: "oluquka kodwa lungaphelelanga apho"
+- **Cellphone no 2**:
+  - Old: "ndifundile / okanye ndichazelwe ndayiqonda imimiselo nemiqathango"
+  - New: "isixhobo iOptical Network device (“ONT”) okanye isixhobo se Internet of Things (“IoT”). Ngokutyikitya kwam kwaye / okanye ukuqala lo mqulu"
+- **Cellphone no 3**:
+  - Old: "izilumkiso"
+  - New: "ndiyayiqonda"
+- **Cellphone no 4**:
+  - Old: "nemingcipheko eyoyanyaniswa nokufakwa kwesi sixhobo"
+  - New: "ndifundile / okanye ndichazelwe ndayiqonda imimiselo nemiqathango"
+- **Cellphone no 5**:
+  - Old: "okanye nakuphi na ukufakwa kwesixhobo zezinkampani zikhankanyiweyo / okanye abantu. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "izilumkiso"
+- **Cellphone no 6**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekufakwa isixhobo kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+  - New: "nemingcipheko eyoyanyaniswa nokufakwa kwesi sixhobo"
+- **Cellphone no 7**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "okanye nakuphi na ukufakwa kwesixhobo zezinkampani zikhankanyiweyo / okanye abantu. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Cellphone no 8**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo."
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekufakwa isixhobo kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Cellphone no 9**:
+  - Old: ""
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Cellphone no 10**:
+  - Old: "innocent(fibertime"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo."
+- **Cellphone no 11**:
+  - Old: "-26.382165"
+  - New: ""
+- **Cellphone no 12**:
+  - Old: "27.810253"
+  - New: "Thabiso(fibertime"
+- **Cellphone no 13**:
+  - Old: "29.2"
+  - New: "-26.382165"
+- **Cellphone no 14**:
+  - Old: ""
+  - New: "27.810253"
+- **Cellphone no 15**:
+  - Old: "ftlawhh10@fibertime.com"
+  - New: "29.2"
+- **Cellphone no 16**:
+  - Old: "2025-07-05 09:28:06.314927+02"
+  - New: ""
+- **Cellphone no 17**:
+  - Old: ""
+  - New: "ftlawhh6@fibertime.com"
+- **Cellphone no 18**:
+  - Old: ""
+  - New: "2025-07-21T09:27:00.907Z"
+
+#### 20. Property ID: 351628
 
 - **Status**:
   - Old: ""
@@ -144,7 +3168,1192 @@ See validation report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/data/val
   - Old: ""
   - New: "2025-07-21 11:31:00.095408+02"
 
-#### 4. Property ID: 394304
+#### 21. Property ID: 333047
+
+- **PONs**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Location Address**:
+  - Old: "16"
+  - New: "Home Installation: In Progress"
+- **Actual Device Location (Latitude)**:
+  - Old: "180"
+  - New: "LAW"
+- **Actual Device Location (Longitude)**:
+  - Old: "84 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "16"
+- **Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "180"
+- **Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "84 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **date_status_changed**:
+  - Old: "ftlawhh7@fibertime.com"
+  - New: ""
+- **Pole Number**:
+  - Old: "2025-07-01 17:01:18.953174+02"
+  - New: ""
+- **Drop Number**:
+  - Old: "2025/07/01 17:00:57.917"
+  - New: "ftlawhh3@fibertime.com"
+- **Language**:
+  - Old: "LAW.P.D635"
+  - New: "2025-07-21 13:53:48.021711+02"
+- **Survey Date**:
+  - Old: "DR1734328"
+  - New: "2025/07/01 17:00:57.917"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "isiZulu"
+  - New: "LAW.P.D635"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: "2025/06/25 16:17:33.449"
+  - New: "DR1734328"
+- **Contact Person: Name**:
+  - Old: ""
+  - New: "isiZulu"
+- **Contact Person: Surname**:
+  - Old: ""
+  - New: "2025/06/25 16:17:33.449"
+- **ID Number**:
+  - Old: "Adel"
+  - New: ""
+- **Passport Number**:
+  - Old: "Mafunza"
+  - New: ""
+- **Email Address**:
+  - Old: "820625"
+  - New: "Adel"
+- **Contact Number (e.g.0123456789)**:
+  - Old: ""
+  - New: "Mafunza"
+- **Address Validation**:
+  - Old: ""
+  - New: "820625"
+- **Stand Number**:
+  - Old: "0827926767"
+  - New: ""
+- **Latitude Longitude**:
+  - Old: "84 KUNENE STREET"
+  - New: ""
+- **CONSENT TO PLANT A POLE**:
+  - Old: "LAWLEY ESTATE"
+  - New: "0827926767"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "LENASIA"
+  - New: "84 KUNENE STREET"
+- **Owner or Tenant**:
+  - Old: "1824"
+  - New: "LAWLEY ESTATE"
+- **Special Conditions (if any)**:
+  - Old: "7518"
+  - New: "LENASIA"
+- **Field Agent Name (pole permission)**:
+  - Old: "-26.382471750283752"
+  - New: "1824"
+- **Signature of the Authorised Person**:
+  - Old: "27.809546853469957"
+  - New: "7518"
+- **Date of Signature**:
+  - Old: ""
+  - New: "-26.382471750283752"
+- **Latitude**:
+  - Old: ""
+  - New: "27.809546853469957"
+- **Longitude**:
+  - Old: "Owner"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "Owner"
+- **Last Modified Pole Permissions By**:
+  - Old: "-26.3824717502837"
+  - New: ""
+- **Last Modified Pole Permissions Date**:
+  - Old: "27.80954685347"
+  - New: ""
+- **Access to Property**:
+  - Old: ""
+  - New: "-26.3824717502837"
+- **Declined**:
+  - Old: ""
+  - New: "27.80954685347"
+- **if Yes**:
+  - Old: ""
+  - New: "1"
+- **Alternative Contact Person: Surname**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "No"
+  - New: ""
+- **Primary House of Backyard Dwelling**:
+  - Old: ""
+  - New: "Yes"
+- **Number of People Living in the Home**:
+  - Old: "Female"
+  - New: "No"
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Female"
+- **Backyard Dwellings**:
+  - Old: "Primary House"
+  - New: ""
+- **If Yes**:
+  - Old: "No"
+  - New: ""
+- **How Many Dwellings**:
+  - Old: "Residential"
+  - New: "Primary House"
+- **How Many People**:
+  - Old: "Vodacom MTN Cell C or Telkom"
+  - New: "Residential"
+- **Structure of Backyard Dwelling**:
+  - Old: ""
+  - New: "Vodacom MTN Cell C or Telkom"
+- **Consent Form**:
+  - Old: ""
+  - New: "No"
+- **Number of Sticker Placed on Door**:
+  - Old: "1"
+  - New: ""
+- **Photo of Property**:
+  - Old: "Dining Room"
+  - New: ""
+- **Customer Consent Signature**:
+  - Old: ""
+  - New: "1"
+- **General Comments**:
+  - Old: "1667073"
+  - New: "Dining Room"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "1667072"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "1667073"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "Yolanda"
+  - New: "1667072"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "-26.382374"
+  - New: ""
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: "27.809511"
+  - New: "Yolanda"
+- **Last Modified Home Sign Ups By**:
+  - Old: "11.4"
+  - New: "-26.382374"
+- **Last Modified Home Sign Ups Date**:
+  - Old: ""
+  - New: "27.809511"
+- **Contact Person Name and Surname**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "11.4"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: "2025-06-25 16:17:33.449387+02"
+  - New: ""
+- **ONT activation light level**:
+  - Old: "Adel Mafunza"
+  - New: "ftlawhh14@fibertime.com"
+- **Record any Relevant Comments**:
+  - Old: ""
+  - New: "2025-06-25 16:17:33.449387+02"
+- **Powermeter reading (at dome)**:
+  - Old: ""
+  - New: "Adel Mafunza"
+- **Outside cable span: Pole to Pigtail screw**:
+  - Old: "1712858"
+  - New: ""
+- **ONT Barcode**:
+  - Old: "1712860"
+  - New: "1915095"
+- **Mini-UPS Serial Number**:
+  - Old: "1712856"
+  - New: "1915089"
+- **Photo of Active Broadband Light (with FT sticker and Drop Numbe**:
+  - Old: ""
+  - New: "1712860"
+- **Powermeter reading (at ONT before activation)**:
+  - Old: ""
+  - New: "1915087"
+- **Please Specify**:
+  - Old: ""
+  - New: "1915092"
+- **Dome Joint Number / BB**:
+  - Old: "1712859"
+  - New: ""
+- **Client happy with Installation**:
+  - Old: ""
+  - New: "1712859"
+- **Home Installations - Actual Device Location (Latitude)**:
+  - Old: "Honest (Fibertime)"
+  - New: ""
+- **Home Installations - Actual Device Location (Longitude)**:
+  - Old: "-26.382189"
+  - New: ""
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: "27.809249"
+  - New: "Mike & Moeketsi (Fibertime)"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: "43.2"
+  - New: "-26.382189"
+- **Last Modified Home Installations By**:
+  - Old: ""
+  - New: "27.809249"
+- **Last Modified Home Installations Date**:
+  - Old: "ftlawhh7@fibertime.com"
+  - New: "43.2"
+- **Marketing Activator Name**:
+  - Old: "2025-07-01 17:00:57.917298+02"
+  - New: ""
+- **Marketing Activator Surname**:
+  - Old: ""
+  - New: "ftlawhh3@fibertime.com"
+- **Has the client been taught where and how to buy a fibertime vou**:
+  - Old: ""
+  - New: "2025-07-21T11:53:27.549Z"
+
+#### 22. Property ID: 334705
+
+- **Status**:
+  - Old: "Home Sign Ups: Approved & Installation Scheduled"
+  - New: "Home Installation: In Progress"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Sections**:
+  - Old: "16"
+  - New: "Home Installation: In Progress"
+- **PONs**:
+  - Old: "180"
+  - New: "Home Installation: In Progress"
+- **Location Address**:
+  - Old: "82 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "Home Installation: In Progress"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "LAW"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "16"
+- **Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "180"
+- **Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "82 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh53@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-03 17:30:40.605181+02"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025/06/26 11:19:33.877"
+  - New: ""
+- **Pole Number**:
+  - Old: "LAW.P.D636"
+  - New: ""
+- **Drop Number**:
+  - Old: "DR1734309"
+  - New: "ftlawhh3@fibertime.com"
+- **Language**:
+  - Old: "English"
+  - New: "2025-07-21 11:38:12.43002+02"
+- **Survey Date**:
+  - Old: "2025/06/26 11:19:33.877"
+  - New: "2025/07/21 10:59:56.224"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "LAW.P.D636"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "DR1734309"
+- **Contact Person: Name**:
+  - Old: "Lerato"
+  - New: "English"
+- **Contact Person: Surname**:
+  - Old: "Mashia"
+  - New: "2025/06/26 11:19:33.877"
+- **ID Number**:
+  - Old: "9504160114080"
+  - New: ""
+- **Email Address**:
+  - Old: ""
+  - New: "Lerato"
+- **Contact Number (e.g.0123456789)**:
+  - Old: "0632011457"
+  - New: "Mashia"
+- **Address Validation**:
+  - Old: "82 KUNENE STREET"
+  - New: "9504160114080"
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: ""
+- **Latitude Longitude**:
+  - Old: "LENASIA"
+  - New: ""
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "0632011457"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7519"
+  - New: "82 KUNENE STREET"
+- **Owner or Tenant**:
+  - Old: "-26.382460340478833"
+  - New: "LAWLEY ESTATE"
+- **Special Conditions (if any)**:
+  - Old: "27.8096573190317"
+  - New: "LENASIA"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "1824"
+- **Signature of the Authorised Person**:
+  - Old: ""
+  - New: "7519"
+- **Date of Signature**:
+  - Old: "Owner"
+  - New: "-26.382460340478833"
+- **Latitude**:
+  - Old: ""
+  - New: "27.8096573190317"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "Owner"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "-26.3824603404788"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "27.8096573190317"
+  - New: ""
+- **Access to Property**:
+  - Old: ""
+  - New: "-26.3824603404788"
+- **Declined**:
+  - Old: ""
+  - New: "27.8096573190317"
+- **if Yes**:
+  - Old: "No"
+  - New: "11"
+- **Gender**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Person: Name**:
+  - Old: "No"
+  - New: ""
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "Female"
+  - New: ""
+- **Primary House of Backyard Dwelling**:
+  - Old: ""
+  - New: "Yes"
+- **Number of People Living in the Home**:
+  - Old: ""
+  - New: "No"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "Primary House"
+  - New: "Female"
+- **How do you access internet at your home currently?**:
+  - Old: "11"
+  - New: ""
+- **Backyard Dwellings**:
+  - Old: "Residential"
+  - New: ""
+- **How Many Dwellings**:
+  - Old: "Vodacom MTN Cell C or Telkom"
+  - New: "Primary House"
+- **How Many People**:
+  - Old: ""
+  - New: "Residential"
+- **Structure of Backyard Dwelling**:
+  - Old: ""
+  - New: "Vodacom MTN Cell C or Telkom"
+- **Consent Form**:
+  - Old: ""
+  - New: "No"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "1"
+  - New: ""
+- **Preferred Place for Router Installation in Home**:
+  - Old: "Bedroom 1"
+  - New: ""
+- **Photo of Property**:
+  - Old: "1670910"
+  - New: ""
+- **Customer Consent Signature**:
+  - Old: "1670909"
+  - New: "1"
+- **General Comments**:
+  - Old: ""
+  - New: "Bedroom 1"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "Tholakele"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: "-26.382342"
+  - New: "1670910"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "27.809572"
+  - New: "1670909"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "15.7"
+  - New: ""
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "Tholakele"
+- **Last Modified Home Sign Ups By**:
+  - Old: "ftlawhh53@fibertime.com"
+  - New: "-26.382342"
+- **Last Modified Home Sign Ups Date**:
+  - Old: "2025-06-26 11:19:33.877111+02"
+  - New: "27.809572"
+- **Contact Person Name and Surname**:
+  - Old: "Lerato Mashia"
+  - New: "15.7"
+- **ONT activation light level**:
+  - Old: ""
+  - New: "ftlawhh53@fibertime.com"
+- **Record any Relevant Comments**:
+  - Old: ""
+  - New: "2025-06-26 11:19:33.877111+02"
+- **Powermeter reading (at dome)**:
+  - Old: ""
+  - New: "Lerato Mashia"
+- **ONT Barcode**:
+  - Old: ""
+  - New: "1910494"
+- **Mini-UPS Serial Number**:
+  - Old: ""
+  - New: "1909165"
+- **Photo of Active Broadband Light (with FT sticker and Drop Numbe**:
+  - Old: ""
+  - New: "1909149"
+- **Powermeter reading (at ONT before activation)**:
+  - Old: ""
+  - New: "1909153"
+- **Please Specify**:
+  - Old: ""
+  - New: "1909172"
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "Mike & Moeketsi (fibertime)"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: ""
+  - New: "-26.382338"
+- **Last Modified Home Installations By**:
+  - Old: ""
+  - New: "27.80965"
+- **Last Modified Home Installations Date**:
+  - Old: ""
+  - New: "13.6"
+- **Marketing Activator Surname**:
+  - Old: ""
+  - New: "ftlawhh3@fibertime.com"
+- **Has the client been taught where and how to buy a fibertime vou**:
+  - Old: ""
+  - New: "2025-07-21T09:38:08.380Z"
+
+#### 23. Property ID: 326912
+
+- **PONs**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Location Address**:
+  - Old: "16"
+  - New: "Home Installation: In Progress"
+- **Actual Device Location (Latitude)**:
+  - Old: "180"
+  - New: "LAW"
+- **Actual Device Location (Longitude)**:
+  - Old: "88 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "16"
+- **Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "180"
+- **Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "88 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **date_status_changed**:
+  - Old: "ftlawhh53@fibertime.com"
+  - New: ""
+- **Pole Number**:
+  - Old: "2025-07-03 17:30:27.752629+02"
+  - New: ""
+- **Drop Number**:
+  - Old: "2025/07/01 15:47:07.617"
+  - New: "ftlawhh6@fibertime.com"
+- **Language**:
+  - Old: "LAW.P.D633"
+  - New: "2025-07-21 12:12:10.103362+02"
+- **Survey Date**:
+  - Old: "DR1734338"
+  - New: "2025/07/01 15:47:07.617"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "Xitsonga"
+  - New: "LAW.P.D633"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: "2025/06/24 10:30:27.917"
+  - New: "DR1734338"
+- **Contact Person: Name**:
+  - Old: ""
+  - New: "Xitsonga"
+- **Contact Person: Surname**:
+  - Old: ""
+  - New: "2025/06/24 10:30:27.917"
+- **ID Number**:
+  - Old: "Lizzy"
+  - New: ""
+- **Passport Number**:
+  - Old: "Maluleke"
+  - New: ""
+- **Email Address**:
+  - Old: "6007050573087"
+  - New: "Lizzy"
+- **Contact Number (e.g.0123456789)**:
+  - Old: ""
+  - New: "Maluleke"
+- **Address Validation**:
+  - Old: ""
+  - New: "6007050573087"
+- **Stand Number**:
+  - Old: "0684416728"
+  - New: ""
+- **Latitude Longitude**:
+  - Old: "88 KUNENE STREET"
+  - New: ""
+- **CONSENT TO PLANT A POLE**:
+  - Old: "LAWLEY ESTATE"
+  - New: "0684416728"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "LENASIA"
+  - New: "88 KUNENE STREET"
+- **Owner or Tenant**:
+  - Old: "1824"
+  - New: "LAWLEY ESTATE"
+- **Special Conditions (if any)**:
+  - Old: "7516"
+  - New: "LENASIA"
+- **Field Agent Name (pole permission)**:
+  - Old: "-26.382458547764056"
+  - New: "1824"
+- **Signature of the Authorised Person**:
+  - Old: "27.809274989583955"
+  - New: "7516"
+- **Date of Signature**:
+  - Old: ""
+  - New: "-26.382458547764056"
+- **Latitude**:
+  - Old: ""
+  - New: "27.809274989583955"
+- **Longitude**:
+  - Old: "Owner"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "Owner"
+- **Last Modified Pole Permissions By**:
+  - Old: "-26.3824585477641"
+  - New: ""
+- **Last Modified Pole Permissions Date**:
+  - Old: "27.809274989584"
+  - New: ""
+- **Access to Property**:
+  - Old: ""
+  - New: "-26.3824585477641"
+- **Declined**:
+  - Old: ""
+  - New: "27.809274989584"
+- **if Yes**:
+  - Old: ""
+  - New: "9"
+- **Alternative Contact Person: Surname**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "No"
+  - New: ""
+- **Primary House of Backyard Dwelling**:
+  - Old: ""
+  - New: "Yes"
+- **Number of People Living in the Home**:
+  - Old: "Female"
+  - New: "No"
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Female"
+- **Backyard Dwellings**:
+  - Old: "Primary House"
+  - New: ""
+- **If Yes**:
+  - Old: "No"
+  - New: ""
+- **How Many Dwellings**:
+  - Old: "Residential"
+  - New: "Primary House"
+- **How Many People**:
+  - Old: "Vodacom MTN Cell C or Telkom"
+  - New: "Residential"
+- **Structure of Backyard Dwelling**:
+  - Old: ""
+  - New: "Vodacom MTN Cell C or Telkom"
+- **Consent Form**:
+  - Old: ""
+  - New: "No"
+- **Number of Sticker Placed on Door**:
+  - Old: "1"
+  - New: ""
+- **Photo of Property**:
+  - Old: "Living Room"
+  - New: ""
+- **Customer Consent Signature**:
+  - Old: ""
+  - New: "1"
+- **General Comments**:
+  - Old: "1652645"
+  - New: "Living Room"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "1652647"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "1652645"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "Tholakele"
+  - New: "1652647"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "-26.382413"
+  - New: ""
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: "27.809213"
+  - New: "Tholakele"
+- **Last Modified Home Sign Ups By**:
+  - Old: "8"
+  - New: "-26.382413"
+- **Last Modified Home Sign Ups Date**:
+  - Old: ""
+  - New: "27.809213"
+- **Contact Person Name and Surname**:
+  - Old: "ftlawhh53@fibertime.com"
+  - New: "8"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: "2025-06-24 10:30:27.917+02"
+  - New: ""
+- **ONT activation light level**:
+  - Old: "Lizzy Maluleke"
+  - New: "ftlawhh53@fibertime.com"
+- **Record any Relevant Comments**:
+  - Old: ""
+  - New: "2025-06-24 10:30:27.917+02"
+- **Powermeter reading (at dome)**:
+  - Old: ""
+  - New: "Lizzy Maluleke"
+- **Home entry point**:
+  - Old: "1711677"
+  - New: ""
+- **Outside cable span: Pole to Pigtail screw**:
+  - Old: "1711676"
+  - New: ""
+- **ONT Barcode**:
+  - Old: "1711678"
+  - New: "1711677"
+- **Mini-UPS Serial Number**:
+  - Old: "1711675"
+  - New: "1711676"
+- **Photo of Active Broadband Light (with FT sticker and Drop Numbe**:
+  - Old: ""
+  - New: "1711678"
+- **Powermeter reading (at ONT before activation)**:
+  - Old: ""
+  - New: "1711675"
+- **Dome Joint Number / BB**:
+  - Old: ""
+  - New: "No"
+- **Customer Signature. Accept Terms and Conditions**:
+  - Old: ""
+  - New: "Yes"
+- **Home Installations - Actual Device Location (Latitude)**:
+  - Old: "Honest (Fibertime)"
+  - New: ""
+- **Home Installations - Actual Device Location (Longitude)**:
+  - Old: "-26.382565"
+  - New: "1911606"
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: "27.809493"
+  - New: "Thabiso (Fibertime)"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: "4179967.3"
+  - New: "-26.382565"
+- **Last Modified Home Installations By**:
+  - Old: ""
+  - New: "27.809493"
+- **Last Modified Home Installations Date**:
+  - Old: "ftlawhh7@fibertime.com"
+  - New: "24.7"
+- **Marketing Activator Name**:
+  - Old: "2025-07-01 15:47:07.61728+02"
+  - New: ""
+- **Marketing Activator Surname**:
+  - Old: ""
+  - New: "ftlawhh6@fibertime.com"
+- **Has the client been taught where and how to buy a fibertime vou**:
+  - Old: ""
+  - New: "2025-07-21T10:12:06.529Z"
+
+#### 24. Property ID: 358675
+
+- **Status**:
+  - Old: "Home Sign Ups: Approved & Installation Scheduled"
+  - New: "Home Installation: In Progress"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Sections**:
+  - Old: "16"
+  - New: "Home Installation: In Progress"
+- **PONs**:
+  - Old: "180"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "90 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "16"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "180"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "90 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-08 11:47:46.536557+02"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025/07/07 17:31:35.874"
+  - New: "ftlawhh3@fibertime.com"
+- **Pole Number**:
+  - Old: "LAW.P.D633"
+  - New: "2025-07-21 11:29:43.692312+02"
+- **Drop Number**:
+  - Old: "DR1734339"
+  - New: "2025/07/21 11:29:43.692"
+- **Language**:
+  - Old: "Xitsonga"
+  - New: "LAW.P.D633"
+- **Survey Date**:
+  - Old: "2025/07/07 17:31:35.874"
+  - New: "DR1734339"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "Xitsonga"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "2025/07/07 17:31:35.874"
+- **Contact Person: Name**:
+  - Old: "Lesley"
+  - New: ""
+- **Contact Person: Surname**:
+  - Old: "maluleke"
+  - New: ""
+- **ID Number**:
+  - Old: "8408175251088"
+  - New: "Lesley"
+- **Passport Number**:
+  - Old: ""
+  - New: "maluleke"
+- **Email Address**:
+  - Old: ""
+  - New: "8408175251088"
+- **Contact Number (e.g.0123456789)**:
+  - Old: "0695517862"
+  - New: ""
+- **Address Validation**:
+  - Old: "90 KUNENE STREET"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "0695517862"
+- **Latitude Longitude**:
+  - Old: "LENASIA"
+  - New: "90 KUNENE STREET"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LAWLEY ESTATE"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7515"
+  - New: "LENASIA"
+- **Owner or Tenant**:
+  - Old: "-26.382566613834975"
+  - New: "1824"
+- **Special Conditions (if any)**:
+  - Old: "27.80906996464225"
+  - New: "7515"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "-26.382566613834975"
+- **Signature of the Authorised Person**:
+  - Old: ""
+  - New: "27.80906996464225"
+- **Date of Signature**:
+  - Old: "Owner"
+  - New: ""
+- **Longitude**:
+  - Old: ""
+  - New: "Owner"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "-26.382566613835"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "27.8090699646423"
+  - New: ""
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "-26.382566613835"
+- **Last Modified Pole Permissions Date**:
+  - Old: ""
+  - New: "27.8090699646423"
+- **if Yes**:
+  - Old: "No"
+  - New: ""
+- **Gender**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Person: Name**:
+  - Old: "No"
+  - New: ""
+- **Alternative Contact Person: Surname**:
+  - Old: ""
+  - New: "Yes"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "Male"
+  - New: "No"
+- **Number of People Living in the Home**:
+  - Old: ""
+  - New: "Male"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "Primary House"
+  - New: ""
+- **How do you access internet at your home currently?**:
+  - Old: "2"
+  - New: ""
+- **Backyard Dwellings**:
+  - Old: "Residential"
+  - New: "Primary House"
+- **If Yes**:
+  - Old: ""
+  - New: "No"
+- **How Many Dwellings**:
+  - Old: "Vodacom MTN Cell C or Telkom"
+  - New: "Residential"
+- **How Many People**:
+  - Old: ""
+  - New: "Vodacom MTN Cell C or Telkom"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "1"
+  - New: ""
+- **Preferred Place for Router Installation in Home**:
+  - Old: "Bedroom 1"
+  - New: ""
+- **Number of Sticker Placed on Door**:
+  - Old: ""
+  - New: "1"
+- **Photo of Property**:
+  - Old: "1760355"
+  - New: "Bedroom 1"
+- **Customer Consent Signature**:
+  - Old: "1760356"
+  - New: ""
+- **General Comments**:
+  - Old: ""
+  - New: "1760355"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "Cecilia"
+  - New: "1760356"
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: "-26.382524"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "27.809084"
+  - New: "Cecilia"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "4.9"
+  - New: "-26.382524"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "27.809084"
+- **Last Modified Home Sign Ups By**:
+  - Old: "ftlawhh13@fibertime.com"
+  - New: "4.9"
+- **Last Modified Home Sign Ups Date**:
+  - Old: "2025-07-07 17:31:35.873643+02"
+  - New: ""
+- **Contact Person Name and Surname**:
+  - Old: "Lesley maluleke"
+  - New: "ftlawhh13@fibertime.com"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: ""
+  - New: "2025-07-07 17:31:35.873643+02"
+- **ONT activation light level**:
+  - Old: ""
+  - New: "Lesley maluleke"
+- **Home Installations - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "Mike & Moeketsi (fibertime)"
+- **Home Installations - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "-26.382372"
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "27.809169"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: ""
+  - New: "23.8"
+- **Last Modified Home Installations Date**:
+  - Old: ""
+  - New: "ftlawhh3@fibertime.com"
+- **Marketing Activator Name**:
+  - Old: ""
+  - New: "2025-07-21 11:29:43.692312+02"
+
+#### 25. Property ID: 342272
+
+- **Status**:
+  - Old: "Home Sign Ups: Approved & Installation Scheduled"
+  - New: "Home Installation: In Progress"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Sections**:
+  - Old: "16"
+  - New: "Home Installation: In Progress"
+- **PONs**:
+  - Old: "180"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "94 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "16"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "180"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "94 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-08 11:46:31.94332+02"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025/06/30 17:18:39.707"
+  - New: "ftlawhh6@fibertime.com"
+- **Pole Number**:
+  - Old: "LAW.P.D632"
+  - New: "2025-07-21 14:45:47.667298+02"
+- **Drop Number**:
+  - Old: "DR1734350"
+  - New: "2025/07/21 14:45:35.299"
+- **Language**:
+  - Old: "Xitsonga"
+  - New: "LAW.P.D632"
+- **Survey Date**:
+  - Old: "2025/06/30 17:18:39.707"
+  - New: "DR1734350"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "Xitsonga"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "2025/06/30 17:18:39.707"
+- **Contact Person: Name**:
+  - Old: "Vincent"
+  - New: ""
+- **Contact Person: Surname**:
+  - Old: "mhangana"
+  - New: ""
+- **ID Number**:
+  - Old: "7005056115084"
+  - New: "Vincent"
+- **Passport Number**:
+  - Old: ""
+  - New: "mhangana"
+- **Email Address**:
+  - Old: ""
+  - New: "7005056115084"
+- **Contact Number (e.g.0123456789)**:
+  - Old: "0729442548"
+  - New: ""
+- **Address Validation**:
+  - Old: "94 KUNENE STREET"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "0729442548"
+- **Latitude Longitude**:
+  - Old: "LENASIA"
+  - New: "94 KUNENE STREET"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LAWLEY ESTATE"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7513"
+  - New: "LENASIA"
+- **Owner or Tenant**:
+  - Old: "-26.382532670702368"
+  - New: "1824"
+- **Special Conditions (if any)**:
+  - Old: "27.808881300647865"
+  - New: "7513"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "-26.382532670702368"
+- **Signature of the Authorised Person**:
+  - Old: ""
+  - New: "27.808881300647865"
+- **Date of Signature**:
+  - Old: "Owner"
+  - New: ""
+- **Longitude**:
+  - Old: ""
+  - New: "Owner"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "-26.3825326707024"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "27.8088813006479"
+  - New: ""
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "-26.3825326707024"
+- **Last Modified Pole Permissions Date**:
+  - Old: ""
+  - New: "27.8088813006479"
+- **if Yes**:
+  - Old: "No"
+  - New: ""
+- **Gender**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Person: Name**:
+  - Old: "No"
+  - New: ""
+- **Alternative Contact Person: Surname**:
+  - Old: ""
+  - New: "Yes"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "Male"
+  - New: "No"
+- **Number of People Living in the Home**:
+  - Old: ""
+  - New: "Male"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "Primary House"
+  - New: ""
+- **How do you access internet at your home currently?**:
+  - Old: "4"
+  - New: ""
+- **Backyard Dwellings**:
+  - Old: "Residential"
+  - New: "Primary House"
+- **If Yes**:
+  - Old: ""
+  - New: "No"
+- **How Many Dwellings**:
+  - Old: "Vodacom MTN Cell C or Telkom"
+  - New: "Residential"
+- **How Many People**:
+  - Old: ""
+  - New: "Vodacom MTN Cell C or Telkom"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "1"
+  - New: ""
+- **Preferred Place for Router Installation in Home**:
+  - Old: "Dining Room"
+  - New: ""
+- **Number of Sticker Placed on Door**:
+  - Old: ""
+  - New: "1"
+- **Photo of Property**:
+  - Old: "1702287"
+  - New: "Dining Room"
+- **Customer Consent Signature**:
+  - Old: "1702288"
+  - New: ""
+- **General Comments**:
+  - Old: ""
+  - New: "1702287"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "Cecilia"
+  - New: "1702288"
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: "-26.382563"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "27.808842"
+  - New: "Cecilia"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "5.2"
+  - New: "-26.382563"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "27.808842"
+- **Last Modified Home Sign Ups By**:
+  - Old: "ftlawhh13@fibertime.com"
+  - New: "5.2"
+- **Last Modified Home Sign Ups Date**:
+  - Old: "2025-06-30 17:18:39.707333+02"
+  - New: ""
+- **Contact Person Name and Surname**:
+  - Old: "Vincent mhangana"
+  - New: "ftlawhh13@fibertime.com"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: ""
+  - New: "2025-06-30 17:18:39.707333+02"
+- **ONT activation light level**:
+  - Old: ""
+  - New: "Vincent mhangana"
+- **Home entry point**:
+  - Old: ""
+  - New: "1916759"
+- **Outside cable span: Pole to Pigtail screw**:
+  - Old: ""
+  - New: "1916757"
+- **ONT Barcode**:
+  - Old: ""
+  - New: "1916752"
+- **Mini-UPS Serial Number**:
+  - Old: ""
+  - New: "1916756"
+- **Please Specify**:
+  - Old: ""
+  - New: "No"
+- **Read English Terms and Conditions**:
+  - Old: ""
+  - New: "Yes"
+- **Installer Name**:
+  - Old: ""
+  - New: "1916750"
+- **Home Installations - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "Fibertime"
+- **Home Installations - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "-26.382535"
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "27.808835"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: ""
+  - New: "4.6"
+- **Last Modified Home Installations Date**:
+  - Old: ""
+  - New: "ftlawhh6@fibertime.com"
+- **Marketing Activator Name**:
+  - Old: ""
+  - New: "2025-07-21 14:45:35.298795+02"
+
+#### 26. Property ID: 394304
 
 - **Status**:
   - Old: ""
@@ -180,6 +4389,3767 @@ See validation report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/data/val
   - Old: ""
   - New: "2025-07-21 11:28:01.726217+02"
 
+#### 27. Property ID: 277268
+
+- **Status**:
+  - Old: "Pole Permission: Approved"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Sections**:
+  - Old: "LAW"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **PONs**:
+  - Old: "16"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Location Address**:
+  - Old: "188"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Actual Device Location (Latitude)**:
+  - Old: "53 REBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "LAW"
+- **Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "16"
+- **Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "188"
+- **lst_mod_by**:
+  - Old: ""
+  - New: "53 REBONE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_dt**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025-06-04 17:24:38.746488+02"
+  - New: ""
+- **Pole Number**:
+  - Old: "2025/05/29 15:47:49.589"
+  - New: ""
+- **Drop Number**:
+  - Old: "LAW.P.D794"
+  - New: ""
+- **Language**:
+  - Old: "DR1733538"
+  - New: "ftlawhh14@fibertime.com"
+- **Survey Date**:
+  - Old: "English"
+  - New: "2025-07-21 10:14:10.911064+02"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025/06/04 00:00:00"
+  - New: "2025/07/21 10:14:07.096"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "LAW.P.D794"
+- **Contact Person: Name**:
+  - Old: ""
+  - New: "DR1733538"
+- **Contact Person: Surname**:
+  - Old: "Ester"
+  - New: "English"
+- **ID Number**:
+  - Old: "Seisha"
+  - New: "2025/07/21 00:00:00"
+- **Passport Number**:
+  - Old: "7610070801088"
+  - New: ""
+- **Contact Number (e.g.0123456789)**:
+  - Old: ""
+  - New: "Ester"
+- **Address Validation**:
+  - Old: "0725514249"
+  - New: "Seisha"
+- **Stand Number**:
+  - Old: "51 REBONE STREET"
+  - New: "7610070801088"
+- **Latitude Longitude**:
+  - Old: "LAWLEY ESTATE"
+  - New: ""
+- **CONSENT TO PLANT A POLE**:
+  - Old: "LENASIA"
+  - New: ""
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "1824"
+  - New: "0725514249"
+- **Owner or Tenant**:
+  - Old: "6582"
+  - New: "51 REBONE STREET"
+- **Special Conditions (if any)**:
+  - Old: "-26.381635122304964"
+  - New: "LAWLEY ESTATE"
+- **Field Agent Name (pole permission)**:
+  - Old: "27.805869628181693"
+  - New: "LENASIA"
+- **Signature of the Authorised Person**:
+  - Old: "As the person signing this form"
+  - New: "1824"
+- **Date of Signature**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "6582"
+- **Latitude**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "-26.381635122304964"
+- **Longitude**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "27.805869628181693"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "As the person signing this form"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Last Modified Pole Permissions By**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Last Modified Pole Permissions Date**:
+  - Old: "abanik’inkonzo"
+  - New: "and prior to the transfer of any title in the property"
+- **Access to Property**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Declined**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **if Yes**:
+  - Old: "40.9"
+  - New: "-26.381635122305"
+- **Reason Why it was Declined**:
+  - Old: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+  - New: "abanik’inkonzo"
+- **Gender**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Alternative Contact Person: Name**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Alternative Contact Person: Surname**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "Owner"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Primary House of Backyard Dwelling**:
+  - Old: ""
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Number of People Living in the Home**:
+  - Old: "Nompumelelo"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Residential or Commercial Dwelling**:
+  - Old: "1490280"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Mark Type of Commercial if Applicable**:
+  - Old: "2025/05/29"
+  - New: "Owner"
+- **How do you access internet at your home currently?**:
+  - Old: "-26.381635122305"
+  - New: ""
+- **Backyard Dwellings**:
+  - Old: "27.8058696281817"
+  - New: "Nompumelelo"
+- **If Yes**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "-26.38189"
+- **How Many Dwellings**:
+  - Old: "27.806166"
+  - New: "2025/05/29"
+- **How Many People**:
+  - Old: ""
+  - New: "27.8058696281817"
+- **Structure of Backyard Dwelling**:
+  - Old: "2025-06-04T15:24:37.744Z"
+  - New: "27.806166"
+- **Consent Form**:
+  - Old: ""
+  - New: "40.9"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: ""
+  - New: "ftlawhh12@fibertime.com"
+- **Preferred Place for Router Installation in Home**:
+  - Old: ""
+  - New: "2025-06-04T15:24:37.744Z"
+- **Number of Sticker Placed on Door**:
+  - Old: ""
+  - New: "Yes"
+- **Photo of Property**:
+  - Old: ""
+  - New: "No"
+- **General Comments**:
+  - Old: ""
+  - New: "Female"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "Primary House"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "4"
+- **Last Modified Home Sign Ups By**:
+  - Old: ""
+  - New: "Residential"
+- **Contact Person Name and Surname**:
+  - Old: ""
+  - New: "Vodacom MTN Cell C or Telkom"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: ""
+  - New: "No"
+- **Photo of Connection Points in the BB/Handhole (other side of jo**:
+  - Old: ""
+  - New: "1"
+- **Photo of the Handhole Before Closing**:
+  - Old: ""
+  - New: "Dining Room"
+- **Photo Showing Location on the Wall (before installation)**:
+  - Old: ""
+  - New: "1907986"
+- **Home Entry Point: Outside (Pigtail screw / Duct entry)**:
+  - Old: ""
+  - New: "1907983"
+- **Outside cable span: Pole to Pigtail screw**:
+  - Old: ""
+  - New: "Yolanda"
+- **ONT Barcode**:
+  - Old: ""
+  - New: "-26.38163"
+- **Mini-UPS Serial Number**:
+  - Old: ""
+  - New: "27.806109"
+- **Photo of Active Broadband Light (with FT sticker and Drop Numbe**:
+  - Old: "Ester Seisha"
+  - New: "23.9"
+- **Fiber cable: entry to ONT (after install)**:
+  - Old: ""
+  - New: "ftlawhh14@fibertime.com"
+- **Record Relevant Comments**:
+  - Old: ""
+  - New: "2025-07-21 10:14:07.095937+02"
+- **Any Damages to be Reported**:
+  - Old: ""
+  - New: "Ester Seisha"
+
+#### 28. Property ID: 278108
+
+- **Site**:
+  - Old: "LAW"
+  - New: "Pole Permission: Approved"
+- **Sections**:
+  - Old: "16"
+  - New: "LAW"
+- **PONs**:
+  - Old: "188"
+  - New: "16"
+- **Location Address**:
+  - Old: "4 SIYABONGA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "188"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "4 SIYABONGA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-06-02 15:00:09.293943+02"
+  - New: "ftlawhh42@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/05/30 09:07:43.599"
+  - New: "2025-07-21 10:14:05.06348+02"
+- **Pole Number**:
+  - Old: "LAW.P.E429"
+  - New: "2025/05/30 09:07:43.599"
+- **Drop Number**:
+  - Old: ""
+  - New: "LAW.P.E429"
+- **Language**:
+  - Old: "English"
+  - New: "DR1733504"
+- **Survey Date**:
+  - Old: "2025/05/30 09:07:43.599"
+  - New: "English"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/07/21 00:00:00"
+- **Contact Person: Name**:
+  - Old: "Novangeli"
+  - New: ""
+- **Contact Person: Surname**:
+  - Old: "Msotwana"
+  - New: "Novangeli"
+- **ID Number**:
+  - Old: "9402071004088"
+  - New: "Msotwana"
+- **Passport Number**:
+  - Old: ""
+  - New: "9402071004088"
+- **Contact Number (e.g.0123456789)**:
+  - Old: "0791453268"
+  - New: ""
+- **Address Validation**:
+  - Old: "6568"
+  - New: "0791453268"
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "4 SIYABONGA STREET"
+- **Latitude Longitude**:
+  - Old: "LENASIA"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "6568"
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: "-26.380074933030524"
+  - New: "6568"
+- **Special Conditions (if any)**:
+  - Old: "27.805597004697624"
+  - New: "-26.380074933030524"
+- **Field Agent Name (pole permission)**:
+  - Old: "As the person signing this form"
+  - New: "27.805597004697624"
+- **Signature of the Authorised Person**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "As the person signing this form"
+- **Date of Signature**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Latitude**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Longitude**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "and prior to the transfer of any title in the property"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Last Modified Pole Permissions By**:
+  - Old: "abanik’inkonzo"
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Last Modified Pole Permissions Date**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "abanik’inkonzo"
+- **Access to Property**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **if Yes**:
+  - Old: ""
+  - New: "20"
+- **Reason Why it was Declined**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Gender**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Alternative Contact Person: Name**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Alternative Contact Person: Surname**:
+  - Old: "Owner"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: ""
+  - New: "Owner"
+- **Primary House of Backyard Dwelling**:
+  - Old: "Nompumelelo"
+  - New: ""
+- **Number of People Living in the Home**:
+  - Old: "1493098"
+  - New: "Nompumelelo"
+- **Residential or Commercial Dwelling**:
+  - Old: "2025/05/30"
+  - New: "1493098"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "-26.3800749330305"
+  - New: "2025/05/30"
+- **How do you access internet at your home currently?**:
+  - Old: "27.8055970046976"
+  - New: "-26.3800749330305"
+- **Backyard Dwellings**:
+  - Old: "-26.379995"
+  - New: "27.8055970046976"
+- **If Yes**:
+  - Old: "2025-05-30 09:07:43.598513+02"
+  - New: "ftlawhh42@fibertime.com"
+- **How Many Dwellings**:
+  - Old: "20"
+  - New: "27.805777"
+- **How Many People**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: ""
+- **Structure of Backyard Dwelling**:
+  - Old: ""
+  - New: "2025-07-21T08:14:07.314Z"
+- **Mini-UPS Serial Number**:
+  - Old: "Novangeli Msotwana"
+  - New: ""
+- **Photo of Active Broadband Light (with FT sticker and Drop Numbe**:
+  - Old: ""
+  - New: "Novangeli Msotwana"
+
+#### 29. Property ID: 337722
+
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Sections**:
+  - Old: "18"
+  - New: "LAW"
+- **PONs**:
+  - Old: "198"
+  - New: "18"
+- **Location Address**:
+  - Old: "1 LECTERN STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "198"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "1 LECTERN STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-06-27 13:21:37.138515+02"
+  - New: "ftlawhh42@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/06/27 12:26:22.556"
+  - New: "2025-07-21 10:24:49.36593+02"
+- **Pole Number**:
+  - Old: "LAW.P.D978"
+  - New: "2025/06/27 12:26:22.556"
+- **Drop Number**:
+  - Old: "DR1736438"
+  - New: "LAW.P.D978"
+- **Language**:
+  - Old: "isiZulu"
+  - New: "DR1736438"
+- **Survey Date**:
+  - Old: "2025/06/27 12:26:22.556"
+  - New: "isiZulu"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/07/21 00:00:00"
+- **Contact Person: Name**:
+  - Old: "Amos"
+  - New: ""
+- **Contact Person: Surname**:
+  - Old: "Mhlangeni"
+  - New: "Amos"
+- **ID Number**:
+  - Old: "7306256244082"
+  - New: "Mhlangeni"
+- **Passport Number**:
+  - Old: ""
+  - New: "7306256244082"
+- **Contact Number (e.g.0123456789)**:
+  - Old: "0739894239"
+  - New: ""
+- **Address Validation**:
+  - Old: "6 MAFIKILE STREET"
+  - New: "0739894239"
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "6 MAFIKILE STREET"
+- **Latitude Longitude**:
+  - Old: "LENASIA"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "5668"
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: "-26.379767274507476"
+  - New: "5668"
+- **Special Conditions (if any)**:
+  - Old: "27.804558586201313"
+  - New: "-26.379767274507476"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "27.804558586201313"
+- **Date of Signature**:
+  - Old: "Owner"
+  - New: ""
+- **Latitude**:
+  - Old: ""
+  - New: "Owner"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "-26.3797672745075"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "27.8045585862013"
+  - New: "-26.3797672745075"
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "27.8045585862013"
+- **if Yes**:
+  - Old: "No"
+  - New: "Other"
+- **Gender**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Person: Name**:
+  - Old: "No"
+  - New: "Yes"
+- **Alternative Contact Person: Surname**:
+  - Old: ""
+  - New: "No"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "Male"
+  - New: ""
+- **Primary House of Backyard Dwelling**:
+  - Old: ""
+  - New: "Male"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "Primary House"
+  - New: ""
+- **How do you access internet at your home currently?**:
+  - Old: "7"
+  - New: "Primary House"
+- **Backyard Dwellings**:
+  - Old: "Residential"
+  - New: "7"
+- **How Many Dwellings**:
+  - Old: "Other"
+  - New: ""
+- **How Many People**:
+  - Old: ""
+  - New: "No"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "1"
+  - New: ""
+- **Preferred Place for Router Installation in Home**:
+  - Old: "Living Room"
+  - New: "1"
+- **Number of Sticker Placed on Door**:
+  - Old: ""
+  - New: "Living Room"
+- **Customer Consent Signature**:
+  - Old: "1679576"
+  - New: "1908265"
+- **General Comments**:
+  - Old: ""
+  - New: "1679576"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "Nompumelelo Kunene"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: "-26.37988"
+  - New: "Nompumelelo Kunene"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "27.804656"
+  - New: "-26.37988"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "15.9"
+  - New: "27.804656"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "15.9"
+- **Last Modified Home Sign Ups By**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: ""
+- **Last Modified Home Sign Ups Date**:
+  - Old: "2025-06-27 12:26:22.556376+02"
+  - New: "ftlawhh42@fibertime.com"
+- **Contact Person Name and Surname**:
+  - Old: "Amos Mhlangeni"
+  - New: "2025-07-21T08:24:49.233Z"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: ""
+  - New: "Amos Mhlangeni"
+
+#### 30. Property ID: 288953
+
+- **Status**:
+  - Old: "Pole Permission: Approved"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Sections**:
+  - Old: "18"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **PONs**:
+  - Old: "208"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "30 SIYABUSWA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "18"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "208"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "30 SIYABUSWA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh16@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-06-05 09:14:27.321547+02"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025/06/04 13:45:19.771"
+  - New: "ftlawhh51@fibertime.com"
+- **Pole Number**:
+  - Old: "LAW.P.E207"
+  - New: "2025-07-21 13:52:41.201357+02"
+- **Drop Number**:
+  - Old: "DR1735793"
+  - New: "2025/07/21 13:52:40.426"
+- **Language**:
+  - Old: "English"
+  - New: "LAW.P.E207"
+- **Survey Date**:
+  - Old: "2025/06/04 13:45:19.771"
+  - New: "DR1735793"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "isiZulu"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "2025/07/21 00:00:00"
+- **Contact Person: Name**:
+  - Old: "Chalie"
+  - New: ""
+- **Contact Person: Surname**:
+  - Old: "mohlongo"
+  - New: ""
+- **ID Number**:
+  - Old: "680623"
+  - New: "Chalie"
+- **Passport Number**:
+  - Old: ""
+  - New: "mohlongo"
+- **Email Address**:
+  - Old: ""
+  - New: "680623"
+- **Contact Number (e.g.0123456789)**:
+  - Old: "0763367866"
+  - New: ""
+- **Address Validation**:
+  - Old: "30 SIYABUSWA STREET"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "0763367866"
+- **Latitude Longitude**:
+  - Old: "LENASIA"
+  - New: "30 SIYABUSWA STREET"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LAWLEY ESTATE"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "5490"
+  - New: "LENASIA"
+- **Owner or Tenant**:
+  - Old: "-26.380260254378918"
+  - New: "1824"
+- **Special Conditions (if any)**:
+  - Old: "27.801310819718243"
+  - New: "5490"
+- **Field Agent Name (pole permission)**:
+  - Old: "As the person signing this form"
+  - New: "-26.380260254378918"
+- **Signature of the Authorised Person**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "27.801310819718243"
+- **Date of Signature**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "As the person signing this form"
+- **Latitude**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Longitude**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "and prior to the transfer of any title in the property"
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Last Modified Pole Permissions By**:
+  - Old: "abanik’inkonzo"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Last Modified Pole Permissions Date**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Access to Property**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "abanik’inkonzo"
+- **Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **if Yes**:
+  - Old: ""
+  - New: "27.801225"
+- **Reason Why it was Declined**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Gender**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Alternative Contact Person: Name**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Alternative Contact Person: Surname**:
+  - Old: "Tenant"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: ""
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Primary House of Backyard Dwelling**:
+  - Old: "Tumesang"
+  - New: "Tenant"
+- **Number of People Living in the Home**:
+  - Old: "1526668"
+  - New: ""
+- **Residential or Commercial Dwelling**:
+  - Old: "2025/06/04"
+  - New: "Tumesang"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "-26.3802602543789"
+  - New: "1526668"
+- **How do you access internet at your home currently?**:
+  - Old: "27.8013108197182"
+  - New: "2025/06/04"
+- **Backyard Dwellings**:
+  - Old: "-26.380442"
+  - New: "-26.3802602543789"
+- **If Yes**:
+  - Old: "2025-06-04 13:45:19.770597+02"
+  - New: ""
+- **How Many Dwellings**:
+  - Old: "21.9"
+  - New: "-26.380442"
+- **How Many People**:
+  - Old: "ftlawhh16@fibertime.com"
+  - New: "21.9"
+- **Structure of Backyard Dwelling**:
+  - Old: ""
+  - New: "ftlawhh16@fibertime.com"
+- **Consent Form**:
+  - Old: ""
+  - New: "2025-06-04 13:45:19.770597+02"
+- **House Number**:
+  - Old: ""
+  - New: "Yes"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: ""
+  - New: "No"
+- **Number of Sticker Placed on Door**:
+  - Old: ""
+  - New: "Male"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: ""
+  - New: "Primary House"
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "5"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "Residential"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "Vodacom MTN Cell C or Telkom"
+- **Last Modified Home Sign Ups By**:
+  - Old: ""
+  - New: "No"
+- **Powermeter reading (at dome)**:
+  - Old: ""
+  - New: "1"
+- **Patched and labelled drop**:
+  - Old: ""
+  - New: "Family Room"
+- **Photo of the Handhole Before Closing**:
+  - Old: ""
+  - New: "1915049"
+- **Photo Showing Location on the Wall (before installation)**:
+  - Old: ""
+  - New: "Dikgahlo Lesitha"
+- **Home Entry Point: Outside (Pigtail screw / Duct entry)**:
+  - Old: ""
+  - New: "-26.379968"
+- **Home entry point**:
+  - Old: ""
+  - New: "27.801234"
+- **Outside cable span: Pole to Pigtail screw**:
+  - Old: ""
+  - New: "33.4"
+- **Mini-UPS Serial Number**:
+  - Old: "Chalie mohlongo"
+  - New: "ftlawhh51@fibertime.com"
+- **Photo of Active Broadband Light (with FT sticker and Drop Numbe**:
+  - Old: ""
+  - New: "2025-07-21 13:52:40.4261+02"
+- **Powermeter reading (at ONT before activation)**:
+  - Old: ""
+  - New: "Chalie mohlongo"
+
+#### 31. Property ID: 371850
+
+- **lst_mod_dt**:
+  - Old: "2025-07-11 12:26:57.353578+02"
+  - New: "2025-07-21 10:31:35.959787+02"
+
+#### 32. Property ID: 397132
+
+- **lst_mod_dt**:
+  - Old: "2025-07-20 16:24:07.472551+02"
+  - New: "2025-07-21 11:04:54.983897+02"
+- **Customer Consent Signature**:
+  - Old: "-2"
+  - New: "1909349"
+
+#### 33. Property ID: 397125
+
+- **lst_mod_dt**:
+  - Old: "2025-07-20 16:16:36.445946+02"
+  - New: "2025-07-21 11:04:49.363329+02"
+
+#### 34. Property ID: 364721
+
+- **Status**:
+  - Old: ""
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Flow Name Groups**:
+  - Old: ""
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Sections**:
+  - Old: "7"
+  - New: "LAW"
+- **PONs**:
+  - Old: "71"
+  - New: "7"
+- **Location Address**:
+  - Old: "22 TIYANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "71"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "22 TIYANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh15@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-09 13:14:30.714252+02"
+  - New: "ftlawhh14@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/07/09 13:14:30.714"
+  - New: "2025-07-21 14:29:07.938381+02"
+- **Pole Number**:
+  - Old: ""
+  - New: "2025/07/21 14:29:01.965"
+- **Drop Number**:
+  - Old: ""
+  - New: "LAW.P.B360"
+- **Language**:
+  - Old: ""
+  - New: "DR1745977"
+- **Survey Date**:
+  - Old: "2025/07/09 13:14:30.714"
+  - New: "Sesotho"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/07/21 00:00:00"
+- **Contact Person: Surname**:
+  - Old: ""
+  - New: "Anna"
+- **ID Number**:
+  - Old: ""
+  - New: "Sobiloane"
+- **Passport Number**:
+  - Old: ""
+  - New: "091216"
+- **Address Validation**:
+  - Old: "22 TIYANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "0846510374"
+- **Stand Number**:
+  - Old: "3855"
+  - New: "22 TIYANI STREET"
+- **Latitude Longitude**:
+  - Old: "-26.38281892098425"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "27.795859228661378"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: ""
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: ""
+  - New: "3855"
+- **Special Conditions (if any)**:
+  - Old: ""
+  - New: "-26.38281892098425"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "27.795859228661378"
+- **Latitude**:
+  - Old: ""
+  - New: "Owner"
+- **Longitude**:
+  - Old: "-26.3828189209842"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "27.7958592286614"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: ""
+  - New: "-26.3828189209842"
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "27.7958592286614"
+- **if Yes**:
+  - Old: ""
+  - New: "Vodacom MTN Cell C or Telkom"
+- **Alternative Contact Person: Name**:
+  - Old: ""
+  - New: "Yes"
+- **Alternative Contact Person: Surname**:
+  - Old: ""
+  - New: "No"
+- **Primary House of Backyard Dwelling**:
+  - Old: ""
+  - New: "Female"
+- **How do you access internet at your home currently?**:
+  - Old: ""
+  - New: "Primary House"
+- **Backyard Dwellings**:
+  - Old: ""
+  - New: "3"
+- **How Many People**:
+  - Old: ""
+  - New: "No"
+- **Preferred Place for Router Installation in Home**:
+  - Old: ""
+  - New: "1"
+- **Number of Sticker Placed on Door**:
+  - Old: ""
+  - New: "Dining Room"
+- **Customer Consent Signature**:
+  - Old: ""
+  - New: "1916281"
+- **General Comments**:
+  - Old: ""
+  - New: "1916279"
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "Yolanda"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "-26.382752"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "27.795877"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "7.6"
+- **Last Modified Home Sign Ups Date**:
+  - Old: ""
+  - New: "ftlawhh14@fibertime.com"
+- **Contact Person Name and Surname**:
+  - Old: ""
+  - New: "2025-07-21 14:29:01.964847+02"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: ""
+  - New: "Anna Sobiloane"
+
+#### 35. Property ID: 361842
+
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Sections**:
+  - Old: "7"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **PONs**:
+  - Old: "71"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Location Address**:
+  - Old: "16 TIYANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "LAW"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "7"
+- **Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "71"
+- **Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "16 TIYANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh47@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-08 19:18:47.621369+02"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025/07/08 15:27:05.053"
+  - New: ""
+- **Pole Number**:
+  - Old: "LAW.P.E387"
+  - New: ""
+- **Drop Number**:
+  - Old: "DR1746005"
+  - New: "ftlawhh51@fibertime.com"
+- **Language**:
+  - Old: "isiZulu"
+  - New: "2025-07-21 14:59:57.151966+02"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "LAW.P.E387"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "DR1746005"
+- **Contact Person: Name**:
+  - Old: "Sfiso"
+  - New: "isiXhosa"
+- **Contact Person: Surname**:
+  - Old: "Dzanibe"
+  - New: "2025/07/21 00:00:00"
+- **ID Number**:
+  - Old: "Dzanibe"
+  - New: ""
+- **Email Address**:
+  - Old: ""
+  - New: "Nowawe"
+- **Contact Number (e.g.0123456789)**:
+  - Old: "0628023306"
+  - New: "Ntoi"
+- **Address Validation**:
+  - Old: "16 TIYANI STREET"
+  - New: "771116"
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: ""
+- **Latitude Longitude**:
+  - Old: "LENASIA"
+  - New: ""
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "0681746732"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "3858"
+  - New: "16 TIYANI STREET"
+- **Owner or Tenant**:
+  - Old: "-26.382638765274443"
+  - New: "LAWLEY ESTATE"
+- **Special Conditions (if any)**:
+  - Old: "27.796071344474974"
+  - New: "LENASIA"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "1824"
+- **Signature of the Authorised Person**:
+  - Old: ""
+  - New: "3858"
+- **Date of Signature**:
+  - Old: "Owner"
+  - New: "-26.382638765274443"
+- **Latitude**:
+  - Old: ""
+  - New: "27.796071344474974"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "Owner"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "-26.3826387652744"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "27.796071344475"
+  - New: ""
+- **Access to Property**:
+  - Old: ""
+  - New: "-26.3826387652744"
+- **Declined**:
+  - Old: ""
+  - New: "27.796071344475"
+- **if Yes**:
+  - Old: "No"
+  - New: "6"
+- **Gender**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Person: Name**:
+  - Old: "No"
+  - New: ""
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "Male"
+  - New: ""
+- **Primary House of Backyard Dwelling**:
+  - Old: ""
+  - New: "Yes"
+- **Number of People Living in the Home**:
+  - Old: ""
+  - New: "No"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "Primary House"
+  - New: "Female"
+- **How do you access internet at your home currently?**:
+  - Old: "3"
+  - New: ""
+- **Backyard Dwellings**:
+  - Old: "Residential"
+  - New: ""
+- **How Many Dwellings**:
+  - Old: "Other"
+  - New: "Primary House"
+- **How Many People**:
+  - Old: ""
+  - New: "Residential"
+- **Structure of Backyard Dwelling**:
+  - Old: ""
+  - New: "Vodacom MTN Cell C or Telkom"
+- **Consent Form**:
+  - Old: ""
+  - New: "No"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "1"
+  - New: ""
+- **Preferred Place for Router Installation in Home**:
+  - Old: "Kitchen"
+  - New: ""
+- **Customer Consent Signature**:
+  - Old: "1768721"
+  - New: "1"
+- **General Comments**:
+  - Old: ""
+  - New: "Dining Room"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "lebohang"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: "-26.382531"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "27.794868"
+  - New: "1768721"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "120.5"
+  - New: ""
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "Dikgahlo Lesitha"
+- **Last Modified Home Sign Ups By**:
+  - Old: "ftlawhh47@fibertime.com"
+  - New: "-26.382531"
+- **Last Modified Home Sign Ups Date**:
+  - Old: "2025-07-08 15:27:05.052605+02"
+  - New: "27.794868"
+- **Contact Person Name and Surname**:
+  - Old: "Sfiso Dzanibe"
+  - New: "120.5"
+- **ONT activation light level**:
+  - Old: ""
+  - New: "ftlawhh51@fibertime.com"
+- **Record any Relevant Comments**:
+  - Old: ""
+  - New: "2025-07-21T12:59:56.266Z"
+- **Powermeter reading (at dome)**:
+  - Old: ""
+  - New: "Nowawe Ntoi"
+
+#### 36. Property ID: 366502
+
+- **Status**:
+  - Old: ""
+  - New: "Home Sign Ups: Declined"
+- **Flow Name Groups**:
+  - Old: ""
+  - New: "Home Sign Ups: Declined"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Sign Ups: Declined"
+- **Sections**:
+  - Old: "7"
+  - New: "LAW"
+- **PONs**:
+  - Old: "70"
+  - New: "7"
+- **Location Address**:
+  - Old: "75 HINGALWI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "70"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "75 HINGALWI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh43@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-10 07:58:54.160722+02"
+  - New: "ftlawhh45@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/07/10 07:58:54.161"
+  - New: "2025-07-21 15:07:59.504984+02"
+- **Pole Number**:
+  - Old: ""
+  - New: "2025/07/21 15:07:59.505"
+- **Language**:
+  - Old: ""
+  - New: "DR1745814"
+- **Survey Date**:
+  - Old: "2025/07/10 07:58:54.161"
+  - New: ""
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/07/21 00:00:00"
+- **Address Validation**:
+  - Old: "75 HINGALWI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: ""
+- **Stand Number**:
+  - Old: "3834"
+  - New: "75 HINGALWI STREET"
+- **Latitude Longitude**:
+  - Old: "-26.38347707100373"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "27.793851180095075"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: ""
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: ""
+  - New: "3834"
+- **Special Conditions (if any)**:
+  - Old: ""
+  - New: "-26.38347707100373"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "27.793851180095075"
+- **Longitude**:
+  - Old: "-26.3834770710037"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "27.7938511800951"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: ""
+  - New: "-26.3834770710037"
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "27.7938511800951"
+- **Alternative Contact Person: Name**:
+  - Old: ""
+  - New: "No"
+- **Alternative Contact Person: Surname**:
+  - Old: ""
+  - New: "Yes"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "-26.383478"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "27.794025"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "17.3"
+- **Last Modified Home Sign Ups Date**:
+  - Old: ""
+  - New: "ftlawhh45@fibertime.com"
+- **Contact Person Name and Surname**:
+  - Old: ""
+  - New: "2025-07-21 15:07:59.504984+02"
+
+#### 37. Property ID: 372652
+
+- **Status**:
+  - Old: ""
+  - New: "Home Sign Ups: Declined"
+- **Flow Name Groups**:
+  - Old: ""
+  - New: "Home Sign Ups: Declined"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Sign Ups: Declined"
+- **Sections**:
+  - Old: "8"
+  - New: "LAW"
+- **PONs**:
+  - Old: "90"
+  - New: "8"
+- **Location Address**:
+  - Old: "69 HINGALWI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "90"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "69 HINGALWI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-11 13:58:10.129891+02"
+  - New: "ftlawhh45@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/07/11 13:58:10.130"
+  - New: "2025-07-21 15:27:09.075626+02"
+- **Pole Number**:
+  - Old: ""
+  - New: "2025/07/21 15:27:09.076"
+- **Language**:
+  - Old: ""
+  - New: "DR1746335"
+- **Survey Date**:
+  - Old: "2025/07/11 13:58:10.130"
+  - New: ""
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/07/21 00:00:00"
+- **Address Validation**:
+  - Old: "69 HINGALWI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: ""
+- **Stand Number**:
+  - Old: "3893"
+  - New: "69 HINGALWI STREET"
+- **Latitude Longitude**:
+  - Old: "-26.38390180240156"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "27.79396161170669"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: ""
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: ""
+  - New: "3893"
+- **Special Conditions (if any)**:
+  - Old: ""
+  - New: "-26.38390180240156"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "27.79396161170669"
+- **Longitude**:
+  - Old: "-26.3839018024016"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "27.7939616117067"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: ""
+  - New: "-26.3839018024016"
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "27.7939616117067"
+- **Alternative Contact Person: Name**:
+  - Old: ""
+  - New: "No"
+- **Alternative Contact Person: Surname**:
+  - Old: ""
+  - New: "Yes"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "-26.384843"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "27.794244"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "108.4"
+- **Last Modified Home Sign Ups Date**:
+  - Old: ""
+  - New: "ftlawhh45@fibertime.com"
+- **Contact Person Name and Surname**:
+  - Old: ""
+  - New: "2025-07-21 15:27:09.075626+02"
+
+#### 38. Property ID: 365325
+
+- **Status**:
+  - Old: ""
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Flow Name Groups**:
+  - Old: ""
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Sections**:
+  - Old: "7"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **PONs**:
+  - Old: "78"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Location Address**:
+  - Old: "103 SIYABONGA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "LAW"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "7"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "78"
+- **Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "103 SIYABONGA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh40@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-09 14:26:09.903777+02"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025/07/09 14:26:09.904"
+  - New: ""
+- **Pole Number**:
+  - Old: ""
+  - New: "ftlawhh40@fibertime.com"
+- **Drop Number**:
+  - Old: ""
+  - New: "2025-07-21 13:35:07.644812+02"
+- **Language**:
+  - Old: ""
+  - New: "2025/07/21 13:32:51.957"
+- **Survey Date**:
+  - Old: "2025/07/09 14:26:09.904"
+  - New: "LAW.P.B489"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "DR1745157"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "isiZulu"
+- **Contact Person: Name**:
+  - Old: ""
+  - New: "2025/07/21 00:00:00"
+- **Passport Number**:
+  - Old: ""
+  - New: "Thabisile"
+- **Email Address**:
+  - Old: ""
+  - New: "Mfuphi"
+- **Contact Number (e.g.0123456789)**:
+  - Old: ""
+  - New: "9004070872083"
+- **Address Validation**:
+  - Old: "103 SIYABONGA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: ""
+- **Stand Number**:
+  - Old: "4006"
+  - New: ""
+- **Latitude Longitude**:
+  - Old: "-26.384632664681945"
+  - New: "0631248068"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "27.796642555190665"
+  - New: "103 SIYABONGA STREET"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: ""
+  - New: "LAWLEY ESTATE"
+- **Owner or Tenant**:
+  - Old: ""
+  - New: "LENASIA"
+- **Special Conditions (if any)**:
+  - Old: ""
+  - New: "1824"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "4006"
+- **Signature of the Authorised Person**:
+  - Old: ""
+  - New: "-26.384632664681945"
+- **Date of Signature**:
+  - Old: ""
+  - New: "27.796642555190665"
+- **Longitude**:
+  - Old: "-26.3846326646819"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "27.7966425551907"
+  - New: "Owner"
+- **Last Modified Pole Permissions Date**:
+  - Old: ""
+  - New: "-26.3846326646819"
+- **Access to Property**:
+  - Old: ""
+  - New: "27.7966425551907"
+- **if Yes**:
+  - Old: ""
+  - New: "Residential"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: ""
+  - New: "Yes"
+- **Primary House of Backyard Dwelling**:
+  - Old: ""
+  - New: "No"
+- **Residential or Commercial Dwelling**:
+  - Old: ""
+  - New: "Female"
+- **If Yes**:
+  - Old: ""
+  - New: "Vodacom MTN Cell C or Telkom"
+- **How Many Dwellings**:
+  - Old: ""
+  - New: "4"
+- **Structure of Backyard Dwelling**:
+  - Old: ""
+  - New: "No"
+- **Photo of Property**:
+  - Old: ""
+  - New: "1"
+- **Customer Consent Signature**:
+  - Old: ""
+  - New: "Dining Room"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: ""
+  - New: "1914446"
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "1914443"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "Nonkululeko"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "-26.384578"
+- **Last Modified Home Sign Ups By**:
+  - Old: ""
+  - New: "27.79672"
+- **Last Modified Home Sign Ups Date**:
+  - Old: ""
+  - New: "9.8"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: ""
+  - New: "ftlawhh40@fibertime.com"
+- **ONT activation light level**:
+  - Old: ""
+  - New: "2025-07-21T11:35:08.143Z"
+- **Record any Relevant Comments**:
+  - Old: ""
+  - New: "Thabisile Mfuphi"
+
+#### 39. Property ID: 369111
+
+- **Status**:
+  - Old: ""
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Flow Name Groups**:
+  - Old: ""
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Sections**:
+  - Old: "8"
+  - New: "LAW"
+- **PONs**:
+  - Old: "87"
+  - New: "8"
+- **Location Address**:
+  - Old: "66 SUN RISE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "87"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "66 SUN RISE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh40@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-10 14:32:45.4237+02"
+  - New: "ftlawhh12@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/07/10 14:32:45.424"
+  - New: "2025-07-21 15:35:28.141712+02"
+- **Pole Number**:
+  - Old: ""
+  - New: "2025/07/21 15:35:22.559"
+- **Drop Number**:
+  - Old: ""
+  - New: "LAW.P.B696"
+- **Language**:
+  - Old: ""
+  - New: "DR1747783"
+- **Survey Date**:
+  - Old: "2025/07/10 14:32:45.424"
+  - New: "Setswana"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/07/21 00:00:00"
+- **Contact Person: Surname**:
+  - Old: ""
+  - New: "Aaron"
+- **ID Number**:
+  - Old: ""
+  - New: "Manametsi"
+- **Passport Number**:
+  - Old: ""
+  - New: "6610265640086"
+- **Address Validation**:
+  - Old: "66 SUN RISE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "0725811776"
+- **Stand Number**:
+  - Old: "4815"
+  - New: "66 SUN RISE STREET"
+- **Latitude Longitude**:
+  - Old: "-26.388341996902785"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "27.80113848404407"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: ""
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: ""
+  - New: "4815"
+- **Special Conditions (if any)**:
+  - Old: ""
+  - New: "-26.388341996902785"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "27.80113848404407"
+- **Latitude**:
+  - Old: ""
+  - New: "Owner"
+- **Longitude**:
+  - Old: "-26.3883419969028"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "27.8011384840441"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: ""
+  - New: "-26.3883419969028"
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "27.8011384840441"
+- **if Yes**:
+  - Old: ""
+  - New: "Other"
+- **Alternative Contact Person: Name**:
+  - Old: ""
+  - New: "Yes"
+- **Alternative Contact Person: Surname**:
+  - Old: ""
+  - New: "No"
+- **Primary House of Backyard Dwelling**:
+  - Old: ""
+  - New: "Male"
+- **How do you access internet at your home currently?**:
+  - Old: ""
+  - New: "Primary House"
+- **Backyard Dwellings**:
+  - Old: ""
+  - New: "8"
+- **How Many People**:
+  - Old: ""
+  - New: "No"
+- **Preferred Place for Router Installation in Home**:
+  - Old: ""
+  - New: "1"
+- **Number of Sticker Placed on Door**:
+  - Old: ""
+  - New: "Living Room"
+- **Customer Consent Signature**:
+  - Old: ""
+  - New: "1918383"
+- **General Comments**:
+  - Old: ""
+  - New: "1918385"
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "Nompumelelo Kunene"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "-26.388289"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "27.801074"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "8.7"
+- **Last Modified Home Sign Ups Date**:
+  - Old: ""
+  - New: "ftlawhh12@fibertime.com"
+- **Contact Person Name and Surname**:
+  - Old: ""
+  - New: "2025-07-21 15:35:22.55923+02"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: ""
+  - New: "Aaron Manametsi"
+
+#### 40. Property ID: 355656
+
+- **Status**:
+  - Old: ""
+  - New: "Home Sign Ups: Declined"
+- **Flow Name Groups**:
+  - Old: ""
+  - New: "Home Sign Ups: Declined"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Sign Ups: Declined"
+- **Sections**:
+  - Old: "8"
+  - New: "LAW"
+- **PONs**:
+  - Old: "86"
+  - New: "8"
+- **Location Address**:
+  - Old: "69 KUBHEKA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "86"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "69 KUBHEKA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh15@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-07 09:51:55.774035+02"
+  - New: "ftlawhh12@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/07/07 09:51:55.774"
+  - New: "2025-07-21 15:50:52.004929+02"
+- **Pole Number**:
+  - Old: ""
+  - New: "2025/07/21 15:50:52.005"
+- **Language**:
+  - Old: ""
+  - New: "DR1747625"
+- **Survey Date**:
+  - Old: "2025/07/07 09:51:55.774"
+  - New: ""
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/07/21 00:00:00"
+- **Address Validation**:
+  - Old: "69 KUBHEKA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: ""
+- **Stand Number**:
+  - Old: "4833"
+  - New: "69 KUBHEKA STREET"
+- **Latitude Longitude**:
+  - Old: "-26.387105918950528"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "27.801208767529022"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: ""
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: ""
+  - New: "4833"
+- **Special Conditions (if any)**:
+  - Old: ""
+  - New: "-26.387105918950528"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "27.801208767529022"
+- **Longitude**:
+  - Old: "-26.3871059189505"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "27.801208767529"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: ""
+  - New: "-26.3871059189505"
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "27.801208767529"
+- **Alternative Contact Person: Name**:
+  - Old: ""
+  - New: "No"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "-26.38721"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "27.801231"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "11.8"
+- **Last Modified Home Sign Ups Date**:
+  - Old: ""
+  - New: "ftlawhh12@fibertime.com"
+- **Contact Person Name and Surname**:
+  - Old: ""
+  - New: "2025-07-21 15:50:52.004929+02"
+
+#### 41. Property ID: 346096
+
+- **Status**:
+  - Old: ""
+  - New: "Home Sign Ups: Declined"
+- **Flow Name Groups**:
+  - Old: ""
+  - New: "Home Sign Ups: Declined"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Sign Ups: Declined"
+- **Sections**:
+  - Old: "8"
+  - New: "LAW"
+- **PONs**:
+  - Old: "85"
+  - New: "8"
+- **Location Address**:
+  - Old: "49 SUN RISE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "85"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "49 SUN RISE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh40@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-02 10:24:09.696784+02"
+  - New: "ftlawhh13@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/07/02 10:24:09.697"
+  - New: "2025-07-21 15:28:19.01828+02"
+- **Pole Number**:
+  - Old: ""
+  - New: "2025/07/21 15:28:19.018"
+- **Language**:
+  - Old: ""
+  - New: "DR1747468"
+- **Survey Date**:
+  - Old: "2025/07/02 10:24:09.697"
+  - New: ""
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/07/21 00:00:00"
+- **Address Validation**:
+  - Old: "49 SUN RISE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: ""
+- **Stand Number**:
+  - Old: "4624"
+  - New: "49 SUN RISE STREET"
+- **Latitude Longitude**:
+  - Old: "-26.388233218773852"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "27.79988957665177"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: ""
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: ""
+  - New: "4624"
+- **Special Conditions (if any)**:
+  - Old: ""
+  - New: "-26.388233218773852"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "27.79988957665177"
+- **Longitude**:
+  - Old: "-26.3882332187738"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "27.7998895766518"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: ""
+  - New: "-26.3882332187738"
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "27.7998895766518"
+- **Alternative Contact Person: Name**:
+  - Old: ""
+  - New: "Yes"
+- **Alternative Contact Person: Surname**:
+  - Old: ""
+  - New: "Yes"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: ""
+  - New: "Not interested - I have home internet with another provider"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "-26.388366"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "27.799833"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "15.8"
+- **Last Modified Home Sign Ups Date**:
+  - Old: ""
+  - New: "ftlawhh13@fibertime.com"
+- **Contact Person Name and Surname**:
+  - Old: ""
+  - New: "2025-07-21 15:28:19.01828+02"
+
+#### 42. Property ID: 369833
+
+- **Status**:
+  - Old: ""
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Flow Name Groups**:
+  - Old: ""
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Sections**:
+  - Old: "8"
+  - New: "LAW"
+- **PONs**:
+  - Old: "89"
+  - New: "8"
+- **Location Address**:
+  - Old: "46 ZWANE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "89"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "46 ZWANE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh40@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-10 16:10:55.356391+02"
+  - New: "ftlawhh12@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/07/10 16:10:55.356"
+  - New: "2025-07-21 15:02:16.347166+02"
+- **Pole Number**:
+  - Old: ""
+  - New: "2025/07/21 14:56:25.464"
+- **Drop Number**:
+  - Old: ""
+  - New: "LAW.P.B729"
+- **Language**:
+  - Old: ""
+  - New: "DR1747933"
+- **Survey Date**:
+  - Old: "2025/07/10 16:10:55.356"
+  - New: "Sesotho"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/07/21 00:00:00"
+- **Contact Person: Surname**:
+  - Old: ""
+  - New: "Rosina"
+- **ID Number**:
+  - Old: ""
+  - New: "Mabasa"
+- **Passport Number**:
+  - Old: ""
+  - New: "7812130873087"
+- **Address Validation**:
+  - Old: "46 ZWANE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "07906126681"
+- **Stand Number**:
+  - Old: "4747"
+  - New: "46 ZWANE STREET"
+- **Latitude Longitude**:
+  - Old: "-26.388623436792216"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "27.797168047238735"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: ""
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: ""
+  - New: "4747"
+- **Special Conditions (if any)**:
+  - Old: ""
+  - New: "-26.388623436792216"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "27.797168047238735"
+- **Latitude**:
+  - Old: ""
+  - New: "Owner"
+- **Longitude**:
+  - Old: "-26.3886234367922"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "27.7971680472387"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: ""
+  - New: "-26.3886234367922"
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "27.7971680472387"
+- **if Yes**:
+  - Old: ""
+  - New: "Other"
+- **Alternative Contact Person: Name**:
+  - Old: ""
+  - New: "Yes"
+- **Alternative Contact Person: Surname**:
+  - Old: ""
+  - New: "No"
+- **Primary House of Backyard Dwelling**:
+  - Old: ""
+  - New: "Female"
+- **How do you access internet at your home currently?**:
+  - Old: ""
+  - New: "Primary House"
+- **Backyard Dwellings**:
+  - Old: ""
+  - New: "1"
+- **How Many People**:
+  - Old: ""
+  - New: "No"
+- **Preferred Place for Router Installation in Home**:
+  - Old: ""
+  - New: "1"
+- **Number of Sticker Placed on Door**:
+  - Old: ""
+  - New: "Living Room"
+- **Customer Consent Signature**:
+  - Old: ""
+  - New: "1917302"
+- **General Comments**:
+  - Old: ""
+  - New: "-1"
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "Nompumelelo Kunene"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "-26.388823"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "27.7972"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "22.4"
+- **Last Modified Home Sign Ups Date**:
+  - Old: ""
+  - New: "ftlawhh12@fibertime.com"
+- **Contact Person Name and Surname**:
+  - Old: ""
+  - New: "2025-07-21T13:02:07.490Z"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: ""
+  - New: "Rosina Mabasa"
+
+#### 43. Property ID: 335579
+
+- **Status**:
+  - Old: "Home Installation: In Progress"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **PONs**:
+  - Old: "LAW"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Location Address**:
+  - Old: "18"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Actual Device Location (Latitude)**:
+  - Old: "210"
+  - New: "LAW"
+- **Actual Device Location (Longitude)**:
+  - Old: "39 SIPHIWE CRESCENT LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "18"
+- **Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "210"
+- **Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "39 SIPHIWE CRESCENT LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **date_status_changed**:
+  - Old: "ftlawhh7@fibertime.com"
+  - New: ""
+- **Pole Number**:
+  - Old: "2025-07-10 10:28:16.192497+02"
+  - New: ""
+- **Drop Number**:
+  - Old: "2025/07/10 08:30:30.569"
+  - New: "ftlawhh42@fibertime.com"
+- **Language**:
+  - Old: ""
+  - New: "2025-07-21 14:15:00.342281+02"
+- **Survey Date**:
+  - Old: "DR1737053"
+  - New: "2025/07/21 14:15:00.342"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "Sesotho"
+  - New: "LAW.P.E256"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: "2025/06/26 13:11:22.281"
+  - New: "DR1737053"
+- **Contact Person: Name**:
+  - Old: ""
+  - New: "Sesotho"
+- **Contact Person: Surname**:
+  - Old: ""
+  - New: "2025/07/21 00:00:00"
+- **ID Number**:
+  - Old: "Maria"
+  - New: ""
+- **Passport Number**:
+  - Old: "Mkwanazi"
+  - New: ""
+- **Email Address**:
+  - Old: "7103190453089"
+  - New: "Maria"
+- **Contact Number (e.g.0123456789)**:
+  - Old: ""
+  - New: "Mkwanazi"
+- **Address Validation**:
+  - Old: ""
+  - New: "7103190453089"
+- **Stand Number**:
+  - Old: "0692751866"
+  - New: ""
+- **Latitude Longitude**:
+  - Old: "39 SIPHIWE CRESCENT"
+  - New: ""
+- **CONSENT TO PLANT A POLE**:
+  - Old: "LAWLEY ESTATE"
+  - New: "0692751866"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "LENASIA"
+  - New: "39 SIPHIWE CRESCENT"
+- **Owner or Tenant**:
+  - Old: "1824"
+  - New: "LAWLEY ESTATE"
+- **Special Conditions (if any)**:
+  - Old: "4972"
+  - New: "LENASIA"
+- **Field Agent Name (pole permission)**:
+  - Old: "-26.38287126894734"
+  - New: "1824"
+- **Signature of the Authorised Person**:
+  - Old: "27.800014098776618"
+  - New: "4972"
+- **Date of Signature**:
+  - Old: ""
+  - New: "-26.38287126894734"
+- **Latitude**:
+  - Old: ""
+  - New: "27.800014098776618"
+- **Longitude**:
+  - Old: "Owner"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "Owner"
+- **Last Modified Pole Permissions By**:
+  - Old: "-26.3828712689473"
+  - New: ""
+- **Last Modified Pole Permissions Date**:
+  - Old: "27.8000140987766"
+  - New: ""
+- **Access to Property**:
+  - Old: ""
+  - New: "-26.3828712689473"
+- **Declined**:
+  - Old: ""
+  - New: "27.8000140987766"
+- **if Yes**:
+  - Old: ""
+  - New: "3"
+- **Alternative Contact Person: Surname**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "No"
+  - New: ""
+- **Primary House of Backyard Dwelling**:
+  - Old: ""
+  - New: "Yes"
+- **Number of People Living in the Home**:
+  - Old: "Female"
+  - New: "No"
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Female"
+- **Backyard Dwellings**:
+  - Old: "Primary House"
+  - New: ""
+- **If Yes**:
+  - Old: "No"
+  - New: ""
+- **How Many Dwellings**:
+  - Old: "Residential"
+  - New: "Primary House"
+- **How Many People**:
+  - Old: "Vodacom MTN Cell C or Telkom"
+  - New: "Residential"
+- **Structure of Backyard Dwelling**:
+  - Old: ""
+  - New: "Vodacom MTN Cell C or Telkom"
+- **Consent Form**:
+  - Old: ""
+  - New: "No"
+- **Number of Sticker Placed on Door**:
+  - Old: "1"
+  - New: ""
+- **Photo of Property**:
+  - Old: "Family Room"
+  - New: ""
+- **Customer Consent Signature**:
+  - Old: ""
+  - New: "1"
+- **General Comments**:
+  - Old: "1672703"
+  - New: "Family Room"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "1672701"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "1672703"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "Almerinda"
+  - New: "1672701"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "-26.382826"
+  - New: ""
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: "27.799988"
+  - New: "Almerinda"
+- **Last Modified Home Sign Ups By**:
+  - Old: "5.7"
+  - New: "-26.382826"
+- **Last Modified Home Sign Ups Date**:
+  - Old: ""
+  - New: "27.799988"
+- **Contact Person Name and Surname**:
+  - Old: "ftlawhh37@fibertime.com"
+  - New: "5.7"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: "2025-06-26 13:11:22.281261+02"
+  - New: ""
+- **ONT activation light level**:
+  - Old: "Maria Mkwanazi"
+  - New: "ftlawhh42@fibertime.com"
+- **Record any Relevant Comments**:
+  - Old: ""
+  - New: "2025-07-21 14:15:00.342281+02"
+- **Powermeter reading (at dome)**:
+  - Old: ""
+  - New: "Maria Mkwanazi"
+- **Home entry point**:
+  - Old: "1784559"
+  - New: ""
+- **Outside cable span: Pole to Pigtail screw**:
+  - Old: "1782909"
+  - New: ""
+- **ONT Barcode**:
+  - Old: "1782910"
+  - New: "1784559"
+- **Mini-UPS Serial Number**:
+  - Old: "1782907"
+  - New: "1782909"
+- **Photo of Active Broadband Light (with FT sticker and Drop Numbe**:
+  - Old: ""
+  - New: "1782910"
+- **Powermeter reading (at ONT before activation)**:
+  - Old: ""
+  - New: "1782907"
+- **Home Installations - Actual Device Location (Latitude)**:
+  - Old: "Honest (Fibertime)"
+  - New: ""
+- **Home Installations - Actual Device Location (Longitude)**:
+  - Old: "-26.382829"
+  - New: ""
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: "27.799981"
+  - New: "Honest (Fibertime)"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: "5.7"
+  - New: "-26.382829"
+- **Last Modified Home Installations By**:
+  - Old: ""
+  - New: "27.799981"
+- **Last Modified Home Installations Date**:
+  - Old: "ftlawhh7@fibertime.com"
+  - New: "5.7"
+- **Marketing Activator Name**:
+  - Old: "2025-07-10 08:30:30.568866+02"
+  - New: ""
+- **Marketing Activator Surname**:
+  - Old: ""
+  - New: "ftlawhh7@fibertime.com"
+- **Has the client been taught where and how to buy a fibertime vou**:
+  - Old: ""
+  - New: "2025-07-10 08:30:30.568866+02"
+
+#### 44. Property ID: 363109
+
+- **Sections**:
+  - Old: "LAW"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **PONs**:
+  - Old: "16"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "187"
+  - New: "16"
+- **Actual Device Location (Latitude)**:
+  - Old: "28 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "187"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "28 AMOGELANG STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_dt**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025-07-09 11:24:10.392725+02"
+  - New: "ftlawhh12@fibertime.com"
+- **Pole Number**:
+  - Old: "2025/07/09 10:21:17.385"
+  - New: "2025-07-21 16:00:29.177464+02"
+- **Drop Number**:
+  - Old: "LAW.P.D762"
+  - New: "2025/07/09 10:21:17.385"
+- **Language**:
+  - Old: "DR1733406"
+  - New: "LAW.P.D762"
+- **Survey Date**:
+  - Old: "Xitsonga"
+  - New: "DR1733406"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025/07/09 00:00:00"
+  - New: "Xitsonga"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "2025/07/21 00:00:00"
+- **Contact Person: Surname**:
+  - Old: "Malwamdle"
+  - New: ""
+- **ID Number**:
+  - Old: "Mathe"
+  - New: "Malwamdle"
+- **Passport Number**:
+  - Old: "0408205696086"
+  - New: "Mathe"
+- **Email Address**:
+  - Old: ""
+  - New: "0408205696086"
+- **Address Validation**:
+  - Old: "0723726559"
+  - New: ""
+- **Stand Number**:
+  - Old: "28 AMOGELANG STREET"
+  - New: "0723726559"
+- **Latitude Longitude**:
+  - Old: "LAWLEY ESTATE"
+  - New: "28 AMOGELANG STREET"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "LENASIA"
+  - New: "LAWLEY ESTATE"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "1824"
+  - New: "LENASIA"
+- **Owner or Tenant**:
+  - Old: "6267"
+  - New: "1824"
+- **Special Conditions (if any)**:
+  - Old: "-26.38594569029167"
+  - New: "6267"
+- **Field Agent Name (pole permission)**:
+  - Old: "27.804440704852187"
+  - New: "-26.38594569029167"
+- **Signature of the Authorised Person**:
+  - Old: ""
+  - New: "27.804440704852187"
+- **Latitude**:
+  - Old: "Owner"
+  - New: ""
+- **Longitude**:
+  - Old: ""
+  - New: "Owner"
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "-26.3859456902917"
+  - New: ""
+- **Last Modified Pole Permissions By**:
+  - Old: "27.8044407048522"
+  - New: "-26.3859456902917"
+- **Last Modified Pole Permissions Date**:
+  - Old: ""
+  - New: "27.8044407048522"
+- **if Yes**:
+  - Old: "Other"
+  - New: ""
+- **Alternative Contact Person: Name**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Person: Surname**:
+  - Old: "No"
+  - New: "Yes"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: ""
+  - New: "No"
+- **Primary House of Backyard Dwelling**:
+  - Old: "Male"
+  - New: ""
+- **Number of People Living in the Home**:
+  - Old: ""
+  - New: "Male"
+- **How do you access internet at your home currently?**:
+  - Old: "Primary House"
+  - New: ""
+- **Backyard Dwellings**:
+  - Old: "8"
+  - New: "Primary House"
+- **If Yes**:
+  - Old: ""
+  - New: "No"
+- **How Many Dwellings**:
+  - Old: ""
+  - New: "Residential"
+- **How Many People**:
+  - Old: "No"
+  - New: "Other"
+- **Preferred Place for Router Installation in Home**:
+  - Old: "1"
+  - New: ""
+- **Number of Sticker Placed on Door**:
+  - Old: "Living Room"
+  - New: "1"
+- **Photo of Property**:
+  - Old: ""
+  - New: "Living Room"
+- **Customer Consent Signature**:
+  - Old: "1772676"
+  - New: ""
+- **General Comments**:
+  - Old: "1772639"
+  - New: "1772676"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: ""
+  - New: "1772639"
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: "Nompumelelo Kunene"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "-26.386091"
+  - New: "Nompumelelo Kunene"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "27.804485"
+  - New: "-26.386091"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: "16.7"
+  - New: "27.804485"
+- **Last Modified Home Sign Ups By**:
+  - Old: ""
+  - New: "16.7"
+- **Last Modified Home Sign Ups Date**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: ""
+- **Contact Person Name and Surname**:
+  - Old: "2025-07-09T08:22:11.527Z"
+  - New: "ftlawhh12@fibertime.com"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: "Malwamdle Mathe"
+  - New: "2025-07-21T14:00:28.465Z"
+- **ONT activation light level**:
+  - Old: ""
+  - New: "Malwamdle Mathe"
+
+#### 45. Property ID: 349476
+
+- **Status**:
+  - Old: "Home Sign Ups: Approved & Installation Scheduled"
+  - New: "Home Installation: In Progress"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Sections**:
+  - Old: "16"
+  - New: "Home Installation: In Progress"
+- **PONs**:
+  - Old: "181"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "168 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "16"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "181"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "168 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-03 15:45:15.938182+02"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025/07/03 11:39:58.345"
+  - New: "ftlawhh6@fibertime.com"
+- **Pole Number**:
+  - Old: "LAW.P.D646"
+  - New: "2025-07-21 15:48:00.643285+02"
+- **Drop Number**:
+  - Old: "DR1734447"
+  - New: "2025/07/21 15:41:18.642"
+- **Language**:
+  - Old: "Sesotho"
+  - New: "LAW.P.D646"
+- **Survey Date**:
+  - Old: "2025/07/03 11:39:58.345"
+  - New: "DR1734447"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "Sesotho"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "2025/07/03 11:39:58.345"
+- **Contact Person: Name**:
+  - Old: "Theresa"
+  - New: ""
+- **Contact Person: Surname**:
+  - Old: "Molapo"
+  - New: ""
+- **ID Number**:
+  - Old: "6211010585082"
+  - New: "Theresa"
+- **Passport Number**:
+  - Old: ""
+  - New: "Molapo"
+- **Email Address**:
+  - Old: ""
+  - New: "6211010585082"
+- **Contact Number (e.g.0123456789)**:
+  - Old: "0717681579"
+  - New: ""
+- **Address Validation**:
+  - Old: "168 KUNENE STREET"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "0717681579"
+- **Latitude Longitude**:
+  - Old: "LENASIA"
+  - New: "168 KUNENE STREET"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LAWLEY ESTATE"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7608"
+  - New: "LENASIA"
+- **Owner or Tenant**:
+  - Old: "-26.385465275275564"
+  - New: "1824"
+- **Special Conditions (if any)**:
+  - Old: "27.806461168506015"
+  - New: "7608"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "-26.385465275275564"
+- **Signature of the Authorised Person**:
+  - Old: ""
+  - New: "27.806461168506015"
+- **Date of Signature**:
+  - Old: "Owner"
+  - New: ""
+- **Longitude**:
+  - Old: ""
+  - New: "Owner"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "-26.3854652752756"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "27.806461168506"
+  - New: ""
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "-26.3854652752756"
+- **Last Modified Pole Permissions Date**:
+  - Old: ""
+  - New: "27.806461168506"
+- **if Yes**:
+  - Old: "No"
+  - New: ""
+- **Gender**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Person: Name**:
+  - Old: "No"
+  - New: ""
+- **Alternative Contact Person: Surname**:
+  - Old: ""
+  - New: "Yes"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "Female"
+  - New: "No"
+- **Number of People Living in the Home**:
+  - Old: ""
+  - New: "Female"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "Primary House"
+  - New: ""
+- **How do you access internet at your home currently?**:
+  - Old: "5"
+  - New: ""
+- **Backyard Dwellings**:
+  - Old: "Residential"
+  - New: "Primary House"
+- **If Yes**:
+  - Old: ""
+  - New: "No"
+- **How Many Dwellings**:
+  - Old: "Other"
+  - New: "Residential"
+- **How Many People**:
+  - Old: ""
+  - New: "Other"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "1"
+  - New: ""
+- **Preferred Place for Router Installation in Home**:
+  - Old: "Living Room"
+  - New: ""
+- **Number of Sticker Placed on Door**:
+  - Old: ""
+  - New: "1"
+- **Photo of Property**:
+  - Old: ""
+  - New: "Living Room"
+- **Customer Consent Signature**:
+  - Old: "1727926"
+  - New: ""
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "Nompumelelo Kunene"
+  - New: "1727926"
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: "-26.385446"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "27.80633"
+  - New: "Nompumelelo Kunene"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "13.2"
+  - New: "-26.385446"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "27.80633"
+- **Last Modified Home Sign Ups By**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "13.2"
+- **Last Modified Home Sign Ups Date**:
+  - Old: "2025-07-03 11:39:58.34496+02"
+  - New: ""
+- **Contact Person Name and Surname**:
+  - Old: "Theresa Molapo"
+  - New: "ftlawhh12@fibertime.com"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: ""
+  - New: "2025-07-03 11:39:58.34496+02"
+- **ONT activation light level**:
+  - Old: ""
+  - New: "Theresa Molapo"
+- **Home Entry Point: Outside (Pigtail screw / Duct entry)**:
+  - Old: ""
+  - New: "-6"
+- **Home entry point**:
+  - Old: ""
+  - New: "-4"
+- **Outside cable span: Pole to Pigtail screw**:
+  - Old: ""
+  - New: "-5"
+- **ONT Barcode**:
+  - Old: ""
+  - New: "-8"
+- **Mini-UPS Serial Number**:
+  - Old: ""
+  - New: "-7"
+- **Read English Terms and Conditions**:
+  - Old: ""
+  - New: "Yes"
+- **Home Installations - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "Fibertime"
+- **Home Installations - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "-26.385451"
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "27.806376"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: ""
+  - New: "8.6"
+- **Last Modified Home Installations Date**:
+  - Old: ""
+  - New: "ftlawhh6@fibertime.com"
+- **Marketing Activator Name**:
+  - Old: ""
+  - New: "2025-07-21T13:48:00.366Z"
+
+#### 46. Property ID: 354067
+
+- **Status**:
+  - Old: "Home Sign Ups: Approved & Installation Scheduled"
+  - New: "Home Installation: In Progress"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Sections**:
+  - Old: "16"
+  - New: "Home Installation: In Progress"
+- **PONs**:
+  - Old: "181"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "142 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "16"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "181"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "142 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh45@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-06 05:47:21.112696+02"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025/07/05 12:23:43.519"
+  - New: "ftlawhh7@fibertime.com"
+- **Pole Number**:
+  - Old: "LAW.P.D655"
+  - New: "2025-07-21 12:08:04.5584+02"
+- **Drop Number**:
+  - Old: "DR1734462"
+  - New: "2025/07/21 12:07:45.954"
+- **Language**:
+  - Old: "English"
+  - New: "LAW.P.D655"
+- **Survey Date**:
+  - Old: "2025/07/05 12:23:43.519"
+  - New: "DR1734462"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "English"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "2025/07/05 12:23:43.519"
+- **Contact Person: Name**:
+  - Old: "mdunwazi"
+  - New: ""
+- **Contact Person: Surname**:
+  - Old: "Maluleke"
+  - New: ""
+- **ID Number**:
+  - Old: "7902165732082"
+  - New: "mdunwazi"
+- **Passport Number**:
+  - Old: ""
+  - New: "Maluleke"
+- **Email Address**:
+  - Old: ""
+  - New: "7902165732082"
+- **Contact Number (e.g.0123456789)**:
+  - Old: "0791566662"
+  - New: ""
+- **Address Validation**:
+  - Old: "142 KUNENE STREET"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "0791566662"
+- **Latitude Longitude**:
+  - Old: "LENASIA"
+  - New: "142 KUNENE STREET"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LAWLEY ESTATE"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7621"
+  - New: "LENASIA"
+- **Owner or Tenant**:
+  - Old: "-26.3839507677754"
+  - New: "1824"
+- **Special Conditions (if any)**:
+  - Old: "27.80638528109638"
+  - New: "7621"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "-26.3839507677754"
+- **Signature of the Authorised Person**:
+  - Old: ""
+  - New: "27.80638528109638"
+- **Date of Signature**:
+  - Old: "Owner"
+  - New: ""
+- **Longitude**:
+  - Old: ""
+  - New: "Owner"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "-26.3839507677754"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "27.8063852810964"
+  - New: ""
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "-26.3839507677754"
+- **Last Modified Pole Permissions Date**:
+  - Old: ""
+  - New: "27.8063852810964"
+- **if Yes**:
+  - Old: "No"
+  - New: ""
+- **Gender**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Person: Name**:
+  - Old: "No"
+  - New: ""
+- **Alternative Contact Person: Surname**:
+  - Old: ""
+  - New: "Yes"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "Male"
+  - New: "No"
+- **Number of People Living in the Home**:
+  - Old: ""
+  - New: "Male"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "Primary House"
+  - New: ""
+- **How do you access internet at your home currently?**:
+  - Old: "4"
+  - New: ""
+- **Backyard Dwellings**:
+  - Old: "Residential"
+  - New: "Primary House"
+- **If Yes**:
+  - Old: ""
+  - New: "No"
+- **How Many Dwellings**:
+  - Old: "Vodacom MTN Cell C or Telkom"
+  - New: "Residential"
+- **How Many People**:
+  - Old: ""
+  - New: "Vodacom MTN Cell C or Telkom"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "1"
+  - New: ""
+- **Preferred Place for Router Installation in Home**:
+  - Old: "Dining Room"
+  - New: ""
+- **Number of Sticker Placed on Door**:
+  - Old: ""
+  - New: "1"
+- **Photo of Property**:
+  - Old: "1744321"
+  - New: "Dining Room"
+- **Customer Consent Signature**:
+  - Old: "1744322"
+  - New: ""
+- **General Comments**:
+  - Old: ""
+  - New: "1744321"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "Zanele hele"
+  - New: "1744322"
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: "-26.383855"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "27.806266"
+  - New: "Zanele hele"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "16"
+  - New: "-26.383855"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "27.806266"
+- **Last Modified Home Sign Ups By**:
+  - Old: "ftlawhh45@fibertime.com"
+  - New: "16"
+- **Last Modified Home Sign Ups Date**:
+  - Old: "2025-07-05 12:23:43.518947+02"
+  - New: ""
+- **Contact Person Name and Surname**:
+  - Old: "mdunwazi Maluleke"
+  - New: "ftlawhh45@fibertime.com"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: ""
+  - New: "2025-07-05 12:23:43.518947+02"
+- **ONT activation light level**:
+  - Old: ""
+  - New: "mdunwazi Maluleke"
+- **Home entry point**:
+  - Old: ""
+  - New: "1911489"
+- **Outside cable span: Pole to Pigtail screw**:
+  - Old: ""
+  - New: "1911485"
+- **ONT Barcode**:
+  - Old: ""
+  - New: "1911484"
+- **Mini-UPS Serial Number**:
+  - Old: ""
+  - New: "1911478"
+- **Home Installations - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "Moses (fibertime)"
+- **Home Installations - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "-26.384066"
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "27.806145"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: ""
+  - New: "27.1"
+- **Last Modified Home Installations Date**:
+  - Old: ""
+  - New: "ftlawhh7@fibertime.com"
+- **Marketing Activator Name**:
+  - Old: ""
+  - New: "2025-07-21 12:07:45.953592+02"
+
+#### 47. Property ID: 370083
+
+- **Status**:
+  - Old: ""
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Flow Name Groups**:
+  - Old: ""
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **Sections**:
+  - Old: "16"
+  - New: "Home Sign Ups: Approved & Installation Scheduled"
+- **PONs**:
+  - Old: "181"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "122 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "16"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "181"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "122 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh42@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-10 17:27:41.962685+02"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025/07/10 17:27:41.963"
+  - New: "ftlawhh2@fibertime.com"
+- **Pole Number**:
+  - Old: ""
+  - New: "2025-07-21 11:12:49.104342+02"
+- **Drop Number**:
+  - Old: ""
+  - New: "2025/07/21 11:12:44.736"
+- **Language**:
+  - Old: ""
+  - New: "LAW.P.D661"
+- **Survey Date**:
+  - Old: "2025/07/10 17:27:41.963"
+  - New: "DR1734489"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "siSwati"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "2025/07/21 00:00:00"
+- **ID Number**:
+  - Old: ""
+  - New: "khensani"
+- **Passport Number**:
+  - Old: ""
+  - New: "dlamini"
+- **Email Address**:
+  - Old: ""
+  - New: "9304180577089"
+- **Address Validation**:
+  - Old: "122 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: ""
+- **Stand Number**:
+  - Old: "7631"
+  - New: "0762842260"
+- **Latitude Longitude**:
+  - Old: "-26.383072860901"
+  - New: "122 KUNENE STREET"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "27.80713249148846"
+  - New: "LAWLEY ESTATE"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: ""
+  - New: "LENASIA"
+- **Owner or Tenant**:
+  - Old: ""
+  - New: "1824"
+- **Special Conditions (if any)**:
+  - Old: ""
+  - New: "7631"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "-26.383072860901"
+- **Signature of the Authorised Person**:
+  - Old: ""
+  - New: "27.80713249148846"
+- **Longitude**:
+  - Old: "-26.383072860901"
+  - New: "Owner"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "27.8071324914885"
+  - New: ""
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "-26.383072860901"
+- **Last Modified Pole Permissions Date**:
+  - Old: ""
+  - New: "27.8071324914885"
+- **Alternative Contact Person: Surname**:
+  - Old: ""
+  - New: "Yes"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: ""
+  - New: "No"
+- **Number of People Living in the Home**:
+  - Old: ""
+  - New: "Female"
+- **Backyard Dwellings**:
+  - Old: ""
+  - New: "Primary House"
+- **If Yes**:
+  - Old: ""
+  - New: "No"
+- **How Many Dwellings**:
+  - Old: ""
+  - New: "Residential"
+- **How Many People**:
+  - Old: ""
+  - New: "Rain"
+- **Number of Sticker Placed on Door**:
+  - Old: ""
+  - New: "1"
+- **Photo of Property**:
+  - Old: ""
+  - New: "Dining Room"
+- **General Comments**:
+  - Old: ""
+  - New: "1909574"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: ""
+  - New: "1909576"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "bhekumusa (fibertime)"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "-26.3832"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "27.806956"
+- **Last Modified Home Sign Ups By**:
+  - Old: ""
+  - New: "22.6"
+- **Contact Person Name and Surname**:
+  - Old: ""
+  - New: "ftlawhh2@fibertime.com"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: ""
+  - New: "2025-07-21 11:12:44.73574+02"
+- **ONT activation light level**:
+  - Old: ""
+  - New: "khensani dlamini"
+
+#### 48. Property ID: 345594
+
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Sections**:
+  - Old: "11"
+  - New: "LAW"
+- **PONs**:
+  - Old: "124"
+  - New: "11"
+- **Location Address**:
+  - Old: "95 KGWEDI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "124"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "95 KGWEDI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh10@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-07-02 09:02:56.181952+02"
+  - New: "ftlawhh2@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/07/02 09:02:32.725"
+  - New: "2025-07-21 08:40:05.196107+02"
+- **Pole Number**:
+  - Old: ""
+  - New: "2025/07/02 09:02:32.725"
+- **Language**:
+  - Old: ""
+  - New: "DR1750175"
+- **Survey Date**:
+  - Old: "2025/07/02 09:02:32.725"
+  - New: ""
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/07/02 09:02:32.725"
+- **Stand Number**:
+  - Old: "7885"
+  - New: ""
+- **Latitude Longitude**:
+  - Old: "-26.383311157020806"
+  - New: "7885"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "27.810867769173818"
+  - New: "-26.383311157020806"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: ""
+  - New: "27.810867769173818"
+- **Longitude**:
+  - Old: "-26.3833111570208"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "27.8108677691738"
+  - New: "-26.3833111570208"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "27.8108677691738"
+- **ONT activation light level**:
+  - Old: "1713900"
+  - New: ""
+- **Record any Relevant Comments**:
+  - Old: ""
+  - New: "1713900"
+- **Patched and labelled drop**:
+  - Old: "1713903"
+  - New: ""
+- **Photo of Splitter Tray in Dome Joint (front side)**:
+  - Old: "1713898"
+  - New: "1713903"
+- **Photo of Connection Points in the BB/Handhole (other side of jo**:
+  - Old: "1713907"
+  - New: "1713898"
+- **Photo of the Handhole Before Closing**:
+  - Old: "1713904"
+  - New: "1713907"
+- **Photo of the Handhole After Closing**:
+  - Old: "1713897"
+  - New: "1713904"
+- **Photo Showing Location on the Wall (before installation)**:
+  - Old: "1713896"
+  - New: "1713897"
+- **Home Entry Point: Outside (Pigtail screw / Duct entry)**:
+  - Old: ""
+  - New: "1713896"
+- **Mini-UPS Serial Number**:
+  - Old: "1713906"
+  - New: ""
+- **Photo of Active Broadband Light (with FT sticker and Drop Numbe**:
+  - Old: ""
+  - New: "1713906"
+- **Overall work area after complete install: including ONT and fib**:
+  - Old: "I hereby warrant that I am the authorized representative of the above-mentioned property and have the authority to sign this consent form and grant access to the property. I consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (the “Company/ies”) and/or its affiliates"
+  - New: ""
+- **Dome Joint Number / BB**:
+  - Old: "service providers"
+  - New: "I hereby warrant that I am the authorized representative of the above-mentioned property and have the authority to sign this consent form and grant access to the property. I consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (the “Company/ies”) and/or its affiliates"
+- **Length of Drop Cable**:
+  - Old: "and contractors authorized by it"
+  - New: "service providers"
+- **Client happy with Installation**:
+  - Old: "to attend to the installation of a battery pack and/or back-up power solution (“UPS”) or (“device”) in the property and/or the necessary devices in order to complete the fibre network"
+  - New: "and contractors authorized by it"
+- **Read English Terms and Conditions**:
+  - Old: "including but not limited to a Optical Network device (“ONT”) or Internet of Things device (“IoT”). By my signature and/or initial of this document"
+  - New: "to attend to the installation of a battery pack and/or back-up power solution (“UPS”) or (“device”) in the property and/or the necessary devices in order to complete the fibre network"
+- **Read Xhosa Terms and Conditions**:
+  - Old: "I am aware"
+  - New: "including but not limited to a Optical Network device (“ONT”) or Internet of Things device (“IoT”). By my signature and/or initial of this document"
+- **Customer Signature. Accept Terms and Conditions**:
+  - Old: "have read and/or have been explained and understand the Terms and Conditions"
+  - New: "I am aware"
+- **Installer Name**:
+  - Old: "warnings and risks associated with the installation of this device"
+  - New: "have read and/or have been explained and understand the Terms and Conditions"
+- **Home Installations - Actual Device Location (Latitude)**:
+  - Old: "or any other installation or device installed by any of the aforesaid companies/persons. I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "warnings and risks associated with the installation of this device"
+- **Home Installations - Actual Device Location (Longitude)**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the device in the property or any malfunction of the device and/or any loss or damage that results from any installation done at the property by the Company/ies or any of the aforesaid companies/persons or any use thereof. I confirm and undertake to notify any successor in title of this consent"
+  - New: "or any other installation or device installed by any of the aforesaid companies/persons. I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the device in the property or any malfunction of the device and/or any loss or damage that results from any installation done at the property by the Company/ies or any of the aforesaid companies/persons or any use thereof. I confirm and undertake to notify any successor in title of this consent"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: "shall also notify the Company/ies of the identity of the successor."
+  - New: "and prior to the transfer of any title in the property"
+- **Last Modified Home Installations By**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fibertime Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "shall also notify the Company/ies of the identity of the successor."
+- **Last Modified Home Installations Date**:
+  - Old: "abanik’inkonzo"
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fibertime Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Marketing Activator Name**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "abanik’inkonzo"
+- **Marketing Activator Surname**:
+  - Old: "ukuba bazofaka iipakethe zamalahle (battery pack) okanye isincedisi kwisisombululo samandla (“UPS”) okanye (“isixhobo”) kwisakhiwo kwaye / okanye izixhobo eziyimfuneko ukuqukumbela unxibelelwano lakwa Fiber"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Has the client been taught where and how to buy a fibertime vou**:
+  - Old: "oluquka kodwa lungaphelelanga apho"
+  - New: "ukuba bazofaka iipakethe zamalahle (battery pack) okanye isincedisi kwisisombululo samandla (“UPS”) okanye (“isixhobo”) kwisakhiwo kwaye / okanye izixhobo eziyimfuneko ukuqukumbela unxibelelwano lakwa Fiber"
+- **Number of Cellphone number linked to fibertime network**:
+  - Old: "isixhobo iOptical Network device (“ONT”) okanye isixhobo se Internet of Things (“IoT”). Ngokutyikitya kwam kwaye / okanye ukuqala lo mqulu"
+  - New: "oluquka kodwa lungaphelelanga apho"
+- **Cellphone no 1**:
+  - Old: "ndiyayiqonda"
+  - New: "isixhobo iOptical Network device (“ONT”) okanye isixhobo se Internet of Things (“IoT”). Ngokutyikitya kwam kwaye / okanye ukuqala lo mqulu"
+- **Cellphone no 2**:
+  - Old: "ndifundile / okanye ndichazelwe ndayiqonda imimiselo nemiqathango"
+  - New: "ndiyayiqonda"
+- **Cellphone no 3**:
+  - Old: "izilumkiso"
+  - New: "ndifundile / okanye ndichazelwe ndayiqonda imimiselo nemiqathango"
+- **Cellphone no 4**:
+  - Old: "nemingcipheko eyoyanyaniswa nokufakwa kwesi sixhobo"
+  - New: "izilumkiso"
+- **Cellphone no 5**:
+  - Old: "okanye nakuphi na ukufakwa kwesixhobo zezinkampani zikhankanyiweyo / okanye abantu. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "nemingcipheko eyoyanyaniswa nokufakwa kwesi sixhobo"
+- **Cellphone no 6**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekufakwa isixhobo kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+  - New: "okanye nakuphi na ukufakwa kwesixhobo zezinkampani zikhankanyiweyo / okanye abantu. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Cellphone no 7**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekufakwa isixhobo kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Cellphone no 8**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo."
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Cellphone no 9**:
+  - Old: ""
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo."
+- **Cellphone no 10**:
+  - Old: "innocent(fibertime"
+  - New: ""
+- **Cellphone no 11**:
+  - Old: "-26.383322"
+  - New: "innocent(fibertime"
+- **Cellphone no 12**:
+  - Old: "27.810883"
+  - New: "-26.383322"
+- **Cellphone no 13**:
+  - Old: "1.9"
+  - New: "27.810883"
+- **Cellphone no 14**:
+  - Old: ""
+  - New: "1.9"
+- **Cellphone no 15**:
+  - Old: "ftlawhh10@fibertime.com"
+  - New: ""
+- **Cellphone no 16**:
+  - Old: "2025-07-02 09:02:32.72545+02"
+  - New: "ftlawhh2@fibertime.com"
+- **Cellphone no 17**:
+  - Old: ""
+  - New: "2025-07-21T06:40:04.858Z"
+
+#### 49. Property ID: 323137
+
+- **Status**:
+  - Old: "Home Sign Ups: Approved & Installation Scheduled"
+  - New: "Home Installation: In Progress"
+- **Site**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Sections**:
+  - Old: "11"
+  - New: "Home Installation: In Progress"
+- **PONs**:
+  - Old: "124"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "93 KGWEDI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "11"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "124"
+- **Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "93 KGWEDI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_by**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-06-23 13:32:53.186462+02"
+  - New: ""
+- **date_status_changed**:
+  - Old: "2025/06/22 16:39:14.847"
+  - New: "ftlawhh10@fibertime.com"
+- **Pole Number**:
+  - Old: "LAW.P.C432"
+  - New: "2025-07-21 09:21:20.005715+02"
+- **Drop Number**:
+  - Old: "DR1750229"
+  - New: "2025/07/21 09:21:10.726"
+- **Language**:
+  - Old: "Sesotho"
+  - New: "LAW.P.C432"
+- **Survey Date**:
+  - Old: "2025/06/22 16:39:14.847"
+  - New: "DR1750229"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "Sesotho"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: ""
+  - New: "2025/06/22 16:39:14.847"
+- **Contact Person: Name**:
+  - Old: "Poppy"
+  - New: ""
+- **Contact Person: Surname**:
+  - Old: "Tsele"
+  - New: ""
+- **ID Number**:
+  - Old: "8701200702087"
+  - New: "Poppy"
+- **Passport Number**:
+  - Old: ""
+  - New: "Tsele"
+- **Email Address**:
+  - Old: ""
+  - New: "8701200702087"
+- **Contact Number (e.g.0123456789)**:
+  - Old: "0781384818"
+  - New: ""
+- **Address Validation**:
+  - Old: "93 KGWEDI STREET"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "0781384818"
+- **Latitude Longitude**:
+  - Old: "LENASIA"
+  - New: "93 KGWEDI STREET"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LAWLEY ESTATE"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7884"
+  - New: "LENASIA"
+- **Owner or Tenant**:
+  - Old: "-26.38312326204554"
+  - New: "1824"
+- **Special Conditions (if any)**:
+  - Old: "27.810821474405238"
+  - New: "7884"
+- **Field Agent Name (pole permission)**:
+  - Old: ""
+  - New: "-26.38312326204554"
+- **Signature of the Authorised Person**:
+  - Old: ""
+  - New: "27.810821474405238"
+- **Date of Signature**:
+  - Old: "Owner"
+  - New: ""
+- **Longitude**:
+  - Old: ""
+  - New: "Owner"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "-26.3831232620455"
+  - New: ""
+- **Pole Permissions - Estimated horizontal accuracy radius in mete**:
+  - Old: "27.8108214744052"
+  - New: ""
+- **Last Modified Pole Permissions By**:
+  - Old: ""
+  - New: "-26.3831232620455"
+- **Last Modified Pole Permissions Date**:
+  - Old: ""
+  - New: "27.8108214744052"
+- **if Yes**:
+  - Old: "No"
+  - New: ""
+- **Gender**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Person: Name**:
+  - Old: "No"
+  - New: ""
+- **Alternative Contact Person: Surname**:
+  - Old: ""
+  - New: "Yes"
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "Female"
+  - New: "No"
+- **Number of People Living in the Home**:
+  - Old: ""
+  - New: "Female"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "Primary House"
+  - New: ""
+- **How do you access internet at your home currently?**:
+  - Old: "7"
+  - New: ""
+- **Backyard Dwellings**:
+  - Old: "Residential"
+  - New: "Primary House"
+- **If Yes**:
+  - Old: ""
+  - New: "No"
+- **How Many Dwellings**:
+  - Old: "Rain"
+  - New: "Residential"
+- **How Many People**:
+  - Old: ""
+  - New: "Rain"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "1"
+  - New: ""
+- **Preferred Place for Router Installation in Home**:
+  - Old: "Living Room"
+  - New: ""
+- **Number of Sticker Placed on Door**:
+  - Old: ""
+  - New: "1"
+- **Photo of Property**:
+  - Old: "1643239"
+  - New: "Living Room"
+- **Customer Consent Signature**:
+  - Old: "1643240"
+  - New: ""
+- **General Comments**:
+  - Old: ""
+  - New: "1643239"
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "Nompumelelo Kunene"
+  - New: "1643240"
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: "-26.383329"
+  - New: ""
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "27.810949"
+  - New: "Nompumelelo Kunene"
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "26.2"
+  - New: "-26.383329"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: ""
+  - New: "27.810949"
+- **Last Modified Home Sign Ups By**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "26.2"
+- **Last Modified Home Sign Ups Date**:
+  - Old: "2025-06-22 16:39:14.84665+02"
+  - New: ""
+- **Contact Person Name and Surname**:
+  - Old: "Poppy Tsele"
+  - New: "ftlawhh12@fibertime.com"
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: ""
+  - New: "2025-06-22 16:39:14.84665+02"
+- **ONT activation light level**:
+  - Old: ""
+  - New: "Poppy Tsele"
+- **Home entry point**:
+  - Old: ""
+  - New: "1906722"
+- **Outside cable span: Pole to Pigtail screw**:
+  - Old: ""
+  - New: "1906718"
+- **ONT Barcode**:
+  - Old: ""
+  - New: "1906721"
+- **Mini-UPS Serial Number**:
+  - Old: ""
+  - New: "1906717"
+- **Read English Terms and Conditions**:
+  - Old: ""
+  - New: "Yes"
+- **Installer Name**:
+  - Old: ""
+  - New: "1906716"
+- **Home Installations - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "Masin(fibretime)"
+- **Home Installations - Actual Device Location (Longitude)**:
+  - Old: ""
+  - New: "-26.383203"
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "27.810529"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: ""
+  - New: "30.5"
+- **Last Modified Home Installations Date**:
+  - Old: ""
+  - New: "ftlawhh10@fibertime.com"
+- **Marketing Activator Name**:
+  - Old: ""
+  - New: "2025-07-21 09:21:10.725573+02"
+
+#### 50. Property ID: 310212
+
+- **PONs**:
+  - Old: "LAW"
+  - New: "Home Installation: In Progress"
+- **Location Address**:
+  - Old: "11"
+  - New: "LAW"
+- **Actual Device Location (Latitude)**:
+  - Old: "124"
+  - New: "11"
+- **Actual Device Location (Longitude)**:
+  - Old: "83 KGWEDI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "124"
+- **Distance between Actual and Captured Point**:
+  - Old: ""
+  - New: "83 KGWEDI STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **date_status_changed**:
+  - Old: "ftlawhh2@fibertime.com"
+  - New: ""
+- **Pole Number**:
+  - Old: "2025-06-14 14:11:56.727758+02"
+  - New: "ftlawhh10@fibertime.com"
+- **Drop Number**:
+  - Old: "2025/06/14 14:11:31.985"
+  - New: "2025-07-21 10:42:07.193283+02"
+- **Language**:
+  - Old: "LAW.P.C436"
+  - New: "2025/06/14 14:11:31.985"
+- **Survey Date**:
+  - Old: "DR1750192"
+  - New: "LAW.P.C436"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "English"
+  - New: "DR1750192"
+- **UXWEBHU lwesivumelwano IINKUKACHA ZOMNTU OTYIKITYA OLUXWEBHU (**:
+  - Old: "2025/06/14 14:04:41.250"
+  - New: "English"
+- **Contact Person: Name**:
+  - Old: ""
+  - New: "2025/06/14 14:04:41.250"
+- **ID Number**:
+  - Old: "patrick"
+  - New: ""
+- **Passport Number**:
+  - Old: "ndzimande"
+  - New: "patrick"
+- **Email Address**:
+  - Old: "7406205478086"
+  - New: "ndzimande"
+- **Contact Number (e.g.0123456789)**:
+  - Old: ""
+  - New: "7406205478086"
+- **Stand Number**:
+  - Old: "0636350001"
+  - New: ""
+- **Latitude Longitude**:
+  - Old: "83 KGWEDI STREET"
+  - New: "0636350001"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "LAWLEY ESTATE"
+  - New: "83 KGWEDI STREET"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "LENASIA"
+  - New: "LAWLEY ESTATE"
+- **Owner or Tenant**:
+  - Old: "1824"
+  - New: "LENASIA"
+- **Special Conditions (if any)**:
+  - Old: "7879"
+  - New: "1824"
+- **Field Agent Name (pole permission)**:
+  - Old: "-26.383061128921614"
+  - New: "7879"
+- **Signature of the Authorised Person**:
+  - Old: "27.81117979521702"
+  - New: "-26.383061128921614"
+- **Date of Signature**:
+  - Old: ""
+  - New: "27.81117979521702"
+- **Longitude**:
+  - Old: "Owner"
+  - New: ""
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "Owner"
+- **Last Modified Pole Permissions By**:
+  - Old: "-26.3830611289216"
+  - New: ""
+- **Last Modified Pole Permissions Date**:
+  - Old: "27.811179795217"
+  - New: "-26.3830611289216"
+- **Access to Property**:
+  - Old: ""
+  - New: "27.811179795217"
+- **if Yes**:
+  - Old: ""
+  - New: "Residential"
+- **Alternative Contact Person: Surname**:
+  - Old: "Yes"
+  - New: ""
+- **Alternative Contact Number (e.g.0123456789)**:
+  - Old: "No"
+  - New: "Yes"
+- **Primary House of Backyard Dwelling**:
+  - Old: ""
+  - New: "No"
+- **Number of People Living in the Home**:
+  - Old: "Female"
+  - New: ""
+- **Residential or Commercial Dwelling**:
+  - Old: ""
+  - New: "Female"
+- **Backyard Dwellings**:
+  - Old: "Primary House"
+  - New: ""
+- **If Yes**:
+  - Old: "No"
+  - New: "Other"
+- **How Many Dwellings**:
+  - Old: "Residential"
+  - New: "3"
+- **How Many People**:
+  - Old: "Other"
+  - New: ""
+- **Structure of Backyard Dwelling**:
+  - Old: ""
+  - New: "No"
+- **Number of Sticker Placed on Door**:
+  - Old: "1"
+  - New: ""
+- **Photo of Property**:
+  - Old: "Living Room"
+  - New: "1"
+- **Customer Consent Signature**:
+  - Old: ""
+  - New: "Living Room"
+- **General Comments**:
+  - Old: "1593965"
+  - New: ""
+- **Field Agent Name (Home Sign Ups)**:
+  - Old: "1593964"
+  - New: "1593965"
+- **Home Sign Ups - Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "1593964"
+- **Home Sign Ups - Actual Device Location (Longitude)**:
+  - Old: "nathan Webb"
+  - New: ""
+- **Home Sign Ups - Distance between Actual and Captured Point**:
+  - Old: "-26.383311"
+  - New: "nathan Webb"
+- **Home Sign Ups - Estimated horizontal accuracy radius in meters**:
+  - Old: "27.811391"
+  - New: "-26.383311"
+- **Last Modified Home Sign Ups By**:
+  - Old: "34.9"
+  - New: "27.811391"
+- **Last Modified Home Sign Ups Date**:
+  - Old: ""
+  - New: "34.9"
+- **Contact Person Name and Surname**:
+  - Old: "ftlawhh2@fibertime.com"
+  - New: ""
+- **Nokia Easy Start ONT Activation Code**:
+  - Old: "2025-06-14 14:04:41.250235+02"
+  - New: "ftlawhh2@fibertime.com"
+- **ONT activation light level**:
+  - Old: "patrick ndzimande"
+  - New: "2025-06-14 14:04:41.250235+02"
+- **Record any Relevant Comments**:
+  - Old: ""
+  - New: "patrick ndzimande"
+- **Home entry point**:
+  - Old: "1594103"
+  - New: ""
+- **Outside cable span: Pole to Pigtail screw**:
+  - Old: "1594102"
+  - New: "1594103"
+- **ONT Barcode**:
+  - Old: "1594100"
+  - New: "1594102"
+- **Mini-UPS Serial Number**:
+  - Old: "1594099"
+  - New: "1594100"
+- **Photo of Active Broadband Light (with FT sticker and Drop Numbe**:
+  - Old: ""
+  - New: "1594099"
+- **Please Specify**:
+  - Old: "No"
+  - New: ""
+- **Overall work area after complete install: including ONT and fib**:
+  - Old: ""
+  - New: "No"
+- **Dome Joint Number / BB**:
+  - Old: "1594097"
+  - New: ""
+- **Length of Drop Cable**:
+  - Old: ""
+  - New: "1594097"
+- **Client happy with Installation**:
+  - Old: "Drop cable 50m"
+  - New: ""
+- **Read English Terms and Conditions**:
+  - Old: "Yes"
+  - New: "Drop cable 50m"
+- **Read Xhosa Terms and Conditions**:
+  - Old: ""
+  - New: "Yes"
+- **Home Installations - Actual Device Location (Latitude)**:
+  - Old: "nathan Webb"
+  - New: ""
+- **Home Installations - Actual Device Location (Longitude)**:
+  - Old: "-26.383295"
+  - New: "nathan Webb"
+- **Home Installations - Distance between Actual and Captured Point**:
+  - Old: "27.811374"
+  - New: "-26.383295"
+- **Home Installations - Estimated horizontal accuracy radius in me**:
+  - Old: "32.4"
+  - New: "27.811374"
+- **Last Modified Home Installations By**:
+  - Old: ""
+  - New: "32.4"
+- **Last Modified Home Installations Date**:
+  - Old: "ftlawhh2@fibertime.com"
+  - New: ""
+- **Marketing Activator Name**:
+  - Old: "2025-06-14 14:11:31.984759+02"
+  - New: "ftlawhh10@fibertime.com"
+- **Marketing Activator Surname**:
+  - Old: ""
+  - New: "2025-07-21T08:42:06.653Z"
+
+
+*... and 9 more changes*
 
 ## Change Log Reference
 

@@ -112,3 +112,11 @@ Qgis/
 # Temporary files
 temp/*.JPG
 temp/*.jpg
+
+# Database files
+*.db
+*.duckdb
+*.duckdb.wal
+OneMap/DuckDB/data/
+OneMap/SQL/*.db
+OneMap/SQL/scripts/*.db

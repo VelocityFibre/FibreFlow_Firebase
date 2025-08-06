@@ -1,0 +1,451 @@
+📊 OneMap Master CSV Creator
+===========================
+
+This will:
+1. Process all CSV files chronologically
+2. Create a master CSV with all unique records
+3. Update existing records when Property ID matches
+4. Track all changes in detailed reports
+5. Generate a report for each day's processing
+
+Press Enter to continue or Ctrl+C to cancel...
+📁 CSV Directory: /home/ldp/VF/Apps/FibreFlow/OneMap/downloads
+
+📊 Creating Master CSV with Change Tracking
+
+This will aggregate all records and track changes over time.
+
+Found 27 CSV files to process:
+
+  1. 2025-05-22 - Lawley May Week 3 22052025 - First Report.csv
+  2. 2025-05-23 - Lawley May Week 3 23052025.csv
+  3. 2025-05-26 - Lawley May Week 4 26052025.csv
+  4. 2025-05-27 - Lawley May Week 4 27052025.csv
+  5. 2025-05-29 - Lawley May Week 4 29052025.csv
+  6. 2025-05-30 - Lawley May Week 4 30052025.csv
+  7. 2025-06-02 - Lawley June Week 1 02062025.csv
+  8. 2025-06-03 - june3.csv
+  9. 2025-06-05 - june5.csv
+  10. 2025-06-23 - Lawley June Week 4 23062025.csv
+  11. 2025-06-26 - Lawley June Week 4 26062025.csv
+  12. 2025-06-27 - Lawley June Week 4 27062025.csv
+  13. 2025-06-30 - Lawley June Week 4 30062025.csv
+  14. 2025-07-01 - Lawley July Week 1 01072025.csv
+  15. 2025-07-02 - Lawley July Week 1 02072025.csv
+  16. 2025-07-03 - Lawley July Week 1 03072025.csv
+  17. 2025-07-07 - Lawley July Week 2 07072025.csv
+  18. 2025-07-08 - Lawley July Week 2 08072025.csv
+  19. 2025-07-11 - Lawley July Week 2 11072025.csv
+  20. 2025-07-14 - Lawley July Week 3 14072025.csv
+  21. 2025-07-15 - Lawley July Week 3 15072025.csv
+  22. 2025-07-16 - Lawley July Week 3 16072025.csv
+  23. 2025-07-17 - Lawley July Week 3 17072025.csv
+  24. 2025-07-18 - Lawley July Week 3 18072025.csv
+  25. 2025-07-19 - Lawley July Week 3 19072025.csv
+  26. 2025-07-20 - Lawley July Week 3 20072025.csv
+  27. 2025-07-21 - Lawley July Week 4 21072025.csv
+
+
+============================================================
+Processing 1/27: Lawley May Week 3 22052025 - First Report.csv
+Date: 2025-05-22
+
+📊 Statistics:
+  - Total records: 746
+  - New: 746
+  - Updated: 0
+  - Unchanged: 0
+  - No Property ID: 0
+  - Master total: 746
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-05-22_Lawley May Week 3 22052025 - First Report.md
+
+============================================================
+Processing 2/27: Lawley May Week 3 23052025.csv
+Date: 2025-05-23
+
+📊 Statistics:
+  - Total records: 746
+  - New: 0
+  - Updated: 268
+  - Unchanged: 478
+  - No Property ID: 0
+  - Master total: 746
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-05-23_Lawley May Week 3 23052025.md
+
+============================================================
+Processing 3/27: Lawley May Week 4 26052025.csv
+Date: 2025-05-26
+
+📊 Statistics:
+  - Total records: 752
+  - New: 7
+  - Updated: 0
+  - Unchanged: 745
+  - No Property ID: 0
+  - Master total: 753
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-05-26_Lawley May Week 4 26052025.md
+
+============================================================
+Processing 4/27: Lawley May Week 4 27052025.csv
+Date: 2025-05-27
+
+📊 Statistics:
+  - Total records: 753
+  - New: 0
+  - Updated: 0
+  - Unchanged: 753
+  - No Property ID: 0
+  - Master total: 753
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-05-27_Lawley May Week 4 27052025.md
+
+============================================================
+Processing 5/27: Lawley May Week 4 29052025.csv
+Date: 2025-05-29
+
+📊 Statistics:
+  - Total records: 1008
+  - New: 255
+  - Updated: 68
+  - Unchanged: 685
+  - No Property ID: 0
+  - Master total: 1008
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-05-29_Lawley May Week 4 29052025.md
+
+============================================================
+Processing 6/27: Lawley May Week 4 30052025.csv
+Date: 2025-05-30
+
+📊 Statistics:
+  - Total records: 1292
+  - New: 284
+  - Updated: 785
+  - Unchanged: 223
+  - No Property ID: 0
+  - Master total: 1292
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-05-30_Lawley May Week 4 30052025.md
+
+============================================================
+Processing 7/27: Lawley June Week 1 02062025.csv
+Date: 2025-06-02
+
+📊 Statistics:
+  - Total records: 2743
+  - New: 1454
+  - Updated: 158
+  - Unchanged: 1131
+  - No Property ID: 0
+  - Master total: 2746
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-06-02_Lawley June Week 1 02062025.md
+
+============================================================
+Processing 8/27: june3.csv
+Date: 2025-06-03
+
+📊 Statistics:
+  - Total records: 3487
+  - New: 747
+  - Updated: 127
+  - Unchanged: 2613
+  - No Property ID: 0
+  - Master total: 3493
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-06-03_june3.md
+
+============================================================
+Processing 9/27: june5.csv
+Date: 2025-06-05
+
+📊 Statistics:
+  - Total records: 6039
+  - New: 2555
+  - Updated: 466
+  - Unchanged: 3018
+  - No Property ID: 0
+  - Master total: 6048
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-06-05_june5.md
+
+============================================================
+Processing 10/27: Lawley June Week 4 23062025.csv
+Date: 2025-06-23
+
+📊 Statistics:
+  - Total records: 12668
+  - New: 6646
+  - Updated: 5867
+  - Unchanged: 155
+  - No Property ID: 0
+  - Master total: 12694
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-06-23_Lawley June Week 4 23062025.md
+
+============================================================
+Processing 11/27: Lawley June Week 4 26062025.csv
+Date: 2025-06-26
+
+📊 Statistics:
+  - Total records: 17109
+  - New: 4464
+  - Updated: 527
+  - Unchanged: 12118
+  - No Property ID: 0
+  - Master total: 17158
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-06-26_Lawley June Week 4 26062025.md
+
+============================================================
+Processing 12/27: Lawley June Week 4 27062025.csv
+Date: 2025-06-27
+
+📊 Statistics:
+  - Total records: 17654
+  - New: 548
+  - Updated: 148
+  - Unchanged: 16958
+  - No Property ID: 0
+  - Master total: 17706
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-06-27_Lawley June Week 4 27062025.md
+
+============================================================
+Processing 13/27: Lawley June Week 4 30062025.csv
+Date: 2025-06-30
+
+📊 Statistics:
+  - Total records: 7745
+  - New: 100
+  - Updated: 67
+  - Unchanged: 7578
+  - No Property ID: 0
+  - Master total: 17806
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-06-30_Lawley June Week 4 30062025.md
+
+============================================================
+Processing 14/27: Lawley July Week 1 01072025.csv
+Date: 2025-07-01
+
+📊 Statistics:
+  - Total records: 9046
+  - New: 1303
+  - Updated: 286
+  - Unchanged: 7457
+  - No Property ID: 0
+  - Master total: 19109
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-07-01_Lawley July Week 1 01072025.md
+
+============================================================
+Processing 15/27: Lawley July Week 1 02072025.csv
+Date: 2025-07-02
+
+📊 Statistics:
+  - Total records: 9912
+  - New: 867
+  - Updated: 169
+  - Unchanged: 8876
+  - No Property ID: 0
+  - Master total: 19976
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-07-02_Lawley July Week 1 02072025.md
+
+============================================================
+Processing 16/27: Lawley July Week 1 03072025.csv
+Date: 2025-07-03
+
+📊 Statistics:
+  - Total records: 11157
+  - New: 1247
+  - Updated: 492
+  - Unchanged: 9418
+  - No Property ID: 0
+  - Master total: 21223
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-07-03_Lawley July Week 1 03072025.md
+
+============================================================
+Processing 17/27: Lawley July Week 2 07072025.csv
+Date: 2025-07-07
+
+📊 Statistics:
+  - Total records: 13145
+  - New: 1992
+  - Updated: 466
+  - Unchanged: 10687
+  - No Property ID: 0
+  - Master total: 23215
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-07-07_Lawley July Week 2 07072025.md
+
+============================================================
+Processing 18/27: Lawley July Week 2 08072025.csv
+Date: 2025-07-08
+
+📊 Statistics:
+  - Total records: 14152
+  - New: 1007
+  - Updated: 637
+  - Unchanged: 12508
+  - No Property ID: 0
+  - Master total: 24222
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-07-08_Lawley July Week 2 08072025.md
+
+============================================================
+Processing 19/27: Lawley July Week 2 11072025.csv
+Date: 2025-07-11
+
+📊 Statistics:
+  - Total records: 167
+  - New: 0
+  - Updated: 0
+  - Unchanged: 0
+  - No Property ID: 167
+  - Master total: 24222
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-07-11_Lawley July Week 2 11072025.md
+
+============================================================
+Processing 20/27: Lawley July Week 3 14072025.csv
+Date: 2025-07-14
+
+📊 Statistics:
+  - Total records: 15496
+  - New: 1354
+  - Updated: 391
+  - Unchanged: 13751
+  - No Property ID: 0
+  - Master total: 25576
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-07-14_Lawley July Week 3 14072025.md
+
+============================================================
+Processing 21/27: Lawley July Week 3 15072025.csv
+Date: 2025-07-15
+
+📊 Statistics:
+  - Total records: 15507
+  - New: 11
+  - Updated: 59
+  - Unchanged: 15437
+  - No Property ID: 0
+  - Master total: 25587
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-07-15_Lawley July Week 3 15072025.md
+
+============================================================
+Processing 22/27: Lawley July Week 3 16072025.csv
+Date: 2025-07-16
+
+📊 Statistics:
+  - Total records: 15632
+  - New: 125
+  - Updated: 131
+  - Unchanged: 15376
+  - No Property ID: 0
+  - Master total: 25712
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-07-16_Lawley July Week 3 16072025.md
+
+============================================================
+Processing 23/27: Lawley July Week 3 17072025.csv
+Date: 2025-07-17
+
+📊 Statistics:
+  - Total records: 15697
+  - New: 69
+  - Updated: 15628
+  - Unchanged: 0
+  - No Property ID: 0
+  - Master total: 25781
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-07-17_Lawley July Week 3 17072025.md
+
+============================================================
+Processing 24/27: Lawley July Week 3 18072025.csv
+Date: 2025-07-18
+
+📊 Statistics:
+  - Total records: 15717
+  - New: 16
+  - Updated: 89
+  - Unchanged: 15612
+  - No Property ID: 0
+  - Master total: 25797
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-07-18_Lawley July Week 3 18072025.md
+
+============================================================
+Processing 25/27: Lawley July Week 3 19072025.csv
+Date: 2025-07-19
+
+📊 Statistics:
+  - Total records: 15754
+  - New: 42
+  - Updated: 120
+  - Unchanged: 15592
+  - No Property ID: 0
+  - Master total: 25839
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-07-19_Lawley July Week 3 19072025.md
+
+============================================================
+Processing 26/27: Lawley July Week 3 20072025.csv
+Date: 2025-07-20
+
+📊 Statistics:
+  - Total records: 15789
+  - New: 35
+  - Updated: 36
+  - Unchanged: 15718
+  - No Property ID: 0
+  - Master total: 25874
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-07-20_Lawley July Week 3 20072025.md
+
+============================================================
+Processing 27/27: Lawley July Week 4 21072025.csv
+Date: 2025-07-21
+
+📊 Statistics:
+  - Total records: 16143
+  - New: 356
+  - Updated: 59
+  - Unchanged: 15728
+  - No Property ID: 0
+  - Master total: 26230
+
+📄 Daily report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing/processing_2025-07-21_Lawley July Week 4 21072025.md
+
+============================================================
+📝 Writing master CSV file...
+
+✅ Master CSV Creation Complete!
+
+📊 Summary:
+  - Total unique records: 26230
+  - Total changes tracked: 27044
+  - Files processed: 27
+  - Date range: 2025-05-22 to 2025-07-21
+
+📁 Output files:
+  - Master CSV: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/data/master/master_csv_with_changes_2025-08-04.csv
+  - Latest link: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/data/master/master_csv_latest.csv
+  - Master summary: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/data/master/master_summary_2025-08-04.md
+  - Daily reports: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/reports/daily-processing
+  - Change logs: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/data/change-logs
+
+📁 Output locations:
+   - Master CSV: data/master/master_csv_latest.csv
+   - Daily reports: reports/daily-processing/
+   - Change logs: data/change-logs/
+   - Master summary: data/master/master_summary_*.md
+
+✅ Master CSV creation complete!

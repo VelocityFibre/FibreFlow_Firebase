@@ -2,6 +2,14 @@
 
 ## ⚡ CRITICAL INSTRUCTIONS FOR CLAUDE
 
+### 📁 DOCUMENT PLACEMENT RULE (CRITICAL - 2025-08-05)
+**NEVER place documentation files in root folders!**
+- ✅ ALWAYS place docs in the `/docs/` subfolder
+- ✅ For OneMap: use `/OneMap/docs/`
+- ✅ For sync: use `/sync/docs/`
+- ❌ NEVER put .md files in root directories
+- The user has repeatedly stated this preference!
+
 ### 🤖 DO THE WORK - DON'T GIVE TASKS!
 **IMPORTANT**: When the user asks for something to be done:
 1. **CHECK** if we already have what's needed (service accounts, files, etc.)
@@ -318,12 +326,15 @@ trackingStatuses = new Map([
 ```
 OneMap/
 ├── CLAUDE.md (this file)
-├── docs/                              # NEW: All documentation
-│   ├── INDEX.md                      # Documentation index
+├── docs/                              # All documentation
+│   ├── INDEX.md                      # Documentation index (NEW 2025-08-05)
+│   ├── DATA_INTEGRITY_RESOLUTION_2025-08-05.md  # Main summary report
+│   ├── VERIFICATION_STRATEGY_2025-08-05.md      # Cross-reference system
+│   ├── FIXED_SCRIPT_READY_2025-08-05.md         # Import script docs
 │   ├── GOOGLE_DRIVE_LOCATION.md      # Cloud storage info
 │   ├── 1MAP_SYNC_ARCHITECTURE.md     # System design
 │   ├── MAPPING_REVIEW_VS_LIVE_DB.md  # Field mappings
-│   └── [Analysis & Technical docs]   # All other docs
+│   └── [30+ Analysis & Technical docs]
 ├── imports/                           # Import Tracking System
 │   ├── INDEX.md                      # Master tracking index
 │   └── 2025-07-21_Lawley_May_Week3/  # Current import

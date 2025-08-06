@@ -10,7 +10,7 @@ const fs = require('fs').promises;
 const path = require('path');
 
 // Initialize Firebase Admin with vf-onemap-data
-const serviceAccount = require('../credentials/vf-onemap-service-account.json');
+const serviceAccount = require('../../credentials/vf-onemap-service-account.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),

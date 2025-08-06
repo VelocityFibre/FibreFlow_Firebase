@@ -1,0 +1,13 @@
+🧪 Running Sample Validation (First 100 records)
+
+📄 Reading master CSV...
+✅ Loaded 18980 total records, using first 100 for test
+
+🔍 Checking 98 unique poles in staging...
+
+📊 SAMPLE VALIDATION RESULTS:
+   Total poles checked: 98
+   ✅ Found in staging: 18
+   ❌ Missing in staging: 80
+
+   Missing poles: 2025/05/06 14:16:50.225, 2025/05/06 14:14:27.103, 2025/05/06 14:16:20.579, 2025/05/06 14:17:41.272, 2025/05/06 14:18:30.762 ...

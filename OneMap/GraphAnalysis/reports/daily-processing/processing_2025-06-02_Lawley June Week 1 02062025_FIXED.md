@@ -1,0 +1,3508 @@
+# FIXED Daily Processing Report - 2025-06-02
+
+**File Processed**: Lawley June Week 1 02062025.csv
+**Processing Time**: 2025-08-05T13:01:24.717Z
+**Fix Applied**: Column alignment normalization
+
+## Summary Statistics
+
+- **Total Records in File**: 2743
+- **New Records Added**: 1454
+- **Existing Records Updated**: 158
+- **Records Unchanged**: 1131
+- **Records Without Property ID**: 0
+
+## Changes Made
+
+### Summary by Field
+
+| Field | Changes Count |
+|-------|---------------|
+| 1map NAD ID | 140 |
+| lst_mod_dt | 140 |
+| Location Address | 131 |
+| Site | 97 |
+| date_status_changed | 75 |
+| Actual Device Location (Latitude) | 59 |
+| lst_mod_by | 59 |
+| Pole Number | 59 |
+| Drop Number | 59 |
+| Language | 59 |
+| Survey Date | 59 |
+| CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM ( | 59 |
+| Stand Number | 59 |
+| Latitude & Longitude | 59 |
+| CONSENT TO PLANT A POLE | 59 |
+| ISIVUMELWANO SOKUTYALWA KWEPALI | 59 |
+| Owner or Tenant | 59 |
+| Special Conditions (if any) | 59 |
+| Field Agent Name (pole permission) | 59 |
+| Date of Signature | 59 |
+| Latitude | 59 |
+| Longitude | 59 |
+| Pole Permissions - Actual Device Location (Latitude) | 59 |
+| Pole Permissions - Actual Device Location (Longitude) | 59 |
+| Pole Permissions - Distance between Actual and Captured Point | 59 |
+| Last Modified Pole Permissions By | 59 |
+| Last Modified Pole Permissions Date | 59 |
+| Access to Property | 59 |
+| Declined | 59 |
+| if Yes | 59 |
+| Reason Why it was Declined | 59 |
+| Primary House of Backyard Dwelling | 59 |
+| Number of People Living in the Home | 59 |
+| Residential or Commercial Dwelling | 59 |
+| Mark Type of Commercial if Applicable | 59 |
+| How do you access internet at your home currently? | 59 |
+| Backyard Dwellings | 59 |
+| If Yes | 59 |
+| How Many Dwellings | 59 |
+| How Many People | 59 |
+| Structure of Backyard Dwelling | 59 |
+| Consent Form | 59 |
+| Address Validation | 45 |
+| House Number | 45 |
+| I hereby consent that I have a permanent Municipal electrical c | 45 |
+| Preferred Place for Router Installation in Home | 45 |
+| Estimated horizontal accuracy radius in meters | 2 |
+| Pole Permissions - Estimated horizontal accuracy radius in mete | 2 |
+
+### Detailed Changes (First 50)
+
+#### 1. Property ID: 279316
+
+- **date_status_changed**:
+  - Old: "2025-05-30 13:14:24.257937+02"
+  - New: "2025-05-30 17:23:16.043424+02"
+
+#### 2. Property ID: 279285
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "110989"
+- **Location Address**:
+  - Old: "80 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+  - New: "UNNAMED LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.381226987740785"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "27.814557128867165]"
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-05-30 13:06:57.572056+02"
+  - New: "ftlawhh14@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/05/30 13:06:53.581"
+  - New: "2025-05-30 17:23:15.834053+02"
+- **Pole Number**:
+  - Old: "LAW.P.C132"
+  - New: "2025/05/30 13:06:53.581"
+- **Drop Number**:
+  - Old: ""
+  - New: "LAW.P.C132"
+- **Language**:
+  - Old: "English"
+  - New: ""
+- **Survey Date**:
+  - Old: "2025/05/30 13:06:53.581"
+  - New: "English"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/05/30 13:06:53.581"
+- **Address Validation**:
+  - Old: "78 MATHE STREET"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "78 MATHE STREET"
+- **Latitude & Longitude**:
+  - Old: "LENASIA"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7475"
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: "-26.381226987740785"
+  - New: "7475"
+- **Special Conditions (if any)**:
+  - Old: "27.814557128867165"
+  - New: "-26.381226987740785"
+- **Field Agent Name (pole permission)**:
+  - Old: "As the person signing this form"
+  - New: "27.814557128867165"
+- **Date of Signature**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "As the person signing this form"
+- **Latitude**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Longitude**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "and prior to the transfer of any title in the property"
+- **Last Modified Pole Permissions By**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Last Modified Pole Permissions Date**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Access to Property**:
+  - Old: "abanik’inkonzo"
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Declined**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "abanik’inkonzo"
+- **if Yes**:
+  - Old: "-26.3812269877408"
+  - New: "2025/05/30"
+- **Reason Why it was Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Primary House of Backyard Dwelling**:
+  - Old: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Number of People Living in the Home**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Residential or Commercial Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **How do you access internet at your home currently?**:
+  - Old: "Owner"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Backyard Dwellings**:
+  - Old: ""
+  - New: "Owner"
+- **If Yes**:
+  - Old: "-26.381045"
+  - New: "27.8145571288672"
+- **How Many Dwellings**:
+  - Old: "2025/05/30"
+  - New: "Yolanda"
+- **How Many People**:
+  - Old: "27.8145571288672"
+  - New: "-26.3812269877408"
+- **Structure of Backyard Dwelling**:
+  - Old: "27.814674"
+  - New: "-26.381045"
+- **Consent Form**:
+  - Old: "23.3"
+  - New: "27.814674"
+- **House Number**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "23.3"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "2025-05-30 13:06:53.58119+02"
+  - New: "ftlawhh14@fibertime.com"
+- **Preferred Place for Router Installation in Home**:
+  - Old: ""
+  - New: "2025-05-30 13:06:53.58119+02"
+
+#### 3. Property ID: 279175
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "110989"
+- **Location Address**:
+  - Old: "88 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+  - New: "UNNAMED LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.3813061114016"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "27.81400360846985]"
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-05-30 12:51:55.526272+02"
+  - New: "ftlawhh14@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/05/30 12:51:54.720"
+  - New: "2025-05-30 17:23:15.046877+02"
+- **Pole Number**:
+  - Old: "LAW.P.C129"
+  - New: "2025/05/30 12:51:54.720"
+- **Drop Number**:
+  - Old: ""
+  - New: "LAW.P.C129"
+- **Language**:
+  - Old: "English"
+  - New: ""
+- **Survey Date**:
+  - Old: "2025/05/30 12:51:54.720"
+  - New: "English"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/05/30 12:51:54.720"
+- **Address Validation**:
+  - Old: "88 MATHE STREET"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "88 MATHE STREET"
+- **Latitude & Longitude**:
+  - Old: "LENASIA"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7471"
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: "-26.3813061114016"
+  - New: "7471"
+- **Special Conditions (if any)**:
+  - Old: "27.81400360846985"
+  - New: "-26.3813061114016"
+- **Field Agent Name (pole permission)**:
+  - Old: "As the person signing this form"
+  - New: "27.81400360846985"
+- **Date of Signature**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "As the person signing this form"
+- **Latitude**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Longitude**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "and prior to the transfer of any title in the property"
+- **Last Modified Pole Permissions By**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Last Modified Pole Permissions Date**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Access to Property**:
+  - Old: "abanik’inkonzo"
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Declined**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "abanik’inkonzo"
+- **if Yes**:
+  - Old: "-26.3813061114016"
+  - New: "2025/05/30"
+- **Reason Why it was Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Primary House of Backyard Dwelling**:
+  - Old: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Number of People Living in the Home**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Residential or Commercial Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **How do you access internet at your home currently?**:
+  - Old: "Owner"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Backyard Dwellings**:
+  - Old: ""
+  - New: "Owner"
+- **If Yes**:
+  - Old: "-26.381208"
+  - New: "27.8140036084699"
+- **How Many Dwellings**:
+  - Old: "2025/05/30"
+  - New: "Yolanda"
+- **How Many People**:
+  - Old: "27.8140036084699"
+  - New: "-26.3813061114016"
+- **Structure of Backyard Dwelling**:
+  - Old: "27.813893"
+  - New: "-26.381208"
+- **Consent Form**:
+  - Old: "15.5"
+  - New: "27.813893"
+- **House Number**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "15.5"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "2025-05-30 12:51:54.720193+02"
+  - New: "ftlawhh14@fibertime.com"
+- **Preferred Place for Router Installation in Home**:
+  - Old: ""
+  - New: "2025-05-30 12:51:54.720193+02"
+
+#### 4. Property ID: 279196
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "110989"
+- **Location Address**:
+  - Old: "86 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+  - New: "UNNAMED LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.381288769509435"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "27.814144037492138]"
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-05-30 12:57:17.638733+02"
+  - New: "ftlawhh14@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/05/30 12:57:16.886"
+  - New: "2025-05-30 17:23:15.288301+02"
+- **Pole Number**:
+  - Old: "LAW.P.C130"
+  - New: "2025/05/30 12:57:16.886"
+- **Drop Number**:
+  - Old: ""
+  - New: "LAW.P.C130"
+- **Language**:
+  - Old: "English"
+  - New: ""
+- **Survey Date**:
+  - Old: "2025/05/30 12:57:16.886"
+  - New: "English"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/05/30 12:57:16.886"
+- **Address Validation**:
+  - Old: "86 MATHE STREET"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "86 MATHE STREET"
+- **Latitude & Longitude**:
+  - Old: "LENASIA"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7472"
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: "-26.381288769509435"
+  - New: "7472"
+- **Special Conditions (if any)**:
+  - Old: "27.814144037492138"
+  - New: "-26.381288769509435"
+- **Field Agent Name (pole permission)**:
+  - Old: "As the person signing this form"
+  - New: "27.814144037492138"
+- **Date of Signature**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "As the person signing this form"
+- **Latitude**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Longitude**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "and prior to the transfer of any title in the property"
+- **Last Modified Pole Permissions By**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Last Modified Pole Permissions Date**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Access to Property**:
+  - Old: "abanik’inkonzo"
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Declined**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "abanik’inkonzo"
+- **if Yes**:
+  - Old: "-26.3812887695094"
+  - New: "2025/05/30"
+- **Reason Why it was Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Primary House of Backyard Dwelling**:
+  - Old: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Number of People Living in the Home**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Residential or Commercial Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **How do you access internet at your home currently?**:
+  - Old: "Owner"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Backyard Dwellings**:
+  - Old: ""
+  - New: "Owner"
+- **If Yes**:
+  - Old: "-26.381129"
+  - New: "27.8141440374921"
+- **How Many Dwellings**:
+  - Old: "2025/05/30"
+  - New: "Yolanda"
+- **How Many People**:
+  - Old: "27.8141440374921"
+  - New: "-26.3812887695094"
+- **Structure of Backyard Dwelling**:
+  - Old: "27.814202"
+  - New: "-26.381129"
+- **Consent Form**:
+  - Old: "18.7"
+  - New: "27.814202"
+- **House Number**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "18.7"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "2025-05-30 12:57:16.885635+02"
+  - New: "ftlawhh14@fibertime.com"
+- **Preferred Place for Router Installation in Home**:
+  - Old: ""
+  - New: "2025-05-30 12:57:16.885635+02"
+
+#### 5. Property ID: 279260
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "110989"
+- **Location Address**:
+  - Old: "84 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+  - New: "UNNAMED LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB [-26.3812478931979"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "27.814412791440752]"
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-05-30 13:00:58.07933+02"
+  - New: "ftlawhh14@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/05/30 13:00:56.745"
+  - New: "2025-05-30 17:23:15.541096+02"
+- **Pole Number**:
+  - Old: "LAW.P.C131"
+  - New: "2025/05/30 13:00:56.745"
+- **Drop Number**:
+  - Old: ""
+  - New: "LAW.P.C131"
+- **Language**:
+  - Old: "English"
+  - New: ""
+- **Survey Date**:
+  - Old: "2025/05/30 13:00:56.745"
+  - New: "English"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/05/30 13:00:56.745"
+- **Address Validation**:
+  - Old: "82 MATHE STREET"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "82 MATHE STREET"
+- **Latitude & Longitude**:
+  - Old: "LENASIA"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7473"
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: "-26.3812478931979"
+  - New: "7473"
+- **Special Conditions (if any)**:
+  - Old: "27.814412791440752"
+  - New: "-26.3812478931979"
+- **Field Agent Name (pole permission)**:
+  - Old: "As the person signing this form"
+  - New: "27.814412791440752"
+- **Date of Signature**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "As the person signing this form"
+- **Latitude**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Longitude**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "and prior to the transfer of any title in the property"
+- **Last Modified Pole Permissions By**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Last Modified Pole Permissions Date**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Access to Property**:
+  - Old: "abanik’inkonzo"
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Declined**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "abanik’inkonzo"
+- **if Yes**:
+  - Old: "-26.3812478931979"
+  - New: "2025/05/30"
+- **Reason Why it was Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Primary House of Backyard Dwelling**:
+  - Old: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Number of People Living in the Home**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Residential or Commercial Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **How do you access internet at your home currently?**:
+  - Old: "Owner"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Backyard Dwellings**:
+  - Old: ""
+  - New: "Owner"
+- **If Yes**:
+  - Old: "-26.381049"
+  - New: "27.8144127914407"
+- **How Many Dwellings**:
+  - Old: "2025/05/30"
+  - New: "Yolanda"
+- **How Many People**:
+  - Old: "27.8144127914407"
+  - New: "-26.3812478931979"
+- **Structure of Backyard Dwelling**:
+  - Old: "27.814495"
+  - New: "-26.381049"
+- **Consent Form**:
+  - Old: "23.6"
+  - New: "27.814495"
+- **House Number**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "23.6"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "2025-05-30 13:00:56.744665+02"
+  - New: "ftlawhh14@fibertime.com"
+- **Preferred Place for Router Installation in Home**:
+  - Old: ""
+  - New: "2025-05-30 13:00:56.744665+02"
+
+#### 6. Property ID: 279136
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "110977"
+- **Location Address**:
+  - Old: "94 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+  - New: "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.38138873374762"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "27.813519499308285]"
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-05-30 12:42:51.246821+02"
+  - New: "ftlawhh14@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/05/30 12:42:50.404"
+  - New: "2025-05-30 17:23:14.870513+02"
+- **Pole Number**:
+  - Old: "LAW.P.C127"
+  - New: "2025/05/30 12:42:50.404"
+- **Drop Number**:
+  - Old: ""
+  - New: "LAW.P.C127"
+- **Language**:
+  - Old: "English"
+  - New: ""
+- **Survey Date**:
+  - Old: "2025/05/30 12:42:50.404"
+  - New: "English"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/05/30 12:42:50.404"
+- **Address Validation**:
+  - Old: "94 MATHE STREET"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "94 MATHE STREET"
+- **Latitude & Longitude**:
+  - Old: "LENASIA"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7457"
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: "-26.38138873374762"
+  - New: "7457"
+- **Special Conditions (if any)**:
+  - Old: "27.813519499308285"
+  - New: "-26.38138873374762"
+- **Field Agent Name (pole permission)**:
+  - Old: "As the person signing this form"
+  - New: "27.813519499308285"
+- **Date of Signature**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "As the person signing this form"
+- **Latitude**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Longitude**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "and prior to the transfer of any title in the property"
+- **Last Modified Pole Permissions By**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Last Modified Pole Permissions Date**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Access to Property**:
+  - Old: "abanik’inkonzo"
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Declined**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "abanik’inkonzo"
+- **if Yes**:
+  - Old: "-26.3813887337476"
+  - New: "2025/05/30"
+- **Reason Why it was Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Primary House of Backyard Dwelling**:
+  - Old: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Number of People Living in the Home**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Residential or Commercial Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **How do you access internet at your home currently?**:
+  - Old: "Owner"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Backyard Dwellings**:
+  - Old: ""
+  - New: "Owner"
+- **If Yes**:
+  - Old: "-26.381564"
+  - New: "27.8135194993083"
+- **How Many Dwellings**:
+  - Old: "2025/05/30"
+  - New: "Yolanda"
+- **How Many People**:
+  - Old: "27.8135194993083"
+  - New: "-26.3813887337476"
+- **Structure of Backyard Dwelling**:
+  - Old: "27.81354"
+  - New: "-26.381564"
+- **Consent Form**:
+  - Old: "19.6"
+  - New: "27.81354"
+- **House Number**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "19.6"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "2025-05-30 12:42:50.403778+02"
+  - New: "ftlawhh14@fibertime.com"
+- **Preferred Place for Router Installation in Home**:
+  - Old: ""
+  - New: "2025-05-30 12:42:50.403778+02"
+
+#### 7. Property ID: 279056
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "110977"
+- **Location Address**:
+  - Old: "52 LESEDI STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+  - New: "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.381474421293476"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "27.81300019443119]"
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-05-30 12:22:37.092748+02"
+  - New: "ftlawhh14@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/05/30 12:22:35.926"
+  - New: "2025-05-30 17:23:14.080309+02"
+- **Pole Number**:
+  - Old: "LAW.P.C124"
+  - New: "2025/05/30 12:22:35.926"
+- **Drop Number**:
+  - Old: ""
+  - New: "LAW.P.C124"
+- **Language**:
+  - Old: "English"
+  - New: ""
+- **Survey Date**:
+  - Old: "2025/05/30 12:22:35.926"
+  - New: "English"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/05/30 12:22:35.926"
+- **Address Validation**:
+  - Old: "29 KUNENE STREET"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "29 KUNENE STREET"
+- **Latitude & Longitude**:
+  - Old: "LENASIA"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7452"
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: "-26.381474421293476"
+  - New: "7452"
+- **Special Conditions (if any)**:
+  - Old: "27.81300019443119"
+  - New: "-26.381474421293476"
+- **Field Agent Name (pole permission)**:
+  - Old: "As the person signing this form"
+  - New: "27.81300019443119"
+- **Date of Signature**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "As the person signing this form"
+- **Latitude**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Longitude**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "and prior to the transfer of any title in the property"
+- **Last Modified Pole Permissions By**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Last Modified Pole Permissions Date**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Access to Property**:
+  - Old: "abanik’inkonzo"
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Declined**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "abanik’inkonzo"
+- **if Yes**:
+  - Old: "-26.3814744212935"
+  - New: "2025/05/30"
+- **Reason Why it was Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Primary House of Backyard Dwelling**:
+  - Old: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Number of People Living in the Home**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Residential or Commercial Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **How do you access internet at your home currently?**:
+  - Old: "Owner"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Backyard Dwellings**:
+  - Old: ""
+  - New: "Owner"
+- **If Yes**:
+  - Old: "-26.381473"
+  - New: "27.8130001944312"
+- **How Many Dwellings**:
+  - Old: "2025/05/30"
+  - New: "Yolanda"
+- **How Many People**:
+  - Old: "27.8130001944312"
+  - New: "-26.3814744212935"
+- **Structure of Backyard Dwelling**:
+  - Old: "27.812942"
+  - New: "-26.381473"
+- **Consent Form**:
+  - Old: "5.8"
+  - New: "27.812942"
+- **House Number**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "5.8"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "2025-05-30 12:22:35.925922+02"
+  - New: "ftlawhh14@fibertime.com"
+- **Preferred Place for Router Installation in Home**:
+  - Old: ""
+  - New: "2025-05-30 12:22:35.925922+02"
+
+#### 8. Property ID: 279115
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "110977"
+- **Location Address**:
+  - Old: "27 KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+  - New: "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.381451071318317"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "27.813133257783687]"
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-05-30 12:36:50.467009+02"
+  - New: "ftlawhh14@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/05/30 12:36:49.824"
+  - New: "2025-05-30 17:23:14.66853+02"
+- **Pole Number**:
+  - Old: "LAW.P.C125"
+  - New: "2025/05/30 12:36:49.824"
+- **Drop Number**:
+  - Old: ""
+  - New: "LAW.P.C125"
+- **Language**:
+  - Old: "English"
+  - New: ""
+- **Survey Date**:
+  - Old: "2025/05/30 12:36:49.824"
+  - New: "English"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/05/30 12:36:49.824"
+- **Address Validation**:
+  - Old: "29 KUNENE STREET"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "29 KUNENE STREET"
+- **Latitude & Longitude**:
+  - Old: "LENASIA"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "7463"
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: "-26.381451071318317"
+  - New: "7463"
+- **Special Conditions (if any)**:
+  - Old: "27.813133257783687"
+  - New: "-26.381451071318317"
+- **Field Agent Name (pole permission)**:
+  - Old: "As the person signing this form"
+  - New: "27.813133257783687"
+- **Date of Signature**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "As the person signing this form"
+- **Latitude**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Longitude**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "and prior to the transfer of any title in the property"
+- **Last Modified Pole Permissions By**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Last Modified Pole Permissions Date**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Access to Property**:
+  - Old: "abanik’inkonzo"
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Declined**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "abanik’inkonzo"
+- **if Yes**:
+  - Old: "-26.3814510713183"
+  - New: "2025/05/30"
+- **Reason Why it was Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Primary House of Backyard Dwelling**:
+  - Old: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Number of People Living in the Home**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Residential or Commercial Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **How do you access internet at your home currently?**:
+  - Old: "Owner"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Backyard Dwellings**:
+  - Old: ""
+  - New: "Owner"
+- **If Yes**:
+  - Old: "-26.38159"
+  - New: "27.8131332577837"
+- **How Many Dwellings**:
+  - Old: "2025/05/30"
+  - New: "Yolanda"
+- **How Many People**:
+  - Old: "27.8131332577837"
+  - New: "-26.3814510713183"
+- **Structure of Backyard Dwelling**:
+  - Old: "27.813211"
+  - New: "-26.38159"
+- **Consent Form**:
+  - Old: "17.3"
+  - New: "27.813211"
+- **House Number**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "17.3"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "2025-05-30 12:36:49.82359+02"
+  - New: "ftlawhh14@fibertime.com"
+- **Preferred Place for Router Installation in Home**:
+  - Old: ""
+  - New: "2025-05-30 12:36:49.82359+02"
+
+#### 9. Property ID: 279365
+
+- **date_status_changed**:
+  - Old: "2025-05-30 13:27:10.722008+02"
+  - New: "2025-05-30 17:23:16.375675+02"
+
+#### 10. Property ID: 279876
+
+- **1map NAD ID**:
+  - Old: "110977"
+  - New: "105006619"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.380036088331718"
+  - New: "21 VUKANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **Actual Device Location (Latitude)**:
+  - Old: "27.81381576576354]"
+  - New: ""
+- **lst_mod_by**:
+  - Old: ""
+  - New: "ftlawhh12@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-06-02 15:00:53.227089+02"
+- **date_status_changed**:
+  - Old: "2025-05-30 16:20:01.416318+02"
+  - New: "2025/05/30 16:19:59.593"
+- **Pole Number**:
+  - Old: "2025/05/30 16:19:59.593"
+  - New: "LAW.P.E421"
+- **Drop Number**:
+  - Old: "LAW.P.E421"
+  - New: ""
+- **Language**:
+  - Old: ""
+  - New: "English"
+- **Survey Date**:
+  - Old: "English"
+  - New: "2025/05/30 16:19:59.593"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025/05/30 16:19:59.593"
+  - New: ""
+- **Stand Number**:
+  - Old: ""
+  - New: "7404"
+- **Latitude & Longitude**:
+  - Old: "7404"
+  - New: "-26.380036088331718"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "-26.380036088331718"
+  - New: "27.81381576576354"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "27.81381576576354"
+  - New: "As the person signing this form"
+- **Owner or Tenant**:
+  - Old: "As the person signing this form"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Special Conditions (if any)**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Field Agent Name (pole permission)**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Date of Signature**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Latitude**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "and prior to the transfer of any title in the property"
+- **Longitude**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "abanik’inkonzo"
+- **Last Modified Pole Permissions By**:
+  - Old: "abanik’inkonzo"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Last Modified Pole Permissions Date**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Access to Property**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **if Yes**:
+  - Old: "-26.379874"
+  - New: "27.813581"
+- **Reason Why it was Declined**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Primary House of Backyard Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Number of People Living in the Home**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "Owner"
+- **Residential or Commercial Dwelling**:
+  - Old: "Owner"
+  - New: ""
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Nompumelelo"
+- **How do you access internet at your home currently?**:
+  - Old: "Nompumelelo"
+  - New: "2025/05/30"
+- **Backyard Dwellings**:
+  - Old: "2025/05/30"
+  - New: "-26.3800360883317"
+- **If Yes**:
+  - Old: "29.5"
+  - New: "ftlawhh12@fibertime.com"
+- **How Many Dwellings**:
+  - Old: "27.8138157657635"
+  - New: "-26.379874"
+- **How Many People**:
+  - Old: "27.813581"
+  - New: "29.5"
+- **Structure of Backyard Dwelling**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-05-30 16:19:59.593289+02"
+- **Consent Form**:
+  - Old: "2025-05-30 16:19:59.593289+02"
+  - New: ""
+
+#### 11. Property ID: 279889
+
+- **1map NAD ID**:
+  - Old: "110977"
+  - New: "105006408"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37992815514454"
+  - New: "54 KGOTSO STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **Actual Device Location (Latitude)**:
+  - Old: "27.813305659607025]"
+  - New: ""
+- **lst_mod_by**:
+  - Old: ""
+  - New: "ftlawhh12@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-06-02 15:00:53.721537+02"
+- **date_status_changed**:
+  - Old: "2025-05-30 16:26:51.458733+02"
+  - New: "2025/05/30 16:26:50.194"
+- **Pole Number**:
+  - Old: "2025/05/30 16:26:50.194"
+  - New: "LAW.P.C181"
+- **Drop Number**:
+  - Old: "LAW.P.C181"
+  - New: ""
+- **Language**:
+  - Old: ""
+  - New: "English"
+- **Survey Date**:
+  - Old: "English"
+  - New: "2025/05/30 16:26:50.194"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025/05/30 16:26:50.194"
+  - New: ""
+- **Stand Number**:
+  - Old: ""
+  - New: "7368"
+- **Latitude & Longitude**:
+  - Old: "7368"
+  - New: "-26.37992815514454"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "-26.37992815514454"
+  - New: "27.813305659607025"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "27.813305659607025"
+  - New: "As the person signing this form"
+- **Owner or Tenant**:
+  - Old: "As the person signing this form"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Special Conditions (if any)**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Field Agent Name (pole permission)**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Date of Signature**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Latitude**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "and prior to the transfer of any title in the property"
+- **Longitude**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "abanik’inkonzo"
+- **Last Modified Pole Permissions By**:
+  - Old: "abanik’inkonzo"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Last Modified Pole Permissions Date**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Access to Property**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **if Yes**:
+  - Old: "-26.380124"
+  - New: "27.813886"
+- **Reason Why it was Declined**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Primary House of Backyard Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Number of People Living in the Home**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "Owner"
+- **Residential or Commercial Dwelling**:
+  - Old: "Owner"
+  - New: ""
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Nompumelelo"
+- **How do you access internet at your home currently?**:
+  - Old: "Nompumelelo"
+  - New: "2025/05/30"
+- **Backyard Dwellings**:
+  - Old: "2025/05/30"
+  - New: "-26.3799281551445"
+- **If Yes**:
+  - Old: "61.8"
+  - New: "ftlawhh12@fibertime.com"
+- **How Many Dwellings**:
+  - Old: "27.813305659607"
+  - New: "-26.380124"
+- **How Many People**:
+  - Old: "27.813886"
+  - New: "61.8"
+- **Structure of Backyard Dwelling**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-05-30 16:26:50.193686+02"
+- **Consent Form**:
+  - Old: "2025-05-30 16:26:50.193686+02"
+  - New: ""
+
+#### 12. Property ID: 279904
+
+- **1map NAD ID**:
+  - Old: "110977"
+  - New: "105006411"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.379749273549876"
+  - New: "28 REFILWE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **Actual Device Location (Latitude)**:
+  - Old: "27.81326931211525]"
+  - New: ""
+- **lst_mod_by**:
+  - Old: ""
+  - New: "ftlawhh12@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-06-02 15:00:55.205407+02"
+- **date_status_changed**:
+  - Old: "2025-05-30 16:42:07.549123+02"
+  - New: "2025/05/30 16:42:03.180"
+- **Pole Number**:
+  - Old: "2025/05/30 16:42:03.180"
+  - New: "LAW.P.C183"
+- **Drop Number**:
+  - Old: "LAW.P.C183"
+  - New: ""
+- **Language**:
+  - Old: ""
+  - New: "English"
+- **Survey Date**:
+  - Old: "English"
+  - New: "2025/05/30 16:42:03.180"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025/05/30 16:42:03.180"
+  - New: ""
+- **Stand Number**:
+  - Old: ""
+  - New: "7366"
+- **Latitude & Longitude**:
+  - Old: "7366"
+  - New: "-26.379749273549876"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "-26.379749273549876"
+  - New: "27.81326931211525"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "27.81326931211525"
+  - New: "As the person signing this form"
+- **Owner or Tenant**:
+  - Old: "As the person signing this form"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Special Conditions (if any)**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Field Agent Name (pole permission)**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Date of Signature**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Latitude**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "and prior to the transfer of any title in the property"
+- **Longitude**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "abanik’inkonzo"
+- **Last Modified Pole Permissions By**:
+  - Old: "abanik’inkonzo"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Last Modified Pole Permissions Date**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Access to Property**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **if Yes**:
+  - Old: "-26.379698"
+  - New: "27.812603"
+- **Reason Why it was Declined**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Primary House of Backyard Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Number of People Living in the Home**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "Owner"
+- **Residential or Commercial Dwelling**:
+  - Old: "Owner"
+  - New: ""
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Nompumelelo"
+- **How do you access internet at your home currently?**:
+  - Old: "Nompumelelo"
+  - New: "2025/05/30"
+- **Backyard Dwellings**:
+  - Old: "2025/05/30"
+  - New: "-26.3797492735499"
+- **If Yes**:
+  - Old: "66.6"
+  - New: "ftlawhh12@fibertime.com"
+- **How Many Dwellings**:
+  - Old: "27.8132693121152"
+  - New: "-26.379698"
+- **How Many People**:
+  - Old: "27.812603"
+  - New: "66.6"
+- **Structure of Backyard Dwelling**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-05-30 16:42:03.179503+02"
+- **Consent Form**:
+  - Old: "2025-05-30 16:42:03.179503+02"
+  - New: ""
+
+#### 13. Property ID: 279814
+
+- **1map NAD ID**:
+  - Old: "110977"
+  - New: "105006638"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.379757987837824"
+  - New: "12 REFILWE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **Actual Device Location (Latitude)**:
+  - Old: "27.81432650746359]"
+  - New: ""
+- **lst_mod_by**:
+  - Old: ""
+  - New: "ftlawhh12@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-06-02 15:00:47.972791+02"
+- **date_status_changed**:
+  - Old: "2025-05-30 15:47:17.206276+02"
+  - New: "2025/05/30 15:47:16.223"
+- **Pole Number**:
+  - Old: "2025/05/30 15:47:16.223"
+  - New: "LAW.P.C190"
+- **Drop Number**:
+  - Old: "LAW.P.C190"
+  - New: ""
+- **Language**:
+  - Old: ""
+  - New: "English"
+- **Survey Date**:
+  - Old: "English"
+  - New: "2025/05/30 15:47:16.223"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025/05/30 15:47:16.223"
+  - New: ""
+- **Stand Number**:
+  - Old: ""
+  - New: "7385"
+- **Latitude & Longitude**:
+  - Old: "7385"
+  - New: "-26.379757987837824"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "-26.379757987837824"
+  - New: "27.81432650746359"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "27.81432650746359"
+  - New: "As the person signing this form"
+- **Owner or Tenant**:
+  - Old: "As the person signing this form"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Special Conditions (if any)**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Field Agent Name (pole permission)**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Date of Signature**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Latitude**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "and prior to the transfer of any title in the property"
+- **Longitude**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "abanik’inkonzo"
+- **Last Modified Pole Permissions By**:
+  - Old: "abanik’inkonzo"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Last Modified Pole Permissions Date**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Access to Property**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **if Yes**:
+  - Old: "-26.37958"
+  - New: "27.81427"
+- **Reason Why it was Declined**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Primary House of Backyard Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Number of People Living in the Home**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "Owner"
+- **Residential or Commercial Dwelling**:
+  - Old: "Owner"
+  - New: ""
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Nompumelelo"
+- **How do you access internet at your home currently?**:
+  - Old: "Nompumelelo"
+  - New: "2025/05/30"
+- **Backyard Dwellings**:
+  - Old: "2025/05/30"
+  - New: "-26.3797579878378"
+- **If Yes**:
+  - Old: "20.6"
+  - New: "ftlawhh12@fibertime.com"
+- **How Many Dwellings**:
+  - Old: "27.8143265074636"
+  - New: "-26.37958"
+- **How Many People**:
+  - Old: "27.81427"
+  - New: "20.6"
+- **Structure of Backyard Dwelling**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-05-30 15:47:16.222819+02"
+- **Consent Form**:
+  - Old: "2025-05-30 15:47:16.222819+02"
+  - New: ""
+
+#### 14. Property ID: 279764
+
+- **1map NAD ID**:
+  - Old: "110977"
+  - New: "105006632"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.379656165335298"
+  - New: "43 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **Actual Device Location (Latitude)**:
+  - Old: "27.814618969929516]"
+  - New: ""
+- **lst_mod_by**:
+  - Old: ""
+  - New: "ftlawhh12@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-06-02 15:00:42.150252+02"
+- **date_status_changed**:
+  - Old: "2025-05-30 15:25:25.966365+02"
+  - New: "2025/05/30 15:25:25.146"
+- **Pole Number**:
+  - Old: "2025/05/30 15:25:25.146"
+  - New: "LAW.P.C194"
+- **Drop Number**:
+  - Old: "LAW.P.C194"
+  - New: ""
+- **Language**:
+  - Old: ""
+  - New: "English"
+- **Survey Date**:
+  - Old: "English"
+  - New: "2025/05/30 15:25:25.146"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025/05/30 15:25:25.146"
+  - New: ""
+- **Stand Number**:
+  - Old: ""
+  - New: "7391"
+- **Latitude & Longitude**:
+  - Old: "7391"
+  - New: "-26.379656165335298"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "-26.379656165335298"
+  - New: "27.814618969929516"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "27.814618969929516"
+  - New: "As the person signing this form"
+- **Owner or Tenant**:
+  - Old: "As the person signing this form"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Special Conditions (if any)**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Field Agent Name (pole permission)**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Date of Signature**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Latitude**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "and prior to the transfer of any title in the property"
+- **Longitude**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "abanik’inkonzo"
+- **Last Modified Pole Permissions By**:
+  - Old: "abanik’inkonzo"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Last Modified Pole Permissions Date**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Access to Property**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **if Yes**:
+  - Old: "-26.37969"
+  - New: "27.814904"
+- **Reason Why it was Declined**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Primary House of Backyard Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Number of People Living in the Home**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "Owner"
+- **Residential or Commercial Dwelling**:
+  - Old: "Owner"
+  - New: ""
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Nompumelelo"
+- **How do you access internet at your home currently?**:
+  - Old: "Nompumelelo"
+  - New: "2025/05/30"
+- **Backyard Dwellings**:
+  - Old: "2025/05/30"
+  - New: "-26.3796561653353"
+- **If Yes**:
+  - Old: "28.6"
+  - New: "ftlawhh12@fibertime.com"
+- **How Many Dwellings**:
+  - Old: "27.8146189699295"
+  - New: "-26.37969"
+- **How Many People**:
+  - Old: "27.814904"
+  - New: "28.6"
+- **Structure of Backyard Dwelling**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-05-30 15:25:25.146168+02"
+- **Consent Form**:
+  - Old: "2025-05-30 15:25:25.146168+02"
+  - New: ""
+
+#### 15. Property ID: 279753
+
+- **1map NAD ID**:
+  - Old: "110977"
+  - New: "105006631"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37972844572528"
+  - New: "45 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **Actual Device Location (Latitude)**:
+  - Old: "27.814636565438608]"
+  - New: ""
+- **lst_mod_by**:
+  - Old: ""
+  - New: "ftlawhh12@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-06-02 15:00:41.875217+02"
+- **date_status_changed**:
+  - Old: "2025-05-30 15:21:40.571451+02"
+  - New: "2025/05/30 15:21:39.299"
+- **Pole Number**:
+  - Old: "2025/05/30 15:21:39.299"
+  - New: "LAW.P.C193"
+- **Drop Number**:
+  - Old: "LAW.P.C193"
+  - New: ""
+- **Language**:
+  - Old: ""
+  - New: "English"
+- **Survey Date**:
+  - Old: "English"
+  - New: "2025/05/30 15:21:39.299"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025/05/30 15:21:39.299"
+  - New: ""
+- **Stand Number**:
+  - Old: ""
+  - New: "7392"
+- **Latitude & Longitude**:
+  - Old: "7392"
+  - New: "-26.37972844572528"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "-26.37972844572528"
+  - New: "27.814636565438608"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "27.814636565438608"
+  - New: "As the person signing this form"
+- **Owner or Tenant**:
+  - Old: "As the person signing this form"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Special Conditions (if any)**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Field Agent Name (pole permission)**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Date of Signature**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Latitude**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "and prior to the transfer of any title in the property"
+- **Longitude**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "abanik’inkonzo"
+- **Last Modified Pole Permissions By**:
+  - Old: "abanik’inkonzo"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Last Modified Pole Permissions Date**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Access to Property**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **if Yes**:
+  - Old: "-26.379679"
+  - New: "27.814866"
+- **Reason Why it was Declined**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Primary House of Backyard Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Number of People Living in the Home**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "Owner"
+- **Residential or Commercial Dwelling**:
+  - Old: "Owner"
+  - New: ""
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Nompumelelo"
+- **How do you access internet at your home currently?**:
+  - Old: "Nompumelelo"
+  - New: "2025/05/30"
+- **Backyard Dwellings**:
+  - Old: "2025/05/30"
+  - New: "-26.3797284457253"
+- **If Yes**:
+  - Old: "23.5"
+  - New: "ftlawhh12@fibertime.com"
+- **How Many Dwellings**:
+  - Old: "27.8146365654386"
+  - New: "-26.379679"
+- **How Many People**:
+  - Old: "27.814866"
+  - New: "23.5"
+- **Structure of Backyard Dwelling**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-05-30 15:21:39.298866+02"
+- **Consent Form**:
+  - Old: "2025-05-30 15:21:39.298866+02"
+  - New: ""
+
+#### 16. Property ID: 279770
+
+- **date_status_changed**:
+  - Old: "2025-05-30 15:26:23.274042+02"
+  - New: "2025-05-30 17:23:19.684356+02"
+
+#### 17. Property ID: 279795
+
+- **1map NAD ID**:
+  - Old: "110977"
+  - New: "105006634"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.379574950437608"
+  - New: "4 REFILWE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **Actual Device Location (Latitude)**:
+  - Old: "27.81443951163785]"
+  - New: ""
+- **lst_mod_by**:
+  - Old: ""
+  - New: "ftlawhh12@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-06-02 15:00:44.374054+02"
+- **date_status_changed**:
+  - Old: "2025-05-30 15:34:33.774664+02"
+  - New: "2025/05/30 15:34:31.816"
+- **Pole Number**:
+  - Old: "2025/05/30 15:34:31.816"
+  - New: "LAW.P.C192"
+- **Drop Number**:
+  - Old: "LAW.P.C192"
+  - New: ""
+- **Language**:
+  - Old: ""
+  - New: "English"
+- **Survey Date**:
+  - Old: "English"
+  - New: "2025/05/30 15:34:31.816"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025/05/30 15:34:31.816"
+  - New: ""
+- **Stand Number**:
+  - Old: ""
+  - New: "7389"
+- **Latitude & Longitude**:
+  - Old: "7389"
+  - New: "-26.379574950437608"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "-26.379574950437608"
+  - New: "27.81443951163785"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "27.81443951163785"
+  - New: "As the person signing this form"
+- **Owner or Tenant**:
+  - Old: "As the person signing this form"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Special Conditions (if any)**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Field Agent Name (pole permission)**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Date of Signature**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Latitude**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "and prior to the transfer of any title in the property"
+- **Longitude**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "abanik’inkonzo"
+- **Last Modified Pole Permissions By**:
+  - Old: "abanik’inkonzo"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Last Modified Pole Permissions Date**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Access to Property**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **if Yes**:
+  - Old: "-26.379435"
+  - New: "27.814524"
+- **Reason Why it was Declined**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Primary House of Backyard Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Number of People Living in the Home**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "Owner"
+- **Residential or Commercial Dwelling**:
+  - Old: "Owner"
+  - New: ""
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Nompumelelo"
+- **How do you access internet at your home currently?**:
+  - Old: "Nompumelelo"
+  - New: "2025/05/30"
+- **Backyard Dwellings**:
+  - Old: "2025/05/30"
+  - New: "-26.3795749504376"
+- **If Yes**:
+  - Old: "17.7"
+  - New: "ftlawhh12@fibertime.com"
+- **How Many Dwellings**:
+  - Old: "27.8144395116379"
+  - New: "-26.379435"
+- **How Many People**:
+  - Old: "27.814524"
+  - New: "17.7"
+- **Structure of Backyard Dwelling**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-05-30 15:34:31.815769+02"
+- **Consent Form**:
+  - Old: "2025-05-30 15:34:31.815769+02"
+  - New: ""
+
+#### 18. Property ID: 279792
+
+- **date_status_changed**:
+  - Old: "2025-05-30 15:33:37.262794+02"
+  - New: "2025-05-30 17:23:20.16283+02"
+
+#### 19. Property ID: 279820
+
+- **date_status_changed**:
+  - Old: "2025-05-30 15:49:27.94182+02"
+  - New: "2025-05-30 17:23:20.749056+02"
+
+#### 20. Property ID: 279797
+
+- **date_status_changed**:
+  - Old: "2025-05-30 15:37:42.432149+02"
+  - New: "2025-05-30 17:23:20.46164+02"
+
+#### 21. Property ID: 279760
+
+- **date_status_changed**:
+  - Old: "2025-05-30 15:23:52.538746+02"
+  - New: "2025-05-30 17:23:19.438776+02"
+
+#### 22. Property ID: 279657
+
+- **date_status_changed**:
+  - Old: "2025-05-30 14:58:13.82991+02"
+  - New: "2025-05-30 17:23:18.44746+02"
+
+#### 23. Property ID: 279680
+
+- **date_status_changed**:
+  - Old: "2025-05-30 15:03:57.235291+02"
+  - New: "2025-05-30 17:23:18.651119+02"
+
+#### 24. Property ID: 279723
+
+- **1map NAD ID**:
+  - Old: "110977"
+  - New: "105006629"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.379945049412488"
+  - New: "49 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **Actual Device Location (Latitude)**:
+  - Old: "27.81467717690128]"
+  - New: ""
+- **lst_mod_by**:
+  - Old: ""
+  - New: "ftlawhh12@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-06-02 15:00:40.932601+02"
+- **date_status_changed**:
+  - Old: "2025-05-30 15:14:22.375429+02"
+  - New: "2025/05/30 15:14:16.771"
+- **Pole Number**:
+  - Old: "2025/05/30 15:14:16.771"
+  - New: "LAW.P.C196"
+- **Drop Number**:
+  - Old: "LAW.P.C196"
+  - New: ""
+- **Language**:
+  - Old: ""
+  - New: "English"
+- **Survey Date**:
+  - Old: "English"
+  - New: "2025/05/30 15:14:16.771"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025/05/30 15:14:16.771"
+  - New: ""
+- **Stand Number**:
+  - Old: ""
+  - New: "7394"
+- **Latitude & Longitude**:
+  - Old: "7394"
+  - New: "-26.379945049412488"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "-26.379945049412488"
+  - New: "27.81467717690128"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "27.81467717690128"
+  - New: "As the person signing this form"
+- **Owner or Tenant**:
+  - Old: "As the person signing this form"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Special Conditions (if any)**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Field Agent Name (pole permission)**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Date of Signature**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Latitude**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "and prior to the transfer of any title in the property"
+- **Longitude**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "abanik’inkonzo"
+- **Last Modified Pole Permissions By**:
+  - Old: "abanik’inkonzo"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Last Modified Pole Permissions Date**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Access to Property**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **if Yes**:
+  - Old: "-26.37993"
+  - New: "27.814439"
+- **Reason Why it was Declined**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Primary House of Backyard Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Number of People Living in the Home**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "Owner"
+- **Residential or Commercial Dwelling**:
+  - Old: "Owner"
+  - New: ""
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Nompumelelo"
+- **How do you access internet at your home currently?**:
+  - Old: "Nompumelelo"
+  - New: "2025/05/30"
+- **Backyard Dwellings**:
+  - Old: "2025/05/30"
+  - New: "-26.3799450494125"
+- **If Yes**:
+  - Old: "23.8"
+  - New: "ftlawhh12@fibertime.com"
+- **How Many Dwellings**:
+  - Old: "27.8146771769013"
+  - New: "-26.37993"
+- **How Many People**:
+  - Old: "27.814439"
+  - New: "23.8"
+- **Structure of Backyard Dwelling**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-05-30 15:14:16.770707+02"
+- **Consent Form**:
+  - Old: "2025-05-30 15:14:16.770707+02"
+  - New: ""
+
+#### 25. Property ID: 279699
+
+- **1map NAD ID**:
+  - Old: "110977"
+  - New: "105006625"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.379928524389"
+  - New: "9 VUKANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **Actual Device Location (Latitude)**:
+  - Old: "27.81450738062012]"
+  - New: ""
+- **lst_mod_by**:
+  - Old: ""
+  - New: "ftlawhh12@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-06-02 15:00:40.426349+02"
+- **date_status_changed**:
+  - Old: "2025-05-30 15:09:31.615559+02"
+  - New: "2025/05/30 15:09:29.764"
+- **Pole Number**:
+  - Old: "2025/05/30 15:09:29.764"
+  - New: "LAW.P.E418"
+- **Drop Number**:
+  - Old: "LAW.P.E418"
+  - New: ""
+- **Language**:
+  - Old: ""
+  - New: "English"
+- **Survey Date**:
+  - Old: "English"
+  - New: "2025/05/30 15:09:29.764"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025/05/30 15:09:29.764"
+  - New: ""
+- **Stand Number**:
+  - Old: ""
+  - New: "7398"
+- **Latitude & Longitude**:
+  - Old: "7398"
+  - New: "-26.379928524389"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "-26.379928524389"
+  - New: "27.81450738062012"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "27.81450738062012"
+  - New: "As the person signing this form"
+- **Owner or Tenant**:
+  - Old: "As the person signing this form"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Special Conditions (if any)**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Field Agent Name (pole permission)**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Date of Signature**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Latitude**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "and prior to the transfer of any title in the property"
+- **Longitude**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "abanik’inkonzo"
+- **Last Modified Pole Permissions By**:
+  - Old: "abanik’inkonzo"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Last Modified Pole Permissions Date**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Access to Property**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **if Yes**:
+  - Old: "-26.380277"
+  - New: "27.813991"
+- **Reason Why it was Declined**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Primary House of Backyard Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Number of People Living in the Home**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "Owner"
+- **Residential or Commercial Dwelling**:
+  - Old: "Owner"
+  - New: ""
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Nompumelelo"
+- **How do you access internet at your home currently?**:
+  - Old: "Nompumelelo"
+  - New: "2025/05/30"
+- **Backyard Dwellings**:
+  - Old: "2025/05/30"
+  - New: "-26.379928524389"
+- **If Yes**:
+  - Old: "64.4"
+  - New: "ftlawhh12@fibertime.com"
+- **How Many Dwellings**:
+  - Old: "27.8145073806201"
+  - New: "-26.380277"
+- **How Many People**:
+  - Old: "27.813991"
+  - New: "64.4"
+- **Structure of Backyard Dwelling**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-05-30 15:09:29.764466+02"
+- **Consent Form**:
+  - Old: "2025-05-30 15:09:29.764466+02"
+  - New: ""
+
+#### 26. Property ID: 279637
+
+- **1map NAD ID**:
+  - Old: "110977"
+  - New: "105005060"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.380369863458736"
+  - New: "8 VUKANI STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **Actual Device Location (Latitude)**:
+  - Old: "27.8145884447383]"
+  - New: ""
+- **lst_mod_by**:
+  - Old: ""
+  - New: "ftlawhh12@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-06-02 15:00:39.507816+02"
+- **date_status_changed**:
+  - Old: "2025-05-30 14:54:12.166159+02"
+  - New: "2025/05/30 14:54:10.994"
+- **Pole Number**:
+  - Old: "2025/05/30 14:54:10.994"
+  - New: "LAW.P.C175"
+- **Drop Number**:
+  - Old: "LAW.P.C175"
+  - New: ""
+- **Language**:
+  - Old: ""
+  - New: "English"
+- **Survey Date**:
+  - Old: "English"
+  - New: "2025/05/30 14:54:10.994"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025/05/30 14:54:10.994"
+  - New: ""
+- **Stand Number**:
+  - Old: ""
+  - New: "7433"
+- **Latitude & Longitude**:
+  - Old: "7433"
+  - New: "-26.380369863458736"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "-26.380369863458736"
+  - New: "27.8145884447383"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "27.8145884447383"
+  - New: "As the person signing this form"
+- **Owner or Tenant**:
+  - Old: "As the person signing this form"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Special Conditions (if any)**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Field Agent Name (pole permission)**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Date of Signature**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Latitude**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "and prior to the transfer of any title in the property"
+- **Longitude**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "abanik’inkonzo"
+- **Last Modified Pole Permissions By**:
+  - Old: "abanik’inkonzo"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Last Modified Pole Permissions Date**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Access to Property**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **if Yes**:
+  - Old: "-26.380375"
+  - New: "27.814443"
+- **Reason Why it was Declined**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Primary House of Backyard Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Number of People Living in the Home**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "Owner"
+- **Residential or Commercial Dwelling**:
+  - Old: "Owner"
+  - New: ""
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Nompumelelo"
+- **How do you access internet at your home currently?**:
+  - Old: "Nompumelelo"
+  - New: "2025/05/30"
+- **Backyard Dwellings**:
+  - Old: "2025/05/30"
+  - New: "-26.3803698634587"
+- **If Yes**:
+  - Old: "14.5"
+  - New: "ftlawhh12@fibertime.com"
+- **How Many Dwellings**:
+  - Old: "27.8145884447383"
+  - New: "-26.380375"
+- **How Many People**:
+  - Old: "27.814443"
+  - New: "14.5"
+- **Structure of Backyard Dwelling**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-05-30 14:54:10.994038+02"
+- **Consent Form**:
+  - Old: "2025-05-30 14:54:10.994038+02"
+  - New: ""
+
+#### 27. Property ID: 279435
+
+- **1map NAD ID**:
+  - Old: "110977"
+  - New: "105005058"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.380314079163593"
+  - New: "53 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **Actual Device Location (Latitude)**:
+  - Old: "27.81477290238042]"
+  - New: ""
+- **lst_mod_by**:
+  - Old: ""
+  - New: "ftlawhh12@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-06-02 15:00:37.342889+02"
+- **date_status_changed**:
+  - Old: "2025-05-30 13:53:17.306108+02"
+  - New: "2025/05/30 13:53:15.753"
+- **Pole Number**:
+  - Old: "2025/05/30 13:53:15.753"
+  - New: "LAW.P.E422"
+- **Drop Number**:
+  - Old: "LAW.P.E422"
+  - New: ""
+- **Language**:
+  - Old: ""
+  - New: "English"
+- **Survey Date**:
+  - Old: "English"
+  - New: "2025/05/30 13:53:15.753"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025/05/30 13:53:15.753"
+  - New: ""
+- **Stand Number**:
+  - Old: ""
+  - New: "7437"
+- **Latitude & Longitude**:
+  - Old: "7437"
+  - New: "-26.380314079163593"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "-26.380314079163593"
+  - New: "27.81477290238042"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "27.81477290238042"
+  - New: "As the person signing this form"
+- **Owner or Tenant**:
+  - Old: "As the person signing this form"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Special Conditions (if any)**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Field Agent Name (pole permission)**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Date of Signature**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Latitude**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "and prior to the transfer of any title in the property"
+- **Longitude**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "abanik’inkonzo"
+- **Last Modified Pole Permissions By**:
+  - Old: "abanik’inkonzo"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Last Modified Pole Permissions Date**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Access to Property**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **if Yes**:
+  - Old: "-26.380709"
+  - New: "27.815174"
+- **Reason Why it was Declined**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Primary House of Backyard Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Number of People Living in the Home**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "Owner"
+- **Residential or Commercial Dwelling**:
+  - Old: "Owner"
+  - New: ""
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Nompumelelo"
+- **How do you access internet at your home currently?**:
+  - Old: "Nompumelelo"
+  - New: "2025/05/30"
+- **Backyard Dwellings**:
+  - Old: "2025/05/30"
+  - New: "-26.3803140791636"
+- **If Yes**:
+  - Old: "59.4"
+  - New: "ftlawhh12@fibertime.com"
+- **How Many Dwellings**:
+  - Old: "27.8147729023804"
+  - New: "-26.380709"
+- **How Many People**:
+  - Old: "27.815174"
+  - New: "59.4"
+- **Structure of Backyard Dwelling**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-05-30 13:53:15.753301+02"
+- **Consent Form**:
+  - Old: "2025-05-30 13:53:15.753301+02"
+  - New: ""
+
+#### 28. Property ID: 279351
+
+- **1map NAD ID**:
+  - Old: "110977"
+  - New: "105005057"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.380525279547935"
+  - New: "55 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **Actual Device Location (Latitude)**:
+  - Old: "27.814813021221553]"
+  - New: ""
+- **lst_mod_by**:
+  - Old: ""
+  - New: "ftlawhh12@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-06-02 15:00:35.498161+02"
+- **date_status_changed**:
+  - Old: "2025-05-30 13:23:35.752567+02"
+  - New: "2025/05/30 13:23:34.641"
+- **Pole Number**:
+  - Old: "2025/05/30 13:23:34.641"
+  - New: "LAW.P.C176"
+- **Drop Number**:
+  - Old: "LAW.P.C176"
+  - New: ""
+- **Language**:
+  - Old: ""
+  - New: "English"
+- **Survey Date**:
+  - Old: "English"
+  - New: "2025/05/30 13:23:34.641"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025/05/30 13:23:34.641"
+  - New: ""
+- **Stand Number**:
+  - Old: ""
+  - New: "7438"
+- **Latitude & Longitude**:
+  - Old: "7438"
+  - New: "-26.380525279547935"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "-26.380525279547935"
+  - New: "27.814813021221553"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "27.814813021221553"
+  - New: "As the person signing this form"
+- **Owner or Tenant**:
+  - Old: "As the person signing this form"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Special Conditions (if any)**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Field Agent Name (pole permission)**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Date of Signature**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Latitude**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "and prior to the transfer of any title in the property"
+- **Longitude**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "abanik’inkonzo"
+- **Last Modified Pole Permissions By**:
+  - Old: "abanik’inkonzo"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Last Modified Pole Permissions Date**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Access to Property**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **if Yes**:
+  - Old: "-26.380565"
+  - New: "27.815055"
+- **Reason Why it was Declined**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Primary House of Backyard Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Number of People Living in the Home**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "Tenant"
+- **Residential or Commercial Dwelling**:
+  - Old: "Tenant"
+  - New: ""
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Nompumelelo"
+- **How do you access internet at your home currently?**:
+  - Old: "Nompumelelo"
+  - New: "2025/05/30"
+- **Backyard Dwellings**:
+  - Old: "2025/05/30"
+  - New: "-26.3805252795479"
+- **If Yes**:
+  - Old: "24.5"
+  - New: "ftlawhh12@fibertime.com"
+- **How Many Dwellings**:
+  - Old: "27.8148130212215"
+  - New: "-26.380565"
+- **How Many People**:
+  - Old: "27.815055"
+  - New: "24.5"
+- **Structure of Backyard Dwelling**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-05-30 13:23:34.64065+02"
+- **Consent Form**:
+  - Old: "2025-05-30 13:23:34.64065+02"
+  - New: ""
+
+#### 29. Property ID: 279372
+
+- **1map NAD ID**:
+  - Old: "110977"
+  - New: "105005057"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.38052385417284"
+  - New: "55 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **Actual Device Location (Latitude)**:
+  - Old: "27.814811928968027]"
+  - New: ""
+- **lst_mod_by**:
+  - Old: ""
+  - New: "ftlawhh12@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-06-02 15:00:36.257081+02"
+- **date_status_changed**:
+  - Old: "2025-05-30 13:30:53.027264+02"
+  - New: "2025/05/30 13:30:51.646"
+- **Pole Number**:
+  - Old: "2025/05/30 13:30:51.646"
+  - New: "LAW.P.C176"
+- **Drop Number**:
+  - Old: "LAW.P.C176"
+  - New: ""
+- **Language**:
+  - Old: ""
+  - New: "English"
+- **Survey Date**:
+  - Old: "English"
+  - New: "2025/05/30 13:30:51.646"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025/05/30 13:30:51.646"
+  - New: ""
+- **Stand Number**:
+  - Old: ""
+  - New: "7438"
+- **Latitude & Longitude**:
+  - Old: "7438"
+  - New: "-26.38052385417284"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "-26.38052385417284"
+  - New: "27.814811928968027"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "27.814811928968027"
+  - New: "As the person signing this form"
+- **Owner or Tenant**:
+  - Old: "As the person signing this form"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Special Conditions (if any)**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Field Agent Name (pole permission)**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Date of Signature**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Latitude**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "and prior to the transfer of any title in the property"
+- **Longitude**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "abanik’inkonzo"
+- **Last Modified Pole Permissions By**:
+  - Old: "abanik’inkonzo"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Last Modified Pole Permissions Date**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Access to Property**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **if Yes**:
+  - Old: "-26.380537"
+  - New: "27.815056"
+- **Reason Why it was Declined**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Primary House of Backyard Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Number of People Living in the Home**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "Tenant"
+- **Residential or Commercial Dwelling**:
+  - Old: "Tenant"
+  - New: ""
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Nompumelelo"
+- **How do you access internet at your home currently?**:
+  - Old: "Nompumelelo"
+  - New: "2025/05/30"
+- **Backyard Dwellings**:
+  - Old: "2025/05/30"
+  - New: "-26.3805238541728"
+- **If Yes**:
+  - Old: "24.4"
+  - New: "ftlawhh12@fibertime.com"
+- **How Many Dwellings**:
+  - Old: "27.814811928968"
+  - New: "-26.380537"
+- **How Many People**:
+  - Old: "27.815056"
+  - New: "24.4"
+- **Structure of Backyard Dwelling**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-05-30 13:30:51.645658+02"
+- **Consent Form**:
+  - Old: "2025-05-30 13:30:51.645658+02"
+  - New: ""
+
+#### 30. Property ID: 279313
+
+- **1map NAD ID**:
+  - Old: "110977"
+  - New: "105006656"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "KUNENE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.38074385451797"
+  - New: "59 MATHE STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **Actual Device Location (Latitude)**:
+  - Old: "27.814855248169092]"
+  - New: ""
+- **lst_mod_by**:
+  - Old: ""
+  - New: "ftlawhh12@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-06-02 15:00:34.285866+02"
+- **date_status_changed**:
+  - Old: "2025-05-30 13:13:28.973063+02"
+  - New: "2025/05/30 13:13:26.653"
+- **Pole Number**:
+  - Old: "2025/05/30 13:13:26.653"
+  - New: "LAW.P.E419"
+- **Drop Number**:
+  - Old: "LAW.P.E419"
+  - New: ""
+- **Language**:
+  - Old: ""
+  - New: "English"
+- **Survey Date**:
+  - Old: "English"
+  - New: "2025/05/30 13:13:26.653"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025/05/30 13:13:26.653"
+  - New: ""
+- **Stand Number**:
+  - Old: ""
+  - New: "7440"
+- **Latitude & Longitude**:
+  - Old: "7440"
+  - New: "-26.38074385451797"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "-26.38074385451797"
+  - New: "27.814855248169092"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "27.814855248169092"
+  - New: "As the person signing this form"
+- **Owner or Tenant**:
+  - Old: "As the person signing this form"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Special Conditions (if any)**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Field Agent Name (pole permission)**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Date of Signature**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Latitude**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "and prior to the transfer of any title in the property"
+- **Longitude**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "abanik’inkonzo"
+- **Last Modified Pole Permissions By**:
+  - Old: "abanik’inkonzo"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **Last Modified Pole Permissions Date**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Access to Property**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **if Yes**:
+  - Old: "-26.38098"
+  - New: "27.814878"
+- **Reason Why it was Declined**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Primary House of Backyard Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Number of People Living in the Home**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "Tenant"
+- **Residential or Commercial Dwelling**:
+  - Old: "Tenant"
+  - New: ""
+- **Mark Type of Commercial if Applicable**:
+  - Old: ""
+  - New: "Nompumelelo"
+- **How do you access internet at your home currently?**:
+  - Old: "Nompumelelo"
+  - New: "2025/05/30"
+- **Backyard Dwellings**:
+  - Old: "2025/05/30"
+  - New: "-26.380743854518"
+- **If Yes**:
+  - Old: "26.4"
+  - New: "ftlawhh12@fibertime.com"
+- **How Many Dwellings**:
+  - Old: "27.8148552481691"
+  - New: "-26.38098"
+- **How Many People**:
+  - Old: "27.814878"
+  - New: "26.4"
+- **Structure of Backyard Dwelling**:
+  - Old: "ftlawhh12@fibertime.com"
+  - New: "2025-05-30 13:13:26.652515+02"
+- **Consent Form**:
+  - Old: "2025-05-30 13:13:26.652515+02"
+  - New: ""
+
+#### 31. Property ID: 279334
+
+- **date_status_changed**:
+  - Old: "2025-05-30 13:20:14.707254+02"
+  - New: "2025-05-30 17:23:16.204688+02"
+
+#### 32. Property ID: 279417
+
+- **date_status_changed**:
+  - Old: "2025-05-30 13:46:14.931029+02"
+  - New: "2025-05-30 17:23:17.016076+02"
+
+#### 33. Property ID: 279619
+
+- **date_status_changed**:
+  - Old: "2025-05-30 14:50:51.346684+02"
+  - New: "2025-05-30 17:23:17.436319+02"
+
+#### 34. Property ID: 279868
+
+- **date_status_changed**:
+  - Old: "2025-05-30 16:16:06.17156+02"
+  - New: "2025-05-30 17:23:21.688779+02"
+
+#### 35. Property ID: 279835
+
+- **date_status_changed**:
+  - Old: "2025-05-30 15:58:47.105555+02"
+  - New: "2025-05-30 17:23:20.940824+02"
+
+#### 36. Property ID: 279892
+
+- **date_status_changed**:
+  - Old: "2025-05-30 16:28:53.651044+02"
+  - New: "2025-05-30 17:23:21.877718+02"
+
+#### 37. Property ID: 279899
+
+- **date_status_changed**:
+  - Old: "2025-05-30 16:36:58.400018+02"
+  - New: "2025-05-30 17:23:22.045364+02"
+
+#### 38. Property ID: 279013
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "105006925"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **lst_mod_dt**:
+  - Old: "2025-05-30 12:18:03.80681+02"
+  - New: "2025-06-02 18:09:39.92648+02"
+
+#### 39. Property ID: 278948
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "105006924"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **lst_mod_dt**:
+  - Old: "2025-05-30 12:00:01.166394+02"
+  - New: "2025-06-02 18:09:39.566094+02"
+
+#### 40. Property ID: 278924
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "105006921"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **lst_mod_dt**:
+  - Old: "2025-05-30 11:54:07.298073+02"
+  - New: "2025-06-02 18:09:39.35909+02"
+
+#### 41. Property ID: 278785
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "105006910"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "5332 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+  - New: "315 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **lst_mod_dt**:
+  - Old: "2025-05-30 11:26:44.004402+02"
+  - New: "2025-06-02 18:09:37.611836+02"
+
+#### 42. Property ID: 277344
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "105004661"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "6378 LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+  - New: "69 JOY STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **lst_mod_dt**:
+  - Old: "2025-05-29 16:03:57.735956+02"
+  - New: "2025-06-02 18:09:08.671715+02"
+
+#### 43. Property ID: 277402
+
+- **1map NAD ID**:
+  - Old: "110978"
+  - New: "105007529"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "LOUIS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.37739677859987"
+  - New: "296 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **Actual Device Location (Latitude)**:
+  - Old: "27.807062378190412]"
+  - New: ""
+- **lst_mod_by**:
+  - Old: ""
+  - New: "ftlawhh15@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "ftlawhh15@fibertime.com"
+  - New: "2025-06-02 18:09:09.408201+02"
+- **date_status_changed**:
+  - Old: "2025-05-29 16:24:47.211027+02"
+  - New: "2025/05/29 16:24:46.413"
+- **Pole Number**:
+  - Old: "2025/05/29 16:24:46.413"
+  - New: "LAW.P.B207"
+- **Drop Number**:
+  - Old: "LAW.P.B207"
+  - New: ""
+- **Language**:
+  - Old: ""
+  - New: "English"
+- **Survey Date**:
+  - Old: "English"
+  - New: "2025/05/29 16:24:46.413"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025/05/29 16:24:46.413"
+  - New: ""
+- **Address Validation**:
+  - Old: ""
+  - New: "6303"
+- **Stand Number**:
+  - Old: "6303"
+  - New: "LAWLEY ESTATE"
+- **Latitude & Longitude**:
+  - Old: "LAWLEY ESTATE"
+  - New: "LENASIA"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "LENASIA"
+  - New: "1824"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "1824"
+  - New: ""
+- **Owner or Tenant**:
+  - Old: ""
+  - New: "-26.37739677859987"
+- **Special Conditions (if any)**:
+  - Old: "-26.37739677859987"
+  - New: "27.807062378190412"
+- **Field Agent Name (pole permission)**:
+  - Old: "27.807062378190412"
+  - New: "As the person signing this form"
+- **Date of Signature**:
+  - Old: "As the person signing this form"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Latitude**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Longitude**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "and prior to the transfer of any title in the property"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Last Modified Pole Permissions By**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Last Modified Pole Permissions Date**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Access to Property**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "abanik’inkonzo"
+- **Declined**:
+  - Old: "abanik’inkonzo"
+  - New: "ono kontraka abagunyaziswe yiyo"
+- **if Yes**:
+  - Old: "2025/05/29"
+  - New: "-26.3773967785999"
+- **Reason Why it was Declined**:
+  - Old: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Primary House of Backyard Dwelling**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Number of People Living in the Home**:
+  - Old: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Residential or Commercial Dwelling**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **How do you access internet at your home currently?**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "Owner"
+- **Backyard Dwellings**:
+  - Old: "Owner"
+  - New: ""
+- **If Yes**:
+  - Old: "27.8070623781904"
+  - New: "-26.377403"
+- **How Many Dwellings**:
+  - Old: "Disemelo"
+  - New: "2025/05/29"
+- **How Many People**:
+  - Old: "-26.3773967785999"
+  - New: "27.8070623781904"
+- **Structure of Backyard Dwelling**:
+  - Old: "-26.377403"
+  - New: "27.807082"
+- **Consent Form**:
+  - Old: "27.807082"
+  - New: "2.1"
+- **House Number**:
+  - Old: "2.1"
+  - New: "ftlawhh15@fibertime.com"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "ftlawhh15@fibertime.com"
+  - New: "2025-05-29 16:24:46.413173+02"
+- **Preferred Place for Router Installation in Home**:
+  - Old: "2025-05-29 16:24:46.413173+02"
+  - New: ""
+
+#### 44. Property ID: 278663
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "105006758"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "5284 KABELO STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+  - New: "309 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **lst_mod_dt**:
+  - Old: "2025-05-30 10:53:03.756059+02"
+  - New: "2025-06-02 18:09:34.193808+02"
+
+#### 45. Property ID: 278632
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "105006757"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "5285 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+  - New: "307 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB"
+- **lst_mod_dt**:
+  - Old: "2025-05-30 10:46:05.682543+02"
+  - New: "2025-06-02 18:09:33.713596+02"
+
+#### 46. Property ID: 278547
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "105007538"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "6294 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "278 SIMELANI AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_dt**:
+  - Old: "2025-05-30 10:28:55.520684+02"
+  - New: "2025-06-02 18:09:31.857941+02"
+
+#### 47. Property ID: 276890
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "110978"
+- **Location Address**:
+  - Old: "6483 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "LOUIS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.378311564132364"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "27.806604308609383]"
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-05-29 15:00:14.716595+02"
+  - New: "ftlawhh14@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/05/29 15:00:13.827"
+  - New: "2025-05-30 17:23:03.507631+02"
+- **Pole Number**:
+  - Old: "LAW.P.D871"
+  - New: "2025/05/29 15:00:13.827"
+- **Drop Number**:
+  - Old: ""
+  - New: "LAW.P.D871"
+- **Language**:
+  - Old: "English"
+  - New: ""
+- **Survey Date**:
+  - Old: "2025/05/29 15:00:13.827"
+  - New: "English"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/05/29 15:00:13.827"
+- **Address Validation**:
+  - Old: "6523"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "6523"
+- **Latitude & Longitude**:
+  - Old: "LENASIA"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "6483"
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: "-26.378311564132364"
+  - New: "6483"
+- **Special Conditions (if any)**:
+  - Old: "27.806604308609383"
+  - New: "-26.378311564132364"
+- **Field Agent Name (pole permission)**:
+  - Old: "As the person signing this form"
+  - New: "27.806604308609383"
+- **Date of Signature**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "As the person signing this form"
+- **Latitude**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Longitude**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "and prior to the transfer of any title in the property"
+- **Last Modified Pole Permissions By**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Last Modified Pole Permissions Date**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Access to Property**:
+  - Old: "abanik’inkonzo"
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Declined**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "abanik’inkonzo"
+- **if Yes**:
+  - Old: "-26.3783115641324"
+  - New: "2025/05/29"
+- **Reason Why it was Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Primary House of Backyard Dwelling**:
+  - Old: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Number of People Living in the Home**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Residential or Commercial Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **How do you access internet at your home currently?**:
+  - Old: "Tenant"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Backyard Dwellings**:
+  - Old: ""
+  - New: "Tenant"
+- **If Yes**:
+  - Old: "-26.37848"
+  - New: "27.8066043086094"
+- **How Many Dwellings**:
+  - Old: "2025/05/29"
+  - New: "Yolanda"
+- **How Many People**:
+  - Old: "27.8066043086094"
+  - New: "-26.3783115641324"
+- **Structure of Backyard Dwelling**:
+  - Old: "27.806479"
+  - New: "-26.37848"
+- **Consent Form**:
+  - Old: "22.5"
+  - New: "27.806479"
+- **House Number**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "22.5"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "2025-05-29 15:00:13.826654+02"
+  - New: "ftlawhh14@fibertime.com"
+- **Preferred Place for Router Installation in Home**:
+  - Old: ""
+  - New: "2025-05-29 15:00:13.826654+02"
+
+#### 48. Property ID: 278509
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "110978"
+- **Location Address**:
+  - Old: "6406 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "LOUIS STREET LAWLEY ESTATE LENASIA 1824 GT 79800008 JHB [-26.378040400296737"
+- **Actual Device Location (Latitude)**:
+  - Old: ""
+  - New: "27.805679967594457]"
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: ""
+- **lst_mod_dt**:
+  - Old: "2025-05-30 10:22:12.140045+02"
+  - New: "ftlawhh14@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025/05/30 10:22:10.576"
+  - New: "2025-05-30 17:23:09.512007+02"
+- **Pole Number**:
+  - Old: "LAW.P.B192"
+  - New: "2025/05/30 10:22:10.576"
+- **Drop Number**:
+  - Old: ""
+  - New: "LAW.P.B192"
+- **Language**:
+  - Old: "English"
+  - New: ""
+- **Survey Date**:
+  - Old: "2025/05/30 10:22:10.576"
+  - New: "English"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: ""
+  - New: "2025/05/30 10:22:10.576"
+- **Address Validation**:
+  - Old: "6406"
+  - New: ""
+- **Stand Number**:
+  - Old: "LAWLEY ESTATE"
+  - New: "6406"
+- **Latitude & Longitude**:
+  - Old: "LENASIA"
+  - New: "LAWLEY ESTATE"
+- **CONSENT TO PLANT A POLE**:
+  - Old: "1824"
+  - New: "LENASIA"
+- **ISIVUMELWANO SOKUTYALWA KWEPALI**:
+  - Old: "6406"
+  - New: "1824"
+- **Owner or Tenant**:
+  - Old: "-26.378040400296737"
+  - New: "6406"
+- **Special Conditions (if any)**:
+  - Old: "27.805679967594457"
+  - New: "-26.378040400296737"
+- **Field Agent Name (pole permission)**:
+  - Old: "As the person signing this form"
+  - New: "27.805679967594457"
+- **Date of Signature**:
+  - Old: "I warrant that I am the authorized representative of the above-mentioned property"
+  - New: "As the person signing this form"
+- **Latitude**:
+  - Old: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+  - New: "I warrant that I am the authorized representative of the above-mentioned property"
+- **Longitude**:
+  - Old: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+  - New: "and I hereby consent to allow Fibertime Networks (Pty) Ltd and/or IIP1 (Pty) Ltd and/or the “Fibertime Group” (“the Company/ies”) and including its affiliates"
+- **Pole Permissions - Actual Device Location (Latitude)**:
+  - Old: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+  - New: "service providers and contractors authorised by it to plant a pole (s) in the property listed above and attend to any civil works necessary to do so and/or consequent thereto. I acknowledge that the pole and any equipment attached/installed thereon will remain the property of Fibertime Networks (Pty) Ltd / IIP1 (Pty) Ltd / Fibertime Group. I understand that from time to time either of the above Company/ies or persons may require access to the pole which access will be by prior arrangement with me as the person signing this consent form and/or any other person so authorized by me"
+- **Pole Permissions - Actual Device Location (Longitude)**:
+  - Old: "and prior to the transfer of any title in the property"
+  - New: "or any successor in title to the property or any other person who subsequently and by substitution enters into a new consent form in respect of the above property.  I hereby consent and confirm that such access shall not be unreasonably withheld. I confirm and undertake to notify any successor in title of this consent"
+- **Pole Permissions - Distance between Actual and Captured Point**:
+  - Old: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+  - New: "and prior to the transfer of any title in the property"
+- **Last Modified Pole Permissions By**:
+  - Old: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+  - New: "shall also notify the Company/ies of the identity of the successor.  I further understand that I as the authorized representative and any persons residing or visiting the property"
+- **Last Modified Pole Permissions Date**:
+  - Old: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+  - New: "will not hold the Company/ies liable nor shall they have any claims against the Company/ies for whatsoever nature arising from the installation of the pole in the property and/or any loss or damage that results from any installation done at the property by Fibertime Networks (Pty) Ltd or any of the aforesaid companies/persons and I understand that neither I nor anyone at the property may tamper with the equipment attached and installed to the pole nor may I or anyone else use the pole for any other purpose."
+- **Access to Property**:
+  - Old: "abanik’inkonzo"
+  - New: "Ndiyagunyazisa ukuba ndingogunyazisiweyo ukuba amele esi sakhiwo sichaziweyo ngasentla kwaye ndinegunya lokutyikitya uxwebhu olugunyazisa isivumelwano sokungena kwesi sakhiwo. Ndiyayivumela I Fiber time Networks (Pty) Ltd okanye IIP 1 (Pty) Ltd ne/okanye “Fibertime Group” (Inkampani/Iinkampani”) kunye / okanye namahlakani ayo"
+- **Declined**:
+  - Old: "ono kontraka abagunyaziswe yiyo"
+  - New: "abanik’inkonzo"
+- **if Yes**:
+  - Old: "-26.3780404002967"
+  - New: "2025/05/30"
+- **Reason Why it was Declined**:
+  - Old: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+  - New: "ukuba batyale ipali/iipali kwisakhiwo esikhankanyiweyo ngasentla yaye ndenze nawuphi umsebenzi oyimfuneko  kwaye okanye neziphumo zawo. Ndiyavuma ukuba ipali naso nasiphi isixhobo esoyanyaniswe/esifakiweyo sakuhlala siyimpahla ye Fibertime Networks (Pty) Ltd/IIP1 (Pty) Ltd Group. Ndiyayiqonda eyokuba nangaliphi ixesha le nkampani ikhankanywe ngasentla okanye abantu bangafuna imvume yokuya kule pali"
+- **Primary House of Backyard Dwelling**:
+  - Old: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+  - New: "mvume leyo iyakuba luhlengahlengiso olwenziwe kwangaphambili nam njengomntu otyikitya oluxwebhu lwesivumelwano okanye nabani na ogunyaziswe ndim"
+- **Number of People Living in the Home**:
+  - Old: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+  - New: "okanye umnini olandelayo wesakhiwo okanye nokuba ngubani ongena kwesivumelwano emva koko malunga nesakhiwo. Ngoko ndiyavuma kwaye ndiyaqinisekisa ngemvume ekumila kunjalo ukuba ayiyikuthintelwa ngokungaqiqwanga. Ndiyaqinisekisa kwaye ndizokwazisa nabani osegunyeni elisemthethweni lesi sivumelwano"
+- **Residential or Commercial Dwelling**:
+  - Old: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+  - New: "kwaye phambi kokugqithiselwa kobunini besakhiwo"
+- **Mark Type of Commercial if Applicable**:
+  - Old: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+  - New: "ndizoyazisa inkampani/iinkampani ngosemagunyeni olandelayo. Ngoko ke njengamntu usemagunyeni okumela nabani na ohlala okanye otyelela esi sakhiwo"
+- **How do you access internet at your home currently?**:
+  - Old: "Tenant"
+  - New: "andizunika inkampani okanye iinkampani uxanduva nokuba xa benganamabango ngakwezinkampani malunga nayo nantoni na engaqhambuka xa bekutyalwa ipali kwesi sakhiwo okanye nakuphi na ukungahambi kakuhle kofakelo lwesixhobo kwaye / okanye ilahleko okanye umonakalo oziziphumo zalo naluphi na ufakelo olwenziwe kwisakhiwo yiNkampani/iinkampani okanye nayiphi inkampani /abantu abakhankanyiweyo okanye nakuphi ukusetyenziswa ngoko yaye ndiyakuqonda ukuba nokuba ndim okanye nawuphi na umntu kwisakhiwo ongaphazamisa isixhobo esoyanyiswe nesifakwe kule pali nokuba mna okanye omnye umntu angasebenzisa le pali kwezinye injongo."
+- **Backyard Dwellings**:
+  - Old: ""
+  - New: "Tenant"
+- **If Yes**:
+  - Old: "-26.378137"
+  - New: "27.8056799675945"
+- **How Many Dwellings**:
+  - Old: "2025/05/30"
+  - New: "Yolanda"
+- **How Many People**:
+  - Old: "27.8056799675945"
+  - New: "-26.3780404002967"
+- **Structure of Backyard Dwelling**:
+  - Old: "27.805933"
+  - New: "-26.378137"
+- **Consent Form**:
+  - Old: "27.4"
+  - New: "27.805933"
+- **House Number**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "27.4"
+- **I hereby consent that I have a permanent Municipal electrical c**:
+  - Old: "2025-05-30 10:22:10.575885+02"
+  - New: "ftlawhh14@fibertime.com"
+- **Preferred Place for Router Installation in Home**:
+  - Old: ""
+  - New: "2025-05-30 10:22:10.575885+02"
+
+#### 49. Property ID: 278201
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "105006207"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "6437 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "12 MAKWARELA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_dt**:
+  - Old: "2025-05-30 09:28:35.884221+02"
+  - New: "2025-06-02 15:00:14.048462+02"
+
+#### 50. Property ID: 278266
+
+- **1map NAD ID**:
+  - Old: ""
+  - New: "105006208"
+- **Site**:
+  - Old: "Lawley"
+  - New: "LAW"
+- **Location Address**:
+  - Old: "6435 LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+  - New: "16 MAKWARELA STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
+- **lst_mod_dt**:
+  - Old: "2025-05-30 09:37:48.235891+02"
+  - New: "2025-06-02 15:00:15.519662+02"
+
+
+*... and 108 more changes*
+
+## Change Log Reference
+
+Full change details saved to: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/data/change-logs/changes_2025-06-02_FIXED.json
+
+## Column Alignment Fix
+
+This version ensures all records are normalized to the master column schema,
+preventing data from appearing in wrong columns during aggregation.

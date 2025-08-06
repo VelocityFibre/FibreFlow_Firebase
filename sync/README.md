@@ -1,31 +1,44 @@
 # FibreFlow Sync Module
 
+## 🚨 CRITICAL UPDATE - August 4, 2025
+
+### NEW SYNC STRATEGY: Full Status History Tracking
+- **USE**: `sync-full-status-history-v2.js` ✅
+- **DO NOT USE**: Old scripts (archived) ❌
+- **See**: `docs/SYNC_STRATEGY_UPDATE_2025-08-04.md` for details
+
+### What Changed:
+- **Before**: Only synced "Approved" status (snapshot)
+- **Now**: Syncs ALL status changes from approval onwards (full timeline)
+- **Benefit**: Complete lifecycle visibility in production
+
 ## Overview
 
-This module synchronizes pole and drop data from the `vf-onemap-data` staging database to the `fibreflow-73daf` production database with full status history tracking.
+This module synchronizes pole and drop data from the `vf-onemap-data` staging database to the `fibreflow-73daf` production database with COMPLETE status history tracking from approval through installation.
 
 ## Quick Start
 
-### 1. Test Database Connections
+### 1. Test Full History Sync (3 poles)
 ```bash
 cd sync
-npm run test:connection
+node scripts/test-full-history-sync-v2.js
 ```
 
-### 2. Run Test Sync (5 records)
+### 2. Run Full Status History Sync
 ```bash
-node scripts/test-sync-corrected.js
+# This syncs ALL 2,806 approved poles with complete history
+node scripts/sync-full-status-history-v2.js
 ```
 
-### 3. Run Sync with Status History
+### 3. Monitor Progress
 ```bash
-node scripts/sync-with-status-history.js
+# In another terminal
+node scripts/monitor-sync.js
 ```
 
 ### 4. Verify Results
 ```bash
-node scripts/verify-sync.js
-node scripts/verify-status-history.js
+node scripts/verify-all-approved-synced.js
 ```
 
 ## How It Works

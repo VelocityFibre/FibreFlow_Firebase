@@ -12,6 +12,7 @@ export interface PoleReport {
   summary: {
     totalRecords: number;
     totalDrops: number;
+    totalProperties?: number;
     addresses: string[];
     statusCounts: Record<string, number>;
     firstAppearance?: string;
@@ -22,6 +23,7 @@ export interface PoleReport {
   timeline: PoleTimelineEvent[];
   drops: ConnectedDrop[];
   agents: AgentActivity[];
+  properties?: ConnectedProperty[]; // New: list of connected properties
 
   dataQuality?: DataQualityIssue[];
   gpsCoordinates?: GPSCoordinate[];
@@ -46,6 +48,18 @@ export interface ConnectedDrop {
   primaryAgent?: string;
   status: string;
   properties: number;
+}
+
+export interface ConnectedProperty {
+  propertyId: string;
+  address: string;
+  drop?: string;
+  status: string;
+  agent: string;
+  workflow?: string;
+  firstSeen: string;
+  lastUpdated: string;
+  records: any[];
 }
 
 export interface AgentActivity {

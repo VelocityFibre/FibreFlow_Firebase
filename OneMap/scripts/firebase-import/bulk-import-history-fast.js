@@ -11,7 +11,7 @@ const path = require('path');
 const readline = require('readline');
 
 // Initialize Firebase Admin
-const serviceAccount = require('../credentials/vf-onemap-service-account.json');
+const serviceAccount = require('../../credentials/vf-onemap-service-account.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -84,7 +84,7 @@ async function importCSVWithHistoryFast(csvFileName) {
   try {
     console.log('🚀 Fast import with status history tracking...\n');
     
-    const csvPath = path.join(__dirname, '../downloads', csvFileName);
+    const csvPath = path.join(__dirname, '../../downloads', csvFileName);
     const records = await parseCSV(csvPath);
     
     console.log(`📊 Found ${records.length} records to import\n`);

@@ -262,7 +262,36 @@ This matrix defines clear boundaries and responsibilities for each specialized a
 
 ---
 
-## 10. Agent Manager
+## 10. OneMap SQL Agent
+
+### Owns:
+- SQL database operations for OneMap data
+- DuckDB and SQLite database management
+- Complex analytical queries
+- Performance optimization for large datasets
+- Status change tracking queries
+- Date progression analysis
+- Cross-table joins and aggregations
+- Data export to various formats
+
+### NOT Responsible For:
+- CSV import processes (use OneMap Data Agent)
+- Firebase operations
+- UI implementation
+- Data validation rules
+- Security implementation
+- Real-time data synchronization
+- Non-SQL data sources
+
+### Delegates To:
+- **OneMap Data Agent**: For CSV imports and initial processing
+- **Data Integrity Guardian**: For validation before SQL operations
+- **Firebase Backend Expert**: For syncing results to Firebase
+- **Report Generator**: For formatted report creation
+
+---
+
+## 11. Agent Manager
 
 ### Owns:
 - Agent coordination and orchestration

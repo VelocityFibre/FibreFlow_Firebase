@@ -14,6 +14,10 @@
 // This makes all theme mixins available with their original names
 @forward './theme-mixins';
 
+// Forward spacing functions for use in components (excluding conflicting ff-transition)
+// This makes ff-spacing(), ff-font-size(), etc. available
+@forward './spacing' hide ff-transition;
+
 // =============================================================================
 // COMPONENT THEMING GUIDE
 // =============================================================================

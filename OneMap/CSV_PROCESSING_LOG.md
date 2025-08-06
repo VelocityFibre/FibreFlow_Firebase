@@ -33,13 +33,20 @@
 | July 2, 2025 | Lawley July Week 1 02072025.csv | 2025-01-31 | 9911 | 888* | TBD |
 | July 3, 2025 | Lawley July Week 1 03072025.csv | 2025-01-31 | 11156 | 1247* | TBD |
 | July 7, 2025 | Lawley July Week 2 07072025.csv | 2025-01-31 | 13141 | 1966* | TBD |
+| July 8, 2025 | Lawley July Week 2 08072025.csv | 2025-02-01 | 14148 | 169 | 921 |
+| July 11, 2025 | Lawley July Week 2 11072025.csv | 2025-02-01 | 0** | 0 | 0 |
+| July 14, 2025 | Lawley July Week 3 14072025.csv | 2025-02-01 | 15492 | 1354 | 143 |
+| July 15, 2025 | Lawley July Week 3 15072025.csv | 2025-02-01 | 15503 | 0*** | 83 |
+| July 16, 2025 | Lawley July Week 3 16072025.csv | 2025-02-01 | 15628 | 129 | 27 |
+| July 17, 2025 | Lawley July Week 3 17072025.csv | 2025-02-01 | 15693 | 69 | 56 |
+| July 18, 2025 | Lawley July Week 3 18072025.csv | 2025-02-01 | 15713 | 16 | 50 |
 
 ## 🚧 In Progress - June Week 3
 
-### ⚠️ June 22 Data Quality Issues
-* **Total records in file**: 11,443 (54% valid, 46% invalid due to CSV corruption)
-** **New properties**: Only from 6,223 valid records processed
-*** **Status changes**: 24 progressed to "Home Installation: In Progress"
+### ⚠️ Data Quality Issues
+* **June 22**: 11,443 total (54% valid, 46% invalid due to CSV corruption)
+** **July 11**: Old OneMap format - incompatible headers (type,name,photo vs Property ID,Status)
+*** **July 15**: Re-imported successfully - 0 new properties indicates initial import completed despite timeout
 
 **Note**: June 22 file had severe data quality issues with 5,220 records (46%) skipped due to:
 - Field shifts/column misalignment
@@ -80,3 +87,6 @@
 *Note: All imports completed with enhanced history tracking*
 *Import Script: bulk-import-history-fast.js*
 *Report Script: generate-report-with-history.js*
+| 2025/08/05 | Lawley May Week 3 22052025 - First Report.csv | 2025-08-05T11:17:44.171Z | Completed |
+| 2025/08/05 | Lawley May Week 3 22052025 - First Report.csv | 2025-08-05T15:43:27.097Z | Completed (Optimized) |
+| 2025/08/05 | Lawley May Week 3 22052025 - First Report.csv | 2025-08-05T16:07:10.196Z | Completed (Optimized) |

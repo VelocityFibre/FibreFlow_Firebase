@@ -1,0 +1,43 @@
+
+🔍 Verifying Status History for Pole: LAW.P.C654
+NaN
+
+📊 Gathering data from all sources...
+
+1️⃣ Master CSV...
+   Found 0 records in master CSV
+
+2️⃣ CSV Change Logs...
+📁 Checking 41 change log files...
+   Found 0 change entries
+
+3️⃣ Staging Database...
+   Found 3 data sources in staging
+
+4️⃣ Production Database...
+   Found 2 data sources in production
+
+NaN
+📋 COMPREHENSIVE STATUS HISTORY
+NaN
+
+💾 Staging Database:
+   Current Status:
+     Status: Pole Permission: Approved
+     Property: 239252
+   Status Changes:
+     2025-05-26: Initial → Pole Permission: Approved
+       Agent: wian, Drop: no drop allocated
+     2025-05-26: Initial → Home Installation: Declined
+       Agent: No Agent, Drop: DR1752940
+
+🚀 Production Database:
+   Current Status: Pole Permission: Approved
+   Sync Type: full-status-history-v2
+   Last Sync: 2025-08-04T10:29:04.518Z
+   Synced Status History: 2 entries
+
+NaN
+✅ VALIDATION SUMMARY
+NaN
+❌ Pole not found in master CSV

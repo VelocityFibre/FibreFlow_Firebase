@@ -27,4 +27,13 @@ export const ANALYTICS_ROUTES: Routes = [
     loadChildren: () =>
       import('./pole-permissions/pole-permissions.routes').then((m) => m.POLE_PERMISSIONS_ROUTES),
   },
+  {
+    path: 'project-progress',
+    loadComponent: () =>
+      import('./pages/project-progress-summary/project-progress-summary.component').then(
+        (m) => m.ProjectProgressSummaryComponent
+      ),
+    canActivate: [authGuard],
+    data: { title: 'Project Progress Summary' },
+  },
 ];

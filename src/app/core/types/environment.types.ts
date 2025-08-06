@@ -21,4 +21,6 @@ export interface Environment {
   production: boolean;
   firebase: FirebaseConfig;
   sentry: SentryConfig;
+  supabaseUrl?: string;
+  supabaseAnonKey?: string;
 }

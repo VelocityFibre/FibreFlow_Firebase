@@ -1,22 +1,15 @@
 # Daily Processing Report - 2025-07-16
 
 **File Processed**: Lawley July Week 3 16072025.csv
-**Processing Time**: 2025-07-24T07:28:18.206Z
+**Processing Time**: 2025-08-05T11:09:04.998Z
 
 ## Summary Statistics
 
 - **Total Records in File**: 15632
-- **Valid Records Processed**: 4754
-- **Invalid Records Skipped**: 10878
-- **New Records Added**: 4736
-- **Existing Records Updated**: 18
-- **Records Unchanged**: 0
+- **New Records Added**: 125
+- **Existing Records Updated**: 131
+- **Records Unchanged**: 15376
 - **Records Without Property ID**: 0
-
-## ⚠️ Data Quality Warning
-
-This file contained 10878 invalid records that were skipped.
-See validation report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/data/validation-logs/validation_2025-07-16_Lawley July Week 3 16072025.md
 
 ## Changes Made
 
@@ -24,933 +17,414 @@ See validation report: /home/ldp/VF/Apps/FibreFlow/OneMap/GraphAnalysis/data/val
 
 | Field | Changes Count |
 |-------|---------------|
-| lst_mod_by | 18 |
-| lst_mod_dt | 18 |
-| PONs | 17 |
-| Status | 16 |
-| Flow Name Groups | 16 |
-| date_status_changed | 16 |
-| Photo of the Handhole Before Closing | 16 |
-| Photo of the Handhole After Closing | 16 |
-| Photo Showing Location on the Wall (before installation) | 16 |
-| Length of Drop Cable | 16 |
-| Client happy with Installation | 16 |
-| Read English Terms and Conditions | 16 |
-| Read Xhosa Terms and Conditions | 16 |
-| Installer Name | 16 |
-| Home Installations - Actual Device Location (Latitude) | 16 |
-| Photo of Connection Points in the BB/Handhole (other side of jo | 15 |
-| If there are | 6 |
-| Record Relevant Comments | 4 |
-| 1map NAD ID | 3 |
-| Site | 3 |
-| Location Address | 3 |
-| Mini-UPS Serial Number | 1 |
-| Powermeter reading (at ONT before activation) | 1 |
-| Please Specify | 1 |
+| lst_mod_dt | 119 |
+| lst_mod_by | 29 |
+| date_status_changed | 17 |
+| Pole Number | 10 |
+| Survey Date | 1 |
+| CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM ( | 1 |
+| Language | 1 |
 
 ### Detailed Changes (First 50)
 
-#### 1. Property ID: 285469
+#### 1. Property ID: 291387
 
-- **Status**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **Flow Name Groups**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **PONs**:
-  - Old: "C8P15"
-  - New: "127"
-- **lst_mod_by**:
-  - Old: "ftlawhh12@fibertime.com"
-  - New: "ftlawhh7@fibertime.com"
-- **lst_mod_dt**:
-  - Old: "2025-06-03 10:58:57.914008+02"
-  - New: "2025-06-26 09:29:51.141317+02"
 - **date_status_changed**:
-  - Old: "2025/06/03 10:58:57.914"
-  - New: "2025/06/26 09:29:32.655"
-- **Photo of Connection Points in the BB/Handhole (other side of jo**:
-  - Old: ""
-  - New: "1669318"
-- **Photo of the Handhole Before Closing**:
-  - Old: ""
-  - New: "1669317"
-- **Photo of the Handhole After Closing**:
-  - Old: ""
-  - New: "1669315"
-- **Photo Showing Location on the Wall (before installation)**:
-  - Old: ""
-  - New: "1669316"
-- **If there are**:
-  - Old: ""
-  - New: "Drop cable 50m"
-- **Length of Drop Cable**:
-  - Old: ""
-  - New: "Honest (Fibertime)"
-- **Client happy with Installation**:
-  - Old: ""
-  - New: "-26.385777"
-- **Read English Terms and Conditions**:
-  - Old: ""
-  - New: "27.813756"
-- **Read Xhosa Terms and Conditions**:
-  - Old: ""
-  - New: "19.5"
-- **Installer Name**:
-  - Old: ""
-  - New: "ftlawhh7@fibertime.com"
-- **Home Installations - Actual Device Location (Latitude)**:
-  - Old: ""
-  - New: "2025-06-26 09:29:32.654957+02"
+  - Old: "ftlawhh9@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **Pole Number**:
+  - Old: "2025-06-24 12:57:47.920427+02"
+  - New: "2025-07-16 08:13:02.481298+02"
 
-#### 2. Property ID: 283857
+#### 2. Property ID: 291307
 
-- **Status**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **Flow Name Groups**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **PONs**:
-  - Old: "C8P6"
-  - New: "118"
-- **lst_mod_by**:
-  - Old: "ftlawhh12@fibertime.com"
-  - New: "ftlawhh11@fibertime.com"
-- **lst_mod_dt**:
-  - Old: "2025-06-02 15:01:59.841006+02"
-  - New: "2025-06-24 12:53:06.586712+02"
 - **date_status_changed**:
-  - Old: "2025/06/02 15:01:59.841"
-  - New: "2025/06/24 12:52:58.625"
-- **Photo of Connection Points in the BB/Handhole (other side of jo**:
-  - Old: ""
-  - New: "1655805"
-- **Photo of the Handhole Before Closing**:
-  - Old: ""
-  - New: "1655804"
-- **Photo of the Handhole After Closing**:
-  - Old: ""
-  - New: "1655801"
-- **Photo Showing Location on the Wall (before installation)**:
-  - Old: ""
-  - New: "1655803"
-- **Length of Drop Cable**:
-  - Old: ""
-  - New: "mbuyiseni fibertime"
-- **Client happy with Installation**:
-  - Old: ""
-  - New: "-26.381822"
-- **Read English Terms and Conditions**:
-  - Old: ""
-  - New: "27.81388"
-- **Read Xhosa Terms and Conditions**:
-  - Old: ""
-  - New: "7"
-- **Installer Name**:
-  - Old: ""
-  - New: "ftlawhh11@fibertime.com"
-- **Home Installations - Actual Device Location (Latitude)**:
-  - Old: ""
-  - New: "2025-06-24 12:52:58.624833+02"
+  - Old: "ftlawhh9@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **Pole Number**:
+  - Old: "2025-06-24 13:16:45.496365+02"
+  - New: "2025-07-16 08:13:02.041354+02"
 
-#### 3. Property ID: 290613
+#### 3. Property ID: 291450
 
-- **Status**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **Flow Name Groups**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **PONs**:
-  - Old: "C8P6"
-  - New: "118"
-- **lst_mod_by**:
-  - Old: "ftlawhh17@fibertime.com"
-  - New: "ftlawhh11@fibertime.com"
-- **lst_mod_dt**:
-  - Old: "2025-06-05 07:21:29.419506+02"
-  - New: "2025-06-24 08:21:15.648249+02"
 - **date_status_changed**:
-  - Old: "2025/06/05 07:21:29.420"
-  - New: "2025/06/23 16:26:14.258"
-- **Photo of Connection Points in the BB/Handhole (other side of jo**:
-  - Old: ""
-  - New: "1650945"
-- **Photo of the Handhole Before Closing**:
-  - Old: ""
-  - New: "1650942"
-- **Photo of the Handhole After Closing**:
-  - Old: ""
-  - New: "1650943"
-- **Photo Showing Location on the Wall (before installation)**:
-  - Old: ""
-  - New: "1649641"
-- **Length of Drop Cable**:
-  - Old: ""
-  - New: "Mbuyiseni(fibertime)"
-- **Client happy with Installation**:
-  - Old: ""
-  - New: "-26.38153"
-- **Read English Terms and Conditions**:
-  - Old: ""
-  - New: "27.814708"
-- **Read Xhosa Terms and Conditions**:
-  - Old: ""
-  - New: "25.5"
-- **Installer Name**:
-  - Old: ""
-  - New: "ftlawhh11@fibertime.com"
-- **Home Installations - Actual Device Location (Latitude)**:
-  - Old: ""
-  - New: "2025-06-23 16:26:14.258335+02"
+  - Old: "ftlawhh9@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **Pole Number**:
+  - Old: "2025-06-24 15:55:47.854614+02"
+  - New: "2025-07-16 08:13:02.714453+02"
 
-#### 4. Property ID: 283704
+#### 4. Property ID: 291543
 
-- **Status**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **Flow Name Groups**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **PONs**:
-  - Old: "C11P16"
-  - New: "176"
 - **lst_mod_by**:
-  - Old: "ftlawhh12@fibertime.com"
-  - New: "ftlawhh11@fibertime.com"
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
 - **lst_mod_dt**:
-  - Old: "2025-06-02 15:00:27.616826+02"
-  - New: "2025-06-25 11:08:03.146076+02"
-- **date_status_changed**:
-  - Old: "2025/06/02 15:00:27.617"
-  - New: "2025/06/25 11:07:59.019"
-- **Photo of Connection Points in the BB/Handhole (other side of jo**:
-  - Old: ""
-  - New: "1662861"
-- **Photo of the Handhole Before Closing**:
-  - Old: ""
-  - New: "1662860"
-- **Photo of the Handhole After Closing**:
-  - Old: ""
-  - New: "1662857"
-- **Photo Showing Location on the Wall (before installation)**:
-  - Old: ""
-  - New: "1662858"
-- **Length of Drop Cable**:
-  - Old: ""
-  - New: "mbuyiseni fibertime"
-- **Client happy with Installation**:
-  - Old: ""
-  - New: "-26.381798"
-- **Read English Terms and Conditions**:
-  - Old: ""
-  - New: "27.810075"
-- **Read Xhosa Terms and Conditions**:
-  - Old: ""
-  - New: "15.8"
-- **Installer Name**:
-  - Old: ""
-  - New: "ftlawhh11@fibertime.com"
-- **Home Installations - Actual Device Location (Latitude)**:
-  - Old: ""
-  - New: "2025-06-25 11:07:59.019241+02"
+  - Old: "2025-06-05 10:44:32.390584+02"
+  - New: "2025-07-16 08:13:03.859418+02"
 
-#### 5. Property ID: 286787
+#### 5. Property ID: 291524
 
-- **Status**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **Flow Name Groups**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **PONs**:
-  - Old: "C12P11"
-  - New: "187"
 - **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "2025-06-05 10:40:31.43663+02"
+  - New: "2025-07-16 08:13:03.259333+02"
+
+#### 6. Property ID: 303889
+
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "2025-06-11 15:20:40.300776+02"
+  - New: "2025-07-16 08:13:09.439321+02"
+
+#### 7. Property ID: 304059
+
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "2025-06-11 15:47:47.493996+02"
+  - New: "2025-07-16 08:13:10.287176+02"
+
+#### 8. Property ID: 304039
+
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "2025-06-11 15:43:11.881028+02"
+  - New: "2025-07-16 08:13:10.022335+02"
+
+#### 9. Property ID: 304344
+
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "2025-06-11 17:24:11.810176+02"
+  - New: "2025-07-16 08:13:12.350359+02"
+
+#### 10. Property ID: 304274
+
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "2025-06-11 16:47:53.277701+02"
+  - New: "2025-07-16 08:13:11.838201+02"
+
+#### 11. Property ID: 304238
+
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "2025-06-11 16:30:36.699929+02"
+  - New: "2025-07-16 08:13:11.674291+02"
+
+#### 12. Property ID: 304161
+
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "2025-06-11 16:13:02.461131+02"
+  - New: "2025-07-16 08:13:11.259623+02"
+
+#### 13. Property ID: 314807
+
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "2025-06-18 12:03:34.036231+02"
+  - New: "2025-07-16 08:13:15.240568+02"
+
+#### 14. Property ID: 314837
+
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "2025-06-18 12:09:44.390526+02"
+  - New: "2025-07-16 08:13:17.097313+02"
+
+#### 15. Property ID: 314891
+
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "2025-06-18 12:22:08.171492+02"
+  - New: "2025-07-16 08:13:18.036049+02"
+
+#### 16. Property ID: 314881
+
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "2025-06-18 12:18:15.238018+02"
+  - New: "2025-07-16 08:13:17.775033+02"
+
+#### 17. Property ID: 314758
+
+- **lst_mod_by**:
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **lst_mod_dt**:
+  - Old: "2025-06-18 11:51:14.0173+02"
+  - New: "2025-07-16 08:13:13.845087+02"
+
+#### 18. Property ID: 314766
+
+- **Survey Date**:
   - Old: "ftlawhh13@fibertime.com"
-  - New: "ftlawhh6@fibertime.com"
-- **lst_mod_dt**:
-  - Old: "2025-06-03 14:40:33.386483+02"
-  - New: "2025-06-22 17:41:19.265205+02"
-- **date_status_changed**:
-  - Old: "2025/06/03 14:40:33.386"
-  - New: "2025/06/22 17:41:12.133"
-- **Photo of Connection Points in the BB/Handhole (other side of jo**:
-  - Old: ""
-  - New: "1643431"
-- **Photo of the Handhole Before Closing**:
-  - Old: ""
-  - New: "1643430"
-- **Photo of the Handhole After Closing**:
-  - Old: ""
-  - New: "1643428"
-- **Photo Showing Location on the Wall (before installation)**:
-  - Old: ""
-  - New: "1643427"
-- **Length of Drop Cable**:
-  - Old: ""
-  - New: "Mpumii"
-- **Client happy with Installation**:
-  - Old: ""
-  - New: "-26.385517"
-- **Read English Terms and Conditions**:
-  - Old: ""
-  - New: "27.803474"
-- **Read Xhosa Terms and Conditions**:
-  - Old: ""
-  - New: "7.1"
-- **Installer Name**:
-  - Old: ""
-  - New: "ftlawhh6@fibertime.com"
-- **Home Installations - Actual Device Location (Latitude)**:
-  - Old: ""
-  - New: "2025-06-22 17:41:12.13281+02"
+  - New: "ftlawhh49@fibertime.com"
+- **CONSENT FORM PERSONAL DETAILS OF THE PERSON SIGNING THIS FORM (**:
+  - Old: "2025-07-08 10:26:45.314646+02"
+  - New: "2025-07-16 08:13:14.170519+02"
 
-#### 6. Property ID: 286753
+#### 19. Property ID: 304307
 
-- **Status**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **Flow Name Groups**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **PONs**:
-  - Old: "C12P10"
-  - New: "186"
 - **lst_mod_by**:
-  - Old: "ftlawhh13@fibertime.com"
-  - New: "ftlawhh7@fibertime.com"
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
 - **lst_mod_dt**:
-  - Old: "2025-06-03 14:39:59.176162+02"
-  - New: "2025-06-21 15:09:35.685934+02"
-- **date_status_changed**:
-  - Old: "2025/06/03 14:39:59.176"
-  - New: "2025/06/21 15:08:51.736"
-- **Photo of Connection Points in the BB/Handhole (other side of jo**:
-  - Old: ""
-  - New: "1638726"
-- **Photo of the Handhole Before Closing**:
-  - Old: ""
-  - New: "1638714"
-- **Photo of the Handhole After Closing**:
-  - Old: ""
-  - New: "1638724"
-- **Photo Showing Location on the Wall (before installation)**:
-  - Old: ""
-  - New: "1638712"
-- **Record Relevant Comments**:
-  - Old: ""
-  - New: "1638723"
-- **If there are**:
-  - Old: ""
-  - New: "Drop cable 50m"
-- **Length of Drop Cable**:
-  - Old: ""
-  - New: "Honest"
-- **Client happy with Installation**:
-  - Old: ""
-  - New: "-26.384033"
-- **Read English Terms and Conditions**:
-  - Old: ""
-  - New: "27.805672"
-- **Read Xhosa Terms and Conditions**:
-  - Old: ""
-  - New: "14"
-- **Installer Name**:
-  - Old: ""
-  - New: "ftlawhh7@fibertime.com"
-- **Home Installations - Actual Device Location (Latitude)**:
-  - Old: ""
-  - New: "2025-06-21 15:08:51.736426+02"
+  - Old: "2025-06-11 17:07:50.322491+02"
+  - New: "2025-07-16 08:13:11.989168+02"
 
-#### 7. Property ID: 286704
+#### 20. Property ID: 314761
 
-- **Status**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **Flow Name Groups**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **PONs**:
-  - Old: "C12P9"
-  - New: "185"
 - **lst_mod_by**:
-  - Old: "ftlawhh13@fibertime.com"
-  - New: "ftlawhh11@fibertime.com"
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
 - **lst_mod_dt**:
-  - Old: "2025-06-03 14:39:33.121909+02"
-  - New: "2025-06-25 16:34:18.981077+02"
-- **date_status_changed**:
-  - Old: "2025/06/03 14:39:33.122"
-  - New: "2025/06/25 16:34:12.539"
-- **Photo of Connection Points in the BB/Handhole (other side of jo**:
-  - Old: ""
-  - New: "1667251"
-- **Photo of the Handhole Before Closing**:
-  - Old: ""
-  - New: "1667248"
-- **Photo of the Handhole After Closing**:
-  - Old: ""
-  - New: "1667246"
-- **Photo Showing Location on the Wall (before installation)**:
-  - Old: ""
-  - New: "1667247"
-- **Length of Drop Cable**:
-  - Old: ""
-  - New: "mbuyiseni fibertime"
-- **Client happy with Installation**:
-  - Old: ""
-  - New: "-26.383492"
-- **Read English Terms and Conditions**:
-  - Old: ""
-  - New: "27.807935"
-- **Read Xhosa Terms and Conditions**:
-  - Old: ""
-  - New: "4.4"
-- **Installer Name**:
-  - Old: ""
-  - New: "ftlawhh11@fibertime.com"
-- **Home Installations - Actual Device Location (Latitude)**:
-  - Old: ""
-  - New: "2025-06-25 16:34:12.53903+02"
+  - Old: "2025-06-18 11:52:13.5875+02"
+  - New: "2025-07-16 08:13:14.02916+02"
 
-#### 8. Property ID: 242951
+#### 21. Property ID: 314690
 
-- **1map NAD ID**:
-  - Old: ""
-  - New: "105008042"
-- **Status**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **Flow Name Groups**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **Site**:
-  - Old: "LAWLEY"
-  - New: "LAW"
-- **PONs**:
-  - Old: "C8P12"
-  - New: "124"
-- **Location Address**:
-  - Old: "7886 THIRD AVENUE LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
-  - New: "9 NGUNGUNYANE STREET LAWLEY ESTATE LENASIA 1824 GT 79800121 JHB"
 - **lst_mod_by**:
-  - Old: "ftlawhh2@fibertime.com"
-  - New: "ftlawhh6@fibertime.com"
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
 - **lst_mod_dt**:
-  - Old: "2025-04-29 14:29:04.859632+02"
-  - New: "2025-06-22 08:30:20.412581+02"
-- **date_status_changed**:
-  - Old: "2025/04/29 14:29:04.860"
-  - New: "2025/06/22 08:30:12.592"
-- **Photo of Connection Points in the BB/Handhole (other side of jo**:
-  - Old: ""
-  - New: "1639795"
-- **Photo of the Handhole Before Closing**:
-  - Old: ""
-  - New: "1639793"
-- **Photo of the Handhole After Closing**:
-  - Old: ""
-  - New: "1639792"
-- **Photo Showing Location on the Wall (before installation)**:
-  - Old: ""
-  - New: "1639791"
-- **Mini-UPS Serial Number**:
-  - Old: ""
-  - New: "1639794"
-- **Powermeter reading (at ONT before activation)**:
-  - Old: ""
-  - New: "No"
-- **Please Specify**:
-  - Old: ""
-  - New: "Yes"
-- **Length of Drop Cable**:
-  - Old: ""
-  - New: "Mpumii"
-- **Client happy with Installation**:
-  - Old: ""
-  - New: "-26.383281"
-- **Read English Terms and Conditions**:
-  - Old: ""
-  - New: "27.810963"
-- **Read Xhosa Terms and Conditions**:
-  - Old: ""
-  - New: "17.7"
-- **Installer Name**:
-  - Old: ""
-  - New: "ftlawhh6@fibertime.com"
-- **Home Installations - Actual Device Location (Latitude)**:
-  - Old: ""
-  - New: "2025-06-22 08:30:12.591564+02"
+  - Old: "2025-06-18 11:38:06.023565+02"
+  - New: "2025-07-16 08:13:13.132809+02"
 
-#### 9. Property ID: 293025
+#### 22. Property ID: 314457
 
-- **Status**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **Flow Name Groups**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **PONs**:
-  - Old: "C8P7"
-  - New: "119"
 - **lst_mod_by**:
-  - Old: "ftlawhh15@fibertime.com"
-  - New: "ftlawhh11@fibertime.com"
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
 - **lst_mod_dt**:
-  - Old: "2025-06-05 16:08:12.759299+02"
-  - New: "2025-06-27 11:01:40.47147+02"
-- **date_status_changed**:
-  - Old: "2025/06/05 16:08:12.759"
-  - New: "2025/06/27 11:01:35.544"
-- **Photo of Connection Points in the BB/Handhole (other side of jo**:
-  - Old: ""
-  - New: "1678003"
-- **Photo of the Handhole Before Closing**:
-  - Old: ""
-  - New: "1678002"
-- **Photo of the Handhole After Closing**:
-  - Old: ""
-  - New: "1678000"
-- **Photo Showing Location on the Wall (before installation)**:
-  - Old: ""
-  - New: "1678001"
-- **Length of Drop Cable**:
-  - Old: ""
-  - New: "mbuyiseni fibertime"
-- **Client happy with Installation**:
-  - Old: ""
-  - New: "-26.382773"
-- **Read English Terms and Conditions**:
-  - Old: ""
-  - New: "27.811814"
-- **Read Xhosa Terms and Conditions**:
-  - Old: ""
-  - New: "7"
-- **Installer Name**:
-  - Old: ""
-  - New: "ftlawhh11@fibertime.com"
-- **Home Installations - Actual Device Location (Latitude)**:
-  - Old: ""
-  - New: "2025-06-27 11:01:35.543808+02"
+  - Old: "2025-06-18 10:56:56.807983+02"
+  - New: "2025-07-16 08:13:12.778689+02"
 
-#### 10. Property ID: 293400
+#### 23. Property ID: 314639
 
-- **Status**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **Flow Name Groups**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **PONs**:
-  - Old: "C8P12"
-  - New: "124"
 - **lst_mod_by**:
-  - Old: "ftlawhh15@fibertime.com"
-  - New: "ftlawhh10@fibertime.com"
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
 - **lst_mod_dt**:
-  - Old: "2025-06-06 07:59:34.654631+02"
-  - New: "2025-06-25 15:36:42.601519+02"
-- **date_status_changed**:
-  - Old: "2025/06/06 07:59:34.655"
-  - New: "2025/06/25 15:36:38.229"
-- **Photo of Connection Points in the BB/Handhole (other side of jo**:
-  - Old: ""
-  - New: "1666447"
-- **Photo of the Handhole Before Closing**:
-  - Old: ""
-  - New: "1666446"
-- **Photo of the Handhole After Closing**:
-  - Old: ""
-  - New: "1666444"
-- **Photo Showing Location on the Wall (before installation)**:
-  - Old: ""
-  - New: "1666445"
-- **Length of Drop Cable**:
-  - Old: ""
-  - New: "Masin(fibretime)"
-- **Client happy with Installation**:
-  - Old: ""
-  - New: "-26.383525"
-- **Read English Terms and Conditions**:
-  - Old: ""
-  - New: "27.81086"
-- **Read Xhosa Terms and Conditions**:
-  - Old: ""
-  - New: "36.8"
-- **Installer Name**:
-  - Old: ""
-  - New: "ftlawhh10@fibertime.com"
-- **Home Installations - Actual Device Location (Latitude)**:
-  - Old: ""
-  - New: "2025-06-25 15:36:38.228935+02"
+  - Old: "2025-06-18 11:27:47.934928+02"
+  - New: "2025-07-16 08:13:13.010041+02"
 
-#### 11. Property ID: 291407
+#### 24. Property ID: 314384
 
-- **Status**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **Flow Name Groups**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **PONs**:
-  - Old: "C8P13"
-  - New: "125"
 - **lst_mod_by**:
-  - Old: "ftlawhh12@fibertime.com"
-  - New: "ftlawhh3@fibertime.com"
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
 - **lst_mod_dt**:
-  - Old: "2025-06-05 10:12:54.586125+02"
-  - New: "2025-06-22 10:43:27.63829+02"
-- **date_status_changed**:
-  - Old: "2025/06/05 10:12:54.586"
-  - New: "2025/06/22 10:43:22.435"
-- **Photo of Connection Points in the BB/Handhole (other side of jo**:
-  - Old: ""
-  - New: "1640589"
-- **Photo of the Handhole Before Closing**:
-  - Old: ""
-  - New: "1640590"
-- **Photo of the Handhole After Closing**:
-  - Old: ""
-  - New: "1640591"
-- **Photo Showing Location on the Wall (before installation)**:
-  - Old: ""
-  - New: "1640588"
-- **Length of Drop Cable**:
-  - Old: ""
-  - New: "Siphesihle (fibertime)"
-- **Client happy with Installation**:
-  - Old: ""
-  - New: "-26.384576"
-- **Read English Terms and Conditions**:
-  - Old: ""
-  - New: "27.811309"
-- **Read Xhosa Terms and Conditions**:
-  - Old: ""
-  - New: "1.7"
-- **Installer Name**:
-  - Old: ""
-  - New: "ftlawhh3@fibertime.com"
-- **Home Installations - Actual Device Location (Latitude)**:
-  - Old: ""
-  - New: "2025-06-22 10:43:22.434914+02"
+  - Old: "2025-06-18 10:41:54.826334+02"
+  - New: "2025-07-16 08:13:12.502283+02"
 
-#### 12. Property ID: 286636
+#### 25. Property ID: 314403
 
-- **Status**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **Flow Name Groups**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **PONs**:
-  - Old: "C8P11"
-  - New: "123"
 - **lst_mod_by**:
-  - Old: "ftlawhh13@fibertime.com"
-  - New: "ftlawhh7@fibertime.com"
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
 - **lst_mod_dt**:
-  - Old: "2025-06-03 14:38:56.103049+02"
-  - New: "2025-06-24 12:14:20.110736+02"
-- **date_status_changed**:
-  - Old: "2025/06/03 14:38:56.103"
-  - New: "2025/06/24 12:14:10.262"
-- **Photo of Connection Points in the BB/Handhole (other side of jo**:
-  - Old: ""
-  - New: "1655067"
-- **Photo of the Handhole Before Closing**:
-  - Old: ""
-  - New: "1655060"
-- **Photo of the Handhole After Closing**:
-  - Old: ""
-  - New: "1655065"
-- **Photo Showing Location on the Wall (before installation)**:
-  - Old: ""
-  - New: "1655059"
-- **Record Relevant Comments**:
-  - Old: ""
-  - New: "1655063"
-- **If there are**:
-  - Old: ""
-  - New: "Drop cable 50m"
-- **Length of Drop Cable**:
-  - Old: ""
-  - New: "Honest (Fibertime)"
-- **Client happy with Installation**:
-  - Old: ""
-  - New: "-26.384958"
-- **Read English Terms and Conditions**:
-  - Old: ""
-  - New: "27.812437"
-- **Read Xhosa Terms and Conditions**:
-  - Old: ""
-  - New: "3.1"
-- **Installer Name**:
-  - Old: ""
-  - New: "ftlawhh7@fibertime.com"
-- **Home Installations - Actual Device Location (Latitude)**:
-  - Old: ""
-  - New: "2025-06-24 12:14:10.262413+02"
+  - Old: "2025-06-18 10:46:22.489185+02"
+  - New: "2025-07-16 08:13:12.633181+02"
 
-#### 13. Property ID: 286822
+#### 26. Property ID: 292317
 
-- **Status**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **Flow Name Groups**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **PONs**:
-  - Old: "C8P13"
-  - New: "125"
 - **lst_mod_by**:
-  - Old: "ftlawhh13@fibertime.com"
-  - New: "ftlawhh7@fibertime.com"
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
 - **lst_mod_dt**:
-  - Old: "2025-06-03 14:41:00.044143+02"
-  - New: "2025-06-22 08:05:56.115644+02"
-- **date_status_changed**:
-  - Old: "2025/06/03 14:41:00.044"
-  - New: "2025/06/22 08:05:43.818"
-- **Photo of Connection Points in the BB/Handhole (other side of jo**:
-  - Old: ""
-  - New: "1639749"
-- **Photo of the Handhole Before Closing**:
-  - Old: ""
-  - New: "1639747"
-- **Photo of the Handhole After Closing**:
-  - Old: ""
-  - New: "1639745"
-- **Photo Showing Location on the Wall (before installation)**:
-  - Old: ""
-  - New: "1639746"
-- **Record Relevant Comments**:
-  - Old: ""
-  - New: "1639744"
-- **If there are**:
-  - Old: ""
-  - New: "Drop cable 50m"
-- **Length of Drop Cable**:
-  - Old: ""
-  - New: "Honest"
-- **Client happy with Installation**:
-  - Old: ""
-  - New: "-26.384651"
-- **Read English Terms and Conditions**:
-  - Old: ""
-  - New: "27.811757"
-- **Read Xhosa Terms and Conditions**:
-  - Old: ""
-  - New: "21.8"
-- **Installer Name**:
-  - Old: ""
-  - New: "ftlawhh7@fibertime.com"
-- **Home Installations - Actual Device Location (Latitude)**:
-  - Old: ""
-  - New: "2025-06-22 08:05:43.818444+02"
+  - Old: "2025-06-05 12:57:41.62722+02"
+  - New: "2025-07-16 08:13:08.21787+02"
 
-#### 14. Property ID: 286723
+#### 27. Property ID: 292383
 
-- **Status**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **Flow Name Groups**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **PONs**:
-  - Old: "C9P6"
-  - New: "134"
 - **lst_mod_by**:
-  - Old: "ftlawhh13@fibertime.com"
-  - New: "ftlawhh7@fibertime.com"
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
 - **lst_mod_dt**:
-  - Old: "2025-06-03 14:39:43.231759+02"
-  - New: "2025-06-22 09:12:18.131421+02"
-- **date_status_changed**:
-  - Old: "2025/06/03 14:39:43.232"
-  - New: "2025/06/22 09:12:06.823"
-- **Photo of Connection Points in the BB/Handhole (other side of jo**:
-  - Old: ""
-  - New: "1639894"
-- **Photo of the Handhole Before Closing**:
-  - Old: ""
-  - New: "1639892"
-- **Photo of the Handhole After Closing**:
-  - Old: ""
-  - New: "1639889"
-- **Photo Showing Location on the Wall (before installation)**:
-  - Old: ""
-  - New: "1639891"
-- **Record Relevant Comments**:
-  - Old: ""
-  - New: "1639888"
-- **If there are**:
-  - Old: ""
-  - New: "Drop cable 50m"
-- **Length of Drop Cable**:
-  - Old: ""
-  - New: "Honest"
-- **Client happy with Installation**:
-  - Old: ""
-  - New: "-26.385647"
-- **Read English Terms and Conditions**:
-  - Old: ""
-  - New: "27.811109"
-- **Read Xhosa Terms and Conditions**:
-  - Old: ""
-  - New: "15.6"
-- **Installer Name**:
-  - Old: ""
-  - New: "ftlawhh7@fibertime.com"
-- **Home Installations - Actual Device Location (Latitude)**:
-  - Old: ""
-  - New: "2025-06-22 09:12:06.822827+02"
+  - Old: "2025-06-05 13:16:16.690837+02"
+  - New: "2025-07-16 08:13:08.617608+02"
 
-#### 15. Property ID: 294693
+#### 28. Property ID: 292365
 
-- **Status**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **Flow Name Groups**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **PONs**:
-  - Old: "C9P3"
-  - New: "131"
 - **lst_mod_by**:
-  - Old: "ftlawhh12@fibertime.com"
-  - New: "ftlawhh6@fibertime.com"
+  - Old: "ftlawhh14@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
 - **lst_mod_dt**:
-  - Old: "2025-06-06 13:05:34.627933+02"
-  - New: "2025-06-22 11:11:32.455621+02"
+  - Old: "2025-06-05 13:10:38.156555+02"
+  - New: "2025-07-16 08:13:08.404501+02"
+
+#### 29. Property ID: 292248
+
 - **date_status_changed**:
-  - Old: "2025/06/06 13:05:34.628"
-  - New: "2025/06/22 11:11:28.145"
-- **Photo of the Handhole Before Closing**:
-  - Old: ""
-  - New: "1640905"
-- **Photo of the Handhole After Closing**:
-  - Old: ""
-  - New: "1640903"
-- **Photo Showing Location on the Wall (before installation)**:
-  - Old: ""
-  - New: "1640904"
-- **Length of Drop Cable**:
-  - Old: ""
-  - New: "Mpumii"
-- **Client happy with Installation**:
-  - Old: ""
-  - New: "-26.386118"
-- **Read English Terms and Conditions**:
-  - Old: ""
-  - New: "27.811227"
-- **Read Xhosa Terms and Conditions**:
-  - Old: ""
-  - New: "4180370.8"
-- **Installer Name**:
-  - Old: ""
-  - New: "ftlawhh6@fibertime.com"
-- **Home Installations - Actual Device Location (Latitude)**:
-  - Old: ""
-  - New: "2025-06-22 11:11:28.144884+02"
+  - Old: "ftlawhh3@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **Pole Number**:
+  - Old: "2025-06-24 15:35:18.268311+02"
+  - New: "2025-07-16 08:13:08.018113+02"
 
-#### 16. Property ID: 294689
+#### 30. Property ID: 329504
 
-- **Status**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **Flow Name Groups**:
-  - Old: ""
-  - New: "Home Installation: In Progress"
-- **PONs**:
-  - Old: "C8P15"
-  - New: "127"
-- **lst_mod_by**:
-  - Old: "ftlawhh12@fibertime.com"
-  - New: "ftlawhh7@fibertime.com"
-- **lst_mod_dt**:
-  - Old: "2025-06-06 13:05:31.450639+02"
-  - New: "2025-06-26 10:03:37.745857+02"
 - **date_status_changed**:
-  - Old: "2025/06/06 13:05:31.451"
-  - New: "2025/06/26 10:03:29.478"
-- **Photo of Connection Points in the BB/Handhole (other side of jo**:
-  - Old: ""
-  - New: "1669716"
-- **Photo of the Handhole Before Closing**:
-  - Old: ""
-  - New: "1669715"
-- **Photo of the Handhole After Closing**:
-  - Old: ""
-  - New: "1669718"
-- **Photo Showing Location on the Wall (before installation)**:
-  - Old: ""
-  - New: "1669717"
-- **If there are**:
-  - Old: ""
-  - New: "Drop cable 50m"
-- **Length of Drop Cable**:
-  - Old: ""
-  - New: "Honest (Fibertime)"
-- **Client happy with Installation**:
-  - Old: ""
-  - New: "-26.386384"
-- **Read English Terms and Conditions**:
-  - Old: ""
-  - New: "27.812018"
-- **Read Xhosa Terms and Conditions**:
-  - Old: ""
-  - New: "13.2"
-- **Installer Name**:
-  - Old: ""
-  - New: "ftlawhh7@fibertime.com"
-- **Home Installations - Actual Device Location (Latitude)**:
-  - Old: ""
-  - New: "2025-06-26 10:03:29.477562+02"
-
-#### 17. Property ID: 264497
-
-- **1map NAD ID**:
-  - Old: ""
-  - New: "104977575"
-- **Site**:
-  - Old: "Lawley"
-  - New: "LAW"
-- **PONs**:
-  - Old: "C10P1"
-  - New: "145"
-- **Location Address**:
-  - Old: "34 BONITO CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB"
-  - New: "57 BONITO CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB"
-- **lst_mod_by**:
   - Old: "ftlawhh16@fibertime.com"
-  - New: "ftlawhh48@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **Pole Number**:
+  - Old: "2025-07-10 13:47:06.535766+02"
+  - New: "2025-07-16 08:13:41.31946+02"
+
+#### 31. Property ID: 329873
+
 - **lst_mod_dt**:
-  - Old: "2025-05-21 11:20:31.025179+02"
-  - New: "2025-07-01 13:19:29.451903+02"
+  - Old: "2025-06-24 16:09:30.446164+02"
+  - New: "2025-07-16 08:13:42.423565+02"
 
-#### 18. Property ID: 264570
+#### 32. Property ID: 329892
 
-- **1map NAD ID**:
-  - Old: ""
-  - New: "105009485"
-- **Site**:
-  - Old: "Lawley"
-  - New: "LAW"
-- **Location Address**:
-  - Old: "736 LOACH PLACE LAWLEY LENASIA 1824 GT 79800121 JHB"
-  - New: "74 IMPERIAL CRESCENT LAWLEY LENASIA 1824 GT 79800121 JHB"
-- **lst_mod_by**:
-  - Old: "ftlawhh16@fibertime.com"
-  - New: "ftlawhh48@fibertime.com"
 - **lst_mod_dt**:
-  - Old: "2025-05-21 11:56:00.081105+02"
-  - New: "2025-07-01 13:19:30.065602+02"
+  - Old: "ftlawhh52@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025-07-09 13:44:54.428636+02"
+  - New: "2025-07-16 08:13:42.625549+02"
 
+#### 33. Property ID: 329680
+
+- **lst_mod_dt**:
+  - Old: "2025-06-24 15:38:53.951846+02"
+  - New: "2025-07-16 08:13:41.827684+02"
+
+#### 34. Property ID: 329728
+
+- **lst_mod_dt**:
+  - Old: "2025-06-24 15:45:30.461099+02"
+  - New: "2025-07-16 08:13:42.191568+02"
+
+#### 35. Property ID: 329655
+
+- **lst_mod_dt**:
+  - Old: "2025-06-24 15:32:42.656432+02"
+  - New: "2025-07-16 08:13:41.504997+02"
+
+#### 36. Property ID: 324798
+
+- **lst_mod_dt**:
+  - Old: "2025-06-23 13:57:26.436605+02"
+  - New: "2025-07-16 08:13:22.45836+02"
+
+#### 37. Property ID: 324772
+
+- **lst_mod_dt**:
+  - Old: "2025-06-23 13:52:02.758193+02"
+  - New: "2025-07-16 08:13:22.309806+02"
+
+#### 38. Property ID: 324645
+
+- **lst_mod_dt**:
+  - Old: "2025-06-23 13:48:52.547423+02"
+  - New: "2025-07-16 08:13:22.144986+02"
+
+#### 39. Property ID: 324840
+
+- **lst_mod_dt**:
+  - Old: "2025-06-23 14:04:51.504033+02"
+  - New: "2025-07-16 08:13:22.629499+02"
+
+#### 40. Property ID: 324862
+
+- **lst_mod_dt**:
+  - Old: "2025-06-23 14:08:47.513508+02"
+  - New: "2025-07-16 08:13:22.776915+02"
+
+#### 41. Property ID: 324907
+
+- **lst_mod_dt**:
+  - Old: "2025-06-23 14:18:22.977492+02"
+  - New: "2025-07-16 08:13:23.10946+02"
+
+#### 42. Property ID: 324926
+
+- **lst_mod_dt**:
+  - Old: "2025-06-23 14:22:06.981548+02"
+  - New: "2025-07-16 08:13:23.244191+02"
+
+#### 43. Property ID: 325090
+
+- **lst_mod_dt**:
+  - Old: "2025-06-23 14:50:34.394988+02"
+  - New: "2025-07-16 08:13:24.460185+02"
+
+#### 44. Property ID: 325036
+
+- **lst_mod_dt**:
+  - Old: "2025-06-23 14:42:24.609454+02"
+  - New: "2025-07-16 08:13:24.082008+02"
+
+#### 45. Property ID: 324971
+
+- **lst_mod_dt**:
+  - Old: "2025-06-23 14:31:51.776532+02"
+  - New: "2025-07-16 08:13:23.605399+02"
+
+#### 46. Property ID: 329064
+
+- **lst_mod_dt**:
+  - Old: "2025-06-24 15:08:19.268463+02"
+  - New: "2025-07-16 08:13:40.677455+02"
+
+#### 47. Property ID: 329085
+
+- **lst_mod_dt**:
+  - Old: "ftlawhh52@fibertime.com"
+  - New: "ftlawhh49@fibertime.com"
+- **date_status_changed**:
+  - Old: "2025-07-09 13:39:23.571626+02"
+  - New: "2025-07-16 08:13:40.834965+02"
+
+#### 48. Property ID: 328929
+
+- **lst_mod_dt**:
+  - Old: "2025-06-24 14:49:57.649844+02"
+  - New: "2025-07-16 08:13:39.615432+02"
+
+#### 49. Property ID: 328819
+
+- **lst_mod_dt**:
+  - Old: "2025-06-24 14:31:45.647354+02"
+  - New: "2025-07-16 08:13:39.05718+02"
+
+#### 50. Property ID: 328650
+
+- **lst_mod_dt**:
+  - Old: "2025-06-24 14:08:34.735183+02"
+  - New: "2025-07-16 08:13:37.503633+02"
+
+
+*... and 81 more changes*
 
 ## Change Log Reference
 

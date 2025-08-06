@@ -28,7 +28,7 @@ async function findDuplicatePoles() {
     
     while (hasMore) {
       let query = polesRef
-        .select('poleNumber', 'createdAt', 'updatedAt', 'source')
+        .select('poleNumber', 'Pole Number', 'propertyId', 'importedAt', 'fileName', 'status', 'dropNumber')
         .orderBy('__name__')
         .limit(batchSize);
       
@@ -46,18 +46,23 @@ async function findDuplicatePoles() {
       snapshot.forEach(doc => {
         processedCount.count++;
         const data = doc.data();
-        const poleNumber = data.poleNumber;
         
-        if (poleNumber) {
+        // Use the normalized poleNumber field first, then fallback to 'Pole Number'
+        const poleNumber = data.poleNumber || data['Pole Number'];
+        
+        // Only process records that have a pole number
+        if (poleNumber && poleNumber.trim() && poleNumber !== '') {
           if (!duplicates.has(poleNumber)) {
             duplicates.set(poleNumber, []);
           }
           
           duplicates.get(poleNumber).push({
             id: doc.id,
-            createdAt: data.createdAt,
-            updatedAt: data.updatedAt,
-            source: data.source
+            propertyId: data.propertyId,
+            importedAt: data.importedAt,
+            fileName: data.fileName,
+            status: data.status,
+            dropNumber: data.dropNumber
           });
         }
         
@@ -104,10 +109,13 @@ async function findDuplicatePoles() {
       console.log(`Duplicate Count: ${docs.length} documents`);
       
       docs.forEach((doc, index) => {
-        const created = doc.createdAt ? new Date(doc.createdAt._seconds * 1000).toISOString() : 'N/A';
-        console.log(`  ${index + 1}. ID: ${doc.id}`);
-        console.log(`     Created: ${created}`);
-        console.log(`     Source: ${doc.source || 'Unknown'}`);
+        const imported = doc.importedAt ? new Date(doc.importedAt._seconds * 1000).toISOString() : 'N/A';
+        console.log(`  ${index + 1}. Property ID: ${doc.propertyId}`);
+        console.log(`     Document ID: ${doc.id}`);
+        console.log(`     Imported: ${imported}`);
+        console.log(`     Source File: ${doc.fileName || 'Unknown'}`);
+        console.log(`     Status: ${doc.status || 'N/A'}`);
+        console.log(`     Drop Number: ${doc.dropNumber || 'N/A'}`);
       });
       
       console.log('');
@@ -122,10 +130,13 @@ async function findDuplicatePoles() {
       console.log(`Found ${docs.length} documents for ${targetPole}:`);
       
       docs.forEach((doc, index) => {
-        const created = doc.createdAt ? new Date(doc.createdAt._seconds * 1000).toISOString() : 'N/A';
-        console.log(`\n${index + 1}. Document ID: ${doc.id}`);
-        console.log(`   Created: ${created}`);
-        console.log(`   Source: ${doc.source || 'Unknown'}`);
+        const imported = doc.importedAt ? new Date(doc.importedAt._seconds * 1000).toISOString() : 'N/A';
+        console.log(`\n${index + 1}. Property ID: ${doc.propertyId}`);
+        console.log(`   Document ID: ${doc.id}`);
+        console.log(`   Imported: ${imported}`);
+        console.log(`   Source File: ${doc.fileName || 'Unknown'}`);
+        console.log(`   Status: ${doc.status || 'N/A'}`);
+        console.log(`   Drop Number: ${doc.dropNumber || 'N/A'}`);
       });
     }
     

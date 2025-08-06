@@ -1,0 +1,609 @@
+🚀 SYNCING ALL REMAINING APPROVED POLES
+Date: 2025/08/01
+============================================================
+🔍 Finding ALL remaining approved poles...
+
+✅ Already synced: 1277 poles
+📥 Fetching ALL remaining approved poles...
+  📦 Fetching batch 1...
+     Found: 0 to sync, Skipped: 999 already synced
+  📦 Fetching batch 2...
+     Found: 519 to sync, Skipped: 480 already synced
+  📦 Fetching batch 3...
+     Found: 948 to sync, Skipped: 52 already synced
+  📦 Fetching batch 4...
+     Found: 808 to sync, Skipped: 192 already synced
+  📦 Fetching batch 5...
+     Found: 921 to sync, Skipped: 79 already synced
+  📦 Fetching batch 6...
+     Found: 60 to sync, Skipped: 0 already synced
+  📦 Fetching batch 7...
+
+📊 REMAINING APPROVED POLES ANALYSIS:
+- Total remaining records: 3256
+- Unique remaining poles: 2357
+
+🎯 SYNC TARGET: 2357 remaining unique poles
+📦 Processing in 48 batches of 50 poles each
+
+
+🔄 BATCH 1/48: Processing poles 1-50
+⏰ Started: 14:32:47
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 79 history entries
+📈 Running total: 50/2357 poles synced
+⏰ Completed: 14:33:21
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 2/48: Processing poles 51-100
+⏰ Started: 14:33:23
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 64 history entries
+📈 Running total: 100/2357 poles synced
+⏰ Completed: 14:34:15
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 3/48: Processing poles 101-150
+⏰ Started: 14:34:17
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 82 history entries
+📈 Running total: 150/2357 poles synced
+⏰ Completed: 14:34:45
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 4/48: Processing poles 151-200
+⏰ Started: 14:34:47
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 72 history entries
+📈 Running total: 200/2357 poles synced
+⏰ Completed: 14:35:10
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 5/48: Processing poles 201-250
+⏰ Started: 14:35:12
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 66 history entries
+📈 Running total: 250/2357 poles synced
+⏰ Completed: 14:35:40
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 6/48: Processing poles 251-300
+⏰ Started: 14:35:42
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 76 history entries
+📈 Running total: 300/2357 poles synced
+⏰ Completed: 14:36:11
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 7/48: Processing poles 301-350
+⏰ Started: 14:36:13
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 78 history entries
+📈 Running total: 350/2357 poles synced
+⏰ Completed: 14:36:43
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 8/48: Processing poles 351-400
+⏰ Started: 14:36:45
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 87 history entries
+📈 Running total: 400/2357 poles synced
+⏰ Completed: 14:37:18
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 9/48: Processing poles 401-450
+⏰ Started: 14:37:20
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 75 history entries
+📈 Running total: 450/2357 poles synced
+⏰ Completed: 14:37:49
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 10/48: Processing poles 451-500
+⏰ Started: 14:37:51
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 82 history entries
+📈 Running total: 500/2357 poles synced
+⏰ Completed: 14:38:29
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 11/48: Processing poles 501-550
+⏰ Started: 14:38:31
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 62 history entries
+📈 Running total: 550/2357 poles synced
+⏰ Completed: 14:38:53
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 12/48: Processing poles 551-600
+⏰ Started: 14:38:55
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 90 history entries
+📈 Running total: 600/2357 poles synced
+⏰ Completed: 14:39:17
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 13/48: Processing poles 601-650
+⏰ Started: 14:39:19
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 80 history entries
+📈 Running total: 650/2357 poles synced
+⏰ Completed: 14:39:45
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 14/48: Processing poles 651-700
+⏰ Started: 14:39:47
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 80 history entries
+📈 Running total: 700/2357 poles synced
+⏰ Completed: 14:40:11
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 15/48: Processing poles 701-750
+⏰ Started: 14:40:13
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 99 history entries
+📈 Running total: 750/2357 poles synced
+⏰ Completed: 14:40:34
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 16/48: Processing poles 751-800
+⏰ Started: 14:40:36
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 66 history entries
+📈 Running total: 800/2357 poles synced
+⏰ Completed: 14:40:51
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 17/48: Processing poles 801-850
+⏰ Started: 14:40:53
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 73 history entries
+📈 Running total: 850/2357 poles synced
+⏰ Completed: 14:41:11
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 18/48: Processing poles 851-900
+⏰ Started: 14:41:13
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 68 history entries
+📈 Running total: 900/2357 poles synced
+⏰ Completed: 14:41:33
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 19/48: Processing poles 901-950
+⏰ Started: 14:41:35
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 68 history entries
+📈 Running total: 950/2357 poles synced
+⏰ Completed: 14:41:57
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 20/48: Processing poles 951-1000
+⏰ Started: 14:41:59
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 86 history entries
+📈 Running total: 1000/2357 poles synced
+⏰ Completed: 14:42:19
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 21/48: Processing poles 1001-1050
+⏰ Started: 14:42:21
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 65 history entries
+📈 Running total: 1050/2357 poles synced
+⏰ Completed: 14:42:39
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 22/48: Processing poles 1051-1100
+⏰ Started: 14:42:41
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 74 history entries
+📈 Running total: 1100/2357 poles synced
+⏰ Completed: 14:43:01
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 23/48: Processing poles 1101-1150
+⏰ Started: 14:43:03
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 81 history entries
+📈 Running total: 1150/2357 poles synced
+⏰ Completed: 14:43:26
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 24/48: Processing poles 1151-1200
+⏰ Started: 14:43:28
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 63 history entries
+📈 Running total: 1200/2357 poles synced
+⏰ Completed: 14:43:44
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 25/48: Processing poles 1201-1250
+⏰ Started: 14:43:46
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 78 history entries
+📈 Running total: 1250/2357 poles synced
+⏰ Completed: 14:44:01
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 26/48: Processing poles 1251-1300
+⏰ Started: 14:44:03
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 82 history entries
+📈 Running total: 1300/2357 poles synced
+⏰ Completed: 14:44:22
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 27/48: Processing poles 1301-1350
+⏰ Started: 14:44:24
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 73 history entries
+📈 Running total: 1350/2357 poles synced
+⏰ Completed: 14:44:40
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 28/48: Processing poles 1351-1400
+⏰ Started: 14:44:42
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 108 history entries
+📈 Running total: 1400/2357 poles synced
+⏰ Completed: 14:45:02
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 29/48: Processing poles 1401-1450
+⏰ Started: 14:45:04
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 62 history entries
+📈 Running total: 1450/2357 poles synced
+⏰ Completed: 14:45:21
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 30/48: Processing poles 1451-1500
+⏰ Started: 14:45:24
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 62 history entries
+📈 Running total: 1500/2357 poles synced
+⏰ Completed: 14:45:44
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 31/48: Processing poles 1501-1550
+⏰ Started: 14:45:46
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 64 history entries
+📈 Running total: 1550/2357 poles synced
+⏰ Completed: 14:46:02
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 32/48: Processing poles 1551-1600
+⏰ Started: 14:46:04
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 57 history entries
+📈 Running total: 1600/2357 poles synced
+⏰ Completed: 14:46:27
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 33/48: Processing poles 1601-1650
+⏰ Started: 14:46:29
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 72 history entries
+📈 Running total: 1650/2357 poles synced
+⏰ Completed: 14:46:52
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 34/48: Processing poles 1651-1700
+⏰ Started: 14:46:54
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 53 history entries
+📈 Running total: 1700/2357 poles synced
+⏰ Completed: 14:47:13
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 35/48: Processing poles 1701-1750
+⏰ Started: 14:47:15
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 62 history entries
+📈 Running total: 1750/2357 poles synced
+⏰ Completed: 14:47:33
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 36/48: Processing poles 1751-1800
+⏰ Started: 14:47:35
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 61 history entries
+📈 Running total: 1800/2357 poles synced
+⏰ Completed: 14:47:54
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 37/48: Processing poles 1801-1850
+⏰ Started: 14:47:56
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 70 history entries
+📈 Running total: 1850/2357 poles synced
+⏰ Completed: 14:48:10
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 38/48: Processing poles 1851-1900
+⏰ Started: 14:48:12
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 56 history entries
+📈 Running total: 1900/2357 poles synced
+⏰ Completed: 14:48:32
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 39/48: Processing poles 1901-1950
+⏰ Started: 14:48:34
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 50 history entries
+📈 Running total: 1950/2357 poles synced
+⏰ Completed: 14:48:56
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 40/48: Processing poles 1951-2000
+⏰ Started: 14:48:58
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 54 history entries
+📈 Running total: 2000/2357 poles synced
+⏰ Completed: 14:49:12
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 41/48: Processing poles 2001-2050
+⏰ Started: 14:49:14
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 51 history entries
+📈 Running total: 2050/2357 poles synced
+⏰ Completed: 14:49:33
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 42/48: Processing poles 2051-2100
+⏰ Started: 14:49:35
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 52 history entries
+📈 Running total: 2100/2357 poles synced
+⏰ Completed: 14:49:52
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 43/48: Processing poles 2101-2150
+⏰ Started: 14:49:54
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 56 history entries
+📈 Running total: 2150/2357 poles synced
+⏰ Completed: 14:50:12
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 44/48: Processing poles 2151-2200
+⏰ Started: 14:50:14
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 51 history entries
+📈 Running total: 2200/2357 poles synced
+⏰ Completed: 14:50:34
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 45/48: Processing poles 2201-2250
+⏰ Started: 14:50:36
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 52 history entries
+📈 Running total: 2250/2357 poles synced
+⏰ Completed: 14:50:56
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 46/48: Processing poles 2251-2300
+⏰ Started: 14:50:58
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 52 history entries
+📈 Running total: 2300/2357 poles synced
+⏰ Completed: 14:51:15
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 47/48: Processing poles 2301-2350
+⏰ Started: 14:51:17
+   📊 Batch: 10/50 poles
+   📊 Batch: 20/50 poles
+   📊 Batch: 30/50 poles
+   📊 Batch: 40/50 poles
+   📊 Batch: 50/50 poles
+✅ BATCH COMPLETE: 50 poles, 54 history entries
+📈 Running total: 2350/2357 poles synced
+⏰ Completed: 14:51:34
+   ⏸️  Pausing 2 seconds...
+
+🔄 BATCH 48/48: Processing poles 2351-2357
+⏰ Started: 14:51:36
+✅ BATCH COMPLETE: 7 poles, 8 history entries
+📈 Running total: 2357/2357 poles synced
+⏰ Completed: 14:51:37
+
+============================================================
+🎯 ALL REMAINING APPROVED POLES SYNCED!
+📊 FINAL RESULTS:
+   - Poles synced this run: 2357
+   - History entries created: 3256
+   - Total OneMap poles in production: 3634
+   - Total production poles: 10875
+   - Completion time: 2025/08/04, 14:51:38
+
+✅ All remaining approved poles sync completed!

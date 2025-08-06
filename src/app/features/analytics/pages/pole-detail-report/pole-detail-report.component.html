@@ -104,6 +104,14 @@
           </div>
 
           <div class="summary-item">
+            <mat-icon>home</mat-icon>
+            <div class="summary-details">
+              <span class="label">Properties</span>
+              <span class="value">{{ report()!.summary.totalProperties || 0 }}</span>
+            </div>
+          </div>
+
+          <div class="summary-item">
             <mat-icon>assignment</mat-icon>
             <div class="summary-details">
               <span class="label">Total Records</span>
@@ -135,6 +143,67 @@
     <mat-tab-group>
       <mat-tab label="Timeline">
         <app-pole-timeline [timeline]="report()!.timeline"></app-pole-timeline>
+      </mat-tab>
+
+      <mat-tab label="Connected Properties" [disabled]="!report()!.properties || report()!.properties!.length === 0">
+        <div class="tab-content properties-tab">
+          <div class="properties-header">
+            <h3>All Properties Connected to Pole {{ poleNumber() }}</h3>
+            <p class="properties-description">
+              This pole serves {{ report()!.properties?.length || 0 }} properties. 
+              Each property may have multiple status records showing its progression through the workflow.
+            </p>
+          </div>
+          
+          <div class="properties-grid" *ngIf="report()!.properties && report()!.properties.length > 0">
+            <mat-card class="property-card" *ngFor="let property of report()!.properties">
+              <mat-card-header>
+                <mat-card-title-group>
+                  <mat-card-title>Property {{ property.propertyId }}</mat-card-title>
+                  <mat-card-subtitle>{{ property.address }}</mat-card-subtitle>
+                </mat-card-title-group>
+                <div class="property-status">
+                  <mat-chip [color]="getStatusColor(property.status)">
+                    {{ property.status }}
+                  </mat-chip>
+                </div>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="property-details">
+                  <div class="property-detail-item" *ngIf="property.drop">
+                    <mat-icon>water_drop</mat-icon>
+                    <span>Drop: {{ property.drop }}</span>
+                  </div>
+                  <div class="property-detail-item">
+                    <mat-icon>person</mat-icon>
+                    <span>Agent: {{ property.agent }}</span>
+                  </div>
+                  <div class="property-detail-item" *ngIf="property.workflow">
+                    <mat-icon>workflow</mat-icon>
+                    <span>Workflow: {{ property.workflow }}</span>
+                  </div>
+                  <div class="property-detail-item">
+                    <mat-icon>schedule</mat-icon>
+                    <span>First Seen: {{ formatDate(property.firstSeen) }}</span>
+                  </div>
+                  <div class="property-detail-item">
+                    <mat-icon>update</mat-icon>
+                    <span>Last Updated: {{ formatDate(property.lastUpdated) }}</span>
+                  </div>
+                  <div class="property-detail-item">
+                    <mat-icon>description</mat-icon>
+                    <span>{{ property.records.length }} record(s)</span>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+
+          <div class="no-properties" *ngIf="!report()!.properties || report()!.properties.length === 0">
+            <mat-icon>info</mat-icon>
+            <p>No properties found for this pole.</p>
+          </div>
+        </div>
       </mat-tab>
 
       <mat-tab label="Connected Drops" [disabled]="report()!.drops.length === 0">

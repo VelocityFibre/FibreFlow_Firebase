@@ -80,6 +80,10 @@ export class AuthService {
       this.initializeRealAuth();
     } else {
       console.log('🔐 Auth Service initialized in MOCK MODE - Always logged in as admin');
+      // Force clear any cached Firebase auth state
+      this.auth.signOut().catch(() => {
+        // Ignore errors - might not be signed in
+      });
       // Set mock user immediately for development
       this.userSignal.set(this.mockUser);
       this.userProfileSignal.set(this.mockUserProfile);

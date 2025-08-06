@@ -1,4 +1,4 @@
-@use '../../../../styles/component-theming' as theme;
+@use '../../../../../styles/component-theming' as theme;
 
 .pole-detail-report-container {
   padding: theme.ff-spacing(lg);
@@ -145,10 +145,131 @@
       .tab-content {
         padding: theme.ff-spacing(lg);
         min-height: 300px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: theme.ff-rgba(foreground, 0.6);
+        
+        &:not(.properties-tab) {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: theme.ff-rgba(foreground, 0.6);
+        }
+      }
+      
+      .properties-tab {
+        .properties-header {
+          margin-bottom: theme.ff-spacing(xl);
+          text-align: center;
+          
+          h3 {
+            margin: 0 0 theme.ff-spacing(md) 0;
+            color: theme.ff-rgb(foreground);
+            font-size: theme.ff-rem(24);
+            font-weight: 600;
+          }
+          
+          .properties-description {
+            color: theme.ff-rgba(foreground, 0.7);
+            font-size: theme.ff-rem(14);
+            margin: 0;
+            max-width: 600px;
+            margin: 0 auto;
+          }
+        }
+        
+        .properties-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+          gap: theme.ff-spacing(lg);
+          
+          .property-card {
+            border: 1px solid theme.ff-rgba(outline-variant, 0.3);
+            transition: all 0.2s ease;
+            
+            &:hover {
+              box-shadow: 0 4px 12px theme.ff-rgba(primary, 0.1);
+              transform: translateY(-2px);
+            }
+            
+            mat-card-header {
+              padding-bottom: theme.ff-spacing(md);
+              border-bottom: 1px solid theme.ff-rgba(outline-variant, 0.2);
+              
+              mat-card-title-group {
+                flex: 1;
+                
+                mat-card-title {
+                  font-size: theme.ff-rem(18);
+                  font-weight: 600;
+                  color: theme.ff-rgb(foreground);
+                  margin: 0;
+                }
+                
+                mat-card-subtitle {
+                  font-size: theme.ff-rem(14);
+                  color: theme.ff-rgba(foreground, 0.7);
+                  margin: theme.ff-spacing(xs) 0 0 0;
+                  display: -webkit-box;
+                  -webkit-line-clamp: 2;
+                  -webkit-box-orient: vertical;
+                  overflow: hidden;
+                }
+              }
+              
+              .property-status {
+                margin-left: theme.ff-spacing(md);
+              }
+            }
+            
+            mat-card-content {
+              padding-top: theme.ff-spacing(md);
+              
+              .property-details {
+                display: flex;
+                flex-direction: column;
+                gap: theme.ff-spacing(sm);
+                
+                .property-detail-item {
+                  display: flex;
+                  align-items: center;
+                  gap: theme.ff-spacing(sm);
+                  font-size: theme.ff-rem(14);
+                  color: theme.ff-rgba(foreground, 0.8);
+                  
+                  mat-icon {
+                    font-size: theme.ff-rem(18);
+                    width: 18px;
+                    height: 18px;
+                    color: theme.ff-rgba(primary, 0.7);
+                  }
+                  
+                  span {
+                    flex: 1;
+                  }
+                }
+              }
+            }
+          }
+        }
+        
+        .no-properties {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: theme.ff-spacing(md);
+          padding: theme.ff-spacing(xl);
+          color: theme.ff-rgba(foreground, 0.6);
+          
+          mat-icon {
+            font-size: theme.ff-rem(48);
+            width: 48px;
+            height: 48px;
+            color: theme.ff-rgba(foreground, 0.4);
+          }
+          
+          p {
+            margin: 0;
+            font-size: theme.ff-rem(16);
+          }
+        }
       }
     }
   }
@@ -171,6 +292,25 @@
         
         .header-actions {
           align-self: flex-end;
+        }
+      }
+    }
+    
+    .properties-tab {
+      .properties-grid {
+        grid-template-columns: 1fr !important;
+        
+        .property-card {
+          mat-card-header {
+            flex-direction: column;
+            align-items: stretch !important;
+            gap: theme.ff-spacing(sm);
+            
+            .property-status {
+              margin-left: 0;
+              align-self: flex-start;
+            }
+          }
         }
       }
     }

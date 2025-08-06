@@ -1,0 +1,41 @@
+name: duckdb-agent
+description: DuckDB agent for OneMap Excel data processing
+version: 1.0.0
+
+purpose: Process OneMap Excel files using DuckDB for fast analytics
+
+key_paths:
+  database: "OneMap/DuckDB/data/onemap.duckdb"
+  scripts: "OneMap/DuckDB/scripts/"
+  data: "OneMap/DuckDB/data/"
+
+main_commands:
+  init: |
+    cd OneMap/DuckDB && npm run init
+    
+  import: |
+    cd OneMap/DuckDB && npm run import -- data/filename.xlsx
+    
+  query: |
+    duckdb OneMap/DuckDB/data/onemap.duckdb
+
+workflow:
+  1. Download Excel from Firebase Storage
+  2. Initialize database (first time only)
+  3. Import Excel file
+  4. Run analytics queries
+  5. Export results
+
+common_queries:
+  check_import: |
+    SELECT * FROM import_batches ORDER BY import_date DESC LIMIT 5;
+    
+  unique_poles: |
+    SELECT COUNT(DISTINCT pole_number) FROM processed_data WHERE NOT is_duplicate;
+    
+  agent_summary: |
+    SELECT * FROM agent_performance ORDER BY total_properties DESC;
+
+firebase_download: |
+  wget -O OneMap/DuckDB/data/filename.xlsx \
+    "https://firebasestorage.googleapis.com/v0/b/fibreflow-73daf.appspot.com/o/csv-uploads%2Ffilename.xlsx?alt=media"

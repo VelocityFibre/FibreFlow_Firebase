@@ -13,7 +13,7 @@ export const POLE_PERMISSIONS_ROUTES: Routes = [
     path: 'upload',
     loadComponent: () =>
       import('./components/upload/onemap-upload.component').then((m) => m.OnemapUploadComponent),
-    title: 'Upload OneMap CSV Files',
+    title: 'Upload OneMap Data Files',
   },
   {
     path: 'process',

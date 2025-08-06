@@ -1,0 +1,253 @@
+<div class="progress-summary-container">
+  <!-- Header -->
+  <div class="header-section">
+    <h1>{{ projectName() }} Progress Summary</h1>
+    <div class="header-actions">
+      <span class="last-updated">Last updated: {{ lastUpdated() | date:'dd MMM yyyy HH:mm' }}</span>
+      <button mat-raised-button color="primary" (click)="refreshData()" [disabled]="loading()">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading()" class="loading-container">
+    <mat-spinner diameter="60"></mat-spinner>
+    <p>Loading progress data...</p>
+  </div>
+
+  <!-- Error State -->
+  <mat-card *ngIf="error()" class="error-card">
+    <mat-card-content>
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error() }}</p>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Main Content -->
+  <div *ngIf="!loading() && !error()" class="content-section">
+    
+    <!-- Build Milestones Summary -->
+    <mat-card class="milestone-summary-card">
+      <mat-card-header>
+        <mat-card-title>Build Milestones Totals</mat-card-title>
+        <mat-card-subtitle>Overall project progress across key phases</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="milestone-grid">
+          <div *ngFor="let milestone of buildMilestones()" class="milestone-item">
+            <div class="milestone-header">
+              <h3>{{ milestone.name }}</h3>
+              <span class="percentage" 
+                    [class.good]="milestone.percentage >= 80"
+                    [class.warning]="milestone.percentage < 80 && milestone.percentage >= 50"
+                    [class.danger]="milestone.percentage < 50">
+                {{ milestone.percentage }}%
+              </span>
+            </div>
+            <div class="milestone-stats">
+              <div class="stat-row">
+                <span class="label">Scope:</span>
+                <span class="value">{{ milestone.scope | number }}</span>
+              </div>
+              <div class="stat-row">
+                <span class="label">Completed:</span>
+                <span class="value">{{ milestone.completed | number }}</span>
+              </div>
+              <mat-progress-bar 
+                [value]="milestone.percentage" 
+                [color]="getProgressColor(milestone.percentage)">
+              </mat-progress-bar>
+            </div>
+            <div *ngIf="milestone.notes" class="milestone-notes">
+              <small>{{ milestone.notes }}</small>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Tabbed AG Grid Content -->
+    <mat-tab-group animationDuration="300ms">
+      
+      <!-- Zone Progress Tab -->
+      <mat-tab label="Zone Progress">
+        <div class="tab-content">
+          
+          <!-- Grid Summary Statistics -->
+          <div class="grid-stats" *ngIf="zoneProgress().length > 0">
+            <mat-card class="stat-card">
+              <div class="stat-value">{{ totalZones() }}</div>
+              <p class="stat-label">Total Zones</p>
+            </mat-card>
+            <mat-card class="stat-card">
+              <div class="stat-value">{{ totalHomes() | number }}</div>
+              <p class="stat-label">Total Homes</p>
+            </mat-card>
+            <mat-card class="stat-card">
+              <div class="stat-value">{{ totalPermissions() | number }}</div>
+              <p class="stat-label">Permissions</p>
+            </mat-card>
+            <mat-card class="stat-card">
+              <div class="stat-value">{{ totalSignups() | number }}</div>
+              <p class="stat-label">Sign Ups</p>
+            </mat-card>
+          </div>
+
+          <!-- Grid Actions Bar -->
+          <div class="grid-actions">
+            <h3 class="grid-title">Zone-by-Zone Progress Breakdown</h3>
+            <div class="grid-controls">
+              <button mat-stroked-button (click)="exportZoneData()" matTooltip="Export to CSV">
+                <mat-icon>download</mat-icon>
+                Export
+              </button>
+              <button mat-icon-button [matMenuTriggerFor]="zoneMenu" matTooltip="Grid Options">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #zoneMenu="matMenu">
+                <button mat-menu-item (click)="zoneGridApi?.autoSizeAllColumns()">
+                  <mat-icon>view_column</mat-icon>
+                  Auto-size Columns
+                </button>
+                <button mat-menu-item (click)="zoneGridApi?.resetColumnState()">
+                  <mat-icon>refresh</mat-icon>
+                  Reset View
+                </button>
+              </mat-menu>
+            </div>
+          </div>
+
+          <!-- Zone Progress AG Grid -->
+          <div class="grid-container zone-progress-grid">
+            <ag-grid-angular
+              #zoneGrid
+              class="ag-theme-material"
+              [rowData]="zoneProgressWithTotal()"
+              [columnDefs]="zoneColumnDefs"
+              [gridOptions]="defaultGridOptions"
+              [enableRangeSelection]="true"
+              [enableCharts]="false"
+              [suppressExcelExport]="false"
+              [suppressCsvExport]="false"
+              (gridReady)="onZoneGridReady($event)">
+            </ag-grid-angular>
+          </div>
+          
+        </div>
+      </mat-tab>
+
+      <!-- Daily Progress Tab -->
+      <mat-tab label="Daily Progress">
+        <div class="tab-content">
+          
+          <!-- Grid Actions Bar -->
+          <div class="grid-actions">
+            <h3 class="grid-title">Last 7 Days Activity</h3>
+            <div class="grid-controls">
+              <button mat-stroked-button (click)="exportDailyData()" matTooltip="Export to CSV">
+                <mat-icon>download</mat-icon>
+                Export
+              </button>
+            </div>
+          </div>
+
+          <!-- Daily Progress AG Grid -->
+          <div class="grid-container daily-progress-grid">
+            <ag-grid-angular
+              #dailyGrid
+              class="ag-theme-material"
+              [rowData]="dailyProgress()"
+              [columnDefs]="dailyColumnDefs"
+              [gridOptions]="defaultGridOptions"
+              [enableRangeSelection]="true"
+              [suppressExcelExport]="false"
+              [suppressCsvExport]="false"
+              (gridReady)="onDailyGridReady($event)">
+            </ag-grid-angular>
+          </div>
+          
+        </div>
+      </mat-tab>
+
+      <!-- Key Milestones Tab -->
+      <mat-tab label="Key Milestones">
+        <div class="tab-content">
+          
+          <!-- Grid Actions Bar -->
+          <div class="grid-actions">
+            <h3 class="grid-title">Project Timeline Milestones</h3>
+          </div>
+
+          <!-- Key Milestones AG Grid -->
+          <div class="grid-container">
+            <ag-grid-angular
+              #milestonesGrid
+              class="ag-theme-material"
+              [rowData]="keyMilestones()"
+              [columnDefs]="milestonesColumnDefs"
+              [gridOptions]="defaultGridOptions"
+              [domLayout]="'autoHeight'"
+              (gridReady)="onMilestonesGridReady($event)">
+            </ag-grid-angular>
+          </div>
+          
+        </div>
+      </mat-tab>
+
+      <!-- Prerequisites Tab -->
+      <mat-tab label="Prerequisites">
+        <div class="tab-content">
+          
+          <!-- Grid Actions Bar -->
+          <div class="grid-actions">
+            <h3 class="grid-title">Project Dependencies</h3>
+          </div>
+
+          <!-- Prerequisites AG Grid -->
+          <div class="grid-container">
+            <ag-grid-angular
+              #prerequisitesGrid
+              class="ag-theme-material"
+              [rowData]="prerequisites()"
+              [columnDefs]="prerequisitesColumnDefs"
+              [gridOptions]="defaultGridOptions"
+              [domLayout]="'autoHeight'"
+              (gridReady)="onPrerequisitesGridReady($event)">
+            </ag-grid-angular>
+          </div>
+          
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+
+  </div>
+</div>
+
+<!-- Add status chip styles for AG Grid cell renderers -->
+<style>
+  .status-chip {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  
+  .status-complete {
+    background-color: #dcfce7;
+    color: #166534;
+  }
+  
+  .status-progress {
+    background-color: #fef3c7;
+    color: #92400e;
+  }
+  
+  .status-pending {
+    background-color: #fee2e2;
+    color: #991b1b;
+  }
+</style>

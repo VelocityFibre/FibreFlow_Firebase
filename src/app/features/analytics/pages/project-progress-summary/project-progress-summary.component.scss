@@ -1,0 +1,334 @@
+@use '../../../../../styles/component-theming' as theme;
+
+.progress-summary-container {
+  padding: theme.ff-spacing(lg);
+  max-width: 1800px;
+  margin: 0 auto;
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: theme.ff-spacing(xl);
+
+  h1 {
+    @include theme.display-text;
+    margin: 0;
+    color: theme.ff-rgb(foreground);
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: theme.ff-spacing(md);
+
+    .last-updated {
+      color: theme.ff-rgb(text-secondary);
+      font-size: theme.ff-rem(14);
+    }
+  }
+}
+
+.error-card {
+  @include theme.card-theme;
+  text-align: center;
+  padding: theme.ff-spacing(xl);
+  margin-bottom: theme.ff-spacing(lg);
+
+  mat-icon {
+    font-size: theme.ff-rem(48);
+    width: 48px;
+    height: 48px;
+    margin-bottom: theme.ff-spacing(md);
+    color: theme.ff-rgb(error);
+  }
+
+  p {
+    color: theme.ff-rgb(text-secondary);
+    margin: 0;
+  }
+}
+
+.content-section {
+  display: flex;
+  flex-direction: column;
+  gap: theme.ff-spacing(xl);
+}
+
+// Build Milestones Summary Card
+.milestone-summary-card {
+  @include theme.card-theme;
+
+  .milestone-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: theme.ff-spacing(lg);
+    margin-top: theme.ff-spacing(md);
+  }
+
+  .milestone-item {
+    padding: theme.ff-spacing(md);
+    border-radius: theme.ff-var(radius);
+    background: theme.ff-rgba(surface-variant, 0.3);
+    border: 1px solid theme.ff-rgb(outline-variant);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: theme.ff-rgba(surface-variant, 0.5);
+      transform: translateY(-2px);
+      box-shadow: theme.ff-shadow(base);
+    }
+
+    .milestone-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: theme.ff-spacing(sm);
+
+      h3 {
+        @include theme.body-text(lg);
+        margin: 0;
+        color: theme.ff-rgb(foreground);
+      }
+
+      .percentage {
+        @include theme.body-text(base);
+        font-weight: 700;
+
+        &.good { color: theme.ff-rgb(success); }
+        &.warning { color: theme.ff-rgb(warning); }
+        &.danger { color: theme.ff-rgb(error); }
+      }
+    }
+
+    .milestone-stats {
+      .stat-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: theme.ff-spacing(xs);
+        font-size: theme.ff-rem(14);
+
+        .label {
+          color: theme.ff-rgb(text-secondary);
+        }
+
+        .value {
+          font-weight: 600;
+          color: theme.ff-rgb(foreground);
+        }
+      }
+
+      mat-progress-bar {
+        margin-top: theme.ff-spacing(sm);
+        border-radius: theme.ff-var(radius);
+      }
+    }
+
+    .milestone-notes {
+      margin-top: theme.ff-spacing(sm);
+      color: theme.ff-rgb(text-secondary);
+      font-style: italic;
+      font-size: theme.ff-rem(12);
+    }
+  }
+}
+
+// Tab Content
+mat-tab-group {
+  @include theme.card-theme;
+  border-radius: theme.ff-var(radius);
+
+  .mat-mdc-tab-header {
+    background: theme.ff-rgb(surface-container);
+  }
+}
+
+.tab-content {
+  padding: theme.ff-spacing(lg);
+}
+
+// AG Grid Containers
+.grid-container {
+  height: 500px;
+  width: 100%;
+  margin: theme.ff-spacing(md) 0;
+  border-radius: theme.ff-var(radius);
+  overflow: hidden;
+  box-shadow: theme.ff-shadow(sm);
+
+  &.zone-progress-grid {
+    height: 600px; // Taller for zone data
+  }
+
+  &.daily-progress-grid {
+    height: 300px; // Shorter for daily data
+  }
+
+  // AG Grid theme integration
+  :deep(.ag-theme-material) {
+    --ag-background-color: #{theme.ff-rgb(surface)};
+    --ag-foreground-color: #{theme.ff-rgb(foreground)};
+    --ag-header-background-color: #{theme.ff-rgb(surface-container)};
+    --ag-header-foreground-color: #{theme.ff-rgb(foreground)};
+    --ag-odd-row-background-color: #{theme.ff-rgba(surface-variant, 0.1)};
+    --ag-border-color: #{theme.ff-rgb(outline-variant)};
+    --ag-row-hover-color: #{theme.ff-rgba(primary, 0.1)};
+    --ag-selected-row-background-color: #{theme.ff-rgba(primary, 0.2)};
+    
+    .ag-header-cell-label {
+      font-weight: 600;
+    }
+    
+    // Total row styling
+    .total-row {
+      background-color: theme.ff-rgba(primary, 0.05) !important;
+      font-weight: 600;
+      border-top: 2px solid theme.ff-rgb(primary) !important;
+    }
+    
+    // Percentage cell colors
+    .percentage-cell {
+      font-weight: 600;
+      
+      &.good { color: theme.ff-rgb(success); }
+      &.warning { color: theme.ff-rgb(warning); }
+      &.danger { color: theme.ff-rgb(error); }
+    }
+  }
+}
+
+// Grid Actions Bar
+.grid-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: theme.ff-spacing(md);
+  padding: theme.ff-spacing(sm) theme.ff-spacing(md);
+  background: theme.ff-rgba(surface-variant, 0.3);
+  border-radius: theme.ff-var(radius);
+
+  .grid-title {
+    @include theme.body-text(lg);
+    margin: 0;
+    color: theme.ff-rgb(foreground);
+  }
+
+  .grid-controls {
+    display: flex;
+    gap: theme.ff-spacing(sm);
+  }
+}
+
+// Statistics Cards for Grid Summary
+.grid-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: theme.ff-spacing(md);
+  margin-bottom: theme.ff-spacing(lg);
+
+  .stat-card {
+    @include theme.card-theme;
+    padding: theme.ff-spacing(md);
+    text-align: center;
+    border-radius: theme.ff-var(radius);
+
+    .stat-value {
+      @include theme.display-text;
+      font-weight: 700;
+      color: theme.ff-rgb(primary);
+      margin-bottom: theme.ff-spacing(xs);
+    }
+
+    .stat-label {
+      @include theme.body-text(sm);
+      color: theme.ff-rgb(text-secondary);
+      margin: 0;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: theme.ff-breakpoint(md)) {
+  .progress-summary-container {
+    padding: theme.ff-spacing(md);
+  }
+
+  .header-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: theme.ff-spacing(md);
+
+    .header-actions {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  .milestone-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .grid-container {
+    height: 400px; // Shorter on mobile
+  }
+
+  .grid-actions {
+    flex-direction: column;
+    gap: theme.ff-spacing(sm);
+    
+    .grid-controls {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}
+
+// Print Styles
+@media print {
+  .header-actions,
+  .grid-actions,
+  .grid-controls {
+    display: none !important;
+  }
+
+  .grid-container {
+    height: auto !important;
+    page-break-inside: avoid;
+  }
+
+  mat-tab-group {
+    display: block;
+
+    .mat-mdc-tab-header {
+      display: none;
+    }
+
+    .mat-mdc-tab-body-wrapper {
+      display: block !important;
+    }
+
+    mat-tab-body {
+      display: block !important;
+      page-break-before: always;
+      
+      &:first-child {
+        page-break-before: auto;
+      }
+    }
+  }
+}
+
+// Loading State
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: theme.ff-spacing(3xl);
+  color: theme.ff-rgb(text-secondary);
+
+  mat-spinner {
+    margin-bottom: theme.ff-spacing(lg);
+  }
+}

@@ -110,4 +110,34 @@ export class PoleDetailReportComponent implements OnInit {
     if (days === 1) return '1 day';
     return `${days} days`;
   }
+
+  getStatusColor(status: string): 'primary' | 'accent' | 'warn' | undefined {
+    if (!status) return undefined;
+    
+    const statusLower = status.toLowerCase();
+    
+    // Green/Success statuses
+    if (statusLower.includes('approved') || 
+        statusLower.includes('complete') || 
+        statusLower.includes('installed') ||
+        statusLower.includes('active')) {
+      return 'primary';
+    }
+    
+    // Yellow/Warning statuses
+    if (statusLower.includes('pending') || 
+        statusLower.includes('progress') || 
+        statusLower.includes('review')) {
+      return 'accent';
+    }
+    
+    // Red/Error statuses
+    if (statusLower.includes('rejected') || 
+        statusLower.includes('failed') || 
+        statusLower.includes('cancelled')) {
+      return 'warn';
+    }
+    
+    return undefined;
+  }
 }

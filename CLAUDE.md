@@ -1544,6 +1544,83 @@ admin.initializeApp({
 - [ ] Rotate credentials regularly
 - [ ] Monitor usage in Firebase Console
 
+## 🦆 OneMap DuckDB Analytics System (NEW 2025-08-06)
+
+### Overview
+DuckDB-based analytics system for processing OneMap Excel exports with columnar storage for ultra-fast analytics.
+
+### Location
+**Directory**: `OneMap/DuckDB/`
+**Documentation**: `OneMap/DuckDB/README.md`
+**Plan**: `OneMap/DuckDB/DUCKDB_EXCEL_IMPORT_PLAN_2025-08-06.md`
+
+### Key Features
+- **Direct Excel Import** - Uses XLSX library to preserve all column names exactly
+- **DuckDB Database** - Columnar storage optimized for analytics
+- **Ultra-Fast Queries** - 10-100x faster than row-based databases
+- **Multiple Export Formats** - Excel, CSV, JSON, Parquet
+- **Low Memory Footprint** - Efficient columnar compression
+
+### Firebase Storage Paths
+```
+# OneMap Excel files stored in Firebase Storage:
+csv-uploads/[filename].xlsx
+
+# Example:
+csv-uploads/1754473447790_Lawley_01082025.xlsx
+
+# Full URL format:
+https://firebasestorage.googleapis.com/v0/b/fibreflow-73daf.appspot.com/o/csv-uploads%2F[filename]?alt=media
+```
+
+### Quick Commands
+```bash
+# Navigate to DuckDB directory
+cd OneMap/DuckDB
+
+# Install dependencies
+npm install
+
+# Import Excel file (preserves all 159 columns!)
+node scripts/import-excel-final.js data/1754473447790_Lawley_01082025.xlsx
+
+# Query the database
+duckdb data/onemap.duckdb
+
+# SQL Examples:
+SELECT COUNT(*) FROM excel_import;
+SELECT "Status", COUNT(*) FROM excel_import GROUP BY "Status";
+SELECT * FROM excel_import WHERE "Pole Number" = 'LAW.P.B167';
+```
+
+### Import Results (Lawley 01082025)
+- **Total Records**: 13,656
+- **Unique Poles**: 3,799
+- **Unique Drops**: 7,827
+- **Records with Poles**: 11,473 (84%)
+- **Records without Poles**: 2,183 (16%)
+- **Total Columns**: 159 (all preserved from Excel)
+
+### Status Distribution
+1. Home Sign Ups: Approved & Installation Scheduled - 5,850
+2. Pole Permission: Approved - 5,168
+3. Home Installation: In Progress - 1,546
+4. Home Sign Ups: Declined - 457
+5. Home Installation: Installed - 200
+
+### Data Schema
+- `excel_import` - Main table with all 159 Excel columns
+- Column names preserved exactly (use double quotes for spaces)
+- Automatic type inference (INTEGER, DOUBLE, VARCHAR, DATE)
+- Full Excel fidelity maintained
+
+### Benefits vs SQLite/CSV
+- ✅ Columnar storage (faster aggregations)
+- ✅ Better compression (smaller files)
+- ✅ Parallel query execution
+- ✅ Native Parquet support
+- ✅ Excel column names preserved exactly
+
 ## 🧘 Simplicity Guidelines
 
 ### When I (Claude) suggest solutions:

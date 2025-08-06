@@ -11,7 +11,7 @@ const path = require('path');
 const readline = require('readline');
 
 // Initialize Firebase Admin
-const serviceAccount = require('../credentials/vf-onemap-service-account.json');
+const serviceAccount = require('../../credentials/vf-onemap-service-account.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),

@@ -17,7 +17,7 @@ import {
   getMetadata,
 } from '@angular/fire/storage';
 import { Firestore, collection, addDoc, serverTimestamp } from '@angular/fire/firestore';
-import { Auth, user } from '@angular/fire/auth';
+import { AuthService } from '../../../../../core/services/auth.service';
 
 interface UploadFile {
   name: string;
@@ -46,8 +46,8 @@ interface UploadFile {
   ],
   template: `
     <app-page-header
-      title="Upload OneMap CSV Files"
-      subtitle="Drag and drop CSV files or click to browse"
+      title="Upload OneMap Data Files"
+      subtitle="Drag and drop CSV or Excel files (.csv, .xlsx, .xls) or click to browse"
     ></app-page-header>
 
     <div class="upload-container">
@@ -99,13 +99,13 @@ interface UploadFile {
               <h2>Upload in progress...</h2>
               <p>Please wait for current uploads to complete</p>
             } @else {
-              <h2>Drop CSV files here</h2>
+              <h2>Drop CSV or Excel files here</h2>
               <p>or click to browse</p>
             }
             <input
               #fileInput
               type="file"
-              accept=".csv"
+              accept=".csv,.xlsx,.xls"
               multiple
               (change)="onFileSelected($event)"
               style="display: none"
@@ -222,7 +222,7 @@ interface UploadFile {
           <h4>Steps:</h4>
           <ol>
             <li>Make sure you're logged in (check top of page)</li>
-            <li>Click upload area or drag CSV files</li>
+            <li>Click upload area or drag CSV/Excel files</li>
             <li>Click "Upload" button</li>
             <li>Wait for green checkmark ✓ on each file</li>
             <li>If any fail (red ✗), click retry button</li>
@@ -476,18 +476,11 @@ interface UploadFile {
 export class OnemapUploadComponent {
   private storage = inject(Storage);
   private firestore = inject(Firestore);
-  private auth = inject(Auth);
+  private authService = inject(AuthService);
   private snackBar = inject(MatSnackBar);
 
-  // User state
-  currentUser = signal<any>(null);
-
-  constructor() {
-    // Subscribe to auth state
-    user(this.auth).subscribe((user) => {
-      this.currentUser.set(user);
-    });
-  }
+  // User state - use AuthService for mock auth support
+  currentUser = this.authService.currentUser;
 
   // File management
   files = signal<UploadFile[]>([]);
@@ -571,21 +564,24 @@ export class OnemapUploadComponent {
   }
 
   private addFiles(fileList: FileList): void {
-    const csvFiles = Array.from(fileList).filter(
+    const acceptedFiles = Array.from(fileList).filter(
       (file) =>
         file.type === 'text/csv' ||
         file.type === 'application/vnd.ms-excel' ||
-        file.name.toLowerCase().endsWith('.csv'),
+        file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+        file.name.toLowerCase().endsWith('.csv') ||
+        file.name.toLowerCase().endsWith('.xlsx') ||
+        file.name.toLowerCase().endsWith('.xls'),
     );
 
-    if (csvFiles.length === 0) {
-      this.showError('Please select CSV files only');
+    if (acceptedFiles.length === 0) {
+      this.showError('Please select CSV or Excel files only');
       return;
     }
 
     // Check for duplicates
     const existingNames = new Set(this.files().map((f) => f.name));
-    const newFiles = csvFiles.filter((file) => {
+    const newFiles = acceptedFiles.filter((file) => {
       if (existingNames.has(file.name)) {
         this.showError(`${file.name} is already in the list`);
         return false;

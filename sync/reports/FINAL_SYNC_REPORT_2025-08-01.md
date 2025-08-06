@@ -15,10 +15,30 @@
 - **Status history entries**: 1,000+ entries preserved
 - **Completion time**: ~2 hours with multiple script runs
 
+### Data Sync Scope - SELECTIVE, NOT COMPLETE
+**❓ Was ALL data in vf-onemap-data synced? NO - BY DESIGN**
+
+#### Staging Database Content:
+- **Total staging records**: 23,005 records
+- **Records with pole numbers**: 9,482 records  
+- **Records without pole numbers**: 13,523 records (cannot be synced)
+
+#### What We Actually Synced:
+- **"Pole Permission: Approved" ONLY**: 234 unique poles
+- **Intentionally EXCLUDED**: ~9,248 other records with different statuses
+- **Reason**: Production only needs approved poles ready for installation
+
+#### Other Statuses NOT Synced:
+- **"Home Installation: In Progress"**: 75+ poles (not synced)
+- **"Pole Permission: Requested"**: Hundreds of poles (not synced) 
+- **"Survey: Requested"**: Hundreds of poles (not synced)
+- **Various other workflow stages**: Thousands more (not synced)
+
 ### Data Quality
-- **Success rate**: 100% for poles with valid numbers
-- **Records processed**: 943 total records
-- **Unique poles identified**: 234
+- **Success rate**: 100% for approved poles with valid numbers
+- **Selective sync**: Only "Pole Permission: Approved" status migrated
+- **Records processed**: 943 total records (from approved status only)
+- **Unique poles identified**: 234 (all with "Approved" status)
 - **Records without pole numbers**: 99 (correctly skipped)
 - **Duplicate prevention**: Working perfectly (pole number as document ID)
 

@@ -59,6 +59,13 @@ This directory contains specialized AI agents for the FibreFlow fiber optic proj
 - Duplicate detection
 - Agent payment verification
 
+### 🗄️ **OneMap SQL Agent**
+- SQL query execution on DuckDB/SQLite
+- Advanced data analysis and exploration
+- Complex status tracking queries
+- Performance optimization for large datasets
+- Integration with existing OneMap data
+
 ## How to Use
 
 1. **In Claude Code**, use the `/agent` command to invoke a specific agent
