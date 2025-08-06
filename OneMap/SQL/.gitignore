@@ -1,0 +1,33 @@
+# Data files (don't commit)
+data/excel/*.xlsx
+data/excel/*.xls
+data/backups/*
+
+# Database files
+database/*.db
+database/*.db-journal
+
+# Reports (sensitive data)
+reports/**/*.xlsx
+reports/**/*.csv
+reports/**/*.json
+
+# Exports
+exports/*
+
+# Node modules
+scripts/node_modules/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Keep directory structure
+!data/excel/.gitkeep
+!data/backups/.gitkeep
+!database/.gitkeep
+!reports/.gitkeep
+!exports/.gitkeeponemap.db
