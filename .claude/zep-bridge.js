@@ -122,16 +122,22 @@ async function addFact(category, content) {
   // First ensure session exists
   try {
     await zep.memory.getSession({ sessionId });
+    console.log(`📄 Using existing session: ${sessionId}`);
   } catch (e) {
-    // Create session if it doesn't exist
-    await zep.memory.addSession({
-      sessionId: sessionId,
-      userId: userId,
-      metadata: {
-        type: 'facts',
-        category: category
-      }
-    });
+    if (e.message.includes('not found') || e.status === 404) {
+      // Create session if it doesn't exist
+      await zep.memory.addSession({
+        sessionId: sessionId,
+        userId: userId,
+        metadata: {
+          type: 'facts',
+          category: category
+        }
+      });
+      console.log(`📄 Created new session: ${sessionId}`);
+    } else {
+      throw e; // Re-throw other errors
+    }
   }
   
   // Add memory to session
@@ -163,15 +169,21 @@ async function addPattern(name, description) {
   // First ensure session exists
   try {
     await zep.memory.getSession({ sessionId });
+    console.log(`📄 Using existing session: ${sessionId}`);
   } catch (e) {
-    // Create session if it doesn't exist
-    await zep.memory.addSession({
-      sessionId: sessionId,
-      userId: userId,
-      metadata: {
-        type: 'patterns'
-      }
-    });
+    if (e.message.includes('not found') || e.status === 404) {
+      // Create session if it doesn't exist
+      await zep.memory.addSession({
+        sessionId: sessionId,
+        userId: userId,
+        metadata: {
+          type: 'patterns'
+        }
+      });
+      console.log(`📄 Created new session: ${sessionId}`);
+    } else {
+      throw e; // Re-throw other errors
+    }
   }
   
   // Add memory to session
@@ -308,7 +320,7 @@ async function listSessions() {
   const results = await zep.graph.search({
     query: '*',
     userId: userId,
-    limit: 100
+    limit: 50  // Max limit is 50
   });
   
   const sessions = new Set();

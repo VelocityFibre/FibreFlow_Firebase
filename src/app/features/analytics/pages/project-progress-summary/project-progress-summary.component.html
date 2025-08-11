@@ -4,9 +4,21 @@
     <h1>{{ projectName() }} Progress Summary</h1>
     <div class="header-actions">
       <span class="last-updated">Last updated: {{ lastUpdated() | date:'dd MMM yyyy HH:mm' }}</span>
+      
+      <!-- Auto-refresh toggle -->
+      <div class="auto-refresh-control">
+        <mat-icon [class.active]="autoRefreshEnabled()" 
+                  [matTooltip]="autoRefreshEnabled() ? 'Auto-refresh is ON (every ' + refreshInterval() + ' minutes)' : 'Auto-refresh is OFF'">
+          {{ autoRefreshEnabled() ? 'sync' : 'sync_disabled' }}
+        </mat-icon>
+        <button mat-button (click)="toggleAutoRefresh()">
+          Auto-refresh: {{ autoRefreshEnabled() ? 'ON' : 'OFF' }}
+        </button>
+      </div>
+      
       <button mat-raised-button color="primary" (click)="refreshData()" [disabled]="loading()">
         <mat-icon>refresh</mat-icon>
-        Refresh
+        Refresh Now
       </button>
     </div>
   </div>

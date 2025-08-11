@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,6 +9,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
+import { interval, Subscription } from 'rxjs';
 
 // AG Grid imports
 import { AgGridAngular } from 'ag-grid-angular';
@@ -113,14 +114,17 @@ interface ProjectProgressData {
   templateUrl: './project-progress-summary.component.html',
   styleUrl: './project-progress-summary.component.scss'
 })
-export class ProjectProgressSummaryComponent implements OnInit {
+export class ProjectProgressSummaryComponent implements OnInit, OnDestroy {
   private supabase = inject(SupabaseService);
+  private refreshSubscription?: Subscription;
   
   // Signals for reactive data
   loading = signal(true);
   error = signal<string | null>(null);
   projectName = signal('Lawley');
   lastUpdated = signal(new Date());
+  autoRefreshEnabled = signal(true);
+  refreshInterval = signal(15); // minutes
   
   // Data signals
   buildMilestones = signal<BuildMilestone[]>([]);
@@ -296,12 +300,52 @@ export class ProjectProgressSummaryComponent implements OnInit {
 
   ngOnInit() {
     this.loadProgressData();
+    this.setupAutoRefresh();
   }
 
-  async loadProgressData() {
+  ngOnDestroy() {
+    if (this.refreshSubscription) {
+      this.refreshSubscription.unsubscribe();
+    }
+  }
+
+  setupAutoRefresh() {
+    if (this.autoRefreshEnabled()) {
+      // Convert minutes to milliseconds
+      const intervalMs = this.refreshInterval() * 60 * 1000;
+      
+      // Set up interval for auto-refresh
+      this.refreshSubscription = interval(intervalMs).subscribe(() => {
+        console.log(`Auto-refreshing data at ${new Date().toLocaleTimeString()}`);
+        // Don't show loading indicator for auto-refresh
+        this.loadProgressData(false);
+      });
+    }
+  }
+
+  toggleAutoRefresh() {
+    this.autoRefreshEnabled.set(!this.autoRefreshEnabled());
+    
+    if (this.autoRefreshEnabled()) {
+      this.setupAutoRefresh();
+    } else {
+      if (this.refreshSubscription) {
+        this.refreshSubscription.unsubscribe();
+        this.refreshSubscription = undefined;
+      }
+    }
+  }
+
+  async loadProgressData(showLoadingIndicator = true) {
     try {
-      this.loading.set(true);
+      if (showLoadingIndicator) {
+        this.loading.set(true);
+      }
       this.error.set(null);
+      
+      // Add timestamp to prevent caching
+      const timestamp = new Date().getTime();
+      console.log(`Loading project progress data at ${new Date().toLocaleTimeString()}`);
       
       // Load all data from Supabase
       const response = await this.supabase.getProjectProgress(this.projectName()).toPromise();
@@ -314,12 +358,17 @@ export class ProjectProgressSummaryComponent implements OnInit {
         this.keyMilestones.set(data.key_milestones || []);
         this.prerequisites.set(data.prerequisites || []);
         this.lastUpdated.set(new Date());
+        
+        // Log summary of loaded data
+        console.log(`Data loaded: ${this.zoneProgress().length} zones, ${this.dailyProgress().length} daily records`);
       }
     } catch (err) {
       console.error('Error loading progress data:', err);
       this.error.set('Failed to load progress data. Please try again.');
     } finally {
-      this.loading.set(false);
+      if (showLoadingIndicator) {
+        this.loading.set(false);
+      }
     }
   }
 

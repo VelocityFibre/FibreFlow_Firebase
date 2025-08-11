@@ -1,0 +1,40 @@
+# Environment variables and secrets
+.env.local
+.env
+*.env
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Cache and generated files
+cache/
+logs/
+*.log
+daily_usage.json
+codebase_index.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test outputs
+test_output/
+*.test.md
+enhanced_output.md
+test_request.txt

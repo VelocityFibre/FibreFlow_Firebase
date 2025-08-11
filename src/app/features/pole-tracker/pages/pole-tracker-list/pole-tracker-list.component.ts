@@ -26,6 +26,7 @@ import { Contractor } from '../../../contractors/models/contractor.model';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { PageHeaderComponent, PageHeaderAction } from '../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-pole-tracker-list',
@@ -49,27 +50,16 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatDialogModule,
     MatSnackBarModule,
     MatPaginatorModule,
+    PageHeaderComponent,
   ],
   template: `
-    <div class="page-container">
+    <div class="ff-page-container">
       <!-- Header -->
-      <div class="page-header">
-        <h1>Pole Tracker</h1>
-        <div class="header-actions">
-          <a
-            mat-button
-            routerLink="/pole-tracker/grid"
-            [queryParams]="{ project: selectedProjectId }"
-          >
-            <mat-icon>grid_on</mat-icon>
-            Grid View
-          </a>
-          <a mat-raised-button color="primary" routerLink="/pole-tracker/new">
-            <mat-icon>add</mat-icon>
-            Add New Pole
-          </a>
-        </div>
-      </div>
+      <app-page-header
+        title="Pole Tracker"
+        subtitle="Manage and track fiber optic pole installations"
+        [actions]="headerActions"
+      ></app-page-header>
 
       <!-- Filters -->
       <mat-card class="filters-card">
@@ -318,29 +308,10 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
   `,
   styles: [
     `
-      .page-container {
+      .ff-page-container {
         padding: 24px;
         max-width: 1400px;
         margin: 0 auto;
-      }
-
-      .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 24px;
-      }
-
-      .page-header h1 {
-        margin: 0;
-        font-size: 32px;
-        font-weight: 500;
-      }
-
-      .header-actions {
-        display: flex;
-        gap: 12px;
-        align-items: center;
       }
 
       .filters-card {
@@ -585,6 +556,29 @@ export class PoleTrackerListComponent implements OnInit, OnDestroy {
 
   // Performance optimization
   trackByPoleId = (index: number, pole: PoleTrackerListItem) => pole.id;
+
+  // Header actions
+  headerActions: PageHeaderAction[] = [
+    {
+      label: 'Grid View',
+      icon: 'grid_on',
+      variant: 'stroked',
+      action: () => {
+        this.router.navigate(['/pole-tracker/grid'], { 
+          queryParams: { project: this.selectedProjectId } 
+        });
+      }
+    },
+    {
+      label: 'Add New Pole',
+      icon: 'add',
+      color: 'primary',
+      variant: 'raised',
+      action: () => {
+        this.router.navigate(['/pole-tracker/new']);
+      }
+    }
+  ];
 
   displayedColumns = [
     'vfPoleId',

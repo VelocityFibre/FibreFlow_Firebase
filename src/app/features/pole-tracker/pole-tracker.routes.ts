@@ -73,6 +73,15 @@ export const poleTrackerRoutes: Routes = [
           ),
         title: 'Quick Capture - FibreFlow Mobile',
       },
+      // DISABLED: offline-capture route causes build errors
+      // {
+      //   path: 'offline-capture',
+      //   loadComponent: () =>
+      //     import('./mobile/pages/offline-capture/offline-capture.component').then(
+      //       (m) => m.OfflineCaptureComponent,
+      //     ),
+      //   title: 'Offline Capture - FibreFlow Mobile',
+      // },
       {
         path: 'assignments',
         loadComponent: () =>

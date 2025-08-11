@@ -29,7 +29,7 @@ if (!supabaseKey) {
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // SQLite database path - CORRECTED to use the actual database location
-const SQLITE_DB_PATH = path.join(__dirname, '../../OneMap/SQL/scripts/onemap.db');
+const SQLITE_DB_PATH = path.join(__dirname, '../../OneMap/SQL/onemap.db');
 
 /**
  * Transform SQLite data to match Supabase schema

@@ -1,0 +1,46 @@
+# Project Configuration Template
+# Copy to project_config.yaml and customize for your project
+
+project:
+  name: "YourProjectName"
+  root: "/path/to/your/project"
+  description: "Brief description of your project"
+
+# Technology stack
+technologies:
+  frontend: "React"          # or Angular, Vue, Svelte, etc.
+  backend: "Node.js"         # or Python, Java, Go, etc.
+  database: "PostgreSQL"     # or MongoDB, MySQL, etc.
+  state: "Redux"            # or MobX, Zustand, Signals, etc.
+
+# Code patterns specific to your project
+patterns:
+  service_pattern: "BaseService"      # Your base service class
+  component_pattern: "FunctionComponent" # Component style
+  file_naming: "kebab-case"           # or camelCase, PascalCase
+  
+# Project conventions
+conventions:
+  - "Use TypeScript for all new code"
+  - "Follow ESLint configuration"
+  - "Write tests for all features"
+  - "Use conventional commits"
+
+# File extensions to scan
+scan_extensions:
+  - ".ts"
+  - ".tsx"
+  - ".js"
+  - ".jsx"
+  - ".py"
+  - ".java"
+  - ".go"
+
+# Directories to ignore during scanning
+ignore_dirs:
+  - "node_modules"
+  - "dist"
+  - "build"
+  - ".git"
+  - "coverage"
+  - "__pycache__"

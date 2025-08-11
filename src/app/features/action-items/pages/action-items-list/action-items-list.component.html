@@ -1,11 +1,12 @@
-<app-page-header
-  title="Action Items Management"
-  subtitle="Manage and track action items from all meetings"
-  [actions]="headerActions"
->
-</app-page-header>
+<div class="ff-page-container">
+  <!-- Page Header -->
+  <app-page-header
+    title="Action Items Management"
+    subtitle="Manage and track action items from all meetings"
+    [actions]="headerActions"
+  >
+  </app-page-header>
 
-<div class="container">
   <!-- Statistics Cards -->
   <div class="stats-cards" *ngIf="stats()">
     <mat-card class="stat-card">

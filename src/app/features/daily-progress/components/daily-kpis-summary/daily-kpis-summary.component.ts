@@ -15,6 +15,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { PageHeaderComponent, PageHeaderAction } from '../../../../shared/components/page-header/page-header.component';
 import { MatDialog } from '@angular/material/dialog';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -56,15 +57,16 @@ interface KPISummaryRow {
     MatChipsModule,
     MatMenuModule,
     MatSnackBarModule,
+    PageHeaderComponent,
   ],
   template: `
-    <div class="kpis-summary-container">
-      <mat-card class="header-card">
-        <mat-card-header>
-          <mat-card-title>Daily KPIs Dashboard</mat-card-title>
-          <mat-card-subtitle>Comprehensive view of all daily KPI data</mat-card-subtitle>
-        </mat-card-header>
-      </mat-card>
+    <div class="ff-page-container">
+      <!-- Page Header -->
+      <app-page-header
+        title="Daily KPIs Dashboard"
+        subtitle="Comprehensive view of all daily KPI data"
+        [actions]="headerActions"
+      ></app-page-header>
 
       <!-- Filters Section -->
       <mat-card class="filter-card">

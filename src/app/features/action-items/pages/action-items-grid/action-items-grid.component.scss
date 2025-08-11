@@ -1,10 +1,8 @@
 @use '../../../../../styles/component-theming' as theme;
 @use '../../../../../styles/spacing' as spacing;
 
-.action-items-grid-container {
-  padding: spacing.ff-spacing(lg);
-  max-width: 1600px;
-  margin: 0 auto;
+.action-items-grid-content {
+  // Remove padding as ff-page-container handles it
 }
 
 // Statistics Cards
@@ -53,21 +51,53 @@
 .filter-card {
   margin-bottom: spacing.ff-spacing(lg);
   
+  // Add proper padding to mat-card-content
+  ::ng-deep mat-card-content {
+    padding: spacing.ff-spacing(lg) !important;
+  }
+  
   .filter-row {
     display: flex;
     gap: spacing.ff-spacing(md);
-    align-items: center;
+    align-items: flex-end;
     flex-wrap: wrap;
     
     mat-form-field {
       flex: 1;
       min-width: 200px;
+      
+      // Fix for cut-off labels - ensure proper height
+      ::ng-deep {
+        .mat-mdc-text-field-wrapper {
+          padding-top: 0;
+        }
+        
+        .mat-mdc-form-field {
+          // Ensure minimum height for label
+          min-height: 56px;
+        }
+        
+        .mat-mdc-floating-label {
+          // Ensure label has proper space
+          top: 1.75rem;
+          
+          &.mdc-floating-label--float-above {
+            top: 1.0625rem;
+          }
+        }
+        
+        .mat-mdc-form-field-infix {
+          padding-top: 1rem;
+          padding-bottom: 0.5rem;
+        }
+      }
     }
     
     .filter-actions {
       display: flex;
       gap: spacing.ff-spacing(sm);
-      margin-left: auto;
+      align-items: center;
+      margin-bottom: 0.5rem; // Align with form fields
     }
   }
 }

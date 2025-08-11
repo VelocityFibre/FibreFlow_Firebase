@@ -130,7 +130,7 @@ interface ParsedPole {
                     <mat-select formControlName="projectId" required>
                       @for (project of projects(); track project.id) {
                         <mat-option [value]="project.id">
-                          {{ project.title }}
+                          {{ project.name }}
                         </mat-option>
                       }
                     </mat-select>

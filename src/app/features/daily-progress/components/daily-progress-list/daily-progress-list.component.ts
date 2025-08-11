@@ -18,6 +18,7 @@ import { DailyProgressService } from '../../services/daily-progress.service';
 import { ProjectService } from '../../../../core/services/project.service';
 import { StaffService } from '../../../staff/services/staff.service';
 import { DateFormatService } from '../../../../core/services/date-format.service';
+import { PageHeaderComponent, PageHeaderAction } from '../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-daily-progress-list',
@@ -37,21 +38,16 @@ import { DateFormatService } from '../../../../core/services/date-format.service
     MatNativeDateModule,
     MatInputModule,
     FormsModule,
+    PageHeaderComponent,
   ],
   template: `
     <div class="ff-page-container">
-      <div class="ff-page-header">
-        <div class="header-content">
-          <h1 class="page-title">Daily Progress Reports</h1>
-          <p class="page-subtitle">Track and manage daily work progress across all projects</p>
-        </div>
-        <div class="header-actions">
-          <button mat-raised-button color="primary" (click)="createNew()">
-            <mat-icon>add</mat-icon>
-            New Progress Report
-          </button>
-        </div>
-      </div>
+      <!-- Page Header -->
+      <app-page-header
+        title="Daily Progress Reports"
+        subtitle="Track and manage daily work progress across all projects"
+        [actions]="headerActions"
+      ></app-page-header>
 
       <div class="filters-section">
         <mat-form-field appearance="outline">
@@ -256,6 +252,17 @@ export class DailyProgressListComponent implements OnInit {
     'actions',
   ];
   canApprove = false; // This should be based on user role
+
+  // Header actions
+  headerActions: PageHeaderAction[] = [
+    {
+      label: 'New Progress Report',
+      icon: 'add',
+      color: 'primary',
+      variant: 'raised',
+      action: () => this.createNew()
+    }
+  ];
 
   ngOnInit() {
     // Component initialized with reactive signals

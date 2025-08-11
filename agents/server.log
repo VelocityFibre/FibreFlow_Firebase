@@ -1,0 +1,4 @@
+WARNING:  You must pass the application as an import string to enable 'reload' or 'workers'.
+🚀 Starting FibreFlow Neon+Gemini Agent (Simple Mode)
+🔗 Angular service will connect to: http://localhost:8000
+📱 API docs available at: http://localhost:8000/docs

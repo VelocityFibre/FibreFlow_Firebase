@@ -30,10 +30,30 @@ Master config: `.claude/shared/fibreflow-master-config.yml`
 2. **CLARIFY** if you're unsure before proceeding
 3. **CONFIRM** you understand before taking action
 4. **DON'T ASSUME** - if unclear, ask!
+5. **VERIFY THE ACTUAL COMPONENT** - Don't assume from URLs!
 
 **Example**:
 - User: "Set up the service account"
 - Claude: "I'll set up the service account. Just to clarify - do you want me to use an existing service account file or create a new one?"
+
+### 🚨 CRITICAL LESSON: The 4-Hour Action Items Alignment Disaster (2025-08-13)
+**What should have taken 4 minutes took 4 HOURS because I didn't verify which component!**
+
+**The Problem**: 
+- User: "Action Items page heading is misaligned"
+- URL: `/action-items`
+- I assumed: Must be the `action-items-list` component
+- REALITY: It was the `action-items-grid` component!
+
+**How to NEVER repeat this**:
+1. **LOOK FOR UNIQUE TEXT** - User mentioned "Double-click cells to edit" = GRID VIEW!
+2. **ASK IF UNSURE** - "Are you seeing a table/grid or a list view?"
+3. **USE GREP** - `grep -r "exact text from page" src/` to find the right file
+4. **CHECK ROUTING** - Multiple components can serve the same URL!
+
+**The fix was trivial**: Just add `<div class="ff-page-container">` wrapper!
+
+**REMEMBER**: Debugging the wrong file is worse than no debugging at all!
 
 ### Before suggesting ANY solution, ask:
 1. **Can this be a simple lookup/check?** (like antiHall)
@@ -276,10 +296,23 @@ EOF
 ## 🧠 MEMORY SYSTEM - TEMPORAL KNOWLEDGE GRAPHS
 
 ### 🚀 Zep Cloud Integration (Primary)
-**Status**: ✅ OPERATIONAL - Integration completed 2025-07-24  
-**SDK Fix**: ✅ Corrected method signature: `zep.memory.add(sessionId, {messages})`  
-**CLI Tools**: ✅ Working bridge with add-fact, add-pattern, add-episode, search  
+**Status**: ✅ FULLY OPERATIONAL - Integration verified 2025-08-14  
+**SDK Version**: v2.21.0 (downgraded from v3.2.0 for compatibility)  
+**API Methods**: ✅ `user.getSessions()`, `user.getFacts()`, `memory.extract()`  
+**Data Storage**: ✅ 30+ sessions, 29+ facts successfully stored including Action Items debugging lesson  
+**Knowledge Graph**: ✅ Automatic entity extraction and relationship mapping  
 **📖 [Full Documentation](.claude/ZEP_INTEGRATION_SUMMARY.md)**
+
+### ⚠️ CRITICAL: API Usage Corrected (2025-08-14)
+**Previous Issue**: zep-bridge.js was using v1 API methods that don't exist in v2.21.0
+**Correct API**:
+- ❌ `zep.memory.add()` - Wrong method (v1 API)
+- ❌ `zep.memory.getSessionMessages()` - Doesn't exist in v2.21.0
+- ✅ `zep.user.getSessions(userId)` - Retrieve all sessions
+- ✅ `zep.user.getFacts(userId)` - Retrieve extracted facts
+- ✅ `zep.memory.extract(params)` - Process and extract knowledge
+
+**Memory Storage**: Data is stored as extracted facts in knowledge graph, not raw messages
 
 ### ⚠️ IMPORTANT: Memory is NOT Automatic!
 **You must manually save important learnings. Here's how:**
@@ -309,17 +342,16 @@ EOF
 
 **Claude will then run the appropriate command:**
 ```bash
-# Facts
+# DEPRECATED - Old API (needs updating for v2.21.0)
 node .claude/zep-bridge.js add-fact category "fact content"
-
-# Patterns  
-node .claude/zep-bridge.js add-pattern "pattern-name" "description"
-
-# Episodes
+node .claude/zep-bridge.js add-pattern "pattern-name" "description"  
 node .claude/zep-bridge.js add-episode "title" '{"problem":"...","solution":"..."}'
-
-# Search
 node .claude/zep-bridge.js search "topic"
+
+# CURRENT - Working API (v2.21.0)
+node .claude/zep-facts-viewer.js facts        # View all facts
+node .claude/zep-facts-viewer.js search "query"  # Search facts
+node .claude/zep-facts-viewer.js action-items    # View Action Items facts
 ```
 
 ### 📁 Local Memory System (Backup)
@@ -541,6 +573,16 @@ ngOnInit() {
 - `/new_plan` - Start PLANIR workflow for comprehensive feature planning
 - `/new_task` - Quick task implementation with streamlined planning
 - `node scripts/sync-meetings-improved.js` - Sync meetings from Fireflies to Firebase
+
+**CRITICAL: Gemini Enhancement Workflow**:
+1. **User types**: `/gem [their request for Claude]` in chat
+2. **Claude runs**: `cd ai-context && source venv/bin/activate && python3 cli/ai_cli.py enhance "[user's request]"`
+3. **Claude provides**: The enhanced prompt output for the user to give to Claude
+
+**Example**:
+- User: `/gem Fix the database sync issues`
+- Claude runs the bash command above
+- Claude gives user the enhanced prompt to pass to Claude
 
 **Page Context Commands**:
 - `!db {feature}` - Show database info (collections, subcollections)
@@ -818,10 +860,13 @@ When Claude needs to verify code:
 - TypeScript strict mode
 
 ### Firebase CI/CD Authentication
-- **Status**: ✅ Permanently configured with CI token in `.env.local`
-- **Deploy Preview**: `./deploy.sh preview channel-name 7d`
-- **Deploy Production**: `./deploy.sh prod`
-- **Full Documentation**: See `docs/firebase-auth-setup.md` for details
+- **Status**: ✅ **SERVICE ACCOUNT AUTHENTICATION** (Reliable & Permanent)
+- **Location**: `fibreflow-service-account.json` + `firebase-login/` folder
+- **Setup**: Run `./firebase-login/setup-permanent-auth.sh` (one-time)
+- **Deploy**: `firebase deploy --only hosting` (works every time!)
+- **Alternative Deploy**: `./firebase-login/deploy-with-service-account.sh`
+- **Why Service Account**: Never expires, no browser needed, 100% reliable
+- **Full Documentation**: See `firebase-login/README.md` for complete guide
 
 ## Project Structure
 ```
@@ -1379,10 +1424,13 @@ interface Step {
 # Development
 ng serve                    # Dev server (http://localhost:4200)
 
-# Build & Deploy
+# Build & Deploy (NEW: Service Account Method)
 npm run build              # Production build
-firebase deploy            # Full deployment
-./DEPLOY_NOW.sh           # Quick deploy (if available)
+firebase deploy --only hosting  # Deploy (uses service account - always works!)
+./firebase-login/deploy-with-service-account.sh  # Alternative deploy script
+
+# Old method (deprecated - tokens expire)
+./deploy.sh prod           # Uses CI token (unreliable)
 ```
 
 ### Live URLs
@@ -2078,19 +2126,26 @@ console.log('Email sent:', docRef.id);
 
 ### Where We Store Secrets
 
-1. **Local Development Secrets** (Never committed to Git)
+1. **Firebase Service Account** (Primary Authentication - RECOMMENDED)
+   - **Location**: `fibreflow-service-account.json`
+   - **Purpose**: Firebase authentication that never expires
+   - **Setup**: `./firebase-login/setup-permanent-auth.sh`
+   - **Benefits**: No browser needed, 100% reliable, works in CI/CD
+   - **Note**: This file is gitignored
+
+2. **Local Development Secrets** (Never committed to Git)
    - **Location**: `.env.local`
    - **Purpose**: Local development credentials, API keys, passwords
-   - **Example**: Fireflies API key, Firebase CI tokens
+   - **Example**: Fireflies API key, Firebase CI tokens (deprecated)
    - **Note**: This file is gitignored and only exists on your local machine
 
-2. **Firebase Functions Config** (For deployed functions)
+3. **Firebase Functions Config** (For deployed functions)
    - **Set via CLI**: `firebase functions:config:set service.key="value"`
    - **Example**: `firebase functions:config:set fireflies.api_key="[VALUE FROM .env.local]"`
    - **Retrieve**: `firebase functions:config:get`
    - **Note**: These are stored securely in Firebase and not in code
 
-3. **Firebase Environment Variables** (For Angular app)
+4. **Firebase Environment Variables** (For Angular app)
    - **Location**: `src/environments/environment.ts` (public keys only!)
    - **Never store**: Passwords, secret keys, or sensitive data here
    - **Only store**: Public Firebase config, API endpoints
@@ -2153,7 +2208,20 @@ Firebase Functions Config (for production)
 - Firebase CI token in `.env.local` for automated deployments
 - Project credentials in `firebase.json` and `.firebaserc` (safe to commit)
 
-### Deployment Commands
+### 🚀 Preferred Deployment Method (Service Account)
+```bash
+# One-time setup (run once)
+./firebase-login/setup-permanent-auth.sh
+source ~/.bashrc
+
+# Deploy (always works!)
+firebase deploy --only hosting
+
+# Or use the deploy script
+./firebase-login/deploy-with-service-account.sh
+```
+
+### Traditional Deployment Commands (Deprecated)
 ```bash
 # To deploy Fireflies API key (get value from .env.local)
 firebase functions:config:set fireflies.api_key="[CHECK .env.local]"
@@ -2163,6 +2231,8 @@ firebase functions:config:get
 
 # To deploy functions
 firebase deploy --only functions
+
+# Note: CI token method often fails with "credentials no longer valid"
 ```
 
 ---

@@ -17,6 +17,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatDividerModule } from '@angular/material/divider';
 import { Router } from '@angular/router';
+import { PageHeaderComponent, PageHeaderAction } from '../../../../shared/components/page-header/page-header.component';
 import { debounceTime } from 'rxjs/operators';
 
 import { DailyKPIs, KPI_DEFINITIONS, KPIDefinition } from '../../models/daily-kpis.model';
@@ -49,9 +50,17 @@ import { StaffMember } from '../../../staff/models/staff.model';
     MatChipsModule,
     MatSliderModule,
     MatDividerModule,
+    PageHeaderComponent,
   ],
   template: `
-    <div class="enhanced-kpis-form-container">
+    <div class="ff-page-container">
+      <!-- Page Header -->
+      <app-page-header
+        title="Enhanced Daily KPIs Update"
+        [subtitle]="'Update KPIs for ' + (selectedDate() | date: 'fullDate')"
+        [actions]="headerActions"
+      ></app-page-header>
+
       <!-- Connection Status Indicator -->
       <div class="connection-status" [class.offline]="!isOnline()">
         <mat-icon>{{ isOnline() ? 'cloud_done' : 'cloud_off' }}</mat-icon>
@@ -59,19 +68,14 @@ import { StaffMember } from '../../../staff/models/staff.model';
       </div>
 
       <!-- Auto-save Status Indicator -->
-      <div class="autosave-status" *ngIf="kpiForm.dirty">
+      <div class="autosave-status" *ngIf="kpiForm && kpiForm.dirty">
         <mat-icon>save</mat-icon>
         <span>Auto-saving changes...</span>
       </div>
 
-      <mat-card class="header-card">
-        <mat-card-header>
-          <mat-card-title>Enhanced Daily KPIs Update</mat-card-title>
-          <mat-card-subtitle>{{ selectedDate() | date: 'fullDate' }}</mat-card-subtitle>
-        </mat-card-header>
-
+      <mat-card class="form-card">
         <mat-card-content>
-          @if (projectsLoaded()) {
+          @if (projectsLoaded() && kpiForm && isFormReady()) {
             <form [formGroup]="kpiForm" (ngSubmit)="onSubmit()">
               <!-- Project & Date Selection -->
               <div class="form-header">
@@ -527,9 +531,10 @@ import { StaffMember } from '../../../staff/models/staff.model';
                         </button>
                       </mat-card-header>
                       <mat-card-content>
-                        <div formArrayName="teamMembers">
-                          @for (member of teamMembersArray.controls; track $index) {
-                            <div [formGroupName]="$index" class="team-member-row">
+                        @if (teamMembersArray && teamMembersArray.length >= 0) {
+                          <div formArrayName="teamMembers">
+                            @for (member of teamMembersArray.controls; track $index; let i = $index) {
+                              <div [formGroupName]="i" class="team-member-row">
                               <mat-form-field appearance="outline">
                                 <mat-label>Team Member</mat-label>
                                 <mat-select formControlName="id">
@@ -555,13 +560,14 @@ import { StaffMember } from '../../../staff/models/staff.model';
                               <button
                                 mat-icon-button
                                 type="button"
-                                (click)="removeTeamMember($index)"
+                                (click)="removeTeamMember(i)"
                               >
                                 <mat-icon>delete</mat-icon>
                               </button>
                             </div>
                           }
                         </div>
+                        }
                       </mat-card-content>
                     </mat-card>
                   </div>
@@ -637,7 +643,7 @@ import { StaffMember } from '../../../staff/models/staff.model';
                   mat-raised-button
                   color="primary"
                   type="submit"
-                  [disabled]="loading() || kpiForm.invalid"
+                  [disabled]="loading() || !kpiForm || !kpiForm.valid"
                 >
                   @if (loading()) {
                     <mat-spinner diameter="20"></mat-spinner>
@@ -947,19 +953,63 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
   kpiDefinitions = KPI_DEFINITIONS;
   cumulativeTotals: any = {};
   private isLoadingData = false;
+  private _formInitialized = false;
+
+  // Header actions
+  headerActions: PageHeaderAction[] = [
+    {
+      label: 'Save & Continue',
+      icon: 'save',
+      color: 'primary',
+      variant: 'raised',
+      action: () => this.onSubmit()
+    },
+    {
+      label: 'Back to List',
+      icon: 'arrow_back',
+      variant: 'stroked',
+      action: () => this.router.navigate(['/daily-progress'])
+    }
+  ];
+
+  constructor() {
+    // Initialize form in constructor to ensure it's ready before template renders
+    try {
+      this.initializeForm();
+      this._formInitialized = true;
+    } catch (error) {
+      console.error('Error initializing form in constructor:', error);
+      // Will retry in ngOnInit
+    }
+  }
 
   ngOnInit() {
-    this.initializeForm();
+    // Double-check form initialization
+    if (!this.kpiForm) {
+      console.error('Form not initialized in constructor!');
+      this.initializeForm();
+    }
+    
+    // Verify form is properly initialized
+    if (!this.kpiForm.controls || !this.kpiForm.get('teamMembers')) {
+      console.error('Form controls not properly initialized!');
+      this.initializeForm();
+    }
+    
     this.loadProjects();
     this.loadContractors();
     this.loadStaffMembers();
-    this.setupFormListeners();
-    this.setupConnectionMonitoring();
+    
+    // Delay form listeners setup to ensure form is stable
+    setTimeout(() => {
+      this.setupFormListeners();
+      this.setupConnectionMonitoring();
+    }, 100);
 
     // Check for unsaved changes after form is initialized
     setTimeout(() => {
       this.loadFromLocalStorage();
-    }, 1000);
+    }, 1500);
   }
 
   private setupConnectionMonitoring() {
@@ -982,7 +1032,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
 
     // Prevent accidental navigation with unsaved changes
     window.addEventListener('beforeunload', (event) => {
-      if (this.kpiForm.dirty && !this.loading()) {
+      if (this.kpiForm && this.kpiForm.dirty && !this.loading()) {
         event.preventDefault();
         event.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
       }
@@ -990,81 +1040,115 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
   }
 
   private initializeForm() {
-    // Base form controls
-    const formControls: any = {
-      projectId: ['', Validators.required],
-      contractorId: [''],
-      date: [new Date(), Validators.required],
-      comments: [''],
+    try {
+      // Create team members array first
+      const teamMembersArray = this.fb.array([]);
+      
+      // Base form controls
+      const formControls: any = {
+        projectId: ['', Validators.required],
+        contractorId: [''],
+        date: [new Date(), Validators.required],
+        comments: [''],
 
-      // Weather & Environmental
-      weatherConditions: [''],
-      weatherImpact: [0],
-      temperatureMin: [null],
-      temperatureMax: [null],
+        // Weather & Environmental
+        weatherConditions: [''],
+        weatherImpact: [0],
+        temperatureMin: [null],
+        temperatureMax: [null],
 
-      // Safety & Compliance
-      safetyIncidents: [0, [Validators.min(0)]],
-      nearMisses: [0, [Validators.min(0)]],
-      toolboxTalks: [0, [Validators.min(0)]],
-      safetyObservations: [0, [Validators.min(0)]],
-      complianceScore: [100, [Validators.min(0), Validators.max(100)]],
+        // Safety & Compliance
+        safetyIncidents: [0, [Validators.min(0)]],
+        nearMisses: [0, [Validators.min(0)]],
+        toolboxTalks: [0, [Validators.min(0)]],
+        safetyObservations: [0, [Validators.min(0)]],
+        complianceScore: [100, [Validators.min(0), Validators.max(100)]],
 
-      // Quality Metrics
-      qualityIssues: [0, [Validators.min(0)]],
-      reworkRequired: [0, [Validators.min(0)]],
-      inspectionsPassed: [0, [Validators.min(0)]],
-      inspectionsFailed: [0, [Validators.min(0)]],
+        // Quality Metrics
+        qualityIssues: [0, [Validators.min(0)]],
+        reworkRequired: [0, [Validators.min(0)]],
+        inspectionsPassed: [0, [Validators.min(0)]],
+        inspectionsFailed: [0, [Validators.min(0)]],
 
-      // Resource Utilization
-      teamSize: [0, [Validators.min(0)]],
-      teamMembers: this.fb.array([]),
-      regularHours: [0, [Validators.min(0)]],
-      overtimeHours: [0, [Validators.min(0)]],
-      equipmentUtilization: [0, [Validators.min(0), Validators.max(100)]],
-      vehiclesUsed: [0, [Validators.min(0)]],
+        // Resource Utilization
+        teamSize: [0, [Validators.min(0)]],
+        teamMembers: teamMembersArray,
+        regularHours: [0, [Validators.min(0)]],
+        overtimeHours: [0, [Validators.min(0)]],
+        equipmentUtilization: [0, [Validators.min(0), Validators.max(100)]],
+        vehiclesUsed: [0, [Validators.min(0)]],
 
-      // Financial Tracking
-      laborCostToday: [0, [Validators.min(0)]],
-      materialCostToday: [0, [Validators.min(0)]],
-      equipmentCostToday: [0, [Validators.min(0)]],
-      totalCostToday: [0, [Validators.min(0)]],
+        // Financial Tracking
+        laborCostToday: [0, [Validators.min(0)]],
+        materialCostToday: [0, [Validators.min(0)]],
+        equipmentCostToday: [0, [Validators.min(0)]],
+        totalCostToday: [0, [Validators.min(0)]],
 
-      // Productivity Metrics
-      productivityScore: [0, [Validators.min(0), Validators.max(100)]],
+        // Productivity Metrics
+        productivityScore: [0, [Validators.min(0), Validators.max(100)]],
+        
+        // Customer Engagement
+        customerComplaints: [0, [Validators.min(0)]],
+        customerCompliments: [0, [Validators.min(0)]],
+        serviceInterruptions: [0, [Validators.min(0)]],
 
-      // Risk and Reports
-      riskFlag: [false],
-      weeklyReportDetails: [''],
-      keyIssuesSummary: [''],
-      weeklyReportInsights: [''],
-      monthlyReports: [''],
-      siteLiveStatus: ['Not Live'],
-    };
+        // Risk and Reports
+        riskFlag: [false],
+        weeklyReportDetails: [''],
+        keyIssuesSummary: [''],
+        weeklyReportInsights: [''],
+        monthlyReports: [''],
+        siteLiveStatus: ['Not Live'],
+      };
 
-    // Add all existing KPI fields
-    this.kpiDefinitions.forEach((kpiDef) => {
-      formControls[kpiDef.todayField] = [0, [Validators.min(0)]];
-      formControls[kpiDef.totalField] = [0, [Validators.min(0)]];
-    });
+      // Add all existing KPI fields
+      this.kpiDefinitions.forEach((kpiDef) => {
+        formControls[kpiDef.todayField] = [0, [Validators.min(0)]];
+        formControls[kpiDef.totalField] = [0, [Validators.min(0)]];
+      });
 
-    // Add home-related fields
-    formControls['homeSignupsToday'] = [0, [Validators.min(0)]];
-    formControls['homeSignupsTotal'] = [0, [Validators.min(0)]];
-    formControls['homeDropsToday'] = [0, [Validators.min(0)]];
-    formControls['homeDropsTotal'] = [0, [Validators.min(0)]];
-    formControls['homesConnectedToday'] = [0, [Validators.min(0)]];
-    formControls['homesConnectedTotal'] = [0, [Validators.min(0)]];
+      // Add home-related fields
+      formControls['homeSignupsToday'] = [0, [Validators.min(0)]];
+      formControls['homeSignupsTotal'] = [0, [Validators.min(0)]];
+      formControls['homeDropsToday'] = [0, [Validators.min(0)]];
+      formControls['homeDropsTotal'] = [0, [Validators.min(0)]];
+      formControls['homesConnectedToday'] = [0, [Validators.min(0)]];
+      formControls['homesConnectedTotal'] = [0, [Validators.min(0)]];
 
-    this.kpiForm = this.fb.group(formControls);
+      // Create the form
+      this.kpiForm = this.fb.group(formControls);
+      
+      // Verify form was created successfully
+      if (!this.kpiForm) {
+        throw new Error('Failed to create form');
+      }
+      
+      console.log('Form initialized successfully with', Object.keys(this.kpiForm.controls).length, 'controls');
+    } catch (error) {
+      console.error('Error in initializeForm:', error);
+      // Create a minimal form as fallback
+      this.kpiForm = this.fb.group({
+        projectId: ['', Validators.required],
+        date: [new Date(), Validators.required],
+        teamMembers: this.fb.array([])
+      });
+    }
   }
 
   private setupFormListeners() {
+    if (!this.kpiForm || !this.kpiForm.controls) {
+      console.error('Form not ready for listeners');
+      return;
+    }
+    
     // Calculate total cost when individual costs change
     ['laborCostToday', 'materialCostToday', 'equipmentCostToday'].forEach((field) => {
-      this.kpiForm.get(field)?.valueChanges.subscribe(() => {
-        this.calculateTotalCost();
-      });
+      const control = this.kpiForm.get(field);
+      if (control) {
+        control.valueChanges.subscribe(() => {
+          this.calculateTotalCost();
+        });
+      }
     });
 
     // Temperature range
@@ -1114,11 +1198,32 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
     this.kpiForm.patchValue({ totalCostToday: total }, { emitEvent: false });
   }
 
-  get teamMembersArray() {
-    return this.kpiForm.get('teamMembers') as FormArray;
+  get teamMembersArray(): FormArray {
+    try {
+      if (!this.kpiForm) {
+        // Return empty FormArray if form doesn't exist
+        return this.fb.array([]);
+      }
+      const formArray = this.kpiForm.get('teamMembers') as FormArray;
+      if (!formArray) {
+        // Create it if it doesn't exist
+        const newArray = this.fb.array([]);
+        this.kpiForm.setControl('teamMembers', newArray);
+        return newArray;
+      }
+      return formArray;
+    } catch (error) {
+      console.error('Error getting teamMembersArray:', error);
+      // Always return a valid FormArray
+      return this.fb.array([]);
+    }
   }
 
   addTeamMember() {
+    if (!this.kpiForm) {
+      return;
+    }
+    
     const memberGroup = this.fb.group({
       id: ['', Validators.required],
       name: [''],
@@ -1137,10 +1242,13 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
       }
     });
 
-    this.teamMembersArray.push(memberGroup);
+    this.teamMembersArray.push(memberGroup as any);
   }
 
   removeTeamMember(index: number) {
+    if (!this.kpiForm || !this.teamMembersArray) {
+      return;
+    }
     this.teamMembersArray.removeAt(index);
   }
 
@@ -1285,7 +1393,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
   }
 
   async onSubmit() {
-    if (this.kpiForm.invalid) {
+    if (!this.kpiForm || this.kpiForm.invalid) {
       this.snackBar.open('Please fill in all required fields', 'Close', { duration: 3000 });
       return;
     }
@@ -1385,7 +1493,7 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
 
   cancel() {
     // Check if form has unsaved changes
-    if (this.kpiForm.dirty && !this.loading()) {
+    if (this.kpiForm && this.kpiForm.dirty && !this.loading()) {
       const confirmLeave = confirm('You have unsaved changes. Are you sure you want to leave?');
       if (!confirmLeave) {
         return;
@@ -1507,6 +1615,9 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
   }
 
   private isFormMostlyEmpty(): boolean {
+    if (!this.kpiForm) {
+      return true;
+    }
     const formValue = this.kpiForm.value;
     // Check if most KPI fields are empty (0 or null/undefined)
     const kpiFields = this.kpiDefinitions.map((kpi) => kpi.key);
@@ -1517,5 +1628,45 @@ export class DailyKpisEnhancedFormComponent implements OnInit {
 
     // If less than 3 fields are filled, consider it mostly empty
     return filledFields.length < 3;
+  }
+
+  isFormReady(): boolean {
+    if (!this.kpiForm) return false;
+    
+    // Check that all essential form controls exist and have valid validators
+    const essentialControls = [
+      'projectId', 'date', 'teamMembers', 'comments',
+      'weatherConditions', 'safetyIncidents', 'laborCostToday'
+    ];
+    
+    for (const controlName of essentialControls) {
+      const control = this.kpiForm.get(controlName);
+      if (!control || control === null) {
+        console.warn(`Form control '${controlName}' is null or missing`);
+        return false;
+      }
+    }
+    
+    // Specifically check teamMembers FormArray
+    const teamMembersControl = this.kpiForm.get('teamMembers');
+    if (!teamMembersControl || !(teamMembersControl instanceof FormArray)) {
+      console.warn('teamMembers control is not a proper FormArray');
+      return false;
+    }
+    
+    return true;
+  }
+
+  private createFallbackForm(): void {
+    console.log('Creating fallback form...');
+    this.kpiForm = this.fb.group({
+      projectId: ['', Validators.required],
+      date: [new Date(), Validators.required],
+      teamMembers: this.fb.array([]),
+      comments: [''],
+      weatherConditions: [''],
+      safetyIncidents: [0, Validators.min(0)],
+      laborCostToday: [0, Validators.min(0)]
+    });
   }
 }

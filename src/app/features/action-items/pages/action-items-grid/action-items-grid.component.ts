@@ -74,6 +74,7 @@ export class ActionItemsGridComponent implements OnInit, OnDestroy {
 
   // State
   loading = signal(true);
+  syncing = signal(false);
   actionItems = signal<ActionItemManagement[]>([]);
   stats = signal<ActionItemStats | null>(null);
   searchText = signal('');
@@ -334,5 +335,43 @@ export class ActionItemsGridComponent implements OnInit, OnDestroy {
   applyQuickFilter() {
     // AG-Grid doesn't use setQuickFilter anymore, we'll use our computed filteredItems instead
     // The filtering is already handled by the computed signal
+  }
+
+  async syncFromMeetings() {
+    try {
+      const user = this.authService.currentUser();
+      if (!user) {
+        this.snackBar.open('Please login to sync action items', 'Close', {
+          duration: 3000,
+        });
+        return;
+      }
+
+      this.syncing.set(true);
+      
+      const importCount = await this.actionItemsService.importUnmanagedActionItems(
+        user.uid,
+        user.email || 'unknown@fibreflow.com'
+      );
+
+      if (importCount > 0) {
+        this.snackBar.open(`Successfully imported ${importCount} action items from meetings`, 'Close', {
+          duration: 5000,
+        });
+        // Refresh the data
+        this.loadData();
+      } else {
+        this.snackBar.open('No new action items found to import', 'Close', {
+          duration: 3000,
+        });
+      }
+    } catch (error) {
+      console.error('Error syncing action items:', error);
+      this.snackBar.open('Error syncing action items from meetings', 'Close', {
+        duration: 3000,
+      });
+    } finally {
+      this.syncing.set(false);
+    }
   }
 }

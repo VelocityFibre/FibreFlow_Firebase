@@ -307,6 +307,29 @@ const allRoutes: Routes = [
       import('./features/debug/sentry-test.component').then((m) => m.SentryTestComponent),
     canActivate: [authGuard],
   },
+  // Argon AI Assistant Dashboard
+  {
+    path: 'argon',
+    loadComponent: () => import('../../agents/argon/components/argon-dashboard.component')
+      .then(m => m.ArgonDashboardComponent),
+    canActivate: [authGuard],
+    data: { 
+      title: 'Argon AI Assistant',
+      description: 'AI coding assistant with multi-database analytics'
+    }
+  },
+  // ✅ DIRECT: Offline Pole Capture (workaround for nested route issues)
+  {
+    path: 'offline-pole-capture',
+    loadComponent: () => 
+      import('./features/pole-tracker/mobile/pages/offline-capture/offline-capture.component')
+        .then(m => m.OfflineCaptureComponent),
+    canActivate: [authGuard],
+    data: { 
+      title: 'Offline Pole Capture',
+      description: 'Capture pole data offline with GPS and photos'
+    }
+  },
 ];
 
 // Filter routes based on demo configuration

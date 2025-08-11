@@ -608,6 +608,8 @@ export class AppShellComponent {
 
   // Analytics category items
   analyticsItems: NavItem[] = this.filterItems([
+    { label: 'Project Progress Summary', icon: 'summarize', route: '/analytics/project-progress' },
+    { label: 'Project Progress (Neon)', icon: 'storage', route: '/analytics/project-progress/neon' },
     { label: 'Pole Permission Analytics', icon: 'analytics', route: '/analytics/pole-permissions' },
     { label: 'Image Upload', icon: 'cloud_upload', route: '/images/upload' },
   ]);
@@ -617,6 +619,7 @@ export class AppShellComponent {
     { label: 'Pole Tracker (Mobile)', icon: 'smartphone', route: '/pole-tracker/mobile' },
     { label: 'Pole Map View', icon: 'map', route: '/pole-tracker/mobile/map' },
     { label: 'Quick Capture', icon: 'camera_alt', route: '/pole-tracker/mobile/capture' },
+    { label: 'Offline Pole Capture', icon: 'cloud_off', route: '/offline-pole-capture' },
     { label: 'My Assignments', icon: 'assignment_ind', route: '/pole-tracker/mobile/assignments' },
     { label: 'Nearby Poles', icon: 'near_me', route: '/pole-tracker/mobile/nearby' },
   ]);

@@ -13,6 +13,32 @@
       "version": 1
     }
   ],
-  "patterns": {},
+  "patterns": {
+    "debugging": [
+      {
+        "id": "pattern_debugging_1755087100000",
+        "pattern": "When user reports UI issues, ALWAYS verify which component they're viewing: 1) Look for unique text on their screen, 2) Use grep to find that text in codebase, 3) Ask 'Are you seeing a grid/table or a list?' Don't assume from URLs - check actual content!",
+        "category": "debugging",
+        "metadata": {
+          "source": "Action Items Grid vs List incident",
+          "importance": "critical"
+        },
+        "timestamp": "2025-08-13T12:11:40.000Z",
+        "active": true
+      }
+    ],
+    "ui-layout": [
+      {
+        "id": "pattern_layout_1755087200000",
+        "pattern": "All FibreFlow pages must use standard ff-page-container wrapper for consistent alignment. When users report layout issues, first check if page is missing this wrapper.",
+        "category": "ui-layout",
+        "metadata": {
+          "source": "Action Items Grid alignment fix"
+        },
+        "timestamp": "2025-08-13T12:13:20.000Z",
+        "active": true
+      }
+    ]
+  },
   "preferences": []
 }

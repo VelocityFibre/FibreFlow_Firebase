@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+
+# Configuration with sensitive data
+config/postgres-connection.json
+.env
+.env.local
+
+# Logs
+logs/*.log
+logs/*.json
+*.log
+
+# Data files
+data/*.xlsx
+data/*.csv
+data/*.json
+
+# Backup files
+*.sql
+*.dump
+*_backup_*
+
+# Temporary files
+temp/
+tmp/
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Database dumps
+schema_dump.sql
+data_dump.sql
+*_dump.sql
+local_backup_*.sql
+
+# Test files
+test-data/
+*.test.js

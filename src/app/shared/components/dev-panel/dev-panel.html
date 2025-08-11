@@ -213,6 +213,50 @@
             </ng-template>
 
             <div class="chat-container">
+              <!-- Agent Status Bar -->
+              <div class="agent-status-bar">
+                @if (neonAgentAvailable()) {
+                  <mat-chip color="primary" class="agent-status">
+                    <mat-icon>database</mat-icon>
+                    Neon+Gemini Ready
+                  </mat-chip>
+                } @else {
+                  <mat-chip class="agent-status">
+                    <mat-icon>cloud_off</mat-icon>
+                    Firebase Fallback
+                  </mat-chip>
+                }
+                
+                @if (usingNeonAgent()) {
+                  <mat-chip color="accent" class="active-agent">
+                    <mat-icon>psychology</mat-icon>
+                    Using Gemini
+                  </mat-chip>
+                }
+                
+                <button mat-icon-button (click)="recheckNeonAgent()" matTooltip="Refresh agent status">
+                  <mat-icon>refresh</mat-icon>
+                </button>
+              </div>
+
+              <!-- Suggested Questions (only show if Neon agent available) -->
+              @if (neonAgentAvailable() && chatMessages().length === 0) {
+                <div class="suggested-questions">
+                  <h4>💡 Try asking about Lawley data:</h4>
+                  <div class="question-chips">
+                    @for (question of getSuggestedQuestions().slice(0, 6); track question) {
+                      <mat-chip 
+                        class="suggested-question" 
+                        (click)="sendSuggestedQuestion(question)"
+                        matTooltip="Click to ask this question"
+                      >
+                        {{ question }}
+                      </mat-chip>
+                    }
+                  </div>
+                </div>
+              }
+
               <!-- Chat Messages -->
               <div class="chat-messages">
                 @for (message of chatMessages(); track $index) {
@@ -265,10 +309,17 @@
                   </textarea>
                 </mat-form-field>
                 <div class="chat-actions">
-                  <button mat-button (click)="testAgentDatabase()" color="warn">
-                    <mat-icon>bug_report</mat-icon>
-                    Test DB
-                  </button>
+                  @if (neonAgentAvailable()) {
+                    <button mat-button (click)="testNeonAgent()" color="primary">
+                      <mat-icon>psychology</mat-icon>
+                      Test Neon
+                    </button>
+                  } @else {
+                    <button mat-button (click)="testAgentDatabase()" color="warn">
+                      <mat-icon>bug_report</mat-icon>
+                      Diagnostics
+                    </button>
+                  }
                   <button mat-button (click)="clearChat()" [disabled]="chatMessages().length === 0">
                     <mat-icon>clear_all</mat-icon>
                     Clear

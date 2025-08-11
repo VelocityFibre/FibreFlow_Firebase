@@ -23,6 +23,11 @@
       "@environments/*": ["src/environments/*"]
     }
   },
+  "exclude": [
+    "src/app/features/pole-tracker/mobile/pages/offline-capture/**",
+    "src/app/features/pole-tracker/mobile/components/sync-status/**",
+    "src/app/features/pole-tracker/mobile/components/gps-accuracy/**"
+  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,

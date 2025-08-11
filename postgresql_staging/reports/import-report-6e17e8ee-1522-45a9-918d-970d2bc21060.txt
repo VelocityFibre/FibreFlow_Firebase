@@ -1,0 +1,38 @@
+IMPORT REPORT
+============
+Generated: 2025-08-12T11:48:20.996Z
+
+IMPORT DETAILS
+--------------
+Batch ID: 6e17e8ee-1522-45a9-918d-970d2bc21060
+Source File: 1754891492681_Lawley_08082025.xlsx
+Import Started: Tue Aug 12 2025 13:44:00 GMT+0200 (South Africa Standard Time)
+Import Completed: Tue Aug 12 2025 13:48:12 GMT+0200 (South Africa Standard Time)
+Status: completed
+
+STATISTICS
+----------
+Total Rows: 15597
+New Records: 14429
+Updated Records: 0
+Status Changes: 0
+Errors: 0
+
+Unique Properties: 14429
+Unique Poles: 3423
+Unique Agents: 130
+Average Quality Score: 0.96
+
+DATA QUALITY
+------------
+Excellent (90-100%): 11325 records (100.0% avg)
+Good (70-89%): 2506 records (85.0% avg)
+Fair (50-69%): 598 records (65.0% avg)
+
+CHANGE SUMMARY
+--------------
+
+
+TOP STATUS CHANGES
+------------------
+

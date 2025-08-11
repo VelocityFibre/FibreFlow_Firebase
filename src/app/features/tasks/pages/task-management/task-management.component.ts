@@ -21,6 +21,7 @@ import { DateFormatService } from '../../../../core/services/date-format.service
 import { NotificationService } from '../../../../core/services/notification.service';
 import { Project } from '../../../../core/models/project.model';
 import { StaffMember } from '../../../staff/models/staff.model';
+import { PageHeaderComponent, PageHeaderAction } from '../../../../shared/components/page-header/page-header.component';
 
 interface TaskDisplay extends Task {
   projectName?: string;
@@ -43,6 +44,7 @@ interface TaskDisplay extends Task {
     MatFormFieldModule,
     MatCheckboxModule,
     MatProgressSpinnerModule,
+    PageHeaderComponent,
   ],
   templateUrl: './task-management.component.html',
   styleUrls: ['./task-management.component.scss'],
@@ -72,6 +74,22 @@ export class TaskManagementComponent implements OnInit {
 
   // Expose enum to template
   TaskStatus = TaskStatus;
+
+  // Header actions
+  headerActions: PageHeaderAction[] = [
+    {
+      label: 'Switch to Grid View',
+      icon: 'grid_view',
+      variant: 'stroked',
+      action: () => this.navigateToGridView()
+    },
+    {
+      label: 'Refresh',
+      icon: 'refresh',
+      variant: 'stroked',
+      action: () => this.refreshTasks()
+    }
+  ];
 
   ngOnInit() {
     console.log('Task Management Component - ngOnInit started');

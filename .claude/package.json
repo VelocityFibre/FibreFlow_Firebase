@@ -10,9 +10,9 @@
     "zep:migrate": "node zep-bridge.js migrate"
   },
   "dependencies": {
-    "@getzep/zep-cloud": "^2.0.0",
-    "dotenv": "^16.0.0",
-    "axios": "^1.6.0"
+    "@getzep/zep-cloud": "^2.21.0",
+    "axios": "^1.6.0",
+    "dotenv": "^16.0.0"
   },
   "engines": {
     "node": ">=18.0.0"

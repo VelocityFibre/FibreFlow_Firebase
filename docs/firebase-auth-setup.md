@@ -2,13 +2,31 @@
 
 This document outlines the permanent authentication setup for Firebase CI/CD operations in the FibreFlow project.
 
-## Overview
+## 🚀 RECOMMENDED: Service Account Method (NEW)
 
-As a sole developer, you need a permanent authentication solution that doesn't require repeated logins. This setup uses Firebase CI tokens which never expire until manually revoked.
+**Use service accounts instead of CI tokens - they're 100% reliable and never expire!**
 
-## Initial Setup (One-Time Only)
+See the complete guide at: `firebase-login/README.md`
 
-### 1. Generate Firebase CI Token
+### Quick Setup
+```bash
+# One-time setup
+./firebase-login/setup-permanent-auth.sh
+source ~/.bashrc
+
+# Deploy anytime (always works!)
+firebase deploy --only hosting
+```
+
+## Overview (Legacy CI Token Method - Deprecated)
+
+⚠️ **DEPRECATED**: CI tokens frequently fail with "credentials no longer valid" errors. Use service accounts instead.
+
+As a sole developer, you need a permanent authentication solution that doesn't require repeated logins. This setup uses Firebase CI tokens which never expire until manually revoked - however, they are unreliable and often fail.
+
+## ⚠️ Legacy CI Token Setup (DO NOT USE - Unreliable)
+
+### 1. Generate Firebase CI Token (DEPRECATED)
 
 ```bash
 firebase login:ci

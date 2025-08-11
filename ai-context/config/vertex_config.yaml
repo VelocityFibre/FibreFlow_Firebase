@@ -1,0 +1,48 @@
+# Vertex AI Context Manager Configuration
+
+project:
+  id: fibreflow-73daf
+  name: FibreFlow
+  root: /home/ldp/VF/Apps/FibreFlow
+
+vertex_ai:
+  location: us-central1
+  model: gemini-1.5-pro-preview-0409
+  temperature: 0.3
+  max_input_tokens: 1048576
+  max_output_tokens: 8192
+
+codebase:
+  include_patterns:
+    - "**/*.ts"
+    - "**/*.html"
+    - "**/*.scss"
+    - "**/*.json"
+    - "**/CLAUDE.md"
+  exclude_patterns:
+    - "**/node_modules/**"
+    - "**/dist/**"
+    - "**/.angular/**"
+    - "**/coverage/**"
+    - "**/*.spec.ts"
+
+caching:
+  enabled: true
+  ttl: 3600
+  max_size_mb: 100
+  strategy: lru
+
+patterns:
+  enforce: true
+  strict_mode: true
+  auto_detect: true
+  
+monitoring:
+  log_level: INFO
+  track_costs: true
+  alert_threshold: 10.00
+  
+cli:
+  default_command: enhance
+  history_size: 100
+  output_format: markdown

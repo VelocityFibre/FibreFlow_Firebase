@@ -1,3 +1,11 @@
 {
-  "sessions": []
+  "sessions": [
+    {
+      "id": "session_1755086992794",
+      "title": "Action Items Grid vs List Debugging Nightmare",
+      "summary": "Wasted 4 hours debugging wrong component. User was viewing action-items-grid but I was editing action-items-list. The clue 'Double-click cells to edit' only appears in grid view. Solution: Add ff-page-container wrapper. Lesson: Always verify actual component by checking unique text, using grep, or asking user if they see grid vs list view.",
+      "learnings": [],
+      "timestamp": "2025-08-13T12:09:52.794Z"
+    }
+  ]
 }

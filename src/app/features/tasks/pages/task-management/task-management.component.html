@@ -1,21 +1,10 @@
 <div class="ff-page-container">
   <!-- Page Header -->
-  <div class="ff-page-header">
-    <div class="header-content">
-      <h1 class="page-title">Task Management</h1>
-      <p class="page-subtitle">View and manage all tasks across projects</p>
-    </div>
-    <div class="header-actions">
-      <button mat-button (click)="navigateToGridView()">
-        <mat-icon>grid_view</mat-icon>
-        Switch to Grid View
-      </button>
-      <button mat-button (click)="refreshTasks()">
-        <mat-icon>refresh</mat-icon>
-        Refresh
-      </button>
-    </div>
-  </div>
+  <app-page-header
+    title="Task Management"
+    subtitle="View and manage all tasks across projects"
+    [actions]="headerActions"
+  ></app-page-header>
 
   <!-- Filters -->
   <mat-card class="ff-card filters-card">

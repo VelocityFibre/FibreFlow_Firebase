@@ -20,9 +20,10 @@ import { DevNoteService } from '../../../core/services/dev-note.service';
 import { RouteTrackerService } from '../../../core/services/route-tracker.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { AgentChatService, ChatMessage } from '../../../core/services/agent-chat.service';
+import { NeonGeminiAgentService, NeonQueryResponse } from '../../../core/services/neon-gemini-agent.service';
 import { DevTask, PageError } from '../../../core/models/dev-note.model';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { switchMap } from 'rxjs';
+import { switchMap, firstValueFrom } from 'rxjs';
 import { MarkdownPipe } from '../../pipes/markdown.pipe';
 import { Functions, httpsCallable } from '@angular/fire/functions';
 import { ProjectService } from '../../../core/services/project.service';
@@ -58,6 +59,7 @@ export class DevPanel {
   private routeTracker = inject(RouteTrackerService);
   private authService = inject(AuthService);
   private agentChat = inject(AgentChatService);
+  private neonAgent = inject(NeonGeminiAgentService);
   private functions = inject(Functions);
   private projectService = inject(ProjectService);
   private poleTrackerService = inject(PoleTrackerService);
@@ -70,6 +72,10 @@ export class DevPanel {
   chatMessages = signal<ChatMessage[]>([]);
   chatInput = '';
   isLoadingChat = signal(false);
+  
+  // Neon agent status
+  neonAgentAvailable = signal(false);
+  usingNeonAgent = signal(false);
 
   // Current route info
   currentRoute = this.routeTracker.currentRoute;
@@ -109,6 +115,9 @@ export class DevPanel {
         this.notesText.set(note.notes || '');
       }
     });
+    
+    // Check Neon agent availability on startup
+    // this.checkNeonAgentStatus();
   }
 
   togglePanel() {
@@ -191,6 +200,32 @@ export class DevPanel {
     return errors.filter((e) => !e.resolved).length;
   }
 
+  // Check Neon agent availability
+  async checkNeonAgentStatus() {
+    try {
+      const isRunning = await firstValueFrom(this.neonAgent.isServiceRunning());
+      this.neonAgentAvailable.set(isRunning);
+      
+      if (isRunning) {
+        console.log('✅ Neon+Gemini agent is available');
+        this.chatMessages.update(messages => [
+          ...messages,
+          {
+            role: 'agent',
+            content: '🎯 **Neon Database Agent Ready!**\n\nI can now answer questions about your fiber optic data using natural language.\n\n**Try asking:**\n- "How many poles are planted in Lawley?"\n- "What\'s the status distribution for all poles?"\n- "Show me recent status changes"\n\n*Using Google Gemini + Neon Database*',
+            timestamp: new Date(),
+            mode: 'neon-status'
+          }
+        ]);
+      } else {
+        console.log('⚠️ Neon+Gemini agent is not available, using Firebase fallback');
+      }
+    } catch (error) {
+      console.log('❌ Neon agent check failed:', error);
+      this.neonAgentAvailable.set(false);
+    }
+  }
+
   // Chat methods
   async sendChatMessage() {
     const message = this.chatInput.trim();
@@ -213,12 +248,55 @@ export class DevPanel {
     this.isLoadingChat.set(true);
 
     try {
-      console.log('DevPanel: Calling agent chat service...');
+      // Try Neon agent first if available
+      if (this.neonAgentAvailable()) {
+        console.log('DevPanel: Using Neon+Gemini agent...');
+        this.usingNeonAgent.set(true);
+        
+        const currentRoute = this.currentRoute();
+        const neonResponse = await firstValueFrom(
+          this.neonAgent.askQuestionWithContext(message, currentRoute?.path)
+        );
 
-      // Send to agent
-      const response = await this.agentChat.sendMessage(message).toPromise();
+        console.log('DevPanel: Received Neon agent response:', neonResponse);
 
-      console.log('DevPanel: Received response from agent:', response);
+        if (neonResponse.success && neonResponse.answer) {
+          let responseContent = neonResponse.answer;
+          
+          // Add SQL query if included
+          if (neonResponse.sql_query) {
+            responseContent += `\n\n*🔍 SQL Query: \`${neonResponse.sql_query}\`*`;
+          }
+          
+          // Add execution time
+          responseContent += `\n\n*⚡ Query executed in ${neonResponse.execution_time}ms using Gemini+Neon*`;
+
+          this.chatMessages.update((messages) => [
+            ...messages,
+            {
+              role: 'agent',
+              content: responseContent,
+              timestamp: new Date(),
+              mode: 'neon-gemini',
+              executionTime: neonResponse.execution_time,
+              sqlQuery: neonResponse.sql_query
+            },
+          ]);
+          
+          return; // Success with Neon agent
+        } else {
+          console.warn('DevPanel: Neon agent returned error, falling back to Firebase');
+          // Fall through to Firebase agent
+        }
+      }
+
+      // Fallback to Firebase agent
+      console.log('DevPanel: Using Firebase agent fallback...');
+      this.usingNeonAgent.set(false);
+      
+      const response = await firstValueFrom(this.agentChat.sendMessage(message));
+
+      console.log('DevPanel: Received Firebase agent response:', response);
 
       if (response) {
         // Add agent response with enhanced context info
@@ -229,7 +307,7 @@ export class DevPanel {
           responseContent += `\n\n*📊 Database context used: ${response.dataUsed.join(', ')}*`;
         }
 
-        console.log('DevPanel: Adding agent response to chat:', {
+        console.log('DevPanel: Adding Firebase agent response to chat:', {
           mode: response.mode,
           dataUsed: response.dataUsed,
           responseLength: responseContent.length,
@@ -246,7 +324,7 @@ export class DevPanel {
           },
         ]);
       } else {
-        console.warn('DevPanel: No response received from agent');
+        console.warn('DevPanel: No response received from any agent');
         this.chatMessages.update((messages) => [
           ...messages,
           {
@@ -258,12 +336,7 @@ export class DevPanel {
       }
     } catch (error: any) {
       console.error('DevPanel: Chat error occurred:', error);
-      console.error('DevPanel: Error details:', {
-        name: error?.name,
-        message: error?.message,
-        stack: error?.stack,
-      });
-
+      
       this.chatMessages.update((messages) => [
         ...messages,
         {
@@ -275,6 +348,7 @@ export class DevPanel {
     } finally {
       console.log('DevPanel: Chat message processing complete, setting loading to false');
       this.isLoadingChat.set(false);
+      this.usingNeonAgent.set(false);
     }
   }
 
@@ -287,6 +361,47 @@ export class DevPanel {
       event.preventDefault();
       this.sendChatMessage();
     }
+  }
+
+  // Neon agent helper methods
+  getSuggestedQuestions(): string[] {
+    return this.neonAgent.getSuggestedQuestions();
+  }
+
+  sendSuggestedQuestion(question: string) {
+    this.chatInput = question;
+    this.sendChatMessage();
+  }
+
+  async testNeonAgent() {
+    this.chatMessages.update(messages => [
+      ...messages,
+      {
+        role: 'user',
+        content: '🔧 Testing Neon+Gemini agent...',
+        timestamp: new Date()
+      }
+    ]);
+
+    try {
+      // Test with a simple question
+      const testQuestion = "How many total records are in the status_changes table?";
+      this.sendSuggestedQuestion(testQuestion);
+    } catch (error) {
+      console.error('Neon agent test failed:', error);
+      this.chatMessages.update(messages => [
+        ...messages,
+        {
+          role: 'agent',
+          content: `❌ Test failed: ${error}`,
+          timestamp: new Date()
+        }
+      ]);
+    }
+  }
+
+  async recheckNeonAgent() {
+    this.checkNeonAgentStatus();
   }
 
   // Test database connection

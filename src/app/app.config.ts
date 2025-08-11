@@ -13,6 +13,7 @@ import { provideFunctions, getFunctions } from '@angular/fire/functions';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { provideServiceWorker } from '@angular/service-worker';
 import * as Sentry from '@sentry/angular';
 
 import { routes } from './app.routes';
@@ -58,5 +59,11 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth()),
     provideStorage(() => getStorage()),
     provideFunctions(() => getFunctions(undefined, 'us-central1')),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
   ],
 };

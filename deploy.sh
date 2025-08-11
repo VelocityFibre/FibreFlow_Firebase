@@ -1,5 +1,7 @@
 #!/bin/bash
 # FibreFlow Deploy Script with jj integration
+# UPDATED: Now uses Service Account authentication (reliable!)
+# Fallback: CI token method (legacy - often fails)
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -7,15 +9,24 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-# Load token from .env.local file
-if [ -f .env.local ]; then
-    export $(grep FIREBASE_TOKEN .env.local | xargs)
-fi
-
-# Check if token is set
-if [ -z "$FIREBASE_TOKEN" ]; then
-    echo -e "${RED}Error: FIREBASE_TOKEN not found in .env.local${NC}"
-    exit 1
+# NEW: Use Service Account (Recommended - Never Expires!)
+SERVICE_ACCOUNT_PATH="./fibreflow-service-account.json"
+if [ -f "$SERVICE_ACCOUNT_PATH" ]; then
+    export GOOGLE_APPLICATION_CREDENTIALS="$SERVICE_ACCOUNT_PATH"
+    echo -e "${GREEN}🔐 Using service account authentication (reliable!)${NC}"
+else
+    # FALLBACK: Use CI token from .env.local (Legacy - Often Fails)
+    echo -e "${YELLOW}⚠️  Service account not found, falling back to CI token method${NC}"
+    if [ -f .env.local ]; then
+        export $(grep FIREBASE_TOKEN .env.local | xargs)
+    fi
+    
+    if [ -z "$FIREBASE_TOKEN" ]; then
+        echo -e "${RED}Error: No authentication method available${NC}"
+        echo -e "${YELLOW}Recommended fix: Run ./firebase-login/setup-permanent-auth.sh${NC}"
+        exit 1
+    fi
+    echo -e "${YELLOW}Using CI token (may fail with 'credentials no longer valid')${NC}"
 fi
 
 # Function to commit changes with jj
@@ -36,7 +47,11 @@ deploy_preview() {
     npm run build
     
     echo -e "${YELLOW}🚀 Deploying to preview channel: $channel_name${NC}"
-    firebase hosting:channel:deploy "$channel_name" --expires "$expires" --token "$FIREBASE_TOKEN"
+    if [ -n "$GOOGLE_APPLICATION_CREDENTIALS" ]; then
+        firebase hosting:channel:deploy "$channel_name" --expires "$expires"
+    else
+        firebase hosting:channel:deploy "$channel_name" --expires "$expires" --token "$FIREBASE_TOKEN"
+    fi
 }
 
 # Function to deploy to production
@@ -45,7 +60,11 @@ deploy_prod() {
     npm run build
     
     echo -e "${YELLOW}🚀 Deploying to production...${NC}"
-    firebase deploy --only hosting --token "$FIREBASE_TOKEN"
+    if [ -n "$GOOGLE_APPLICATION_CREDENTIALS" ]; then
+        firebase deploy --only hosting
+    else
+        firebase deploy --only hosting --token "$FIREBASE_TOKEN"
+    fi
 }
 
 # Function for quick deploy (commit + build + deploy)

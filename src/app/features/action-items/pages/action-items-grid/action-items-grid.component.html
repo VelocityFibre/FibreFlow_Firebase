@@ -1,10 +1,11 @@
-<app-page-header
-  title="Action Items Management"
-  subtitle="Manage and track action items from all meetings. Double-click cells to edit."
->
-</app-page-header>
+<div class="ff-page-container">
+  <app-page-header
+    title="Action Items Management"
+    subtitle="Manage and track action items from all meetings. Double-click cells to edit."
+  >
+  </app-page-header>
 
-<div class="action-items-grid-container">
+  <div class="action-items-grid-content">
   <!-- Statistics Cards -->
   <div class="stats-cards" *ngIf="stats()">
     <mat-card class="stat-card">
@@ -83,6 +84,10 @@
             <mat-icon>clear</mat-icon>
             Clear
           </button>
+          <button mat-raised-button color="accent" (click)="syncFromMeetings()" [disabled]="syncing()">
+            <mat-icon>sync</mat-icon>
+            {{ syncing() ? 'Syncing...' : 'Sync from Meetings' }}
+          </button>
           <button mat-raised-button color="primary" (click)="exportToExcel()">
             <mat-icon>download</mat-icon>
             Export to Excel
@@ -123,4 +128,5 @@
       </div>
     </mat-card-content>
   </mat-card>
+</div>
 </div>

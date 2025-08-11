@@ -36,4 +36,13 @@ export const ANALYTICS_ROUTES: Routes = [
     canActivate: [authGuard],
     data: { title: 'Project Progress Summary' },
   },
+  {
+    path: 'project-progress/neon',
+    loadComponent: () =>
+      import('./pages/project-progress-neon/project-progress-neon.component').then(
+        (m) => m.ProjectProgressNeonComponent
+      ),
+    canActivate: [authGuard],
+    data: { title: 'Project Progress Summary (Neon)' },
+  },
 ];

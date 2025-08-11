@@ -23,4 +23,5 @@ export interface Environment {
   sentry: SentryConfig;
   supabaseUrl?: string;
   supabaseAnonKey?: string;
+  neonConnectionString?: string;
 }
