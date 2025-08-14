@@ -613,6 +613,7 @@ export class AppShellComponent {
     { label: 'Pole Permission Analytics', icon: 'analytics', route: '/analytics/pole-permissions' },
     { label: 'Image Upload', icon: 'cloud_upload', route: '/images/upload' },
     { label: 'Argon AI Assistant', icon: 'hub', route: '/argon' },
+    { label: 'Neon Database Agent', icon: 'psychology', route: '/neon-agent' },
   ]);
 
   // Mobile Pages category items

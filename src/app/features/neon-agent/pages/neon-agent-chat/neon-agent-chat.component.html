@@ -1,0 +1,194 @@
+<div class="neon-agent-container">
+  <!-- Header -->
+  <mat-card class="agent-header">
+    <mat-card-content>
+      <div class="header-content">
+        <div class="title-section">
+          <h1>
+            <mat-icon>psychology</mat-icon>
+            Neon Database Agent
+          </h1>
+          <p class="subtitle">Natural language queries powered by Google Gemini</p>
+        </div>
+        
+        <div class="status-section">
+          @if (agentAvailable()) {
+            <mat-chip color="primary">
+              <mat-icon>check_circle</mat-icon>
+              Connected
+            </mat-chip>
+          } @else {
+            <mat-chip color="warn">
+              <mat-icon>error</mat-icon>
+              Disconnected
+            </mat-chip>
+          }
+          
+          <button mat-icon-button (click)="refreshStatus()" matTooltip="Refresh connection">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Database Info -->
+      @if (databaseInfo(); as info) {
+        <div class="database-info">
+          <mat-chip-set>
+            <mat-chip>
+              <mat-icon>database</mat-icon>
+              {{ info.connection_status }}
+            </mat-chip>
+            <mat-chip>
+              <mat-icon>table_chart</mat-icon>
+              {{ info.whitelisted_tables?.length || 0 }} tables
+            </mat-chip>
+            <mat-chip>
+              <mat-icon>psychology</mat-icon>
+              {{ info.llm_model || 'Unknown' }}
+            </mat-chip>
+          </mat-chip-set>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Main Chat Area -->
+  <mat-card class="chat-container">
+    <mat-card-content class="chat-content">
+      <!-- Suggested Questions (show when no messages) -->
+      @if (messages().length === 0 && agentAvailable()) {
+        <div class="suggested-questions">
+          <h3>💡 Try asking about your data:</h3>
+          <div class="questions-grid">
+            @for (question of getSuggestedQuestions(); track question) {
+              <button 
+                mat-stroked-button 
+                class="suggested-question"
+                (click)="sendSuggestedQuestion(question)"
+              >
+                {{ question }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Messages -->
+      <div class="messages-container">
+        @for (message of messages(); track $index) {
+          <div class="message" [class]="getMessageClass(message.role)">
+            <div class="message-header">
+              <mat-icon>{{ getMessageIcon(message.role) }}</mat-icon>
+              <span class="message-role">
+                {{ message.role === 'user' ? 'You' : message.role === 'agent' ? 'Gemini' : 'System' }}
+              </span>
+              <span class="message-time">{{ message.timestamp | date:'short' }}</span>
+            </div>
+            
+            <div class="message-content" [innerHTML]="message.content | markdown"></div>
+            
+            <!-- Metadata -->
+            @if (message.metadata) {
+              <div class="message-metadata">
+                @if (message.metadata.executionTime) {
+                  <mat-chip>
+                    <mat-icon>schedule</mat-icon>
+                    {{ message.metadata.executionTime }}ms
+                  </mat-chip>
+                }
+                @if (message.metadata.sqlQuery && showSqlQueries()) {
+                  <div class="sql-query">
+                    <code>{{ message.metadata.sqlQuery }}</code>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Loading indicator -->
+        @if (isLoading()) {
+          <div class="message message-agent loading">
+            <mat-spinner diameter="20"></mat-spinner>
+            <span>Thinking...</span>
+          </div>
+        }
+      </div>
+    </mat-card-content>
+
+    <!-- Input Area -->
+    <mat-card-actions class="chat-actions">
+      <mat-form-field appearance="outline" class="message-input">
+        <mat-label>Ask a question about your data</mat-label>
+        <textarea
+          matInput
+          [(ngModel)]="inputMessage"
+          (keydown)="onKeydown($event)"
+          [disabled]="!agentAvailable() || isLoading()"
+          placeholder="e.g., How many poles are installed in Lawley?"
+          rows="2"
+        ></textarea>
+        <mat-hint>Press Ctrl+Enter to send</mat-hint>
+      </mat-form-field>
+
+      <div class="action-buttons">
+        <mat-checkbox [(ngModel)]="showSqlQueries">
+          Show SQL
+        </mat-checkbox>
+        
+        <button 
+          mat-button 
+          (click)="testAgent()"
+          [disabled]="!agentAvailable() || isLoading()"
+        >
+          <mat-icon>bug_report</mat-icon>
+          Test
+        </button>
+        
+        <button 
+          mat-button 
+          (click)="clearChat()"
+          [disabled]="messages().length === 0"
+        >
+          <mat-icon>clear</mat-icon>
+          Clear
+        </button>
+        
+        <button 
+          mat-raised-button 
+          color="primary"
+          (click)="sendMessage()"
+          [disabled]="!inputMessage().trim() || !agentAvailable() || isLoading()"
+        >
+          <mat-icon>send</mat-icon>
+          Send
+        </button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- Stats Panel -->
+  @if (agentStats(); as stats) {
+    <mat-card class="stats-panel">
+      <mat-card-header>
+        <mat-card-title>Agent Statistics</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stats-grid">
+          <div class="stat">
+            <span class="stat-label">Total Queries</span>
+            <span class="stat-value">{{ stats.total_queries }}</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Success Rate</span>
+            <span class="stat-value">{{ stats.success_rate }}%</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Avg Response Time</span>
+            <span class="stat-value">{{ stats.average_execution_time }}ms</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

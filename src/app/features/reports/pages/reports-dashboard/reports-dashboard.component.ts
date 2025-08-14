@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { PageHeaderComponent, PageHeaderAction } from '../../../../shared/components/page-header/page-header.component';
 import { ReportService } from '../../services/report.service';
 
 @Component({
@@ -20,21 +21,16 @@ import { ReportService } from '../../services/report.service';
     MatTabsModule,
     MatTableModule,
     MatProgressSpinnerModule,
+    PageHeaderComponent,
   ],
   template: `
-    <div class="reports-dashboard-container">
-      <mat-card class="header-card">
-        <mat-card-header>
-          <mat-card-title>Reports Dashboard</mat-card-title>
-          <mat-card-subtitle>Generate and view project reports</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-actions>
-          <button mat-raised-button color="primary" (click)="navigateToGenerator()">
-            <mat-icon>add</mat-icon>
-            Generate New Report
-          </button>
-        </mat-card-actions>
-      </mat-card>
+    <div class="ff-page-container">
+      <!-- Page Header -->
+      <app-page-header
+        title="Reports Dashboard"
+        subtitle="Generate and view project reports"
+        [actions]="headerActions"
+      ></app-page-header>
 
       <!-- Quick Actions -->
       <div class="quick-actions">
@@ -175,24 +171,6 @@ import { ReportService } from '../../services/report.service';
   `,
   styles: [
     `
-      .reports-dashboard-container {
-        padding: 24px;
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-
-      .header-card {
-        margin-bottom: 24px;
-      }
-
-      .header-card mat-card-header {
-        flex: 1;
-      }
-
-      .header-card mat-card-actions {
-        margin: 0;
-        padding: 0;
-      }
 
       .quick-actions {
         display: grid;
@@ -343,6 +321,17 @@ export class ReportsDashboardComponent implements OnInit {
 
   // Table columns
   displayedColumns = ['type', 'project', 'period', 'generated', 'actions'];
+
+  // Header actions
+  headerActions: PageHeaderAction[] = [
+    {
+      label: 'Generate New Report',
+      icon: 'add',
+      color: 'primary',
+      variant: 'raised',
+      action: () => this.navigateToGenerator()
+    }
+  ];
 
   ngOnInit() {
     this.loadReports();

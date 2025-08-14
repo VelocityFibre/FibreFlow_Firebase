@@ -1,0 +1,276 @@
+@use '../../../../styles/component-theming' as theme;
+
+.neon-agent-container {
+  padding: theme.ff-spacing(lg);
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: theme.ff-spacing(lg);
+}
+
+// Header Card
+.agent-header {
+  @include theme.card-theme();
+  
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: theme.ff-spacing(md);
+  }
+
+  .title-section {
+    h1 {
+      @include theme.typography-heading();
+      display: flex;
+      align-items: center;
+      gap: theme.ff-spacing(sm);
+      margin: 0;
+      
+      mat-icon {
+        font-size: 32px;
+        height: 32px;
+        width: 32px;
+      }
+    }
+
+    .subtitle {
+      color: theme.ff-rgb(text-secondary);
+      margin: theme.ff-spacing(xs) 0 0 0;
+    }
+  }
+
+  .status-section {
+    display: flex;
+    align-items: center;
+    gap: theme.ff-spacing(sm);
+  }
+
+  .database-info {
+    margin-top: theme.ff-spacing(md);
+    padding-top: theme.ff-spacing(md);
+    border-top: 1px solid theme.ff-rgb(border);
+  }
+}
+
+// Chat Container
+.chat-container {
+  @include theme.card-theme();
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  
+  .chat-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+  }
+}
+
+// Suggested Questions
+.suggested-questions {
+  padding: theme.ff-spacing(xl);
+  text-align: center;
+
+  h3 {
+    @include theme.typography-subheading();
+    margin-bottom: theme.ff-spacing(lg);
+  }
+
+  .questions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: theme.ff-spacing(md);
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .suggested-question {
+    text-align: left;
+    white-space: normal;
+    line-height: 1.4;
+    padding: theme.ff-spacing(md);
+  }
+}
+
+// Messages
+.messages-container {
+  padding: theme.ff-spacing(lg);
+  display: flex;
+  flex-direction: column;
+  gap: theme.ff-spacing(md);
+}
+
+.message {
+  @include theme.surface-card();
+  padding: theme.ff-spacing(md);
+  border-radius: theme.ff-var(radius);
+  
+  &.message-user {
+    background-color: theme.ff-rgba(primary, 0.1);
+    margin-left: theme.ff-spacing(xl);
+  }
+
+  &.message-agent {
+    background-color: theme.ff-rgba(secondary, 0.1);
+    margin-right: theme.ff-spacing(xl);
+  }
+
+  &.message-system {
+    background-color: theme.ff-rgba(info, 0.1);
+    text-align: center;
+    margin: 0 theme.ff-spacing(xl);
+  }
+
+  &.loading {
+    display: flex;
+    align-items: center;
+    gap: theme.ff-spacing(sm);
+    opacity: 0.7;
+  }
+
+  .message-header {
+    display: flex;
+    align-items: center;
+    gap: theme.ff-spacing(sm);
+    margin-bottom: theme.ff-spacing(sm);
+    
+    mat-icon {
+      font-size: 20px;
+      height: 20px;
+      width: 20px;
+    }
+
+    .message-role {
+      font-weight: 500;
+    }
+
+    .message-time {
+      font-size: 0.85em;
+      color: theme.ff-rgb(text-secondary);
+      margin-left: auto;
+    }
+  }
+
+  .message-content {
+    color: theme.ff-rgb(text-primary);
+    line-height: 1.6;
+    
+    ::ng-deep {
+      pre {
+        background-color: theme.ff-rgba(muted, 0.3);
+        padding: theme.ff-spacing(sm);
+        border-radius: theme.ff-var(radius-sm);
+        overflow-x: auto;
+      }
+
+      code {
+        background-color: theme.ff-rgba(muted, 0.3);
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-size: 0.9em;
+      }
+
+      p {
+        margin: theme.ff-spacing(sm) 0;
+      }
+    }
+  }
+
+  .message-metadata {
+    margin-top: theme.ff-spacing(sm);
+    display: flex;
+    align-items: center;
+    gap: theme.ff-spacing(sm);
+    
+    mat-chip {
+      font-size: 0.85em;
+    }
+
+    .sql-query {
+      width: 100%;
+      margin-top: theme.ff-spacing(sm);
+      
+      code {
+        display: block;
+        background-color: theme.ff-rgba(muted, 0.3);
+        padding: theme.ff-spacing(sm);
+        border-radius: theme.ff-var(radius-sm);
+        overflow-x: auto;
+        font-size: 0.85em;
+        line-height: 1.4;
+      }
+    }
+  }
+}
+
+// Chat Actions
+.chat-actions {
+  padding: theme.ff-spacing(md);
+  border-top: 1px solid theme.ff-rgb(border);
+  
+  .message-input {
+    width: 100%;
+    margin-bottom: theme.ff-spacing(md);
+  }
+
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    gap: theme.ff-spacing(md);
+    
+    mat-checkbox {
+      margin-right: auto;
+    }
+  }
+}
+
+// Stats Panel
+.stats-panel {
+  @include theme.card-theme();
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: theme.ff-spacing(lg);
+    
+    .stat {
+      text-align: center;
+      
+      .stat-label {
+        display: block;
+        font-size: 0.9em;
+        color: theme.ff-rgb(text-secondary);
+        margin-bottom: theme.ff-spacing(xs);
+      }
+      
+      .stat-value {
+        display: block;
+        font-size: 1.5em;
+        font-weight: 500;
+        color: theme.ff-rgb(primary);
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .neon-agent-container {
+    padding: theme.ff-spacing(md);
+  }
+
+  .message {
+    &.message-user,
+    &.message-agent {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  .suggested-questions .questions-grid {
+    grid-template-columns: 1fr;
+  }
+}

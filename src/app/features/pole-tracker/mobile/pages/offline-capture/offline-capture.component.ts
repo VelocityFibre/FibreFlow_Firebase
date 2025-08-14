@@ -23,6 +23,7 @@ import { OfflineSyncService } from '../../services/offline-sync.service';
 import { EnhancedGPSService, GPSPosition } from '../../services/enhanced-gps.service';
 import { AuthService } from '@app/core/services/auth.service';
 import { ProjectService } from '@app/core/services/project.service';
+import { Project } from '@app/core/models/project.model';
 
 @Component({
   selector: 'app-offline-capture',
@@ -426,7 +427,8 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
   private offlineSyncService = inject(OfflineSyncService);
   private gpsService = inject(EnhancedGPSService);
   
-  projects$ = this.projectService.getActiveProjects();
+  projects$ = this.projectService.getProjects();
+  projects: Project[] = [];
   
   basicInfoForm = this.fb.group({
     projectId: ['', Validators.required],
@@ -449,6 +451,12 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   ngOnInit() {
+    // Subscribe to projects
+    const projectSub = this.projects$.subscribe(projects => {
+      this.projects = projects || [];
+    });
+    this.subscriptions.push(projectSub);
+    
     // Pre-fill project if provided in route
     const projectId = this.route.snapshot.queryParamMap.get('projectId');
     if (projectId) {
@@ -525,8 +533,11 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
 
   getProjectName(): string {
     const projectId = this.basicInfoForm.get('projectId')?.value;
-    // In real app, would look up project name
-    return projectId || 'Unknown';
+    if (!projectId) return 'Not selected';
+    
+    // Get the selected project name from the projects list
+    const selectedProject = this.projects.find(p => p.id === projectId);
+    return selectedProject?.name || projectId;
   }
 
   async saveOffline(): Promise<void> {

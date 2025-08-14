@@ -330,6 +330,16 @@ const allRoutes: Routes = [
       description: 'Capture pole data offline with GPS and photos'
     }
   },
+  // Neon Database Agent - Natural language queries with Gemini
+  {
+    path: 'neon-agent',
+    loadChildren: () => import('./features/neon-agent/neon-agent.routes').then(m => m.neonAgentRoutes),
+    canActivate: [authGuard],
+    data: { 
+      title: 'Neon Database Agent',
+      description: 'Natural language database queries powered by Google Gemini'
+    }
+  },
 ];
 
 // Filter routes based on demo configuration
