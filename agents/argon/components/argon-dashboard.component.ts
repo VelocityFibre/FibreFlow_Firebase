@@ -87,7 +87,7 @@ import {
                 }
                 @if (connection.metadata?.['responseTimeMs']) {
                   <div class="response-time">
-                    Response: {{ connection.metadata['responseTimeMs'] }}ms
+                    Response: {{ connection.metadata?.['responseTimeMs'] }}ms
                   </div>
                 }
               </div>

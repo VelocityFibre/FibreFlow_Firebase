@@ -792,6 +792,35 @@ export class DailyKpisSummaryComponent implements OnInit {
   // Signals
   projects = signal<Project[]>([]);
   dailySummary = signal<KPISummaryRow[]>([]);
+
+  // Header actions
+  headerActions: PageHeaderAction[] = [
+    {
+      label: 'New Entry',
+      icon: 'add',
+      color: 'primary',
+      variant: 'raised',
+      action: () => this.router.navigate(['/daily-progress/kpis-enhanced'])
+    },
+    {
+      label: 'Export PDF',
+      icon: 'picture_as_pdf',
+      variant: 'stroked',
+      action: () => this.exportPDF()
+    },
+    {
+      label: 'Export Excel',
+      icon: 'table_view',
+      variant: 'stroked',
+      action: () => this.exportExcel()
+    },
+    {
+      label: 'Weekly Report',
+      icon: 'description',
+      variant: 'stroked',
+      action: () => this.generateWeeklyReport()
+    }
+  ];
   loadingDaily = signal(false);
   selectedContractorName = signal<string>('');
   currentKpis = signal<DailyKPIs[]>([]);

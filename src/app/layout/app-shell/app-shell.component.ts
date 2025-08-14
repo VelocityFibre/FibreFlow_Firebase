@@ -612,6 +612,7 @@ export class AppShellComponent {
     { label: 'Project Progress (Neon)', icon: 'storage', route: '/analytics/project-progress/neon' },
     { label: 'Pole Permission Analytics', icon: 'analytics', route: '/analytics/pole-permissions' },
     { label: 'Image Upload', icon: 'cloud_upload', route: '/images/upload' },
+    { label: 'Argon AI Assistant', icon: 'hub', route: '/argon' },
   ]);
 
   // Mobile Pages category items
