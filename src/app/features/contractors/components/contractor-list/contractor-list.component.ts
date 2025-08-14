@@ -59,10 +59,13 @@ import { ContractorImportComponent } from '../contractor-import/contractor-impor
     FormsModule,
   ],
   template: `
-    <div class="contractor-list-container">
+    <div class="ff-page-container">
       <!-- Header -->
-      <div class="header">
-        <h1>Contractors (NEW CARD VIEW)</h1>
+      <div class="ff-page-header">
+        <div class="header-content">
+          <h1 class="page-title">Contractors</h1>
+          <p class="page-subtitle">Manage contractor relationships and project assignments</p>
+        </div>
         <div class="header-actions">
           <button mat-raised-button color="accent" (click)="openImportDialog()">
             <mat-icon>upload</mat-icon>
@@ -290,28 +293,50 @@ import { ContractorImportComponent } from '../contractor-import/contractor-impor
   `,
   styles: [
     `
-      .contractor-list-container {
-        padding: 24px;
-        max-width: 1600px;
+      @use '../../../../../styles/component-theming' as theme;
+
+      // Page container following theme standards
+      .ff-page-container {
+        max-width: 1280px;
         margin: 0 auto;
+        padding: 40px 24px;
+
+        @media (max-width: 768px) {
+          padding: 24px 16px;
+        }
       }
 
-      .header {
+      // Page header pattern matching dashboard exactly
+      .ff-page-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 24px;
-      }
+        margin-bottom: 48px;
 
-      .header h1 {
-        margin: 0;
-        font-size: 28px;
-        font-weight: 500;
-      }
+        .header-content {
+          flex: 1;
+        }
 
-      .header-actions {
-        display: flex;
-        gap: 12px;
+        .header-actions {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .page-title {
+          font-size: 32px;
+          font-weight: 300;
+          color: theme.ff-rgb(foreground);
+          margin: 0 0 8px 0;
+          letter-spacing: -0.02em;
+        }
+
+        .page-subtitle {
+          font-size: 18px;
+          color: theme.ff-rgb(muted-foreground);
+          font-weight: 400;
+          margin: 0;
+        }
       }
 
       .filters {

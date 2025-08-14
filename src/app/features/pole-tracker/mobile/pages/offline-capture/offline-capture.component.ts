@@ -528,7 +528,17 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
   hasRequiredPhotos(): boolean {
     const requiredTypes = ['before', 'front', 'side'];
     const capturedTypes = new Set(this.capturedPhotos().map(p => p.type));
-    return requiredTypes.every(type => capturedTypes.has(type as any));
+    const hasAllRequired = requiredTypes.every(type => capturedTypes.has(type as any));
+    
+    // Debug log to help troubleshoot
+    console.log('Required photos check:', {
+      requiredTypes,
+      capturedTypes: Array.from(capturedTypes),
+      capturedPhotos: this.capturedPhotos(),
+      hasAllRequired
+    });
+    
+    return hasAllRequired;
   }
 
   getProjectName(): string {

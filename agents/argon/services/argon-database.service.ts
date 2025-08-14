@@ -2,8 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, forkJoin, from, of, combineLatest, throwError } from 'rxjs';
 import { map, catchError, switchMap, tap, mergeMap } from 'rxjs/operators';
 import { Firestore, collection, query, where, orderBy, limit, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc, Timestamp, QueryConstraint } from '@angular/fire/firestore';
-import { SupabaseService } from '../../../src/app/core/services/supabase.service';
-import { NeonService } from '../../../src/app/core/services/neon.service';
+import { NeonAnalyticsService } from '../../../src/app/core/services/neon-analytics.service';
 import { AuthService } from '../../../src/app/core/services/auth.service';
 
 import {
@@ -20,7 +19,6 @@ import {
   UnifiedQueryResult,
   QueryExecutionResult,
   FirestoreQuery,
-  SupabaseQuery,
   NeonQuery
 } from '../models/argon.models';
 
@@ -29,8 +27,7 @@ import {
 })
 export class ArgonDatabaseService {
   private firestore = inject(Firestore);
-  private supabaseService = inject(SupabaseService);
-  private neonService = inject(NeonService);
+  private neonAnalyticsService = inject(NeonAnalyticsService);
   private authService = inject(AuthService);
 
   constructor() {}
@@ -45,10 +42,9 @@ export class ArgonDatabaseService {
   testAllConnections(): Observable<ArgonDatabaseConnection[]> {
     return combineLatest([
       this.testFirestoreConnection(),
-      this.testSupabaseConnection(), 
       this.testNeonConnection()
     ]).pipe(
-      map(([firestore, supabase, neon]) => [firestore, supabase, neon])
+      map(([firestore, neon]) => [firestore, neon])
     );
   }
 
@@ -81,42 +77,16 @@ export class ArgonDatabaseService {
     );
   }
 
-  private testSupabaseConnection(): Observable<ArgonDatabaseConnection> {
-    const startTime = Date.now();
-    
-    return this.supabaseService.getProjectProgress('Lawley').pipe(
-      map(() => ({
-        type: 'supabase' as const,
-        status: 'connected' as const,
-        name: 'Supabase Analytics',
-        description: 'Advanced analytics database with project progress and zone data',
-        lastTestedAt: new Date(),
-        metadata: {
-          responseTimeMs: Date.now() - startTime,
-          features: ['zone_progress', 'daily_progress', 'agent_performance']
-        }
-      })),
-      catchError(error => of({
-        type: 'supabase' as const,
-        status: 'error' as const,
-        name: 'Supabase Analytics',
-        description: 'Advanced analytics database with project progress and zone data',
-        lastTestedAt: new Date(),
-        error: error.message,
-        metadata: { responseTimeMs: Date.now() - startTime }
-      }))
-    );
-  }
 
   private testNeonConnection(): Observable<ArgonDatabaseConnection> {
     const startTime = Date.now();
     
-    return this.neonService.testConnection().pipe(
+    return this.neonAnalyticsService.testConnection().pipe(
       map(result => ({
         type: 'neon' as const,
         status: result.success ? 'connected' as const : 'error' as const,
         name: 'Neon PostgreSQL',
-        description: 'High-performance analytics database for complex queries',
+        description: 'High-performance analytics database with real OneMap data',
         lastTestedAt: new Date(),
         error: result.success ? undefined : result.message,
         metadata: {
@@ -141,11 +111,6 @@ export class ArgonDatabaseService {
     // Execute Firestore query if provided
     if (unifiedQuery.firestore) {
       queryPromises.push(this.executeFirestoreQuery(unifiedQuery.firestore));
-    }
-
-    // Execute Supabase query if provided
-    if (unifiedQuery.supabase) {
-      queryPromises.push(this.executeSupabaseQuery(unifiedQuery.supabase));
     }
 
     // Execute Neon query if provided
@@ -227,31 +192,11 @@ export class ArgonDatabaseService {
     }
   }
 
-  private executeSupabaseQuery(supabaseQuery: SupabaseQuery): Observable<QueryExecutionResult> {
-    const startTime = Date.now();
-    
-    // For now, use a simple approach - extend as needed
-    return this.supabaseService.runAnalyticsQuery(
-      `SELECT ${supabaseQuery.select || '*'} FROM ${supabaseQuery.table} LIMIT ${supabaseQuery.limit || 100}`
-    ).pipe(
-      map(data => ({
-        source: 'supabase' as const,
-        data,
-        executionTimeMs: Date.now() - startTime
-      })),
-      catchError(error => of({
-        source: 'supabase' as const,
-        data: [],
-        executionTimeMs: Date.now() - startTime,
-        error: error.message
-      }))
-    );
-  }
 
   private executeNeonQuery(neonQuery: NeonQuery): Observable<QueryExecutionResult> {
     const startTime = Date.now();
     
-    return this.neonService.query(neonQuery.sql, neonQuery.parameters).pipe(
+    return this.neonAnalyticsService.executeAnalyticsQuery(neonQuery.sql, neonQuery.parameters).pipe(
       map(data => ({
         source: 'neon' as const,
         data,
@@ -311,24 +256,22 @@ export class ArgonDatabaseService {
   }
 
   /**
-   * Get project analytics combining Firestore projects with Supabase analytics
+   * Get project analytics combining Firestore projects with Neon analytics
    */
   getProjectAnalytics(projectId?: string): Observable<any> {
     return combineLatest([
       this.getFibreFlowProjects(),
-      this.supabaseService.getProjectProgress(),
-      this.neonService.getBuildMilestones('Lawley')
+      this.neonAnalyticsService.getBuildMilestones('Lawley').pipe(catchError(() => of([])))
     ]).pipe(
-      map(([firestoreProjects, supabaseProgress, neonMilestones]) => {
+      map(([firestoreProjects, neonMilestones]) => {
         return {
           projects: firestoreProjects,
-          progress: supabaseProgress,
           milestones: neonMilestones,
           analysis: {
             totalProjects: firestoreProjects.length,
             activeProjects: firestoreProjects.filter(p => p.status === 'active').length,
             completedProjects: firestoreProjects.filter(p => p.status === 'completed').length,
-            avgProgress: this.calculateAverageProgress(supabaseProgress.build_milestones)
+            avgProgress: this.calculateAverageProgress(neonMilestones)
           }
         };
       })
@@ -356,12 +299,10 @@ export class ArgonDatabaseService {
           queryObservable = this.executeFirestoreAnalytics(query.query);
           break;
         
-        case 'supabase':
-          queryObservable = this.supabaseService.runAnalyticsQuery(query.query);
-          break;
         
         case 'neon':
-          queryObservable = this.neonService.executeAnalyticsQuery(query.query, query.parameters);
+          // Use neonAnalyticsService for all analytics queries
+          queryObservable = this.neonAnalyticsService.executeAnalyticsQuery(query.query, query.parameters);
           break;
         
         case 'all':
@@ -403,11 +344,26 @@ export class ArgonDatabaseService {
 
   private executeOnAllDatabases(query: string, parameters?: any[]): Observable<any[]> {
     // Execute safe SELECT queries on available databases and combine results
-    return combineLatest([
-      this.supabaseService.runAnalyticsQuery(query).pipe(catchError(() => of([]))),
-      this.neonService.executeAnalyticsQuery(query, parameters).pipe(catchError(() => of([])))
-    ]).pipe(
-      map(([supabaseResults, neonResults]) => [...supabaseResults, ...neonResults])
+    const observables: Observable<any[]>[] = [];
+    
+    // Add Neon query if it's a valid SELECT
+    if (query.trim().toUpperCase().startsWith('SELECT')) {
+      observables.push(
+        this.neonAnalyticsService.executeAnalyticsQuery(query, parameters).pipe(
+          catchError(error => {
+            console.warn('Neon query failed:', error);
+            return of([]);
+          })
+        )
+      );
+    }
+    
+    if (observables.length === 0) {
+      return of([]);
+    }
+    
+    return combineLatest(observables).pipe(
+      map(results => results.flat())
     );
   }
 
@@ -424,10 +380,9 @@ export class ArgonDatabaseService {
       from(getDocs(collection(this.firestore, 'tasks'))).pipe(
         map(snapshot => snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as any)))
       ),
-      this.supabaseService.getProjectProgress(),
       this.testAllConnections()
     ]).pipe(
-      map(([projects, tasks, supabaseData, connections]) => ({
+      map(([projects, tasks, connections]) => ({
         projects: {
           total: projects.length,
           active: projects.filter(p => p.status === 'active').length,
@@ -566,7 +521,7 @@ export class ArgonDatabaseService {
           unifiedQueries: true,
           crossDatabaseAnalytics: true,
           realTimeSync: true,
-          supportedDatabases: ['firestore', 'supabase', 'neon']
+          supportedDatabases: ['firestore', 'neon']
         }
       }))
     );

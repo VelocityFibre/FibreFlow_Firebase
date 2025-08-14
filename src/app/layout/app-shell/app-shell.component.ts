@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -48,7 +48,11 @@ interface NavItem {
   template: `
     <mat-sidenav-container class="sidenav-container">
       <!-- Sidebar -->
-      <mat-sidenav #sidenav mode="side" opened="true" class="sidenav" [fixedInViewport]="true">
+      <mat-sidenav #sidenav 
+                   [mode]="isMobile ? 'over' : 'side'" 
+                   [opened]="!isMobile" 
+                   class="sidenav" 
+                   [fixedInViewport]="true">
         <!-- Logo Section -->
         <div class="logo-section">
           <div class="logo-container">
@@ -59,6 +63,13 @@ interface NavItem {
               loading="lazy"
             />
           </div>
+          <!-- Close button for mobile -->
+          <button *ngIf="isMobile" 
+                  mat-icon-button 
+                  class="mobile-close-btn" 
+                  (click)="sidenav.close()">
+            <mat-icon>close</mat-icon>
+          </button>
         </div>
 
         <!-- User Profile Section -->
@@ -89,6 +100,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
+                (click)="onNavItemClick(sidenav)"
               >
                 <mat-icon
                   matListItemIcon
@@ -113,6 +125,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
+                (click)="onNavItemClick(sidenav)"
               >
                 <mat-icon
                   matListItemIcon
@@ -137,6 +150,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
+                (click)="onNavItemClick(sidenav)"
               >
                 <mat-icon
                   matListItemIcon
@@ -161,6 +175,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
+                (click)="onNavItemClick(sidenav)"
               >
                 <mat-icon
                   matListItemIcon
@@ -185,6 +200,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
+                (click)="onNavItemClick(sidenav)"
               >
                 <mat-icon
                   matListItemIcon
@@ -209,6 +225,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
+                (click)="onNavItemClick(sidenav)"
               >
                 <mat-icon
                   matListItemIcon
@@ -233,6 +250,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
+                (click)="onNavItemClick(sidenav)"
               >
                 <mat-icon
                   matListItemIcon
@@ -257,6 +275,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
+                (click)="onNavItemClick(sidenav)"
               >
                 <mat-icon
                   matListItemIcon
@@ -281,6 +300,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
+                (click)="onNavItemClick(sidenav)"
               >
                 <mat-icon
                   matListItemIcon
@@ -299,6 +319,18 @@ interface NavItem {
 
       <!-- Main Content -->
       <mat-sidenav-content class="main-content">
+        <!-- Mobile Header Toolbar -->
+        <mat-toolbar *ngIf="isMobile" class="mobile-toolbar">
+          <button mat-icon-button (click)="sidenav.toggle()">
+            <mat-icon>menu</mat-icon>
+          </button>
+          <span class="toolbar-title">FibreFlow</span>
+          <span class="toolbar-spacer"></span>
+          <button mat-icon-button (click)="logout()">
+            <mat-icon>logout</mat-icon>
+          </button>
+        </mat-toolbar>
+        
         <router-outlet></router-outlet>
       </mat-sidenav-content>
     </mat-sidenav-container>
@@ -327,6 +359,18 @@ interface NavItem {
         display: flex;
         align-items: center;
         justify-content: center;
+        position: relative;
+      }
+      
+      .mobile-close-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        color: #90a4ae;
+        
+        &:hover {
+          color: #ffffff;
+        }
       }
 
       .logo-container {
@@ -475,6 +519,29 @@ interface NavItem {
         height: 100vh;
         background-color: #f5f5f5;
       }
+      
+      /* Mobile toolbar */
+      .mobile-toolbar {
+        background-color: #1a2332;
+        color: #ffffff;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        
+        .toolbar-title {
+          font-size: 18px;
+          font-weight: 500;
+        }
+        
+        .toolbar-spacer {
+          flex: 1 1 auto;
+        }
+        
+        mat-icon {
+          color: #ffffff;
+        }
+      }
 
       /* Scrollbar styling */
       .nav-content::-webkit-scrollbar {
@@ -497,18 +564,44 @@ interface NavItem {
       /* Mobile responsive */
       @media (max-width: 768px) {
         .sidenav {
-          width: 240px;
+          width: 85vw;
+          max-width: 300px;
+          box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo-section {
+          height: 120px;
+          padding: 16px;
+        }
+        
+        .logo-image {
+          max-width: 180px;
+          max-height: 80px;
+        }
+        
+        .nav-item {
+          height: 48px;
+          
+          span[matListItemTitle] {
+            font-size: 16px;
+          }
+        }
+        
+        .category-title {
+          font-size: 14px;
+          padding: 12px 20px;
         }
       }
     `,
   ],
 })
-export class AppShellComponent {
+export class AppShellComponent implements OnInit {
   private authService = inject(AuthService);
   private devNoteService = inject(DevNoteService);
   private router = inject(Router);
 
   pendingTasksCount = 0;
+  isMobile = false;
 
   // Get dev stats for badge count - only load if authenticated
   devStats = toSignal(
@@ -520,6 +613,25 @@ export class AppShellComponent {
 
   // Current user signal
   currentUser = this.authService.currentUser;
+
+  ngOnInit() {
+    this.checkScreenSize();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize() {
+    this.isMobile = window.innerWidth <= 768;
+  }
+
+  onNavItemClick(sidenav: any) {
+    if (this.isMobile) {
+      sidenav.close();
+    }
+  }
 
   // Logout function
   async logout() {
@@ -608,12 +720,10 @@ export class AppShellComponent {
 
   // Analytics category items
   analyticsItems: NavItem[] = this.filterItems([
+    { label: 'Argon AI Assistant', icon: 'smart_toy', route: '/argon' },
     { label: 'Project Progress Summary', icon: 'summarize', route: '/analytics/project-progress' },
     { label: 'Project Progress (Neon)', icon: 'storage', route: '/analytics/project-progress/neon' },
-    { label: 'Pole Permission Analytics', icon: 'analytics', route: '/analytics/pole-permissions' },
     { label: 'Image Upload', icon: 'cloud_upload', route: '/images/upload' },
-    { label: 'Argon AI Assistant', icon: 'hub', route: '/argon' },
-    { label: 'Neon Database Agent', icon: 'psychology', route: '/neon-agent' },
   ]);
 
   // Mobile Pages category items

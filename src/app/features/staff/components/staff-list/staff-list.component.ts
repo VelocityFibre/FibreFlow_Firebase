@@ -27,6 +27,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { PageHeaderComponent, PageHeaderAction } from '../../../../shared/components/page-header/page-header.component';
 import { StaffService } from '../../services/staff.service';
 import { StaffMember, StaffGroup, AvailabilityStatus } from '../../models';
 import { LoadingSkeletonComponent } from '../../../../shared/components/loading-skeleton/loading-skeleton.component';
@@ -55,22 +56,16 @@ import { StaffImportComponent } from '../staff-import/staff-import.component';
     MatDividerModule,
     MatDialogModule,
     LoadingSkeletonComponent,
+    PageHeaderComponent,
   ],
   template: `
-    <div class="staff-list-container">
-      <div class="header">
-        <h1>Staff Management</h1>
-        <div class="header-actions">
-          <button mat-raised-button color="accent" (click)="openImportDialog()">
-            <mat-icon>upload</mat-icon>
-            Import Staff
-          </button>
-          <button mat-raised-button color="primary" routerLink="new">
-            <mat-icon>add</mat-icon>
-            Add Staff Member
-          </button>
-        </div>
-      </div>
+    <div class="ff-page-container">
+      <!-- Page Header -->
+      <app-page-header
+        title="Staff Management"
+        subtitle="Manage team members, availability, and assignments"
+        [actions]="headerActions"
+      ></app-page-header>
 
       <div class="filters">
         <mat-form-field appearance="outline">
@@ -242,31 +237,6 @@ import { StaffImportComponent } from '../staff-import/staff-import.component';
   `,
   styles: [
     `
-      .staff-list-container {
-        padding: 24px;
-        max-width: 1400px;
-        margin: 0 auto;
-        background-color: var(--mat-sys-background);
-      }
-
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 24px;
-      }
-
-      h1 {
-        margin: 0;
-        font-size: 32px;
-        font-weight: 500;
-        color: var(--mat-sys-on-surface);
-      }
-
-      .header-actions {
-        display: flex;
-        gap: 12px;
-      }
 
       .filters {
         display: flex;
@@ -408,6 +378,23 @@ export class StaffListComponent implements OnInit, AfterViewInit {
   groupControl = new FormControl<StaffGroup[]>([]);
   statusControl = new FormControl<AvailabilityStatus[]>([]);
   activeControl = new FormControl<boolean | null>(true);
+
+  headerActions: PageHeaderAction[] = [
+    {
+      label: 'Import Staff',
+      icon: 'upload',
+      color: 'accent',
+      variant: 'raised',
+      action: () => this.openImportDialog()
+    },
+    {
+      label: 'Add Staff Member',
+      icon: 'add',
+      color: 'primary',
+      variant: 'raised',
+      action: () => this.addStaffMember()
+    }
+  ];
 
   displayedColumns = [
     'name',
@@ -578,5 +565,9 @@ export class StaffListComponent implements OnInit, AfterViewInit {
         this.loadStaff();
       }
     });
+  }
+
+  addStaffMember() {
+    window.location.href = '/staff/new';
   }
 }

@@ -2,7 +2,6 @@ import { Injectable, inject, signal, computed } from '@angular/core';
 import { Observable, BehaviorSubject, timer } from 'rxjs';
 import { map, catchError, tap, shareReplay, switchMap } from 'rxjs/operators';
 import { Firestore } from '@angular/fire/firestore';
-import { SupabaseService } from './supabase.service';
 import { NeonService } from './neon.service';
 import { AuthService } from './auth.service';
 
@@ -227,22 +226,6 @@ export class ArgonService {
   // CONVENIENCE METHODS FOR COMMON OPERATIONS
   // ==========================================================================
 
-  /**
-   * Get zone progress data (Supabase)
-   */
-  getZoneProgress(projectName: string = 'Lawley'): Observable<any[]> {
-    return this.argonDb.executeUnifiedQuery({
-      description: `Get zone progress for ${projectName}`,
-      supabase: {
-        table: 'zone_progress_view',
-        select: '*',
-        filters: { project: projectName },
-        orderBy: { column: 'zone', ascending: true }
-      }
-    }).pipe(
-      map(result => result.mergedData)
-    );
-  }
 
   /**
    * Get build milestones (Neon)

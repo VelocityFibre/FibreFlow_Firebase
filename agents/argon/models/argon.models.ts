@@ -127,7 +127,7 @@ export interface ArgonSearchResult {
 }
 
 export interface ArgonAnalyticsQuery {
-  database: 'firestore' | 'supabase' | 'neon' | 'all';
+  database: 'firestore' | 'neon' | 'all';
   query: string;
   parameters?: any[];
   description?: string;
@@ -144,7 +144,7 @@ export interface ArgonAnalyticsResult {
 }
 
 export interface ArgonDatabaseConnection {
-  type: 'firestore' | 'supabase' | 'neon';
+  type: 'firestore' | 'neon';
   status: 'connected' | 'disconnected' | 'error';
   name: string;
   description?: string;
@@ -222,20 +222,6 @@ export interface FirestoreQuery {
   startAfter?: any;
 }
 
-export interface SupabaseQuery {
-  table: string;
-  select?: string;
-  filters?: Record<string, any>;
-  orderBy?: {
-    column: string;
-    ascending: boolean;
-  };
-  limit?: number;
-  range?: {
-    from: number;
-    to: number;
-  };
-}
 
 export interface NeonQuery {
   sql: string;
@@ -247,13 +233,12 @@ export interface NeonQuery {
 export interface UnifiedQuery {
   description: string;
   firestore?: FirestoreQuery;
-  supabase?: SupabaseQuery;
   neon?: NeonQuery;
   mergeStrategy?: 'union' | 'intersection' | 'first-available';
 }
 
 export interface QueryExecutionResult {
-  source: 'firestore' | 'supabase' | 'neon';
+  source: 'firestore' | 'neon';
   data: any[];
   executionTimeMs: number;
   error?: string;

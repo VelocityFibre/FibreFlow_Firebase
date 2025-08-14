@@ -1,0 +1,47 @@
+# Google Cloud Build configuration
+steps:
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/neon-agent:$COMMIT_SHA', '.']
+  
+  # Push to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/neon-agent:$COMMIT_SHA']
+  
+  # Deploy to Cloud Run with "Always On" Configuration
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'neon-agent'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/neon-agent:$COMMIT_SHA'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--min-instances'
+      - '1'
+      - '--max-instances'
+      - '10'
+      - '--memory'
+      - '1Gi'
+      - '--cpu'
+      - '1000m'
+      - '--timeout'
+      - '900'
+      - '--concurrency'
+      - '80'
+      - '--port'
+      - '8000'
+      - '--set-env-vars'
+      - 'NEON_CONNECTION_STRING=${_NEON_CONNECTION_STRING},GOOGLE_AI_STUDIO_API_KEY=${_GOOGLE_AI_STUDIO_API_KEY},KEEP_ALIVE=true,CONNECTION_POOL_SIZE=10'
+
+substitutions:
+  _NEON_CONNECTION_STRING: 'postgresql://neondb_owner:npg_AlX83ojfZpBk@ep-long-breeze-a9w7xool.gwc.azure.neon.tech:5432/neondb?sslmode=require'
+  _GOOGLE_AI_STUDIO_API_KEY: 'AIzaSyDBktsZ8DsqchXKLHFN07iRvJuHrr7jr_8'
+
+images:
+  - 'gcr.io/$PROJECT_ID/neon-agent:$COMMIT_SHA'

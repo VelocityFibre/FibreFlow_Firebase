@@ -20,6 +20,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Subject, takeUntil, combineLatest, debounceTime } from 'rxjs';
 import { FormControl } from '@angular/forms';
 
+import { PageHeaderComponent, PageHeaderAction } from '../../../../shared/components/page-header/page-header.component';
+
 import { BOQService } from '../../services/boq.service';
 import { ProjectService } from '../../../../core/services/project.service';
 import { BOQItem, BOQStatus, BOQSummary } from '../../models/boq.model';
@@ -54,30 +56,16 @@ import { RemoteLoggerService } from '../../../../core/services/remote-logger.ser
     MatProgressSpinnerModule,
     ScrollingModule,
     MatCheckboxModule,
+    PageHeaderComponent,
   ],
   template: `
-    <div class="boq-container">
-      <!-- Header -->
-      <div class="header">
-        <div class="header-content">
-          <h1>BOQ Management</h1>
-          <p class="subtitle">Manage Bill of Quantities and stock allocations for projects</p>
-        </div>
-        <div class="header-actions">
-          <button mat-stroked-button (click)="exportToCSV()">
-            <mat-icon>download</mat-icon>
-            Export CSV
-          </button>
-          <button mat-stroked-button (click)="openImportDialog()">
-            <mat-icon>upload</mat-icon>
-            Import BOQ
-          </button>
-          <button mat-raised-button color="primary" (click)="openAddDialog()">
-            <mat-icon>add</mat-icon>
-            Add BOQ Item
-          </button>
-        </div>
-      </div>
+    <div class="ff-page-container">
+      <!-- Page Header -->
+      <app-page-header
+        title="BOQ Management"
+        subtitle="Manage Bill of Quantities and stock allocations for projects"
+        [actions]="headerActions"
+      ></app-page-header>
 
       <!-- Project Summary (when project is selected) -->
       <mat-card
@@ -496,36 +484,6 @@ import { RemoteLoggerService } from '../../../../core/services/remote-logger.ser
   `,
   styles: [
     `
-      .boq-container {
-        padding: 24px;
-        max-width: 1400px;
-        margin: 0 auto;
-      }
-
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 24px;
-      }
-
-      .header-content h1 {
-        margin: 0;
-        font-size: 32px;
-        font-weight: 500;
-        color: #1a202c;
-      }
-
-      .subtitle {
-        margin: 4px 0 0;
-        color: #718096;
-        font-size: 16px;
-      }
-
-      .header-actions {
-        display: flex;
-        gap: 12px;
-      }
 
       .summary-card {
         margin-bottom: 24px;
@@ -745,16 +703,6 @@ import { RemoteLoggerService } from '../../../../core/services/remote-logger.ser
       }
 
       @media (max-width: 768px) {
-        .header {
-          flex-direction: column;
-          gap: 16px;
-        }
-
-        .header-actions {
-          width: 100%;
-          flex-wrap: wrap;
-        }
-
         .filters {
           flex-direction: column;
           width: 100%;
@@ -781,6 +729,29 @@ export class BOQListComponent implements OnInit, OnDestroy {
   projectSummary: BOQSummary | null = null;
   loading = true;
   currentSort: Sort = { active: '', direction: '' };
+
+  // Header actions
+  headerActions: PageHeaderAction[] = [
+    {
+      label: 'Export CSV',
+      icon: 'download',
+      variant: 'stroked',
+      action: () => this.exportToCSV()
+    },
+    {
+      label: 'Import BOQ',
+      icon: 'upload',
+      variant: 'stroked',
+      action: () => this.openImportDialog()
+    },
+    {
+      label: 'Add BOQ Item',
+      icon: 'add',
+      color: 'primary',
+      variant: 'raised',
+      action: () => this.openAddDialog()
+    }
+  ];
 
   // Virtual scrolling properties
   useVirtualScrolling = false;

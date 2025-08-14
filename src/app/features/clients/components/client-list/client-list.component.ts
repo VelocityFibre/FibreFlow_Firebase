@@ -41,17 +41,19 @@ import { NotificationService } from '../../../../core/services/notification.serv
     MatMenuModule,
   ],
   template: `
-    <div class="clients-container">
+    <div class="ff-page-container">
       <!-- Header -->
-      <div class="page-header">
+      <div class="ff-page-header">
         <div class="header-content">
           <h1 class="page-title">Clients</h1>
           <p class="page-subtitle">Manage your client relationships and project portfolios</p>
         </div>
-        <a mat-raised-button color="primary" routerLink="/clients/new">
-          <mat-icon>add</mat-icon>
-          Add Client
-        </a>
+        <div class="header-actions">
+          <a mat-raised-button color="primary" routerLink="/clients/new">
+            <mat-icon>add</mat-icon>
+            Add Client
+          </a>
+        </div>
       </div>
 
       <!-- Search and Stats -->
@@ -239,33 +241,50 @@ import { NotificationService } from '../../../../core/services/notification.serv
   `,
   styles: [
     `
-      .clients-container {
-        padding: 24px;
-        max-width: 1400px;
+      @use '../../../../../styles/component-theming' as theme;
+
+      // Page container following theme standards
+      .ff-page-container {
+        max-width: 1280px;
         margin: 0 auto;
+        padding: 40px 24px;
+
+        @media (max-width: 768px) {
+          padding: 24px 16px;
+        }
       }
 
-      .page-header {
+      // Page header pattern matching dashboard exactly
+      .ff-page-header {
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 32px;
-      }
+        align-items: center;
+        margin-bottom: 48px;
 
-      .header-content {
-        flex: 1;
-      }
+        .header-content {
+          flex: 1;
+        }
 
-      .page-title {
-        font-size: 32px;
-        font-weight: 500;
-        margin: 0;
-        color: var(--mat-sys-on-surface);
-      }
+        .header-actions {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
 
-      .page-subtitle {
-        color: var(--mat-sys-on-surface-variant);
-        margin-top: 4px;
+        .page-title {
+          font-size: 32px;
+          font-weight: 300;
+          color: theme.ff-rgb(foreground);
+          margin: 0 0 8px 0;
+          letter-spacing: -0.02em;
+        }
+
+        .page-subtitle {
+          font-size: 18px;
+          color: theme.ff-rgb(muted-foreground);
+          font-weight: 400;
+          margin: 0;
+        }
       }
 
       .search-section {

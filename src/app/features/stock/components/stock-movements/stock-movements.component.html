@@ -1,17 +1,10 @@
 <div class="ff-page-container">
   <!-- Page Header -->
-  <div class="ff-page-header">
-    <div class="header-content">
-      <h1 class="page-title">Stock Movements</h1>
-      <p class="page-subtitle">Track and manage all stock movement transactions</p>
-    </div>
-    <div class="header-actions">
-      <button mat-raised-button color="primary" (click)="openMovementDialog()">
-        <mat-icon>add</mat-icon>
-        New Movement
-      </button>
-    </div>
-  </div>
+  <app-page-header
+    title="Stock Movements"
+    subtitle="Track and manage all stock movement transactions"
+    [actions]="headerActions"
+  ></app-page-header>
 
   <!-- Summary Cards -->
   @if (summary(); as sum) {

@@ -10,10 +10,12 @@ import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+// MatFabModule is part of MatButtonModule in Angular Material 20
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 import { ArgonService } from '../../../src/app/core/services/argon.service';
+import { ArgonAiResponseService, ChatMessage, QueryAnalysis } from '../services/argon-ai-response.service';
 import {
   ArgonDatabaseConnection,
   ArgonSystemMetrics,
@@ -180,8 +182,82 @@ import {
           }
         </mat-tab>
 
+        <!-- AI Chat Interface Tab -->
+        <mat-tab label="AI Assistant" class="chat-tab">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Chat with Argon AI Assistant</mat-card-title>
+              <mat-card-subtitle>Ask questions in natural language about your data</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <!-- Chat Messages -->
+              <div class="chat-container">
+                <div class="chat-messages" #chatMessages>
+                  @for (message of chatHistory(); track message.id) {
+                    <div class="chat-message" [class]="'message-' + message.type">
+                      <div class="message-content">
+                        <div class="message-text" [innerHTML]="formatMessageContent(message.content)"></div>
+                        @if (message.executionTime) {
+                          <div class="message-meta">
+                            Query executed in {{ message.executionTime }}ms
+                          </div>
+                        }
+                      </div>
+                      <div class="message-timestamp">
+                        {{ message.timestamp | date:'short' }}
+                      </div>
+                    </div>
+                  }
+                  
+                  @if (chatHistory().length === 0) {
+                    <div class="chat-welcome">
+                      <mat-icon>smart_toy</mat-icon>
+                      <h3>Welcome to Argon AI Assistant!</h3>
+                      <p>Ask me questions about your data, such as:</p>
+                      <ul>
+                        <li>"How many projects do we have?"</li>
+                        <li>"What's the status of our active projects?"</li>
+                        <li>"Show me all projects in planning phase"</li>
+                        <li>"What are our project completion rates?"</li>
+                      </ul>
+                    </div>
+                  }
+                  
+                  @if (isProcessingChat()) {
+                    <div class="chat-message message-assistant processing">
+                      <div class="message-content">
+                        <mat-spinner diameter="20"></mat-spinner>
+                        <span>Analyzing your query...</span>
+                      </div>
+                    </div>
+                  }
+                </div>
+                
+                <!-- Chat Input -->
+                <form class="chat-input-form" [formGroup]="chatForm" (ngSubmit)="sendChatMessage()">
+                  <mat-form-field appearance="outline" class="chat-input-field">
+                    <mat-label>Ask Argon a question...</mat-label>
+                    <input matInput 
+                           formControlName="message" 
+                           placeholder="e.g., How many projects do we have?"
+                           [disabled]="isProcessingChat()"
+                           (keydown.enter)="sendChatMessage()">
+                  </mat-form-field>
+                  <button mat-fab 
+                          color="primary" 
+                          type="submit"
+                          [disabled]="chatForm.invalid || isProcessingChat()"
+                          class="chat-send-button">
+                    <mat-icon>send</mat-icon>
+                  </button>
+                </form>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </mat-tab>
+
         <!-- Query Interface Tab -->
-        <mat-tab label="Query Interface" class="query-tab">
+        <mat-tab label="Raw Query Interface" class="query-tab">
           <mat-card>
             <mat-card-header>
               <mat-card-title>Execute Unified Query</mat-card-title>
@@ -200,7 +276,6 @@ import {
                     <mat-label>Target Database</mat-label>
                     <mat-select formControlName="targetDatabase">
                       <mat-option value="firestore">Firestore (FibreFlow)</mat-option>
-                      <mat-option value="supabase">Supabase (Analytics)</mat-option>
                       <mat-option value="neon">Neon (PostgreSQL)</mat-option>
                       <mat-option value="all">All Databases</mat-option>
                     </mat-select>
@@ -572,7 +647,159 @@ import {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 16px;
+    }
+
+    /* Chat Interface Styles */
+    .chat-container {
+      height: 600px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      background: #fafafa;
+    }
+
+    .chat-message {
+      margin-bottom: 16px;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    .chat-message.message-user {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .chat-message.message-user .message-content {
+      background: #2196f3;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 18px 18px 4px 18px;
+      max-width: 70%;
+    }
+
+    .chat-message.message-assistant {
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    .chat-message.message-assistant .message-content {
+      background: white;
+      color: #333;
+      padding: 12px 16px;
+      border-radius: 18px 18px 18px 4px;
+      max-width: 80%;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .chat-message.processing .message-content {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .message-text {
+      line-height: 1.5;
+    }
+
+    .message-text h3 {
+      margin: 0 0 8px 0;
+      font-size: 16px;
+    }
+
+    .message-text p {
+      margin: 8px 0;
+    }
+
+    .message-text ul {
+      margin: 8px 0;
+      padding-left: 20px;
+    }
+
+    .message-text li {
+      margin: 4px 0;
+    }
+
+    .message-meta {
+      font-size: 11px;
+      color: rgba(255,255,255,0.7);
+      margin-top: 4px;
+    }
+
+    .chat-message.message-assistant .message-meta {
+      color: #666;
+    }
+
+    .message-timestamp {
+      font-size: 10px;
+      color: #999;
+      margin-top: 4px;
+      text-align: center;
+    }
+
+    .chat-welcome {
+      text-align: center;
+      padding: 40px 20px;
+      color: #666;
+    }
+
+    .chat-welcome mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      color: #2196f3;
+      margin-bottom: 16px;
+    }
+
+    .chat-welcome h3 {
+      margin: 0 0 16px 0;
+      color: #333;
+    }
+
+    .chat-welcome ul {
+      text-align: left;
+      display: inline-block;
       margin-top: 16px;
+    }
+
+    .chat-welcome li {
+      margin: 8px 0;
+      font-style: italic;
+      color: #555;
+    }
+
+    .chat-input-form {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .chat-input-field {
+      flex: 1;
+    }
+
+    .chat-send-button {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .milestone-card {
@@ -616,19 +843,29 @@ import {
 export class ArgonDashboardComponent implements OnInit {
   argonService = inject(ArgonService);
   private fb = inject(FormBuilder);
+  private aiResponseService = inject(ArgonAiResponseService);
 
   // Signals for reactive state
   queryResults = signal<any>(null);
   projectAnalytics = signal<any>(null);
   isExecutingQuery = signal(false);
 
+  // Chat-related signals
+  chatHistory = signal<ChatMessage[]>([]);
+  isProcessingChat = signal(false);
+
   queryForm: FormGroup;
+  chatForm: FormGroup;
 
   constructor() {
     this.queryForm = this.fb.group({
       description: [''],
       targetDatabase: ['firestore'],
       queryParams: ['{}']
+    });
+
+    this.chatForm = this.fb.group({
+      message: ['', [Validators.required]]
     });
   }
 
@@ -672,14 +909,6 @@ export class ArgonDashboardComponent implements OnInit {
           };
           break;
         
-        case 'supabase':
-          unifiedQuery.supabase = {
-            table: queryParams.table || 'zone_progress_view',
-            select: queryParams.select || '*',
-            limit: queryParams.limit || 10
-          };
-          break;
-        
         case 'neon':
           unifiedQuery.neon = {
             sql: queryParams.sql || 'SELECT * FROM projects LIMIT 10',
@@ -689,7 +918,6 @@ export class ArgonDashboardComponent implements OnInit {
         
         case 'all':
           unifiedQuery.firestore = { collection: 'projects', limit: 5 };
-          unifiedQuery.supabase = { table: 'zone_progress_view', select: '*', limit: 5 };
           unifiedQuery.neon = { sql: 'SELECT * FROM projects LIMIT 5' };
           break;
       }
@@ -733,9 +961,169 @@ export class ArgonDashboardComponent implements OnInit {
   getConnectionIcon(type: string): string {
     switch (type) {
       case 'firestore': return 'cloud_queue';
-      case 'supabase': return 'analytics';
       case 'neon': return 'storage';
       default: return 'database';
     }
+  }
+
+  // Chat functionality methods
+  sendChatMessage(): void {
+    if (this.chatForm.invalid || this.isProcessingChat()) return;
+
+    const userMessage = this.chatForm.get('message')?.value.trim();
+    if (!userMessage) return;
+
+    // Add user message to chat history
+    const userChatMessage: ChatMessage = {
+      id: `user-${Date.now()}`,
+      type: 'user',
+      content: userMessage,
+      timestamp: new Date()
+    };
+
+    this.chatHistory.update(history => [...history, userChatMessage]);
+    this.chatForm.reset();
+    this.isProcessingChat.set(true);
+
+    // Execute query based on user's natural language input
+    const unifiedQuery: UnifiedQuery = {
+      description: userMessage,
+      mergeStrategy: 'union'
+    };
+
+    // Determine target database based on question content
+    const targetDatabase = this.detectTargetDatabase(userMessage);
+    
+    // Build query configuration
+    this.buildQueryFromNaturalLanguage(unifiedQuery, userMessage, targetDatabase);
+
+    const queryStartTime = Date.now();
+
+    this.argonService.executeUnifiedQuery(unifiedQuery).subscribe({
+      next: (queryResult) => {
+        const executionTime = Date.now() - queryStartTime;
+        
+        // Generate AI response from query results
+        this.aiResponseService.generateResponse(userMessage, queryResult, targetDatabase).subscribe({
+          next: (analysis) => {
+            const assistantMessage: ChatMessage = {
+              id: `assistant-${Date.now()}`,
+              type: 'assistant',
+              content: analysis.response,
+              timestamp: new Date(),
+              queryData: queryResult,
+              executionTime
+            };
+
+            this.chatHistory.update(history => [...history, assistantMessage]);
+            this.isProcessingChat.set(false);
+          },
+          error: (error) => {
+            console.error('AI response generation failed:', error);
+            const errorMessage: ChatMessage = {
+              id: `assistant-error-${Date.now()}`,
+              type: 'assistant',
+              content: '🚨 **Error**: Failed to generate AI response. Please try again.',
+              timestamp: new Date(),
+              executionTime
+            };
+            this.chatHistory.update(history => [...history, errorMessage]);
+            this.isProcessingChat.set(false);
+          }
+        });
+      },
+      error: (error) => {
+        console.error('Query execution failed:', error);
+        const errorMessage: ChatMessage = {
+          id: `assistant-error-${Date.now()}`,
+          type: 'assistant',
+          content: '🚨 **Error**: Failed to execute query. Please check your database connections and try again.',
+          timestamp: new Date()
+        };
+        this.chatHistory.update(history => [...history, errorMessage]);
+        this.isProcessingChat.set(false);
+      }
+    });
+  }
+
+  private detectTargetDatabase(question: string): string {
+    const questionLower = question.toLowerCase();
+    
+    if (questionLower.includes('neon') || questionLower.includes('postgres')) {
+      return 'neon';
+    }
+    if (questionLower.includes('firestore') || questionLower.includes('firebase')) {
+      return 'firestore';
+    }
+    
+    // Default to firestore (FibreFlow main database)
+    return 'firestore';
+  }
+
+  private buildQueryFromNaturalLanguage(unifiedQuery: UnifiedQuery, question: string, targetDatabase: string): void {
+    const questionLower = question.toLowerCase();
+    
+    switch (targetDatabase) {
+      case 'firestore':
+        if (questionLower.includes('project')) {
+          unifiedQuery.firestore = {
+            collection: 'projects',
+            limit: 10,
+            filters: []
+          };
+        } else if (questionLower.includes('task')) {
+          unifiedQuery.firestore = {
+            collection: 'tasks',
+            limit: 10,
+            filters: []
+          };
+        } else if (questionLower.includes('user') || questionLower.includes('staff')) {
+          unifiedQuery.firestore = {
+            collection: 'users',
+            limit: 10,
+            filters: []
+          };
+        } else {
+          // Default to projects
+          unifiedQuery.firestore = {
+            collection: 'projects',
+            limit: 10,
+            filters: []
+          };
+        }
+        break;
+        
+      case 'neon':
+        if (questionLower.includes('project')) {
+          unifiedQuery.neon = {
+            sql: 'SELECT * FROM projects LIMIT 10',
+            parameters: []
+          };
+        } else {
+          unifiedQuery.neon = {
+            sql: 'SELECT * FROM projects LIMIT 10',
+            parameters: []
+          };
+        }
+        break;
+        
+      default:
+        // Query both databases for comprehensive results
+        unifiedQuery.firestore = { collection: 'projects', limit: 5 };
+        unifiedQuery.neon = { sql: 'SELECT * FROM projects LIMIT 5' };
+    }
+  }
+
+  formatMessageContent(content: string): string {
+    // Convert markdown-like formatting to HTML
+    return content
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+      .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italic
+      .replace(/\n/g, '<br>') // Line breaks
+      .replace(/^### (.*$)/gm, '<h3>$1</h3>') // H3 headers
+      .replace(/^## (.*$)/gm, '<h2>$1</h2>') // H2 headers
+      .replace(/^# (.*$)/gm, '<h1>$1</h1>') // H1 headers
+      .replace(/• (.*?)(?=<br>|$)/g, '<li>$1</li>') // List items
+      .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>'); // Wrap lists in ul tags
   }
 }

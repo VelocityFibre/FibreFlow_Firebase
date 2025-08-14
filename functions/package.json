@@ -19,10 +19,12 @@
     "firebase-functions": "^5.1.1",
     "lodash": "^4.17.21",
     "node-fetch": "^2.6.7",
+    "pg": "^8.16.3",
     "winston": "^3.11.0"
   },
   "devDependencies": {
     "@types/node-fetch": "^2.6.4",
+    "@types/pg": "^8.15.5",
     "firebase-functions-test": "^3.1.0",
     "typescript": "^5.0.0"
   },

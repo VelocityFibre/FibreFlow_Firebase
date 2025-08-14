@@ -76,8 +76,12 @@ import { DatePipe } from '@angular/common';
         <mat-card-content>
           <!-- Search -->
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Search Pole ID</mat-label>
-            <input matInput [(ngModel)]="searchTerm" placeholder="e.g., LAW.P.A001" />
+            <mat-label>Search Poles</mat-label>
+            <input 
+              matInput 
+              [ngModel]="searchTerm()" 
+              (ngModelChange)="searchTerm.set($event)"
+              placeholder="Pole ID, Number, PON, Zone..." />
             <mat-icon matPrefix>search</mat-icon>
           </mat-form-field>
 
@@ -526,7 +530,7 @@ export class PoleListMobileComponent implements OnInit {
   showFilters = signal(false);
 
   // Filters
-  searchTerm = '';
+  searchTerm = signal('');
   selectedProjectId = '';
   selectedContractorId = '';
   uploadStatusFilter: 'all' | 'complete' | 'incomplete' = 'all';
@@ -535,13 +539,17 @@ export class PoleListMobileComponent implements OnInit {
   filteredPoles = computed(() => {
     let filtered = this.poles();
 
-    // Apply search filter
-    if (this.searchTerm) {
-      const search = this.searchTerm.toLowerCase();
+    // Apply search filter - Enhanced to include pole number, PON, and zone
+    if (this.searchTerm()) {
+      const search = this.searchTerm().toLowerCase();
       filtered = filtered.filter(
         (pole) =>
           pole.vfPoleId.toLowerCase().includes(search) ||
-          pole.location?.toLowerCase().includes(search),
+          pole.poleNumber?.toLowerCase().includes(search) ||
+          pole.location?.toLowerCase().includes(search) ||
+          pole.pon?.toLowerCase().includes(search) ||
+          pole.zone?.toLowerCase().includes(search) ||
+          pole.alternativePoleId?.toLowerCase().includes(search),
       );
     }
 

@@ -16,6 +16,8 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil, combineLatest } from 'rxjs';
 
+import { PageHeaderComponent, PageHeaderAction } from '../../../../shared/components/page-header/page-header.component';
+
 import { RFQ, RFQStatus } from '../../models/rfq.model';
 import { RFQService } from '../../services/rfq.service';
 import { ProjectService } from '../../../../core/services/project.service';
@@ -41,22 +43,16 @@ import { RFQEmailDialogComponent } from '../../components/rfq-email-dialog/rfq-e
     MatSelectModule,
     MatInputModule,
     MatDialogModule,
+    PageHeaderComponent,
   ],
   template: `
-    <div class="rfq-container">
-      <!-- Header -->
-      <div class="header">
-        <div class="header-content">
-          <h1>Request for Quotes (RFQs)</h1>
-          <p class="subtitle">Manage and track all your RFQs</p>
-        </div>
-        <div class="header-actions">
-          <button mat-raised-button color="primary" routerLink="/boq">
-            <mat-icon>add</mat-icon>
-            Create RFQ from BOQ
-          </button>
-        </div>
-      </div>
+    <div class="ff-page-container">
+      <!-- Page Header -->
+      <app-page-header
+        title="Request for Quotes (RFQs)"
+        subtitle="Manage and track all your RFQs"
+        [actions]="headerActions"
+      ></app-page-header>
 
       <!-- Filters -->
       <mat-card class="filters-card">
@@ -240,36 +236,6 @@ import { RFQEmailDialogComponent } from '../../components/rfq-email-dialog/rfq-e
   `,
   styles: [
     `
-      .rfq-container {
-        padding: 24px;
-        max-width: 1400px;
-        margin: 0 auto;
-      }
-
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 24px;
-      }
-
-      .header-content h1 {
-        margin: 0;
-        font-size: 32px;
-        font-weight: 500;
-        color: #1a202c;
-      }
-
-      .subtitle {
-        margin: 4px 0 0;
-        color: #718096;
-        font-size: 16px;
-      }
-
-      .header-actions {
-        display: flex;
-        gap: 12px;
-      }
 
       .filters-card {
         margin-bottom: 24px;
@@ -393,11 +359,6 @@ import { RFQEmailDialogComponent } from '../../components/rfq-email-dialog/rfq-e
       }
 
       @media (max-width: 768px) {
-        .header {
-          flex-direction: column;
-          gap: 16px;
-        }
-
         .filters {
           flex-direction: column;
           width: 100%;
@@ -425,6 +386,16 @@ export class RFQPageComponent implements OnInit, OnDestroy {
   selectedProjectId = 'all';
   selectedStatus: RFQStatus | 'all' = 'all';
   searchTerm = '';
+
+  headerActions: PageHeaderAction[] = [
+    {
+      label: 'Create RFQ from BOQ',
+      icon: 'add',
+      color: 'primary',
+      variant: 'raised',
+      action: () => this.createRFQFromBOQ()
+    }
+  ];
 
   displayedColumns = [
     'rfqNumber',
@@ -612,5 +583,9 @@ export class RFQPageComponent implements OnInit, OnDestroy {
         },
       });
     }
+  }
+
+  createRFQFromBOQ() {
+    window.location.href = '/boq';
   }
 }

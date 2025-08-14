@@ -14,6 +14,8 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
 import { Observable, combineLatest, map, startWith, take } from 'rxjs';
 
+import { PageHeaderComponent, PageHeaderAction } from '../../../../shared/components/page-header/page-header.component';
+
 import {
   PersonalTodo,
   TodoStatus,
@@ -49,6 +51,7 @@ interface TodoDisplay extends PersonalTodo {
     MatChipsModule,
     MatBadgeModule,
     MatMenuModule,
+    PageHeaderComponent,
   ],
   templateUrl: './todo-management.component.html',
   styleUrls: ['./todo-management.component.scss'],
@@ -69,6 +72,23 @@ export class TodoManagementComponent implements OnInit {
   sourceFilter = new FormControl<string>('all', { nonNullable: true });
 
   displayedColumns: string[] = ['complete', 'text', 'priority', 'source', 'dueDate', 'actions'];
+
+  headerActions: PageHeaderAction[] = [
+    {
+      label: 'Refresh',
+      icon: 'refresh',
+      color: 'primary',
+      variant: 'raised',
+      action: () => this.refreshTodos()
+    },
+    {
+      label: 'Add Todo',
+      icon: 'add',
+      color: 'accent',
+      variant: 'raised',
+      action: () => this.addTodo()
+    }
+  ];
 
   // Expose enums to template
   TodoStatus = TodoStatus;
@@ -231,5 +251,10 @@ export class TodoManagementComponent implements OnInit {
     if (todo.isDueToday) return 'text-warning';
     if (todo.isDueSoon) return 'text-info';
     return '';
+  }
+
+  addTodo() {
+    // TODO: Implement add todo functionality
+    this.notification.info('Add Todo feature coming soon!');
   }
 }

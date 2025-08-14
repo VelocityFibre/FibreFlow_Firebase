@@ -28,6 +28,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { Timestamp } from '@angular/fire/firestore';
+import { PageHeaderComponent, PageHeaderAction } from '../../../../shared/components/page-header/page-header.component';
 
 import { StockService } from '../../services/stock.service';
 import { StockMovementService } from '../../services/stock-movement.service';
@@ -69,6 +70,7 @@ import { Project } from '../../../../core/models/project.model';
     MatSortModule,
     MatProgressBarModule,
     MatSnackBarModule,
+    PageHeaderComponent,
   ],
   templateUrl: './stock-movements.component.html',
   styleUrls: ['./stock-movements.component.scss'],
@@ -110,6 +112,17 @@ export class StockMovementsComponent implements OnInit {
     'location',
     'performedBy',
     'actions',
+  ];
+
+  // Header actions
+  headerActions: PageHeaderAction[] = [
+    {
+      label: 'New Movement',
+      icon: 'add',
+      color: 'primary',
+      variant: 'raised',
+      action: () => this.openMovementDialog()
+    }
   ];
 
   // Computed values

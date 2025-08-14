@@ -4,7 +4,10 @@ const { Client } = require('pg');
 
 const NEON_CONFIG = {
   connectionString: 'postgresql://neondb_owner:npg_AlX83ojfZpBk@ep-long-breeze-a9w7xool-pooler.gwc.azure.neon.tech/neondb?sslmode=require',
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false },
+  connectionTimeoutMillis: 30000,
+  query_timeout: 30000,
+  statement_timeout: 30000
 };
 
 async function createAnalyticsViews() {

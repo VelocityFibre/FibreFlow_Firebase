@@ -307,7 +307,7 @@ const allRoutes: Routes = [
       import('./features/debug/sentry-test.component').then((m) => m.SentryTestComponent),
     canActivate: [authGuard],
   },
-  // Argon AI Assistant Dashboard
+  // ✅ ACTIVE: Argon AI Assistant Dashboard (connected to real Neon data)
   {
     path: 'argon',
     loadComponent: () => import('../../agents/argon/components/argon-dashboard.component')
@@ -330,16 +330,16 @@ const allRoutes: Routes = [
       description: 'Capture pole data offline with GPS and photos'
     }
   },
-  // Neon Database Agent - Natural language queries with Gemini
-  {
-    path: 'neon-agent',
-    loadChildren: () => import('./features/neon-agent/neon-agent.routes').then(m => m.neonAgentRoutes),
-    canActivate: [authGuard],
-    data: { 
-      title: 'Neon Database Agent',
-      description: 'Natural language database queries powered by Google Gemini'
-    }
-  },
+  // DISABLED: Neon Database Agent - Natural language queries with Gemini (build errors)
+  // {
+  //   path: 'neon-agent',
+  //   loadChildren: () => import('./features/neon-agent/neon-agent.routes').then(m => m.neonAgentRoutes),
+  //   canActivate: [authGuard],
+  //   data: { 
+  //     title: 'Neon Database Agent',
+  //     description: 'Natural language database queries powered by Google Gemini'
+  //   }
+  // },
 ];
 
 // Filter routes based on demo configuration

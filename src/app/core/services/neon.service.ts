@@ -174,56 +174,56 @@ export class NeonService {
     const query = this.sql`
       SELECT 
         'Permissions' as name,
-        COALESCE(SUM(permission_scope), 0) as scope,
-        COALESCE(SUM(permissions_completed), 0) as completed,
+        COUNT(DISTINCT CASE WHEN status = 'Pole Permission: Approved' THEN pole_number END) as completed,
+        COUNT(DISTINCT pole_number) as scope,
         CASE 
-          WHEN COALESCE(SUM(permission_scope), 0) = 0 THEN 0
-          ELSE ROUND(COALESCE(SUM(permissions_completed), 0) * 100.0 / COALESCE(SUM(permission_scope), 1), 1)
+          WHEN COUNT(DISTINCT pole_number) = 0 THEN 0
+          ELSE ROUND(COUNT(DISTINCT CASE WHEN status = 'Pole Permission: Approved' THEN pole_number END) * 100.0 / COUNT(DISTINCT pole_number), 1)
         END as percentage,
         'Pole permission approvals' as notes
-      FROM zone_progress 
+      FROM status_changes 
       WHERE project_name = ${projectName}
       
       UNION ALL
       
       SELECT 
         'Poles' as name,
-        COALESCE(SUM(pole_scope), 0) as scope,
-        COALESCE(SUM(poles_planted), 0) as completed,
+        COUNT(DISTINCT CASE WHEN pole_planted_date IS NOT NULL THEN pole_number END) as completed,
+        COUNT(DISTINCT pole_number) as scope,
         CASE 
-          WHEN COALESCE(SUM(pole_scope), 0) = 0 THEN 0
-          ELSE ROUND(COALESCE(SUM(poles_planted), 0) * 100.0 / COALESCE(SUM(pole_scope), 1), 1)
+          WHEN COUNT(DISTINCT pole_number) = 0 THEN 0
+          ELSE ROUND(COUNT(DISTINCT CASE WHEN pole_planted_date IS NOT NULL THEN pole_number END) * 100.0 / COUNT(DISTINCT pole_number), 1)
         END as percentage,
         'Physical pole installations' as notes
-      FROM zone_progress 
+      FROM status_changes 
       WHERE project_name = ${projectName}
       
       UNION ALL
       
       SELECT 
         'Stringing' as name,
-        COALESCE(SUM(stringing_scope), 0) as scope,
-        COALESCE(SUM(stringing_completed), 0) as completed,
+        COUNT(DISTINCT CASE WHEN stringing_date IS NOT NULL THEN pole_number END) as completed,
+        COUNT(DISTINCT pole_number) as scope,
         CASE 
-          WHEN COALESCE(SUM(stringing_scope), 0) = 0 THEN 0
-          ELSE ROUND(COALESCE(SUM(stringing_completed), 0) * 100.0 / COALESCE(SUM(stringing_scope), 1), 1)
+          WHEN COUNT(DISTINCT pole_number) = 0 THEN 0
+          ELSE ROUND(COUNT(DISTINCT CASE WHEN stringing_date IS NOT NULL THEN pole_number END) * 100.0 / COUNT(DISTINCT pole_number), 1)
         END as percentage,
         'Cable stringing between poles' as notes
-      FROM zone_progress 
+      FROM status_changes 
       WHERE project_name = ${projectName}
       
       UNION ALL
       
       SELECT 
         'Sign Ups' as name,
-        COALESCE(SUM(home_count), 0) as scope,
-        COALESCE(SUM(signups_completed), 0) as completed,
+        COUNT(DISTINCT CASE WHEN status LIKE '%Sign Ups: Approved%' THEN property_id END) as completed,
+        COUNT(DISTINCT property_id) as scope,
         CASE 
-          WHEN COALESCE(SUM(home_count), 0) = 0 THEN 0
-          ELSE ROUND(COALESCE(SUM(signups_completed), 0) * 100.0 / COALESCE(SUM(home_count), 1), 1)
+          WHEN COUNT(DISTINCT property_id) = 0 THEN 0
+          ELSE ROUND(COUNT(DISTINCT CASE WHEN status LIKE '%Sign Ups: Approved%' THEN property_id END) * 100.0 / COUNT(DISTINCT property_id), 1)
         END as percentage,
         'Customer sign-ups' as notes
-      FROM zone_progress 
+      FROM status_changes 
       WHERE project_name = ${projectName}
       
       ORDER BY name
@@ -242,25 +242,44 @@ export class NeonService {
 
     const query = this.sql`
       SELECT 
-        zone,
-        home_count,
-        permission_scope,
-        pole_scope,
-        stringing_scope,
-        permissions_completed,
-        poles_planted,
-        stringing_completed,
-        signups_completed,
-        drops_completed,
-        connected_completed,
-        permissions_percentage,
-        poles_planted_percentage,
-        stringing_percentage,
-        signups_percentage,
-        drops_percentage,
-        connected_percentage
-      FROM zone_progress 
+        COALESCE(NULLIF(zone, ''), 'No Zone Assigned') as zone,
+        COUNT(DISTINCT property_id) as home_count,
+        COUNT(DISTINCT pole_number) as permission_scope,
+        COUNT(DISTINCT pole_number) as pole_scope,
+        COUNT(DISTINCT pole_number) as stringing_scope,
+        COUNT(DISTINCT CASE WHEN status = 'Pole Permission: Approved' THEN pole_number END) as permissions_completed,
+        COUNT(DISTINCT CASE WHEN pole_planted_date IS NOT NULL THEN pole_number END) as poles_planted,
+        COUNT(DISTINCT CASE WHEN stringing_date IS NOT NULL THEN pole_number END) as stringing_completed,
+        COUNT(DISTINCT CASE WHEN status LIKE '%Sign Ups: Approved%' THEN property_id END) as signups_completed,
+        COUNT(DISTINCT CASE WHEN drop_date IS NOT NULL THEN property_id END) as drops_completed,
+        COUNT(DISTINCT CASE WHEN connected_date IS NOT NULL THEN property_id END) as connected_completed,
+        CASE 
+          WHEN COUNT(DISTINCT pole_number) = 0 THEN 0
+          ELSE ROUND(COUNT(DISTINCT CASE WHEN status = 'Pole Permission: Approved' THEN pole_number END) * 100.0 / COUNT(DISTINCT pole_number), 1)
+        END as permissions_percentage,
+        CASE 
+          WHEN COUNT(DISTINCT pole_number) = 0 THEN 0
+          ELSE ROUND(COUNT(DISTINCT CASE WHEN pole_planted_date IS NOT NULL THEN pole_number END) * 100.0 / COUNT(DISTINCT pole_number), 1)
+        END as poles_planted_percentage,
+        CASE 
+          WHEN COUNT(DISTINCT pole_number) = 0 THEN 0
+          ELSE ROUND(COUNT(DISTINCT CASE WHEN stringing_date IS NOT NULL THEN pole_number END) * 100.0 / COUNT(DISTINCT pole_number), 1)
+        END as stringing_percentage,
+        CASE 
+          WHEN COUNT(DISTINCT property_id) = 0 THEN 0
+          ELSE ROUND(COUNT(DISTINCT CASE WHEN status LIKE '%Sign Ups: Approved%' THEN property_id END) * 100.0 / COUNT(DISTINCT property_id), 1)
+        END as signups_percentage,
+        CASE 
+          WHEN COUNT(DISTINCT property_id) = 0 THEN 0
+          ELSE ROUND(COUNT(DISTINCT CASE WHEN drop_date IS NOT NULL THEN property_id END) * 100.0 / COUNT(DISTINCT property_id), 1)
+        END as drops_percentage,
+        CASE 
+          WHEN COUNT(DISTINCT property_id) = 0 THEN 0
+          ELSE ROUND(COUNT(DISTINCT CASE WHEN connected_date IS NOT NULL THEN property_id END) * 100.0 / COUNT(DISTINCT property_id), 1)
+        END as connected_percentage
+      FROM status_changes 
       WHERE project_name = ${projectName}
+      GROUP BY COALESCE(NULLIF(zone, ''), 'No Zone Assigned')
       ORDER BY zone
     `;
     
@@ -277,18 +296,20 @@ export class NeonService {
 
     const query = this.sql`
       SELECT 
-        progress_date,
-        day_name,
-        permissions,
-        poles_planted,
-        stringing_d,
-        stringing_f,
-        sign_ups,
-        home_drops,
-        homes_connected
-      FROM daily_progress 
+        DATE(status_date) as progress_date,
+        TO_CHAR(DATE(status_date), 'Day') as day_name,
+        COUNT(CASE WHEN status = 'Pole Permission: Approved' THEN 1 END) as permissions,
+        COUNT(CASE WHEN pole_planted_date IS NOT NULL THEN 1 END) as poles_planted,
+        COUNT(CASE WHEN stringing_date IS NOT NULL THEN 1 END) as stringing_d,
+        COUNT(CASE WHEN stringing_date IS NOT NULL THEN 1 END) as stringing_f,
+        COUNT(CASE WHEN status LIKE '%Sign Ups: Approved%' THEN 1 END) as sign_ups,
+        COUNT(CASE WHEN drop_date IS NOT NULL THEN 1 END) as home_drops,
+        COUNT(CASE WHEN connected_date IS NOT NULL THEN 1 END) as homes_connected
+      FROM status_changes 
       WHERE project_name = ${projectName}
-      AND progress_date >= CURRENT_DATE - INTERVAL '${days} days'
+      AND status_date >= CURRENT_DATE - INTERVAL '7 days'
+      AND status_date IS NOT NULL
+      GROUP BY DATE(status_date)
       ORDER BY progress_date DESC
     `;
     
@@ -309,9 +330,46 @@ export class NeonService {
         status,
         eta,
         actual_date
-      FROM key_milestones 
-      WHERE project_name = ${projectName}
-      ORDER BY eta
+      FROM (
+        SELECT 
+          'Pole Permission Start' as milestone_name,
+          CASE WHEN COUNT(CASE WHEN status = 'Pole Permission: Approved' THEN 1 END) > 0 THEN 'Completed' ELSE 'Pending' END as status,
+          MIN(permission_date) as eta,
+          MIN(permission_date) as actual_date
+        FROM status_changes 
+        WHERE project_name = ${projectName}
+        
+        UNION ALL
+        
+        SELECT 
+          'First Pole Installation' as milestone_name,
+          CASE WHEN COUNT(CASE WHEN pole_planted_date IS NOT NULL THEN 1 END) > 0 THEN 'Completed' ELSE 'Pending' END as status,
+          MIN(pole_planted_date) as eta,
+          MIN(pole_planted_date) as actual_date
+        FROM status_changes 
+        WHERE project_name = ${projectName}
+        
+        UNION ALL
+        
+        SELECT 
+          'First Sign-up Approval' as milestone_name,
+          CASE WHEN COUNT(CASE WHEN status LIKE '%Sign Ups: Approved%' THEN 1 END) > 0 THEN 'Completed' ELSE 'Pending' END as status,
+          MIN(signup_date) as eta,
+          MIN(signup_date) as actual_date
+        FROM status_changes 
+        WHERE project_name = ${projectName}
+        
+        UNION ALL
+        
+        SELECT 
+          'First Home Connection' as milestone_name,
+          CASE WHEN COUNT(CASE WHEN connected_date IS NOT NULL THEN 1 END) > 0 THEN 'Completed' ELSE 'Pending' END as status,
+          MIN(connected_date) as eta,
+          MIN(connected_date) as actual_date
+        FROM status_changes 
+        WHERE project_name = ${projectName}
+      ) milestones
+      ORDER BY eta NULLS LAST
     `;
     
     return from(query) as Observable<any[]>;
@@ -330,8 +388,45 @@ export class NeonService {
         prerequisite_name,
         responsible,
         status
-      FROM prerequisites 
-      WHERE project_name = ${projectName}
+      FROM (
+        SELECT 
+          'Pole Permission Approvals' as prerequisite_name,
+          'Municipal Department' as responsible,
+          CASE 
+            WHEN COUNT(CASE WHEN status = 'Pole Permission: Approved' THEN 1 END) > 0 THEN 'In Progress'
+            ELSE 'Pending'
+          END as status
+        FROM status_changes 
+        WHERE project_name = ${projectName}
+        
+        UNION ALL
+        
+        SELECT 
+          'Equipment Procurement' as prerequisite_name,
+          'Supply Chain Team' as responsible,
+          'Completed' as status
+        
+        UNION ALL
+        
+        SELECT 
+          'Site Survey Completion' as prerequisite_name,
+          'Engineering Team' as responsible,
+          'Completed' as status
+        
+        UNION ALL
+        
+        SELECT 
+          'Contractor Assignment' as prerequisite_name,
+          'Project Manager' as responsible,
+          CASE 
+            WHEN COUNT(DISTINCT contractor) > 0 THEN 'Completed'
+            ELSE 'Pending'
+          END as status
+        FROM status_changes 
+        WHERE project_name = ${projectName}
+        AND contractor IS NOT NULL
+        AND contractor != ''
+      ) prerequisites
       ORDER BY prerequisite_name
     `;
     

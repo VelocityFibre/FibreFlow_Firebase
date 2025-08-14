@@ -1,11 +1,9 @@
 <div class="supplier-list-container">
-  <div class="header-section">
-    <h1>Suppliers</h1>
-    <button mat-raised-button color="primary" routerLink="/suppliers/new">
-      <mat-icon>add</mat-icon>
-      Add Supplier
-    </button>
-  </div>
+  <app-page-header 
+    title="Suppliers" 
+    subtitle="Manage your supplier relationships and partnerships"
+    [actions]="headerActions">
+  </app-page-header>
 
   <div class="filters-section">
     <mat-form-field appearance="outline" class="search-field">

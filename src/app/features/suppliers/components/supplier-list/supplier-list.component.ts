@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -28,6 +28,7 @@ import {
   VerificationStatus,
 } from '../../../../core/suppliers/models';
 import { Observable, map, catchError, of } from 'rxjs';
+import { PageHeaderComponent, PageHeaderAction } from '../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-supplier-list',
@@ -52,6 +53,7 @@ import { Observable, map, catchError, of } from 'rxjs';
     MatProgressBarModule,
     MatDividerModule,
     MatSnackBarModule,
+    PageHeaderComponent,
   ],
   templateUrl: './supplier-list.component.html',
   styleUrls: ['./supplier-list.component.scss'],
@@ -60,6 +62,7 @@ export class SupplierListComponent implements OnInit {
   private supplierService = inject(SupplierService);
   private cdr = inject(ChangeDetectorRef);
   private snackBar = inject(MatSnackBar);
+  private router = inject(Router);
 
   suppliers$!: Observable<Supplier[]>;
   suppliers: Supplier[] = [];
@@ -80,6 +83,15 @@ export class SupplierListComponent implements OnInit {
 
   loading = true;
   viewMode: 'card' | 'table' = 'card'; // Default to card view
+
+  headerActions: PageHeaderAction[] = [
+    {
+      label: 'Add Supplier',
+      icon: 'add',
+      color: 'primary',
+      action: () => this.navigateToNewSupplier()
+    }
+  ];
 
   ngOnInit(): void {
     this.loadSuppliers();
@@ -200,5 +212,9 @@ export class SupplierListComponent implements OnInit {
         duration: 3000,
       });
     }
+  }
+
+  private navigateToNewSupplier(): void {
+    this.router.navigate(['/suppliers/new']);
   }
 }

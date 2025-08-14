@@ -17,6 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { debounceTime } from 'rxjs/operators';
 
+import { PageHeaderComponent, PageHeaderAction } from '../../../../shared/components/page-header/page-header.component';
 import { EmailLog } from '../../models/email.model';
 import { EmailLogService } from '../../services/email-log.service';
 import { EmailPreviewDialogComponent } from '../email-preview-dialog/email-preview-dialog.component';
@@ -40,17 +41,18 @@ import { NotificationService } from '../../../../core/services/notification.serv
     MatInputModule,
     MatSelectModule,
     MatMenuModule,
+    PageHeaderComponent,
   ],
   template: `
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>
-          <mat-icon>history</mat-icon>
-          Email History & Audit Trail
-        </mat-card-title>
-      </mat-card-header>
+    <div class="ff-page-container">
+      <!-- Page Header -->
+      <app-page-header
+        title="Email History & Audit Trail"
+        subtitle="View and manage all email communications"
+        [actions]="headerActions">
+      </app-page-header>
 
-      <mat-card-content>
+      <!-- Email Content -->
         <!-- Filters -->
         <div class="filters">
           <mat-form-field appearance="outline">
@@ -240,8 +242,7 @@ import { NotificationService } from '../../../../core/services/notification.serv
 
           <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
         </div>
-      </mat-card-content>
-    </mat-card>
+    </div>
   `,
   styles: [
     `
@@ -363,12 +364,6 @@ import { NotificationService } from '../../../../core/services/notification.serv
       .failed-row {
         background: #fff5f5;
       }
-
-      mat-card-title {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
     `,
   ],
 })
@@ -396,6 +391,16 @@ export class EmailHistoryComponent implements OnInit, AfterViewInit {
   searchControl = new FormControl('');
   typeControl = new FormControl('');
   statusControl = new FormControl('');
+
+  headerActions: PageHeaderAction[] = [
+    {
+      label: 'Refresh',
+      icon: 'refresh',
+      color: 'primary',
+      variant: 'raised',
+      action: () => this.loadEmails()
+    }
+  ];
 
   ngOnInit() {
     this.loadEmails();

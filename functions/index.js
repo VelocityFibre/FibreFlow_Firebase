@@ -1094,6 +1094,16 @@ const testFunctions = require('./src/test-agent-db');
 exports.testAgentDatabase = testFunctions.testAgentDatabase;
 
 // =============================================================================
+// POWERBI NEON SYNC FUNCTIONS
+// =============================================================================
+
+// Import Neon sync functions
+const neonSyncFunctions = require('./src/sync-to-neon');
+exports.syncToNeon = neonSyncFunctions.syncToNeon;
+exports.retryFailedSyncs = neonSyncFunctions.retryFailedSyncs;
+exports.syncHealthCheck = neonSyncFunctions.syncHealthCheck;
+
+// =============================================================================
 // SCHEDULED ACTION ITEMS SYNC
 // =============================================================================
 

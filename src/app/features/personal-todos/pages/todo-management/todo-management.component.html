@@ -1,26 +1,15 @@
-<div class="todo-management">
-  <!-- Header with Stats -->
-  <mat-card class="header-card">
-    <mat-card-content>
-      <div class="header-content">
-        <div>
-          <h1>Personal Todos</h1>
-          <p class="subtitle">Manage your personal tasks and action items from meetings</p>
-        </div>
-        <div class="header-actions">
-          <button mat-raised-button color="primary" (click)="refreshTodos()">
-            <mat-icon>refresh</mat-icon>
-            Refresh
-          </button>
-          <button mat-raised-button color="accent">
-            <mat-icon>add</mat-icon>
-            Add Todo
-          </button>
-        </div>
-      </div>
+<div class="ff-page-container">
+  <!-- Page Header -->
+  <app-page-header
+    title="Personal Todos"
+    subtitle="Manage your personal tasks and action items from meetings"
+    [actions]="headerActions"
+  ></app-page-header>
 
-      <!-- Todo Stats -->
-      <div class="stats-container" *ngIf="todoStats$ | async as stats">
+  <!-- Todo Stats -->
+  <mat-card class="stats-card" *ngIf="todoStats$ | async as stats">
+    <mat-card-content>
+      <div class="stats-container">
         <div class="stat-card">
           <mat-icon>assignment</mat-icon>
           <div class="stat-content">

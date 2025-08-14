@@ -1,0 +1,24 @@
+# Ignore Python cache and virtual environment
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+
+# Ignore test files
+test_*.py
+
+# Ignore docs and examples
+docs/
+examples/
+
+# Ignore log files
+*.log
+
+# Keep only essential files
+!simple_server.py
+!Dockerfile
+!requirements.txt
+!.env.local

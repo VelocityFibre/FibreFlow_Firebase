@@ -131,7 +131,7 @@ export class NeonAgentChatComponent implements OnInit {
         // Add agent response
         this.messages.update(msgs => [...msgs, {
           role: 'agent',
-          content: response.answer,
+          content: response.answer || 'No response received',
           timestamp: new Date(),
           metadata: {
             executionTime: response.execution_time,
