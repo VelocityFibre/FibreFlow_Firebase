@@ -248,43 +248,36 @@ export class ArgonService {
   }
 
   /**
-   * Get project dashboard data combining all sources
+   * Get project dashboard data combining Firestore and Neon sources
    */
   getProjectDashboard(projectName?: string): Observable<any> {
-    const queries: UnifiedQuery[] = [
-      {
-        description: 'Get FibreFlow projects',
-        firestore: {
-          collection: 'projects',
-          limit: 10,
-          orderBy: [{ field: 'updatedAt', direction: 'desc' }]
-        }
+    return this.argonDb.executeUnifiedQuery({
+      description: 'Get FibreFlow projects and build milestones',
+      firestore: {
+        collection: 'projects',
+        limit: 10,
+        orderBy: [{ field: 'updatedAt', direction: 'desc' }]
       },
-      {
-        description: 'Get Supabase progress',
-        supabase: {
-          table: 'zone_progress_view',
-          select: '*',
-          limit: 5
-        }
+      neon: {
+        sql: `
+          SELECT name, scope, completed, percentage 
+          FROM build_milestones 
+          WHERE project_name = $1 
+          ORDER BY name
+        `,
+        parameters: [projectName || 'Lawley']
       }
-    ];
-
-    return this.argonDb.executeUnifiedQuery(queries[0]).pipe(
-      switchMap(firestoreResult => 
-        this.argonDb.executeUnifiedQuery(queries[1]).pipe(
-          map(supabaseResult => ({
-            projects: firestoreResult.mergedData,
-            progress: supabaseResult.mergedData,
-            summary: {
-              totalProjects: firestoreResult.mergedData.length,
-              activeProjects: firestoreResult.mergedData.filter(p => p.status === 'active').length,
-              zonesTracked: supabaseResult.mergedData.length,
-              lastUpdated: new Date()
-            }
-          }))
-        )
-      )
+    }).pipe(
+      map(result => ({
+        projects: result.results.find(r => r.source === 'firestore')?.data || [],
+        milestones: result.results.find(r => r.source === 'neon')?.data || [],
+        summary: {
+          totalProjects: result.results.find(r => r.source === 'firestore')?.data.length || 0,
+          activeProjects: result.results.find(r => r.source === 'firestore')?.data.filter(p => p.status === 'active').length || 0,
+          milestonesTracked: result.results.find(r => r.source === 'neon')?.data.length || 0,
+          lastUpdated: new Date()
+        }
+      }))
     );
   }
 
@@ -357,7 +350,7 @@ export class ArgonService {
   /**
    * Check if specific database is available
    */
-  isDatabaseAvailable(dbType: 'firestore' | 'supabase' | 'neon'): boolean {
+  isDatabaseAvailable(dbType: 'firestore' | 'neon'): boolean {
     const connections = this._connectionStatus();
     return connections.some(c => c.type === dbType && c.status === 'connected');
   }

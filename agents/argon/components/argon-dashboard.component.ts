@@ -41,21 +41,23 @@ import {
     ReactiveFormsModule
   ],
   template: `
-    <div class="argon-dashboard">
+    <div class="ff-page-container">
       <!-- Header -->
-      <div class="header">
-        <h1>
-          <mat-icon>hub</mat-icon>
-          Argon Database Command Center
-        </h1>
-        <button 
-          mat-raised-button 
-          color="primary" 
-          (click)="refreshConnections()"
-          [disabled]="argonService.isLoading()">
-          <mat-icon>refresh</mat-icon>
-          Refresh
-        </button>
+      <div class="ff-page-header">
+        <div class="header-content">
+          <h1 class="page-title">Argon AI Assistant</h1>
+          <p class="page-subtitle">Database command center with AI-powered insights and cross-database analytics</p>
+        </div>
+        <div class="header-actions">
+          <button 
+            mat-raised-button 
+            color="primary" 
+            (click)="refreshConnections()"
+            [disabled]="argonService.isLoading()">
+            <mat-icon>refresh</mat-icon>
+            Refresh
+          </button>
+        </div>
       </div>
 
       <!-- Connection Status -->
@@ -431,25 +433,50 @@ import {
     </div>
   `,
   styles: [`
-    .argon-dashboard {
-      padding: 24px;
-      max-width: 1400px;
+    @use '../../../../styles/component-theming' as theme;
+
+    // Page container following theme standards
+    .ff-page-container {
+      max-width: 1280px;
       margin: 0 auto;
+      padding: 40px 24px;
+
+      @media (max-width: 768px) {
+        padding: 24px 16px;
+      }
     }
 
-    .header {
+    // Page header pattern matching dashboard exactly
+    .ff-page-header {
       display: flex;
-      justify-content: between;
+      justify-content: space-between;
       align-items: center;
-      margin-bottom: 24px;
-    }
+      margin-bottom: 48px;
 
-    .header h1 {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 0;
-      flex: 1;
+      .header-content {
+        flex: 1;
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .page-title {
+        font-size: 32px;
+        font-weight: 300;
+        color: theme.ff-rgb(foreground);
+        margin: 0 0 8px 0;
+        letter-spacing: -0.02em;
+      }
+
+      .page-subtitle {
+        font-size: 18px;
+        color: theme.ff-rgb(muted-foreground);
+        font-weight: 400;
+        margin: 0;
+      }
     }
 
     .connection-status {
