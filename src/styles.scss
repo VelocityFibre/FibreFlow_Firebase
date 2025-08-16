@@ -621,3 +621,19 @@ h4 {
     z-index: 9999 !important;
   }
 }
+
+
+// SOW Wizard Dialog styles to prevent flickering
+.sow-wizard-dialog {
+  .mat-mdc-dialog-container {
+    animation: none !important;
+    transition: opacity 0.2s ease !important;
+  }
+}
+
+// Prevent multiple dialogs
+.cdk-overlay-container {
+  .cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+    opacity: 0.48;
+  }
+}

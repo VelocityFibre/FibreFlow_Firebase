@@ -13,12 +13,14 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule } from '@angular/material/dialog';
 import { ProjectService } from '../../../../core/services/project.service';
 import { ClientService } from '../../../../features/clients/services/client.service';
 import { Client } from '../../../../features/clients/models/client.model';
 import { StaffService } from '../../../../features/staff/services/staff.service';
 import { StaffMember } from '../../../../features/staff/models/staff.model';
 import { Observable, firstValueFrom } from 'rxjs';
+import { SOWData } from '../../../sow/models/sow.model';
 import {
   ProjectType,
   ProjectStatus,
@@ -45,6 +47,7 @@ import {
     MatCheckboxModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
+    MatDialogModule,
   ],
   template: `
     <div class="ff-page-container">
@@ -202,6 +205,16 @@ import {
               <mat-card-title>
                 <mat-icon style="margin-right: 8px; vertical-align: middle;">trending_up</mat-icon>
                 Scope of Work (SOW)
+                <button 
+                  mat-stroked-button
+                  color="primary"
+                  type="button"
+                  (click)="openSOWWizard()"
+                  style="margin-left: auto; font-size: 14px;"
+                >
+                  <mat-icon>upload_file</mat-icon>
+                  Import from Excel
+                </button>
               </mat-card-title>
               <mat-card-subtitle
                 >Set daily targets for key performance indicators</mat-card-subtitle
@@ -220,9 +233,9 @@ import {
                     />
                     <span matSuffix>permissions</span>
                     <mat-error
-                      *ngIf="projectForm.get('polePermissionsTotal')?.hasError('required')"
+                      *ngIf="projectForm.get('polePermissionsTotal')?.hasError('min')"
                     >
-                      Pole permissions target is required
+                      Must be greater than 0
                     </mat-error>
                   </mat-form-field>
 
@@ -236,9 +249,9 @@ import {
                     />
                     <span matSuffix>per day</span>
                     <mat-error
-                      *ngIf="projectForm.get('polePermissionsDaily')?.hasError('required')"
+                      *ngIf="projectForm.get('polePermissionsDaily')?.hasError('min')"
                     >
-                      Daily target is required
+                      Must be greater than 0
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -253,8 +266,8 @@ import {
                       placeholder="100"
                     />
                     <span matSuffix>homes</span>
-                    <mat-error *ngIf="projectForm.get('homeSignupsTotal')?.hasError('required')">
-                      Home signups target is required
+                    <mat-error *ngIf="projectForm.get('homeSignupsTotal')?.hasError('min')">
+                      Must be greater than 0
                     </mat-error>
                   </mat-form-field>
 
@@ -267,8 +280,8 @@ import {
                       placeholder="8"
                     />
                     <span matSuffix>per day</span>
-                    <mat-error *ngIf="projectForm.get('homeSignupsDaily')?.hasError('required')">
-                      Daily target is required
+                    <mat-error *ngIf="projectForm.get('homeSignupsDaily')?.hasError('min')">
+                      Must be greater than 0
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -283,8 +296,8 @@ import {
                       placeholder="50"
                     />
                     <span matSuffix>poles</span>
-                    <mat-error *ngIf="projectForm.get('polesPlantedTotal')?.hasError('required')">
-                      Poles target is required
+                    <mat-error *ngIf="projectForm.get('polesPlantedTotal')?.hasError('min')">
+                      Must be greater than 0
                     </mat-error>
                   </mat-form-field>
 
@@ -297,8 +310,8 @@ import {
                       placeholder="3"
                     />
                     <span matSuffix>per day</span>
-                    <mat-error *ngIf="projectForm.get('polesPlantedDaily')?.hasError('required')">
-                      Daily target is required
+                    <mat-error *ngIf="projectForm.get('polesPlantedDaily')?.hasError('min')">
+                      Must be greater than 0
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -313,8 +326,8 @@ import {
                       placeholder="2000"
                     />
                     <span matSuffix>meters</span>
-                    <mat-error *ngIf="projectForm.get('fibreStringingTotal')?.hasError('required')">
-                      Fibre stringing target is required
+                    <mat-error *ngIf="projectForm.get('fibreStringingTotal')?.hasError('min')">
+                      Must be greater than 0
                     </mat-error>
                   </mat-form-field>
 
@@ -327,8 +340,8 @@ import {
                       placeholder="150"
                     />
                     <span matSuffix>meters/day</span>
-                    <mat-error *ngIf="projectForm.get('fibreStringingDaily')?.hasError('required')">
-                      Daily target is required
+                    <mat-error *ngIf="projectForm.get('fibreStringingDaily')?.hasError('min')">
+                      Must be greater than 0
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -344,9 +357,9 @@ import {
                     />
                     <span matSuffix>meters</span>
                     <mat-error
-                      *ngIf="projectForm.get('trenchingMetersTotal')?.hasError('required')"
+                      *ngIf="projectForm.get('trenchingMetersTotal')?.hasError('min')"
                     >
-                      Trenching target is required
+                      Must be greater than 0
                     </mat-error>
                   </mat-form-field>
 
@@ -360,9 +373,9 @@ import {
                     />
                     <span matSuffix>meters/day</span>
                     <mat-error
-                      *ngIf="projectForm.get('trenchingMetersDaily')?.hasError('required')"
+                      *ngIf="projectForm.get('trenchingMetersDaily')?.hasError('min')"
                     >
-                      Daily target is required
+                      Must be greater than 0
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -377,8 +390,8 @@ import {
                       placeholder="200"
                     />
                     <span matSuffix>homes</span>
-                    <mat-error *ngIf="projectForm.get('homesConnectedTotal')?.hasError('required')">
-                      Homes connected target is required
+                    <mat-error *ngIf="projectForm.get('homesConnectedTotal')?.hasError('min')">
+                      Must be greater than 0
                     </mat-error>
                   </mat-form-field>
 
@@ -391,8 +404,8 @@ import {
                       placeholder="10"
                     />
                     <span matSuffix>homes/day</span>
-                    <mat-error *ngIf="projectForm.get('homesConnectedDaily')?.hasError('required')">
-                      Daily target is required
+                    <mat-error *ngIf="projectForm.get('homesConnectedDaily')?.hasError('min')">
+                      Must be greater than 0
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -683,19 +696,19 @@ export class ProjectCreateComponent implements OnInit {
     allowWeekendWork: [false],
     allowNightWork: [false],
 
-    // Scope of Work (SOW)
-    polePermissionsTotal: ['', [Validators.required, Validators.min(1)]],
-    polePermissionsDaily: ['', [Validators.required, Validators.min(1)]],
-    homeSignupsTotal: ['', [Validators.required, Validators.min(1)]],
-    homeSignupsDaily: ['', [Validators.required, Validators.min(1)]],
-    polesPlantedTotal: ['', [Validators.required, Validators.min(1)]],
-    polesPlantedDaily: ['', [Validators.required, Validators.min(1)]],
-    fibreStringingTotal: ['', [Validators.required, Validators.min(1)]],
-    fibreStringingDaily: ['', [Validators.required, Validators.min(1)]],
-    trenchingMetersTotal: ['', [Validators.required, Validators.min(1)]],
-    trenchingMetersDaily: ['', [Validators.required, Validators.min(1)]],
-    homesConnectedTotal: ['', [Validators.required, Validators.min(1)]],
-    homesConnectedDaily: ['', [Validators.required, Validators.min(1)]],
+    // Scope of Work (SOW) - Made optional to allow Excel import
+    polePermissionsTotal: ['', [Validators.min(1)]],
+    polePermissionsDaily: ['', [Validators.min(1)]],
+    homeSignupsTotal: ['', [Validators.min(1)]],
+    homeSignupsDaily: ['', [Validators.min(1)]],
+    polesPlantedTotal: ['', [Validators.min(1)]],
+    polesPlantedDaily: ['', [Validators.min(1)]],
+    fibreStringingTotal: ['', [Validators.min(1)]],
+    fibreStringingDaily: ['', [Validators.min(1)]],
+    trenchingMetersTotal: ['', [Validators.min(1)]],
+    trenchingMetersDaily: ['', [Validators.min(1)]],
+    homesConnectedTotal: ['', [Validators.min(1)]],
+    homesConnectedDaily: ['', [Validators.min(1)]],
   });
 
   constructor() {
@@ -945,5 +958,61 @@ export class ProjectCreateComponent implements OnInit {
       // Only reset the flag in case of error (handled above)
       this.isSubmitting = false;
     }
+  }
+
+  openSOWWizard() {
+    // Save current form state to session storage so we can restore it when coming back
+    sessionStorage.setItem('projectFormData', JSON.stringify(this.projectForm.value));
+    sessionStorage.setItem('projectEditMode', this.isEditMode.toString());
+    sessionStorage.setItem('projectId', this.projectId || '');
+    
+    // Navigate to the SOW create page
+    this.router.navigate(['/sow/create'], {
+      queryParams: { 
+        projectId: this.projectId || 'temp',
+        projectName: this.projectForm.get('name')?.value || 'New Project',
+        returnUrl: this.isEditMode ? `/projects/${this.projectId}/edit` : '/projects/new'
+      }
+    });
+  }
+
+  private populateSOWFields(sowData: SOWData) {
+    // Calculate totals and daily rates from imported data
+    const poles = sowData.poles || [];
+    const drops = sowData.drops || [];
+    const fibre = sowData.fibre || [];
+    
+    // Estimated working days (default to 20 if not calculated)
+    const estimatedDays = sowData.estimatedDays || 20;
+    
+    // Update form with calculated values
+    this.projectForm.patchValue({
+      // Pole permissions - count approved poles
+      polePermissionsTotal: poles.filter(p => p.status === 'Pole Permission: Approved').length || '',
+      polePermissionsDaily: Math.ceil(poles.filter(p => p.status === 'Pole Permission: Approved').length / estimatedDays) || '',
+      
+      // Home signups - count from drops
+      homeSignupsTotal: drops.filter(d => d.status?.includes('Home Sign Ups')).length || '',
+      homeSignupsDaily: Math.ceil(drops.filter(d => d.status?.includes('Home Sign Ups')).length / estimatedDays) || '',
+      
+      // Poles planted - count ready for installation
+      polesPlantedTotal: poles.filter(p => p.status === 'Ready for Installation').length || '',
+      polesPlantedDaily: Math.ceil(poles.filter(p => p.status === 'Ready for Installation').length / estimatedDays) || '',
+      
+      // Fibre stringing - calculate from fibre data
+      fibreStringingTotal: fibre.reduce((sum, f) => sum + (f.cableLength || 0), 0) || '',
+      fibreStringingDaily: Math.ceil(fibre.reduce((sum, f) => sum + (f.cableLength || 0), 0) / estimatedDays) || '',
+      
+      // Trenching - estimate based on underground fibre
+      trenchingMetersTotal: Math.round(fibre.reduce((sum, f) => sum + (f.cableLength || 0), 0) * 0.2) || '', // Assume 20% needs trenching
+      trenchingMetersDaily: Math.ceil(Math.round(fibre.reduce((sum, f) => sum + (f.cableLength || 0), 0) * 0.2) / estimatedDays) || '',
+      
+      // Homes connected - count completed drops
+      homesConnectedTotal: drops.filter(d => d.status === 'Home Installation: Installed').length || '',
+      homesConnectedDaily: Math.ceil(drops.filter(d => d.status === 'Home Installation: Installed').length / estimatedDays) || '',
+    });
+
+    // Store the full SOW data for later use if needed
+    (this.projectForm as any).sowData = sowData;
   }
 }

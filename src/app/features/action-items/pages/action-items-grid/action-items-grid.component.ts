@@ -209,6 +209,8 @@ export class ActionItemsGridComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadData();
+    // Automatically sync action items from meetings on page load
+    this.autoSyncFromMeetings();
   }
 
   ngOnDestroy() {
@@ -372,6 +374,34 @@ export class ActionItemsGridComponent implements OnInit, OnDestroy {
       });
     } finally {
       this.syncing.set(false);
+    }
+  }
+
+  private async autoSyncFromMeetings() {
+    try {
+      const user = this.authService.currentUser();
+      if (!user) {
+        return; // Silent fail for auto-sync
+      }
+
+      // Run sync in background without blocking UI
+      const importCount = await this.actionItemsService.importUnmanagedActionItems(
+        user.uid,
+        user.email || 'unknown@fibreflow.com'
+      );
+
+      if (importCount > 0) {
+        console.log(`Auto-sync: Imported ${importCount} new action items from meetings`);
+        // Refresh the data
+        this.loadData();
+        // Show subtle notification
+        this.snackBar.open(`${importCount} new action items imported from meetings`, 'Close', {
+          duration: 3000,
+        });
+      }
+    } catch (error) {
+      console.error('Error in auto-sync:', error);
+      // Silent fail for auto-sync - don't show error to user
     }
   }
 }

@@ -24,6 +24,7 @@ import { ProjectBOQComponent } from '../../components/boq/project-boq.component'
 import { PhaseService } from '../../../../core/services/phase.service';
 import { TaskService } from '../../../../core/services/task.service';
 import { Task } from '../../../../core/models/task.model';
+import { ProjectSOWComponent } from '../../../sow/components/project-sow/project-sow.component';
 
 @Component({
   selector: 'app-project-detail',
@@ -47,6 +48,7 @@ import { Task } from '../../../../core/models/task.model';
     ProjectStockComponent,
     ProjectContractorsComponent,
     ProjectBOQComponent,
+    ProjectSOWComponent,
   ],
   templateUrl: './project-detail.component.html',
   styles: [

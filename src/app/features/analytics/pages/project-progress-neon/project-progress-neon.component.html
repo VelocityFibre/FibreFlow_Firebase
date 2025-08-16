@@ -1,12 +1,15 @@
-<div class="progress-summary-container">
+<div class="ff-page-container">
   <!-- Header -->
-  <div class="header-section">
-    <div class="title-section">
-      <h1>{{ projectName() }} Progress Summary</h1>
-      <div class="data-source-badge">
-        <mat-icon>storage</mat-icon>
-        <span>Neon PostgreSQL</span>
-      </div>
+  <div class="ff-page-header">
+    <div class="header-content">
+      <h1 class="page-title">{{ projectName() }} Progress Summary</h1>
+      <p class="page-subtitle">
+        Real-time project analytics powered by Neon PostgreSQL
+        <span class="data-source-badge">
+          <mat-icon>storage</mat-icon>
+          Neon PostgreSQL
+        </span>
+      </p>
     </div>
     <div class="header-actions">
       <span class="last-updated">Last updated: {{ lastUpdated() | date:'dd MMM yyyy HH:mm' }}</span>

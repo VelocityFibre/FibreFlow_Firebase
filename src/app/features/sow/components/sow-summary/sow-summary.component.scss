@@ -1,0 +1,401 @@
+@use '../../../../../styles/component-theming' as theme;
+
+.sow-summary-container {
+  padding: theme.ff-spacing(lg);
+  max-width: 1200px;
+  margin: 0 auto;
+  
+  .summary-header {
+    text-align: center;
+    margin-bottom: theme.ff-spacing(xl);
+    
+    mat-icon {
+      font-size: theme.ff-rem(48);
+      width: theme.ff-rem(48);
+      height: theme.ff-rem(48);
+      color: theme.ff-rgb(primary);
+      margin-bottom: theme.ff-spacing(md);
+    }
+    
+    h2 {
+      margin: 0 0 theme.ff-spacing(sm) 0;
+      color: theme.ff-rgb(foreground);
+      font-size: theme.ff-rem(28);
+      font-weight: 500;
+    }
+    
+    p {
+      margin: 0;
+      color: theme.ff-rgba(foreground, 0.7);
+      font-size: theme.ff-rem(16);
+    }
+  }
+  
+  mat-card {
+    @include theme.card-theme();
+    margin-bottom: theme.ff-spacing(lg);
+    
+    mat-card-header {
+      mat-card-title {
+        color: theme.ff-rgb(foreground);
+        font-size: theme.ff-rem(20);
+        font-weight: 500;
+      }
+      
+      mat-card-subtitle {
+        color: theme.ff-rgba(foreground, 0.7);
+        margin-top: theme.ff-spacing(xs);
+      }
+    }
+  }
+  
+  .project-card {
+    .project-info {
+      .info-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: theme.ff-spacing(sm) 0;
+        border-bottom: 1px solid theme.ff-rgba(foreground, 0.1);
+        
+        &:last-child {
+          border-bottom: none;
+        }
+        
+        .info-label {
+          color: theme.ff-rgba(foreground, 0.7);
+          font-weight: 500;
+        }
+        
+        .info-value {
+          color: theme.ff-rgb(foreground);
+        }
+      }
+    }
+  }
+  
+  .overview-card {
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: theme.ff-spacing(md);
+      margin-bottom: theme.ff-spacing(lg);
+      
+      .metric-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: theme.ff-spacing(lg);
+        border-radius: theme.ff-var(radius);
+        background: theme.ff-rgba(primary, 0.05);
+        border: 1px solid theme.ff-rgba(primary, 0.1);
+        
+        &.total-cost {
+          background: theme.ff-rgba(success, 0.1);
+          border-color: theme.ff-rgba(success, 0.2);
+          
+          mat-icon {
+            color: theme.ff-rgb(success);
+          }
+        }
+        
+        mat-icon {
+          color: theme.ff-rgb(primary);
+          font-size: theme.ff-rem(32);
+          width: theme.ff-rem(32);
+          height: theme.ff-rem(32);
+          margin-bottom: theme.ff-spacing(sm);
+        }
+        
+        .metric-value {
+          font-size: theme.ff-rem(24);
+          font-weight: 600;
+          color: theme.ff-rgb(foreground);
+          margin-bottom: theme.ff-spacing(xs);
+        }
+        
+        .metric-label {
+          font-size: theme.ff-rem(12);
+          color: theme.ff-rgba(foreground, 0.7);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          text-align: center;
+        }
+      }
+    }
+    
+    .status-indicators {
+      .status-chip {
+        background: theme.ff-rgba(info, 0.1);
+        color: theme.ff-rgb(info);
+        margin-right: theme.ff-spacing(sm);
+        
+        &.ready {
+          background: theme.ff-rgba(success, 0.2);
+          color: theme.ff-rgb(success);
+        }
+        
+        mat-icon {
+          margin-right: theme.ff-spacing(xs);
+        }
+      }
+    }
+  }
+  
+  .breakdown-card {
+    ::ng-deep {
+      .mat-tab-group {
+        .mat-tab-header {
+          .mat-tab-label {
+            color: theme.ff-rgba(foreground, 0.7);
+            
+            &.mat-tab-label-active {
+              color: theme.ff-rgb(primary);
+            }
+          }
+          
+          .mat-ink-bar {
+            background-color: theme.ff-rgb(primary);
+          }
+        }
+      }
+    }
+    
+    .tab-content {
+      padding: theme.ff-spacing(lg);
+      
+      .breakdown-section {
+        margin-bottom: theme.ff-spacing(xl);
+        
+        h3 {
+          margin: 0 0 theme.ff-spacing(md) 0;
+          color: theme.ff-rgb(foreground);
+          font-size: theme.ff-rem(18);
+          font-weight: 500;
+        }
+        
+        .time-details,
+        .rate-details {
+          .time-item,
+          .rate-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: theme.ff-spacing(sm) 0;
+            border-bottom: 1px solid theme.ff-rgba(foreground, 0.1);
+            
+            .time-label,
+            .rate-label {
+              color: theme.ff-rgba(foreground, 0.7);
+            }
+            
+            .time-value,
+            .rate-value {
+              color: theme.ff-rgb(foreground);
+              font-weight: 500;
+            }
+          }
+        }
+        
+        .cost-analysis {
+          .cost-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: theme.ff-spacing(sm) 0;
+            border-bottom: 1px solid theme.ff-rgba(foreground, 0.1);
+            
+            &.subtotal {
+              font-weight: 500;
+              margin-top: theme.ff-spacing(md);
+              border-top: 1px solid theme.ff-rgba(foreground, 0.2);
+              border-bottom: 1px solid theme.ff-rgba(foreground, 0.2);
+            }
+            
+            &.total {
+              font-size: theme.ff-rem(18);
+              font-weight: 600;
+              margin-top: theme.ff-spacing(sm);
+              padding: theme.ff-spacing(md);
+              background: theme.ff-rgba(success, 0.1);
+              border-radius: theme.ff-var(radius);
+              border: none;
+              
+              .cost-value {
+                color: theme.ff-rgb(success);
+              }
+            }
+            
+            .cost-label {
+              color: theme.ff-rgba(foreground, 0.8);
+            }
+            
+            .cost-value {
+              color: theme.ff-rgb(foreground);
+              font-weight: 500;
+            }
+          }
+        }
+      }
+      
+      .data-summary {
+        .summary-section {
+          margin-bottom: theme.ff-spacing(xl);
+          
+          h4 {
+            margin: 0 0 theme.ff-spacing(sm) 0;
+            color: theme.ff-rgb(foreground);
+            font-size: theme.ff-rem(16);
+            font-weight: 500;
+          }
+          
+          .summary-text {
+            margin: 0 0 theme.ff-spacing(md) 0;
+            color: theme.ff-rgba(foreground, 0.7);
+            font-size: theme.ff-rem(14);
+          }
+          
+          .sample-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: theme.ff-spacing(xs);
+            align-items: center;
+            
+            mat-chip {
+              background: theme.ff-rgba(primary, 0.1);
+              color: theme.ff-rgb(foreground);
+              font-size: theme.ff-rem(12);
+            }
+            
+            span {
+              color: theme.ff-rgba(foreground, 0.6);
+              font-size: theme.ff-rem(12);
+              margin-left: theme.ff-spacing(sm);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: theme.ff-spacing(md);
+    justify-content: center;
+    margin-top: theme.ff-spacing(xl);
+    
+    button {
+      min-width: theme.ff-rem(160);
+      
+      mat-icon {
+        margin-right: theme.ff-spacing(xs);
+      }
+    }
+    
+    @media #{theme.ff-breakpoint(sm)} {
+      flex-direction: column;
+      
+      button {
+        width: 100%;
+      }
+    }
+  }
+  
+  .loading-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    
+    ::ng-deep .mat-progress-bar-fill::after {
+      background-color: theme.ff-rgb(primary);
+    }
+  }
+}
+
+// Responsive adjustments
+@media #{theme.ff-breakpoint(md)} {
+  .sow-summary-container {
+    padding: theme.ff-spacing(md);
+    
+    .summary-header {
+      mat-icon {
+        font-size: theme.ff-rem(40);
+        width: theme.ff-rem(40);
+        height: theme.ff-rem(40);
+      }
+      
+      h2 {
+        font-size: theme.ff-rem(24);
+      }
+    }
+    
+    .overview-card {
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+        
+        .metric-item {
+          &.total-cost {
+            grid-column: 1 / -1;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media #{theme.ff-breakpoint(sm)} {
+  .sow-summary-container {
+    .overview-card {
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .project-card {
+      .project-info {
+        .info-item {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: theme.ff-spacing(xs);
+        }
+      }
+    }
+    
+    .breakdown-card {
+      .tab-content {
+        padding: theme.ff-spacing(md);
+        
+        .breakdown-section {
+          .time-details,
+          .rate-details {
+            .time-item,
+            .rate-item {
+              flex-direction: column;
+              align-items: flex-start;
+              gap: theme.ff-spacing(xs);
+            }
+          }
+          
+          .cost-analysis {
+            .cost-row {
+              flex-direction: column;
+              align-items: flex-start;
+              gap: theme.ff-spacing(xs);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Dark theme adjustments
+:root[data-theme="dark"] {
+  .sow-summary-container {
+    mat-card {
+      box-shadow: theme.ff-shadow(lg);
+    }
+  }
+}

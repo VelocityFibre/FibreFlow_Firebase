@@ -92,6 +92,59 @@ page_contexts:
     inline_markers:
       service: "src/app/core/services/project.service.ts"
 
+  # Offline Pole Capture - Simple Data Entry (DESIGN DECISION 2025-01-30)
+  offline_pole_capture:
+    design_philosophy: "Two-stage architecture: Simple offline capture + Backend processing"
+    
+    stage_1_simple_capture:
+      purpose: "Fast, reliable field data entry - NO complex validation"
+      route: "/offline-pole-capture"
+      complexity: "LOW by design"
+      storage_requirement: "50KB-500KB per device"
+      what_it_does:
+        - "Basic pole info capture (project, pole number, notes)"
+        - "GPS coordinates with accuracy validation" 
+        - "Required photos (before, front, side, depth, concrete, compaction)"
+        - "Local offline storage queue"
+        - "Simple search for continuing existing work"
+        - "Auto-save drafts"
+      what_it_does_NOT_do:
+        - "❌ Complex pole number validation"
+        - "❌ Duplicate checking across entire database"
+        - "❌ Project-wide pole autocomplete" 
+        - "❌ Heavy data synchronization"
+        - "❌ Complex caching strategies"
+    
+    stage_2_backend_processing:
+      purpose: "Heavy lifting, data validation, intelligent matching"
+      location: "Firebase Functions + Database scripts"
+      complexity: "HIGH but isolated from field agents"
+      what_it_does:
+        - "✅ GPS-to-pole matching algorithms"
+        - "✅ Duplicate detection and resolution"
+        - "✅ Data quality validation"
+        - "✅ Automatic pole number assignment"
+        - "✅ Cross-reference with existing pole databases"
+        - "✅ Conflict resolution for multiple captures"
+        - "✅ Data enrichment and standardization"
+    
+    benefits:
+      for_field_agents:
+        - "Fast: No waiting for data downloads"
+        - "Reliable: Works offline, simple interface"
+        - "Universal: Works on budget phones"
+        - "Focused: Just capture data, no validation complexity"
+        - "Low Storage: Minimal device requirements"
+      for_management:
+        - "High Quality: Backend ensures data integrity"
+        - "Intelligent: GPS matching, duplicate resolution"
+        - "Scalable: Heavy processing doesn't affect field ops"
+        - "Flexible: Add algorithms without mobile app changes"
+    
+    documentation: "docs/OFFLINE_CAPTURE_DESIGN_DECISION.md"
+    status: "production - stage 1 complete, stage 2 planned"
+    last_updated: "2025-01-30"
+
   # Pole Tracker - Desktop & Mobile versions
   pole_tracker:
     data_integrity_enforcement:

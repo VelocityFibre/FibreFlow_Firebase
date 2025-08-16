@@ -282,6 +282,15 @@ const allRoutes: Routes = [
     canActivate: [authGuard],
     data: { title: 'Reports', preload: true },
   },
+  {
+    path: 'sow',
+    loadChildren: () => import('./features/sow/sow.routes').then(m => m.sowRoutes),
+    canActivate: [authGuard],
+    data: {
+      title: 'Scope of Work',
+      description: 'Create and manage project SOW documents'
+    }
+  },
   // Auth routes - temporary for testing
   {
     path: 'test-auth',
@@ -330,16 +339,6 @@ const allRoutes: Routes = [
       description: 'Capture pole data offline with GPS and photos'
     }
   },
-  // DISABLED: Neon Database Agent - Natural language queries with Gemini (build errors)
-  // {
-  //   path: 'neon-agent',
-  //   loadChildren: () => import('./features/neon-agent/neon-agent.routes').then(m => m.neonAgentRoutes),
-  //   canActivate: [authGuard],
-  //   data: { 
-  //     title: 'Neon Database Agent',
-  //     description: 'Natural language database queries powered by Google Gemini'
-  //   }
-  // },
 ];
 
 // Filter routes based on demo configuration

@@ -67,6 +67,46 @@ import { Project } from '@app/core/models/project.model';
         }
       </div>
 
+      <!-- Search for Existing Pole -->
+      <mat-card class="search-card">
+        <mat-card-content>
+          <h3>Continue Previous Work?</h3>
+          <div class="search-section">
+            <mat-form-field appearance="outline" class="search-field">
+              <mat-label>Search Pole Number</mat-label>
+              <input matInput 
+                     [(ngModel)]="searchPoleNumber" 
+                     placeholder="e.g., LAW.P.B167"
+                     (keyup.enter)="searchForPole()">
+              <button matSuffix mat-icon-button (click)="searchForPole()" [disabled]="isSearching()">
+                <mat-icon>{{ isSearching() ? 'hourglass_empty' : 'search' }}</mat-icon>
+              </button>
+            </mat-form-field>
+            
+            @if (searchResult()) {
+              @if (searchResult()!.found) {
+                <div class="search-result found">
+                  <mat-icon color="primary">check_circle</mat-icon>
+                  <div class="result-content">
+                    <strong>Found: {{ searchResult()!.pole!.poleNumber }}</strong>
+                    <p>{{ searchResult()!.pole!.photos?.length || 0 }} photos captured</p>
+                    <p>Status: {{ searchResult()!.pole!.syncStatus }}</p>
+                  </div>
+                  <button mat-raised-button color="primary" (click)="loadExistingPole(searchResult()!.pole!)">
+                    Continue Work
+                  </button>
+                </div>
+              } @else {
+                <div class="search-result not-found">
+                  <mat-icon color="accent">info</mat-icon>
+                  <span>No existing work found for "{{ searchPoleNumber }}". Start new capture below.</span>
+                </div>
+              }
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+
       <!-- Stepper Form -->
       <mat-stepper #stepper linear class="capture-stepper">
         <!-- Step 1: Basic Info -->
@@ -173,7 +213,7 @@ import { Project } from '@app/core/models/project.model';
           <div class="step-actions">
             <button mat-button matStepperPrevious>Back</button>
             <button mat-raised-button matStepperNext color="primary"
-                    [disabled]="!hasRequiredPhotos()">
+                    [disabled]="!hasAnyPhotos()">
               Next
               <mat-icon>arrow_forward</mat-icon>
             </button>
@@ -225,6 +265,12 @@ import { Project } from '@app/core/models/project.model';
 
               <div class="review-section">
                 <h3>Photos ({{ capturedPhotos().length }})</h3>
+                @if (!hasRequiredPhotos()) {
+                  <div class="photo-warning">
+                    <mat-icon color="warn">warning</mat-icon>
+                    <span>Missing required photos: {{ getMissingRequiredPhotos().join(', ') }}</span>
+                  </div>
+                }
                 <div class="photo-summary">
                   @for (photo of capturedPhotos(); track photo.id) {
                     <div class="photo-thumb">
@@ -285,6 +331,56 @@ import { Project } from '@app/core/models/project.model';
       .coordinates {
         font-size: 12px;
         color: var(--mat-sys-outline);
+      }
+    }
+
+    .search-card {
+      margin: 16px;
+      
+      h3 {
+        margin-bottom: 16px;
+        color: var(--mat-sys-primary);
+      }
+    }
+
+    .search-section {
+      .search-field {
+        width: 100%;
+        margin-bottom: 16px;
+      }
+    }
+
+    .search-result {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 8px;
+      
+      &.found {
+        background: var(--mat-sys-primary-container);
+        color: var(--mat-sys-on-primary-container);
+        
+        .result-content {
+          flex: 1;
+          
+          strong {
+            display: block;
+            margin-bottom: 4px;
+          }
+          
+          p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.8;
+          }
+        }
+      }
+      
+      &.not-found {
+        background: var(--mat-sys-secondary-container);
+        color: var(--mat-sys-on-secondary-container);
       }
     }
 
@@ -385,6 +481,24 @@ import { Project } from '@app/core/models/project.model';
       }
     }
 
+    .photo-warning {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+      background: var(--mat-sys-error-container);
+      color: var(--mat-sys-on-error-container);
+      border-radius: 8px;
+      font-size: 14px;
+      
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+
     .photo-summary {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
@@ -448,6 +562,16 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
   gpsError = signal<string | null>(null);
   isSaving = signal(false);
   
+  // Search functionality
+  searchPoleNumber = '';
+  isSearching = signal(false);
+  searchResult = signal<{ found: boolean; pole?: OfflinePoleData } | null>(null);
+  
+  // Auto-save functionality
+  currentDraftId = signal<string | null>(null);
+  isAutoSaving = signal(false);
+  lastAutoSave = signal<Date | null>(null);
+  
   private subscriptions: Subscription[] = [];
 
   ngOnInit() {
@@ -462,6 +586,12 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
     if (projectId) {
       this.basicInfoForm.patchValue({ projectId });
     }
+
+    // Setup auto-save on form changes
+    const formChangeSub = this.basicInfoForm.valueChanges.subscribe(() => {
+      this.autoSaveDraft();
+    });
+    this.subscriptions.push(formChangeSub);
   }
 
   ngOnDestroy() {
@@ -497,6 +627,9 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
           { duration: 5000 }
         );
       }
+
+      // Auto-save after GPS capture
+      this.autoSaveDraft();
     } catch (error) {
       this.gpsError.set(error instanceof Error ? error.message : 'Failed to get GPS location');
     } finally {
@@ -523,6 +656,9 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
 
   onPhotosChanged(photos: OfflinePhoto[]): void {
     this.capturedPhotos.set(photos);
+    
+    // Auto-save when photos change
+    this.autoSaveDraft();
   }
 
   hasRequiredPhotos(): boolean {
@@ -539,6 +675,164 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
     });
     
     return hasAllRequired;
+  }
+
+  hasAnyPhotos(): boolean {
+    return this.capturedPhotos().length > 0;
+  }
+
+  getMissingRequiredPhotos(): string[] {
+    const requiredTypes = ['before', 'front', 'side'];
+    const capturedTypes = new Set(this.capturedPhotos().map(p => p.type));
+    return requiredTypes.filter(type => !capturedTypes.has(type as any));
+  }
+
+  async searchForPole(): Promise<void> {
+    if (!this.searchPoleNumber.trim()) {
+      this.snackBar.open('Please enter a pole number to search', 'OK', { duration: 3000 });
+      return;
+    }
+
+    this.isSearching.set(true);
+    this.searchResult.set(null);
+
+    try {
+      // Search in offline storage
+      const offlinePoles = await this.getOfflinePoles();
+      const foundPole = offlinePoles.find(pole => 
+        pole.poleNumber?.toLowerCase().includes(this.searchPoleNumber.toLowerCase()) ||
+        pole.id.includes(this.searchPoleNumber)
+      );
+
+      if (foundPole) {
+        this.searchResult.set({ found: true, pole: foundPole });
+      } else {
+        this.searchResult.set({ found: false });
+      }
+    } catch (error) {
+      console.error('Error searching for pole:', error);
+      this.snackBar.open('Error searching for pole', 'OK', { duration: 3000 });
+      this.searchResult.set({ found: false });
+    } finally {
+      this.isSearching.set(false);
+    }
+  }
+
+  loadExistingPole(pole: OfflinePoleData): void {
+    // Set the current draft ID
+    this.currentDraftId.set(pole.id);
+    
+    // Load the existing pole data into the form
+    this.basicInfoForm.patchValue({
+      projectId: pole.projectId || '',
+      poleNumber: pole.poleNumber || '',
+      notes: pole.notes || ''
+    });
+
+    // Load GPS location if available
+    if (pole.gpsLocation) {
+      this.currentPosition.set({
+        latitude: pole.gpsLocation.latitude,
+        longitude: pole.gpsLocation.longitude,
+        accuracy: pole.gpsAccuracy || 0,
+        timestamp: pole.capturedAt?.getTime() || Date.now()
+      });
+      
+      this.locationForm.patchValue({
+        latitude: pole.gpsLocation.latitude,
+        longitude: pole.gpsLocation.longitude,
+        accuracy: pole.gpsAccuracy || 0
+      });
+    }
+
+    // Load captured photos
+    if (pole.photos) {
+      this.capturedPhotos.set(pole.photos);
+    }
+
+    this.snackBar.open(`Loaded existing work for ${pole.poleNumber}`, 'OK', { duration: 3000 });
+    
+    // Clear search
+    this.searchPoleNumber = '';
+    this.searchResult.set(null);
+  }
+
+  private async getOfflinePoles(): Promise<OfflinePoleData[]> {
+    return new Promise((resolve) => {
+      const subscription = this.offlinePoleService.offlinePoles$.subscribe(poles => {
+        resolve(poles);
+        subscription.unsubscribe();
+      });
+    });
+  }
+
+  private autoSaveTimeout?: number;
+
+  async autoSaveDraft(): Promise<void> {
+    // Debounce auto-save to avoid too many saves
+    if (this.autoSaveTimeout) {
+      clearTimeout(this.autoSaveTimeout);
+    }
+
+    this.autoSaveTimeout = window.setTimeout(async () => {
+      await this.performAutoSave();
+    }, 2000); // Save after 2 seconds of inactivity
+  }
+
+  private async performAutoSave(): Promise<void> {
+    if (this.isAutoSaving()) return; // Prevent concurrent saves
+    
+    const formValue = this.basicInfoForm.value;
+    
+    // Only auto-save if we have some meaningful data
+    if (!formValue.projectId && !formValue.poleNumber && !formValue.notes) {
+      return;
+    }
+
+    this.isAutoSaving.set(true);
+
+    try {
+      const user = await this.authService.getCurrentUser();
+      const position = this.currentPosition();
+      
+      const draftData: Partial<OfflinePoleData> = {
+        projectId: formValue.projectId || undefined,
+        poleNumber: formValue.poleNumber || undefined,
+        notes: formValue.notes || undefined,
+        capturedBy: user?.uid || 'offline_user',
+        status: 'draft'
+      };
+
+      if (position) {
+        draftData.gpsLocation = {
+          latitude: position.latitude,
+          longitude: position.longitude
+        };
+        draftData.gpsAccuracy = position.accuracy;
+      }
+
+      if (this.currentDraftId()) {
+        // Update existing draft
+        await this.offlinePoleService.updatePoleOffline(
+          this.currentDraftId()!,
+          draftData,
+          this.capturedPhotos()
+        );
+      } else {
+        // Create new draft
+        const draftId = await this.offlinePoleService.storeDraftPole(
+          draftData as any,
+          this.capturedPhotos()
+        );
+        this.currentDraftId.set(draftId);
+      }
+
+      this.lastAutoSave.set(new Date());
+    } catch (error) {
+      console.error('Auto-save failed:', error);
+    } finally {
+      this.isAutoSaving.set(false);
+    }
   }
 
   getProjectName(): string {
@@ -565,25 +859,52 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
       if (!position) {
         throw new Error('No GPS position captured');
       }
-      
-      const poleData: Partial<OfflinePoleData> = {
-        projectId: this.basicInfoForm.get('projectId')!.value!,
-        poleNumber: this.basicInfoForm.get('poleNumber')?.value || undefined,
-        notes: this.basicInfoForm.get('notes')?.value || undefined,
-        gpsLocation: {
-          latitude: position.latitude,
-          longitude: position.longitude
-        },
-        gpsAccuracy: position.accuracy,
-        capturedBy: user?.uid || 'offline_user',
-        capturedAt: new Date(),
-        status: 'captured'
-      };
-      
-      const poleId = await this.offlinePoleService.storePoleOffline(
-        poleData,
-        this.capturedPhotos()
-      );
+
+      if (this.currentDraftId()) {
+        // Update the existing draft with final data
+        const finalData: Partial<OfflinePoleData> = {
+          projectId: this.basicInfoForm.get('projectId')!.value!,
+          poleNumber: this.basicInfoForm.get('poleNumber')?.value || undefined,
+          notes: this.basicInfoForm.get('notes')?.value || undefined,
+          gpsLocation: {
+            latitude: position.latitude,
+            longitude: position.longitude
+          },
+          gpsAccuracy: position.accuracy,
+          capturedBy: user?.uid || 'offline_user',
+          capturedAt: new Date(),
+          status: 'captured'
+        };
+        
+        await this.offlinePoleService.updatePoleOffline(
+          this.currentDraftId()!,
+          finalData,
+          this.capturedPhotos()
+        );
+        
+        // Promote draft to pending for sync
+        await this.offlinePoleService.promoteDraftToPending(this.currentDraftId()!);
+      } else {
+        // No draft exists, create new pole directly
+        const poleData: Partial<OfflinePoleData> = {
+          projectId: this.basicInfoForm.get('projectId')!.value!,
+          poleNumber: this.basicInfoForm.get('poleNumber')?.value || undefined,
+          notes: this.basicInfoForm.get('notes')?.value || undefined,
+          gpsLocation: {
+            latitude: position.latitude,
+            longitude: position.longitude
+          },
+          gpsAccuracy: position.accuracy,
+          capturedBy: user?.uid || 'offline_user',
+          capturedAt: new Date(),
+          status: 'captured'
+        };
+        
+        await this.offlinePoleService.storePoleOffline(
+          poleData,
+          this.capturedPhotos()
+        );
+      }
       
       this.snackBar.open(
         navigator.onLine 
@@ -593,11 +914,12 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
         { duration: 5000 }
       );
       
-      // Reset form
+      // Reset form and draft
       this.basicInfoForm.reset();
       this.locationForm.reset();
       this.currentPosition.set(null);
       this.capturedPhotos.set([]);
+      this.currentDraftId.set(null);
       
       // Navigate to offline list or back
       this.router.navigate(['../'], { relativeTo: this.route });

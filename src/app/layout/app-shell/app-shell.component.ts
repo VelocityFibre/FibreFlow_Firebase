@@ -265,6 +265,31 @@ interface NavItem {
             </mat-nav-list>
           </div>
 
+          <!-- Analytics Category -->
+          <div class="nav-category">
+            <h3 class="category-title">Analytics & AI</h3>
+            <mat-nav-list class="nav-list">
+              <a
+                mat-list-item
+                *ngFor="let item of analyticsItems"
+                [routerLink]="item.route"
+                routerLinkActive="active-link"
+                class="nav-item"
+                (click)="onNavItemClick(sidenav)"
+              >
+                <mat-icon
+                  matListItemIcon
+                  [matBadge]="item.badge"
+                  [matBadgeHidden]="!item.badge || item.badge === 0"
+                  matBadgeColor="warn"
+                  matBadgeSize="small"
+                  >{{ item.icon }}</mat-icon
+                >
+                <span matListItemTitle>{{ item.label }}</span>
+              </a>
+            </mat-nav-list>
+          </div>
+
           <!-- Mobile Pages Category -->
           <div class="nav-category">
             <h3 class="category-title">Mobile Pages</h3>
@@ -721,6 +746,7 @@ export class AppShellComponent implements OnInit {
   // Analytics category items
   analyticsItems: NavItem[] = this.filterItems([
     { label: 'Argon AI Assistant', icon: 'smart_toy', route: '/argon' },
+    { label: 'Neon AI Agent', icon: 'psychology', route: '/neon-agent' },
     { label: 'Project Progress Summary', icon: 'summarize', route: '/analytics/project-progress' },
     { label: 'Project Progress (Neon)', icon: 'storage', route: '/analytics/project-progress/neon' },
     { label: 'Image Upload', icon: 'cloud_upload', route: '/images/upload' },

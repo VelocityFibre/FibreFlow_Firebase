@@ -125,13 +125,19 @@ export class OfflineSyncService {
       // Update status to syncing
       await this.offlinePoleService.updatePoleStatus(pole.id, 'syncing');
       
-      // Upload photos first
+      // Handle photos - use existing URLs or upload if needed
       const photoUrls: { [key: string]: string } = {};
       
       for (const photo of pole.photos || []) {
         try {
-          const url = await this.uploadPhoto(pole.id, photo);
-          photoUrls[photo.type] = url;
+          if (photo.uploadUrl && photo.uploadStatus === 'uploaded') {
+            // Use existing upload URL
+            photoUrls[photo.type] = photo.uploadUrl;
+          } else {
+            // Upload photo if not already uploaded
+            const url = await this.uploadPhoto(pole.id, photo);
+            photoUrls[photo.type] = url;
+          }
         } catch (error) {
           console.error(`Failed to upload photo ${photo.id}:`, error);
           // Continue with other photos even if one fails

@@ -1,0 +1,275 @@
+@use '../../../../../styles/component-theming' as theme;
+
+.sow-validation-container {
+  padding: theme.ff-spacing(lg);
+  max-width: 1200px;
+  margin: 0 auto;
+  
+  .validation-header {
+    text-align: center;
+    margin-bottom: theme.ff-spacing(xl);
+    
+    mat-icon {
+      font-size: theme.ff-rem(48);
+      width: theme.ff-rem(48);
+      height: theme.ff-rem(48);
+      color: theme.ff-rgb(info);
+      margin-bottom: theme.ff-spacing(md);
+    }
+    
+    h2 {
+      margin: 0 0 theme.ff-spacing(sm) 0;
+      color: theme.ff-rgb(foreground);
+      font-size: theme.ff-rem(28);
+      font-weight: 500;
+    }
+    
+    p {
+      margin: 0;
+      color: theme.ff-rgba(foreground, 0.7);
+      font-size: theme.ff-rem(16);
+    }
+  }
+  
+  .summary-card {
+    @include theme.card-theme();
+    margin-bottom: theme.ff-spacing(lg);
+    
+    mat-card-header {
+      mat-card-title {
+        display: flex;
+        align-items: center;
+        gap: theme.ff-spacing(sm);
+        color: theme.ff-rgb(foreground);
+        
+        mat-icon {
+          &.success {
+            color: theme.ff-rgb(success);
+          }
+          
+          &.error {
+            color: theme.ff-rgb(destructive);
+          }
+        }
+      }
+    }
+    
+    .validation-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: theme.ff-spacing(md);
+      margin-bottom: theme.ff-spacing(lg);
+      
+      .stat-item {
+        text-align: center;
+        padding: theme.ff-spacing(md);
+        border-radius: theme.ff-var(radius);
+        background: theme.ff-rgba(foreground, 0.05);
+        border: 1px solid theme.ff-rgba(foreground, 0.1);
+        
+        &.success {
+          background: theme.ff-rgba(success, 0.1);
+          border-color: theme.ff-rgba(success, 0.2);
+        }
+        
+        &.error {
+          background: theme.ff-rgba(destructive, 0.1);
+          border-color: theme.ff-rgba(destructive, 0.2);
+        }
+        
+        &.warning {
+          background: theme.ff-rgba(warning, 0.1);
+          border-color: theme.ff-rgba(warning, 0.2);
+        }
+        
+        .stat-number {
+          display: block;
+          font-size: theme.ff-rem(24);
+          font-weight: 600;
+          color: theme.ff-rgb(foreground);
+          margin-bottom: theme.ff-spacing(xs);
+        }
+        
+        .stat-label {
+          font-size: theme.ff-rem(12);
+          color: theme.ff-rgba(foreground, 0.7);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+      }
+    }
+    
+    .validation-status {
+      .success-chip {
+        background: theme.ff-rgba(success, 0.2);
+        color: theme.ff-rgb(success);
+        
+        mat-icon {
+          color: theme.ff-rgb(success);
+        }
+      }
+      
+      .error-chip {
+        background: theme.ff-rgba(destructive, 0.2);
+        color: theme.ff-rgb(destructive);
+        
+        mat-icon {
+          color: theme.ff-rgb(destructive);
+        }
+      }
+    }
+  }
+  
+  .details-card {
+    @include theme.card-theme();
+    margin-bottom: theme.ff-spacing(lg);
+    
+    ::ng-deep {
+      .mat-tab-group {
+        .mat-tab-header {
+          .mat-tab-label {
+            color: theme.ff-rgba(foreground, 0.7);
+            
+            &.mat-tab-label-active {
+              color: theme.ff-rgb(primary);
+            }
+          }
+          
+          .mat-ink-bar {
+            background-color: theme.ff-rgb(primary);
+          }
+        }
+      }
+    }
+    
+    .tab-content {
+      padding: theme.ff-spacing(lg);
+      
+      .no-issues {
+        text-align: center;
+        padding: theme.ff-spacing(xl);
+        
+        mat-icon {
+          font-size: theme.ff-rem(64);
+          width: theme.ff-rem(64);
+          height: theme.ff-rem(64);
+          margin-bottom: theme.ff-spacing(md);
+        }
+        
+        h3 {
+          margin: 0 0 theme.ff-spacing(sm) 0;
+          color: theme.ff-rgb(foreground);
+          font-size: theme.ff-rem(20);
+          font-weight: 500;
+        }
+        
+        p {
+          margin: 0;
+          color: theme.ff-rgba(foreground, 0.7);
+        }
+      }
+    }
+    
+    mat-expansion-panel {
+      margin-bottom: theme.ff-spacing(md);
+      border: 1px solid theme.ff-rgba(foreground, 0.1);
+      border-radius: theme.ff-var(radius);
+      
+      mat-expansion-panel-header {
+        mat-panel-title {
+          color: theme.ff-rgb(foreground);
+          font-weight: 500;
+        }
+      }
+      
+      mat-list {
+        mat-list-item {
+          [matListItemTitle] {
+            color: theme.ff-rgb(foreground);
+            font-weight: 500;
+          }
+          
+          [matListItemLine] {
+            color: theme.ff-rgba(foreground, 0.7);
+            font-size: theme.ff-rem(12);
+          }
+        }
+      }
+    }
+    
+    .data-preview {
+      .preview-section {
+        margin-bottom: theme.ff-spacing(lg);
+        
+        h4 {
+          margin: 0 0 theme.ff-spacing(md) 0;
+          color: theme.ff-rgb(foreground);
+          font-size: theme.ff-rem(16);
+          font-weight: 500;
+        }
+        
+        .preview-items {
+          display: flex;
+          flex-wrap: wrap;
+          gap: theme.ff-spacing(xs);
+          align-items: center;
+          
+          .data-chip {
+            background: theme.ff-rgba(primary, 0.1);
+            color: theme.ff-rgb(foreground);
+            font-size: theme.ff-rem(12);
+          }
+          
+          span {
+            color: theme.ff-rgba(foreground, 0.6);
+            font-size: theme.ff-rem(12);
+            margin-left: theme.ff-spacing(sm);
+          }
+        }
+      }
+    }
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: theme.ff-spacing(md);
+    justify-content: flex-end;
+    margin-top: theme.ff-spacing(lg);
+    
+    button {
+      mat-icon {
+        margin-right: theme.ff-spacing(xs);
+      }
+    }
+    
+    @media #{theme.ff-breakpoint(sm)} {
+      flex-direction: column;
+      
+      button {
+        width: 100%;
+      }
+    }
+  }
+  
+  .loading-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    
+    ::ng-deep .mat-progress-bar-fill::after {
+      background-color: theme.ff-rgb(primary);
+    }
+  }
+}
+
+// Dark theme adjustments
+:root[data-theme="dark"] {
+  .sow-validation-container {
+    .summary-card,
+    .details-card {
+      box-shadow: theme.ff-shadow(lg);
+    }
+  }
+}

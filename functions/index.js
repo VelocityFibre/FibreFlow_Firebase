@@ -1089,6 +1089,17 @@ exports.agentChatHttp = agentFunctions.agentChatHttp;
 exports.searchAgentMemory = agentFunctions.searchAgentMemory;
 exports.getAgentStats = agentFunctions.getAgentStats;
 
+// =============================================================================
+// NEON AI QUERY FUNCTIONS (Simple Firebase Functions approach)
+// =============================================================================
+
+const neonAIFunctions = require('./src/neon-ai-query');
+exports.testNeonConnection = neonAIFunctions.testNeonConnection;
+exports.getNeonDatabaseInfo = neonAIFunctions.getNeonDatabaseInfo;
+exports.processNeonQuery = neonAIFunctions.processNeonQuery;
+exports.getNeonAgentHealth = neonAIFunctions.getNeonAgentHealth;
+exports.executeNeonSQL = neonAIFunctions.executeNeonSQL;
+
 // Test function for debugging
 const testFunctions = require('./src/test-agent-db');
 exports.testAgentDatabase = testFunctions.testAgentDatabase;

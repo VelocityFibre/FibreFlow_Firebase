@@ -1,0 +1,245 @@
+@use '../../../../../styles/component-theming' as theme;
+
+.sow-calculations-container {
+  padding: theme.ff-spacing(lg);
+  max-width: 1200px;
+  margin: 0 auto;
+  
+  .calculations-header {
+    text-align: center;
+    margin-bottom: theme.ff-spacing(xl);
+    
+    mat-icon {
+      font-size: theme.ff-rem(48);
+      width: theme.ff-rem(48);
+      height: theme.ff-rem(48);
+      color: theme.ff-rgb(success);
+      margin-bottom: theme.ff-spacing(md);
+    }
+    
+    h2 {
+      margin: 0 0 theme.ff-spacing(sm) 0;
+      color: theme.ff-rgb(foreground);
+      font-size: theme.ff-rem(28);
+      font-weight: 500;
+    }
+    
+    p {
+      margin: 0;
+      color: theme.ff-rgba(foreground, 0.7);
+      font-size: theme.ff-rem(16);
+    }
+  }
+  
+  .calculation-form {
+    display: flex;
+    flex-direction: column;
+    gap: theme.ff-spacing(lg);
+    margin-bottom: theme.ff-spacing(xl);
+    
+    mat-card {
+      @include theme.card-theme();
+      
+      mat-card-header {
+        margin-bottom: theme.ff-spacing(md);
+        
+        mat-card-title {
+          color: theme.ff-rgb(foreground);
+          font-size: theme.ff-rem(20);
+          font-weight: 500;
+        }
+        
+        mat-card-subtitle {
+          color: theme.ff-rgba(foreground, 0.7);
+          margin-top: theme.ff-spacing(xs);
+        }
+      }
+      
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: theme.ff-spacing(md);
+        
+        mat-form-field {
+          width: 100%;
+        }
+      }
+    }
+  }
+  
+  .results-card {
+    @include theme.card-theme();
+    margin-bottom: theme.ff-spacing(lg);
+    
+    mat-card-header {
+      mat-card-title {
+        display: flex;
+        align-items: center;
+        gap: theme.ff-spacing(sm);
+        color: theme.ff-rgb(foreground);
+        
+        mat-icon {
+          color: theme.ff-rgb(success);
+        }
+      }
+    }
+    
+    .result-section {
+      margin: theme.ff-spacing(lg) 0;
+      
+      h3 {
+        margin: 0 0 theme.ff-spacing(md) 0;
+        color: theme.ff-rgb(foreground);
+        font-size: theme.ff-rem(18);
+        font-weight: 500;
+      }
+      
+      .estimate-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: theme.ff-spacing(md);
+        
+        .estimate-item {
+          text-align: center;
+          padding: theme.ff-spacing(lg);
+          border-radius: theme.ff-var(radius);
+          background: theme.ff-rgba(success, 0.1);
+          border: 1px solid theme.ff-rgba(success, 0.2);
+          
+          .estimate-value {
+            display: block;
+            font-size: theme.ff-rem(32);
+            font-weight: 600;
+            color: theme.ff-rgb(foreground);
+            margin-bottom: theme.ff-spacing(xs);
+          }
+          
+          .estimate-label {
+            font-size: theme.ff-rem(14);
+            color: theme.ff-rgba(foreground, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+        }
+      }
+      
+      .cost-breakdown {
+        .cost-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: theme.ff-spacing(sm) 0;
+          border-bottom: 1px solid theme.ff-rgba(foreground, 0.1);
+          
+          &.subtotal {
+            font-weight: 500;
+            margin-top: theme.ff-spacing(md);
+            border-top: 1px solid theme.ff-rgba(foreground, 0.2);
+            border-bottom: 1px solid theme.ff-rgba(foreground, 0.2);
+          }
+          
+          &.total {
+            font-size: theme.ff-rem(18);
+            font-weight: 600;
+            margin-top: theme.ff-spacing(sm);
+            padding: theme.ff-spacing(md) 0;
+            border: none;
+            background: theme.ff-rgba(primary, 0.05);
+            border-radius: theme.ff-var(radius);
+            padding: theme.ff-spacing(md);
+            
+            .cost-value {
+              color: theme.ff-rgb(primary);
+            }
+          }
+          
+          .cost-label {
+            color: theme.ff-rgb(foreground);
+          }
+          
+          .cost-value {
+            color: theme.ff-rgba(foreground, 0.8);
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: theme.ff-spacing(md);
+    justify-content: flex-end;
+    margin-top: theme.ff-spacing(lg);
+    
+    button {
+      mat-icon {
+        margin-right: theme.ff-spacing(xs);
+      }
+    }
+    
+    @media #{theme.ff-breakpoint(sm)} {
+      flex-direction: column;
+      
+      button {
+        width: 100%;
+      }
+    }
+  }
+  
+  .loading-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    
+    ::ng-deep .mat-progress-bar-fill::after {
+      background-color: theme.ff-rgb(primary);
+    }
+  }
+}
+
+// Responsive adjustments
+@media #{theme.ff-breakpoint(md)} {
+  .sow-calculations-container {
+    padding: theme.ff-spacing(md);
+    
+    .calculations-header {
+      mat-icon {
+        font-size: theme.ff-rem(40);
+        width: theme.ff-rem(40);
+        height: theme.ff-rem(40);
+      }
+      
+      h2 {
+        font-size: theme.ff-rem(24);
+      }
+    }
+    
+    .calculation-form {
+      mat-card {
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+    
+    .results-card {
+      .result-section {
+        .estimate-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    }
+  }
+}
+
+// Dark theme adjustments
+:root[data-theme="dark"] {
+  .sow-calculations-container {
+    .results-card {
+      box-shadow: theme.ff-shadow(lg);
+    }
+  }
+}

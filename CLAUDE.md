@@ -493,6 +493,30 @@ cd ~/VF/Apps/FibreFlow-RFQ  # for Suppliers/RFQ/Email work
 4. Document any significant differences from previous Angular versions
 5. Keep track of new best practices that differ from training data
 
+## 🚨 OFFLINE CAPTURE DESIGN DECISION (2025-01-30)
+
+### **Two-Stage Architecture: Simple Field Capture + Backend Processing**
+
+**CRITICAL DESIGN PRINCIPLE**: We chose simplicity over complexity for field agent tools.
+
+**Decision**: Keep `/offline-pole-capture` component intentionally simple:
+- ✅ **Stage 1**: Fast, reliable offline data entry (no complex validation)
+- ✅ **Stage 2**: Heavy lifting happens in backend scripts (GPS matching, deduplication)
+
+**Why**: Field agents need tools that work every time on any device, not feature-rich complex systems.
+
+**Benefits**:
+- Fast capture (<2 minutes per pole)
+- Works on budget phones (50KB storage vs 20MB)
+- No sync failures or storage quota issues
+- Backend processing ensures data quality
+
+**Documentation**: `docs/OFFLINE_CAPTURE_DESIGN_DECISION.md`
+
+**Future Enhancement Strategy**: Add intelligence in backend, keep mobile UI simple.
+
+---
+
 ## 🚨 CRITICAL: Angular v20 Updates (2025-06-18)
 
 ### NG0200 Error Resolution

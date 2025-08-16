@@ -67,12 +67,11 @@ interface ImageBatch {
     PageHeaderComponent,
   ],
   template: `
-    <app-page-header
-      title="Bulk Image Upload"
-      subtitle="Upload pole photos with GPS metadata for processing"
-    ></app-page-header>
-
-    <div class="upload-container">
+    <div class="ff-page-container">
+      <app-page-header
+        title="Bulk Image Upload"
+        subtitle="Upload pole photos with GPS metadata for processing"
+      ></app-page-header>
       <!-- Debug Panel (remove when working) -->
       @if (debugInfo().length > 0) {
         <mat-card class="debug-card">
@@ -358,10 +357,14 @@ interface ImageBatch {
   `,
   styles: [
     `
-      .upload-container {
-        padding: 24px;
-        max-width: 900px;
+      .ff-page-container {
+        max-width: 1280px;
         margin: 0 auto;
+        padding: 40px 24px;
+
+        @media (max-width: 768px) {
+          padding: 24px 16px;
+        }
       }
 
       .status-card,

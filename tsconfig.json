@@ -26,7 +26,10 @@
   "exclude": [
     "src/app/features/pole-tracker/mobile/pages/offline-capture/**",
     "src/app/features/pole-tracker/mobile/components/sync-status/**",
-    "src/app/features/pole-tracker/mobile/components/gps-accuracy/**"
+    "src/app/features/pole-tracker/mobile/components/gps-accuracy/**",
+    "src/app/features/sow/**",
+    "src/app/features/neon-agent/**",
+    "src/app/core/services/neon-ai.service.ts"
   ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

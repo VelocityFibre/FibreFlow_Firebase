@@ -1,7 +1,18 @@
 
-<div class="container">
-  <h1>Materials</h1>
-  <button mat-raised-button color="primary" (click)="addMaterial()">Add Material</button>
+<div class="ff-page-container">
+  <!-- Header -->
+  <div class="ff-page-header">
+    <div class="header-content">
+      <h1 class="page-title">Materials</h1>
+      <p class="page-subtitle">Manage master materials catalog and pricing</p>
+    </div>
+    <div class="header-actions">
+      <button mat-raised-button color="primary" (click)="addMaterial()">
+        <mat-icon>add</mat-icon>
+        Add Material
+      </button>
+    </div>
+  </div>
 
   <table mat-table [dataSource]="materials" class="mat-elevation-z8">
 

@@ -7,6 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatBadgeModule } from '@angular/material/badge';
 import { PhotoCompressionService } from '../../services/photo-compression.service';
+import { PhotoUploadService } from '../../services/photo-upload.service';
 import { OfflinePhoto } from '../../services/offline-pole.service';
 
 export type PhotoType = 'before' | 'front' | 'side' | 'depth' | 'concrete' | 'compaction';
@@ -122,11 +123,36 @@ export interface PhotoTypeConfig {
           <h4>Captured Photos ({{ capturedPhotos().length }})</h4>
           <div class="photo-grid">
             @for (photo of capturedPhotos(); track photo.id) {
-              <div class="photo-item">
+              <div class="photo-item" [class]="'upload-' + (photo.uploadStatus || 'pending')">
                 <img [src]="photo.data" [alt]="photo.type" class="thumbnail">
+                
+                <!-- Upload Status Overlay -->
+                @if (photo.uploadStatus === 'uploading') {
+                  <div class="upload-overlay">
+                    <mat-progress-spinner diameter="30" mode="indeterminate"></mat-progress-spinner>
+                  </div>
+                } @else if (photo.uploadStatus === 'uploaded') {
+                  <div class="upload-status uploaded">
+                    <mat-icon>cloud_done</mat-icon>
+                  </div>
+                } @else if (photo.uploadStatus === 'error') {
+                  <div class="upload-status error">
+                    <mat-icon>cloud_off</mat-icon>
+                  </div>
+                } @else if (photo.uploadStatus === 'pending') {
+                  <div class="upload-status pending">
+                    <mat-icon>cloud_queue</mat-icon>
+                  </div>
+                }
+                
                 <div class="photo-info">
                   <span class="photo-type">{{ getPhotoTypeLabel(photo.type) }}</span>
                   <span class="photo-size">{{ formatSize(photo.size) }}</span>
+                  @if (photo.uploadStatus) {
+                    <span class="upload-status-text" [class]="photo.uploadStatus">
+                      {{ getUploadStatusText(photo) }}
+                    </span>
+                  }
                 </div>
                 <button mat-icon-button 
                         color="warn" 
@@ -241,10 +267,63 @@ export interface PhotoTypeConfig {
       overflow: hidden;
       box-shadow: var(--mat-sys-elevation-1);
       
+      &.upload-uploaded {
+        border: 2px solid var(--mat-sys-primary);
+      }
+      
+      &.upload-error {
+        border: 2px solid var(--mat-sys-error);
+      }
+      
+      &.upload-uploading {
+        border: 2px solid var(--mat-sys-secondary);
+      }
+      
       .thumbnail {
         width: 100%;
         height: 150px;
         object-fit: cover;
+      }
+      
+      .upload-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+      }
+      
+      .upload-status {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 50%;
+        padding: 4px;
+        z-index: 1;
+        
+        mat-icon {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
+        
+        &.uploaded mat-icon {
+          color: var(--mat-sys-primary);
+        }
+        
+        &.error mat-icon {
+          color: var(--mat-sys-error);
+        }
+        
+        &.pending mat-icon {
+          color: var(--mat-sys-outline);
+        }
       }
       
       .photo-info {
@@ -261,6 +340,26 @@ export interface PhotoTypeConfig {
         
         .photo-size {
           color: var(--mat-sys-outline);
+        }
+        
+        .upload-status-text {
+          font-size: 10px;
+          
+          &.uploaded {
+            color: var(--mat-sys-primary);
+          }
+          
+          &.error {
+            color: var(--mat-sys-error);
+          }
+          
+          &.uploading {
+            color: var(--mat-sys-secondary);
+          }
+          
+          &.pending {
+            color: var(--mat-sys-outline);
+          }
         }
       }
       
@@ -307,6 +406,7 @@ export class OfflinePhotoCaptureComponent {
   @Output() photosChanged = new EventEmitter<OfflinePhoto[]>();
 
   private photoCompressionService = inject(PhotoCompressionService);
+  private photoUploadService = inject(PhotoUploadService);
 
   photoTypes: PhotoTypeConfig[] = [
     { type: 'before', label: 'Before', icon: 'landscape', required: true },
@@ -402,17 +502,64 @@ export class OfflinePhotoCaptureComponent {
       type: this.selectedType()!,
       timestamp: new Date(),
       size: this.compressionInfo()?.compressedSize || 0,
-      compressed: true
+      compressed: true,
+      uploadStatus: 'pending'
     };
 
+    // Add photo to captured photos immediately
     const updated = [...this.capturedPhotos(), photo];
     this.capturedPhotos.set(updated);
     this.photosChanged.emit(updated);
 
-    // Reset
+    // Reset preview
     this.currentPreview.set(null);
     this.currentFile.set(null);
     this.compressionInfo.set(null);
+
+    // Try to upload immediately if online
+    if (this.photoUploadService.isOnline()) {
+      this.uploadPhotoImmediately(photo);
+    } else {
+      // Queue for upload when online
+      this.photoUploadService.queueForUpload(photo);
+      this.updatePhotoUploadStatus(photo.id, 'pending', 'Will upload when online');
+    }
+  }
+
+  private async uploadPhotoImmediately(photo: OfflinePhoto): Promise<void> {
+    try {
+      // Update status to uploading
+      this.updatePhotoUploadStatus(photo.id, 'uploading');
+
+      // Upload to Firebase Storage
+      const uploadUrl = await this.photoUploadService.uploadPhotoImmediately(photo);
+      
+      // Update photo with upload URL
+      this.updatePhotoUploadStatus(photo.id, 'uploaded', undefined, uploadUrl);
+    } catch (error) {
+      console.error('Failed to upload photo immediately:', error);
+      
+      // Update status to error and queue for retry
+      const errorMessage = error instanceof Error ? error.message : 'Upload failed';
+      this.updatePhotoUploadStatus(photo.id, 'error', errorMessage);
+      this.photoUploadService.queueForUpload(photo);
+    }
+  }
+
+  private updatePhotoUploadStatus(
+    photoId: string, 
+    status: OfflinePhoto['uploadStatus'],
+    error?: string,
+    url?: string
+  ): void {
+    const photos = this.capturedPhotos();
+    const updatedPhotos = photos.map(photo => 
+      photo.id === photoId 
+        ? { ...photo, uploadStatus: status, uploadError: error, uploadUrl: url }
+        : photo
+    );
+    this.capturedPhotos.set(updatedPhotos);
+    this.photosChanged.emit(updatedPhotos);
   }
 
   retake(): void {
@@ -437,6 +584,21 @@ export class OfflinePhotoCaptureComponent {
     
     const savings = ((info.originalSize - info.compressedSize) / info.originalSize) * 100;
     return savings.toFixed(0);
+  }
+
+  getUploadStatusText(photo: OfflinePhoto): string {
+    switch (photo.uploadStatus) {
+      case 'uploaded':
+        return 'Uploaded';
+      case 'uploading':
+        return 'Uploading...';
+      case 'error':
+        return photo.uploadError || 'Upload failed';
+      case 'pending':
+        return 'Queued';
+      default:
+        return 'Not uploaded';
+    }
   }
 
   private generateId(): string {

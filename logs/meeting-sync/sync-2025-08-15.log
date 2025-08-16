@@ -1,0 +1,74 @@
+[2025-08-15 09:00:00] =========================================
+[2025-08-15 09:00:00] Starting daily meeting sync
+[2025-08-15 09:00:00] =========================================
+[2025-08-15 09:00:00] Syncing yesterday's meetings only
+[2025-08-15 09:00:00] Override: Syncing last 1 days
+[2025-08-15 09:00:00] Running meeting sync for the last 1 days...
+🚀 Starting Fireflies sync...
+
+📅 Fetching meetings from 2025/08/14 to 2025/08/15
+
+📊 Found 50 meetings in Fireflies
+
+✅ Created: TARGET 2500 - VF Daily Check in
+✅ Created: VF - Data Workshop (Daily)
+✅ Created: Velocity Budget Meeting
+✅ Created: VF Suppliers Meeting
+✅ Created: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: Velocity Executives Meeting
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: Velocity Manco - Weekly
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: VF - Data Workshop (Daily)
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: Velocity Budget Meeting
+🔄 Updated: VF Suppliers Meeting
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: VF - Data Workshop (Daily)
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: VF - Data Workshop (Daily)
+🔄 Updated: Velocity Manco - Weekly
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: Velocity Budget Meeting
+🔄 Updated: VF Suppliers Meeting
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: Velocity Executives Meeting
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: Velocity Directors
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+🔄 Updated: TARGET 2500 - VF Daily Check in
+
+✨ Sync completed successfully!
+📈 Summary:
+   - Total meetings processed: 50
+   - New meetings created: 5
+   - Existing meetings updated: 45
+
+👋 Done!
+[2025-08-15 09:00:24] ✅ Meeting sync completed successfully
+[2025-08-15 09:00:24] Cleaning up old logs...
+[2025-08-15 09:00:24] Daily meeting sync script finished
+[2025-08-15 09:00:24] =========================================

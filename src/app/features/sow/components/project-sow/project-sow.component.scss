@@ -1,0 +1,180 @@
+@use '../../../../../styles/component-theming' as theme;
+
+.sow-container {
+  padding: theme.ff-spacing(lg);
+}
+
+// Summary Cards
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: theme.ff-spacing(md);
+  margin-bottom: theme.ff-spacing(xl);
+}
+
+.summary-card {
+  @include theme.surface-card;
+  
+  mat-card-content {
+    display: flex;
+    align-items: center;
+    gap: theme.ff-spacing(md);
+  }
+}
+
+.summary-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  
+  mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+  
+  &.poles {
+    background: theme.ff-rgba(primary, 0.1);
+    color: theme.ff-rgb(primary);
+  }
+  
+  &.drops {
+    background: theme.ff-rgba(accent, 0.1);
+    color: theme.ff-rgb(accent);
+  }
+  
+  &.fibre {
+    background: theme.ff-rgba(warning, 0.1);
+    color: theme.ff-rgb(warning);
+  }
+  
+  &.distance {
+    background: theme.ff-rgba(success, 0.1);
+    color: theme.ff-rgb(success);
+  }
+}
+
+.summary-info {
+  flex: 1;
+}
+
+.summary-value {
+  font-size: theme.ff-rem(24);
+  font-weight: 600;
+  color: theme.ff-rgb(text-primary);
+  line-height: 1.2;
+}
+
+.summary-label {
+  font-size: theme.ff-rem(14);
+  color: theme.ff-rgb(text-secondary);
+  margin-top: theme.ff-spacing(xs);
+}
+
+// No Data State
+.no-data-container {
+  display: flex;
+  justify-content: center;
+  padding: theme.ff-spacing(4xl) 0;
+}
+
+.no-data-card {
+  @include theme.surface-card;
+  max-width: 500px;
+  text-align: center;
+  
+  mat-card-content {
+    padding: theme.ff-spacing(xl);
+  }
+}
+
+.no-data-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto theme.ff-spacing(lg);
+  color: theme.ff-rgb(text-tertiary);
+}
+
+.import-note {
+  margin-top: theme.ff-spacing(md);
+  font-size: theme.ff-rem(14);
+  color: theme.ff-rgb(text-secondary);
+}
+
+// Tabs
+.sow-tabs {
+  @include theme.surface-card;
+  margin-top: theme.ff-spacing(lg);
+}
+
+.tab-content {
+  padding: theme.ff-spacing(lg);
+}
+
+// Tables
+.table-container {
+  overflow-x: auto;
+}
+
+.sow-table {
+  width: 100%;
+  
+  th {
+    font-weight: 600;
+    color: theme.ff-rgb(text-secondary);
+  }
+  
+  td {
+    color: theme.ff-rgb(text-primary);
+  }
+}
+
+// Status Chips
+mat-chip {
+  font-size: theme.ff-rem(12);
+  min-height: 24px;
+  padding: 0 theme.ff-spacing(sm);
+  
+  &.status-approved {
+    background: theme.ff-rgba(success, 0.1);
+    color: theme.ff-rgb(success);
+  }
+  
+  &.status-completed {
+    background: theme.ff-rgba(info, 0.1);
+    color: theme.ff-rgb(info);
+  }
+  
+  &.status-progress {
+    background: theme.ff-rgba(warning, 0.1);
+    color: theme.ff-rgb(warning);
+  }
+  
+  &.status-pending {
+    background: theme.ff-rgba(text-secondary, 0.1);
+    color: theme.ff-rgb(text-secondary);
+  }
+  
+  &.status-default {
+    background: theme.ff-rgba(text-tertiary, 0.1);
+    color: theme.ff-rgb(text-tertiary);
+  }
+}
+
+// Loading State
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: theme.ff-spacing(4xl);
+  
+  p {
+    margin-top: theme.ff-spacing(md);
+    color: theme.ff-rgb(text-secondary);
+  }
+}

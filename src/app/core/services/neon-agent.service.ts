@@ -86,7 +86,7 @@ export class NeonAgentService {
   
   // Service configuration
   private readonly LOCAL_URL = 'http://localhost:8000';
-  private readonly CLOUD_URL = 'https://neon-agent-814485644774.us-central1.run.app'; // Will be updated after deployment
+  private readonly CLOUD_URL = 'https://neon-agent-814485644774.us-central1.run.app'; // Cloud Run deployment URL
   
   // Reactive state
   private _serviceUrl = signal<string>(this.LOCAL_URL);
@@ -415,7 +415,7 @@ export class NeonAgentService {
    * Generic error handler
    */
   private handleError<T>(operation = 'operation') {
-    return (error: HttpErrorResponse): Observable<T> => {
+    return (error: HttpErrorResponse): Observable<never> => {
       console.error(`${operation} failed:`, error);
       
       let errorMessage = 'An unknown error occurred';

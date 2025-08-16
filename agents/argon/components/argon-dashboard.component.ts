@@ -433,50 +433,50 @@ import {
     </div>
   `,
   styles: [`
-    @use '../../../../styles/component-theming' as theme;
-
-    // Page container following theme standards
+    /* Page container following theme standards */
     .ff-page-container {
       max-width: 1280px;
       margin: 0 auto;
       padding: 40px 24px;
+    }
 
-      @media (max-width: 768px) {
+    @media (max-width: 768px) {
+      .ff-page-container {
         padding: 24px 16px;
       }
     }
 
-    // Page header pattern matching dashboard exactly
+    /* Page header pattern matching dashboard exactly */
     .ff-page-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 48px;
+    }
 
-      .header-content {
-        flex: 1;
-      }
+    .ff-page-header .header-content {
+      flex: 1;
+    }
 
-      .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
+    .ff-page-header .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-      .page-title {
-        font-size: 32px;
-        font-weight: 300;
-        color: theme.ff-rgb(foreground);
-        margin: 0 0 8px 0;
-        letter-spacing: -0.02em;
-      }
+    .ff-page-header .page-title {
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--mat-sys-on-surface);
+      margin: 0 0 8px 0;
+      letter-spacing: -0.02em;
+    }
 
-      .page-subtitle {
-        font-size: 18px;
-        color: theme.ff-rgb(muted-foreground);
-        font-weight: 400;
-        margin: 0;
-      }
+    .ff-page-header .page-subtitle {
+      font-size: 18px;
+      color: var(--mat-sys-on-surface-variant);
+      font-weight: 400;
+      margin: 0;
     }
 
     .connection-status {

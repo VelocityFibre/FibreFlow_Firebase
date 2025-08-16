@@ -4,7 +4,7 @@ import { PoleTracker } from '../../models/pole-tracker.model';
 
 export interface OfflinePoleData extends Partial<PoleTracker> {
   id: string;
-  syncStatus: 'pending' | 'syncing' | 'synced' | 'error';
+  syncStatus: 'draft' | 'pending' | 'syncing' | 'synced' | 'error';
   syncError?: string;
   capturedOffline: boolean;
   capturedAt: Date;
@@ -28,6 +28,9 @@ export interface OfflinePhoto {
   timestamp: Date;
   size: number;
   compressed: boolean;
+  uploadStatus?: 'pending' | 'uploading' | 'uploaded' | 'error';
+  uploadUrl?: string; // Firebase Storage URL after upload
+  uploadError?: string;
 }
 
 export interface SyncQueueItem {
@@ -110,6 +113,41 @@ export class OfflinePoleService {
     });
   }
 
+  async storeDraftPole(poleData: Partial<PoleTracker>, photos: OfflinePhoto[] = []): Promise<string> {
+    if (!this.db) {
+      await this.initializeDB();
+    }
+    
+    const id = this.generateId();
+    const draftPole: OfflinePoleData = {
+      ...poleData,
+      id,
+      syncStatus: 'draft',
+      capturedOffline: true,
+      capturedAt: new Date(),
+      photos,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    } as OfflinePoleData;
+    
+    const transaction = this.db!.transaction(['poles', 'photos'], 'readwrite');
+    const poleStore = transaction.objectStore('poles');
+    const photoStore = transaction.objectStore('photos');
+    
+    // Store pole
+    await this.promisifyRequest(poleStore.add(draftPole));
+    
+    // Store photos
+    for (const photo of photos) {
+      const photoWithPoleId = { ...photo, poleId: id };
+      await this.promisifyRequest(photoStore.add(photoWithPoleId));
+    }
+    
+    await this.loadOfflinePoles();
+    
+    return id;
+  }
+
   async storePoleOffline(poleData: Partial<PoleTracker>, photos: OfflinePhoto[]): Promise<string> {
     if (!this.db) {
       await this.initializeDB();
@@ -178,6 +216,78 @@ export class OfflinePoleService {
     }
     
     return pole;
+  }
+
+  async updatePoleOffline(id: string, updates: Partial<OfflinePoleData>, newPhotos?: OfflinePhoto[]): Promise<void> {
+    if (!this.db) return;
+
+    const transaction = this.db.transaction(['poles', 'photos'], 'readwrite');
+    const poleStore = transaction.objectStore('poles');
+    const photoStore = transaction.objectStore('photos');
+    const pole = await this.promisifyRequest<OfflinePoleData>(poleStore.get(id));
+
+    if (pole) {
+      // Update pole data
+      Object.assign(pole, updates);
+      pole.updatedAt = new Date();
+      await this.promisifyRequest(poleStore.put(pole));
+
+      // Update photos if provided
+      if (newPhotos) {
+        // Remove old photos for this pole
+        const photoIndex = photoStore.index('poleId');
+        const oldPhotos = await this.promisifyRequest<OfflinePhoto[]>(photoIndex.getAll(id));
+        for (const oldPhoto of oldPhotos) {
+          await this.promisifyRequest(photoStore.delete(oldPhoto.id));
+        }
+
+        // Add new photos
+        for (const photo of newPhotos) {
+          const photoWithPoleId = { ...photo, poleId: id };
+          await this.promisifyRequest(photoStore.add(photoWithPoleId));
+        }
+
+        // Update the pole's photos array
+        pole.photos = newPhotos;
+        await this.promisifyRequest(poleStore.put(pole));
+      }
+
+      await this.loadOfflinePoles();
+    }
+  }
+
+  async promoteDraftToPending(id: string): Promise<void> {
+    if (!this.db) return;
+
+    const transaction = this.db.transaction(['poles', 'syncQueue'], 'readwrite');
+    const poleStore = transaction.objectStore('poles');
+    const syncStore = transaction.objectStore('syncQueue');
+    
+    const pole = await this.promisifyRequest<OfflinePoleData>(poleStore.get(id));
+    
+    if (pole && pole.syncStatus === 'draft') {
+      // Update status to pending
+      pole.syncStatus = 'pending';
+      pole.updatedAt = new Date();
+      await this.promisifyRequest(poleStore.put(pole));
+
+      // Add to sync queue
+      const syncItem: SyncQueueItem = {
+        id: this.generateId(),
+        type: 'pole',
+        data: { poleId: id },
+        attempts: 0
+      };
+      await this.promisifyRequest(syncStore.add(syncItem));
+      
+      await this.loadOfflinePoles();
+      await this.loadSyncQueue();
+      
+      // Try to sync if online
+      if (navigator.onLine) {
+        this.processSyncQueue();
+      }
+    }
   }
 
   async updatePoleStatus(id: string, status: OfflinePoleData['syncStatus'], error?: string): Promise<void> {
