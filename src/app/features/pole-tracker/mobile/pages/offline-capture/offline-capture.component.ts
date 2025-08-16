@@ -265,10 +265,10 @@ import { Project } from '@app/core/models/project.model';
 
               <div class="review-section">
                 <h3>Photos ({{ capturedPhotos().length }})</h3>
-                @if (!hasRequiredPhotos()) {
-                  <div class="photo-warning">
-                    <mat-icon color="warn">warning</mat-icon>
-                    <span>Missing required photos: {{ getMissingRequiredPhotos().join(', ') }}</span>
+                @if (capturedPhotos().length === 0) {
+                  <div class="photo-info">
+                    <mat-icon color="accent">info</mat-icon>
+                    <span>No photos captured yet. You can add photos later.</span>
                   </div>
                 }
                 <div class="photo-summary">
@@ -481,14 +481,14 @@ import { Project } from '@app/core/models/project.model';
       }
     }
 
-    .photo-warning {
+    .photo-info {
       display: flex;
       align-items: center;
       gap: 8px;
       padding: 12px;
       margin-bottom: 16px;
-      background: var(--mat-sys-error-container);
-      color: var(--mat-sys-on-error-container);
+      background: var(--mat-sys-secondary-container);
+      color: var(--mat-sys-on-secondary-container);
       border-radius: 8px;
       font-size: 14px;
       
@@ -662,19 +662,8 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
   }
 
   hasRequiredPhotos(): boolean {
-    const requiredTypes = ['before', 'front', 'side'];
-    const capturedTypes = new Set(this.capturedPhotos().map(p => p.type));
-    const hasAllRequired = requiredTypes.every(type => capturedTypes.has(type as any));
-    
-    // Debug log to help troubleshoot
-    console.log('Required photos check:', {
-      requiredTypes,
-      capturedTypes: Array.from(capturedTypes),
-      capturedPhotos: this.capturedPhotos(),
-      hasAllRequired
-    });
-    
-    return hasAllRequired;
+    // No photos are required anymore - field agents can save with any number
+    return true;
   }
 
   hasAnyPhotos(): boolean {
@@ -682,9 +671,8 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
   }
 
   getMissingRequiredPhotos(): string[] {
-    const requiredTypes = ['before', 'front', 'side'];
-    const capturedTypes = new Set(this.capturedPhotos().map(p => p.type));
-    return requiredTypes.filter(type => !capturedTypes.has(type as any));
+    // No photos are required anymore
+    return [];
   }
 
   async searchForPole(): Promise<void> {
@@ -835,6 +823,31 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
     }
   }
 
+  async confirmSaveWithoutPhotos(): Promise<boolean> {
+    return new Promise((resolve) => {
+      const snackBarRef = this.snackBar.open(
+        'Save without photos? You can add photos later.',
+        'Save Anyway',
+        {
+          duration: 10000,
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          panelClass: ['confirm-snackbar']
+        }
+      );
+      
+      snackBarRef.onAction().subscribe(() => {
+        resolve(true);
+      });
+      
+      snackBarRef.afterDismissed().subscribe((info) => {
+        if (!info.dismissedByAction) {
+          resolve(false);
+        }
+      });
+    });
+  }
+
   getProjectName(): string {
     const projectId = this.basicInfoForm.get('projectId')?.value;
     if (!projectId) return 'Not selected';
@@ -845,9 +858,15 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
   }
 
   async saveOffline(): Promise<void> {
-    if (!this.basicInfoForm.valid || !this.locationForm.valid || !this.hasRequiredPhotos()) {
-      this.snackBar.open('Please complete all required fields', 'OK', { duration: 3000 });
+    if (!this.basicInfoForm.valid || !this.locationForm.valid) {
+      this.snackBar.open('Please complete basic information and GPS location', 'OK', { duration: 3000 });
       return;
+    }
+    
+    // Photos are optional - can save with any number of photos
+    if (this.capturedPhotos().length === 0) {
+      const confirmed = await this.confirmSaveWithoutPhotos();
+      if (!confirmed) return;
     }
     
     this.isSaving.set(true);

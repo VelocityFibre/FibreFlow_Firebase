@@ -1,11 +1,11 @@
-[2025-08-15 09:00:00] =========================================
-[2025-08-15 09:00:00] Starting daily meeting sync
-[2025-08-15 09:00:00] =========================================
-[2025-08-15 09:00:00] Syncing yesterday's meetings only
-[2025-08-15 09:00:00] Override: Syncing last 1 days
-[2025-08-15 09:00:00] Running meeting sync for the last 1 days...
-[2025-08-15 09:00:24] ✅ Meeting sync completed successfully
+[2025-08-16 09:00:00] =========================================
+[2025-08-16 09:00:00] Starting daily meeting sync
+[2025-08-16 09:00:00] =========================================
+[2025-08-16 09:00:00] Syncing yesterday's meetings only
+[2025-08-16 09:00:00] Override: Syncing last 1 days
+[2025-08-16 09:00:00] Running meeting sync for the last 1 days...
+[2025-08-16 09:00:40] ✅ Meeting sync completed successfully
 postdrop: warning: unable to look up public/pickup: No such file or directory
-[2025-08-15 09:00:24] Cleaning up old logs...
-[2025-08-15 09:00:24] Daily meeting sync script finished
-[2025-08-15 09:00:24] =========================================
+[2025-08-16 09:00:41] Cleaning up old logs...
+[2025-08-16 09:00:41] Daily meeting sync script finished
+[2025-08-16 09:00:41] =========================================

@@ -30,7 +30,8 @@ export class NeonService {
       throw new Error('Neon connection not configured. Please add neonConnectionString to environment.');
     }
 
-    const promise = this.sql(query, params);
+    // Use sql.query for parameterized queries as per new API
+    const promise = params ? this.sql.query(query, params) : this.sql(query);
     return from(promise) as Observable<T[]>;
   }
 
@@ -84,6 +85,8 @@ export class NeonService {
    * @returns Observable of count
    */
   getTableCount(tableName: string): Observable<number> {
+    // Note: Using direct interpolation for table names (be careful with SQL injection)
+    // Table names cannot be parameterized in SQL
     const promise = this.sql(`SELECT COUNT(*) as count FROM ${tableName}`)
       .then((result: any[]) => parseInt(result[0].count));
     

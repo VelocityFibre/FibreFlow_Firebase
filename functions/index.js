@@ -1323,3 +1323,7 @@ exports.syncActionItemsManual = functions.https.onCall(async (data, context) => 
     throw new functions.https.HttpsError('internal', error.message);
   }
 });
+
+// Export Neon Read API
+const neonReadAPI = require('./src/neon-read-api');
+exports.neonReadAPI = neonReadAPI.neonReadAPI;

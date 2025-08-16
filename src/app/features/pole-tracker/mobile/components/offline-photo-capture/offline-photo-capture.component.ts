@@ -33,7 +33,7 @@ export interface PhotoTypeConfig {
   ],
   template: `
     <div class="photo-capture-container">
-      <h3>Capture Photos</h3>
+      <h3>Capture Photos (Optional)</h3>
       
       <!-- Photo Types -->
       <div class="photo-types">
@@ -51,9 +51,6 @@ export interface PhotoTypeConfig {
               {{ config.icon }}
             </mat-icon>
             <span>{{ config.label }}</span>
-            @if (config.required) {
-              <span class="required">*</span>
-            }
           </button>
         }
       </div>
@@ -409,9 +406,9 @@ export class OfflinePhotoCaptureComponent {
   private photoUploadService = inject(PhotoUploadService);
 
   photoTypes: PhotoTypeConfig[] = [
-    { type: 'before', label: 'Before', icon: 'landscape', required: true },
-    { type: 'front', label: 'Front', icon: 'photo_camera', required: true },
-    { type: 'side', label: 'Side', icon: 'switch_camera', required: true },
+    { type: 'before', label: 'Before', icon: 'landscape', required: false },
+    { type: 'front', label: 'Front', icon: 'photo_camera', required: false },
+    { type: 'side', label: 'Side', icon: 'switch_camera', required: false },
     { type: 'depth', label: 'Depth', icon: 'straighten', required: false },
     { type: 'concrete', label: 'Concrete', icon: 'foundation', required: false },
     { type: 'compaction', label: 'Compaction', icon: 'compress', required: false }

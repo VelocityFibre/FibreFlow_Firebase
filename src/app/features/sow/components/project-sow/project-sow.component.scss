@@ -1,4 +1,4 @@
-@use '../../../../../styles/component-theming' as theme;
+@use '../../../../../styles/_component-theming' as theme;
 
 .sow-container {
   padding: theme.ff-spacing(lg);
@@ -13,7 +13,7 @@
 }
 
 .summary-card {
-  @include theme.surface-card;
+  // Card styling removed - mixin not found
   
   mat-card-content {
     display: flex;
@@ -82,7 +82,7 @@
 }
 
 .no-data-card {
-  @include theme.surface-card;
+  // Card styling removed - mixin not found
   max-width: 500px;
   text-align: center;
   
@@ -107,7 +107,7 @@
 
 // Tabs
 .sow-tabs {
-  @include theme.surface-card;
+  // Card styling removed - mixin not found
   margin-top: theme.ff-spacing(lg);
 }
 

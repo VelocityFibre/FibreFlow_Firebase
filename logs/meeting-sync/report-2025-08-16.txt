@@ -1,0 +1,11 @@
+FibreFlow Meeting Sync Report - SUCCESS
+=======================================
+Date: 2025-08-16 09:00:40
+Sync Period: Last 1 days
+
+Summary:
+Total meetings processed: 50
+New meetings created: 0
+Existing meetings updated: 50
+
+Full log: /home/ldp/VF/Apps/FibreFlow/logs/meeting-sync/sync-2025-08-16.log
