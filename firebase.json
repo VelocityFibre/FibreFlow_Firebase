@@ -17,6 +17,10 @@
         "function": "orchestratorHealth"
       },
       {
+        "source": "/api/offline-field/**",
+        "function": "offlineFieldAppAPI"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -10,6 +10,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { OneMapService } from '../../services/onemap.service';
 import { OneMapRecord, ProcessedOneMapData } from '../../models/onemap.model';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { OneMapNeonService } from '../../../../core/services/onemap-neon.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { AuthService } from '../../../../core/services/auth.service';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTableModule } from '@angular/material/table';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-onemap',
@@ -25,18 +31,30 @@ import { PageHeaderComponent } from '../../../../shared/components/page-header/p
     MatProgressSpinnerModule,
     PageHeaderComponent,
     DatePipe,
+    MatSnackBarModule,
+    MatTabsModule,
+    MatTableModule,
+    MatChipsModule,
   ],
   templateUrl: './onemap.html',
   styleUrl: './onemap.scss',
 })
-export class OnemapComponent {
+export class OnemapComponent implements OnInit {
   private fb = inject(FormBuilder);
   private oneMapService = inject(OneMapService);
+  private oneMapNeonService = inject(OneMapNeonService);
+  private snackBar = inject(MatSnackBar);
+  private authService = inject(AuthService);
 
   uploadedData = signal<OneMapRecord[]>([]);
   processedData = signal<ProcessedOneMapData | null>(null);
   isProcessing = signal(false);
   uploadError = signal<string>('');
+  
+  // Neon import state
+  isImportingToNeon = signal(false);
+  recentImports = signal<any[]>([]);
+  selectedTab = signal(0);
 
   dateForm = this.fb.group({
     startDate: ['', Validators.required],
@@ -184,5 +202,67 @@ export class OnemapComponent {
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  // Neon import methods
+  ngOnInit(): void {
+    this.loadRecentImports();
+  }
+
+  async importToNeon(): Promise<void> {
+    const fileInput = document.getElementById('csvFileInput') as HTMLInputElement;
+    if (!fileInput.files || fileInput.files.length === 0) {
+      this.snackBar.open('Please select a file first', 'OK', { duration: 3000 });
+      return;
+    }
+
+    const file = fileInput.files[0];
+    this.isImportingToNeon.set(true);
+
+    try {
+      const user = await this.authService.getCurrentUser();
+      const userId = user?.uid || 'unknown';
+      
+      const result = await this.oneMapNeonService.importOneMapExcel(file, userId);
+      
+      this.snackBar.open(
+        `Successfully imported ${result.recordCount} records to Neon database`, 
+        'OK', 
+        { duration: 5000 }
+      );
+      
+      // Reload recent imports
+      await this.loadRecentImports();
+      
+      // Clear the form
+      this.clearAll();
+    } catch (error) {
+      console.error('Neon import error:', error);
+      this.snackBar.open(
+        'Failed to import to Neon: ' + (error instanceof Error ? error.message : 'Unknown error'),
+        'OK',
+        { duration: 5000 }
+      );
+    } finally {
+      this.isImportingToNeon.set(false);
+    }
+  }
+
+  async loadRecentImports(): Promise<void> {
+    try {
+      const imports = await this.oneMapNeonService.getRecentImports(10).toPromise();
+      this.recentImports.set(imports || []);
+    } catch (error) {
+      console.error('Failed to load recent imports:', error);
+    }
+  }
+
+  getImportStatusColor(status: string): string {
+    switch (status) {
+      case 'completed': return 'primary';
+      case 'processing': return 'accent';
+      case 'failed': return 'warn';
+      default: return '';
+    }
   }
 }

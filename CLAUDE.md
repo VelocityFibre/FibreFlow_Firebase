@@ -404,6 +404,44 @@ jj git push --branch master
 
 **📖 Full Guide**: `.claude/workflows/backup-checklist.md`
 
+## 🗄️ Multi-Database Architecture (Implemented: 2025-08-16)
+
+### Overview
+FibreFlow now operates with a dual-database architecture providing clear separation between operational and analytical data:
+
+**Firebase (Field Operations)**:
+- Real-time pole capture and photo uploads
+- GPS location tracking  
+- Offline synchronization for field workers
+- Mobile-optimized workflows
+
+**Neon PostgreSQL (Analytics & Import)**:
+- OneMap Excel import processing
+- SOW (Scope of Work) data storage
+- Status change tracking and analytics
+- Historical data analysis
+
+### Key Services Implemented
+- **OneMapNeonService**: Excel import to Neon database
+- **UnifiedPoleService**: Combines Firebase + Neon data views  
+- **StatusSyncService**: Real-time synchronization between databases
+
+### Implementation Details
+**Completed**: August 16, 2025  
+**Status**: ✅ Production Ready  
+**Deployed**: https://fibreflow-73daf.web.app
+
+### Access Points
+- **OneMap Import**: Settings → OneMap → "Neon Database Import" tab
+- **Unified Views**: Pole Tracker → Individual pole details  
+- **SOW Data**: Project Detail → SOW tab (when available)
+
+### Benefits
+- **No Data Duplication**: Clean separation of operational vs analytical data
+- **Real-time Sync**: Status updates flow between both databases
+- **Unified Views**: Single interface combining data from both sources
+- **Scalable**: Each database optimized for its specific use case
+
 ## 🛑 ARCHITECTURAL CHANGES - ASK FIRST!
 
 ### NEVER Make These Changes Without Asking:
@@ -514,6 +552,34 @@ cd ~/VF/Apps/FibreFlow-RFQ  # for Suppliers/RFQ/Email work
 **Documentation**: `docs/OFFLINE_CAPTURE_DESIGN_DECISION.md`
 
 **Future Enhancement Strategy**: Add intelligence in backend, keep mobile UI simple.
+
+## 🗄️ Multi-Database Architecture (2025-01-30)
+
+### **Hybrid Firebase + Neon with Staging Validation**
+
+**Architecture**: Multi-database system with clear separation of concerns and staging validation layer.
+
+```
+Field App → Staging → Firebase (photos, GPS, real-time)
+Excel Imports → Staging → Neon (analytics, status, reports)
+                ↓
+           FibreFlow UI (reads both)
+```
+
+**Database Responsibilities**:
+- **Firebase**: Field operations, photos, offline sync, real-time updates
+- **Neon**: Excel imports (SOW/OneMap), analytics, status tracking  
+- **Staging**: Data validation, duplicate checking, quality gates
+
+**No Duplication Policy**:
+- Photos stay in Firebase only
+- Status/analytics in Neon only
+- Each data type has ONE home
+
+**Documentation**: 
+- `dbase/MULTI_DATABASE_ARCHITECTURE_WITH_STAGING.md`
+- `docs/databases/MULTI_DATABASE_ARCHITECTURE.md`
+- `Neon/MULTI_DATABASE_ARCHITECTURE.md`
 
 ---
 

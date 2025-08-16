@@ -6,174 +6,288 @@
 </app-page-header>
 
 <div class="container">
-  <!-- Step 1: Upload CSV -->
-  <mat-card class="upload-section">
-    <mat-card-header>
-      <mat-card-title>Step 1: Upload CSV File</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="upload-area" (click)="fileInput.click()">
-        <mat-icon>cloud_upload</mat-icon>
-        <p>Click to upload CSV file or drag and drop</p>
-        <input
-          #fileInput
-          id="csvFileInput"
-          type="file"
-          accept=".csv"
-          (change)="onFileSelected($event)"
-          style="display: none"
-        />
+  <mat-tab-group [(selectedIndex)]="selectedTab">
+    <!-- Tab 1: Local Processing -->
+    <mat-tab label="Local Processing">
+      <div class="tab-content">
+        <!-- Step 1: Upload CSV -->
+        <mat-card class="upload-section">
+          <mat-card-header>
+            <mat-card-title>Step 1: Upload CSV File</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="upload-area" (click)="fileInput.click()">
+              <mat-icon>cloud_upload</mat-icon>
+              <p>Click to upload CSV file or drag and drop</p>
+              <input
+                #fileInput
+                id="csvFileInput"
+                type="file"
+                accept=".csv"
+                (change)="onFileSelected($event)"
+                style="display: none"
+              />
+            </div>
+
+            @if (uploadError()) {
+              <div class="error-message">
+                <mat-icon>error</mat-icon>
+                <span style="white-space: pre-line">{{ uploadError() }}</span>
+              </div>
+            }
+
+            @if (uploadedData().length > 0) {
+              <div class="success-message">
+                <mat-icon>check_circle</mat-icon>
+                Successfully loaded {{ uploadedData().length }} records
+              </div>
+            }
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Step 2: Configure Date Range -->
+        @if (uploadedData().length > 0) {
+          <mat-card class="date-section">
+            <mat-card-header>
+              <mat-card-title>Step 2: Configure Date Range</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <form [formGroup]="dateForm" class="date-form">
+                <mat-form-field>
+                  <mat-label>Start Date</mat-label>
+                  <input matInput type="date" formControlName="startDate" />
+                  <mat-error>Start date is required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                  <mat-label>End Date</mat-label>
+                  <input matInput type="date" formControlName="endDate" />
+                  <mat-error>End date is required</mat-error>
+                </mat-form-field>
+              </form>
+
+              <button
+                mat-raised-button
+                color="primary"
+                [disabled]="!dateForm.valid || isProcessing()"
+                (click)="processData()"
+              >
+                <mat-icon>play_arrow</mat-icon>
+                Process Data
+              </button>
+            </mat-card-content>
+          </mat-card>
+        }
+
+        <!-- Step 3: Download Reports -->
+        @if (processedData()) {
+          <mat-card class="results-section">
+            <mat-card-header>
+              <mat-card-title>Step 3: Download Reports</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="report-grid">
+                <!-- Primary Analysis Reports -->
+                <div class="report-category">
+                  <h3>Primary Analysis</h3>
+
+                  <div class="report-item">
+                    <div class="report-info">
+                      <h4>New Signups ({{ processedData()!.firstEntryRecords.length }} records)</h4>
+                      <p>
+                        Drops with first approval during {{ dateForm.value.startDate | date: 'MMM d' }} -
+                        {{ dateForm.value.endDate | date: 'MMM d, yyyy' }}
+                      </p>
+                    </div>
+                    <button
+                      mat-flat-button
+                      color="primary"
+                      (click)="downloadReport('firstEntry')"
+                    >
+                      <mat-icon>download</mat-icon>
+                      Download CSV
+                    </button>
+                  </div>
+
+                  <div class="report-item">
+                    <div class="report-info">
+                      <h4>Existing Signups ({{ processedData()!.duplicatesPreWindow.length }} records)</h4>
+                      <p>Drops approved before the analysis window</p>
+                    </div>
+                    <button
+                      mat-flat-button
+                      color="primary"
+                      (click)="downloadReport('duplicatesPreWindow')"
+                    >
+                      <mat-icon>download</mat-icon>
+                      Download CSV
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Data Quality Reports -->
+                <div class="report-category">
+                  <h3>Data Quality Reports</h3>
+
+                  <div class="report-item">
+                    <div class="report-info">
+                      <h4>No Drop Allocated ({{ processedData()!.noDropAllocated.length }} records)</h4>
+                      <p>Records without drop number assigned</p>
+                    </div>
+                    <button
+                      mat-flat-button
+                      [color]="processedData()!.noDropAllocated.length > 0 ? 'warn' : 'primary'"
+                      (click)="downloadReport('noDropAllocated')"
+                    >
+                      <mat-icon>download</mat-icon>
+                      Download CSV
+                    </button>
+                  </div>
+
+                  <div class="report-item">
+                    <div class="report-info">
+                      <h4>Duplicate Drops ({{ processedData()!.duplicateDropsRemoved.length }} records)</h4>
+                      <p>Duplicate drop numbers removed during processing</p>
+                    </div>
+                    <button
+                      mat-flat-button
+                      [color]="processedData()!.duplicateDropsRemoved.length > 0 ? 'warn' : 'primary'"
+                      (click)="downloadReport('duplicateDropsRemoved')"
+                    >
+                      <mat-icon>download</mat-icon>
+                      Download CSV
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Summary Stats -->
+              <div class="summary-stats">
+                <h3>Summary</h3>
+                <div class="stats-grid">
+                  <div class="stat-item">
+                    <span class="stat-value">{{ uploadedData().length }}</span>
+                    <span class="stat-label">Total Records</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-value">{{ processedData()!.firstEntryRecords.length }}</span>
+                    <span class="stat-label">New Signups</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-value">{{ processedData()!.duplicatesPreWindow.length }}</span>
+                    <span class="stat-label">Existing</span>
+                  </div>
+                  <div class="stat-item" [class.warn]="processedData()!.noDropAllocated.length > 0">
+                    <span class="stat-value">{{ processedData()!.noDropAllocated.length }}</span>
+                    <span class="stat-label">No Drop</span>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+
+        <!-- Processing Spinner -->
+        @if (isProcessing()) {
+          <div class="processing-overlay">
+            <mat-spinner></mat-spinner>
+            <p>Processing data...</p>
+          </div>
+        }
       </div>
+    </mat-tab>
 
-      @if (uploadError()) {
-        <div class="error-message">
-          <mat-icon>error</mat-icon>
-          <span style="white-space: pre-line">{{ uploadError() }}</span>
-        </div>
-      }
-
-      @if (uploadedData().length > 0) {
-        <div class="success-message">
-          <mat-icon>check_circle</mat-icon>
-          Successfully loaded {{ uploadedData().length }} records
-        </div>
-      }
-    </mat-card-content>
-  </mat-card>
-
-  <!-- Step 2: Configure Date Range -->
-  @if (uploadedData().length > 0) {
-    <mat-card class="date-section">
-      <mat-card-header>
-        <mat-card-title>Step 2: Configure Date Range</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <form [formGroup]="dateForm" class="date-form">
-          <mat-form-field>
-            <mat-label>Start Date</mat-label>
-            <input matInput type="date" formControlName="startDate" />
-            <mat-error>Start date is required</mat-error>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label>End Date</mat-label>
-            <input matInput type="date" formControlName="endDate" />
-            <mat-error>End date is required</mat-error>
-          </mat-form-field>
-        </form>
-
-        <button
-          mat-raised-button
-          color="primary"
-          [disabled]="!dateForm.valid || isProcessing()"
-          (click)="processData()"
-        >
-          <mat-icon>play_arrow</mat-icon>
-          Process Data
-        </button>
-      </mat-card-content>
-    </mat-card>
-  }
-
-  <!-- Step 3: Download Reports -->
-  @if (processedData()) {
-    <mat-card class="results-section">
-      <mat-card-header>
-        <mat-card-title>Step 3: Download Reports</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="report-grid">
-          <!-- Primary Analysis Reports -->
-          <div class="report-category">
-            <h3>Primary Analysis</h3>
-
-            <div class="report-item">
-              <div class="report-info">
-                <h4>New Signups ({{ processedData()!.firstEntryRecords.length }} records)</h4>
-                <p>
-                  Drops with first approval during {{ dateForm.value.startDate | date: 'MMM d' }} -
-                  {{ dateForm.value.endDate | date: 'MMM d, yyyy' }}
-                </p>
-              </div>
+    <!-- Tab 2: Neon Database Import -->
+    <mat-tab label="Neon Database Import">
+      <div class="tab-content">
+        <mat-card class="neon-import-section">
+          <mat-card-header>
+            <mat-card-title>Import to Neon Database</mat-card-title>
+            <mat-card-subtitle>
+              Import OneMap Excel files directly to Neon for analytics and status tracking
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="neon-actions">
               <button
-                mat-flat-button
+                mat-raised-button
                 color="primary"
-                [disabled]="processedData()!.firstEntryRecords.length === 0"
-                (click)="downloadReport('firstEntry')"
+                [disabled]="isImportingToNeon() || uploadedData().length === 0"
+                (click)="importToNeon()"
               >
-                <mat-icon>download</mat-icon>
-                Download
+                <mat-icon>cloud_upload</mat-icon>
+                Import to Neon Database
               </button>
+              
+              @if (isImportingToNeon()) {
+                <mat-spinner diameter="24"></mat-spinner>
+                <span>Importing to Neon...</span>
+              }
             </div>
 
-            <div class="report-item">
-              <div class="report-info">
-                <h4>
-                  Existing Signups ({{ processedData()!.duplicatesPreWindow.length }} records)
-                </h4>
-                <p>Drops approved before {{ dateForm.value.startDate | date: 'MMM d, yyyy' }}</p>
+            <div class="neon-info">
+              <h4>What happens during import:</h4>
+              <ul>
+                <li>Excel data is parsed and validated</li>
+                <li>Status changes are extracted and stored</li>
+                <li>Duplicate records are handled automatically</li>
+                <li>Import history is tracked for audit</li>
+              </ul>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Recent Imports -->
+        <mat-card class="recent-imports-section">
+          <mat-card-header>
+            <mat-card-title>Recent Imports</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            @if (recentImports().length > 0) {
+              <table mat-table [dataSource]="recentImports()" class="imports-table">
+                <ng-container matColumnDef="fileName">
+                  <th mat-header-cell *matHeaderCellDef>File Name</th>
+                  <td mat-cell *matCellDef="let import">{{ import.file_name }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="date">
+                  <th mat-header-cell *matHeaderCellDef>Import Date</th>
+                  <td mat-cell *matCellDef="let import">
+                    {{ import.import_date | date: 'medium' }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="records">
+                  <th mat-header-cell *matHeaderCellDef>Records</th>
+                  <td mat-cell *matCellDef="let import">{{ import.record_count }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef>Status</th>
+                  <td mat-cell *matCellDef="let import">
+                    <mat-chip [color]="getImportStatusColor(import.status)">
+                      {{ import.status }}
+                    </mat-chip>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="user">
+                  <th mat-header-cell *matHeaderCellDef>Imported By</th>
+                  <td mat-cell *matCellDef="let import">{{ import.created_by }}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="['fileName', 'date', 'records', 'status', 'user']"></tr>
+                <tr mat-row *matRowDef="let row; columns: ['fileName', 'date', 'records', 'status', 'user']"></tr>
+              </table>
+            } @else {
+              <div class="no-imports">
+                <mat-icon>history</mat-icon>
+                <p>No imports yet</p>
               </div>
-              <button
-                mat-flat-button
-                color="primary"
-                [disabled]="processedData()!.duplicatesPreWindow.length === 0"
-                (click)="downloadReport('duplicatesPreWindow')"
-              >
-                <mat-icon>download</mat-icon>
-                Download
-              </button>
-            </div>
-          </div>
-
-          <!-- Data Quality Reports -->
-          <div class="report-category">
-            <h3>Data Quality Control</h3>
-
-            <div class="report-item">
-              <div class="report-info">
-                <h4>No Drop Allocated ({{ processedData()!.noDropAllocated.length }} records)</h4>
-                <p>Records missing drop numbers</p>
-              </div>
-              <button
-                mat-flat-button
-                color="accent"
-                [disabled]="processedData()!.noDropAllocated.length === 0"
-                (click)="downloadReport('noDropAllocated')"
-              >
-                <mat-icon>download</mat-icon>
-                Download
-              </button>
-            </div>
-
-            <div class="report-item">
-              <div class="report-info">
-                <h4>
-                  Duplicate Drops Removed ({{ processedData()!.duplicateDropsRemoved.length }}
-                  records)
-                </h4>
-                <p>Newer duplicate entries removed from analysis</p>
-              </div>
-              <button
-                mat-flat-button
-                color="accent"
-                [disabled]="processedData()!.duplicateDropsRemoved.length === 0"
-                (click)="downloadReport('duplicateDropsRemoved')"
-              >
-                <mat-icon>download</mat-icon>
-                Download
-              </button>
-            </div>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  }
-
-  <!-- Processing Indicator -->
-  @if (isProcessing()) {
-    <div class="processing-overlay">
-      <mat-spinner></mat-spinner>
-      <p>Processing data...</p>
-    </div>
-  }
+            }
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
 </div>

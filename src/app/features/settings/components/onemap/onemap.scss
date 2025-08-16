@@ -151,6 +151,127 @@ mat-card {
   }
 }
 
+// Tab content
+.tab-content {
+  padding: ff-spacing(lg) 0;
+}
+
+// Neon Import Section
+.neon-import-section {
+  .neon-actions {
+    display: flex;
+    align-items: center;
+    gap: ff-spacing(md);
+    margin-bottom: ff-spacing(xl);
+
+    mat-spinner {
+      margin-left: ff-spacing(md);
+    }
+  }
+
+  .neon-info {
+    background: theme.ff-rgba(muted, 0.1);
+    padding: ff-spacing(lg);
+    border-radius: theme.ff-var(radius);
+    margin-top: ff-spacing(xl);
+
+    h4 {
+      margin: 0 0 ff-spacing(md) 0;
+      color: theme.ff-rgb(foreground);
+      font-weight: 500;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: ff-spacing(xl);
+      color: theme.ff-rgb(muted-foreground);
+
+      li {
+        margin-bottom: ff-spacing(xs);
+      }
+    }
+  }
+}
+
+// Recent Imports Section
+.recent-imports-section {
+  margin-top: ff-spacing(xl);
+
+  .imports-table {
+    width: 100%;
+    margin-top: ff-spacing(md);
+  }
+
+  .no-imports {
+    text-align: center;
+    padding: ff-spacing(3xl);
+    color: theme.ff-rgb(muted-foreground);
+
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      margin-bottom: ff-spacing(md);
+    }
+
+    p {
+      margin: 0;
+      font-size: theme.ff-rem(16);
+    }
+  }
+}
+
+// Summary Stats
+.summary-stats {
+  margin-top: ff-spacing(2xl);
+  padding-top: ff-spacing(xl);
+  border-top: 1px solid theme.ff-rgb(border);
+
+  h3 {
+    margin-bottom: ff-spacing(lg);
+    color: theme.ff-rgb(foreground);
+    font-size: theme.ff-rem(18);
+    font-weight: 600;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: ff-spacing(lg);
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: ff-spacing(lg);
+    background: theme.ff-rgba(muted, 0.05);
+    border-radius: theme.ff-var(radius);
+    border: 1px solid theme.ff-rgb(border);
+
+    &.warn {
+      border-color: theme.ff-rgb(warning);
+      background: theme.ff-rgba(warning, 0.05);
+
+      .stat-value {
+        color: theme.ff-rgb(warning);
+      }
+    }
+
+    .stat-value {
+      display: block;
+      font-size: theme.ff-rem(32);
+      font-weight: 700;
+      color: theme.ff-rgb(primary);
+      margin-bottom: ff-spacing(xs);
+    }
+
+    .stat-label {
+      display: block;
+      font-size: theme.ff-rem(14);
+      color: theme.ff-rgb(muted-foreground);
+    }
+  }
+}
+
 // Responsive
 @media (max-width: 768px) {
   .container {
@@ -174,5 +295,18 @@ mat-card {
       margin-top: ff-spacing(md);
       width: 100%;
     }
+  }
+
+  .neon-actions {
+    flex-direction: column;
+    align-items: stretch !important;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 }

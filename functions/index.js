@@ -1327,3 +1327,35 @@ exports.syncActionItemsManual = functions.https.onCall(async (data, context) => 
 // Export Neon Read API
 const neonReadAPI = require('./src/neon-read-api');
 exports.neonReadAPI = neonReadAPI.neonReadAPI;
+
+// Export Staging API
+const stagingAPI = require('./src/staging-api');
+exports.stagingAPI = stagingAPI.stagingAPI;
+
+// Export Offline Field App API with public access
+const offlineFieldAppAPI = require('./src/offline-field-app-api');
+// Wrap the function to ensure public access and proper CORS
+exports.offlineFieldAppAPI = functions
+  .runWith({
+    memory: '1GB',
+    timeoutSeconds: 540
+  })
+  .https
+  .onRequest((req, res) => {
+    // Set CORS headers for public access
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.set('Access-Control-Allow-Headers', 'Content-Type, X-API-Key, X-Device-ID');
+    
+    if (req.method === 'OPTIONS') {
+      res.status(204).send('');
+      return;
+    }
+    
+    // Call the original function
+    return offlineFieldAppAPI.offlineFieldAppAPI(req, res);
+  });
+
+// Export Neon Sync Worker
+const neonSyncWorker = require('./src/neon-sync-worker');
+exports.syncFieldCapturesToNeon = neonSyncWorker.syncFieldCapturesToNeon;

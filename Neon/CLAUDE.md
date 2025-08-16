@@ -26,6 +26,30 @@ FibreFlow uses a **hybrid database architecture**:
 1. **Firebase Firestore** - Primary database for real-time operations, CRUD, authentication
 2. **Neon PostgreSQL** - Analytics database for complex queries, reporting, and data analysis
 
+### Multi-Database Architecture (Updated 2025-01-30)
+
+**Clear Separation of Concerns**:
+- **Firebase**: Field operations, photos, offline sync, real-time updates
+- **Neon**: Excel imports (SOW/OneMap), analytics, status tracking
+- **Staging** (planned): Data validation, duplicate checking, quality gates
+
+**No Duplication Policy**:
+- Photos stay in Firebase only
+- Status/analytics in Neon only
+- Each data type has ONE home
+
+**Data Flow**:
+```
+Field App → Staging → Firebase (photos, GPS, real-time)
+Excel Imports → Staging → Neon (analytics, status, reports)
+                ↓
+           FibreFlow UI (reads both)
+```
+
+For complete architecture documentation, see:
+- `MULTI_DATABASE_ARCHITECTURE.md` (in this directory)
+- `/dbase/MULTI_DATABASE_ARCHITECTURE_WITH_STAGING.md` (staging layer details)
+
 ## Connection Details
 - **Host**: ep-long-breeze-a9w7xool-pooler.gwc.azure.neon.tech
 - **Database**: neondb
