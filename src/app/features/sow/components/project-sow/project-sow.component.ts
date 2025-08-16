@@ -173,8 +173,13 @@ interface SOWFibre {
               [paginationPageSize]="50"
               [paginationPageSizeSelector]="[25, 50, 100, 200]"
               [animateRows]="true"
-              [rowSelection]="'multiple'"
-              [suppressRowClickSelection]="true"
+              [rowSelection]="{
+                mode: 'multiRow',
+                checkboxes: true,
+                headerCheckbox: true,
+                selectAll: 'filtered',
+                enableClickSelection: false
+              }"
               [enableCellTextSelection]="true">
             </ag-grid-angular>
           </div>
@@ -218,8 +223,13 @@ interface SOWFibre {
               [paginationPageSize]="50"
               [paginationPageSizeSelector]="[25, 50, 100, 200]"
               [animateRows]="true"
-              [rowSelection]="'multiple'"
-              [suppressRowClickSelection]="true"
+              [rowSelection]="{
+                mode: 'multiRow',
+                checkboxes: true,
+                headerCheckbox: true,
+                selectAll: 'filtered',
+                enableClickSelection: false
+              }"
               [enableCellTextSelection]="true">
             </ag-grid-angular>
           </div>
@@ -263,8 +273,13 @@ interface SOWFibre {
               [paginationPageSize]="50"
               [paginationPageSizeSelector]="[25, 50, 100, 200]"
               [animateRows]="true"
-              [rowSelection]="'multiple'"
-              [suppressRowClickSelection]="true"
+              [rowSelection]="{
+                mode: 'multiRow',
+                checkboxes: true,
+                headerCheckbox: true,
+                selectAll: 'filtered',
+                enableClickSelection: false
+              }"
               [enableCellTextSelection]="true">
             </ag-grid-angular>
           </div>
@@ -313,9 +328,6 @@ export class ProjectSOWComponent implements OnInit {
       headerName: 'Pole Number',
       sortable: true,
       filter: true,
-      checkboxSelection: true,
-      headerCheckboxSelection: true,
-      headerCheckboxSelectionFilteredOnly: true,
     },
     {
       field: 'status',
@@ -335,7 +347,11 @@ export class ProjectSOWComponent implements OnInit {
       sortable: true,
       valueGetter: (params: any) => {
         if (params.data.latitude && params.data.longitude) {
-          return `${params.data.latitude.toFixed(6)}, ${params.data.longitude.toFixed(6)}`;
+          const lat = parseFloat(params.data.latitude);
+          const lng = parseFloat(params.data.longitude);
+          if (!isNaN(lat) && !isNaN(lng)) {
+            return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+          }
         }
         return '-';
       }
@@ -349,9 +365,6 @@ export class ProjectSOWComponent implements OnInit {
       headerName: 'Drop Number',
       sortable: true,
       filter: true,
-      checkboxSelection: true,
-      headerCheckboxSelection: true,
-      headerCheckboxSelectionFilteredOnly: true,
     },
     { field: 'pole_number', headerName: 'Pole', sortable: true, filter: true },
     { field: 'address', headerName: 'Address', sortable: true, filter: true },
@@ -383,9 +396,6 @@ export class ProjectSOWComponent implements OnInit {
       headerName: 'Segment ID',
       sortable: true,
       filter: true,
-      checkboxSelection: true,
-      headerCheckboxSelection: true,
-      headerCheckboxSelectionFilteredOnly: true,
     },
     {
       field: 'distance',
@@ -531,36 +541,42 @@ export class ProjectSOWComponent implements OnInit {
   
   // Filter methods
   onSearchChanged() {
-    if (this.polesGridApi) {
-      this.polesGridApi.setGridOption('quickFilterText', this.searchText);
-    }
-    if (this.dropsGridApi) {
-      this.dropsGridApi.setGridOption('quickFilterText', this.searchText);
-    }
-    if (this.fibreGridApi) {
-      this.fibreGridApi.setGridOption('quickFilterText', this.searchText);
-    }
+    // Use setTimeout to prevent "grid drawing rows during render" error
+    setTimeout(() => {
+      if (this.polesGridApi) {
+        this.polesGridApi.setGridOption('quickFilterText', this.searchText);
+      }
+      if (this.dropsGridApi) {
+        this.dropsGridApi.setGridOption('quickFilterText', this.searchText);
+      }
+      if (this.fibreGridApi) {
+        this.fibreGridApi.setGridOption('quickFilterText', this.searchText);
+      }
+    }, 0);
   }
   
   onFilterChanged() {
-    // Apply filters based on current tab
-    if (this.dropsGridApi && this.statusFilter) {
-      this.dropsGridApi.setFilterModel({
-        status: {
-          type: 'contains',
-          filter: this.statusFilter
-        }
-      });
-    }
-    
-    if (this.fibreGridApi && this.contractorFilter) {
-      this.fibreGridApi.setFilterModel({
-        contractor: {
-          type: 'contains',
-          filter: this.contractorFilter
-        }
-      });
-    }
+    // Use setTimeout to prevent "grid drawing rows during render" error
+    setTimeout(() => {
+      // Apply filters based on current tab
+      if (this.dropsGridApi && this.statusFilter) {
+        this.dropsGridApi.setFilterModel({
+          status: {
+            type: 'contains',
+            filter: this.statusFilter
+          }
+        });
+      }
+      
+      if (this.fibreGridApi && this.contractorFilter) {
+        this.fibreGridApi.setFilterModel({
+          contractor: {
+            type: 'contains',
+            filter: this.contractorFilter
+          }
+        });
+      }
+    }, 0);
   }
   
   // Export methods
