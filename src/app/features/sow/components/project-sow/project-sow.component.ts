@@ -151,8 +151,7 @@ export class ProjectSOWComponent implements OnInit {
       
       // Check project-specific data
       this.neonService.query(
-        'SELECT COUNT(*) as total FROM sow_poles WHERE project_id = $1',
-        [this.projectId]
+        `SELECT COUNT(*) as total FROM sow_poles WHERE project_id = '${this.projectId.replace(/'/g, "''")}'`
       ).pipe(
         catchError(() => of([{total: 0}]))
       ).subscribe(result => {
@@ -161,8 +160,7 @@ export class ProjectSOWComponent implements OnInit {
       
       // Load poles with better error handling
       this.poles$ = this.neonService.query<SOWPole>(
-        'SELECT * FROM sow_poles WHERE project_id = $1 ORDER BY pole_number',
-        [this.projectId]
+        `SELECT * FROM sow_poles WHERE project_id = '${this.projectId.replace(/'/g, "''")}' ORDER BY pole_number`
       ).pipe(
         catchError(error => {
           console.error('Error loading poles from sow_poles table:', error);
@@ -179,8 +177,7 @@ export class ProjectSOWComponent implements OnInit {
       
       // Load drops with better error handling
       this.drops$ = this.neonService.query<SOWDrop>(
-        'SELECT * FROM sow_drops WHERE project_id = $1 ORDER BY drop_number',
-        [this.projectId]
+        `SELECT * FROM sow_drops WHERE project_id = '${this.projectId.replace(/'/g, "''")}' ORDER BY drop_number`
       ).pipe(
         catchError(error => {
           console.error('Error loading drops from sow_drops table:', error);
@@ -197,8 +194,7 @@ export class ProjectSOWComponent implements OnInit {
       
       // Load fibre with better error handling
       this.fibre$ = this.neonService.query<SOWFibre>(
-        'SELECT * FROM sow_fibre WHERE project_id = $1 ORDER BY segment_id',
-        [this.projectId]
+        `SELECT * FROM sow_fibre WHERE project_id = '${this.projectId.replace(/'/g, "''")}' ORDER BY segment_id`
       ).pipe(
         catchError(error => {
           console.error('Error loading fibre from sow_fibre table:', error);

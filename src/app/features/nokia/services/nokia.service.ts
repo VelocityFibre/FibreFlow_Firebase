@@ -26,8 +26,8 @@ export class NokiaService {
    * Get all Nokia data with optional filtering
    */
   getNokiaData(filters?: NokiaFilterOptions): Observable<NokiaData[]> {
-    // Build query dynamically without parameterized queries for Neon compatibility
-    let baseQuery = 'SELECT * FROM nokia_data WHERE 1=1';
+    // Query status_changes table where Nokia data was imported
+    let baseQuery = 'SELECT * FROM status_changes WHERE project_name = \'Nokia\'';
     const conditions: string[] = [];
 
     // Add filters using string interpolation (safe because we control the values)
@@ -99,11 +99,12 @@ export class NokiaService {
         COUNT(DISTINCT team) as total_teams,
         AVG(ont_rx_signal_dbm) as avg_signal_strength,
         MAX(measurement_date) as last_measurement
-      FROM nokia_data
+      FROM status_changes
+      WHERE project_name = 'Nokia'
     `;
     
     if (projectId) {
-      query += ` WHERE project_id = '${projectId.replace(/'/g, "''")}'`;
+      query += ` AND project_id = '${projectId.replace(/'/g, "''")}'`;
     }
 
     return this.neonService.query<any>(query)
@@ -145,11 +146,12 @@ export class NokiaService {
         AVG(ont_rx_signal_dbm) as avg_signal_strength,
         AVG(current_ont_rx) as avg_current_rx,
         MAX(measurement_date) as last_measurement
-      FROM nokia_data
+      FROM status_changes
+      WHERE project_name = 'Nokia'
     `;
     
     if (projectId) {
-      query += ` WHERE project_id = '${projectId.replace(/'/g, "''")}'`;
+      query += ` AND project_id = '${projectId.replace(/'/g, "''")}'`;
     }
     
     query += ' GROUP BY team ORDER BY equipment_count DESC';
@@ -181,8 +183,9 @@ export class NokiaService {
         COUNT(CASE WHEN ont_rx_signal_dbm BETWEEN -20 AND -15 THEN 1 END) as good,
         COUNT(CASE WHEN ont_rx_signal_dbm BETWEEN -25 AND -20 THEN 1 END) as fair,
         COUNT(CASE WHEN ont_rx_signal_dbm < -25 THEN 1 END) as poor
-      FROM nokia_data
-      WHERE ont_rx_signal_dbm IS NOT NULL
+      FROM status_changes
+      WHERE project_name = 'Nokia'
+        AND ont_rx_signal_dbm IS NOT NULL
     `;
     
     if (projectId) {
@@ -211,7 +214,7 @@ export class NokiaService {
    * Get unique teams list
    */
   getTeams(projectId?: string): Observable<string[]> {
-    let query = 'SELECT DISTINCT team FROM nokia_data WHERE team IS NOT NULL';
+    let query = 'SELECT DISTINCT team FROM status_changes WHERE project_name = \'Nokia\' AND team IS NOT NULL';
     
     if (projectId) {
       query += ` AND project_id = '${projectId.replace(/'/g, "''")}'`;
@@ -233,7 +236,7 @@ export class NokiaService {
    * Get unique status values
    */
   getStatuses(): Observable<string[]> {
-    const query = 'SELECT DISTINCT status FROM nokia_data WHERE status IS NOT NULL ORDER BY status';
+    const query = 'SELECT DISTINCT status FROM status_changes WHERE project_name = \'Nokia\' AND status IS NOT NULL ORDER BY status';
     
     return this.neonService.query<{status: string}>(query)
       .pipe(
@@ -249,7 +252,7 @@ export class NokiaService {
    * Get equipment by drop number
    */
   getEquipmentByDrop(dropNumber: string): Observable<NokiaData[]> {
-    const query = `SELECT * FROM nokia_data WHERE drop_number = '${dropNumber.replace(/'/g, "''")}' ORDER BY measurement_date DESC`;
+    const query = `SELECT * FROM status_changes WHERE project_name = 'Nokia' AND drop_number = '${dropNumber.replace(/'/g, "''")}' ORDER BY measurement_date DESC`;
     
     return this.neonService.query<NokiaData>(query)
       .pipe(
@@ -268,11 +271,12 @@ export class NokiaService {
     const searchPattern = `%${escapedTerm}%`;
     
     const query = `
-      SELECT * FROM nokia_data 
-      WHERE drop_number ILIKE '${searchPattern}'
+      SELECT * FROM status_changes 
+      WHERE project_name = 'Nokia'
+        AND (drop_number ILIKE '${searchPattern}'
          OR serial_number ILIKE '${searchPattern}'
          OR olt_address ILIKE '${searchPattern}'
-         OR team ILIKE '${searchPattern}'
+         OR team ILIKE '${searchPattern}')
       ORDER BY measurement_date DESC
       LIMIT 100
     `;
@@ -290,7 +294,7 @@ export class NokiaService {
    * Test database connection and table existence
    */
   testConnection(): Observable<{ success: boolean; message: string; recordCount?: number }> {
-    return this.neonService.query<{count: string}>('SELECT COUNT(*) as count FROM nokia_data')
+    return this.neonService.query<{count: string}>('SELECT COUNT(*) as count FROM status_changes WHERE project_name = \'Nokia\'')
       .pipe(
         map(result => ({
           success: true,

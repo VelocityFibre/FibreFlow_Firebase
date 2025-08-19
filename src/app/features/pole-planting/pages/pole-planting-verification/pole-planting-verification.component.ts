@@ -244,7 +244,7 @@ interface VerificationGridData extends StagingPoleData {
               [defaultColDef]="defaultColDef"
               [rowData]="rowData()"
               [rowSelection]="'multiple'"
-              [suppressRowClickSelection]="true"
+              [suppressRowClickSelection]="false"
               (gridReady)="onGridReady($event)"
               (selectionChanged)="onSelectionChanged($event)"
               domLayout="autoHeight"
@@ -300,6 +300,16 @@ export class PolePlantingVerificationComponent implements OnInit {
   
   // Column definitions
   columnDefs: ColDef[] = [
+    {
+      field: 'selection',
+      headerName: '',
+      width: 50,
+      checkboxSelection: true,
+      headerCheckboxSelection: true,
+      pinned: 'left',
+      lockPinned: true,
+      cellClass: 'ag-cell-selection'
+    },
     {
       field: 'validation_status',
       headerName: 'Status',
@@ -526,7 +536,13 @@ export class PolePlantingVerificationComponent implements OnInit {
         }
       }
       
-      const stagingData = await this.stagingSyncService.getStagingItems(status);
+      // Get data from Angular staging collection
+      const angularStagingData = await this.stagingSyncService.getStagingItems(status);
+      // TODO: Add React app data loading when method is implemented
+      // const reactAppData = await this.loadReactAppStagingData(status);
+      
+      // For now, just use Angular staging data
+      const stagingData = angularStagingData;
       
       // Transform for grid display
       const gridData: VerificationGridData[] = stagingData.map(item => ({
@@ -636,11 +652,14 @@ export class PolePlantingVerificationComponent implements OnInit {
       
       // Process each item
       for (const item of selectedItems) {
+        // First mark as validated in staging
+        if (item.id) {
+          await this.stagingSyncService.approveStagingItem(item.id);
+        }
+        
         // Create planted pole from staging data
         const plantedPoleId = await this.plantedPoleService.createFromStagingData(item);
         
-        // Update staging status to indicate it's been processed
-        // This would be handled by the staging service
         console.log(`Created planted pole ${plantedPoleId} from staging item ${item.id}`);
       }
       
@@ -663,14 +682,43 @@ export class PolePlantingVerificationComponent implements OnInit {
   async bulkReject() {
     const selectedItems = this.selectedRows();
     if (selectedItems.length === 0) return;
+
+    // Show confirmation dialog
+    const confirmed = confirm(`Are you sure you want to reject ${selectedItems.length} selected poles? This action cannot be undone.`);
+    if (!confirmed) return;
     
-    // TODO: Implement bulk rejection
-    // This would update the staging items to rejected status
-    this.snackBar.open(
-      `Bulk rejection not yet implemented for ${selectedItems.length} items`, 
-      'Close', 
-      { duration: 3000 }
-    );
+    this.isProcessing.set(true);
+    this.processingMessage.set(`Rejecting ${selectedItems.length} poles...`);
+    
+    try {
+      const currentUser = await this.authService.getCurrentUser();
+      const verifiedBy = currentUser?.email || 'admin';
+      
+      // Process each item
+      for (const item of selectedItems) {
+        if (item.id) {
+          await this.stagingSyncService.rejectStagingItem(
+            item.id, 
+            `Bulk rejected by ${verifiedBy} during manual verification`
+          );
+          console.log(`Rejected staging item ${item.id}`);
+        }
+      }
+      
+      this.snackBar.open(
+        `Successfully rejected ${selectedItems.length} poles`, 
+        'Close', 
+        { duration: 3000 }
+      );
+      
+      await this.refreshData();
+      
+    } catch (error) {
+      console.error('Error in bulk rejection:', error);
+      this.snackBar.open('Error during bulk rejection', 'Close', { duration: 3000 });
+    } finally {
+      this.isProcessing.set(false);
+    }
   }
   
   async approveSingle(item: VerificationGridData) {
@@ -678,6 +726,12 @@ export class PolePlantingVerificationComponent implements OnInit {
     this.processingMessage.set(`Approving pole ${item.poleNumber || item.id}...`);
     
     try {
+      // First mark as validated in staging
+      if (item.id) {
+        await this.stagingSyncService.approveStagingItem(item.id);
+      }
+      
+      // Then create planted pole from staging data
       const plantedPoleId = await this.plantedPoleService.createFromStagingData(item);
       
       this.snackBar.open(
@@ -697,12 +751,40 @@ export class PolePlantingVerificationComponent implements OnInit {
   }
   
   async rejectSingle(item: VerificationGridData) {
-    // TODO: Implement single rejection
-    this.snackBar.open(
-      `Single rejection not yet implemented for ${item.poleNumber || item.id}`, 
-      'Close', 
-      { duration: 3000 }
-    );
+    // Show confirmation dialog
+    const confirmed = confirm(`Are you sure you want to reject pole ${item.poleNumber || 'unnamed'}? This action cannot be undone.`);
+    if (!confirmed) return;
+
+    this.isProcessing.set(true);
+    this.processingMessage.set(`Rejecting pole ${item.poleNumber || item.id}...`);
+    
+    try {
+      const currentUser = await this.authService.getCurrentUser();
+      const verifiedBy = currentUser?.email || 'admin';
+      
+      if (item.id) {
+        await this.stagingSyncService.rejectStagingItem(
+          item.id,
+          `Manually rejected by ${verifiedBy} during verification`
+        );
+        
+        this.snackBar.open(
+          `Rejected pole ${item.poleNumber || 'unnamed'}`, 
+          'Close', 
+          { duration: 2000 }
+        );
+        
+        await this.refreshData();
+      } else {
+        throw new Error('No item ID available for rejection');
+      }
+      
+    } catch (error) {
+      console.error('Error rejecting pole:', error);
+      this.snackBar.open('Error rejecting pole', 'Close', { duration: 3000 });
+    } finally {
+      this.isProcessing.set(false);
+    }
   }
   
   viewPhotos(item: VerificationGridData) {

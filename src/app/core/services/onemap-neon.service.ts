@@ -51,9 +51,9 @@ export class OneMapNeonService {
       const batchResult = await this.neonService.query<any>(`
         INSERT INTO onemap_import_batches 
         (file_name, import_date, record_count, status, created_by)
-        VALUES ($1, $2, $3, $4, $5)
+        VALUES ('${batch.file_name}', '${batch.import_date}', ${batch.record_count}, '${batch.status}', '${batch.created_by}')
         RETURNING id
-      `, [batch.file_name, batch.import_date, batch.record_count, batch.status, batch.created_by]).toPromise();
+      `).toPromise();
 
       const batchId = batchResult?.[0]?.id;
       if (!batchId) throw new Error('Failed to create import batch');
@@ -69,9 +69,9 @@ export class OneMapNeonService {
         // Update batch with success
         await this.neonService.query(`
           UPDATE onemap_import_batches 
-          SET status = 'completed', record_count = $1
-          WHERE id = $2
-        `, [records.length, batchId]).toPromise();
+          SET status = 'completed', record_count = ${records.length}
+          WHERE id = '${batchId}'
+        `).toPromise();
       }
 
       return { batchId, recordCount: records.length };
@@ -211,17 +211,19 @@ export class OneMapNeonService {
       JSON.stringify(r.raw_data)
     ]);
     
-    // Create placeholders for bulk insert
-    const placeholders = values.map((_, i) => 
-      `($${i * 11 + 1}, $${i * 11 + 2}, $${i * 11 + 3}, $${i * 11 + 4}, $${i * 11 + 5}, $${i * 11 + 6}, $${i * 11 + 7}, $${i * 11 + 8}, $${i * 11 + 9}, $${i * 11 + 10}, $${i * 11 + 11})`
+    // Create value strings for bulk insert (without parameters)
+    const valueStrings = values.map(valueArray => 
+      `(${valueArray.map(v => 
+        v === null ? 'NULL' : 
+        typeof v === 'string' ? `'${v.replace(/'/g, "''")}'` : 
+        v
+      ).join(', ')})`
     ).join(', ');
-    
-    const flatValues = values.flat();
     
     await this.neonService.query(`
       INSERT INTO onemap_status_history 
       (property_id, pole_number, drop_number, status, status_date, zone, feeder, distribution, contractor, import_batch_id, raw_data)
-      VALUES ${placeholders}
+      VALUES ${valueStrings}
       ON CONFLICT (property_id, status, status_date) DO UPDATE
       SET 
         pole_number = EXCLUDED.pole_number,
@@ -233,7 +235,7 @@ export class OneMapNeonService {
         import_batch_id = EXCLUDED.import_batch_id,
         raw_data = EXCLUDED.raw_data,
         updated_at = NOW()
-    `, flatValues).toPromise();
+    `).toPromise();
   }
 
   /**
@@ -292,7 +294,7 @@ export class OneMapNeonService {
     return this.neonService.query<OneMapImportBatch>(`
       SELECT * FROM onemap_import_batches 
       ORDER BY import_date DESC 
-      LIMIT $1
+      LIMIT ${limit}
     `, [limit]);
   }
 
@@ -302,7 +304,7 @@ export class OneMapNeonService {
   getPoleStatusHistory(poleNumber: string): Observable<OneMapStatusChange[]> {
     return this.neonService.query<OneMapStatusChange>(`
       SELECT * FROM onemap_status_history 
-      WHERE pole_number = $1 
+      WHERE pole_number = '${poleNumber}' 
       ORDER BY status_date DESC
     `, [poleNumber]);
   }
@@ -324,7 +326,7 @@ export class OneMapNeonService {
     `;
     
     if (projectFilter) {
-      query += ` AND zone LIKE $1`;
+      query += ` AND zone LIKE '%${projectFilter}%'`;
     }
     
     query += `
@@ -367,8 +369,8 @@ export class OneMapNeonService {
     dateFrom?: Date;
     dateTo?: Date;
   }): Observable<OneMapStatusChange[]> {
-    // Simple query to get actual data records
-    console.log('OneMapNeonService: Fetching OneMap grid data');
+    // Query the actual OneMap data from status_changes table
+    console.log('OneMapNeonService: Fetching OneMap grid data from status_changes table');
     
     const query = `
       SELECT 
@@ -380,13 +382,17 @@ export class OneMapNeonService {
         zone,
         feeder,
         distribution,
-        contractor
-      FROM onemap_status_history 
-      ORDER BY status_date DESC 
-      LIMIT 100
+        contractor,
+        agent,
+        address,
+        project_name
+      FROM status_changes 
+      WHERE project_name = 'Lawley'
+      ORDER BY created_at DESC 
+      LIMIT 1000
     `;
 
-    console.log('OneMapNeonService: Executing data query');
+    console.log('OneMapNeonService: Executing data query for status_changes');
     return this.neonService.query<OneMapStatusChange>(query);
   }
 
@@ -400,8 +406,16 @@ export class OneMapNeonService {
     totalRecords: number;
     statusBreakdown: { status: string; count: number }[];
   }> {
-    // Simple query to test basic functionality first
-    const query = `SELECT COUNT(*) as total_records FROM onemap_status_history`;
+    // Query status_changes table for Lawley summary statistics
+    const query = `
+      SELECT 
+        COUNT(*) as total_records,
+        COUNT(DISTINCT property_id) as total_properties,
+        COUNT(DISTINCT pole_number) FILTER (WHERE pole_number IS NOT NULL AND pole_number != '') as total_poles,
+        COUNT(DISTINCT drop_number) FILTER (WHERE drop_number IS NOT NULL AND drop_number != '') as total_drops
+      FROM status_changes 
+      WHERE project_name = 'Lawley'
+    `;
 
     console.log('OneMapNeonService: Executing simple summary stats query');
     return this.neonService.query(query).pipe(
@@ -420,9 +434,9 @@ export class OneMapNeonService {
         const result = results[0];
         
         return {
-          totalProperties: 0,
-          totalPoles: 0,
-          totalDrops: 0,
+          totalProperties: result.total_properties || 0,
+          totalPoles: result.total_poles || 0,
+          totalDrops: result.total_drops || 0,
           totalRecords: result.total_records || 0,
           statusBreakdown: []
         };
@@ -438,10 +452,19 @@ export class OneMapNeonService {
     statuses: string[];
     contractors: string[];
   }> {
-    // Simple query to test basic functionality first
-    const query = `SELECT DISTINCT status FROM onemap_status_history WHERE status IS NOT NULL LIMIT 10`;
+    // Query status_changes table for filter options
+    const query = `
+      SELECT DISTINCT 
+        status,
+        zone,
+        contractor
+      FROM status_changes 
+      WHERE project_name = 'Lawley'
+      AND (status IS NOT NULL OR zone IS NOT NULL OR contractor IS NOT NULL)
+      ORDER BY status, zone, contractor
+    `;
 
-    console.log('OneMapNeonService: Executing simple filter options query');
+    console.log('OneMapNeonService: Executing filter options query for status_changes');
     return this.neonService.query(query).pipe(
       map((results: any[]) => {
         console.log('OneMapNeonService: Filter options query results:', results);
@@ -449,12 +472,15 @@ export class OneMapNeonService {
           return { zones: [], statuses: [], contractors: [] };
         }
 
-        // Extract statuses from results
-        const statuses = results.map((row: any) => row.status);
+        // Extract unique values
+        const statuses = [...new Set(results.map((row: any) => row.status).filter(Boolean))];
+        const zones = [...new Set(results.map((row: any) => row.zone).filter(Boolean))];
+        const contractors = [...new Set(results.map((row: any) => row.contractor).filter(Boolean))];
+        
         return {
-          zones: [],
+          zones: zones,
           statuses: statuses,
-          contractors: []
+          contractors: contractors
         };
       })
     );

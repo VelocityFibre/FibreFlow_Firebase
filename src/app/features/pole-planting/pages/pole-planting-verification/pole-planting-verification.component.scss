@@ -217,15 +217,43 @@
     
     .ag-header {
       border-bottom: 2px solid theme.ff-rgb(border);
+      
+      .ag-header-cell {
+        &.ag-column-pinned-left {
+          border-right: 1px solid theme.ff-rgba(border, 0.3);
+        }
+      }
     }
     
     .ag-row {
       border-bottom: 1px solid theme.ff-rgba(border, 0.5);
+      
+      &.ag-row-selected {
+        background-color: theme.ff-rgba(primary, 0.08) !important;
+        border-left: 3px solid theme.ff-rgb(primary);
+      }
+      
+      .ag-cell {
+        &.ag-column-pinned-left {
+          border-right: 1px solid theme.ff-rgba(border, 0.2);
+          background-color: theme.ff-rgba(muted, 0.02);
+        }
+      }
     }
     
     .ag-cell {
       display: flex;
       align-items: center;
+      
+      &.ag-cell-selection {
+        justify-content: center;
+        
+        .ag-selection-checkbox {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
       
       // Status chips
       .status-chip {

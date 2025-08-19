@@ -27,22 +27,90 @@ async function testNeon() {
     if (tables.length > 0) {
       console.log('✅ Found OneMap tables:', tables.map(t => t.table_name));
       
-      // Check all OneMap tables
-      for (const table of ['onemap_status_history', 'onemap_lawley_raw', 'onemap_import_batches']) {
-        try {
-          const count = await sql`SELECT COUNT(*) as count FROM ${sql(table)}`;
-          console.log(`✅ Records in ${table}:`, count[0].count);
+      // Check onemap_lawley_raw table (most likely to have data)
+      try {
+        const count = await sql`SELECT COUNT(*) as count FROM onemap_lawley_raw`;
+        console.log('✅ Records in onemap_lawley_raw:', count[0].count);
+        
+        // Check recent imports to see what files were imported
+        const recentImports = await sql`
+          SELECT DISTINCT source_file, import_date, COUNT(*) as records
+          FROM onemap_lawley_raw 
+          WHERE source_file IS NOT NULL
+          GROUP BY source_file, import_date
+          ORDER BY import_date DESC
+          LIMIT 5
+        `;
+        
+        if (recentImports.length > 0) {
+          console.log('✅ Recent OneMap imports:');
+          recentImports.forEach((imp, i) => {
+            console.log(`  ${i + 1}. ${imp.source_file} - ${imp.records} records (${imp.import_date})`);
+          });
           
-          if (count[0].count > 0) {
-            // Get a sample record to see structure
-            const sample = await sql`SELECT * FROM ${sql(table)} LIMIT 1`;
-            if (sample.length > 0) {
-              console.log(`✅ ${table} columns:`, Object.keys(sample[0]).slice(0, 10)); // Show first 10 columns
-            }
+          // Get a sample record to see actual data
+          const sample = await sql`
+            SELECT 
+              property_id, 
+              pole_number, 
+              drop_number, 
+              status,
+              date_status_changed,
+              site,
+              field_agent_name_pole_permission,
+              source_file
+            FROM onemap_lawley_raw 
+            WHERE source_file LIKE '%Lawley%'
+            LIMIT 3
+          `;
+          
+          if (sample.length > 0) {
+            console.log('✅ Sample Lawley data records:');
+            sample.forEach((rec, i) => {
+              console.log(`  ${i + 1}. Property: ${rec.property_id}, Pole: ${rec.pole_number || 'N/A'}, Status: ${rec.status}`);
+            });
           }
-        } catch (error) {
-          console.log(`❌ Error reading ${table}:`, error.message);
         }
+        
+      } catch (error) {
+        console.log('❌ Error reading onemap_lawley_raw:', error.message);
+      }
+      
+      // Check import batches table
+      try {
+        const batches = await sql`SELECT * FROM onemap_import_batches ORDER BY import_started DESC LIMIT 5`;
+        console.log('\n📊 Import batches:', batches.length);
+        
+        if (batches.length > 0) {
+          batches.forEach((batch, i) => {
+            console.log(`  ${i + 1}. ${batch.source_file}: ${batch.processed_rows || 0} rows processed (${batch.status})`);
+            if (batch.error_details) {
+              console.log(`     Error: ${JSON.stringify(batch.error_details)}`);
+            }
+          });
+        } else {
+          console.log('  No import batches found - data may not have been imported yet');
+        }
+        
+        // Check all public tables to see if data exists elsewhere
+        const allTables = await sql`
+          SELECT table_name, 
+                 (SELECT COUNT(*) 
+                  FROM information_schema.tables t2 
+                  WHERE t2.table_name = t1.table_name) as row_count
+          FROM information_schema.tables t1
+          WHERE table_schema = 'public'
+          AND table_name NOT LIKE 'pg_%'
+          ORDER BY table_name
+        `;
+        
+        console.log('\n📋 All tables in database:');
+        for (const table of allTables) {
+          console.log(`  - ${table.table_name}`);
+        }
+        
+      } catch (error) {
+        console.log('❌ Error checking import batches:', error.message);
       }
     } else {
       console.log('❌ No OneMap tables found');

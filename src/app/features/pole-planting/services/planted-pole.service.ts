@@ -28,6 +28,7 @@ export class PlantedPoleService {
   
   private readonly PLANTED_POLES_COLLECTION = 'planted-poles';
   private readonly STAGING_COLLECTION = 'staging-field-captures';
+  private readonly REACT_APP_STAGING_COLLECTION = 'pole-plantings-staging';
 
   /**
    * Get all planted poles

@@ -58,6 +58,13 @@ ModuleRegistry.registerModules([AllCommunityModule]);
       </div>
 
 
+      <!-- Debug Info - Remove after testing -->
+      <div style="margin-bottom: 16px; padding: 16px; background: #f5f5f5; border-radius: 4px;">
+        <p>Debug: Contractors count: {{ contractors().length }}</p>
+        <p>Debug: First contractor: {{ contractors()[0]?.companyName || 'None' }}</p>
+        <p>Debug: Sample contractor data: {{ contractors()[0] | json }}</p>
+      </div>
+
       <!-- Grid Container -->
       <mat-card class="grid-card">
         <mat-card-content>
@@ -67,15 +74,12 @@ ModuleRegistry.registerModules([AllCommunityModule]);
               [rowData]="contractors()"
               [columnDefs]="columnDefs"
               [defaultColDef]="defaultColDef"
-              [animateRows]="true"
+              [animateRows]="false"
               [pagination]="true"
               [paginationPageSize]="20"
-              [paginationPageSizeSelector]="[10, 20, 50, 100]"
               [enableCellTextSelection]="true"
-              [ensureDomOrder]="true"
               (gridReady)="onGridReady($event)"
               (rowDoubleClicked)="onRowDoubleClicked($event)"
-              [overlayLoadingTemplate]="'<span>Loading contractors...</span>'"
               [overlayNoRowsTemplate]="'<span>No contractors found</span>'"
             >
             </ag-grid-angular>
@@ -155,8 +159,13 @@ ModuleRegistry.registerModules([AllCommunityModule]);
     }
 
     .grid-container {
-      height: calc(100vh - 300px);
-      min-height: 500px;
+      height: 600px;
+      width: 100%;
+    }
+    
+    .ag-theme-material {
+      height: 100%;
+      width: 100%;
     }
 
     .status-chip {
@@ -378,12 +387,38 @@ export class ContractorGridComponent implements OnInit {
   }
 
   loadContractors() {
+    console.log('ContractorGridComponent: Loading contractors...');
     this.contractorService.getContractors().subscribe({
       next: (contractors) => {
+        console.log('ContractorGridComponent: Contractors received:', contractors?.length || 0);
+        
+        if (contractors && contractors.length > 0) {
+          console.log('ContractorGridComponent: Sample contractor:', {
+            id: contractors[0].id,
+            companyName: contractors[0].companyName,
+            primaryContact: contractors[0].primaryContact
+          });
+        }
+        
         this.contractors.set(contractors || []);
+        
+        // Force AG Grid to refresh data if grid is ready
+        if (this.gridApi && contractors && contractors.length > 0) {
+          console.log('ContractorGridComponent: Grid API available, forcing refresh');
+          this.gridApi.setGridOption('rowData', contractors);
+          
+          // Check what AG Grid thinks it has
+          setTimeout(() => {
+            const rowCount = this.gridApi.getDisplayedRowCount();
+            const allRowData: any[] = [];
+            this.gridApi.forEachNode(node => allRowData.push(node.data));
+            console.log('ContractorGridComponent: AG Grid row count:', rowCount);
+            console.log('ContractorGridComponent: AG Grid data sample:', allRowData[0]);
+          }, 100);
+        }
       },
       error: (error) => {
-        console.error('Error loading contractors:', error);
+        console.error('ContractorGridComponent: Error loading contractors:', error);
         this.contractors.set([]);
       }
     });
@@ -391,6 +426,24 @@ export class ContractorGridComponent implements OnInit {
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
+    console.log('ContractorGridComponent: Grid API ready');
+    
+    // Check if data is available
+    const contractorsData = this.contractors();
+    console.log('ContractorGridComponent: Current contractors data:', contractorsData.length);
+    
+    if (contractorsData.length > 0) {
+      console.log('ContractorGridComponent: Setting row data immediately');
+      console.log('ContractorGridComponent: Sample data:', contractorsData[0]);
+      this.gridApi.setGridOption('rowData', contractorsData);
+      
+      // Additional debugging
+      setTimeout(() => {
+        const displayedRows = this.gridApi.getDisplayedRowCount();
+        console.log('ContractorGridComponent: Displayed rows after set:', displayedRows);
+      }, 1000);
+    }
+    
     this.gridApi.sizeColumnsToFit();
   }
 

@@ -1328,8 +1328,8 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
       this.capturedPhotos.set([]);
       this.currentDraftId.set(null);
       
-      // Navigate to offline list or back
-      this.router.navigate(['../'], { relativeTo: this.route });
+      // Reset stepper to step 1 instead of navigating away
+      this.stepper.reset();
     } catch (error) {
       console.error('Error saving offline:', error);
       this.snackBar.open(
@@ -1346,10 +1346,14 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
    * Handle successful sync completion - reset stepper to step 1
    */
   onSyncCompleted(): void {
+    console.log('🎯 DEBUG: onSyncCompleted method called');
+    
     // Reset the stepper to the first step
+    console.log('🎯 DEBUG: Resetting stepper to step 1');
     this.stepper.reset();
     
     // Reset all forms
+    console.log('🎯 DEBUG: Resetting forms and data');
     this.basicInfoForm.reset();
     this.locationForm.reset();
     this.currentPosition.set(null);
@@ -1357,10 +1361,13 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
     this.currentDraftId.set(null);
     
     // Show success message
+    console.log('🎯 DEBUG: Showing success message');
     this.snackBar.open(
       'Sync completed! Ready to capture a new pole.',
       'Close',
       { duration: 3000 }
     );
+    
+    console.log('🎯 DEBUG: onSyncCompleted method finished - should stay on offline-pole-capture page');
   }
 }

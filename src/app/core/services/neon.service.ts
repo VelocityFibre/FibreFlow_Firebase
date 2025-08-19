@@ -22,7 +22,7 @@ export class NeonService {
   /**
    * Execute a raw SQL query
    * @param query SQL query string
-   * @param params Optional parameters for parameterized queries
+   * @param params Optional parameters (DEPRECATED - use string interpolation instead)
    * @returns Observable of query results
    */
   query<T = any>(query: string, params?: any[]): Observable<T[]> {
@@ -32,35 +32,15 @@ export class NeonService {
     }
 
     console.log('NeonService: Executing query:', query.substring(0, 100) + (query.length > 100 ? '...' : ''));
+    
+    // Log warning if params are passed (should not be used with Neon)
     if (params?.length) {
-      console.log('NeonService: Query params:', params);
+      console.warn('NeonService: Parameterized queries are not supported with Neon serverless. Use string interpolation instead.');
+      console.log('NeonService: Ignoring params:', params);
     }
 
     try {
-      // For parameterized queries with Neon serverless
-      if (params && params.length > 0) {
-        console.warn('NeonService: Parameterized queries may not be supported. Attempting parameterized query...');
-        try {
-          const promise = this.sql.query(query, params);
-          return from(promise.catch((error: any) => {
-            console.error('Neon parameterized query failed:', error);
-            // If parameterized query fails, log warning and use template string
-            console.warn('NeonService: Falling back to template string query');
-            const fallbackPromise = this.sql`${query}`;
-            return fallbackPromise;
-          })) as Observable<T[]>;
-        } catch (paramError) {
-          console.error('Neon parameterized query setup error:', paramError);
-          console.warn('NeonService: Using template string query instead');
-          const promise = this.sql`${query}`;
-          return from(promise.catch((error: any) => {
-            console.error('Neon fallback query failed:', error);
-            throw error;
-          })) as Observable<T[]>;
-        }
-      }
-      
-      // For non-parameterized queries
+      // Always use template string queries for Neon serverless compatibility
       const promise = this.sql`${query}`;
       return from(promise.catch((error: any) => {
         console.error('Neon query failed:', error);
@@ -110,10 +90,10 @@ export class NeonService {
    */
   getTableInfo(tableName?: string): Observable<any[]> {
     const query = tableName
-      ? `SELECT * FROM information_schema.tables WHERE table_schema = 'public' AND table_name = $1`
+      ? `SELECT * FROM information_schema.tables WHERE table_schema = 'public' AND table_name = '${tableName.replace(/'/g, "''")}'`
       : `SELECT * FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_name`;
     
-    return this.query(query, tableName ? [tableName] : undefined);
+    return this.query(query);
   }
 
   /**
@@ -164,7 +144,7 @@ export class NeonService {
       WHERE created_at >= NOW() - INTERVAL '${days} days'
       GROUP BY date
       ORDER BY date
-    `, [days]);
+    `);
   }
 
   /**

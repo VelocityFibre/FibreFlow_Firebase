@@ -58,9 +58,9 @@ const PoleCapture = ({ projectId, resumingPole, onClearResume }) => {
     for (const [photoType, photoData] of Object.entries(photos)) {
       if (photoData && photoData.blob) {
         try {
-          // Create a unique filename
+          // Create a unique filename  
           const filename = `${poleId}_${photoType}_${Date.now()}.jpg`;
-          const photoRef = ref(storage, `pole-plantings/${filename}`);
+          const photoRef = ref(storage, `csv-uploads/${filename}`);
           
           // Upload the photo
           const snapshot = await uploadBytes(photoRef, photoData.blob);

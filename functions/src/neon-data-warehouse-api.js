@@ -235,10 +235,11 @@ app.get('/powerbi/poles', async (req, res) => {
         s.status as current_status,
         s.status_changed_date,
         s.agent_name
-      FROM project_poles p
-      LEFT JOIN onemap_status_history s ON p.pole_number = s.pole_number
-      WHERE s.id IN (
-        SELECT MAX(id) FROM onemap_status_history 
+      FROM status_changes p
+      WHERE p.pole_number IS NOT NULL 
+      AND p.id IN (
+        SELECT MAX(id) FROM status_changes 
+        WHERE pole_number IS NOT NULL
         GROUP BY pole_number
       )
       ORDER BY p.pole_number
@@ -297,9 +298,12 @@ app.get('/powerbi/status-history', async (req, res) => {
 // Get data from ALL tables in one endpoint (for Power BI multi-table import)
 app.get('/all-data', async (req, res) => {
   try {
+    // Updated to query actual tables that exist in Neon
     const tables = [
+      'status_changes', // Main table with 15,651 rows of OneMap data
+      'import_batches', // Import tracking
       'projects', 'project_poles', 'project_drops', 'project_fibre',
-      'sow_drops', 'sow_fibre', 'onemap_status_history', 'import_batches'
+      'sow_drops', 'sow_fibre', 'onemap_status_history'
     ];
     
     const allData = {};

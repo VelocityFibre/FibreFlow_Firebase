@@ -145,14 +145,17 @@ export class StagingSyncUiComponent implements OnInit, OnDestroy {
       const failureCount = results.filter(r => !r.success).length;
       
       if (successCount > 0) {
+        console.log('🚀 DEBUG: Sync successful, showing snack bar');
         this.snackBar.open(
           `Successfully synced ${successCount} pole(s) to staging`, 
           'Close', 
           { duration: 5000 }
         );
         
+        console.log('🚀 DEBUG: About to emit syncCompleted event');
         // Emit event to notify parent component of successful sync
         this.syncCompleted.emit();
+        console.log('🚀 DEBUG: syncCompleted event emitted');
       }
       
       if (failureCount > 0) {

@@ -208,10 +208,13 @@ export class StagingSyncService {
           if (photo.uploadUrl && photo.uploadStatus === 'uploaded') {
             // Use existing URL
             photoUrls[photo.type] = photo.uploadUrl;
+            console.log(`✅ Using existing photo URL for ${photo.type}: ${photo.uploadUrl}`);
           } else {
             // Upload photo
+            console.log(`🔄 Uploading photo ${photo.type} for pole ${pole.id}`);
             const url = await this.uploadPhoto(pole.id, photo);
             photoUrls[photo.type] = url;
+            console.log(`✅ Photo uploaded successfully: ${photo.type} -> ${url}`);
             
             // Update photo upload status in offline storage
             await this.offlinePoleService.updatePhotoUploadStatus(
@@ -222,8 +225,17 @@ export class StagingSyncService {
             );
           }
         } catch (error) {
-          console.error(`Failed to upload photo ${photo.type}:`, error);
-          // Continue with other photos
+          console.error(`❌ Failed to upload photo ${photo.type} for pole ${pole.id}:`, error);
+          
+          // For development: Skip photo upload errors and continue sync
+          if (error instanceof Error && error.message.includes('unauthorized')) {
+            console.warn(`⚠️ Storage permission error for ${photo.type}, continuing sync without this photo`);
+            // Don't add to photoUrls, but don't fail the entire sync
+            continue;
+          }
+          
+          // For other errors, still continue with sync but log the error
+          console.warn(`⚠️ Photo upload failed for ${photo.type}, continuing sync without this photo`);
         }
       }
       
@@ -422,5 +434,61 @@ export class StagingSyncService {
    */
   clearErrors(): void {
     this.updateProgress({ errors: [] });
+  }
+
+  /**
+   * Update validation status for a staging item
+   */
+  async updateValidationStatus(
+    stagingId: string, 
+    status: 'pending' | 'validating' | 'validated' | 'rejected',
+    validationErrors: ValidationError[] = []
+  ): Promise<void> {
+    try {
+      const stagingDoc = doc(this.firestore, this.STAGING_COLLECTION, stagingId);
+      
+      await updateDoc(stagingDoc, {
+        validation_status: status,
+        validation_errors: validationErrors,
+        validated_at: serverTimestamp()
+      });
+      
+      console.log(`Updated staging item ${stagingId} status to ${status}`);
+    } catch (error) {
+      console.error('Error updating validation status:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Reject a staging item with optional reason
+   */
+  async rejectStagingItem(stagingId: string, reason?: string): Promise<void> {
+    const validationErrors: ValidationError[] = [];
+    
+    if (reason) {
+      validationErrors.push({
+        field: 'general',
+        rule: 'manual_rejection',
+        message: reason,
+        severity: 'error'
+      });
+    } else {
+      validationErrors.push({
+        field: 'general',
+        rule: 'manual_rejection',
+        message: 'Item rejected during manual verification',
+        severity: 'error'
+      });
+    }
+    
+    await this.updateValidationStatus(stagingId, 'rejected', validationErrors);
+  }
+
+  /**
+   * Approve a staging item
+   */
+  async approveStagingItem(stagingId: string): Promise<void> {
+    await this.updateValidationStatus(stagingId, 'validated', []);
   }
 }
