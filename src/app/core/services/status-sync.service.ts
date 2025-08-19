@@ -100,6 +100,7 @@ export class StatusSyncService {
    */
   private fetchLatestStatusUpdates(): Observable<StatusUpdate[]> {
     const since = this.lastSyncTimestamp || new Date(Date.now() - 24 * 60 * 60 * 1000); // Default to last 24 hours
+    const sinceStr = since.toISOString();
     
     return this.neonService.query<any>(`
       WITH latest_updates AS (
@@ -111,7 +112,7 @@ export class StatusSyncService {
           contractor,
           ROW_NUMBER() OVER (PARTITION BY pole_number ORDER BY status_date DESC) as rn
         FROM onemap_status_changes
-        WHERE status_date > $1
+        WHERE status_date > '${sinceStr}'
           AND pole_number IS NOT NULL
       ),
       previous_status AS (
@@ -119,7 +120,7 @@ export class StatusSyncService {
           pole_number,
           status as previous_status
         FROM onemap_status_changes
-        WHERE status_date <= $1
+        WHERE status_date <= '${sinceStr}'
           AND pole_number IS NOT NULL
         ORDER BY pole_number, status_date DESC
       )
@@ -134,7 +135,7 @@ export class StatusSyncService {
       LEFT JOIN previous_status ps ON lu.pole_number = ps.pole_number
       WHERE lu.rn = 1
       ORDER BY lu.status_date DESC
-    `, [since]).pipe(
+    `).pipe(
       map(results => {
         // Update last sync timestamp to the newest status date
         if (results.length > 0) {
@@ -170,9 +171,9 @@ export class StatusSyncService {
         contractor,
         LAG(status) OVER (ORDER BY status_date) as previous_status
       FROM onemap_status_changes
-      WHERE pole_number = $1
+      WHERE pole_number = '${poleNumber.replace(/'/g, "''")}'
       ORDER BY status_date DESC
-    `, [poleNumber]).pipe(
+    `).pipe(
       map(results => results.map(r => ({
         poleNumber: r.pole_number,
         previousStatus: r.previous_status,

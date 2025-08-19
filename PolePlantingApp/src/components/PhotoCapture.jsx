@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 
-const PhotoCapture = ({ photoType, label, onCapture, existingPhoto }) => {
+const PhotoCapture = ({ onPhotoCapture, existingPhoto, placeholder = "📷 Take Photo", instruction = "", showExample = false }) => {
   const [processing, setProcessing] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -71,7 +71,7 @@ const PhotoCapture = ({ photoType, label, onCapture, existingPhoto }) => {
 
     try {
       const processedPhoto = await processImage(file);
-      onCapture(photoType, processedPhoto);
+      onPhotoCapture(processedPhoto.dataUrl);
     } catch (error) {
       console.error('Error processing image:', error);
       alert('Error processing image. Please try again.');
@@ -85,7 +85,7 @@ const PhotoCapture = ({ photoType, label, onCapture, existingPhoto }) => {
   };
 
   const handleRetake = () => {
-    onCapture(photoType, null);
+    onPhotoCapture(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -93,13 +93,6 @@ const PhotoCapture = ({ photoType, label, onCapture, existingPhoto }) => {
 
   return (
     <div className="photo-capture">
-      <div className="photo-header">
-        <h4>{label}</h4>
-        {existingPhoto && (
-          <span className="photo-status captured">✓ Captured</span>
-        )}
-      </div>
-
       <input
         ref={fileInputRef}
         type="file"
@@ -110,22 +103,12 @@ const PhotoCapture = ({ photoType, label, onCapture, existingPhoto }) => {
       />
 
       {existingPhoto ? (
-        <div className="photo-preview">
+        <div className="photo-preview captured">
           <img 
-            src={existingPhoto.dataUrl || existingPhoto.url} 
-            alt={label}
+            src={existingPhoto} 
+            alt="Captured"
             className="preview-image"
           />
-          <div className="photo-info">
-            <p>Size: {Math.round(existingPhoto.size / 1024)}KB</p>
-            <p>Dimensions: {existingPhoto.dimensions.width}×{existingPhoto.dimensions.height}</p>
-            {existingPhoto.uploadFailed && (
-              <p style={{color: 'orange'}}>⚠️ Upload failed - will retry on sync</p>
-            )}
-            {existingPhoto.url && (
-              <p style={{color: 'green'}}>✓ Uploaded to cloud</p>
-            )}
-          </div>
           <button 
             onClick={handleRetake}
             className="retake-button"
@@ -135,19 +118,16 @@ const PhotoCapture = ({ photoType, label, onCapture, existingPhoto }) => {
           </button>
         </div>
       ) : (
-        <div className="photo-placeholder">
+        <button 
+          className="photo-capture-box"
+          onClick={handleCapture}
+          disabled={processing}
+        >
           <div className="placeholder-content">
-            <span className="camera-icon">📷</span>
-            <p>Tap to capture {label.toLowerCase()}</p>
+            <span>{placeholder}</span>
+            {instruction && <p className="instruction">{instruction}</p>}
           </div>
-          <button 
-            onClick={handleCapture}
-            disabled={processing}
-            className="capture-button"
-          >
-            {processing ? 'Processing...' : 'Capture Photo'}
-          </button>
-        </div>
+        </button>
       )}
     </div>
   );

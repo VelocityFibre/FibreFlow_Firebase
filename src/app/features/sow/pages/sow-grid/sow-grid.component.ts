@@ -248,8 +248,7 @@ export class SOWGridComponent implements OnInit {
     
     // Load all three data types in parallel
     const poles$ = this.neonService.query<any>(
-      'SELECT * FROM sow_poles WHERE project_id = $1',
-      [this.projectFilter]
+      `SELECT * FROM sow_poles WHERE project_id = '${this.projectFilter.replace(/'/g, "''")}'`
     ).pipe(
       catchError(error => {
         console.error('Error loading poles:', error);
@@ -258,8 +257,7 @@ export class SOWGridComponent implements OnInit {
     );
     
     const drops$ = this.neonService.query<any>(
-      'SELECT * FROM sow_drops WHERE project_id = $1',
-      [this.projectFilter]
+      `SELECT * FROM sow_drops WHERE project_id = '${this.projectFilter.replace(/'/g, "''")}'`
     ).pipe(
       catchError(error => {
         console.error('Error loading drops:', error);
@@ -268,8 +266,7 @@ export class SOWGridComponent implements OnInit {
     );
     
     const fibre$ = this.neonService.query<any>(
-      'SELECT * FROM sow_fibre WHERE project_id = $1',
-      [this.projectFilter]
+      `SELECT * FROM sow_fibre WHERE project_id = '${this.projectFilter.replace(/'/g, "''")}'`
     ).pipe(
       catchError(error => {
         console.error('Error loading fibre:', error);

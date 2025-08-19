@@ -1246,17 +1246,25 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
   }
 
   async saveOffline(): Promise<void> {
+    console.log('💾 DEBUG: saveOffline() called');
+    
     if (!this.basicInfoForm.valid || !this.locationForm.valid) {
+      console.log('❌ DEBUG: Form validation failed');
       this.snackBar.open('Please complete basic information and GPS location', 'OK', { duration: 3000 });
       return;
     }
     
     // Photos are optional - can save with any number of photos
     if (this.capturedPhotos().length === 0) {
+      console.log('⚠️ DEBUG: No photos captured, confirming with user');
       const confirmed = await this.confirmSaveWithoutPhotos();
-      if (!confirmed) return;
+      if (!confirmed) {
+        console.log('❌ DEBUG: User cancelled save without photos');
+        return;
+      }
     }
     
+    console.log('✅ DEBUG: Starting save process');
     this.isSaving.set(true);
     
     try {
@@ -1329,15 +1337,18 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
       this.currentDraftId.set(null);
       
       // Reset stepper to step 1 instead of navigating away
+      console.log('🔄 DEBUG: Resetting stepper to step 1');
       this.stepper.reset();
+      console.log('✅ DEBUG: saveOffline() completed successfully - should stay on page');
     } catch (error) {
-      console.error('Error saving offline:', error);
+      console.error('❌ DEBUG: Error saving offline:', error);
       this.snackBar.open(
         'Failed to save pole data offline',
         'OK',
         { duration: 3000 }
       );
     } finally {
+      console.log('🏁 DEBUG: saveOffline() finished, setting isSaving to false');
       this.isSaving.set(false);
     }
   }

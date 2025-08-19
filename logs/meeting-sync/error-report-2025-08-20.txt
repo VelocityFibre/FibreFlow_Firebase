@@ -1,0 +1,41 @@
+FibreFlow Meeting Sync Report - FAILED
+=======================================
+Date: 2025-08-20 09:00:00
+Exit Code: 1
+Sync Period: Last 1 days
+
+Error Details:
+❌ Error executing curl: Error: Command failed: curl -s -X POST https://api.fireflies.ai/graphql       -H "Content-Type: application/json"       -H "Authorization: Bearer 894886b5-b232-4319-95c7-1296782e9ea6"       -d '{"query":" query { transcripts { id title date duration participants organizer_email meeting_link summary { keywords action_items outline overview short_summary bullet_gist } } } "}'
+    at genericNodeError (node:internal/errors:983:15)
+    at wrappedFn (node:internal/errors:537:14)
+❌ Sync failed: Command failed: curl -s -X POST https://api.fireflies.ai/graphql       -H "Content-Type: application/json"       -H "Authorization: Bearer 894886b5-b232-4319-95c7-1296782e9ea6"       -d '{"query":" query { transcripts { id title date duration participants organizer_email meeting_link summary { keywords action_items outline overview short_summary bullet_gist } } } "}'
+[2025-08-20 09:00:00] ❌ Meeting sync failed with exit code: 1
+
+Last 50 lines of log:
+--------------------
+[2025-08-20 09:00:00] =========================================
+[2025-08-20 09:00:00] Starting daily meeting sync
+[2025-08-20 09:00:00] =========================================
+[2025-08-20 09:00:00] Syncing yesterday's meetings only
+[2025-08-20 09:00:00] Override: Syncing last 1 days
+[2025-08-20 09:00:00] Running meeting sync for the last 1 days...
+🚀 Starting Fireflies sync...
+
+📅 Fetching meetings from 2025/08/19 to 2025/08/20
+❌ Error executing curl: Error: Command failed: curl -s -X POST https://api.fireflies.ai/graphql       -H "Content-Type: application/json"       -H "Authorization: Bearer 894886b5-b232-4319-95c7-1296782e9ea6"       -d '{"query":" query { transcripts { id title date duration participants organizer_email meeting_link summary { keywords action_items outline overview short_summary bullet_gist } } } "}'
+
+    at genericNodeError (node:internal/errors:983:15)
+    at wrappedFn (node:internal/errors:537:14)
+    at ChildProcess.exithandler (node:child_process:414:12)
+    at ChildProcess.emit (node:events:507:28)
+    at maybeClose (node:internal/child_process:1101:16)
+    at ChildProcess._handle.onexit (node:internal/child_process:305:5) {
+  code: 6,
+  killed: false,
+  signal: null,
+  cmd: `curl -s -X POST https://api.fireflies.ai/graphql       -H "Content-Type: application/json"       -H "Authorization: Bearer 894886b5-b232-4319-95c7-1296782e9ea6"       -d '{"query":" query { transcripts { id title date duration participants organizer_email meeting_link summary { keywords action_items outline overview short_summary bullet_gist } } } "}'`
+}
+
+❌ Sync failed: Command failed: curl -s -X POST https://api.fireflies.ai/graphql       -H "Content-Type: application/json"       -H "Authorization: Bearer 894886b5-b232-4319-95c7-1296782e9ea6"       -d '{"query":" query { transcripts { id title date duration participants organizer_email meeting_link summary { keywords action_items outline overview short_summary bullet_gist } } } "}'
+
+[2025-08-20 09:00:00] ❌ Meeting sync failed with exit code: 1

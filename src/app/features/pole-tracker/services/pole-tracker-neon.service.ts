@@ -85,32 +85,25 @@ export class PoleTrackerNeonService {
     
     if (filter) {
       if (filter.projectId) {
-        query += ` AND p.project_id = $${paramIndex++}`;
-        params.push(filter.projectId);
+        query += ` AND p.project_id = '${filter.projectId.replace(/'/g, "''")}'`;
       }
       if (filter.contractorId) {
-        query += ` AND p.contractor_id = $${paramIndex++}`;
-        params.push(filter.contractorId);
+        query += ` AND p.contractor_id = '${filter.contractorId.replace(/'/g, "''")}'`;
       }
       if (filter.workingTeam) {
-        query += ` AND p.working_team = $${paramIndex++}`;
-        params.push(filter.workingTeam);
+        query += ` AND p.working_team = '${filter.workingTeam.replace(/'/g, "''")}'`;
       }
       if (filter.poleType) {
-        query += ` AND p.pole_type = $${paramIndex++}`;
-        params.push(filter.poleType);
+        query += ` AND p.pole_type = '${filter.poleType.replace(/'/g, "''")}'`;
       }
       if (filter.qualityChecked !== undefined) {
-        query += ` AND p.quality_checked = $${paramIndex++}`;
-        params.push(filter.qualityChecked);
+        query += ` AND p.quality_checked = ${filter.qualityChecked}`;
       }
       if (filter.dateFrom) {
-        query += ` AND p.date_installed >= $${paramIndex++}`;
-        params.push(filter.dateFrom);
+        query += ` AND p.date_installed >= '${filter.dateFrom.toISOString()}'`;
       }
       if (filter.dateTo) {
-        query += ` AND p.date_installed <= $${paramIndex++}`;
-        params.push(filter.dateTo);
+        query += ` AND p.date_installed <= '${filter.dateTo.toISOString()}'`;
       }
     }
     
@@ -119,7 +112,7 @@ export class PoleTrackerNeonService {
       ORDER BY p.created_at DESC
     `;
     
-    return this.neonService.query<NeonPole>(query, params).pipe(
+    return this.neonService.query<NeonPole>(query).pipe(
       map(rows => rows.map(row => this.mapNeonPoleToModel(row))),
       catchError(error => {
         console.error('Error fetching poles:', error);
@@ -148,7 +141,23 @@ export class PoleTrackerNeonService {
       WHERE p.id = $1::uuid
     `;
     
-    return this.neonService.query<NeonPole>(query, [id]).pipe(
+    const queryWithId = `
+      SELECT 
+        p.*,
+        pr.name as project_name,
+        pr.project_code,
+        p.connected_drops,
+        (
+          SELECT json_agg(sh ORDER BY sh.changed_at DESC)
+          FROM status_history sh
+          WHERE sh.pole_number = p.pole_number
+        ) as status_history
+      FROM project_poles p
+      LEFT JOIN projects pr ON p.project_id = pr.id
+      WHERE p.id = '${id.replace(/'/g, "''")}'
+    `;
+    
+    return this.neonService.query<NeonPole>(queryWithId).pipe(
       map(rows => rows.length > 0 ? this.mapNeonPoleToModel(rows[0]) : null),
       catchError(error => {
         console.error('Error fetching pole:', error);
@@ -168,7 +177,14 @@ export class PoleTrackerNeonService {
       WHERE LOWER(p.pole_number) = LOWER($1)
     `;
     
-    return this.neonService.query<NeonPole>(query, [poleNumber]).pipe(
+    const queryWithPoleNumber = `
+      SELECT p.*, pr.name as project_name, pr.project_code, p.connected_drops
+      FROM project_poles p
+      LEFT JOIN projects pr ON p.project_id = pr.id
+      WHERE LOWER(p.pole_number) = LOWER('${poleNumber.replace(/'/g, "''")}')
+    `;
+    
+    return this.neonService.query<NeonPole>(queryWithPoleNumber).pipe(
       map(rows => rows.length > 0 ? this.mapNeonPoleToModel(rows[0]) : null),
       catchError(error => {
         console.error('Error fetching pole by number:', error);
@@ -190,6 +206,17 @@ export class PoleTrackerNeonService {
         return true;
       }),
       switchMap(() => {
+        // Parse GPS from location string
+        const gps = this.parseLocation(pole.location);
+        const vfPoleId = pole.vfPoleId || this.generateVfPoleId(pole.projectCode!, pole.poleNumber!);
+        const status = pole.status || 'Permission not granted';
+        const dateInstalled = pole.dateInstalled || new Date();
+        const poleType = pole.poleType || 'wooden';
+        const dropCount = pole.dropCount || 0;
+        const maxCapacity = pole.maxCapacity || 12;
+        const connectedDrops = JSON.stringify(pole.connectedDrops || []);
+        const createdBy = pole.createdBy || 'system';
+        
         const query = `
           INSERT INTO project_poles (
             project_id, pole_number, vf_pole_id, status,
@@ -199,35 +226,29 @@ export class PoleTrackerNeonService {
             drop_count, max_capacity, connected_drops,
             created_by, updated_by
           ) VALUES (
-            $1::uuid, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $17
+            '${pole.projectId!.replace(/'/g, "''")}', 
+            '${pole.poleNumber!.replace(/'/g, "''")}', 
+            '${vfPoleId.replace(/'/g, "''")}', 
+            '${status.replace(/'/g, "''")}',
+            '${(pole.zone || '').replace(/'/g, "''")}',
+            '${(pole.pon || '').replace(/'/g, "''")}',
+            '${(pole.location || '').replace(/'/g, "''")}',
+            ${gps.lat},
+            ${gps.lon},
+            ${pole.contractorId ? `'${pole.contractorId.replace(/'/g, "''")}'` : 'NULL'},
+            ${pole.workingTeam ? `'${pole.workingTeam.replace(/'/g, "''")}'` : 'NULL'},
+            '${dateInstalled.toISOString()}',
+            '${poleType.replace(/'/g, "''")}',
+            ${dropCount},
+            ${maxCapacity},
+            '${connectedDrops.replace(/'/g, "''")}'::jsonb,
+            '${createdBy.replace(/'/g, "''")}',
+            '${createdBy.replace(/'/g, "''")}'  
           )
           RETURNING id
         `;
         
-        // Parse GPS from location string
-        const gps = this.parseLocation(pole.location);
-        
-        const params = [
-          pole.projectId,
-          pole.poleNumber,
-          pole.vfPoleId || this.generateVfPoleId(pole.projectCode!, pole.poleNumber!),
-          pole.status || 'Permission not granted',
-          pole.zone,
-          pole.pon,
-          pole.location,
-          gps.lat,
-          gps.lon,
-          pole.contractorId,
-          pole.workingTeam,
-          pole.dateInstalled || new Date(),
-          pole.poleType || 'wooden',
-          pole.dropCount || 0,
-          pole.maxCapacity || 12,
-          pole.connectedDrops || [],
-          pole.createdBy || 'system'
-        ];
-        
-        return this.neonService.query<{ id: string }>(query, params);
+        return this.neonService.query<{ id: string }>(query);
       }),
       map(result => result[0].id),
       catchError(error => {
@@ -269,8 +290,19 @@ export class PoleTrackerNeonService {
     Object.entries(mutableUpdates).forEach(([key, value]) => {
       const dbField = this.camelToSnake(key);
       if (allowedFields.includes(dbField)) {
-        updateFields.push(`${dbField} = $${paramIndex++}`);
-        params.push(value);
+        if (value === null || value === undefined) {
+          updateFields.push(`${dbField} = NULL`);
+        } else if (typeof value === 'boolean') {
+          updateFields.push(`${dbField} = ${value}`);
+        } else if (typeof value === 'number') {
+          updateFields.push(`${dbField} = ${value}`);
+        } else if (Array.isArray(value)) {
+          updateFields.push(`${dbField} = '${JSON.stringify(value).replace(/'/g, "''")}'::jsonb`);
+        } else if (value instanceof Date) {
+          updateFields.push(`${dbField} = '${value.toISOString()}'`);
+        } else {
+          updateFields.push(`${dbField} = '${String(value).replace(/'/g, "''")}'`);
+        }
       }
     });
     
@@ -279,20 +311,17 @@ export class PoleTrackerNeonService {
     }
     
     // Add updated_by and updated_at
-    updateFields.push(`updated_by = $${paramIndex++}`);
-    params.push(updates.updatedBy || 'system');
+    const updatedBy = (updates.updatedBy || 'system').replace(/'/g, "''");
+    updateFields.push(`updated_by = '${updatedBy}'`);
     updateFields.push(`updated_at = CURRENT_TIMESTAMP`);
-    
-    // Add ID as last parameter
-    params.push(id);
     
     const query = `
       UPDATE project_poles 
       SET ${updateFields.join(', ')}
-      WHERE id = $${paramIndex}::uuid
+      WHERE id = '${id.replace(/'/g, "''")}'
     `;
     
-    return this.neonService.query(query, params).pipe(
+    return this.neonService.query(query).pipe(
       map(() => undefined),
       catchError(error => {
         console.error('Error updating pole:', error);
@@ -308,10 +337,10 @@ export class PoleTrackerNeonService {
     const query = `
       UPDATE project_poles 
       SET status = 'deleted', updated_at = CURRENT_TIMESTAMP
-      WHERE id = $1::uuid
+      WHERE id = '${id.replace(/'/g, "''")}'
     `;
     
-    return this.neonService.query(query, [id]).pipe(
+    return this.neonService.query(query).pipe(
       map(() => undefined),
       catchError(error => {
         console.error('Error deleting pole:', error);
@@ -338,31 +367,30 @@ export class PoleTrackerNeonService {
    * Add status history entry
    */
   addStatusHistory(poleId: string, status: string, notes?: string, changedBy?: string): Observable<void> {
+    const changeDetails = JSON.stringify({ notes, source: 'fibreflow_app' }).replace(/'/g, "''");
+    const statusEscaped = status.replace(/'/g, "''");
+    const changedByEscaped = (changedBy || 'system').replace(/'/g, "''");
+    const poleIdEscaped = poleId.replace(/'/g, "''");
+    
     const query = `
       WITH pole_info AS (
         SELECT pole_number, status, project_id 
         FROM project_poles 
-        WHERE id = $1::uuid
+        WHERE id = '${poleIdEscaped}'
       )
       INSERT INTO status_history (
         property_id, pole_number, old_status, new_status,
         changed_by, changed_at, change_details
       )
-      SELECT project_id::text, pole_number, status, $2, $3, NOW(), $4::jsonb
+      SELECT project_id::text, pole_number, status, '${statusEscaped}', '${changedByEscaped}', NOW(), '${changeDetails}'::jsonb
       FROM pole_info
     `;
     
-    return this.neonService.query(query, [
-      poleId, 
-      status, 
-      changedBy || 'system', 
-      JSON.stringify({ notes, source: 'fibreflow_app' })
-    ]).pipe(
+    return this.neonService.query(query).pipe(
       switchMap(() => {
         // Update pole status
         return this.neonService.query(
-          'UPDATE project_poles SET status = $1 WHERE id = $2::uuid',
-          [status, poleId]
+          `UPDATE project_poles SET status = '${statusEscaped}' WHERE id = '${poleIdEscaped}'`
         );
       }),
       map(() => undefined),
@@ -384,10 +412,10 @@ export class PoleTrackerNeonService {
     const query = `
       UPDATE project_poles 
       SET ${uploadColumn} = true, updated_at = CURRENT_TIMESTAMP
-      WHERE id = $1::uuid
+      WHERE id = '${poleId.replace(/'/g, "''")}'
     `;
     
-    return this.neonService.query(query, [poleId]).pipe(
+    return this.neonService.query(query).pipe(
       map(() => undefined),
       catchError(error => {
         console.error('Error uploading photo:', error);
@@ -401,11 +429,9 @@ export class PoleTrackerNeonService {
    */
   getStatistics(projectId?: string): Observable<PoleTrackerStats> {
     let whereClause = '';
-    const params: any[] = [];
     
     if (projectId) {
-      whereClause = 'WHERE p.project_id = $1::uuid';
-      params.push(projectId);
+      whereClause = `WHERE p.project_id = '${projectId.replace(/'/g, "''")}'`;
     }
     
     const query = `
@@ -460,7 +486,7 @@ export class PoleTrackerNeonService {
                ps.poles_near_capacity, ps.avg_drops_per_pole
     `;
     
-    return this.neonService.query<any>(query, params).pipe(
+    return this.neonService.query<any>(query).pipe(
       map(rows => {
         if (rows.length === 0) {
           return this.getEmptyStats();
@@ -502,20 +528,19 @@ export class PoleTrackerNeonService {
    * Validate pole number uniqueness
    */
   validatePoleNumber(poleNumber: string, excludeId?: string): Observable<boolean> {
+    const poleNumberEscaped = poleNumber.replace(/'/g, "''");
     const query = excludeId
       ? `SELECT NOT EXISTS(
           SELECT 1 FROM project_poles 
-          WHERE LOWER(pole_number) = LOWER($1) 
-          AND id != $2::uuid
+          WHERE LOWER(pole_number) = LOWER('${poleNumberEscaped}') 
+          AND id != '${excludeId.replace(/'/g, "''")}'  
         ) as is_valid`
       : `SELECT NOT EXISTS(
           SELECT 1 FROM project_poles 
-          WHERE LOWER(pole_number) = LOWER($1)
+          WHERE LOWER(pole_number) = LOWER('${poleNumberEscaped}')
         ) as is_valid`;
     
-    const params = excludeId ? [poleNumber, excludeId] : [poleNumber];
-    
-    return this.neonService.query<{ is_valid: boolean }>(query, params).pipe(
+    return this.neonService.query<{ is_valid: boolean }>(query).pipe(
       map(rows => rows[0]?.is_valid || false),
       catchError(() => of(false))
     );
@@ -526,8 +551,7 @@ export class PoleTrackerNeonService {
    */
   checkPoleCapacity(poleId: string): Observable<boolean> {
     return this.neonService.query<{ drop_count: number; max_capacity: number }>(
-      'SELECT drop_count, max_capacity FROM project_poles WHERE id = $1::uuid',
-      [poleId]
+      `SELECT drop_count, max_capacity FROM project_poles WHERE id = '${poleId.replace(/'/g, "''")}'`
     ).pipe(
       map(rows => {
         if (rows.length === 0) return false;
@@ -550,11 +574,11 @@ export class PoleTrackerNeonService {
         p.pon
       FROM project_drops d
       JOIN project_poles p ON d.connected_to_pole = p.pole_number
-      WHERE p.id = $1::uuid
+      WHERE p.id = '${poleId.replace(/'/g, "''")}'
       ORDER BY d.drop_number
     `;
     
-    return this.neonService.query(query, [poleId]).pipe(
+    return this.neonService.query(query).pipe(
       catchError(error => {
         console.error('Error fetching connected drops:', error);
         return of([]);

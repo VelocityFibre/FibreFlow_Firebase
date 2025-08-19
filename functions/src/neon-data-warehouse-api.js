@@ -99,9 +99,8 @@ app.get('/tables/:tableName/schema', async (req, res) => {
       ORDER BY ordinal_position
     `;
     
-    const sampleData = await sql`
-      SELECT * FROM ${sql(tableName)} LIMIT 3
-    `;
+    const sampleQuery = `SELECT * FROM ${tableName} LIMIT 3`;
+    const sampleData = await sql(sampleQuery);
     
     res.json({
       success: true,
@@ -123,20 +122,17 @@ app.get('/tables/:tableName/schema', async (req, res) => {
 app.get('/tables/:tableName', async (req, res) => {
   try {
     const { tableName } = req.params;
-    const limit = parseInt(req.query.limit) || 1000;
+    const limit = parseInt(req.query.limit) || 50000; // Higher default for Power BI
     const offset = parseInt(req.query.offset) || 0;
     
     // Get total count
-    const countResult = await sql`
-      SELECT COUNT(*) as total FROM ${sql(tableName)}
-    `;
+    const countQuery = `SELECT COUNT(*) as total FROM ${tableName}`;
+    const countResult = await sql(countQuery);
     const total = parseInt(countResult[0].total);
     
     // Get data with pagination
-    const data = await sql`
-      SELECT * FROM ${sql(tableName)} 
-      LIMIT ${limit} OFFSET ${offset}
-    `;
+    const dataQuery = `SELECT * FROM ${tableName} LIMIT ${limit} OFFSET ${offset}`;
+    const data = await sql(dataQuery);
     
     res.json({
       success: true,
@@ -168,8 +164,8 @@ app.get('/dashboard', async (req, res) => {
       sql`SELECT COUNT(*) as total_projects FROM projects`,
       
       // Poles data
-      sql`SELECT COUNT(*) as total_poles FROM project_poles`,
-      sql`SELECT status, COUNT(*) as count FROM onemap_status_history 
+      sql`SELECT COUNT(DISTINCT pole_number) as total_poles FROM status_changes WHERE pole_number IS NOT NULL`,
+      sql`SELECT status, COUNT(*) as count FROM status_changes 
           GROUP BY status ORDER BY count DESC LIMIT 10`,
       
       // Recent imports
@@ -276,7 +272,7 @@ app.get('/powerbi/status-history', async (req, res) => {
       FROM status_changes
       WHERE created_at IS NOT NULL
       ORDER BY created_at DESC
-      LIMIT 10000
+      -- No limit for Power BI comprehensive data
     `;
     
     res.json({
@@ -311,7 +307,9 @@ app.get('/all-data', async (req, res) => {
     
     for (const table of tables) {
       try {
-        const data = await sql`SELECT * FROM ${sql(table)} LIMIT 1000`;
+        // Get ALL data for Power BI (no limit for comprehensive reporting)
+        const query = `SELECT * FROM ${table}`;
+        const data = await sql(query);
         allData[table] = data;
       } catch (e) {
         console.log(`Table ${table} not accessible: ${e.message}`);
@@ -343,8 +341,8 @@ app.get('/all-data', async (req, res) => {
 // Export as Firebase Function
 exports.neonDataWarehouse = functions
   .runWith({
-    memory: '1GB',
-    timeoutSeconds: 120
+    memory: '2GB', // Increased for large datasets
+    timeoutSeconds: 300 // 5 minutes for large data exports
   })
   .https
   .onRequest(app);

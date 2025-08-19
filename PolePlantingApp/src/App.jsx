@@ -1,107 +1,61 @@
 import React, { useState, useEffect } from 'react';
-import ProjectSelector from './components/ProjectSelector';
-import PoleCapture from './components/PoleCapture';
-import IncompletePoles from './components/IncompletePoles';
+import Dashboard from './components/Dashboard';
+import WizardCapture from './components/WizardCapture';
 import './App.css'
 
 function App() {
-  const [selectedProject, setSelectedProject] = useState('');
+  const [currentView, setCurrentView] = useState('dashboard');
+  const [selectedProject, setSelectedProject] = useState(null);
   const [resumingPole, setResumingPole] = useState(null);
-  const [activeTab, setActiveTab] = useState('capture');
 
-  // Auto-switch to capture tab when project is selected
+  // Load last selected project from localStorage
   useEffect(() => {
-    if (selectedProject && activeTab !== 'capture') {
-      setActiveTab('capture');
+    const lastProject = localStorage.getItem('lastSelectedProject');
+    if (lastProject) {
+      setSelectedProject(JSON.parse(lastProject));
     }
-  }, [selectedProject]);
+  }, []);
 
-  const handleProjectSelect = (projectId) => {
-    setSelectedProject(projectId);
-    setResumingPole(null); // Clear any resumed pole when switching projects
+  const handleNewCapture = (project) => {
+    setSelectedProject(project);
+    setResumingPole(null);
+    setCurrentView('capture');
+    localStorage.setItem('lastSelectedProject', JSON.stringify(project));
   };
 
-  const handleResumeCapture = (pole) => {
-    setResumingPole(pole);
-    setActiveTab('capture');
+  const handleResumeCapture = (poleData) => {
+    setResumingPole(poleData);
+    setCurrentView('capture');
+  };
+
+  const handleBackToDashboard = () => {
+    setCurrentView('dashboard');
+    setResumingPole(null);
+  };
+
+  const handleCaptureComplete = () => {
+    setCurrentView('dashboard');
+    setResumingPole(null);
   };
 
   return (
     <div className="app">
-      <header className="app-header">
-        <h1>🌴 Pole Planting App</h1>
-        <p>Field Worker Tool for Fiber Optic Pole Installation</p>
-      </header>
+      {currentView === 'dashboard' && (
+        <Dashboard 
+          onNewCapture={handleNewCapture}
+          onResumeCapture={handleResumeCapture}
+          selectedProject={selectedProject}
+        />
+      )}
 
-      <main className="app-main">
-        {/* Project Selection */}
-        <section className="project-section">
-          <ProjectSelector 
-            onProjectSelect={handleProjectSelect}
-            selectedProject={selectedProject}
-          />
-        </section>
-
-        {selectedProject && (
-          <>
-            {/* Tab Navigation */}
-            <nav className="tab-navigation">
-              <button 
-                className={`tab ${activeTab === 'capture' ? 'active' : ''}`}
-                onClick={() => setActiveTab('capture')}
-              >
-                📷 Capture Pole
-              </button>
-              <button 
-                className={`tab ${activeTab === 'incomplete' ? 'active' : ''}`}
-                onClick={() => setActiveTab('incomplete')}
-              >
-                📋 Incomplete Poles
-              </button>
-            </nav>
-
-            {/* Tab Content */}
-            <section className="tab-content">
-              {activeTab === 'capture' && (
-                <PoleCapture 
-                  projectId={selectedProject}
-                  resumingPole={resumingPole}
-                  onClearResume={() => setResumingPole(null)}
-                />
-              )}
-              
-              {activeTab === 'incomplete' && (
-                <IncompletePoles 
-                  projectId={selectedProject}
-                  onResumeCapture={handleResumeCapture}
-                />
-              )}
-            </section>
-          </>
-        )}
-
-        {!selectedProject && (
-          <div className="welcome-message">
-            <h2>👋 Welcome to Pole Planting</h2>
-            <p>Select a project above to start capturing pole installation data.</p>
-            <div className="feature-list">
-              <h3>Features:</h3>
-              <ul>
-                <li>📍 One-click GPS location capture</li>
-                <li>📷 6 required photo types</li>
-                <li>💾 Offline storage & sync</li>
-                <li>🔄 Resume incomplete captures</li>
-                <li>📱 Mobile-optimized interface</li>
-              </ul>
-            </div>
-          </div>
-        )}
-      </main>
-
-      <footer className="app-footer">
-        <p>FibreFlow Pole Planting App v1.0</p>
-        <p>Optimized for field workers</p>
-      </footer>
+      {currentView === 'capture' && (
+        <WizardCapture 
+          project={selectedProject}
+          resumingPole={resumingPole}
+          onBack={handleBackToDashboard}
+          onComplete={handleCaptureComplete}
+        />
+      )}
     </div>
   );
 }
