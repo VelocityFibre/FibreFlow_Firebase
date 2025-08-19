@@ -112,13 +112,19 @@ const PhotoCapture = ({ photoType, label, onCapture, existingPhoto }) => {
       {existingPhoto ? (
         <div className="photo-preview">
           <img 
-            src={existingPhoto.dataUrl} 
+            src={existingPhoto.dataUrl || existingPhoto.url} 
             alt={label}
             className="preview-image"
           />
           <div className="photo-info">
             <p>Size: {Math.round(existingPhoto.size / 1024)}KB</p>
             <p>Dimensions: {existingPhoto.dimensions.width}×{existingPhoto.dimensions.height}</p>
+            {existingPhoto.uploadFailed && (
+              <p style={{color: 'orange'}}>⚠️ Upload failed - will retry on sync</p>
+            )}
+            {existingPhoto.url && (
+              <p style={{color: 'green'}}>✓ Uploaded to cloud</p>
+            )}
           </div>
           <button 
             onClick={handleRetake}

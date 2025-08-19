@@ -26,57 +26,59 @@ export class NokiaService {
    * Get all Nokia data with optional filtering
    */
   getNokiaData(filters?: NokiaFilterOptions): Observable<NokiaData[]> {
-    let query = 'SELECT * FROM nokia_data WHERE 1=1';
-    const params: any[] = [];
-    let paramIndex = 1;
+    // Build query dynamically without parameterized queries for Neon compatibility
+    let baseQuery = 'SELECT * FROM nokia_data WHERE 1=1';
+    const conditions: string[] = [];
 
-    // Add filters
+    // Add filters using string interpolation (safe because we control the values)
     if (filters?.projectId) {
-      query += ` AND project_id = $${paramIndex++}`;
-      params.push(filters.projectId);
+      conditions.push(`project_id = '${filters.projectId.replace(/'/g, "''")}'`);
     }
 
     if (filters?.status) {
-      query += ` AND LOWER(status) = LOWER($${paramIndex++})`;
-      params.push(filters.status);
+      conditions.push(`LOWER(status) = LOWER('${filters.status.replace(/'/g, "''")}')`);
     }
 
     if (filters?.team) {
-      query += ` AND LOWER(team) = LOWER($${paramIndex++})`;
-      params.push(filters.team);
+      conditions.push(`LOWER(team) = LOWER('${filters.team.replace(/'/g, "''")}')`);
     }
 
     if (filters?.dateFrom) {
-      query += ` AND measurement_date >= $${paramIndex++}`;
-      params.push(filters.dateFrom.toISOString().split('T')[0]);
+      const dateStr = filters.dateFrom.toISOString().split('T')[0];
+      conditions.push(`measurement_date >= '${dateStr}'`);
     }
 
     if (filters?.dateTo) {
-      query += ` AND measurement_date <= $${paramIndex++}`;
-      params.push(filters.dateTo.toISOString().split('T')[0]);
+      const dateStr = filters.dateTo.toISOString().split('T')[0];
+      conditions.push(`measurement_date <= '${dateStr}'`);
     }
 
     // Filter by signal quality if specified
     if (filters?.signalQuality) {
       switch (filters.signalQuality) {
         case 'excellent':
-          query += ` AND ont_rx_signal_dbm > -15`;
+          conditions.push('ont_rx_signal_dbm > -15');
           break;
         case 'good':
-          query += ` AND ont_rx_signal_dbm BETWEEN -20 AND -15`;
+          conditions.push('ont_rx_signal_dbm BETWEEN -20 AND -15');
           break;
         case 'fair':
-          query += ` AND ont_rx_signal_dbm BETWEEN -25 AND -20`;
+          conditions.push('ont_rx_signal_dbm BETWEEN -25 AND -20');
           break;
         case 'poor':
-          query += ` AND ont_rx_signal_dbm < -25`;
+          conditions.push('ont_rx_signal_dbm < -25');
           break;
       }
     }
 
-    query += ' ORDER BY measurement_date DESC, team, drop_number';
+    // Combine conditions
+    if (conditions.length > 0) {
+      baseQuery += ' AND ' + conditions.join(' AND ');
+    }
 
-    return this.neonService.query<NokiaData>(query, params.length > 0 ? params : undefined)
+    baseQuery += ' ORDER BY measurement_date DESC, team, drop_number';
+
+    return this.neonService.query<NokiaData>(baseQuery)
       .pipe(
         catchError(error => {
           console.error('Error fetching Nokia data:', error);
@@ -100,13 +102,11 @@ export class NokiaService {
       FROM nokia_data
     `;
     
-    const params: string[] = [];
     if (projectId) {
-      query += ' WHERE project_id = $1';
-      params.push(projectId);
+      query += ` WHERE project_id = '${projectId.replace(/'/g, "''")}'`;
     }
 
-    return this.neonService.query<any>(query, params.length > 0 ? params : undefined)
+    return this.neonService.query<any>(query)
       .pipe(
         map(results => {
           const result = results[0] || {};
@@ -148,15 +148,13 @@ export class NokiaService {
       FROM nokia_data
     `;
     
-    const params: string[] = [];
     if (projectId) {
-      query += ' WHERE project_id = $1';
-      params.push(projectId);
+      query += ` WHERE project_id = '${projectId.replace(/'/g, "''")}'`;
     }
     
     query += ' GROUP BY team ORDER BY equipment_count DESC';
 
-    return this.neonService.query<any>(query, params.length > 0 ? params : undefined)
+    return this.neonService.query<any>(query)
       .pipe(
         map(results => results.map(result => ({
           team: result.team || 'Unknown',
@@ -187,13 +185,11 @@ export class NokiaService {
       WHERE ont_rx_signal_dbm IS NOT NULL
     `;
     
-    const params: string[] = [];
     if (projectId) {
-      query += ' AND project_id = $1';
-      params.push(projectId);
+      query += ` AND project_id = '${projectId.replace(/'/g, "''")}'`;
     }
 
-    return this.neonService.query<any>(query, params.length > 0 ? params : undefined)
+    return this.neonService.query<any>(query)
       .pipe(
         map(results => {
           const result = results[0] || {};
@@ -216,16 +212,14 @@ export class NokiaService {
    */
   getTeams(projectId?: string): Observable<string[]> {
     let query = 'SELECT DISTINCT team FROM nokia_data WHERE team IS NOT NULL';
-    const params: string[] = [];
     
     if (projectId) {
-      query += ' AND project_id = $1';
-      params.push(projectId);
+      query += ` AND project_id = '${projectId.replace(/'/g, "''")}'`;
     }
     
     query += ' ORDER BY team';
 
-    return this.neonService.query<{team: string}>(query, params.length > 0 ? params : undefined)
+    return this.neonService.query<{team: string}>(query)
       .pipe(
         map(results => results.map(r => r.team)),
         catchError(error => {
@@ -255,9 +249,9 @@ export class NokiaService {
    * Get equipment by drop number
    */
   getEquipmentByDrop(dropNumber: string): Observable<NokiaData[]> {
-    const query = 'SELECT * FROM nokia_data WHERE drop_number = $1 ORDER BY measurement_date DESC';
+    const query = `SELECT * FROM nokia_data WHERE drop_number = '${dropNumber.replace(/'/g, "''")}' ORDER BY measurement_date DESC`;
     
-    return this.neonService.query<NokiaData>(query, [dropNumber])
+    return this.neonService.query<NokiaData>(query)
       .pipe(
         catchError(error => {
           console.error('Error fetching equipment by drop:', error);
@@ -270,19 +264,20 @@ export class NokiaService {
    * Search equipment by serial number or drop number
    */
   searchEquipment(searchTerm: string): Observable<NokiaData[]> {
+    const escapedTerm = searchTerm.replace(/'/g, "''").replace(/%/g, '\\%').replace(/_/g, '\\_');
+    const searchPattern = `%${escapedTerm}%`;
+    
     const query = `
       SELECT * FROM nokia_data 
-      WHERE drop_number ILIKE $1 
-         OR serial_number ILIKE $1
-         OR olt_address ILIKE $1
-         OR team ILIKE $1
+      WHERE drop_number ILIKE '${searchPattern}'
+         OR serial_number ILIKE '${searchPattern}'
+         OR olt_address ILIKE '${searchPattern}'
+         OR team ILIKE '${searchPattern}'
       ORDER BY measurement_date DESC
       LIMIT 100
     `;
     
-    const searchPattern = `%${searchTerm}%`;
-    
-    return this.neonService.query<NokiaData>(query, [searchPattern])
+    return this.neonService.query<NokiaData>(query)
       .pipe(
         catchError(error => {
           console.error('Error searching equipment:', error);

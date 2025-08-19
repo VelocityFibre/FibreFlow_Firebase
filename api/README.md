@@ -83,6 +83,48 @@ api/
 - [ ] Phase 5: Testing & Documentation
 - [ ] Phase 6: Production deployment
 
+## ✅ **PRODUCTION DATA WAREHOUSE APIs (Ready for Power BI)**
+
+### **Neon Data Warehouse API** 
+**Status**: ✅ **DEPLOYED & WORKING**  
+**URL**: `https://us-central1-fibreflow-73daf.cloudfunctions.net/neonDataWarehouse`  
+**API Key**: `powerbi-data-warehouse-2025`  
+
+**Contains**: All Neon PostgreSQL data
+- OneMap Excel imports (pole permissions, status history)
+- SOW data (scopes of work)
+- Project poles, drops, fibre infrastructure
+- Import batches and tracking
+
+**Power BI Endpoint**: `/all-data?apikey=powerbi-data-warehouse-2025`
+
+### **Firebase Data Warehouse API**
+**Status**: ✅ **DEPLOYED & WORKING**  
+**URL**: `https://us-central1-fibreflow-73daf.cloudfunctions.net/firebaseDataWarehouse`  
+**API Key**: `powerbi-firebase-warehouse-2025`  
+
+**Contains**: All Firestore data (28 collections)
+- Projects, tasks, staff, contractors
+- Materials, stock, BOQ, quotes
+- Meetings, daily progress
+- Pole tracker data
+
+**Power BI Endpoint**: `/all-data?apikey=powerbi-firebase-warehouse-2025`
+
+### **Features**:
+- ✅ **Read-only access** - Safe for management reporting
+- ✅ **API key protected** - Secure authentication
+- ✅ **Public access enabled** - No additional setup needed
+- ✅ **Power BI optimized** - JSON format for business intelligence
+- ✅ **Complete data coverage** - All databases accessible
+
+### **Documentation**:
+- **Complete Setup Guide**: `COMPLETE_POWER_BI_DUAL_DATABASE_GUIDE.md`
+- **Power BI Connection**: `POWER_BI_COMPLETE_DATA_WAREHOUSE_GUIDE.md`
+- **Beginner's Guide**: `POWERBI_COMPLETE_GUIDE_FOR_BEGINNERS.md`
+
+**Ready for**: Lew's team, management reporting, executive dashboards
+
 ---
 
 For detailed implementation instructions, see `API_DEVELOPMENT_PLAN_2025-08-16.md`

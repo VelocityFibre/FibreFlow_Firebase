@@ -436,6 +436,17 @@ body {
   font-weight: 500;
 }
 
+.save-hint {
+  margin-top: 0.75rem;
+  padding: 0.5rem;
+  background: #e3f2fd;
+  border-radius: 6px;
+  color: #1976d2;
+  font-size: 0.9rem;
+  text-align: center;
+  border: 1px solid #bbdefb;
+}
+
 /* Incomplete Poles */
 .incomplete-poles {
   background: white;

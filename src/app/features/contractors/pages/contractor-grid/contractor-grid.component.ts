@@ -8,11 +8,14 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef, GridApi, GridReadyEvent, RowDoubleClickedEvent } from 'ag-grid-community';
+import { ColDef, GridApi, GridReadyEvent, RowDoubleClickedEvent, ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 import { ContractorService } from '../../services/contractor.service';
 import { Contractor } from '../../models/contractor.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ContractorFormComponent } from '../../components/contractor-form/contractor-form.component';
+
+// Register AG Grid modules
+ModuleRegistry.registerModules([AllCommunityModule]);
 
 @Component({
   selector: 'app-contractor-grid',
@@ -53,6 +56,7 @@ import { ContractorFormComponent } from '../../components/contractor-form/contra
           </button>
         </div>
       </div>
+
 
       <!-- Grid Container -->
       <mat-card class="grid-card">
@@ -238,139 +242,108 @@ export class ContractorGridComponent implements OnInit {
       minWidth: 120
     },
     
-    // Contact Information
+    // Contact Information - Using new nested structure
     { 
-      field: 'contactPerson', 
+      field: 'primaryContact.name', 
       headerName: 'Contact Person', 
       minWidth: 200
     },
     { 
-      field: 'contactTitle', 
+      field: 'primaryContact.role', 
       headerName: 'Title', 
       minWidth: 150
     },
     { 
-      field: 'contactNumber', 
+      field: 'primaryContact.phone', 
       headerName: 'Phone', 
       minWidth: 150
     },
     { 
-      field: 'email', 
+      field: 'primaryContact.email', 
       headerName: 'Email', 
       minWidth: 200
     },
     
-    // Address
+    // Address - Using new nested structure
     { 
-      field: 'address.street1', 
+      field: 'physicalAddress.street', 
       headerName: 'Street Address', 
       minWidth: 200
     },
     { 
-      field: 'address.suburb', 
-      headerName: 'Suburb', 
-      minWidth: 150
-    },
-    { 
-      field: 'address.city', 
+      field: 'physicalAddress.city', 
       headerName: 'City', 
       minWidth: 150
     },
     { 
-      field: 'address.postalCode', 
-      headerName: 'Postal Code', 
-      minWidth: 100
-    },
-    { 
-      field: 'address.province', 
+      field: 'physicalAddress.province', 
       headerName: 'Province', 
       minWidth: 120
+    },
+    { 
+      field: 'physicalAddress.postalCode', 
+      headerName: 'Postal Code', 
+      minWidth: 100
     },
     
     // Services and Operations
     { 
-      field: 'servicesOffered', 
+      field: 'capabilities.services', 
       headerName: 'Services', 
       minWidth: 150,
-      valueFormatter: params => params.value?.join(', ') || ''
+      valueGetter: (params) => {
+        const services = params.data?.capabilities?.services || [];
+        return Array.isArray(services) ? services.join(', ') : '';
+      }
     },
     { 
       field: 'regionsOfOperation', 
       headerName: 'Regions', 
       minWidth: 150,
-      valueFormatter: params => params.value?.join(', ') || ''
+      valueGetter: (params) => {
+        const regions = params.data?.regionsOfOperation || [];
+        return Array.isArray(regions) ? regions.join(', ') : '';
+      }
     },
     { 
       field: 'projectZones', 
       headerName: 'Project Zones', 
       minWidth: 150,
-      valueFormatter: params => params.value?.join(', ') || ''
+      valueGetter: (params) => {
+        const zones = params.data?.projectZones || [];
+        return Array.isArray(zones) ? zones.join(', ') : '';
+      }
     },
     
-    // Banking Details
+    // Banking Details - Using new nested structure
     { 
-      field: 'bankingDetails.bankName', 
+      field: 'financial.bankName', 
       headerName: 'Bank', 
       minWidth: 120
     },
     { 
-      field: 'bankingDetails.accountNumber', 
+      field: 'financial.accountNumber', 
       headerName: 'Account No.', 
       minWidth: 150
     },
     { 
-      field: 'bankingDetails.branchCode', 
+      field: 'financial.branchCode', 
       headerName: 'Branch Code', 
       minWidth: 100
     },
     { 
-      field: 'bankingDetails.accountType', 
+      field: 'financial.accountType', 
       headerName: 'Account Type', 
       minWidth: 150
     },
-    
-    // Payment Terms
     { 
-      field: 'paymentTerms', 
+      field: 'financial.paymentTerms', 
       headerName: 'Payment Terms', 
-      minWidth: 200
-    },
-    
-    // Documents Status
-    { 
-      field: 'documents.cipcRegistration', 
-      headerName: 'CIPC Reg', 
-      minWidth: 100,
-      cellRenderer: (params: any) => params.value ? '✓' : '✗',
-      cellClass: params => params.value ? 'text-green-600' : 'text-red-600'
-    },
-    { 
-      field: 'documents.taxClearance', 
-      headerName: 'Tax Clear', 
-      minWidth: 100,
-      cellRenderer: (params: any) => params.value ? '✓' : '✗',
-      cellClass: params => params.value ? 'text-green-600' : 'text-red-600'
-    },
-    { 
-      field: 'documents.bbbee', 
-      headerName: 'B-BBEE', 
-      minWidth: 100,
-      cellRenderer: (params: any) => params.value ? '✓' : '✗',
-      cellClass: params => params.value ? 'text-green-600' : 'text-red-600'
-    },
-    { 
-      field: 'documents.coid', 
-      headerName: 'COID', 
-      minWidth: 100,
-      cellRenderer: (params: any) => params.value ? '✓' : '✗',
-      cellClass: params => params.value ? 'text-green-600' : 'text-red-600'
-    },
-    { 
-      field: 'documents.publicLiability', 
-      headerName: 'Insurance', 
-      minWidth: 100,
-      cellRenderer: (params: any) => params.value ? '✓' : '✗',
-      cellClass: params => params.value ? 'text-green-600' : 'text-red-600'
+      minWidth: 120,
+      valueGetter: (params) => {
+        const terms = params.data?.financial?.paymentTerms;
+        return terms ? `${terms} days` : '';
+      }
     },
     
     // Status
@@ -378,10 +351,9 @@ export class ContractorGridComponent implements OnInit {
       field: 'status', 
       headerName: 'Status', 
       minWidth: 120,
-      cellRenderer: (params: any) => {
-        const status = params.value || 'active';
-        const formatted = status.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
-        return `<span class="status-chip ${status}">${formatted}</span>`;
+      valueGetter: (params) => {
+        const status = params.data?.status || 'active';
+        return status.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
       }
     },
     
@@ -390,7 +362,7 @@ export class ContractorGridComponent implements OnInit {
       field: 'whatsappGroup', 
       headerName: 'WhatsApp', 
       minWidth: 100,
-      cellRenderer: (params: any) => params.value ? 'Yes' : 'No'
+      valueGetter: (params) => params.data?.whatsappGroup ? 'Yes' : 'No'
     }
   ];
 
@@ -408,10 +380,11 @@ export class ContractorGridComponent implements OnInit {
   loadContractors() {
     this.contractorService.getContractors().subscribe({
       next: (contractors) => {
-        this.contractors.set(contractors);
+        this.contractors.set(contractors || []);
       },
       error: (error) => {
         console.error('Error loading contractors:', error);
+        this.contractors.set([]);
       }
     });
   }

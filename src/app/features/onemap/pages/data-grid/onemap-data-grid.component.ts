@@ -296,12 +296,40 @@ export class OneMapDataGridComponent implements OnInit {
   private async loadData() {
     this.loading.set(true);
     try {
-      // Load all data using optimized methods
+      console.log('OneMap Data Grid: Starting data load...');
+      
+      // Load all data using optimized methods with error catching
+      console.log('OneMap Data Grid: Calling getOneMapGridData...');
+      const gridDataPromise = this.oneMapNeonService.getOneMapGridData().toPromise()
+        .catch(error => {
+          console.error('OneMap Data Grid: getOneMapGridData failed:', error);
+          return [];
+        });
+      
+      console.log('OneMap Data Grid: Calling getFilterOptions...');
+      const filterOptionsPromise = this.oneMapNeonService.getFilterOptions().toPromise()
+        .catch(error => {
+          console.error('OneMap Data Grid: getFilterOptions failed:', error);
+          return { zones: [], statuses: [], contractors: [] };
+        });
+      
+      console.log('OneMap Data Grid: Calling getOneMapSummaryStats...');
+      const summaryStatsPromise = this.oneMapNeonService.getOneMapSummaryStats().toPromise()
+        .catch(error => {
+          console.error('OneMap Data Grid: getOneMapSummaryStats failed:', error);
+          return { totalProperties: 0, totalPoles: 0, totalDrops: 0, totalRecords: 0, statusBreakdown: [] };
+        });
+
       const [gridData, filterOptions, summaryStats] = await Promise.all([
-        this.oneMapNeonService.getOneMapGridData().toPromise(),
-        this.oneMapNeonService.getFilterOptions().toPromise(),
-        this.oneMapNeonService.getOneMapSummaryStats().toPromise()
+        gridDataPromise,
+        filterOptionsPromise,
+        summaryStatsPromise
       ]);
+      
+      console.log('OneMap Data Grid: Data loaded successfully');
+      console.log('- Grid data records:', gridData?.length || 0);
+      console.log('- Filter options:', filterOptions);
+      console.log('- Summary stats:', summaryStats);
 
       // Transform data for grid
       const transformedData: OneMapGridData[] = (gridData || []).map(record => ({

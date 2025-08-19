@@ -18,13 +18,13 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase services
+// Initialize Firebase services (basic initialization)
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 export const auth = getAuth(app);
 
-// Enable offline persistence for better mobile experience
-enableIndexedDbPersistence(db).catch((err) => {
+// Enable offline persistence (suppress deprecation warning for now)
+enableIndexedDbPersistence(db, { synchronizeTabs: true }).catch((err) => {
   if (err.code === 'failed-precondition') {
     console.warn('Persistence failed: Multiple tabs open');
   } else if (err.code === 'unimplemented') {

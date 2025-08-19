@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, addDoc, updateDoc, doc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { db, storage } from '../firebase';
 import PhotoCapture from './PhotoCapture';
 import GPSCapture from './GPSCapture';
 
@@ -51,7 +52,48 @@ const PoleCapture = ({ projectId, resumingPole, onClearResume }) => {
     }));
   };
 
-  const handleSave = async () => {
+  const uploadPhotosToStorage = async (poleId) => {
+    const uploadedPhotos = {};
+    
+    for (const [photoType, photoData] of Object.entries(photos)) {
+      if (photoData && photoData.blob) {
+        try {
+          // Create a unique filename
+          const filename = `${poleId}_${photoType}_${Date.now()}.jpg`;
+          const photoRef = ref(storage, `pole-plantings/${filename}`);
+          
+          // Upload the photo
+          const snapshot = await uploadBytes(photoRef, photoData.blob);
+          const downloadURL = await getDownloadURL(snapshot.ref);
+          
+          // Store photo metadata without the blob
+          uploadedPhotos[photoType] = {
+            url: downloadURL,
+            filename,
+            size: photoData.size,
+            dimensions: photoData.dimensions,
+            timestamp: photoData.timestamp,
+            originalSize: photoData.originalSize
+          };
+        } catch (error) {
+          console.error(`Error uploading ${photoType} photo:`, error);
+          // Keep the existing photo data if upload fails (for offline scenarios)
+          uploadedPhotos[photoType] = {
+            ...photoData,
+            blob: null, // Remove blob to prevent Firestore error
+            uploadFailed: true
+          };
+        }
+      } else if (photoData) {
+        // Photo already uploaded or no blob
+        uploadedPhotos[photoType] = photoData;
+      }
+    }
+    
+    return uploadedPhotos;
+  };
+
+  const handleSaveProgress = async () => {
     if (!poleNumber.trim()) {
       setStatus('Please enter a pole number');
       return;
@@ -62,23 +104,35 @@ const PoleCapture = ({ projectId, resumingPole, onClearResume }) => {
       return;
     }
 
-    // Check if all photos are captured
-    const missingPhotos = photoTypes.filter(type => !photos[type.key]);
-    if (missingPhotos.length > 0) {
-      setStatus(`Missing photos: ${missingPhotos.map(p => p.label).join(', ')}`);
-      return;
-    }
-
     setSaving(true);
-    setStatus('Saving pole data...');
+    setStatus('Saving progress...');
 
     try {
+      const capturedPhotos = Object.values(photos).filter(Boolean).length;
+      const isComplete = capturedPhotos === photoTypes.length;
+      
+      // Create a temporary pole ID for photo uploads
+      const tempPoleId = resumingPole?.id || `temp_${poleNumber.trim()}_${Date.now()}`;
+      
+      // Update status to show photo upload progress
+      setStatus('Uploading photos...');
+      
+      // Upload photos to Storage first
+      const uploadedPhotos = await uploadPhotosToStorage(tempPoleId);
+      
+      setStatus('Saving to database...');
+      
       const poleData = {
         projectId,
         poleNumber: poleNumber.trim(),
         gpsLocation,
-        photos,
-        status: 'ready-for-sync',
+        photos: uploadedPhotos,
+        status: isComplete ? 'ready-for-sync' : 'in-progress',
+        completionStatus: {
+          totalPhotos: photoTypes.length,
+          capturedPhotos,
+          isComplete
+        },
         updatedAt: serverTimestamp(),
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // 7 days
       };
@@ -86,30 +140,30 @@ const PoleCapture = ({ projectId, resumingPole, onClearResume }) => {
       if (resumingPole?.id) {
         // Update existing pole
         await updateDoc(doc(db, 'pole-plantings-staging', resumingPole.id), poleData);
-        setStatus('Pole data updated successfully!');
+        setStatus(isComplete ? 'Pole completed and saved!' : `Progress saved! (${capturedPhotos}/${photoTypes.length} photos)`);
       } else {
         // Create new pole
         poleData.createdAt = serverTimestamp();
-        await addDoc(collection(db, 'pole-plantings-staging'), poleData);
-        setStatus('Pole data saved successfully!');
+        const docRef = await addDoc(collection(db, 'pole-plantings-staging'), poleData);
+        setStatus(isComplete ? 'Pole completed and saved!' : `Progress saved! (${capturedPhotos}/${photoTypes.length} photos)`);
       }
       
-      // Clear resuming state
-      if (onClearResume) {
-        onClearResume();
+      // Only clear form if complete, otherwise keep for resume
+      if (isComplete) {
+        if (onClearResume) {
+          onClearResume();
+        }
+        setPoleNumber('');
+        setGpsLocation(null);
+        setPhotos({
+          before: null,
+          front: null,
+          side: null,
+          depth: null,
+          concrete: null,
+          compaction: null
+        });
       }
-      
-      // Reset form
-      setPoleNumber('');
-      setGpsLocation(null);
-      setPhotos({
-        before: null,
-        front: null,
-        side: null,
-        depth: null,
-        concrete: null,
-        compaction: null
-      });
       
     } catch (error) {
       console.error('Error saving pole data:', error);
@@ -121,6 +175,9 @@ const PoleCapture = ({ projectId, resumingPole, onClearResume }) => {
 
   const isComplete = poleNumber.trim() && gpsLocation && 
     photoTypes.every(type => photos[type.key]);
+  
+  const canSaveProgress = poleNumber.trim() && gpsLocation;
+  const capturedPhotos = Object.values(photos).filter(Boolean).length;
 
   return (
     <div className="pole-capture">
@@ -156,7 +213,7 @@ const PoleCapture = ({ projectId, resumingPole, onClearResume }) => {
 
       {/* Photo Captures */}
       <div className="photo-captures">
-        <h3>Required Photos ({Object.values(photos).filter(Boolean).length}/6)</h3>
+        <h3>Required Photos ({capturedPhotos}/6)</h3>
         {photoTypes.map(photoType => (
           <PhotoCapture
             key={photoType.key}
@@ -171,12 +228,19 @@ const PoleCapture = ({ projectId, resumingPole, onClearResume }) => {
       {/* Save Button */}
       <div className="save-section">
         <button 
-          onClick={handleSave}
-          disabled={saving || !isComplete}
-          className={`save-button ${isComplete ? 'complete' : 'incomplete'}`}
+          onClick={handleSaveProgress}
+          disabled={saving || !canSaveProgress}
+          className={`save-button ${canSaveProgress ? 'complete' : 'incomplete'}`}
         >
-          {saving ? 'Saving...' : 'Save Pole Data'}
+          {saving ? 'Saving...' : (isComplete ? 'Complete & Save' : 'Save Progress')}
         </button>
+        
+        {canSaveProgress && !isComplete && (
+          <p className="save-hint">
+            💡 You can save with {capturedPhotos > 0 ? `${capturedPhotos} photo${capturedPhotos > 1 ? 's' : ''}` : 'just GPS'} and add more photos later!
+          </p>
+        )}
+        
         {status && <p className="status-message">{status}</p>}
       </div>
     </div>

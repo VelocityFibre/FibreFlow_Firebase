@@ -35,6 +35,38 @@ export const fieldWorkerGuard: CanActivateFn = (route, state): boolean | UrlTree
 };
 
 /**
+ * Offline Pole Capture Guard - Allows both technicians and admins
+ * 
+ * This guard allows access to the offline-pole-capture page for:
+ * - Technicians (field workers) - their primary interface
+ * - Admins - for testing and oversight
+ */
+export const offlinePoleGuard: CanActivateFn = (route, state): boolean | UrlTree => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  
+  const userProfile = authService.getCurrentUserProfile();
+  
+  if (!userProfile) {
+    console.log('🔒 Offline Pole Guard - User not authenticated');
+    return router.createUrlTree(['/login'], { 
+      queryParams: { returnUrl: '/offline-pole-capture' } 
+    });
+  }
+  
+  // Allow technicians and admins
+  const allowedRoles = ['technician', 'admin'];
+  if (allowedRoles.includes(userProfile.userGroup)) {
+    console.log(`✅ Offline Pole Guard - Access granted for ${userProfile.userGroup}`);
+    return true;
+  }
+  
+  // Redirect other roles to dashboard
+  console.log(`🚫 Offline Pole Guard - Access denied for ${userProfile.userGroup}, redirecting to dashboard`);
+  return router.createUrlTree(['/dashboard']);
+};
+
+/**
  * Non-Field Worker Guard - Prevents non-field workers from accessing restricted pages
  * 
  * This guard can be used to protect pages that should only be accessible by
@@ -54,7 +86,13 @@ export const nonFieldWorkerGuard: CanActivateFn = (route, state): boolean | UrlT
   // Check if user has technician role (field worker)
   const isFieldWorker = userProfile.userGroup === 'technician';
   
-  // Prevent field workers from accessing this route
+  // Special case: Allow admins to access offline-pole-capture for testing
+  if (isFieldWorker && !state.url.includes('offline-pole-capture')) {
+    console.log('🚫 Field worker trying to access restricted area - redirecting to offline capture');
+    return router.createUrlTree(['/offline-pole-capture']);
+  }
+  
+  // Prevent field workers from accessing non-offline routes
   if (isFieldWorker) {
     console.log('🚫 Field worker trying to access restricted area - redirecting to offline capture');
     return router.createUrlTree(['/offline-pole-capture']);

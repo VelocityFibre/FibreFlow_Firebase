@@ -1439,3 +1439,7 @@ exports.poleAnalyticsWorking = poleAnalyticsWorking.poleAnalyticsWorking;
 // Neon Data Warehouse API - Complete access to all Neon tables for Power BI
 const neonDataWarehouse = require('./src/neon-data-warehouse-api');
 exports.neonDataWarehouse = neonDataWarehouse.neonDataWarehouse;
+
+// Firebase Data Warehouse API - Complete access to all Firestore collections for Power BI
+const firebaseDataWarehouse = require('./src/firebase-data-warehouse-api');
+exports.firebaseDataWarehouse = firebaseDataWarehouse.firebaseDataWarehouse;

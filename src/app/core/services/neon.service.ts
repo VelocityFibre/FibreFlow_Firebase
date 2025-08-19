@@ -27,19 +27,49 @@ export class NeonService {
    */
   query<T = any>(query: string, params?: any[]): Observable<T[]> {
     if (!this.sql) {
+      console.error('Neon connection not configured. Connection string present:', !!environment.neonConnectionString);
       throw new Error('Neon connection not configured. Please add neonConnectionString to environment.');
     }
 
-    // For parameterized queries, use the new sql.query() method
-    if (params && params.length > 0) {
-      console.log('Executing Neon parameterized query:', query, 'with params:', params);
-      const promise = this.sql.query(query, params);
-      return from(promise) as Observable<T[]>;
+    console.log('NeonService: Executing query:', query.substring(0, 100) + (query.length > 100 ? '...' : ''));
+    if (params?.length) {
+      console.log('NeonService: Query params:', params);
     }
-    
-    // For non-parameterized queries
-    const promise = this.sql`${query}`;
-    return from(promise) as Observable<T[]>;
+
+    try {
+      // For parameterized queries with Neon serverless
+      if (params && params.length > 0) {
+        console.warn('NeonService: Parameterized queries may not be supported. Attempting parameterized query...');
+        try {
+          const promise = this.sql.query(query, params);
+          return from(promise.catch((error: any) => {
+            console.error('Neon parameterized query failed:', error);
+            // If parameterized query fails, log warning and use template string
+            console.warn('NeonService: Falling back to template string query');
+            const fallbackPromise = this.sql`${query}`;
+            return fallbackPromise;
+          })) as Observable<T[]>;
+        } catch (paramError) {
+          console.error('Neon parameterized query setup error:', paramError);
+          console.warn('NeonService: Using template string query instead');
+          const promise = this.sql`${query}`;
+          return from(promise.catch((error: any) => {
+            console.error('Neon fallback query failed:', error);
+            throw error;
+          })) as Observable<T[]>;
+        }
+      }
+      
+      // For non-parameterized queries
+      const promise = this.sql`${query}`;
+      return from(promise.catch((error: any) => {
+        console.error('Neon query failed:', error);
+        throw error;
+      })) as Observable<T[]>;
+    } catch (error) {
+      console.error('Neon query execution error:', error);
+      throw error;
+    }
   }
 
   /**

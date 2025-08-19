@@ -20,17 +20,35 @@ const IncompletePoles = ({ projectId, onResumeCapture }) => {
     setLoading(true);
     
     try {
-      const q = query(
+      // Get both incomplete and in-progress poles
+      const q1 = query(
         collection(db, 'pole-plantings-staging'),
         where('projectId', '==', projectId),
         where('status', '==', 'incomplete')
       );
       
-      const snapshot = await getDocs(q);
-      const poles = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
+      const q2 = query(
+        collection(db, 'pole-plantings-staging'),
+        where('projectId', '==', projectId),
+        where('status', '==', 'in-progress')
+      );
+      
+      const [snapshot1, snapshot2] = await Promise.all([
+        getDocs(q1),
+        getDocs(q2)
+      ]);
+      
+      const poles = [
+        ...snapshot1.docs.map(doc => ({ id: doc.id, ...doc.data() })),
+        ...snapshot2.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+      ];
+      
+      // Sort by most recent first
+      poles.sort((a, b) => {
+        const aTime = a.updatedAt?.toDate?.() || a.createdAt?.toDate?.() || new Date(0);
+        const bTime = b.updatedAt?.toDate?.() || b.createdAt?.toDate?.() || new Date(0);
+        return bTime - aTime;
+      });
 
       setIncompletePoles(poles);
     } catch (error) {

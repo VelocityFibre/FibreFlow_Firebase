@@ -3,7 +3,7 @@ import { demoConfig } from './config/demo.config';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
-import { fieldWorkerGuard, nonFieldWorkerGuard } from './core/guards/field-worker.guard';
+import { fieldWorkerGuard, nonFieldWorkerGuard, offlinePoleGuard } from './core/guards/field-worker.guard';
 
 const allRoutes: Routes = [
   {
@@ -361,17 +361,17 @@ const allRoutes: Routes = [
       description: 'AI coding assistant with multi-database analytics'
     }
   },
-  // ✅ DIRECT: Offline Pole Capture (workaround for nested route issues)
+  // ✅ DIRECT: Offline Pole Capture (accessible by technicians and admins)
   {
     path: 'offline-pole-capture',
     loadComponent: () => 
       import('./features/pole-tracker/mobile/pages/offline-capture/offline-capture.component')
         .then(m => m.OfflineCaptureComponent),
-    canActivate: [authGuard],
+    canActivate: [offlinePoleGuard],
     data: { 
       title: 'Offline Pole Capture',
       description: 'Capture pole data offline with GPS and photos',
-      restrictedToFieldWorkers: true
+      allowedRoles: ['technician', 'admin'] // Allow both field workers and admins
     }
   },
   // ✅ NEW: Pole Planting Verification (Admin approval of field captures)
