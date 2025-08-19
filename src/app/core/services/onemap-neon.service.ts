@@ -295,7 +295,7 @@ export class OneMapNeonService {
       SELECT * FROM onemap_import_batches 
       ORDER BY import_date DESC 
       LIMIT ${limit}
-    `, [limit]);
+    `);
   }
 
   /**

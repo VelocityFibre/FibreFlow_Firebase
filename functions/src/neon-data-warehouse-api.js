@@ -227,22 +227,23 @@ app.get('/powerbi/poles', async (req, res) => {
   try {
     const data = await sql`
       SELECT 
-        p.pole_number,
-        p.project_id,
-        p.location_description,
-        p.gps_lat,
-        p.gps_lng,
-        s.status as current_status,
-        s.status_changed_date,
-        s.agent_name
-      FROM status_changes p
-      WHERE p.pole_number IS NOT NULL 
-      AND p.id IN (
+        pole_number,
+        property_id,
+        status as current_status,
+        created_at as status_changed_date,
+        agent,
+        address,
+        zone,
+        contractor,
+        project_name
+      FROM status_changes
+      WHERE pole_number IS NOT NULL 
+      AND id IN (
         SELECT MAX(id) FROM status_changes 
         WHERE pole_number IS NOT NULL
         GROUP BY pole_number
       )
-      ORDER BY p.pole_number
+      ORDER BY pole_number
     `;
     
     res.json({
@@ -269,12 +270,12 @@ app.get('/powerbi/status-history', async (req, res) => {
         property_id,
         pole_number,
         status,
-        status_changed_date,
-        agent_name,
-        import_batch_id
-      FROM onemap_status_history
-      WHERE status_changed_date IS NOT NULL
-      ORDER BY status_changed_date DESC
+        created_at as status_changed_date,
+        agent as agent_name,
+        project_name
+      FROM status_changes
+      WHERE created_at IS NOT NULL
+      ORDER BY created_at DESC
       LIMIT 10000
     `;
     
