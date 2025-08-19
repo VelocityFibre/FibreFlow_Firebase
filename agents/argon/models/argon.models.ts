@@ -251,4 +251,31 @@ export interface UnifiedQueryResult {
   totalExecutionTimeMs: number;
   success: boolean;
   errors: string[];
+  queryInsights?: QueryInsights;
+}
+
+export interface QueryInsights {
+  timestamp: Date;
+  userQuery: string;
+  detectedIntent: string;
+  detectedDataType: string;
+  databasesQueried: string[];
+  queries: QueryDetail[];
+  dataProcessing: ProcessingStep[];
+  totalRecordsFound: number;
+  recordsShown: number;
+}
+
+export interface QueryDetail {
+  database: string;
+  queryString: string;
+  parameters?: any[];
+  executionTimeMs: number;
+  recordsReturned: number;
+}
+
+export interface ProcessingStep {
+  step: string;
+  description: string;
+  duration: number;
 }

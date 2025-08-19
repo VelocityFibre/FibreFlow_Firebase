@@ -192,18 +192,79 @@ export class ArgonService {
   /**
    * Execute a unified query across multiple databases
    */
-  executeUnifiedQuery(query: UnifiedQuery): Observable<UnifiedQueryResult> {
+  executeUnifiedQuery(query: UnifiedQuery, userQuestion?: string, intent?: string, dataType?: string): Observable<UnifiedQueryResult> {
     this._isLoading.set(true);
     this._error.set(null);
 
+    const startTime = Date.now();
+
     return this.argonDb.executeUnifiedQuery(query).pipe(
-      tap(() => this._isLoading.set(false)),
+      tap((result) => {
+        // Add query insights
+        if (userQuestion) {
+          result.queryInsights = {
+            timestamp: new Date(),
+            userQuery: userQuestion,
+            detectedIntent: intent || 'general',
+            detectedDataType: dataType || 'unknown',
+            databasesQueried: result.results.map(r => r.source),
+            queries: result.results.map(r => ({
+              database: r.source,
+              queryString: this.getQueryString(query, r.source),
+              parameters: this.getQueryParameters(query, r.source),
+              executionTimeMs: r.executionTimeMs,
+              recordsReturned: r.data.length
+            })),
+            dataProcessing: [
+              {
+                step: 'Query Parsing',
+                description: 'Analyzed user question and determined intent',
+                duration: 5
+              },
+              {
+                step: 'Database Query',
+                description: `Executed query on ${result.results.length} database(s)`,
+                duration: result.totalExecutionTimeMs
+              },
+              {
+                step: 'Data Processing',
+                description: 'Formatted and analyzed results',
+                duration: Date.now() - startTime - result.totalExecutionTimeMs
+              }
+            ],
+            totalRecordsFound: result.mergedData.length,
+            recordsShown: Math.min(result.mergedData.length, 10)
+          };
+        }
+        
+        this._isLoading.set(false);
+      }),
       catchError(error => {
         this._error.set(error.message);
         this._isLoading.set(false);
         throw error;
       })
     );
+  }
+
+  private getQueryString(query: UnifiedQuery, source: string): string {
+    if (source === 'firestore' && query.firestore) {
+      return `collection('${query.firestore.collection}') ${query.firestore.filters ? '+ filters' : ''} ${query.firestore.orderBy ? '+ orderBy' : ''} ${query.firestore.limit ? `limit(${query.firestore.limit})` : ''}`;
+    }
+    if (source === 'neon' && query.neon) {
+      return query.neon.sql;
+    }
+    return 'Unknown query';
+  }
+
+  private getQueryParameters(query: UnifiedQuery, source: string): any[] {
+    if (source === 'firestore' && query.firestore?.filters) {
+      return query.firestore.filters.map(f => ({ field: f.field, operator: f.operator, value: f.value }));
+    }
+    if (source === 'neon' && query.neon?.parameters) {
+      return query.neon.parameters;
+    }
+    return [];
   }
 
   /**

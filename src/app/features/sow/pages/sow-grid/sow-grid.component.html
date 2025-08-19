@@ -1,0 +1,121 @@
+<div class="sow-grid-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1>SOW Data Management</h1>
+    <p class="subtitle">Comprehensive view of Poles, Drops, and Fibre data</p>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="summary-icon poles">
+          <mat-icon>electrical_services</mat-icon>
+        </div>
+        <div class="summary-info">
+          <div class="summary-value">{{ summary().totalPoles.toLocaleString() }}</div>
+          <div class="summary-label">Poles</div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="summary-icon drops">
+          <mat-icon>home</mat-icon>
+        </div>
+        <div class="summary-info">
+          <div class="summary-value">{{ summary().totalDrops.toLocaleString() }}</div>
+          <div class="summary-label">Drops (with ONT)</div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="summary-icon fibre">
+          <mat-icon>cable</mat-icon>
+        </div>
+        <div class="summary-info">
+          <div class="summary-value">{{ summary().totalFibre.toLocaleString() }}</div>
+          <div class="summary-label">Fibre Segments</div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="summary-icon distance">
+          <mat-icon>straighten</mat-icon>
+        </div>
+        <div class="summary-info">
+          <div class="summary-value">{{ summary().totalDistance.toLocaleString() }}m</div>
+          <div class="summary-label">Total Distance</div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <mat-form-field appearance="outline" class="project-field">
+      <mat-label>Project</mat-label>
+      <mat-select [(ngModel)]="projectFilter" (ngModelChange)="onProjectFilterChanged()">
+        @for (project of projects(); track project.id) {
+          <mat-option [value]="project.id">{{ project.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search all data</mat-label>
+      <input matInput [(ngModel)]="searchText" (ngModelChange)="onSearchChanged()">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Data Type</mat-label>
+      <mat-select [(ngModel)]="typeFilter" (ngModelChange)="onTypeFilterChanged()">
+        <mat-option value="all">All Types</mat-option>
+        <mat-option value="pole">Poles Only</mat-option>
+        <mat-option value="drop">Drops Only (with ONT)</mat-option>
+        <mat-option value="fibre">Fibre Only</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="exportData()" class="export-btn">
+      <mat-icon>download</mat-icon>
+      Export to CSV
+    </button>
+  </div>
+
+  <!-- AG Grid -->
+  <ag-grid-angular
+    *ngIf="!loading()"
+    class="ag-theme-material sow-main-grid"
+    [rowData]="rowData()"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    (gridReady)="onGridReady($event)"
+    [pagination]="true"
+    [paginationPageSize]="100"
+    [paginationPageSizeSelector]="[50, 100, 200, 500]"
+    [animateRows]="true"
+    [rowSelection]="{
+      mode: 'multiRow',
+      checkboxes: true,
+      headerCheckbox: true,
+      selectAll: 'filtered',
+      enableClickSelection: true
+    }"
+    [enableCellTextSelection]="true"
+    [suppressRowClickSelection]="false"
+    [rowMultiSelectWithClick]="true">
+  </ag-grid-angular>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading()">
+    <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+    <p>Loading SOW data...</p>
+  </div>
+</div>

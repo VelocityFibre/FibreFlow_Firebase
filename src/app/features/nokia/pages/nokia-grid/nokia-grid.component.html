@@ -1,0 +1,182 @@
+<div class="nokia-grid-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1>Nokia Equipment Monitoring</h1>
+    <p class="subtitle">Network equipment performance and signal quality tracking</p>
+    
+    <button mat-icon-button 
+            (click)="refreshData()" 
+            class="refresh-btn" 
+            matTooltip="Refresh data">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <mat-card class="summary-card equipment">
+      <mat-card-content>
+        <div class="summary-icon">
+          <mat-icon>router</mat-icon>
+        </div>
+        <div class="summary-info">
+          <div class="summary-value">{{ summary().totalEquipment.toLocaleString() }}</div>
+          <div class="summary-label">Total Equipment</div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card active">
+      <mat-card-content>
+        <div class="summary-icon">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="summary-info">
+          <div class="summary-value">{{ summary().activeEquipment.toLocaleString() }}</div>
+          <div class="summary-label">Active Equipment</div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card teams">
+      <mat-card-content>
+        <div class="summary-icon">
+          <mat-icon>group</mat-icon>
+        </div>
+        <div class="summary-info">
+          <div class="summary-value">{{ summary().totalTeams.toLocaleString() }}</div>
+          <div class="summary-label">Teams</div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="summary-card signal">
+      <mat-card-content>
+        <div class="summary-icon">
+          <mat-icon>signal_cellular_alt</mat-icon>
+        </div>
+        <div class="summary-info">
+          <div class="summary-value">{{ summary().avgSignalStrength.toFixed(1) }} dBm</div>
+          <div class="summary-label">Avg Signal Strength</div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <mat-form-field appearance="outline" class="project-field">
+      <mat-label>Project</mat-label>
+      <mat-select [(ngModel)]="projectFilter" (ngModelChange)="onProjectFilterChanged()">
+        @for (project of projects(); track project.id) {
+          <mat-option [value]="project.id">{{ project.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search equipment</mat-label>
+      <input matInput [(ngModel)]="searchText" (ngModelChange)="onSearchChanged()"
+             placeholder="Drop number, serial, team...">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Status</mat-label>
+      <mat-select [(ngModel)]="statusFilter" (ngModelChange)="onStatusFilterChanged()">
+        <mat-option value="all">All Statuses</mat-option>
+        @for (status of statuses(); track status) {
+          <mat-option [value]="status">{{ status }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Team</mat-label>
+      <mat-select [(ngModel)]="teamFilter" (ngModelChange)="onTeamFilterChanged()">
+        <mat-option value="all">All Teams</mat-option>
+        @for (team of teams(); track team) {
+          <mat-option [value]="team">{{ team }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Signal Quality</mat-label>
+      <mat-select [(ngModel)]="signalQualityFilter" (ngModelChange)="onSignalQualityFilterChanged()">
+        <mat-option value="all">All Qualities</mat-option>
+        <mat-option value="excellent">Excellent (> -15 dBm)</mat-option>
+        <mat-option value="good">Good (-15 to -20 dBm)</mat-option>
+        <mat-option value="fair">Fair (-20 to -25 dBm)</mat-option>
+        <mat-option value="poor">Poor (< -25 dBm)</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="action-buttons">
+      <button mat-stroked-button (click)="clearFilters()" class="clear-btn">
+        <mat-icon>clear_all</mat-icon>
+        Clear Filters
+      </button>
+
+      <button mat-raised-button color="primary" (click)="exportData()" class="export-btn">
+        <mat-icon>download</mat-icon>
+        Export CSV
+      </button>
+    </div>
+  </div>
+
+  <!-- Signal Quality Legend -->
+  <div class="signal-quality-legend">
+    <div class="legend-title">Signal Quality:</div>
+    <mat-chip-listbox class="quality-chips" multiple="false">
+      <mat-chip class="quality-chip excellent">
+        <mat-icon>signal_cellular_4_bar</mat-icon>
+        Excellent (&gt; -15 dBm)
+      </mat-chip>
+      <mat-chip class="quality-chip good">
+        <mat-icon>signal_cellular_4_bar</mat-icon>
+        Good (-15 to -20 dBm)
+      </mat-chip>
+      <mat-chip class="quality-chip fair">
+        <mat-icon>signal_cellular_4_bar</mat-icon>
+        Fair (-20 to -25 dBm)
+      </mat-chip>
+      <mat-chip class="quality-chip poor">
+        <mat-icon>signal_cellular_1_bar</mat-icon>
+        Poor (&lt; -25 dBm)
+      </mat-chip>
+    </mat-chip-listbox>
+  </div>
+
+  <!-- AG Grid -->
+  <ag-grid-angular
+    *ngIf="!loading()"
+    class="ag-theme-material nokia-main-grid"
+    [rowData]="rowData()"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    (gridReady)="onGridReady($event)"
+    [pagination]="true"
+    [paginationPageSize]="100"
+    [paginationPageSizeSelector]="[50, 100, 200, 500]"
+    [animateRows]="true"
+    [rowSelection]="{
+      mode: 'multiRow',
+      checkboxes: true,
+      headerCheckbox: true,
+      selectAll: 'filtered',
+      enableClickSelection: true
+    }"
+    [enableCellTextSelection]="true"
+    [suppressRowClickSelection]="false"
+    [rowMultiSelectWithClick]="true"
+    [headerHeight]="48"
+    [rowHeight]="52">
+  </ag-grid-angular>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading()">
+    <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+    <p>Loading Nokia equipment data...</p>
+  </div>
+</div>

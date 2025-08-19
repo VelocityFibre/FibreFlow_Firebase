@@ -23,6 +23,14 @@ export const sowRoutes: Routes = [
         }
       },
       {
+        path: 'data',
+        loadComponent: () => import('./pages/sow-grid/sow-grid.component').then(m => m.SOWGridComponent),
+        data: { 
+          title: 'SOW Data Management',
+          description: 'View and manage SOW pole, drop, and fibre data'
+        }
+      },
+      {
         path: '',
         redirectTo: '/projects',
         pathMatch: 'full'

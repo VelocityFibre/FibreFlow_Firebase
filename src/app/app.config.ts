@@ -23,6 +23,7 @@ import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 import { CustomPreloadingStrategy } from './core/services/custom-preload.service';
 import { AppInitializerService } from './core/services/app-initializer.service';
+import { NavigationRestrictionService } from './core/services/navigation-restriction.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -48,6 +49,16 @@ export const appConfig: ApplicationConfig = {
       provide: APP_INITIALIZER,
       useFactory: (initializer: AppInitializerService) => () => initializer.initialize(),
       deps: [AppInitializerService],
+      multi: true,
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (navigationRestrictionService: NavigationRestrictionService) => () => {
+        navigationRestrictionService.initializeRestrictions();
+        navigationRestrictionService.disableNavigationForFieldWorkers();
+        navigationRestrictionService.getRestrictedRouter();
+      },
+      deps: [NavigationRestrictionService],
       multi: true,
     },
     provideFirebaseApp(() => initializeApp(environment.firebase)),

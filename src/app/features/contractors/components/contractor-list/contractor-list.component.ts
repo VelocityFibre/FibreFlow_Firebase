@@ -22,7 +22,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatDividerModule } from '@angular/material/divider';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 import { ContractorService } from '../../services/contractor.service';
 import { ContractorProjectService } from '../../services/contractor-project.service';
@@ -42,6 +42,7 @@ import { ContractorImportComponent } from '../contractor-import/contractor-impor
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
+    RouterModule,
     MatTableModule,
     MatCardModule,
     MatButtonModule,
@@ -67,6 +68,10 @@ import { ContractorImportComponent } from '../contractor-import/contractor-impor
           <p class="page-subtitle">Manage contractor relationships and project assignments</p>
         </div>
         <div class="header-actions">
+          <button mat-button routerLink="/contractors/grid">
+            <mat-icon>table_chart</mat-icon>
+            Grid View
+          </button>
           <button mat-raised-button color="accent" (click)="openImportDialog()">
             <mat-icon>upload</mat-icon>
             Import Contractors

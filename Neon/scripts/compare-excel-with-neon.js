@@ -10,7 +10,7 @@ const fs = require('fs');
 const path = require('path');
 
 const NEON_CONFIG = {
-  connectionString: 'postgresql://neondb_owner:npg_AlX83ojfZpBk@ep-long-breeze-a9w7xool.gwc.azure.neon.tech/neondb',
+  connectionString: 'postgresql://neondb_owner:npg_AlX83ojfZpBk@ep-long-breeze-a9w7xool-pooler.gwc.azure.neon.tech/neondb?sslmode=require&options=endpoint%3Dep-long-breeze-a9w7xool',
   ssl: { rejectUnauthorized: false }
 };
 

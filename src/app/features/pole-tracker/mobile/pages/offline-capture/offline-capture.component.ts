@@ -1,8 +1,8 @@
-import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepperModule, MatStepper } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,9 +14,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Subscription } from 'rxjs';
 
 import { OfflineIndicatorComponent } from '../../components/offline-indicator/offline-indicator.component';
-import { SyncStatusComponent } from '../../components/sync-status/sync-status.component';
 import { GPSAccuracyComponent } from '../../components/gps-accuracy/gps-accuracy.component';
 import { OfflinePhotoCaptureComponent } from '../../components/offline-photo-capture/offline-photo-capture.component';
+import { StagingSyncUiComponent } from '../../components/staging-sync-ui/staging-sync-ui';
 
 import { OfflinePoleService, OfflinePoleData, OfflinePhoto } from '../../services/offline-pole.service';
 import { OfflineSyncService } from '../../services/offline-sync.service';
@@ -24,6 +24,7 @@ import { EnhancedGPSService, GPSPosition } from '../../services/enhanced-gps.ser
 import { AuthService } from '@app/core/services/auth.service';
 import { ProjectService } from '@app/core/services/project.service';
 import { Project } from '@app/core/models/project.model';
+import { NavigationRestrictionService } from '@app/core/services/navigation-restriction.service';
 
 @Component({
   selector: 'app-offline-capture',
@@ -42,17 +43,21 @@ import { Project } from '@app/core/models/project.model';
     MatSnackBarModule,
     MatProgressSpinnerModule,
     OfflineIndicatorComponent,
-    SyncStatusComponent,
     GPSAccuracyComponent,
-    OfflinePhotoCaptureComponent
+    OfflinePhotoCaptureComponent,
+    StagingSyncUiComponent
   ],
   template: `
     <div class="offline-capture-page">
       <!-- Header -->
       <div class="header">
-        <button mat-icon-button (click)="goBack()">
-          <mat-icon>arrow_back</mat-icon>
-        </button>
+        @if (!isFieldWorker()) {
+          <button mat-icon-button (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+        } @else {
+          <div class="header-spacer"></div>
+        }
         <h1>Offline Pole Capture</h1>
         <app-offline-indicator></app-offline-indicator>
       </div>
@@ -91,6 +96,19 @@ import { Project } from '@app/core/models/project.model';
                     <strong>Found: {{ searchResult()!.pole!.poleNumber }}</strong>
                     <p>{{ searchResult()!.pole!.photos?.length || 0 }} photos captured</p>
                     <p>Status: {{ searchResult()!.pole!.syncStatus }}</p>
+                    
+                    <!-- Photo Status Summary -->
+                    @if (searchResult()!.pole!.photos && searchResult()!.pole!.photos.length > 0) {
+                      <div class="photo-status-summary">
+                        @for (photoType of photoTypes; track photoType.type) {
+                          <div class="photo-status-item" 
+                               [class.captured]="hasPhotoInPole(searchResult()!.pole!, photoType.type)">
+                            <mat-icon>{{ hasPhotoInPole(searchResult()!.pole!, photoType.type) ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+                            <span>{{ photoType.label }}</span>
+                          </div>
+                        }
+                      </div>
+                    }
                   </div>
                   <button mat-raised-button color="primary" (click)="loadExistingPole(searchResult()!.pole!)">
                     Continue Work
@@ -150,12 +168,80 @@ import { Project } from '@app/core/models/project.model';
             
             <div class="gps-capture-section">
               @if (!currentPosition()) {
-                <button mat-raised-button color="primary" 
-                        (click)="captureGPS()" 
-                        [disabled]="isCapturingGPS()">
-                  <mat-icon>location_on</mat-icon>
-                  {{ isCapturingGPS() ? 'Getting GPS...' : 'Capture GPS Location' }}
-                </button>
+                @if (gpsPermissionState() === 'denied') {
+                  <mat-card class="permission-denied-card">
+                    <mat-card-content>
+                      <div class="permission-info">
+                        <mat-icon color="warn">location_disabled</mat-icon>
+                        <div>
+                          <h3>Location Permission Required</h3>
+                          <p>To capture GPS location, please enable location services:</p>
+                          
+                          @if (isIOS()) {
+                            <div class="ios-instructions">
+                              <h4>For Chrome on iPhone/iPad:</h4>
+                              <ol>
+                                <li>Go to iPhone <strong>Settings</strong> → <strong>Privacy & Security</strong> → <strong>Location Services</strong></li>
+                                <li>Make sure Location Services is ON</li>
+                                <li>Find <strong>Chrome</strong> in the app list and tap it</li>
+                                <li>Select <strong>"While Using App"</strong> or <strong>"Always"</strong></li>
+                                <li>Return to Chrome and tap "Check Again" below</li>
+                              </ol>
+                              <p class="help-text">If location is already enabled for Chrome, try:</p>
+                              <ul>
+                                <li>Pull down to refresh this page</li>
+                                <li>Close Chrome completely (swipe up and remove from app switcher)</li>
+                                <li>Reopen Chrome and try again</li>
+                                <li>Check Chrome Settings → Site Settings → Location (should be "Ask First")</li>
+                                <li>Try clearing Chrome's cache: Chrome Settings → Privacy → Clear Browsing Data</li>
+                              </ul>
+                              <p class="chrome-note"><strong>Note:</strong> Chrome on iOS requires location permission in iPhone Settings, not just in the browser.</p>
+                            </div>
+                          } @else {
+                            <ol>
+                              <li>Click the <mat-icon inline>lock</mat-icon> or <mat-icon inline>info</mat-icon> icon in your browser's address bar</li>
+                              <li>Find "Location" or "Permissions"</li>
+                              <li>Change from "Block" to "Allow"</li>
+                              <li>Refresh this page</li>
+                            </ol>
+                            <p class="help-text">Or go to your browser settings → Site settings → Location</p>
+                          }
+                        </div>
+                      </div>
+                    </mat-card-content>
+                    <mat-card-actions>
+                      <button mat-raised-button color="primary" (click)="checkGPSPermission()">
+                        <mat-icon>refresh</mat-icon>
+                        Check Again
+                      </button>
+                    </mat-card-actions>
+                  </mat-card>
+                } @else {
+                  <div class="gps-capture-options">
+                    <button mat-raised-button color="primary" 
+                            (click)="captureGPS()" 
+                            [disabled]="isCapturingGPS()">
+                      <mat-icon>location_on</mat-icon>
+                      {{ isCapturingGPS() ? 'Getting GPS...' : 'Capture GPS Location' }}
+                    </button>
+                    
+                    @if (isIOS() && gpsError()) {
+                      <p class="ios-help">Having trouble? Try these options:</p>
+                      <button mat-stroked-button 
+                              (click)="requestPermissionDirectly()"
+                              [disabled]="isCapturingGPS()">
+                        <mat-icon>settings</mat-icon>
+                        Request Permission Again
+                      </button>
+                      <button mat-stroked-button 
+                              (click)="tryWithLowerAccuracy()"
+                              [disabled]="isCapturingGPS()">
+                        <mat-icon>gps_not_fixed</mat-icon>
+                        Try Lower Accuracy
+                      </button>
+                    }
+                  </div>
+                }
               } @else {
                 <mat-card class="gps-result">
                   <mat-card-content>
@@ -182,11 +268,23 @@ import { Project } from '@app/core/models/project.model';
                 </mat-card>
               }
 
-              @if (gpsError()) {
-                <p class="error-message">
-                  <mat-icon>error</mat-icon>
-                  {{ gpsError() }}
-                </p>
+              @if (gpsError() && gpsPermissionState() !== 'denied') {
+                <mat-card class="error-card">
+                  <mat-card-content>
+                    <p class="error-message">
+                      <mat-icon>error</mat-icon>
+                      {{ gpsError() }}
+                    </p>
+                    @if (isIOS()) {
+                      <p class="debug-info">
+                        <strong>Debug Info:</strong><br>
+                        Permission State: {{ gpsPermissionState() }}<br>
+                        User Agent: iOS Device<br>
+                        GPS Available: {{ isGPSAvailable() ? 'Yes' : 'No' }}
+                      </p>
+                    }
+                  </mat-card-content>
+                </mat-card>
               }
             </div>
 
@@ -295,9 +393,9 @@ import { Project } from '@app/core/models/project.model';
         </mat-step>
       </mat-stepper>
 
-      <!-- Sync Status (shown when offline data exists) -->
+      <!-- Staging Sync UI (shown when offline data exists) -->
       @if ((offlinePoleService.offlinePoles$ | async)?.length) {
-        <app-sync-status></app-sync-status>
+        <app-staging-sync-ui (syncCompleted)="onSyncCompleted()"></app-staging-sync-ui>
       }
     </div>
   `,
@@ -318,6 +416,11 @@ import { Project } from '@app/core/models/project.model';
         flex: 1;
         margin: 0 16px;
         font-size: 20px;
+      }
+      
+      .header-spacer {
+        width: 40px; // Same width as the back button
+        height: 40px;
       }
     }
 
@@ -384,6 +487,37 @@ import { Project } from '@app/core/models/project.model';
       }
     }
 
+    .photo-status-summary {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      
+      .photo-status-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 13px;
+        
+        mat-icon {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+          color: var(--mat-sys-outline);
+        }
+        
+        &.captured {
+          mat-icon {
+            color: var(--mat-sys-primary);
+          }
+          
+          span {
+            font-weight: 500;
+          }
+        }
+      }
+    }
+
     .capture-stepper {
       margin: 16px;
       background: transparent;
@@ -408,6 +542,24 @@ import { Project } from '@app/core/models/project.model';
       align-items: center;
       justify-content: center;
       gap: 16px;
+    }
+
+    .gps-capture-options {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      
+      .ios-help {
+        margin: 16px 0 8px 0;
+        color: var(--mat-sys-outline);
+        font-size: 14px;
+        text-align: center;
+      }
+      
+      button {
+        min-width: 200px;
+      }
     }
 
     .gps-result {
@@ -446,6 +598,93 @@ import { Project } from '@app/core/models/project.model';
       
       mat-icon {
         font-size: 20px;
+      }
+    }
+
+    .permission-denied-card {
+      width: 100%;
+      max-width: 500px;
+      
+      .permission-info {
+        display: flex;
+        gap: 16px;
+        
+        mat-icon {
+          font-size: 48px;
+          width: 48px;
+          height: 48px;
+          flex-shrink: 0;
+        }
+        
+        h3 {
+          margin: 0 0 12px 0;
+          color: var(--mat-sys-error);
+        }
+        
+        p {
+          margin: 0 0 12px 0;
+        }
+        
+        ol {
+          margin: 0 0 12px 0;
+          padding-left: 20px;
+          
+          li {
+            margin-bottom: 8px;
+            
+            mat-icon {
+              font-size: 16px;
+              width: 16px;
+              height: 16px;
+              vertical-align: middle;
+            }
+          }
+        }
+        
+        .help-text {
+          font-size: 14px;
+          color: var(--mat-sys-outline);
+          font-style: italic;
+        }
+      }
+      
+      mat-card-actions {
+        padding-top: 0;
+      }
+    }
+
+    .ios-instructions {
+      h4 {
+        margin: 12px 0 8px 0;
+        color: var(--mat-sys-primary);
+      }
+      
+      ul {
+        margin: 8px 0;
+        padding-left: 20px;
+      }
+      
+      .chrome-note {
+        margin-top: 12px;
+        padding: 12px;
+        background: var(--mat-sys-primary-container);
+        color: var(--mat-sys-on-primary-container);
+        border-radius: 8px;
+        font-size: 14px;
+      }
+    }
+
+    .error-card {
+      width: 100%;
+      margin-top: 16px;
+      
+      .debug-info {
+        margin-top: 12px;
+        padding: 12px;
+        background: var(--mat-sys-surface-variant);
+        border-radius: 4px;
+        font-size: 12px;
+        font-family: monospace;
       }
     }
 
@@ -536,10 +775,13 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
   private snackBar = inject(MatSnackBar);
   private authService = inject(AuthService);
   private projectService = inject(ProjectService);
+  private navigationRestrictionService = inject(NavigationRestrictionService);
   
   offlinePoleService = inject(OfflinePoleService);
   private offlineSyncService = inject(OfflineSyncService);
   private gpsService = inject(EnhancedGPSService);
+  
+  @ViewChild('stepper') stepper!: MatStepper;
   
   projects$ = this.projectService.getProjects();
   projects: Project[] = [];
@@ -561,6 +803,7 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
   isCapturingGPS = signal(false);
   gpsError = signal<string | null>(null);
   isSaving = signal(false);
+  gpsPermissionState = signal<PermissionState>('prompt');
   
   // Search functionality
   searchPoleNumber = '';
@@ -572,9 +815,31 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
   isAutoSaving = signal(false);
   lastAutoSave = signal<Date | null>(null);
   
+  // Photo types for status display
+  photoTypes: Array<{ type: string; label: string }> = [
+    { type: 'before', label: 'Before' },
+    { type: 'front', label: 'Front' },
+    { type: 'side', label: 'Side' },
+    { type: 'depth', label: 'Depth' },
+    { type: 'concrete', label: 'Concrete' },
+    { type: 'compaction', label: 'Compaction' }
+  ];
+  
+  // Field worker detection
+  isFieldWorker = signal(false);
+  
   private subscriptions: Subscription[] = [];
 
   ngOnInit() {
+    // Check if user is a field worker
+    this.checkFieldWorkerStatus();
+    
+    // Initialize navigation restrictions for field workers
+    if (this.authService.getCurrentUserProfile()?.userGroup === 'technician') {
+      this.navigationRestrictionService.initializeRestrictions();
+      this.navigationRestrictionService.disableNavigationForFieldWorkers();
+    }
+    
     // Subscribe to projects
     const projectSub = this.projects$.subscribe(projects => {
       this.projects = projects || [];
@@ -592,6 +857,15 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
       this.autoSaveDraft();
     });
     this.subscriptions.push(formChangeSub);
+
+    // Check GPS permission on load
+    this.checkGPSPermission();
+  }
+
+  private async checkFieldWorkerStatus(): Promise<void> {
+    const userProfile = this.authService.getCurrentUserProfile();
+    const isFieldWorker = userProfile?.userGroup === 'technician';
+    this.isFieldWorker.set(isFieldWorker);
   }
 
   ngOnDestroy() {
@@ -600,7 +874,48 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
+    // Field workers cannot navigate away
+    if (this.isFieldWorker()) {
+      this.snackBar.open('Navigation is restricted for field workers', 'OK', {
+        duration: 3000
+      });
+      return;
+    }
+    
     this.router.navigate(['../'], { relativeTo: this.route });
+  }
+
+  private resetForm(): void {
+    this.basicInfoForm.reset();
+    this.locationForm.reset();
+    this.currentPosition.set(null);
+    this.capturedPhotos.set([]);
+    this.currentDraftId.set(null);
+    this.searchResult.set(null);
+    this.searchPoleNumber = '';
+  }
+
+  isIOS(): boolean {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+  }
+
+  isChrome(): boolean {
+    // CriOS is Chrome on iOS
+    return /CriOS/.test(navigator.userAgent) || /Chrome/.test(navigator.userAgent);
+  }
+
+  isGPSAvailable(): boolean {
+    return 'geolocation' in navigator;
+  }
+
+  async checkGPSPermission(): Promise<void> {
+    try {
+      const permissionState = await this.gpsService.checkPermission();
+      this.gpsPermissionState.set(permissionState);
+    } catch (error) {
+      console.warn('Failed to check GPS permission:', error);
+      this.gpsPermissionState.set('prompt');
+    }
   }
 
   async captureGPS(): Promise<void> {
@@ -631,7 +946,13 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
       // Auto-save after GPS capture
       this.autoSaveDraft();
     } catch (error) {
-      this.gpsError.set(error instanceof Error ? error.message : 'Failed to get GPS location');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to get GPS location';
+      this.gpsError.set(errorMessage);
+      
+      // Check if permission was denied
+      if (errorMessage.toLowerCase().includes('permission denied')) {
+        this.gpsPermissionState.set('denied');
+      }
     } finally {
       this.isCapturingGPS.set(false);
     }
@@ -640,6 +961,65 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
   recaptureGPS(): void {
     this.currentPosition.set(null);
     this.captureGPS();
+  }
+
+  async requestPermissionDirectly(): Promise<void> {
+    this.isCapturingGPS.set(true);
+    this.gpsError.set(null);
+    
+    try {
+      // Try to request permission directly
+      const permissionGranted = await this.gpsService.requestPermission();
+      if (permissionGranted) {
+        this.gpsPermissionState.set('granted');
+        // Try to capture GPS after permission granted
+        await this.captureGPS();
+      } else {
+        this.gpsPermissionState.set('denied');
+        this.gpsError.set('Permission denied. Please check iOS Settings → Privacy & Security → Location Services → Safari');
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to request permission';
+      this.gpsError.set(errorMessage);
+    } finally {
+      this.isCapturingGPS.set(false);
+    }
+  }
+
+  async tryWithLowerAccuracy(): Promise<void> {
+    this.isCapturingGPS.set(true);
+    this.gpsError.set(null);
+    
+    try {
+      // Try with lower accuracy requirements
+      const position = await this.gpsService.getCurrentPosition({
+        requiredAccuracy: 50, // 50 meters instead of 5
+        enableHighAccuracy: false, // Use network location instead of GPS
+        timeout: 30000, // 30 seconds timeout
+        maxAttempts: 3
+      });
+      
+      this.currentPosition.set(position);
+      this.locationForm.patchValue({
+        latitude: position.latitude,
+        longitude: position.longitude,
+        accuracy: position.accuracy
+      });
+      
+      this.snackBar.open(
+        `GPS captured with ${this.formatAccuracy(position.accuracy)} accuracy (lower precision mode)`,
+        'OK',
+        { duration: 5000 }
+      );
+
+      // Auto-save after GPS capture
+      this.autoSaveDraft();
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to get GPS location';
+      this.gpsError.set(errorMessage);
+    } finally {
+      this.isCapturingGPS.set(false);
+    }
   }
 
   formatCoordinates(position: GPSPosition): string {
@@ -673,6 +1053,14 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
   getMissingRequiredPhotos(): string[] {
     // No photos are required anymore
     return [];
+  }
+
+  hasPhotoInPole(pole: OfflinePoleData, photoType: string): boolean {
+    return pole.photos?.some(photo => photo.type === photoType) || false;
+  }
+
+  hasPhotoType(photoType: string): boolean {
+    return this.capturedPhotos().some(photo => photo.type === photoType);
   }
 
   async searchForPole(): Promise<void> {
@@ -952,5 +1340,27 @@ export class OfflineCaptureComponent implements OnInit, OnDestroy {
     } finally {
       this.isSaving.set(false);
     }
+  }
+
+  /**
+   * Handle successful sync completion - reset stepper to step 1
+   */
+  onSyncCompleted(): void {
+    // Reset the stepper to the first step
+    this.stepper.reset();
+    
+    // Reset all forms
+    this.basicInfoForm.reset();
+    this.locationForm.reset();
+    this.currentPosition.set(null);
+    this.capturedPhotos.set([]);
+    this.currentDraftId.set(null);
+    
+    // Show success message
+    this.snackBar.open(
+      'Sync completed! Ready to capture a new pole.',
+      'Close',
+      { duration: 3000 }
+    );
   }
 }

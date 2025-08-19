@@ -32,22 +32,31 @@ export class AuthService {
   //
   private USE_REAL_AUTH = false; // Set to true for production Google auth
 
-  // Mock user for development - always logged in as admin
-  private mockUser = {
+  // 🚨 DEV MODE: Change this to test different user roles
+  // Options: 'admin' | 'project-manager' | 'technician' | 'supplier' | 'client'
+  // Set to 'technician' to test field worker restrictions
+  public DEV_USER_ROLE: UserProfile['userGroup'] = 'admin'; // Made public for access
+
+  // Mock user for development - role determined by DEV_USER_ROLE
+  public mockUser = {
     uid: 'dev-user',
     email: 'dev@test.com',
     displayName: 'Dev User',
   };
 
-  private mockUserProfile: UserProfile = {
+  public mockUserProfile: UserProfile = {
     uid: 'dev-user',
     email: 'dev@test.com',
     displayName: 'Dev User',
-    userGroup: 'admin' as const,
+    userGroup: this.DEV_USER_ROLE,
     isActive: true,
     createdAt: new Date(),
     lastLogin: new Date(),
   };
+  
+  public userProfileSignal = signal<UserProfile | null>(
+    this.USE_REAL_AUTH ? null : this.mockUserProfile,
+  );
 
   // Signal-based state management
   // Initialize as null when using real auth, mock user only in dev mode
@@ -56,10 +65,6 @@ export class AuthService {
     email: string;
     displayName: string;
   } | null>(this.USE_REAL_AUTH ? null : this.mockUser);
-
-  private userProfileSignal = signal<UserProfile | null>(
-    this.USE_REAL_AUTH ? null : this.mockUserProfile,
-  );
 
   // Public signals for components
   readonly currentUser = this.userSignal.asReadonly();
@@ -79,7 +84,8 @@ export class AuthService {
       console.log('🔐 Auth Service initialized with REAL Firebase Authentication');
       this.initializeRealAuth();
     } else {
-      console.log('🔐 Auth Service initialized in MOCK MODE - Always logged in as admin');
+      console.log(`🔐 Auth Service initialized in MOCK MODE - Logged in as ${this.DEV_USER_ROLE}`);
+      console.log(`🚨 To test field worker restrictions, change DEV_USER_ROLE to 'technician' in auth.service.ts`);
       // Force clear any cached Firebase auth state
       this.auth.signOut().catch(() => {
         // Ignore errors - might not be signed in
@@ -214,6 +220,30 @@ export class AuthService {
   async updateUserProfile(updates: Partial<UserProfile>): Promise<void> {
     console.log('🔐 Mock update user profile:', updates);
     this.userProfileSignal.update((current) => (current ? { ...current, ...updates } : null));
+  }
+
+  // 🚨 DEVELOPMENT ONLY: Method to switch user roles for testing
+  // Usage: In browser console: authService.switchDevRole('technician')
+  switchDevRole(role: UserProfile['userGroup']): void {
+    if (!this.USE_REAL_AUTH) {
+      console.log(`🔄 Switching dev user role from ${this.DEV_USER_ROLE} to ${role}`);
+      this.DEV_USER_ROLE = role;
+      this.mockUserProfile.userGroup = role;
+      this.userProfileSignal.set(this.mockUserProfile);
+      
+      // Show appropriate message based on role
+      if (role === 'technician') {
+        console.log('✅ Now testing as FIELD WORKER - you should be restricted to offline-pole-capture only');
+        console.log('🔒 Navigation should be locked down');
+      } else {
+        console.log(`✅ Now testing as ${role.toUpperCase()} - full navigation available`);
+      }
+      
+      // Force a navigation update
+      window.location.reload();
+    } else {
+      console.warn('⚠️ Cannot switch roles in production mode');
+    }
   }
 
   // TODO: Remove mock implementation when ready for production

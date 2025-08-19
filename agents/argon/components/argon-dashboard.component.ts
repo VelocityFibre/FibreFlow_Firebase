@@ -419,6 +419,127 @@ import {
             </mat-card-content>
           </mat-card>
         </mat-tab>
+
+        <!-- Query Insights Tab -->
+        <mat-tab label="Query Insights" class="insights-tab">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Query Transparency & Insights</mat-card-title>
+              <mat-card-subtitle>See exactly how your queries are processed and where data comes from</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              @if (lastQueryInsights()) {
+                <div class="insights-content">
+                  <!-- Query Information -->
+                  <div class="insight-section">
+                    <h3><mat-icon>search</mat-icon> Query Analysis</h3>
+                    <div class="insight-details">
+                      <div class="insight-row">
+                        <span class="label">User Query:</span>
+                        <span class="value">"{{ lastQueryInsights().userQuery }}"</span>
+                      </div>
+                      <div class="insight-row">
+                        <span class="label">Detected Intent:</span>
+                        <mat-chip>{{ lastQueryInsights().detectedIntent }}</mat-chip>
+                      </div>
+                      <div class="insight-row">
+                        <span class="label">Data Type:</span>
+                        <mat-chip>{{ lastQueryInsights().detectedDataType }}</mat-chip>
+                      </div>
+                      <div class="insight-row">
+                        <span class="label">Timestamp:</span>
+                        <span class="value">{{ lastQueryInsights().timestamp | date:'medium' }}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Database Queries -->
+                  <div class="insight-section">
+                    <h3><mat-icon>storage</mat-icon> Database Queries Executed</h3>
+                    <div class="queries-list">
+                      @for (query of lastQueryInsights().queries; track query.database) {
+                        <div class="query-card">
+                          <div class="query-header">
+                            <mat-chip [color]="query.database === 'firestore' ? 'primary' : 'accent'">
+                              {{ query.database | uppercase }}
+                            </mat-chip>
+                            <span class="execution-time">{{ query.executionTimeMs }}ms</span>
+                          </div>
+                          <div class="query-details">
+                            <code class="query-string">{{ query.queryString }}</code>
+                            @if (query.parameters?.length) {
+                              <div class="parameters">
+                                <strong>Parameters:</strong>
+                                <pre>{{ query.parameters | json }}</pre>
+                              </div>
+                            }
+                            <div class="query-stats">
+                              <mat-icon>description</mat-icon>
+                              <span>{{ query.recordsReturned }} records returned</span>
+                            </div>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+
+                  <!-- Processing Steps -->
+                  <div class="insight-section">
+                    <h3><mat-icon>timeline</mat-icon> Processing Timeline</h3>
+                    <div class="timeline">
+                      @for (step of lastQueryInsights().dataProcessing; track step.step) {
+                        <div class="timeline-step">
+                          <div class="step-marker"></div>
+                          <div class="step-content">
+                            <h4>{{ step.step }}</h4>
+                            <p>{{ step.description }}</p>
+                            <span class="duration">{{ step.duration }}ms</span>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+
+                  <!-- Results Summary -->
+                  <div class="insight-section">
+                    <h3><mat-icon>analytics</mat-icon> Results Summary</h3>
+                    <div class="results-summary">
+                      <div class="stat-card">
+                        <span class="stat-value">{{ lastQueryInsights().totalRecordsFound }}</span>
+                        <span class="stat-label">Total Records Found</span>
+                      </div>
+                      <div class="stat-card">
+                        <span class="stat-value">{{ lastQueryInsights().recordsShown }}</span>
+                        <span class="stat-label">Records Displayed</span>
+                      </div>
+                      <div class="stat-card">
+                        <span class="stat-value">{{ lastQueryInsights().queries.length }}</span>
+                        <span class="stat-label">Databases Queried</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Raw Data Preview -->
+                  <div class="insight-section">
+                    <h3><mat-icon>code</mat-icon> Raw Data Sample</h3>
+                    <button mat-stroked-button (click)="toggleRawData()">
+                      {{ showRawData() ? 'Hide' : 'Show' }} Raw Data
+                    </button>
+                    @if (showRawData()) {
+                      <pre class="raw-data">{{ getLatestQueryData() | json }}</pre>
+                    }
+                  </div>
+                </div>
+              } @else {
+                <div class="no-insights">
+                  <mat-icon>info</mat-icon>
+                  <h3>No Query Insights Available</h3>
+                  <p>Ask a question in the AI Assistant tab to see detailed query insights here.</p>
+                </div>
+              }
+            </mat-card-content>
+          </mat-card>
+        </mat-tab>
       </mat-tab-group>
 
       <!-- Error Display -->
@@ -865,6 +986,209 @@ import {
       display: flex;
       gap: 16px;
     }
+
+    /* Query Insights Styles */
+    .insights-content {
+      padding: 16px 0;
+    }
+
+    .insight-section {
+      margin-bottom: 32px;
+      padding: 20px;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+
+    .insight-section h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 16px 0;
+      color: #333;
+    }
+
+    .insight-details {
+      background: white;
+      padding: 16px;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .insight-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .insight-row:last-child {
+      border-bottom: none;
+    }
+
+    .insight-row .label {
+      font-weight: 500;
+      color: #666;
+      min-width: 140px;
+    }
+
+    .insight-row .value {
+      flex: 1;
+      color: #333;
+      font-family: monospace;
+    }
+
+    .queries-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .query-card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 16px;
+    }
+
+    .query-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .execution-time {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .query-string {
+      display: block;
+      background: #f8f8f8;
+      padding: 12px;
+      border-radius: 4px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 13px;
+      overflow-x: auto;
+      margin: 8px 0;
+    }
+
+    .query-stats {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #666;
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .parameters {
+      margin-top: 12px;
+      padding: 12px;
+      background: #f0f0f0;
+      border-radius: 4px;
+    }
+
+    .parameters pre {
+      margin: 4px 0 0 0;
+      font-size: 12px;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 30px;
+    }
+
+    .timeline-step {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .step-marker {
+      position: absolute;
+      left: -30px;
+      top: 4px;
+      width: 12px;
+      height: 12px;
+      background: #2196f3;
+      border-radius: 50%;
+    }
+
+    .timeline-step:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: -24px;
+      top: 16px;
+      width: 1px;
+      height: calc(100% + 12px);
+      background: #e0e0e0;
+    }
+
+    .step-content h4 {
+      margin: 0 0 4px 0;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .step-content p {
+      margin: 0;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .duration {
+      display: inline-block;
+      margin-top: 4px;
+      color: #999;
+      font-size: 12px;
+    }
+
+    .results-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+      text-align: center;
+    }
+
+    .raw-data {
+      margin-top: 16px;
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 16px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .no-insights {
+      text-align: center;
+      padding: 60px 20px;
+      color: #666;
+    }
+
+    .no-insights mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      color: #ccc;
+      margin-bottom: 16px;
+    }
+
+    .no-insights h3 {
+      margin: 0 0 8px 0;
+      color: #333;
+    }
   `]
 })
 export class ArgonDashboardComponent implements OnInit {
@@ -880,6 +1204,8 @@ export class ArgonDashboardComponent implements OnInit {
   // Chat-related signals
   chatHistory = signal<ChatMessage[]>([]);
   isProcessingChat = signal(false);
+  lastQueryInsights = signal<any>(null);
+  showRawData = signal(false);
 
   queryForm: FormGroup;
   chatForm: FormGroup;
@@ -1025,8 +1351,14 @@ export class ArgonDashboardComponent implements OnInit {
     this.buildQueryFromNaturalLanguage(unifiedQuery, userMessage, targetDatabase);
 
     const queryStartTime = Date.now();
+    
+    // Detect intent and data type for insights
+    const intent = this.aiResponseService.detectIntent ? 
+      this.aiResponseService.detectIntent(userMessage) : 'general';
+    const dataType = this.aiResponseService.detectDataType ? 
+      this.aiResponseService.detectDataType(userMessage, []) : 'unknown';
 
-    this.argonService.executeUnifiedQuery(unifiedQuery).subscribe({
+    this.argonService.executeUnifiedQuery(unifiedQuery, userMessage, intent, dataType).subscribe({
       next: (queryResult) => {
         const executionTime = Date.now() - queryStartTime;
         
@@ -1043,6 +1375,12 @@ export class ArgonDashboardComponent implements OnInit {
             };
 
             this.chatHistory.update(history => [...history, assistantMessage]);
+            
+            // Store query insights if available
+            if (queryResult.queryInsights || analysis.queryInsights) {
+              this.lastQueryInsights.set(queryResult.queryInsights || analysis.queryInsights);
+            }
+            
             this.isProcessingChat.set(false);
           },
           error: (error) => {
@@ -1152,5 +1490,26 @@ export class ArgonDashboardComponent implements OnInit {
       .replace(/^# (.*$)/gm, '<h1>$1</h1>') // H1 headers
       .replace(/• (.*?)(?=<br>|$)/g, '<li>$1</li>') // List items
       .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>'); // Wrap lists in ul tags
+  }
+
+  toggleRawData(): void {
+    this.showRawData.update(show => !show);
+  }
+
+  getLatestQueryData(): any {
+    const history = this.chatHistory();
+    const lastMessage = history[history.length - 1];
+    if (lastMessage?.queryData) {
+      return {
+        totalRecords: lastMessage.queryData.mergedData.length,
+        sampleRecords: lastMessage.queryData.mergedData.slice(0, 3),
+        databases: lastMessage.queryData.results.map((r: any) => ({
+          source: r.source,
+          recordCount: r.data.length,
+          executionTime: r.executionTimeMs
+        }))
+      };
+    }
+    return null;
   }
 }

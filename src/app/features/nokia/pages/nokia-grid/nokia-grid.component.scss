@@ -1,0 +1,370 @@
+@use '../../../../../styles/_component-theming' as theme;
+
+.nokia-grid-container {
+  padding: theme.ff-spacing(lg);
+  max-width: 1600px;
+  margin: 0 auto;
+  
+  // Page header
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: theme.ff-spacing(lg);
+    
+    h1 {
+      // @include theme.heading-1(); // Commented out - mixin not available
+      font-size: theme.ff-rem(32);
+      font-weight: 700;
+      line-height: 1.2;
+      color: theme.ff-rgb(foreground);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: theme.ff-spacing(sm);
+    }
+    
+    .subtitle {
+      color: theme.ff-rgb(muted-foreground);
+      font-size: theme.ff-rem(14);
+      margin: theme.ff-spacing(xs) 0 0 0;
+    }
+    
+    .refresh-btn {
+      color: theme.ff-rgb(primary);
+      
+      &:hover {
+        background-color: theme.ff-rgba(primary, 0.1);
+      }
+    }
+  }
+
+  // Summary cards
+  .summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: theme.ff-spacing(md);
+    margin-bottom: theme.ff-spacing(lg);
+    
+    .summary-card {
+      background: theme.ff-rgb(card);
+      border: 1px solid theme.ff-rgba(border, 0.2);
+      border-radius: theme.ff-rem(8);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: theme.ff-shadow(lg);
+      }
+      
+      mat-card-content {
+        display: flex;
+        align-items: center;
+        gap: theme.ff-spacing(md);
+        padding: theme.ff-spacing(md);
+      }
+      
+      .summary-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        mat-icon {
+          font-size: 24px;
+          width: 24px;
+          height: 24px;
+        }
+        
+        &.equipment {
+          background: theme.ff-rgba(primary, 0.1);
+          color: theme.ff-rgb(primary);
+        }
+        
+        &.active {
+          background: theme.ff-rgba(success, 0.1);
+          color: theme.ff-rgb(success);
+        }
+        
+        &.teams {
+          background: theme.ff-rgba(info, 0.1);
+          color: theme.ff-rgb(info);
+        }
+        
+        &.signal {
+          background: theme.ff-rgba(warning, 0.1);
+          color: theme.ff-rgb(warning);
+        }
+      }
+      
+      .summary-info {
+        flex: 1;
+        
+        .summary-value {
+          font-size: theme.ff-rem(24);
+          font-weight: 600;
+          color: theme.ff-rgb(foreground);
+          line-height: 1;
+        }
+        
+        .summary-label {
+          font-size: theme.ff-rem(14);
+          color: theme.ff-rgb(muted-foreground);
+          margin-top: theme.ff-spacing(xs);
+        }
+      }
+    }
+  }
+
+  // Filter bar
+  .filter-bar {
+    // @include theme.surface-card; // Commented out - mixin not available
+    background: theme.ff-rgb(card);
+    border: 1px solid theme.ff-rgba(border, 0.2);
+    border-radius: theme.ff-rem(8);
+    box-shadow: theme.ff-shadow(sm);
+    padding: theme.ff-spacing(md);
+    margin-bottom: theme.ff-spacing(md);
+    display: flex;
+    flex-wrap: wrap;
+    gap: theme.ff-spacing(md);
+    align-items: center;
+    
+    mat-form-field {
+      min-width: 160px;
+      
+      &.search-field {
+        min-width: 250px;
+        flex: 1;
+      }
+      
+      &.project-field {
+        min-width: 200px;
+      }
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: theme.ff-spacing(sm);
+      margin-left: auto;
+      
+      .clear-btn {
+        color: theme.ff-rgb(muted-foreground);
+        border-color: theme.ff-rgba(border, 0.5);
+        
+        &:hover {
+          background-color: theme.ff-rgba(muted, 0.1);
+        }
+      }
+      
+      .export-btn {
+        background-color: theme.ff-rgb(primary);
+        color: theme.ff-rgb(primary-foreground);
+      }
+    }
+  }
+
+  // Signal quality legend
+  .signal-quality-legend {
+    // @include theme.surface-card; // Commented out - mixin not available
+    background: theme.ff-rgb(card);
+    border: 1px solid theme.ff-rgba(border, 0.2);
+    border-radius: theme.ff-rem(8);
+    box-shadow: theme.ff-shadow(sm);
+    padding: theme.ff-spacing(sm) theme.ff-spacing(md);
+    margin-bottom: theme.ff-spacing(md);
+    display: flex;
+    align-items: center;
+    gap: theme.ff-spacing(md);
+    
+    .legend-title {
+      font-weight: 500;
+      color: theme.ff-rgb(foreground);
+      font-size: theme.ff-rem(14);
+    }
+    
+    .quality-chips {
+      display: flex;
+      gap: theme.ff-spacing(sm);
+      
+      .quality-chip {
+        pointer-events: none;
+        font-size: theme.ff-rem(12);
+        padding: 4px 8px;
+        height: auto;
+        border-radius: theme.ff-rem(16);
+        
+        mat-icon {
+          font-size: 14px;
+          width: 14px;
+          height: 14px;
+          margin-right: 4px;
+        }
+        
+        &.excellent {
+          background-color: #4caf50;
+          color: white;
+        }
+        
+        &.good {
+          background-color: #8bc34a;
+          color: white;
+        }
+        
+        &.fair {
+          background-color: #ff9800;
+          color: white;
+        }
+        
+        &.poor {
+          background-color: #f44336;
+          color: white;
+        }
+      }
+    }
+  }
+
+  // AG Grid container
+  .nokia-main-grid {
+    // @include theme.surface-card; // Commented out - mixin not available
+    background: theme.ff-rgb(card);
+    box-shadow: theme.ff-shadow(sm);
+    border-radius: theme.ff-rem(8);
+    overflow: hidden;
+    height: 600px;
+    border: 1px solid theme.ff-rgba(border, 0.2);
+    
+    // Custom styling for Nokia-specific cells
+    :global {
+      .drop-number-cell {
+        font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+        font-weight: 600;
+        color: theme.ff-rgb(primary);
+      }
+      
+      .monospace {
+        font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+        font-size: theme.ff-rem(12);
+      }
+      
+      .status-chip {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: theme.ff-rem(12);
+        font-size: theme.ff-rem(11);
+        font-weight: 500;
+        text-transform: uppercase;
+        
+        &.status-active {
+          background-color: theme.ff-rgba(success, 0.1);
+          color: theme.ff-rgb(success);
+        }
+        
+        &.status-inactive {
+          background-color: theme.ff-rgba(muted, 0.1);
+          color: theme.ff-rgb(muted-foreground);
+        }
+      }
+      
+      .olt-address {
+        .olt-name {
+          font-weight: 500;
+          font-size: theme.ff-rem(12);
+          color: theme.ff-rgb(foreground);
+        }
+        
+        .olt-port {
+          font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+          font-size: theme.ff-rem(11);
+          color: theme.ff-rgb(muted-foreground);
+        }
+      }
+      
+      .team-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        background-color: theme.ff-rgba(info, 0.1);
+        color: theme.ff-rgb(info);
+        border-radius: theme.ff-rem(8);
+        font-size: theme.ff-rem(11);
+        font-weight: 500;
+      }
+      
+      .coordinates-link {
+        color: theme.ff-rgb(primary);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: theme.ff-rem(12);
+        
+        &:hover {
+          text-decoration: underline;
+        }
+        
+        mat-icon {
+          color: theme.ff-rgb(success);
+        }
+      }
+    }
+  }
+
+  // Loading state
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: theme.ff-spacing(3xl);
+    color: theme.ff-rgb(muted-foreground);
+    
+    mat-progress-spinner {
+      margin-bottom: theme.ff-spacing(md);
+    }
+    
+    p {
+      font-size: theme.ff-rem(16);
+      margin: 0;
+    }
+  }
+
+  // Mobile responsive adjustments
+  @media (max-width: 768px) {
+    padding: theme.ff-spacing(md);
+    
+    .summary-cards {
+      grid-template-columns: 1fr;
+    }
+    
+    .filter-bar {
+      flex-direction: column;
+      align-items: stretch;
+      
+      mat-form-field {
+        min-width: auto;
+        width: 100%;
+      }
+      
+      .action-buttons {
+        margin-left: 0;
+        margin-top: theme.ff-spacing(sm);
+        justify-content: center;
+      }
+    }
+    
+    .signal-quality-legend {
+      flex-direction: column;
+      align-items: flex-start;
+      
+      .quality-chips {
+        flex-wrap: wrap;
+      }
+    }
+    
+    .nokia-main-grid {
+      height: 500px;
+    }
+  }
+}

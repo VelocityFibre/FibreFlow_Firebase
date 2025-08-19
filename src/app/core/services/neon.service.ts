@@ -30,8 +30,15 @@ export class NeonService {
       throw new Error('Neon connection not configured. Please add neonConnectionString to environment.');
     }
 
-    // Use sql.query for parameterized queries as per new API
-    const promise = params ? this.sql.query(query, params) : this.sql(query);
+    // For parameterized queries, use the new sql.query() method
+    if (params && params.length > 0) {
+      console.log('Executing Neon parameterized query:', query, 'with params:', params);
+      const promise = this.sql.query(query, params);
+      return from(promise) as Observable<T[]>;
+    }
+    
+    // For non-parameterized queries
+    const promise = this.sql`${query}`;
     return from(promise) as Observable<T[]>;
   }
 

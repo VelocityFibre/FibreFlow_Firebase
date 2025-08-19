@@ -42,8 +42,8 @@
   }
   
   &.drops {
-    background: theme.ff-rgba(accent, 0.1);
-    color: theme.ff-rgb(accent);
+    background: theme.ff-rgba(success, 0.1);
+    color: theme.ff-rgb(success);
   }
   
   &.fibre {
@@ -74,170 +74,7 @@
   margin-top: theme.ff-spacing(xs);
 }
 
-// No Data State
-.no-data-container {
-  display: flex;
-  justify-content: center;
-  padding: theme.ff-spacing(4xl) 0;
-}
 
-.no-data-card {
-  // Card styling removed - mixin not found
-  max-width: 500px;
-  text-align: center;
-  
-  mat-card-content {
-    padding: theme.ff-spacing(xl);
-  }
-}
-
-.no-data-icon {
-  font-size: 64px;
-  width: 64px;
-  height: 64px;
-  margin: 0 auto theme.ff-spacing(lg);
-  color: theme.ff-rgb(text-tertiary);
-}
-
-.import-note {
-  margin-top: theme.ff-spacing(md);
-  font-size: theme.ff-rem(14);
-  color: theme.ff-rgb(text-secondary);
-}
-
-// Tabs
-.sow-tabs {
-  // Card styling removed - mixin not found
-  margin-top: theme.ff-spacing(lg);
-}
-
-.tab-content {
-  padding: theme.ff-spacing(lg);
-}
-
-// Filter Bar
-.filter-bar {
-  display: flex;
-  gap: theme.ff-spacing(md);
-  align-items: center;
-  margin-bottom: theme.ff-spacing(lg);
-  flex-wrap: wrap;
-}
-
-.search-field {
-  min-width: 300px;
-  flex: 1;
-}
-
-.filter-field {
-  min-width: 180px;
-}
-
-.export-btn {
-  margin-left: auto;
-}
-
-// AG Grid Container
-.sow-grid {
-  height: 600px;
-  width: 100%;
-  
-  // Custom AG Grid theme overrides for SOW
-  --ag-header-background-color: theme.ff-rgb(surface-secondary);
-  --ag-header-foreground-color: theme.ff-rgb(text-primary);
-  --ag-row-hover-color: theme.ff-rgba(primary, 0.05);
-  --ag-selected-row-background-color: theme.ff-rgba(primary, 0.1);
-  --ag-odd-row-background-color: theme.ff-rgba(surface-secondary, 0.3);
-  --ag-border-color: theme.ff-rgb(border);
-  --ag-font-family: inherit;
-  --ag-font-size: theme.ff-rem(14);
-}
-
-// Tables (legacy - keeping for compatibility)
-.table-container {
-  overflow-x: auto;
-}
-
-.sow-table {
-  width: 100%;
-  
-  th {
-    font-weight: 600;
-    color: theme.ff-rgb(text-secondary);
-  }
-  
-  td {
-    color: theme.ff-rgb(text-primary);
-  }
-}
-
-// Status Chips (Material Components)
-mat-chip {
-  font-size: theme.ff-rem(12);
-  min-height: 24px;
-  padding: 0 theme.ff-spacing(sm);
-  
-  &.status-approved {
-    background: theme.ff-rgba(success, 0.1);
-    color: theme.ff-rgb(success);
-  }
-  
-  &.status-completed {
-    background: theme.ff-rgba(info, 0.1);
-    color: theme.ff-rgb(info);
-  }
-  
-  &.status-progress {
-    background: theme.ff-rgba(warning, 0.1);
-    color: theme.ff-rgb(warning);
-  }
-  
-  &.status-pending {
-    background: theme.ff-rgba(text-secondary, 0.1);
-    color: theme.ff-rgb(text-secondary);
-  }
-  
-  &.status-default {
-    background: theme.ff-rgba(text-tertiary, 0.1);
-    color: theme.ff-rgb(text-tertiary);
-  }
-}
-
-// Status Chips (AG Grid Cell Renderers)
-.status-chip {
-  font-size: theme.ff-rem(12);
-  min-height: 20px;
-  padding: 4px theme.ff-spacing(sm);
-  border-radius: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
-  display: inline-block;
-  
-  &.status-approved {
-    background: theme.ff-rgba(success, 0.1);
-    color: theme.ff-rgb(success);
-  }
-  
-  &.status-completed {
-    background: theme.ff-rgba(info, 0.1);
-    color: theme.ff-rgb(info);
-  }
-  
-  &.status-progress {
-    background: theme.ff-rgba(warning, 0.1);
-    color: theme.ff-rgb(warning);
-  }
-  
-  &.status-pending {
-    background: theme.ff-rgba(text-secondary, 0.1);
-    color: theme.ff-rgb(text-secondary);
-  }
-  
-  &.status-default {
-    background: theme.ff-rgba(text-tertiary, 0.1);
-    color: theme.ff-rgb(text-tertiary);
-  }
-}
 
 // Loading State
 .loading-container {
@@ -256,75 +93,12 @@ mat-chip {
 // Responsive Design
 @media (max-width: 768px) {
   .summary-cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .filter-bar {
-    flex-direction: column;
-    align-items: stretch;
-    
-    .search-field {
-      min-width: auto;
-      flex: none;
-    }
-    
-    .export-btn {
-      margin-left: 0;
-    }
-  }
-  
-  .sow-grid {
-    height: 500px;
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 480px) {
-  .summary-cards {
-    grid-template-columns: 1fr;
-  }
-  
   .sow-container {
     padding: theme.ff-spacing(md);
-  }
-  
-  .tab-content {
-    padding: theme.ff-spacing(md);
-  }
-  
-  .sow-grid {
-    height: 400px;
-  }
-}
-
-// Custom AG Grid Cell Renderers
-.ag-theme-material {
-  .status-cell {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    
-    mat-chip {
-      margin: 0;
-    }
-  }
-  
-  .icon-cell {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    
-    mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-    }
-  }
-  
-  // Fix for Material chip rendering in AG Grid
-  .ag-cell-wrapper {
-    height: 100%;
-    display: flex;
-    align-items: center;
   }
 }

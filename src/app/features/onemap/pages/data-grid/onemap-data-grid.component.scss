@@ -1,0 +1,174 @@
+@use '../../../../../styles/_component-theming' as theme;
+
+.onemap-grid-container {
+  padding: theme.ff-spacing(lg);
+  max-width: 1600px;
+  margin: 0 auto;
+  
+  .summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: theme.ff-spacing(md);
+    margin-bottom: theme.ff-spacing(lg);
+    
+    .summary-card {
+      @include theme.card-theme();
+      
+      mat-card-content {
+        display: flex;
+        align-items: center;
+        gap: theme.ff-spacing(md);
+        
+        .summary-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 48px;
+          height: 48px;
+          border-radius: theme.ff-var(radius);
+          background: theme.ff-rgba(primary, 0.1);
+          
+          mat-icon {
+            font-size: 24px;
+            width: 24px;
+            height: 24px;
+          }
+        }
+        
+        .summary-info {
+          flex: 1;
+          
+          .summary-value {
+            @include theme.heading-4();
+            color: theme.ff-rgb(foreground);
+            margin-bottom: 4px;
+          }
+          
+          .summary-label {
+            @include theme.caption-text();
+            color: theme.ff-rgb(text-secondary);
+          }
+        }
+      }
+    }
+  }
+  
+  .filter-bar {
+    display: flex;
+    gap: theme.ff-spacing(md);
+    margin-bottom: theme.ff-spacing(lg);
+    align-items: center;
+    flex-wrap: wrap;
+    
+    .filter-field {
+      min-width: 180px;
+      flex: 0 1 auto;
+    }
+    
+    button {
+      flex-shrink: 0;
+      margin-left: auto;
+      
+      &:not(:last-child) {
+        margin-left: 0;
+        margin-right: theme.ff-spacing(sm);
+      }
+    }
+  }
+  
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: theme.ff-spacing(xl);
+    
+    mat-progress-spinner {
+      margin-bottom: theme.ff-spacing(md);
+    }
+    
+    p {
+      @include theme.body-text();
+      color: theme.ff-rgb(text-secondary);
+    }
+  }
+  
+  .onemap-main-grid {
+    height: calc(100vh - 450px);
+    min-height: 500px;
+    
+    // AG Grid theming
+    --ag-header-background-color: #{theme.ff-rgb(surface-secondary)};
+    --ag-header-foreground-color: #{theme.ff-rgb(foreground)};
+    --ag-row-hover-color: #{theme.ff-rgba(primary, 0.05)};
+    --ag-selected-row-background-color: #{theme.ff-rgba(primary, 0.1)};
+    --ag-border-color: #{theme.ff-rgb(border)};
+    --ag-font-size: #{theme.ff-rem(14)};
+    --ag-font-family: 'Roboto', 'Segoe UI', sans-serif;
+    
+    // Custom styling for better integration
+    border: 1px solid theme.ff-rgb(border);
+    border-radius: theme.ff-var(radius);
+    overflow: hidden;
+  }
+  
+  // Responsive design
+  @media (max-width: 768px) {
+    padding: theme.ff-spacing(md);
+    
+    .summary-cards {
+      grid-template-columns: 1fr;
+      gap: theme.ff-spacing(sm);
+    }
+    
+    .filter-bar {
+      flex-direction: column;
+      align-items: stretch;
+      
+      .filter-field {
+        min-width: auto;
+      }
+      
+      button {
+        margin-left: 0;
+        margin-top: theme.ff-spacing(sm);
+      }
+    }
+    
+    .onemap-main-grid {
+      height: calc(100vh - 600px);
+    }
+  }
+}
+
+// Global styles for status chips
+:global {
+  .status-chip {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: theme.ff-rem(11);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    
+    &.status-success {
+      background: theme.ff-rgba(success, 0.15);
+      color: theme.ff-rgb(success);
+    }
+    
+    &.status-warning {
+      background: theme.ff-rgba(warning, 0.15);
+      color: theme.ff-rgb(warning);
+    }
+    
+    &.status-error {
+      background: theme.ff-rgba(destructive, 0.15);
+      color: theme.ff-rgb(destructive);
+    }
+    
+    &.status-neutral {
+      background: theme.ff-rgba(text-secondary, 0.15);
+      color: theme.ff-rgb(text-secondary);
+    }
+  }
+}

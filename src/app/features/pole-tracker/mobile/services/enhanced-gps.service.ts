@@ -69,6 +69,36 @@ export class EnhancedGPSService {
     return true;
   }
 
+  async checkPermission(): Promise<PermissionState> {
+    if (!('permissions' in navigator)) {
+      // Fallback for browsers that don't support Permissions API
+      return 'prompt';
+    }
+
+    try {
+      const result = await navigator.permissions.query({ name: 'geolocation' as PermissionName });
+      return result.state;
+    } catch (error) {
+      console.warn('Failed to check GPS permission:', error);
+      return 'prompt';
+    }
+  }
+
+  async requestPermission(): Promise<boolean> {
+    try {
+      // Attempt to get position to trigger permission prompt
+      await this.getPositionOnce(this.DEFAULT_OPTIONS);
+      return true;
+    } catch (error) {
+      const errorMessage = this.getErrorMessage(error);
+      if (errorMessage.includes('permission denied')) {
+        return false;
+      }
+      // Other errors might still mean permission was granted
+      return true;
+    }
+  }
+
   async getCurrentPosition(options?: GPSOptions): Promise<GPSPosition> {
     if (!this.checkGPSAvailability()) {
       throw new Error('GPS not available');
@@ -110,6 +140,12 @@ export class EnhancedGPSService {
       } catch (error) {
         const errorMessage = this.getErrorMessage(error);
         this.updateStatus({ lastError: errorMessage });
+        
+        // If permission denied, throw immediately without retrying
+        if (errorMessage.includes('permission denied')) {
+          this.updateStatus({ isTracking: false });
+          throw new Error(errorMessage);
+        }
         
         // If this is the last attempt, throw the error
         if (attempts >= opts.maxAttempts!) {
@@ -224,19 +260,30 @@ export class EnhancedGPSService {
   }
 
   private getErrorMessage(error: any): string {
+    console.error('GPS Error Details:', error);
+    
     if (error instanceof GeolocationPositionError) {
       switch (error.code) {
         case error.PERMISSION_DENIED:
+          const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+          if (isIOS) {
+            // Check if Chrome on iOS
+            const isChrome = /CriOS/.test(navigator.userAgent);
+            if (isChrome) {
+              return 'GPS permission denied. On iPhone: Settings → Privacy & Security → Location Services → Chrome → While Using App. Chrome on iOS needs permission in iPhone Settings, not just the browser.';
+            }
+            return 'GPS permission denied. On iOS: Settings → Privacy & Security → Location Services → Safari → While Using App. Also check if Private Browsing is enabled.';
+          }
           return 'GPS permission denied. Please enable location services.';
         case error.POSITION_UNAVAILABLE:
-          return 'GPS position unavailable. Please check your device settings.';
+          return 'GPS position unavailable. Please ensure Location Services are enabled and you have a GPS signal.';
         case error.TIMEOUT:
-          return 'GPS request timed out. Please try again.';
+          return 'GPS request timed out. This may happen indoors or in areas with poor GPS signal. Please try again.';
         default:
-          return 'Unknown GPS error occurred.';
+          return `Unknown GPS error (code: ${error.code}). Please check your device settings.`;
       }
     }
-    return error?.message || 'Unknown error';
+    return error?.message || 'Unknown error accessing GPS';
   }
 
   private updateStatus(updates: Partial<GPSStatus>): void {

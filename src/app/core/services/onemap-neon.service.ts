@@ -354,4 +354,200 @@ export class OneMapNeonService {
       ORDER BY property_count DESC
     `);
   }
+
+  /**
+   * Get data for OneMap Grid - optimized for current status display
+   * Shows latest status per property with comprehensive filtering options
+   */
+  getOneMapGridData(filters?: {
+    zone?: string;
+    status?: string;
+    contractor?: string;
+    searchTerm?: string;
+    dateFrom?: Date;
+    dateTo?: Date;
+  }): Observable<OneMapStatusChange[]> {
+    let query = `
+      WITH latest_status AS (
+        SELECT DISTINCT ON (property_id) 
+          property_id,
+          pole_number,
+          drop_number,
+          status,
+          status_date,
+          zone,
+          feeder,
+          distribution,
+          contractor,
+          import_batch_id,
+          raw_data
+        FROM onemap_status_changes 
+        WHERE 1=1
+    `;
+
+    const params: any[] = [];
+    let paramIndex = 1;
+
+    // Add zone filter
+    if (filters?.zone) {
+      query += ` AND zone = $${paramIndex}`;
+      params.push(filters.zone);
+      paramIndex++;
+    }
+
+    // Add status filter
+    if (filters?.status) {
+      query += ` AND status ILIKE $${paramIndex}`;
+      params.push(`%${filters.status}%`);
+      paramIndex++;
+    }
+
+    // Add contractor filter
+    if (filters?.contractor) {
+      query += ` AND contractor = $${paramIndex}`;
+      params.push(filters.contractor);
+      paramIndex++;
+    }
+
+    // Add date range filter
+    if (filters?.dateFrom) {
+      query += ` AND status_date >= $${paramIndex}`;
+      params.push(filters.dateFrom);
+      paramIndex++;
+    }
+
+    if (filters?.dateTo) {
+      query += ` AND status_date <= $${paramIndex}`;
+      params.push(filters.dateTo);
+      paramIndex++;
+    }
+
+    // Add search term filter
+    if (filters?.searchTerm) {
+      query += ` AND (
+        property_id ILIKE $${paramIndex} OR
+        pole_number ILIKE $${paramIndex} OR
+        drop_number ILIKE $${paramIndex} OR
+        status ILIKE $${paramIndex}
+      )`;
+      params.push(`%${filters.searchTerm}%`);
+      paramIndex++;
+    }
+
+    query += `
+        ORDER BY property_id, status_date DESC
+      )
+      SELECT * FROM latest_status
+      ORDER BY 
+        CASE 
+          WHEN pole_number IS NOT NULL THEN 1
+          WHEN drop_number IS NOT NULL THEN 2
+          ELSE 3
+        END,
+        property_id
+    `;
+
+    return this.neonService.query<OneMapStatusChange>(query, params.length > 0 ? params : undefined);
+  }
+
+  /**
+   * Get summary statistics for OneMap data
+   */
+  getOneMapSummaryStats(): Observable<{
+    totalProperties: number;
+    totalPoles: number;
+    totalDrops: number;
+    totalRecords: number;
+    statusBreakdown: { status: string; count: number }[];
+  }> {
+    const query = `
+      WITH latest_status AS (
+        SELECT DISTINCT ON (property_id) 
+          property_id,
+          pole_number,
+          drop_number,
+          status
+        FROM onemap_status_changes 
+        ORDER BY property_id, status_date DESC
+      ),
+      summary AS (
+        SELECT 
+          COUNT(DISTINCT property_id) as total_properties,
+          COUNT(DISTINCT pole_number) FILTER (WHERE pole_number IS NOT NULL) as total_poles,
+          COUNT(DISTINCT drop_number) FILTER (WHERE drop_number IS NOT NULL) as total_drops,
+          COUNT(*) as total_records
+        FROM latest_status
+      ),
+      status_breakdown AS (
+        SELECT 
+          status,
+          COUNT(*) as count
+        FROM latest_status
+        GROUP BY status
+        ORDER BY count DESC
+      )
+      SELECT 
+        (SELECT row_to_json(summary.*) FROM summary) as summary,
+        array_agg(row_to_json(status_breakdown.*)) as status_breakdown
+      FROM status_breakdown
+      GROUP BY 1
+    `;
+
+    return this.neonService.query(query).pipe(
+      map((results: any[]) => {
+        if (!results || results.length === 0) {
+          return {
+            totalProperties: 0,
+            totalPoles: 0,
+            totalDrops: 0,
+            totalRecords: 0,
+            statusBreakdown: []
+          };
+        }
+
+        const result = results[0];
+        const summary = result.summary || {};
+        
+        return {
+          totalProperties: summary.total_properties || 0,
+          totalPoles: summary.total_poles || 0,
+          totalDrops: summary.total_drops || 0,
+          totalRecords: summary.total_records || 0,
+          statusBreakdown: result.status_breakdown || []
+        };
+      })
+    );
+  }
+
+  /**
+   * Get unique filter values for dropdowns
+   */
+  getFilterOptions(): Observable<{
+    zones: string[];
+    statuses: string[];
+    contractors: string[];
+  }> {
+    const query = `
+      SELECT 
+        array_agg(DISTINCT zone ORDER BY zone) FILTER (WHERE zone IS NOT NULL) as zones,
+        array_agg(DISTINCT status ORDER BY status) FILTER (WHERE status IS NOT NULL) as statuses,
+        array_agg(DISTINCT contractor ORDER BY contractor) FILTER (WHERE contractor IS NOT NULL) as contractors
+      FROM onemap_status_changes
+    `;
+
+    return this.neonService.query(query).pipe(
+      map((results: any[]) => {
+        if (!results || results.length === 0) {
+          return { zones: [], statuses: [], contractors: [] };
+        }
+
+        const result = results[0];
+        return {
+          zones: result.zones || [],
+          statuses: result.statuses || [],
+          contractors: result.contractors || []
+        };
+      })
+    );
+  }
 }

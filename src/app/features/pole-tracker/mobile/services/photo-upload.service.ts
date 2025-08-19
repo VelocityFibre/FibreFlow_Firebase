@@ -33,7 +33,7 @@ export class PhotoUploadService {
     
     try {
       // Create unique filename
-      const fileName = `poles/${poleId || 'draft'}/${photo.type}_${photo.timestamp.getTime()}_${photo.id}.jpg`;
+      const fileName = `poles/${poleId || 'staging'}/${photo.type}_${photo.timestamp.getTime()}_${photo.id}.jpg`;
       const storageRef = ref(this.storage, fileName);
       
       // Update progress to 25%

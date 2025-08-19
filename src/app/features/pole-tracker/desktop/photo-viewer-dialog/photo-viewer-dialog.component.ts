@@ -26,7 +26,7 @@ interface DialogData {
     MatProgressSpinnerModule,
     MatChipsModule,
   ],
-  styleUrls: ['./photo-viewer-dialog.component.scss'],
+  styleUrl: './photo-viewer-dialog.component.scss',
   template: `
     <div class="photo-viewer-dialog">
       <h2 mat-dialog-title>
@@ -149,7 +149,7 @@ interface DialogData {
   `,
   styles: [
     `
-      @use '../../../styles/component-theming' as theme;
+      @use '../../../../../styles/component-theming' as theme;
 
       .photo-viewer-dialog {
         width: 800px;

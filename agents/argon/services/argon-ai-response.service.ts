@@ -16,6 +16,7 @@ export interface QueryAnalysis {
   summary: string;
   insights: string[];
   response: string;
+  queryInsights?: any; // Will be populated with detailed tracking
 }
 
 @Injectable({
@@ -34,6 +35,12 @@ export class ArgonAiResponseService {
     return of(null).pipe(
       map(() => {
         const analysis = this.analyzeQuery(userQuestion, queryResults, targetDatabase);
+        
+        // Add query insights if available
+        if (queryResults?.queryInsights) {
+          analysis.queryInsights = queryResults.queryInsights;
+        }
+        
         return analysis;
       })
     );
@@ -96,23 +103,42 @@ export class ArgonAiResponseService {
     };
   }
 
-  private detectIntent(question: string): string {
-    if (question.includes('how many') || question.includes('count') || question.includes('total')) {
+  detectIntent(question: string): string {
+    const q = question.toLowerCase();
+    
+    // Count queries
+    if (q.includes('how many') || q.includes('count') || q.includes('total number')) {
       return 'count';
     }
-    if (question.includes('list') || question.includes('show me') || question.includes('what are')) {
+    
+    // List queries - enhanced detection
+    if (q.includes('list') || q.includes('show me') || q.includes('what are') || 
+        q.includes('tell me about') || q.includes('what') || q.includes('which') ||
+        q.includes('give me') || q.includes('display') || q.includes('what can')) {
       return 'list';
     }
-    if (question.includes('status') || question.includes('progress') || question.includes('state')) {
+    
+    // Status queries
+    if (q.includes('status') || q.includes('progress') || q.includes('state') ||
+        q.includes('how is') || q.includes('where is')) {
       return 'status';
     }
-    if (question.includes('analytics') || question.includes('metrics') || question.includes('performance')) {
+    
+    // Analytics queries
+    if (q.includes('analytics') || q.includes('metrics') || q.includes('performance') ||
+        q.includes('statistics') || q.includes('summary') || q.includes('report')) {
       return 'analytics';
     }
+    
+    // Default to list if asking about specific entities
+    if (q.includes('project') || q.includes('task') || q.includes('user')) {
+      return 'list';
+    }
+    
     return 'general';
   }
 
-  private detectDataType(question: string, data: any[]): string {
+  detectDataType(question: string, data: any[]): string {
     if (question.includes('project')) return 'projects';
     if (question.includes('task')) return 'tasks';
     if (question.includes('user') || question.includes('staff')) return 'users';
@@ -127,6 +153,78 @@ export class ArgonAiResponseService {
     }
     
     return 'general';
+  }
+
+  // Enhanced field mappings for intelligent display
+  private getFieldMappings(): Record<string, Record<string, string>> {
+    return {
+      projects: {
+        name: 'Project Name',
+        projectCode: 'Code',
+        status: 'Status',
+        location: 'Location',
+        clientName: 'Client',
+        projectManagerName: 'Project Manager',
+        overallProgress: 'Progress',
+        currentPhaseName: 'Current Phase',
+        projectType: 'Type',
+        budget: 'Budget',
+        startDate: 'Start Date',
+        expectedEndDate: 'Expected End'
+      },
+      tasks: {
+        name: 'Task Name',
+        status: 'Status',
+        assigneeName: 'Assigned To',
+        priority: 'Priority',
+        dueDate: 'Due Date',
+        completedDate: 'Completed',
+        estimatedHours: 'Est. Hours',
+        actualHours: 'Actual Hours'
+      },
+      users: {
+        displayName: 'Name',
+        email: 'Email',
+        role: 'Role',
+        department: 'Department',
+        status: 'Status'
+      }
+    };
+  }
+
+  private formatFieldValue(key: string, value: any): string {
+    // Handle null/undefined
+    if (value === null || value === undefined) return 'N/A';
+    
+    // Format timestamps
+    if (key.includes('Date') || key.includes('At')) {
+      if (value.seconds) {
+        return new Date(value.seconds * 1000).toLocaleDateString();
+      }
+      return new Date(value).toLocaleDateString();
+    }
+    
+    // Format currency
+    if (key === 'budget' || key === 'budgetUsed' || key === 'actualCost') {
+      return new Intl.NumberFormat('en-ZA', {
+        style: 'currency',
+        currency: 'ZAR'
+      }).format(value);
+    }
+    
+    // Format percentages
+    if (key.includes('Progress') || key.includes('percentage')) {
+      return `${value}%`;
+    }
+    
+    // Format enums to readable text
+    if (typeof value === 'string') {
+      // Convert snake_case or UPPER_CASE to Title Case
+      return value.replace(/_/g, ' ').toLowerCase()
+        .replace(/\b\w/g, char => char.toUpperCase());
+    }
+    
+    return String(value);
   }
 
   private generateCountResponse(question: string, data: any[], database: string): string {
@@ -155,22 +253,60 @@ export class ArgonAiResponseService {
 
   private generateListResponse(question: string, data: any[], database: string): string {
     const count = data.length;
+    const dataType = this.detectDataType(question, data);
     
     if (count === 0) {
-      return `📝 **No items found** matching your criteria in ${database}.`;
+      return `📝 **No ${dataType} found** in the system.`;
     }
     
-    let response = `📝 **Found ${count} items** in ${database}:\n\n`;
+    // For projects, provide a comprehensive overview
+    if (dataType === 'projects') {
+      let response = `📊 **FibreFlow Projects Overview**\n\n`;
+      response += `We currently have **${count} project${count !== 1 ? 's' : ''}** in the system:\n\n`;
+      
+      const fieldMappings = this.getFieldMappings()['projects'];
+      
+      data.forEach((project, index) => {
+        response += `**${index + 1}. ${project.name || 'Unnamed Project'}** (${project.projectCode || 'No Code'})\n`;
+        response += `   📍 Location: ${project.location || 'Not specified'}\n`;
+        response += `   👤 Client: ${project.clientName || 'Not assigned'}\n`;
+        response += `   📊 Status: ${this.formatFieldValue('status', project.status)}\n`;
+        response += `   📈 Progress: ${this.formatFieldValue('overallProgress', project.overallProgress || 0)}\n`;
+        response += `   🎯 Current Phase: ${project.currentPhaseName || this.formatFieldValue('currentPhase', project.currentPhase) || 'Planning'}\n`;
+        response += `   💰 Budget: ${this.formatFieldValue('budget', project.budget)}\n`;
+        response += `   📅 Timeline: ${this.formatFieldValue('startDate', project.startDate)} → ${this.formatFieldValue('expectedEndDate', project.expectedEndDate)}\n`;
+        response += `   👨‍💼 Project Manager: ${project.projectManagerName || 'Not assigned'}\n\n`;
+      });
+      
+      // Add summary statistics
+      const activeProjects = data.filter(p => p.status === 'active').length;
+      const completedProjects = data.filter(p => p.status === 'completed').length;
+      const totalBudget = data.reduce((sum, p) => sum + (p.budget || 0), 0);
+      const avgProgress = data.reduce((sum, p) => sum + (p.overallProgress || 0), 0) / count;
+      
+      response += `---\n**Summary Statistics:**\n`;
+      response += `• Active Projects: ${activeProjects}\n`;
+      response += `• Completed Projects: ${completedProjects}\n`;
+      response += `• Total Budget: ${this.formatFieldValue('budget', totalBudget)}\n`;
+      response += `• Average Progress: ${avgProgress.toFixed(1)}%\n`;
+      
+      return response;
+    }
     
-    // Show first few items with key details
-    const itemsToShow = Math.min(5, count);
+    // Generic list response for other data types
+    let response = `📝 **Found ${count} ${dataType}** in ${database}:\n\n`;
+    
+    const allMappings = this.getFieldMappings();
+    const fieldMappings = allMappings[dataType as keyof typeof allMappings] || {};
+    const itemsToShow = Math.min(10, count);
+    
     for (let i = 0; i < itemsToShow; i++) {
       const item = data[i];
-      response += this.formatListItem(item, i + 1);
+      response += this.formatDetailedItem(item, i + 1, fieldMappings);
     }
     
-    if (count > 5) {
-      response += `\n...and ${count - 5} more items.`;
+    if (count > 10) {
+      response += `\n...and ${count - 10} more items.`;
     }
     
     return response;
@@ -207,12 +343,89 @@ export class ArgonAiResponseService {
 
   private generateGenericResponse(question: string, data: any[], database: string): string {
     const count = data.length;
+    const dataType = this.detectDataType(question, data);
     
-    return `🔍 **Query Results** from ${database}:\n\n` +
-           `Found **${count} records** matching your query "${question}".\n\n` +
-           (count > 0 ? 
-             `**Sample Data**: ${this.formatSampleData(data[0])}` : 
-             '**No data found** matching your criteria.');
+    // If we have a known data type, use the list response
+    if (dataType !== 'general') {
+      return this.generateListResponse(question, data, database);
+    }
+    
+    // For truly generic queries, provide a better formatted response
+    if (count === 0) {
+      return `🔍 **No results found** for your query.`;
+    }
+    
+    let response = `🔍 **Query Results** from ${database}:\n\n`;
+    response += `Found **${count} records** matching your query.\n\n`;
+    
+    // Show the first few records with better formatting
+    const itemsToShow = Math.min(3, count);
+    for (let i = 0; i < itemsToShow; i++) {
+      const item = data[i];
+      response += `**Record ${i + 1}:**\n`;
+      
+      // Show only the most important fields
+      const importantFields = this.extractImportantFields(item);
+      importantFields.forEach(([key, value]) => {
+        response += `• ${this.humanizeFieldName(key)}: ${this.formatFieldValue(key, value)}\n`;
+      });
+      response += '\n';
+    }
+    
+    if (count > 3) {
+      response += `...and ${count - 3} more records.\n`;
+    }
+    
+    return response;
+  }
+
+  private formatDetailedItem(item: any, index: number, fieldMappings: Record<string, string>): string {
+    let response = `**${index}. ${item.name || item.title || `Item ${index}`}**\n`;
+    
+    // Use field mappings to show only relevant fields
+    Object.entries(fieldMappings).forEach(([key, label]) => {
+      if (item[key] !== undefined && item[key] !== null && key !== 'name') {
+        response += `   ${label}: ${this.formatFieldValue(key, item[key])}\n`;
+      }
+    });
+    
+    response += '\n';
+    return response;
+  }
+
+  private extractImportantFields(item: any): Array<[string, any]> {
+    // Define priority fields to show
+    const priorityFields = ['name', 'title', 'status', 'type', 'location', 'date', 'createdAt'];
+    const fields: Array<[string, any]> = [];
+    
+    // First, add priority fields if they exist
+    priorityFields.forEach(field => {
+      if (item[field] !== undefined && item[field] !== null) {
+        fields.push([field, item[field]]);
+      }
+    });
+    
+    // If we don't have enough fields, add some more
+    if (fields.length < 5) {
+      Object.entries(item).forEach(([key, value]) => {
+        if (!priorityFields.includes(key) && 
+            !key.includes('id') && 
+            !key.includes('Id') &&
+            fields.length < 5) {
+          fields.push([key, value]);
+        }
+      });
+    }
+    
+    return fields.slice(0, 5);
+  }
+
+  private humanizeFieldName(fieldName: string): string {
+    // Convert camelCase to Title Case
+    return fieldName
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, str => str.toUpperCase())
+      .trim();
   }
 
   private generateCountInsights(data: any[]): string[] {

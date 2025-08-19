@@ -106,3 +106,115 @@
 ---
 
 *Last Updated: 2025-01-30*
+## 📄 **Import Record: 1755237660935_Lawley_14082025.xlsx**
+
+**Date Processed**: 2025-08-19  
+**File Size**: 8.98 MB  
+**Processing Time**: ~2 minutes  
+**Result**: ✅ **SUCCESSFUL WITH CHANGES**
+
+### Summary:
+- **Excel Records**: 15,749 rows
+- **Database Records Before**: 27,699
+- **Database Records After**: 27,744
+- **New Properties Added**: 45
+- **Status Updates Applied**: 61
+- **Records Skipped (No Changes)**: 14,933
+- **Errors (Missing Property ID)**: 710
+- **Total Changes Applied**: 106
+
+### Key Insights:
+1. **Change Rate**: Only 0.7% of records had actual changes
+2. **Skip Rate**: 94.8% of records were already up-to-date
+3. **Error Rate**: 4.5% of rows missing Property IDs
+
+---
+EOF < /dev/null
+
+## 📄 **Import Record: 1755499735778_Lawley_15082025.xlsx**
+
+**Date Processed**: 2025-08-19  
+**File Size**: 9.01 MB  
+**Processing Time**: ~104 seconds  
+**Result**: ✅ **SUCCESSFUL WITH CHANGES**
+
+### Summary:
+- **Excel Records**: 15 789
+- **New Properties Added**: 60
+- **Status Updates Applied**: 112
+- **Records Skipped (No Changes)**: 14 882
+- **Errors (Missing Property ID)**: 735
+- **Total Changes Applied**: 172
+
+### Key Insights:
+1. **Change Rate**: 1.1% of records had actual changes
+2. **Skip Rate**: 94.3% of records were already up-to-date
+3. **Error Rate**: 4.7% of rows missing Property IDs
+
+---
+
+## 📄 **Import Record: 1755501709548_Lawley_16082025.xlsx**
+
+**Date Processed**: 2025-08-19  
+**File Size**: 9.05 MB  
+**Processing Time**: ~100 seconds  
+**Result**: ✅ **SUCCESSFUL WITH CHANGES**
+
+### Summary:
+- **Excel Records**: 15 825
+- **New Properties Added**: 82
+- **Status Updates Applied**: 144
+- **Records Skipped (No Changes)**: 14 853
+- **Errors (Missing Property ID)**: 746
+- **Total Changes Applied**: 226
+
+### Key Insights:
+1. **Change Rate**: 1.4% of records had actual changes
+2. **Skip Rate**: 93.9% of records were already up-to-date
+3. **Error Rate**: 4.7% of rows missing Property IDs
+
+---
+
+## 📄 **Import Record: 1755501818814_Lawley_17082025.xlsx**
+
+**Date Processed**: 2025-08-19  
+**File Size**: 9.06 MB  
+**Processing Time**: ~65 seconds  
+**Result**: ✅ **SUCCESSFUL WITH CHANGES**
+
+### Summary:
+- **Excel Records**: 15 837
+- **New Properties Added**: 94
+- **Status Updates Applied**: 52
+- **Records Skipped (No Changes)**: 14 945
+- **Errors (Missing Property ID)**: 746
+- **Total Changes Applied**: 146
+
+### Key Insights:
+1. **Change Rate**: 0.9% of records had actual changes
+2. **Skip Rate**: 94.4% of records were already up-to-date
+3. **Error Rate**: 4.7% of rows missing Property IDs
+
+---
+
+## 📄 **Import Record: 1755584665096_Lawley_18082025.xlsx**
+
+**Date Processed**: 2025-08-19  
+**File Size**: 8.84 MB  
+**Processing Time**: ~177 seconds  
+**Result**: ✅ **SUCCESSFUL WITH CHANGES**
+
+### Summary:
+- **Excel Records**: 15 277
+- **New Properties Added**: 272
+- **Status Updates Applied**: 167
+- **Records Skipped (No Changes)**: 14 833
+- **Errors (Missing Property ID)**: 5
+- **Total Changes Applied**: 439
+
+### Key Insights:
+1. **Change Rate**: 2.9% of records had actual changes
+2. **Skip Rate**: 97.1% of records were already up-to-date
+3. **Error Rate**: 0.0% of rows missing Property IDs
+
+---

@@ -24,6 +24,7 @@ export interface DatabaseInfo {
   schema_available?: boolean;
   supported_queries?: string[];
   error?: string;
+  connection_pool?: string;
 }
 
 export interface NeonAIHealth {
@@ -49,7 +50,7 @@ export interface NeonAIHealth {
 })
 export class SimpleNeonAIService {
   private sql: any;
-  private genAI: GoogleGenerativeAI;
+  private genAI!: GoogleGenerativeAI;
   
   // State
   private _chatHistory = signal<ChatMessage[]>([]);
@@ -67,6 +68,7 @@ export class SimpleNeonAIService {
   // Computed status
   readonly healthStatus = computed(() => 'healthy'); // Always healthy
   readonly isReady = computed(() => true); // Always ready
+  readonly serviceUrl = signal<string>('direct-connection'); // No server needed
   
   // Mock health check data
   readonly lastHealthCheck = signal<NeonAIHealth>({
@@ -130,7 +132,7 @@ export class SimpleNeonAIService {
         message: `Connection failed: ${error.message}`
       }));
     
-    return from(promise);
+    return from(promise) as Observable<{success: boolean; message: string; timestamp?: Date; version?: string}>;
   }
   
   /**
@@ -179,7 +181,7 @@ export class SimpleNeonAIService {
       error: error.message
     }));
     
-    return from(promise);
+    return from(promise) as Observable<DatabaseInfo>;
   }
   
   /**
@@ -334,7 +336,7 @@ ANSWER:`;
         .join('\n');
     }).catch(() => 'Unable to load database schema');
     
-    return from(promise);
+    return from(promise) as Observable<string>;
   }
   
   /**

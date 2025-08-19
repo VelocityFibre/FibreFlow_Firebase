@@ -1,0 +1,268 @@
+@use '../../../../../styles/_component-theming' as theme;
+
+.sow-grid-container {
+  padding: theme.ff-spacing(lg);
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+// Page Header
+.page-header {
+  margin-bottom: theme.ff-spacing(xl);
+  
+  h1 {
+    font-size: theme.ff-rem(28);
+    font-weight: 600;
+    color: theme.ff-rgb(text-primary);
+    margin: 0 0 theme.ff-spacing(xs) 0;
+  }
+  
+  .subtitle {
+    color: theme.ff-rgb(text-secondary);
+    font-size: theme.ff-rem(16);
+    margin: 0;
+  }
+}
+
+// Summary Cards
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: theme.ff-spacing(md);
+  margin-bottom: theme.ff-spacing(xl);
+}
+
+.summary-card {
+  border: 1px solid theme.ff-rgb(border);
+  box-shadow: 0 1px 3px theme.ff-rgba(shadow, 0.1);
+  
+  mat-card-content {
+    display: flex;
+    align-items: center;
+    gap: theme.ff-spacing(md);
+    padding: theme.ff-spacing(lg);
+  }
+}
+
+.summary-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+  
+  &.poles {
+    background: theme.ff-rgba(primary, 0.1);
+    color: theme.ff-rgb(primary);
+  }
+  
+  &.drops {
+    background: theme.ff-rgba(success, 0.1);
+    color: theme.ff-rgb(success);
+  }
+  
+  &.fibre {
+    background: theme.ff-rgba(warning, 0.1);
+    color: theme.ff-rgb(warning);
+  }
+  
+  &.distance {
+    background: theme.ff-rgba(info, 0.1);
+    color: theme.ff-rgb(info);
+  }
+}
+
+.summary-info {
+  flex: 1;
+}
+
+.summary-value {
+  font-size: theme.ff-rem(32);
+  font-weight: 700;
+  color: theme.ff-rgb(text-primary);
+  line-height: 1;
+}
+
+.summary-label {
+  font-size: theme.ff-rem(14);
+  color: theme.ff-rgb(text-secondary);
+  margin-top: theme.ff-spacing(xs);
+  font-weight: 500;
+}
+
+// Filter Bar
+.filter-bar {
+  display: flex;
+  gap: theme.ff-spacing(md);
+  align-items: center;
+  margin-bottom: theme.ff-spacing(lg);
+  padding: theme.ff-spacing(md);
+  background: theme.ff-rgb(surface);
+  border: 1px solid theme.ff-rgb(border);
+  border-radius: var(--ff-radius);
+}
+
+.project-field {
+  min-width: 250px;
+}
+
+.search-field {
+  min-width: 300px;
+  flex: 1;
+}
+
+.filter-field {
+  min-width: 200px;
+}
+
+.export-btn {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+// AG Grid Container
+.sow-main-grid {
+  height: calc(100vh - 500px);
+  min-height: 600px;
+  width: 100%;
+  border: 1px solid theme.ff-rgb(border);
+  border-radius: var(--ff-radius);
+  overflow: hidden;
+  
+  // Custom AG Grid theme overrides for SOW
+  --ag-header-background-color: theme.ff-rgb(surface-secondary);
+  --ag-header-foreground-color: theme.ff-rgb(text-primary);
+  --ag-header-height: 48px;
+  --ag-row-height: 42px;
+  --ag-row-hover-color: theme.ff-rgba(primary, 0.05);
+  --ag-selected-row-background-color: theme.ff-rgba(primary, 0.1);
+  --ag-odd-row-background-color: theme.ff-rgba(surface-secondary, 0.3);
+  --ag-border-color: theme.ff-rgb(border);
+  --ag-font-family: inherit;
+  --ag-font-size: theme.ff-rem(14);
+  --ag-grid-size: 8px;
+  --ag-list-item-height: 32px;
+}
+
+// Status Chips (AG Grid Cell Renderers)
+:global {
+  .status-chip {
+    font-size: theme.ff-rem(11);
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    line-height: 1;
+    
+    &.status-approved,
+    &.status-completed {
+      background: theme.ff-rgba(success, 0.15);
+      color: theme.ff-rgb(success);
+    }
+    
+    &.status-progress {
+      background: theme.ff-rgba(warning, 0.15);
+      color: theme.ff-rgb(warning);
+    }
+    
+    &.status-pending {
+      background: theme.ff-rgba(error, 0.15);
+      color: theme.ff-rgb(error);
+    }
+    
+    &.status-default {
+      background: theme.ff-rgba(text-tertiary, 0.15);
+      color: theme.ff-rgb(text-tertiary);
+    }
+  }
+  
+  // AG Grid Cell Content
+  .ag-cell-wrapper {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  
+  // Icon cells
+  mat-icon {
+    vertical-align: middle;
+    margin-right: 4px;
+  }
+}
+
+// Loading State
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: theme.ff-spacing(4xl);
+  min-height: 400px;
+  
+  p {
+    margin-top: theme.ff-spacing(md);
+    color: theme.ff-rgb(text-secondary);
+    font-size: theme.ff-rem(16);
+  }
+}
+
+// Responsive Design
+@media (max-width: 1200px) {
+  .summary-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .sow-grid-container {
+    padding: theme.ff-spacing(md);
+  }
+  
+  .summary-cards {
+    grid-template-columns: 1fr;
+    gap: theme.ff-spacing(sm);
+  }
+  
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+    
+    .project-field,
+    .search-field,
+    .filter-field {
+      min-width: auto;
+      width: 100%;
+    }
+    
+    .export-btn {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+  
+  .sow-main-grid {
+    height: calc(100vh - 600px);
+    min-height: 400px;
+  }
+}
+
+// Print styles
+@media print {
+  .filter-bar,
+  .export-btn {
+    display: none;
+  }
+  
+  .sow-main-grid {
+    height: auto !important;
+  }
+}

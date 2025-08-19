@@ -1,0 +1,145 @@
+<mat-card class="staging-sync-card">
+  <mat-card-header>
+    <mat-icon mat-card-avatar>cloud_sync</mat-icon>
+    <mat-card-title>Staging Sync Status</mat-card-title>
+    <mat-card-subtitle>
+      @if (isOnline()) {
+        <span class="online-status">
+          <mat-icon>wifi</mat-icon>
+          Online
+        </span>
+      } @else {
+        <span class="offline-status">
+          <mat-icon>wifi_off</mat-icon>
+          Offline
+        </span>
+      }
+    </mat-card-subtitle>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <!-- Summary Section -->
+    <div class="sync-summary">
+      <div class="summary-item">
+        <div class="summary-label">Offline Queue</div>
+        <div class="summary-counts">
+          @if (syncSummary().offlinePending > 0) {
+            <span class="badge pending" [matBadge]="syncSummary().offlinePending" matBadgeColor="accent">
+              Pending
+            </span>
+          }
+          @if (syncSummary().offlineError > 0) {
+            <span class="badge error" [matBadge]="syncSummary().offlineError" matBadgeColor="warn">
+              Failed
+            </span>
+          }
+          @if (syncSummary().staged > 0) {
+            <span class="badge staged" [matBadge]="syncSummary().staged">
+              Staged
+            </span>
+          }
+        </div>
+      </div>
+      
+      <mat-divider></mat-divider>
+      
+      <div class="summary-item">
+        <div class="summary-label">Staging Database</div>
+        <div class="summary-counts">
+          @if (syncSummary().stagingPending > 0) {
+            <span class="badge" [matBadge]="syncSummary().stagingPending" matBadgeColor="accent">
+              Validating
+            </span>
+          }
+          @if (syncSummary().stagingValidated > 0) {
+            <span class="badge" [matBadge]="syncSummary().stagingValidated" matBadgeColor="primary">
+              Validated
+            </span>
+          }
+          @if (syncSummary().stagingRejected > 0) {
+            <span class="badge" [matBadge]="syncSummary().stagingRejected" matBadgeColor="warn">
+              Rejected
+            </span>
+          }
+        </div>
+      </div>
+    </div>
+    
+    <!-- Progress Section -->
+    @if (syncProgress().currentStage !== 'idle' && syncProgress().currentStage !== 'complete') {
+      <div class="sync-progress">
+        <div class="progress-header">
+          <span class="progress-label">{{ syncProgress().currentItem || 'Processing...' }}</span>
+          <span class="progress-percentage">{{ getProgressPercentage() }}%</span>
+        </div>
+        <mat-progress-bar 
+          mode="determinate" 
+          [value]="getProgressPercentage()"
+          color="accent">
+        </mat-progress-bar>
+        <div class="progress-stage">
+          <mat-icon>{{ 
+            syncProgress().currentStage === 'uploading' ? 'cloud_upload' :
+            syncProgress().currentStage === 'validating' ? 'fact_check' :
+            syncProgress().currentStage === 'syncing' ? 'sync' :
+            'hourglass_empty'
+          }}</mat-icon>
+          <span>{{ syncProgress().currentStage | titlecase }}</span>
+        </div>
+      </div>
+    }
+    
+    <!-- Error Section -->
+    @if (syncProgress().errors.length > 0) {
+      <mat-expansion-panel [expanded]="showErrors()">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon color="warn">error</mat-icon>
+            <span>Sync Errors ({{ syncProgress().errors.length }})</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        
+        <div class="error-list">
+          @for (error of syncProgress().errors; track error) {
+            <div class="error-item">
+              <mat-icon>error_outline</mat-icon>
+              <span>{{ error }}</span>
+            </div>
+          }
+        </div>
+        
+        <mat-action-row>
+          <button mat-button (click)="clearErrors()">
+            <mat-icon>clear</mat-icon>
+            Clear Errors
+          </button>
+        </mat-action-row>
+      </mat-expansion-panel>
+    }
+  </mat-card-content>
+  
+  <mat-card-actions align="end">
+    <button 
+      mat-button 
+      color="warn" 
+      (click)="retryFailed()"
+      [disabled]="!isOnline() || isSyncing() || syncSummary().offlineError === 0">
+      <mat-icon>replay</mat-icon>
+      Retry Failed
+    </button>
+    
+    <button 
+      mat-raised-button 
+      color="primary" 
+      (click)="startSync()"
+      [disabled]="!isOnline() || isSyncing() || syncSummary().offlinePending === 0">
+      @if (isSyncing()) {
+        <mat-icon>hourglass_empty</mat-icon>
+        Syncing...
+      } @else {
+        <mat-icon>cloud_upload</mat-icon>
+        Sync to Staging
+      }
+    </button>
+  </mat-card-actions>
+</mat-card>

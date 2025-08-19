@@ -3,64 +3,75 @@ import { demoConfig } from './config/demo.config';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { fieldWorkerGuard, nonFieldWorkerGuard } from './core/guards/field-worker.guard';
 
 const allRoutes: Routes = [
   {
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full',
+    canActivate: [fieldWorkerGuard],
   },
   {
     path: 'dashboard',
     loadChildren: () =>
       import('./features/dashboard/dashboard.routes').then((m) => m.dashboardRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { preload: true },
   },
   {
     path: 'projects',
     loadChildren: () => import('./features/projects/projects.routes').then((m) => m.projectRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { preload: true },
+  },
+  {
+    path: 'sow-data',
+    loadComponent: () =>
+      import('./features/sow/pages/sow-grid/sow-grid.component').then(
+        (m) => m.SOWGridComponent,
+      ),
+    canActivate: [authGuard, nonFieldWorkerGuard],
+    data: { title: 'SOW Data Management' },
   },
   {
     path: 'suppliers',
     loadChildren: () =>
       import('./features/suppliers/suppliers.routes').then((m) => m.suppliersRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
   },
   {
     path: 'staff',
     loadChildren: () => import('./features/staff/staff.routes').then((m) => m.staffRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
   },
   {
     path: 'contractors',
     loadChildren: () =>
       import('./features/contractors/contractors.routes').then((m) => m.contractorsRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
   },
   {
     path: 'clients',
     loadChildren: () => import('./features/clients/clients.routes').then((m) => m.clientsRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
   },
   {
     path: 'phases',
     loadChildren: () => import('./features/phases/phases.routes').then((m) => m.phasesRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
   },
   {
     path: 'steps',
     loadChildren: () => import('./features/steps/steps.routes').then((m) => m.STEPS_ROUTES),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     title: 'All Steps - FibreFlow',
   },
   {
     path: 'pole-tracker',
     loadChildren: () =>
       import('./features/pole-tracker/pole-tracker.routes').then((m) => m.poleTrackerRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { preload: true },
   },
   // Dashboard-linked routes
@@ -68,7 +79,7 @@ const allRoutes: Routes = [
     path: 'materials',
     loadChildren: () =>
       import('./features/materials/materials.routes').then((m) => m.materialRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { preload: true },
   },
   {
@@ -77,14 +88,14 @@ const allRoutes: Routes = [
       import('./shared/components/placeholder-page/placeholder-page.component').then(
         (m) => m.PlaceholderPageComponent,
       ),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Flagged Issues' },
   },
   {
     path: 'analytics',
     loadChildren: () =>
       import('./features/analytics/analytics.routes').then((m) => m.ANALYTICS_ROUTES),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Analytics', preload: true },
   },
   {
@@ -93,20 +104,20 @@ const allRoutes: Routes = [
       import('./features/daily-progress/daily-progress.routes').then(
         (m) => m.DAILY_PROGRESS_ROUTES,
       ),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
   },
   {
     path: 'dev-tasks',
     loadChildren: () =>
       import('./features/dev-tasks/dev-tasks.routes').then((m) => m.DEV_TASKS_ROUTES),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Development Tasks' },
   },
   // Placeholder routes for pages to be implemented
   {
     path: 'roles',
     loadChildren: () => import('./features/roles/roles.routes').then((m) => m.ROLES_ROUTES),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
   },
   {
     path: 'attendance',
@@ -114,7 +125,7 @@ const allRoutes: Routes = [
       import('./shared/components/placeholder-page/placeholder-page.component').then(
         (m) => m.PlaceholderPageComponent,
       ),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Attendance' },
   },
   {
@@ -123,7 +134,7 @@ const allRoutes: Routes = [
       import('./shared/components/placeholder-page/placeholder-page.component').then(
         (m) => m.PlaceholderPageComponent,
       ),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Performance' },
   },
   {
@@ -137,7 +148,7 @@ const allRoutes: Routes = [
         },
       );
     },
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Task Management Test' },
   },
   {
@@ -171,26 +182,26 @@ const allRoutes: Routes = [
       import('./features/personal-todos/pages/todo-management/todo-management.component').then(
         (m) => m.TodoManagementComponent,
       ),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Personal Todos' },
   },
   {
     path: 'meetings',
     loadChildren: () => import('./features/meetings/meetings.routes').then((m) => m.meetingsRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Meetings' },
   },
   {
     path: 'action-items',
     loadChildren: () =>
       import('./features/action-items/action-items.routes').then((m) => m.ACTION_ITEMS_ROUTES),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Action Items Management' },
   },
   {
     path: 'tasks',
     loadChildren: () => import('./features/tasks/tasks.routes').then((m) => m.tasksRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
   },
   {
     path: 'task-grid',
@@ -198,37 +209,37 @@ const allRoutes: Routes = [
       import('./features/tasks/pages/task-management-grid/task-management-grid.component').then(
         (m) => m.TaskManagementGridComponent,
       ),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Task Management Grid' },
   },
   {
     path: 'stock',
     loadChildren: () => import('./features/stock/stock.routes').then((m) => m.stockRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { preload: true },
   },
   {
     path: 'boq',
     loadChildren: () => import('./features/boq/boq.routes').then((m) => m.boqRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
   },
   {
     path: 'quotes',
     loadChildren: () => import('./features/quotes/quotes.routes').then((m) => m.quotesRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Quotes Management' },
   },
   {
     path: 'emails',
     loadChildren: () => import('./features/emails/emails.routes').then((m) => m.emailsRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Email Management' },
   },
   {
     path: 'stock-movements',
     loadChildren: () =>
       import('./features/stock/stock-movements.routes').then((m) => m.stockMovementsRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
   },
   {
     path: 'stock-analysis',
@@ -236,7 +247,7 @@ const allRoutes: Routes = [
       import('./shared/components/placeholder-page/placeholder-page.component').then(
         (m) => m.PlaceholderPageComponent,
       ),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Stock Analysis' },
   },
   {
@@ -245,7 +256,7 @@ const allRoutes: Routes = [
       import('./shared/components/placeholder-page/placeholder-page.component').then(
         (m) => m.PlaceholderPageComponent,
       ),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Category Management' },
   },
   {
@@ -254,42 +265,60 @@ const allRoutes: Routes = [
       import('./shared/components/placeholder-page/placeholder-page.component').then(
         (m) => m.PlaceholderPageComponent,
       ),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Supplier Portal' },
   },
   {
     path: 'settings',
     loadChildren: () => import('./features/settings/settings.routes').then((m) => m.settingsRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Settings' },
   },
   {
     path: 'audit-trail',
     loadChildren: () =>
       import('./features/audit-trail/audit-trail.routes').then((m) => m.auditTrailRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Audit Trail' },
   },
   {
     path: 'images',
     loadChildren: () => import('./features/images/images.routes').then((m) => m.imagesRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Image Upload', preload: true },
   },
   {
     path: 'reports',
     loadChildren: () => import('./features/reports/reports.routes').then((m) => m.REPORTS_ROUTES),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { title: 'Reports', preload: true },
   },
   {
     path: 'sow',
     loadChildren: () => import('./features/sow/sow.routes').then(m => m.sowRoutes),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: {
       title: 'Scope of Work',
       description: 'Create and manage project SOW documents'
     }
+  },
+  {
+    path: 'onemap',
+    loadChildren: () => import('./features/onemap/onemap.routes').then(m => m.onemapRoutes),
+    canActivate: [authGuard, nonFieldWorkerGuard],
+    data: {
+      title: 'OneMap Data',
+      description: 'OneMap data analysis and grid views'
+    }
+  },
+  {
+    path: 'nokia-data',
+    loadComponent: () =>
+      import('./features/nokia/pages/nokia-grid/nokia-grid.component').then(
+        (m) => m.NokiaGridComponent,
+      ),
+    canActivate: [authGuard, nonFieldWorkerGuard],
+    data: { title: 'Nokia Equipment Data' },
   },
   // Auth routes - temporary for testing
   {
@@ -302,26 +331,31 @@ const allRoutes: Routes = [
     loadComponent: () =>
       import('./features/auth/login/login.component').then((m) => m.LoginComponent),
   },
+  {
+    path: 'field-worker-login',
+    loadComponent: () =>
+      import('./features/auth/field-worker-login/field-worker-login.component').then((m) => m.FieldWorkerLoginComponent),
+  },
   // Debug route for accessing logs
   {
     path: 'debug-logs',
     loadComponent: () =>
       import('./features/debug/debug-logs.component').then((m) => m.DebugLogsComponent),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
   },
   // Sentry test route
   {
     path: 'debug/sentry-test',
     loadComponent: () =>
       import('./features/debug/sentry-test.component').then((m) => m.SentryTestComponent),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
   },
   // ✅ ACTIVE: Argon AI Assistant Dashboard (connected to real Neon data)
   {
     path: 'argon',
     loadComponent: () => import('../../agents/argon/components/argon-dashboard.component')
       .then(m => m.ArgonDashboardComponent),
-    canActivate: [authGuard],
+    canActivate: [authGuard, nonFieldWorkerGuard],
     data: { 
       title: 'Argon AI Assistant',
       description: 'AI coding assistant with multi-database analytics'
@@ -336,7 +370,33 @@ const allRoutes: Routes = [
     canActivate: [authGuard],
     data: { 
       title: 'Offline Pole Capture',
-      description: 'Capture pole data offline with GPS and photos'
+      description: 'Capture pole data offline with GPS and photos',
+      restrictedToFieldWorkers: true
+    }
+  },
+  // ✅ NEW: Pole Planting Verification (Admin approval of field captures)
+  {
+    path: 'pole-planting',
+    loadChildren: () => 
+      import('./features/pole-planting/pole-planting.routes')
+        .then(m => m.POLE_PLANTING_ROUTES),
+    canActivate: [authGuard, nonFieldWorkerGuard],
+    data: { 
+      title: 'Pole Planting Verification',
+      description: 'Verify and approve field-captured pole data',
+      adminOnly: true
+    }
+  },
+  // ✅ ACTIVE: Neon AI Agent (AI-powered database assistant)
+  {
+    path: 'neon-agent',
+    loadChildren: () => 
+      import('./features/neon-agent/neon-agent.routes')
+        .then(m => m.neonAgentRoutes),
+    canActivate: [authGuard, nonFieldWorkerGuard],
+    data: { 
+      title: 'Neon AI Agent',
+      description: 'AI-powered database assistant for Neon PostgreSQL'
     }
   },
 ];

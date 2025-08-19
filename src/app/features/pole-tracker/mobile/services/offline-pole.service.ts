@@ -4,7 +4,7 @@ import { PoleTracker } from '../../models/pole-tracker.model';
 
 export interface OfflinePoleData extends Partial<PoleTracker> {
   id: string;
-  syncStatus: 'draft' | 'pending' | 'syncing' | 'synced' | 'error';
+  syncStatus: 'draft' | 'pending' | 'syncing' | 'synced' | 'error' | 'staged';
   syncError?: string;
   capturedOffline: boolean;
   capturedAt: Date;
@@ -19,6 +19,8 @@ export interface OfflinePoleData extends Partial<PoleTracker> {
   createdAt?: Date;
   updatedAt?: Date;
   notes?: string;
+  stagingId?: string; // Reference to staging collection document
+  deviceId?: string; // Device identifier
 }
 
 export interface OfflinePhoto {
@@ -119,6 +121,7 @@ export class OfflinePoleService {
     }
     
     const id = this.generateId();
+    const deviceId = await this.getDeviceId();
     const draftPole: OfflinePoleData = {
       ...poleData,
       id,
@@ -127,7 +130,8 @@ export class OfflinePoleService {
       capturedAt: new Date(),
       photos,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      deviceId
     } as OfflinePoleData;
     
     const transaction = this.db!.transaction(['poles', 'photos'], 'readwrite');
@@ -154,6 +158,7 @@ export class OfflinePoleService {
     }
     
     const id = this.generateId();
+    const deviceId = await this.getDeviceId();
     const offlinePole: OfflinePoleData = {
       ...poleData,
       id,
@@ -162,7 +167,8 @@ export class OfflinePoleService {
       capturedAt: new Date(),
       photos,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      deviceId
     } as OfflinePoleData;
     
     const transaction = this.db!.transaction(['poles', 'photos', 'syncQueue'], 'readwrite');
@@ -290,7 +296,7 @@ export class OfflinePoleService {
     }
   }
 
-  async updatePoleStatus(id: string, status: OfflinePoleData['syncStatus'], error?: string): Promise<void> {
+  async updatePoleStatus(id: string, status: OfflinePoleData['syncStatus'], error?: string, stagingId?: string): Promise<void> {
     if (!this.db) return;
     
     const transaction = this.db.transaction(['poles'], 'readwrite');
@@ -300,6 +306,7 @@ export class OfflinePoleService {
     if (pole) {
       pole.syncStatus = status;
       if (error) pole.syncError = error;
+      if (stagingId) pole.stagingId = stagingId;
       pole.updatedAt = new Date();
       await this.promisifyRequest(store.put(pole));
       await this.loadOfflinePoles();
@@ -383,12 +390,25 @@ export class OfflinePoleService {
   }
 
   private async syncItem(item: SyncQueueItem): Promise<void> {
-    // This will be implemented to sync with Firebase
-    // For now, just mark as synced after a delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+    // Sync with Firebase through staging service
     if (item.type === 'pole' && item.data.poleId) {
-      await this.updatePoleStatus(item.data.poleId, 'synced');
+      try {
+        // Get the pole data
+        const pole = await this.getOfflinePole(item.data.poleId);
+        if (!pole) {
+          throw new Error(`Pole ${item.data.poleId} not found in offline storage`);
+        }
+
+        // The staging sync service will handle the actual sync
+        // This is triggered automatically when online
+        console.log(`Pole ${item.data.poleId} ready for staging sync`);
+        
+        // Update status to indicate it's ready for staging sync
+        await this.updatePoleStatus(item.data.poleId, 'pending');
+      } catch (error) {
+        console.error(`Failed to prepare pole ${item.data.poleId} for sync:`, error);
+        throw error;
+      }
     }
   }
 
@@ -425,5 +445,38 @@ export class OfflinePoleService {
 
   getFailedSyncCount(): number {
     return this.offlinePolesSubject.value.filter(pole => pole.syncStatus === 'error').length;
+  }
+
+  getCurrentOfflinePoles(): OfflinePoleData[] {
+    return this.offlinePolesSubject.value;
+  }
+
+  async updatePhotoUploadStatus(poleId: string, photoId: string, status: 'uploaded' | 'error', uploadUrl?: string, error?: string): Promise<void> {
+    if (!this.db) return;
+    
+    const transaction = this.db.transaction(['photos'], 'readwrite');
+    const store = transaction.objectStore('photos');
+    const photo = await this.promisifyRequest<OfflinePhoto>(store.get(photoId));
+    
+    if (photo) {
+      photo.uploadStatus = status;
+      if (uploadUrl) photo.uploadUrl = uploadUrl;
+      if (error) photo.uploadError = error;
+      await this.promisifyRequest(store.put(photo));
+    }
+  }
+
+  async getStagedPoles(): Promise<OfflinePoleData[]> {
+    return this.offlinePolesSubject.value.filter(pole => pole.syncStatus === 'staged');
+  }
+
+  async getDeviceId(): Promise<string> {
+    // Get or generate a unique device ID
+    let deviceId = localStorage.getItem('fibreflow-device-id');
+    if (!deviceId) {
+      deviceId = `device_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem('fibreflow-device-id', deviceId);
+    }
+    return deviceId;
   }
 }

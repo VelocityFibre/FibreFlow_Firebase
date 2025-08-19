@@ -9,6 +9,13 @@ export const contractorsRoutes: Routes = [
       ),
   },
   {
+    path: 'grid',
+    loadComponent: () =>
+      import('./pages/contractor-grid/contractor-grid.component').then(
+        (m) => m.ContractorGridComponent,
+      ),
+  },
+  {
     path: ':contractorId/projects/:projectId',
     loadComponent: () =>
       import(

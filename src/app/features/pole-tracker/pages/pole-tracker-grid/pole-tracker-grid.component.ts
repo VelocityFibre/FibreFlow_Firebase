@@ -43,12 +43,8 @@ import {
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-material.css';
 
-// Register AG-Grid modules
-ModuleRegistry.registerModules([AllCommunityModule]);
-
 // Chart.js imports
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
-Chart.register(...registerables);
 
 import { PoleTrackerService } from '../../services/pole-tracker.service';
 import { ProjectService } from '../../../../core/services/project.service';
@@ -302,6 +298,12 @@ export class PoleTrackerGridComponent implements OnInit, OnDestroy, AfterViewIni
   };
 
   ngOnInit() {
+    // Register AG-Grid modules
+    ModuleRegistry.registerModules([AllCommunityModule]);
+    
+    // Register Chart.js
+    Chart.register(...registerables);
+    
     // Set up debounced search
     this.searchSubject$
       .pipe(

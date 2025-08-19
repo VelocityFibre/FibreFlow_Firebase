@@ -1,52 +1,40 @@
 import { Component, Input, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatTooltipModule } from '@angular/material/tooltip';
-
-// AG Grid imports
-import { AgGridAngular } from 'ag-grid-angular';
-import {
-  ColDef,
-  GridReadyEvent,
-  GridApi,
-  ModuleRegistry,
-  AllCommunityModule,
-} from 'ag-grid-community';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-material.css';
-
-// Register AG Grid modules
-ModuleRegistry.registerModules([AllCommunityModule]);
 
 import { NeonService } from '@app/core/services/neon.service';
 import { Observable, of, combineLatest } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
 interface SOWPole {
+  id: number;
+  project_id: string;
   pole_number: string;
   status: string;
-  latitude: number;
-  longitude: number;
-  zone_no: string;
+  latitude: string;
+  longitude: string;
   pon_no: string;
+  zone_no: string;
+  created_date: string;
+  imported_at: string;
+  designer: string;
 }
 
 interface SOWDrop {
+  id: number;
+  project_id: string;
   drop_number: string;
   pole_number: string;
+  premises_id: string;
   address: string;
   status: string;
-  distance_to_pole: number;
+  latitude: string | null;
+  longitude: string | null;
+  distance_to_pole: string;
+  imported_at: string;
+  designer: string;
 }
 
 interface SOWFibre {
@@ -64,19 +52,9 @@ interface SOWFibre {
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
-    MatTabsModule,
     MatCardModule,
     MatIconModule,
-    MatButtonModule,
-    MatChipsModule,
-    MatProgressSpinnerModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatMenuModule,
-    MatTooltipModule,
-    AgGridAngular
+    MatProgressSpinnerModule
   ],
   template: `
     <div class="sow-container">
@@ -85,7 +63,7 @@ interface SOWFibre {
         <mat-card class="summary-card">
           <mat-card-content>
             <div class="summary-icon poles">
-              <mat-icon>cell_tower</mat-icon>
+              <mat-icon>electrical_services</mat-icon>
             </div>
             <div class="summary-info">
               <div class="summary-value">{{ summary.totalPoles }}</div>
@@ -100,191 +78,14 @@ interface SOWFibre {
               <mat-icon>home</mat-icon>
             </div>
             <div class="summary-info">
-              <div class="summary-value">{{ summary.totalDrops }}</div>
-              <div class="summary-label">Drops</div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-
-        <mat-card class="summary-card">
-          <mat-card-content>
-            <div class="summary-icon fibre">
-              <mat-icon>cable</mat-icon>
-            </div>
-            <div class="summary-info">
-              <div class="summary-value">{{ summary.totalFibre }}</div>
-              <div class="summary-label">Fibre Segments</div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-
-        <mat-card class="summary-card">
-          <mat-card-content>
-            <div class="summary-icon distance">
-              <mat-icon>straighten</mat-icon>
-            </div>
-            <div class="summary-info">
-              <div class="summary-value">{{ summary.totalDistance.toLocaleString() }}m</div>
-              <div class="summary-label">Total Distance</div>
+              <div class="summary-value">{{ summary.totalDropsWithONT }}</div>
+              <div class="summary-label">Drops (with ONT)</div>
             </div>
           </mat-card-content>
         </mat-card>
       </div>
 
-      <!-- No Data Message -->
-      <div class="no-data-container" *ngIf="(sowSummary$ | async) && !(hasData$ | async)">
-        <mat-card class="no-data-card">
-          <mat-card-content>
-            <mat-icon class="no-data-icon">description</mat-icon>
-            <h3>No SOW Data Available</h3>
-            <p>SOW data has not been imported for this project yet.</p>
-            <p class="import-note">Please contact your administrator to import the SOW Excel files.</p>
-          </mat-card-content>
-        </mat-card>
-      </div>
 
-      <!-- Data Tabs -->
-      <mat-tab-group *ngIf="hasData$ | async" class="sow-tabs">
-        <!-- Poles Tab -->
-        <mat-tab label="Poles">
-          <div class="tab-content">
-            <!-- Filter Bar -->
-            <div class="filter-bar">
-              <mat-form-field appearance="outline" class="search-field">
-                <mat-label>Search poles</mat-label>
-                <input matInput [(ngModel)]="searchText" (ngModelChange)="onSearchChanged()">
-                <mat-icon matSuffix>search</mat-icon>
-              </mat-form-field>
-              
-              <button mat-stroked-button (click)="exportData('poles')" class="export-btn">
-                <mat-icon>download</mat-icon>
-                Export Poles
-              </button>
-            </div>
-
-            <!-- AG Grid -->
-            <ag-grid-angular
-              class="ag-theme-material sow-grid"
-              [rowData]="polesData"
-              [columnDefs]="poleColumnDefs"
-              [defaultColDef]="defaultColDef"
-              (gridReady)="onPolesGridReady($event)"
-              [pagination]="true"
-              [paginationPageSize]="50"
-              [paginationPageSizeSelector]="[25, 50, 100, 200]"
-              [animateRows]="true"
-              [rowSelection]="{
-                mode: 'multiRow',
-                checkboxes: true,
-                headerCheckbox: true,
-                selectAll: 'filtered',
-                enableClickSelection: false
-              }"
-              [enableCellTextSelection]="true">
-            </ag-grid-angular>
-          </div>
-        </mat-tab>
-
-        <!-- Drops Tab -->
-        <mat-tab label="Drops">
-          <div class="tab-content">
-            <!-- Filter Bar -->
-            <div class="filter-bar">
-              <mat-form-field appearance="outline" class="search-field">
-                <mat-label>Search drops</mat-label>
-                <input matInput [(ngModel)]="searchText" (ngModelChange)="onSearchChanged()">
-                <mat-icon matSuffix>search</mat-icon>
-              </mat-form-field>
-              
-              <mat-form-field appearance="outline" class="filter-field">
-                <mat-label>Status</mat-label>
-                <mat-select [(ngModel)]="statusFilter" (ngModelChange)="onFilterChanged()">
-                  <mat-option value="">All</mat-option>
-                  <mat-option value="pending">Pending</mat-option>
-                  <mat-option value="approved">Approved</mat-option>
-                  <mat-option value="installed">Installed</mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <button mat-stroked-button (click)="exportData('drops')" class="export-btn">
-                <mat-icon>download</mat-icon>
-                Export Drops
-              </button>
-            </div>
-
-            <!-- AG Grid -->
-            <ag-grid-angular
-              class="ag-theme-material sow-grid"
-              [rowData]="dropsData"
-              [columnDefs]="dropColumnDefs"
-              [defaultColDef]="defaultColDef"
-              (gridReady)="onDropsGridReady($event)"
-              [pagination]="true"
-              [paginationPageSize]="50"
-              [paginationPageSizeSelector]="[25, 50, 100, 200]"
-              [animateRows]="true"
-              [rowSelection]="{
-                mode: 'multiRow',
-                checkboxes: true,
-                headerCheckbox: true,
-                selectAll: 'filtered',
-                enableClickSelection: false
-              }"
-              [enableCellTextSelection]="true">
-            </ag-grid-angular>
-          </div>
-        </mat-tab>
-
-        <!-- Fibre Tab -->
-        <mat-tab label="Fibre">
-          <div class="tab-content">
-            <!-- Filter Bar -->
-            <div class="filter-bar">
-              <mat-form-field appearance="outline" class="search-field">
-                <mat-label>Search segments</mat-label>
-                <input matInput [(ngModel)]="searchText" (ngModelChange)="onSearchChanged()">
-                <mat-icon matSuffix>search</mat-icon>
-              </mat-form-field>
-              
-              <mat-form-field appearance="outline" class="filter-field">
-                <mat-label>Contractor</mat-label>
-                <mat-select [(ngModel)]="contractorFilter" (ngModelChange)="onFilterChanged()">
-                  <mat-option value="">All</mat-option>
-                  <mat-option value="velocity">Velocity</mat-option>
-                  <mat-option value="elevate">Elevate</mat-option>
-                  <mat-option value="plannet">PlanNet</mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <button mat-stroked-button (click)="exportData('fibre')" class="export-btn">
-                <mat-icon>download</mat-icon>
-                Export Fibre
-              </button>
-            </div>
-
-            <!-- AG Grid -->
-            <ag-grid-angular
-              class="ag-theme-material sow-grid"
-              [rowData]="fibreData"
-              [columnDefs]="fibreColumnDefs"
-              [defaultColDef]="defaultColDef"
-              (gridReady)="onFibreGridReady($event)"
-              [pagination]="true"
-              [paginationPageSize]="50"
-              [paginationPageSizeSelector]="[25, 50, 100, 200]"
-              [animateRows]="true"
-              [rowSelection]="{
-                mode: 'multiRow',
-                checkboxes: true,
-                headerCheckbox: true,
-                selectAll: 'filtered',
-                enableClickSelection: false
-              }"
-              [enableCellTextSelection]="true">
-            </ag-grid-angular>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
 
       <!-- Loading State -->
       <div class="loading-container" *ngIf="loading()">
@@ -305,128 +106,6 @@ export class ProjectSOWComponent implements OnInit {
   drops$!: Observable<SOWDrop[]>;
   fibre$!: Observable<SOWFibre[]>;
   sowSummary$!: Observable<any>;
-  hasData$!: Observable<boolean>;
-  
-  // AG Grid properties
-  polesData: SOWPole[] = [];
-  dropsData: SOWDrop[] = [];
-  fibreData: SOWFibre[] = [];
-  
-  polesGridApi!: GridApi;
-  dropsGridApi!: GridApi;
-  fibreGridApi!: GridApi;
-  
-  // Filter properties
-  searchText = '';
-  statusFilter = '';
-  contractorFilter = '';
-  
-  // Column definitions for AG Grid
-  poleColumnDefs: ColDef[] = [
-    {
-      field: 'pole_number',
-      headerName: 'Pole Number',
-      sortable: true,
-      filter: true,
-    },
-    {
-      field: 'status',
-      headerName: 'Status',
-      sortable: true,
-      filter: true,
-      cellRenderer: (params: any) => {
-        const statusClass = this.getStatusClass(params.value);
-        return `<span class="status-chip ${statusClass}">${params.value || 'Unknown'}</span>`;
-      }
-    },
-    { field: 'zone_no', headerName: 'Zone', sortable: true, filter: true },
-    { field: 'pon_no', headerName: 'PON', sortable: true, filter: true },
-    {
-      field: 'location',
-      headerName: 'Location',
-      sortable: true,
-      valueGetter: (params: any) => {
-        if (params.data.latitude && params.data.longitude) {
-          const lat = parseFloat(params.data.latitude);
-          const lng = parseFloat(params.data.longitude);
-          if (!isNaN(lat) && !isNaN(lng)) {
-            return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
-          }
-        }
-        return '-';
-      }
-    },
-    { field: 'designer', headerName: 'Designer', sortable: true, filter: true }
-  ];
-  
-  dropColumnDefs: ColDef[] = [
-    {
-      field: 'drop_number',
-      headerName: 'Drop Number',
-      sortable: true,
-      filter: true,
-    },
-    { field: 'pole_number', headerName: 'Pole', sortable: true, filter: true },
-    { field: 'address', headerName: 'Address', sortable: true, filter: true },
-    {
-      field: 'status',
-      headerName: 'Status',
-      sortable: true,
-      filter: true,
-      cellRenderer: (params: any) => {
-        const statusClass = this.getStatusClass(params.value);
-        return `<span class="status-chip ${statusClass}">${params.value || 'Unknown'}</span>`;
-      }
-    },
-    {
-      field: 'distance_to_pole',
-      headerName: 'Distance',
-      sortable: true,
-      filter: 'agNumberColumnFilter',
-      valueFormatter: (params: any) => {
-        return `${params.value || 0}m`;
-      }
-    },
-    { field: 'installer', headerName: 'Installer', sortable: true, filter: true }
-  ];
-  
-  fibreColumnDefs: ColDef[] = [
-    {
-      field: 'segment_id',
-      headerName: 'Segment ID',
-      sortable: true,
-      filter: true,
-    },
-    {
-      field: 'distance',
-      headerName: 'Distance',
-      sortable: true,
-      filter: 'agNumberColumnFilter',
-      valueFormatter: (params: any) => {
-        return `${this.roundDistance(params.value)}m`;
-      }
-    },
-    { field: 'fibre_type', headerName: 'Type', sortable: true, filter: true },
-    { field: 'contractor', headerName: 'Contractor', sortable: true, filter: true },
-    {
-      field: 'completed',
-      headerName: 'Completed',
-      sortable: true,
-      filter: true,
-      cellRenderer: (params: any) => {
-        const isCompleted = params.value === 'Y';
-        const icon = isCompleted ? '✓' : '○';
-        const color = isCompleted ? '#4caf50' : '#999';
-        return `<span style="color: ${color}; font-weight: bold; font-size: 16px;">${icon}</span>`;
-      }
-    }
-  ];
-  
-  defaultColDef: ColDef = {
-    resizable: true,
-    sortable: true,
-    filter: true,
-  };
   
   ngOnInit() {
     this.loadSOWData();
@@ -441,6 +120,45 @@ export class ProjectSOWComponent implements OnInit {
 
     // Check if Neon service is configured
     try {
+      // Debug: Check what data exists in tables
+      console.log('🔍 Checking SOW data for project:', this.projectId);
+      
+      // First check what data exists overall
+      this.neonService.query('SELECT COUNT(*) as total FROM sow_poles').pipe(
+        catchError(() => of([{total: 0}]))
+      ).subscribe(result => {
+        console.log('📊 Total poles in sow_poles table:', result[0]?.total || 0);
+      });
+      
+      this.neonService.query('SELECT COUNT(*) as total FROM sow_drops').pipe(
+        catchError(() => of([{total: 0}]))
+      ).subscribe(result => {
+        console.log('📊 Total drops in sow_drops table:', result[0]?.total || 0);
+      });
+      
+      this.neonService.query('SELECT COUNT(*) as total FROM sow_fibre').pipe(
+        catchError(() => of([{total: 0}]))
+      ).subscribe(result => {
+        console.log('📊 Total fibre in sow_fibre table:', result[0]?.total || 0);
+      });
+      
+      // Debug: Check what project_ids actually exist in the database
+      this.neonService.query('SELECT DISTINCT project_id FROM sow_poles LIMIT 10').pipe(
+        catchError(() => of([]))
+      ).subscribe(result => {
+        console.log('🔍 Available project IDs in sow_poles:', result.map(r => r.project_id));
+      });
+      
+      // Check project-specific data
+      this.neonService.query(
+        'SELECT COUNT(*) as total FROM sow_poles WHERE project_id = $1',
+        [this.projectId]
+      ).pipe(
+        catchError(() => of([{total: 0}]))
+      ).subscribe(result => {
+        console.log('🎯 Poles for project', this.projectId, ':', result[0]?.total || 0);
+      });
+      
       // Load poles with better error handling
       this.poles$ = this.neonService.query<SOWPole>(
         'SELECT * FROM sow_poles WHERE project_id = $1 ORDER BY pole_number',
@@ -452,8 +170,10 @@ export class ProjectSOWComponent implements OnInit {
           return of([]);
         }),
         tap(poles => {
-          this.polesData = poles;
-          console.log('Loaded poles:', poles.length);
+          console.log('Loaded poles for project', this.projectId, ':', poles.length);
+          if (poles.length > 0) {
+            console.log('First few poles:', poles.slice(0, 3));
+          }
         })
       );
       
@@ -468,8 +188,10 @@ export class ProjectSOWComponent implements OnInit {
           return of([]);
         }),
         tap(drops => {
-          this.dropsData = drops;
-          console.log('Loaded drops:', drops.length);
+          console.log('Loaded drops for project', this.projectId, ':', drops.length);
+          if (drops.length > 0) {
+            console.log('First few drops:', drops.slice(0, 3));
+          }
         })
       );
       
@@ -484,8 +206,10 @@ export class ProjectSOWComponent implements OnInit {
           return of([]);
         }),
         tap(fibre => {
-          this.fibreData = fibre;
-          console.log('Loaded fibre segments:', fibre.length);
+          console.log('Loaded fibre segments for project', this.projectId, ':', fibre.length);
+          if (fibre.length > 0) {
+            console.log('First few fibre:', fibre.slice(0, 3));
+          }
         })
       );
     } catch (error) {
@@ -494,117 +218,26 @@ export class ProjectSOWComponent implements OnInit {
       this.poles$ = of([]);
       this.drops$ = of([]);
       this.fibre$ = of([]);
+      
+      // Empty data handled by observables
     }
     
     // Create summary
     this.sowSummary$ = combineLatest([this.poles$, this.drops$, this.fibre$]).pipe(
-      map(([poles, drops, fibre]) => ({
-        totalPoles: poles.length,
-        totalDrops: drops.length,
-        totalFibre: fibre.length,
-        totalDistance: Math.round(fibre.reduce((sum, f) => sum + (parseFloat(String(f.distance)) || 0), 0))
-      })),
+      map(([poles, drops, fibre]) => {
+        // Filter drops to only those with ONT references
+        const dropsWithONT = drops.filter(drop => drop.address?.includes('ONT'));
+        
+        return {
+          totalPoles: poles.length,
+          totalDropsWithONT: dropsWithONT.length,
+          totalDrops: drops.length,
+          totalFibre: fibre.length,
+          totalDistance: Math.round(fibre.reduce((sum, f) => sum + (parseFloat(String(f.distance)) || 0), 0))
+        };
+      }),
       tap(() => this.loading.set(false))
     );
-    
-    // Check if has data
-    this.hasData$ = this.sowSummary$.pipe(
-      map(summary => summary.totalPoles > 0 || summary.totalDrops > 0 || summary.totalFibre > 0)
-    );
   }
   
-  getStatusClass(status: string): string {
-    const statusLower = status?.toLowerCase() || '';
-    if (statusLower.includes('approved')) return 'status-approved';
-    if (statusLower.includes('installed')) return 'status-completed';
-    if (statusLower.includes('progress')) return 'status-progress';
-    if (statusLower.includes('pending')) return 'status-pending';
-    return 'status-default';
-  }
-  
-  roundDistance(distance: any): number {
-    return Math.round(parseFloat(distance) || 0);
-  }
-  
-  // Grid ready events
-  onPolesGridReady(params: GridReadyEvent) {
-    this.polesGridApi = params.api;
-  }
-  
-  onDropsGridReady(params: GridReadyEvent) {
-    this.dropsGridApi = params.api;
-  }
-  
-  onFibreGridReady(params: GridReadyEvent) {
-    this.fibreGridApi = params.api;
-  }
-  
-  // Filter methods
-  onSearchChanged() {
-    // Use setTimeout to prevent "grid drawing rows during render" error
-    setTimeout(() => {
-      if (this.polesGridApi) {
-        this.polesGridApi.setGridOption('quickFilterText', this.searchText);
-      }
-      if (this.dropsGridApi) {
-        this.dropsGridApi.setGridOption('quickFilterText', this.searchText);
-      }
-      if (this.fibreGridApi) {
-        this.fibreGridApi.setGridOption('quickFilterText', this.searchText);
-      }
-    }, 0);
-  }
-  
-  onFilterChanged() {
-    // Use setTimeout to prevent "grid drawing rows during render" error
-    setTimeout(() => {
-      // Apply filters based on current tab
-      if (this.dropsGridApi && this.statusFilter) {
-        this.dropsGridApi.setFilterModel({
-          status: {
-            type: 'contains',
-            filter: this.statusFilter
-          }
-        });
-      }
-      
-      if (this.fibreGridApi && this.contractorFilter) {
-        this.fibreGridApi.setFilterModel({
-          contractor: {
-            type: 'contains',
-            filter: this.contractorFilter
-          }
-        });
-      }
-    }, 0);
-  }
-  
-  // Export methods
-  exportData(type: 'poles' | 'drops' | 'fibre') {
-    let gridApi: GridApi | undefined;
-    let filename: string;
-    
-    switch (type) {
-      case 'poles':
-        gridApi = this.polesGridApi;
-        filename = `${this.projectId}_poles_${new Date().toISOString().split('T')[0]}.csv`;
-        break;
-      case 'drops':
-        gridApi = this.dropsGridApi;
-        filename = `${this.projectId}_drops_${new Date().toISOString().split('T')[0]}.csv`;
-        break;
-      case 'fibre':
-        gridApi = this.fibreGridApi;
-        filename = `${this.projectId}_fibre_${new Date().toISOString().split('T')[0]}.csv`;
-        break;
-    }
-    
-    if (gridApi) {
-      gridApi.exportDataAsCsv({
-        fileName: filename,
-        allColumns: true,
-        skipColumnHeaders: false
-      });
-    }
-  }
 }

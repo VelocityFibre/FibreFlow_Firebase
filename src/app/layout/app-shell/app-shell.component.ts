@@ -1,7 +1,7 @@
-import { Component, inject, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, HostListener, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -47,12 +47,13 @@ interface NavItem {
   ],
   template: `
     <mat-sidenav-container class="sidenav-container">
-      <!-- Sidebar -->
-      <mat-sidenav #sidenav 
-                   [mode]="isMobile ? 'over' : 'side'" 
-                   [opened]="!isMobile" 
-                   class="sidenav" 
-                   [fixedInViewport]="true">
+      <!-- Sidebar - Hidden for field workers -->
+      @if (!isFieldWorker()) {
+        <mat-sidenav #sidenav 
+                     [mode]="isMobile ? 'over' : 'side'" 
+                     [opened]="!isMobile && !isFieldWorker()" 
+                     class="sidenav" 
+                     [fixedInViewport]="true">
         <!-- Logo Section -->
         <div class="logo-section">
           <div class="logo-container">
@@ -100,7 +101,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
-                (click)="onNavItemClick(sidenav)"
+                (click)="onNavItemClick()"
               >
                 <mat-icon
                   matListItemIcon
@@ -125,7 +126,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
-                (click)="onNavItemClick(sidenav)"
+                (click)="onNavItemClick()"
               >
                 <mat-icon
                   matListItemIcon
@@ -150,7 +151,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
-                (click)="onNavItemClick(sidenav)"
+                (click)="onNavItemClick()"
               >
                 <mat-icon
                   matListItemIcon
@@ -175,7 +176,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
-                (click)="onNavItemClick(sidenav)"
+                (click)="onNavItemClick()"
               >
                 <mat-icon
                   matListItemIcon
@@ -200,7 +201,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
-                (click)="onNavItemClick(sidenav)"
+                (click)="onNavItemClick()"
               >
                 <mat-icon
                   matListItemIcon
@@ -225,7 +226,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
-                (click)="onNavItemClick(sidenav)"
+                (click)="onNavItemClick()"
               >
                 <mat-icon
                   matListItemIcon
@@ -250,7 +251,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
-                (click)="onNavItemClick(sidenav)"
+                (click)="onNavItemClick()"
               >
                 <mat-icon
                   matListItemIcon
@@ -275,7 +276,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
-                (click)="onNavItemClick(sidenav)"
+                (click)="onNavItemClick()"
               >
                 <mat-icon
                   matListItemIcon
@@ -300,7 +301,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
-                (click)="onNavItemClick(sidenav)"
+                (click)="onNavItemClick()"
               >
                 <mat-icon
                   matListItemIcon
@@ -325,7 +326,7 @@ interface NavItem {
                 [routerLink]="item.route"
                 routerLinkActive="active-link"
                 class="nav-item"
-                (click)="onNavItemClick(sidenav)"
+                (click)="onNavItemClick()"
               >
                 <mat-icon
                   matListItemIcon
@@ -341,16 +342,25 @@ interface NavItem {
           </div>
         </div>
       </mat-sidenav>
+      }
 
       <!-- Main Content -->
       <mat-sidenav-content class="main-content">
         <!-- Mobile Header Toolbar -->
-        <mat-toolbar *ngIf="isMobile" class="mobile-toolbar">
-          <button mat-icon-button (click)="sidenav.toggle()">
-            <mat-icon>menu</mat-icon>
-          </button>
-          <span class="toolbar-title">FibreFlow</span>
+        <mat-toolbar *ngIf="isMobile || isFieldWorker()" class="mobile-toolbar">
+          @if (!isFieldWorker() && isMobile) {
+            <button mat-icon-button (click)="toggleSidenav()">
+              <mat-icon>menu</mat-icon>
+            </button>
+          }
+          <span class="toolbar-title">{{ isFieldWorker() ? 'Offline Pole Capture' : 'FibreFlow' }}</span>
           <span class="toolbar-spacer"></span>
+          <!-- Dev Mode Role Indicator -->
+          @if (!isProduction()) {
+            <span class="dev-role-indicator" [class.field-worker]="isFieldWorker()">
+              DEV: {{ currentUserProfile()?.userGroup || 'unknown' }}
+            </span>
+          }
           <button mat-icon-button (click)="logout()">
             <mat-icon>logout</mat-icon>
           </button>
@@ -567,6 +577,29 @@ interface NavItem {
           color: #ffffff;
         }
       }
+      
+      /* Dev mode role indicator */
+      .dev-role-indicator {
+        background: #ff6b6b;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+        margin-right: 12px;
+        text-transform: uppercase;
+        
+        &.field-worker {
+          background: #ff9800;
+          animation: pulse 2s infinite;
+        }
+      }
+      
+      @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.7; }
+        100% { opacity: 1; }
+      }
 
       /* Scrollbar styling */
       .nav-content::-webkit-scrollbar {
@@ -625,6 +658,8 @@ export class AppShellComponent implements OnInit {
   private devNoteService = inject(DevNoteService);
   private router = inject(Router);
 
+  @ViewChild('sidenav') sidenav?: MatSidenav;
+
   pendingTasksCount = 0;
   isMobile = false;
 
@@ -638,6 +673,18 @@ export class AppShellComponent implements OnInit {
 
   // Current user signal
   currentUser = this.authService.currentUser;
+  currentUserProfile = this.authService.currentUserProfile;
+  
+  // Check if current user is a field worker
+  isFieldWorker = computed(() => {
+    const profile = this.authService.getCurrentUserProfile();
+    return profile?.userGroup === 'technician';
+  });
+  
+  // Check if in production mode
+  isProduction(): boolean {
+    return false; // Always false since we're in dev mode with USE_REAL_AUTH = false
+  }
 
   ngOnInit() {
     this.checkScreenSize();
@@ -652,9 +699,15 @@ export class AppShellComponent implements OnInit {
     this.isMobile = window.innerWidth <= 768;
   }
 
-  onNavItemClick(sidenav: any) {
-    if (this.isMobile) {
-      sidenav.close();
+  toggleSidenav() {
+    if (this.sidenav) {
+      this.sidenav.toggle();
+    }
+  }
+
+  onNavItemClick() {
+    if (this.isMobile && this.sidenav) {
+      this.sidenav.close();
     }
   }
 
@@ -707,7 +760,11 @@ export class AppShellComponent implements OnInit {
   // Project Management category items
   projectItems: NavItem[] = this.filterItems([
     { label: 'Projects', icon: 'folder', route: '/projects' },
+    { label: 'SOW Data Management', icon: 'table_view', route: '/sow/data' },
+    { label: 'OneMap Data Grid', icon: 'grid_view', route: '/onemap/pages/data-grid' },
+    { label: 'Nokia Equipment Data', icon: 'router', route: '/nokia-data' },
     { label: 'Pole Tracker (Desktop)', icon: 'cell_tower', route: '/pole-tracker/list' },
+    { label: 'Pole Planting Verification', icon: 'verified', route: '/pole-planting' },
     { label: 'Phases', icon: 'timeline', route: '/phases' },
     { label: 'Steps', icon: 'linear_scale', route: '/steps', badge: 0 },
     { label: 'All Tasks', icon: 'task_alt', route: '/tasks' },

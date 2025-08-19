@@ -1359,3 +1359,83 @@ exports.offlineFieldAppAPI = functions
 // Export Neon Sync Worker
 const neonSyncWorker = require('./src/neon-sync-worker');
 exports.syncFieldCapturesToNeon = neonSyncWorker.syncFieldCapturesToNeon;
+
+// Export Pole Analytics API
+const poleAnalyticsAPI = require('./src/pole-analytics-api');
+
+// Make pole analytics functions publicly accessible
+exports.poleAnalytics = functions
+  .runWith({
+    memory: '512MB',
+    timeoutSeconds: 60
+  })
+  .https
+  .onRequest((req, res) => {
+    // Set CORS headers for public access
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
+    
+    if (req.method === 'OPTIONS') {
+      res.status(204).send('');
+      return;
+    }
+    
+    // Call the original function
+    return poleAnalyticsAPI.poleAnalytics(req, res);
+  });
+
+exports.poleAnalyticsSummary = functions
+  .runWith({
+    memory: '256MB',
+    timeoutSeconds: 30
+  })
+  .https
+  .onRequest((req, res) => {
+    // Set CORS headers for public access
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
+    
+    if (req.method === 'OPTIONS') {
+      res.status(204).send('');
+      return;
+    }
+    
+    // Call the original function
+    return poleAnalyticsAPI.poleAnalyticsSummary(req, res);
+  });
+
+// Public Pole Analytics API (Simplified version that works)
+const poleAnalyticsPublic = require('./src/pole-analytics-public');
+exports.poleAnalyticsPublic = functions
+  .runWith({
+    memory: '256MB',
+    timeoutSeconds: 60
+  })
+  .https
+  .onRequest(poleAnalyticsPublic.poleAnalyticsPublic);
+
+exports.poleAnalyticsSummaryPublic = functions
+  .runWith({
+    memory: '256MB',
+    timeoutSeconds: 30
+  })
+  .https
+  .onRequest(poleAnalyticsPublic.poleAnalyticsSummaryPublic);
+
+// Open API endpoint - no authentication required
+const poleAnalyticsOpen = require('./src/pole-analytics-open');
+exports.poleAnalyticsOpen = functions.https.onRequest(poleAnalyticsOpen.handler);
+
+// Pole Analytics Express API - same pattern as neonReadAPI and offlineFieldAppAPI
+const poleAnalyticsExpress = require('./src/pole-analytics-express');
+exports.poleAnalyticsExpress = poleAnalyticsExpress.poleAnalyticsExpress;
+
+// Pole Analytics Working - Testing Firestore permissions
+const poleAnalyticsWorking = require('./src/pole-analytics-working');
+exports.poleAnalyticsWorking = poleAnalyticsWorking.poleAnalyticsWorking;
+
+// Neon Data Warehouse API - Complete access to all Neon tables for Power BI
+const neonDataWarehouse = require('./src/neon-data-warehouse-api');
+exports.neonDataWarehouse = neonDataWarehouse.neonDataWarehouse;
