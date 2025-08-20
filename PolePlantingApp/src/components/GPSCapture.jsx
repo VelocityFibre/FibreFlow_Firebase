@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const GPSCapture = ({ onLocationCapture, location }) => {
+const GPSCapture = ({ onLocationCapture, existingLocation, existingAccuracy }) => {
   const [capturing, setCapturing] = useState(false);
   const [error, setError] = useState('');
 
@@ -16,18 +16,13 @@ const GPSCapture = ({ onLocationCapture, location }) => {
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        const locationData = {
+        const location = {
           latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          accuracy: position.coords.accuracy,
-          timestamp: new Date(),
-          altitude: position.coords.altitude || null,
-          altitudeAccuracy: position.coords.altitudeAccuracy || null,
-          heading: position.coords.heading || null,
-          speed: position.coords.speed || null
+          longitude: position.coords.longitude
         };
+        const accuracy = position.coords.accuracy;
 
-        onLocationCapture(locationData);
+        onLocationCapture(location, accuracy);
         setCapturing(false);
       },
       (error) => {
@@ -68,60 +63,38 @@ const GPSCapture = ({ onLocationCapture, location }) => {
 
   return (
     <div className="gps-capture">
-      <h3>GPS Location</h3>
-      
-      {location ? (
-        <div className="gps-info">
-          <div className="location-display">
-            <p><strong>Latitude:</strong> {formatCoordinate(location.latitude)}°</p>
-            <p><strong>Longitude:</strong> {formatCoordinate(location.longitude)}°</p>
-            <p>
-              <strong>Accuracy:</strong> 
-              <span style={{ color: getAccuracyColor(location.accuracy) }}>
-                {location.accuracy ? `±${Math.round(location.accuracy)}m` : 'Unknown'}
-              </span>
-            </p>
-            <p><strong>Captured:</strong> {location.timestamp?.toLocaleString()}</p>
-            {location.altitude && (
-              <p><strong>Altitude:</strong> {Math.round(location.altitude)}m</p>
-            )}
-          </div>
-          <button 
-            onClick={captureGPS}
-            disabled={capturing}
-            className="recapture-button"
-          >
-            {capturing ? 'Capturing GPS...' : 'Recapture Location'}
-          </button>
+      {existingLocation ? (
+        <div className="gps-display">
+          <span>📍 Location Captured</span>
+          <span>{formatCoordinate(existingLocation.latitude)}, {formatCoordinate(existingLocation.longitude)}</span>
         </div>
       ) : (
-        <div className="gps-placeholder">
-          <div className="gps-icon">📍</div>
-          <p>GPS location not captured</p>
-          <button 
-            onClick={captureGPS}
-            disabled={capturing}
-            className="capture-gps-button"
-          >
-            {capturing ? 'Capturing GPS...' : 'Capture GPS Location'}
-          </button>
-        </div>
-      )}
-
-      {error && (
-        <div className="gps-error">
-          <p>{error}</p>
-          <small>
-            Make sure you're in an area with good GPS signal and that location permissions are enabled.
-          </small>
-        </div>
-      )}
-
-      {capturing && (
-        <div className="gps-status">
-          <p>📡 Acquiring GPS signal...</p>
-          <small>This may take up to 30 seconds</small>
-        </div>
+        <>
+          {!capturing && !error && (
+            <button 
+              onClick={captureGPS}
+              className="capture-gps-button"
+            >
+              📍 Capture GPS Location
+            </button>
+          )}
+          
+          {capturing && (
+            <div className="gps-status">
+              <p>📡 Acquiring GPS signal...</p>
+              <small>This may take up to 30 seconds</small>
+            </div>
+          )}
+          
+          {error && (
+            <div className="gps-error">
+              <p>{error}</p>
+              <button onClick={captureGPS} className="capture-gps-button">
+                Try Again
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
