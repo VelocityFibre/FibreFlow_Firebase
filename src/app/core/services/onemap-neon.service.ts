@@ -306,7 +306,7 @@ export class OneMapNeonService {
       SELECT * FROM onemap_status_history 
       WHERE pole_number = '${poleNumber}' 
       ORDER BY status_date DESC
-    `, [poleNumber]);
+    `);
   }
 
   /**
@@ -336,7 +336,7 @@ export class OneMapNeonService {
       ORDER BY pole_number
     `;
     
-    return this.neonService.query(query, projectFilter ? [`%${projectFilter}%`] : undefined);
+    return this.neonService.query(query);
   }
 
   /**

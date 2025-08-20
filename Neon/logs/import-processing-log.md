@@ -218,3 +218,25 @@ EOF < /dev/null
 3. **Error Rate**: 0.0% of rows missing Property IDs
 
 ---
+
+## 📄 **Import Record: 1755670317444_Lawley_19082025.xlsx**
+
+**Date Processed**: 2025-08-20  
+**File Size**: 9.17 MB  
+**Processing Time**: ~80 seconds  
+**Result**: ✅ **SUCCESSFUL WITH CHANGES**
+
+### Summary:
+- **Excel Records**: 15 873
+- **New Properties Added**: 747
+- **Status Updates Applied**: 130
+- **Records Skipped (No Changes)**: 14 869
+- **Errors (Missing Property ID)**: 127
+- **Total Changes Applied**: 877
+
+### Key Insights:
+1. **Change Rate**: 5.5% of records had actual changes
+2. **Skip Rate**: 93.7% of records were already up-to-date
+3. **Error Rate**: 0.8% of rows missing Property IDs
+
+---

@@ -234,8 +234,8 @@ export class UnifiedPoleService {
         feeder,
         distribution
       FROM sow_poles
-      WHERE pole_number = $1
-    `, [poleNumber]).pipe(
+      WHERE pole_number = '${poleNumber.replace(/'/g, "''")}'
+    `).pipe(
       map(results => {
         if (!results || results.length === 0) return null;
         
@@ -267,10 +267,10 @@ export class UnifiedPoleService {
         feeder,
         distribution,
         contractor
-      FROM onemap_status_changes
-      WHERE pole_number = $1
+      FROM status_changes
+      WHERE pole_number = '${poleNumber.replace(/'/g, "''")}'
       ORDER BY status_date DESC
-    `, [poleNumber]).pipe(
+    `).pipe(
       map(results => {
         if (!results || results.length === 0) return null;
         
@@ -356,11 +356,11 @@ export class UnifiedPoleService {
       FROM (
         SELECT pole_number FROM sow_poles WHERE pole_number IS NOT NULL
         UNION
-        SELECT pole_number FROM onemap_status_changes WHERE pole_number IS NOT NULL
+        SELECT pole_number FROM status_changes WHERE pole_number IS NOT NULL
       ) combined
       ORDER BY pole_number
-      LIMIT $1 OFFSET $2
-    `, [limit, offset]);
+      LIMIT ${limit} OFFSET ${offset}
+    `);
     
     return neonPoles$.pipe(
       switchMap(poles => {
@@ -388,13 +388,13 @@ export class UnifiedPoleService {
       SELECT DISTINCT pole_number 
       FROM (
         SELECT pole_number FROM sow_poles 
-        WHERE pole_number ILIKE $1 OR zone ILIKE $1
+        WHERE pole_number ILIKE '${search.replace(/'/g, "''")}' OR zone ILIKE '${search.replace(/'/g, "''")}'
         UNION
-        SELECT pole_number FROM onemap_status_changes 
-        WHERE pole_number ILIKE $1 OR status ILIKE $1
+        SELECT pole_number FROM status_changes 
+        WHERE pole_number ILIKE '${search.replace(/'/g, "''")}' OR status ILIKE '${search.replace(/'/g, "''")}'
       ) combined
       LIMIT 50
-    `, [search]);
+    `);
     
     return neonSearch$.pipe(
       switchMap(poles => {

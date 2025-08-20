@@ -129,20 +129,30 @@ export class StagingSyncUiComponent implements OnInit, OnDestroy {
   }
   
   async startSync() {
-    if (!this.isOnline() || this.isSyncing()) return;
+    console.log('🔄 DEBUG: startSync() method called');
+    if (!this.isOnline() || this.isSyncing()) {
+      console.log('🚫 DEBUG: Cannot sync - offline or already syncing');
+      return;
+    }
     
     this.isSyncing.set(true);
     this.stagingSyncService.clearErrors();
     
     try {
+      console.log('📤 DEBUG: Starting sync process...');
+      
       // First, mark all pending poles for staging sync
       await this.offlineSyncService.syncAllPendingPoles();
       
       // Then trigger the staging sync
       const results = await this.stagingSyncService.syncAllToStaging();
       
+      console.log('📊 DEBUG: Sync results:', results);
+      
       const successCount = results.filter(r => r.success).length;
       const failureCount = results.filter(r => !r.success).length;
+      
+      console.log(`📈 DEBUG: Success: ${successCount}, Failures: ${failureCount}`);
       
       if (successCount > 0) {
         console.log('🚀 DEBUG: Sync successful, showing snack bar');
@@ -156,6 +166,8 @@ export class StagingSyncUiComponent implements OnInit, OnDestroy {
         // Emit event to notify parent component of successful sync
         this.syncCompleted.emit();
         console.log('🚀 DEBUG: syncCompleted event emitted');
+      } else {
+        console.log('⚠️ DEBUG: No successful syncs, not emitting syncCompleted event');
       }
       
       if (failureCount > 0) {
