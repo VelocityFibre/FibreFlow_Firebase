@@ -77,8 +77,8 @@ function ReviewComplete({ data, onUpdate, onBack, onComplete, isLastStep }) {
       // Prepare data for Firestore
       const poleData = {
         // Project info
-        projectId: data.projectId,
-        projectName: data.projectName,
+        projectId: data.projectId || 'unknown',
+        projectName: data.projectName || 'Unknown Project',
         
         // Basic info
         poleNumber: data.poleNumber || '',

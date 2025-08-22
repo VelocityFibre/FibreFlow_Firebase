@@ -23,7 +23,7 @@ function WizardCapture({ project, resumingPole, onBack, onComplete }) {
   const [captureData, setCaptureData] = useState({
     id: null,
     projectId: project?.id,
-    projectName: project?.name,
+    projectName: project?.title || project?.name || 'Unknown Project',
     status: 'incomplete',
     currentStep: 1,
     lastUpdated: new Date().toISOString(),

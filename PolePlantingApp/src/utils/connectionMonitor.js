@@ -67,7 +67,7 @@ class ConnectionMonitor {
           // Remove from incomplete list after successful sync
           this.removeSyncedPole(pole.id);
         } catch (error) {
-          console.error(`Failed to sync pole ${pole.poleNumber}:`, error);
+          console.error(`Failed to sync pole ${pole.data?.poleNumber || pole.poleNumber || 'unknown'}:`, error);
         }
       }
       
@@ -102,10 +102,10 @@ class ConnectionMonitor {
       }
     }
     
-    // Save to Firestore
+    // Save to Firestore - handle undefined values from old data
     const firestoreData = {
-      projectId: poleData.projectId,
-      projectName: poleData.projectName,
+      projectId: poleData.projectId || 'unknown',
+      projectName: poleData.projectName || 'Unknown Project',
       poleNumber: poleData.data.poleNumber || '',
       gpsLocation: poleData.data.gpsLocation || null,
       gpsAccuracy: poleData.data.gpsAccuracy || null,
@@ -114,8 +114,18 @@ class ConnectionMonitor {
       depthVerified: poleData.data.depthVerified || false,
       compactionVerified: poleData.data.compactionVerified || false,
       concreteVerified: poleData.data.concreteVerified || false,
-      frontView: poleData.data.frontView || {},
-      sideView: poleData.data.sideView || {},
+      frontView: poleData.data.frontView || {
+        vertical: false,
+        clearPowerLines: false,
+        clearInfrastructure: false,
+        spiritLevelVisible: false
+      },
+      sideView: poleData.data.sideView || {
+        vertical: false,
+        clearPowerLines: false,
+        clearInfrastructure: false,
+        spiritLevelVisible: false
+      },
       status: 'completed',
       createdAt: serverTimestamp(),
       completedAt: serverTimestamp(),

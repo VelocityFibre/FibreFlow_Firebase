@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Dashboard from './components/Dashboard';
 import WizardCapture from './components/WizardCapture';
 import HelpButton from './components/HelpButton';
+import NetworkStatus from './components/NetworkStatus';
+import SyncStatus from './components/SyncStatus';
 import './App.css'
 
 function App() {
@@ -41,22 +43,34 @@ function App() {
 
   return (
     <div className="app">
-      {currentView === 'dashboard' && (
-        <Dashboard 
-          onNewCapture={handleNewCapture}
-          onResumeCapture={handleResumeCapture}
-          selectedProject={selectedProject}
-        />
-      )}
+      <NetworkStatus />
+      
+      <div className="app-header">
+        <h1>FibreField</h1>
+        <p>Pole Installation Capture</p>
+        <div className="header-sync-status">
+          <SyncStatus />
+        </div>
+      </div>
 
-      {currentView === 'capture' && (
-        <WizardCapture 
-          project={selectedProject}
-          resumingPole={resumingPole}
-          onBack={handleBackToDashboard}
-          onComplete={handleCaptureComplete}
-        />
-      )}
+      <div className="app-content">
+        {currentView === 'dashboard' && (
+          <Dashboard 
+            onNewCapture={handleNewCapture}
+            onResumeCapture={handleResumeCapture}
+            selectedProject={selectedProject}
+          />
+        )}
+
+        {currentView === 'capture' && (
+          <WizardCapture 
+            project={selectedProject}
+            resumingPole={resumingPole}
+            onBack={handleBackToDashboard}
+            onComplete={handleCaptureComplete}
+          />
+        )}
+      </div>
       
       <HelpButton />
     </div>

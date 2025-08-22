@@ -84,9 +84,9 @@ But with modern React patterns and improved UX.
 
 ## 🚀 Deployment
 
-The React app will be deployed to a separate URL from the Angular version:
-- **Angular**: https://fibreflow-73daf.web.app
-- **React**: https://fibreflow-react.web.app (or similar)
+The React app is deployed to a separate URL from the Angular version:
+- **Angular (Main App)**: https://fibreflow-73daf.web.app
+- **React (New Version)**: https://fibreflow-react.web.app
 
 ## 🤝 Contributing
 

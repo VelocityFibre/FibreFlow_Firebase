@@ -376,6 +376,61 @@ node .claude/zep-facts-viewer.js action-items    # View Action Items facts
 - ✅ After establishing new patterns → "Add pattern: [pattern name]"
 - ✅ When learning system behavior → "Remember: [behavior]"
 
+## 🎨 Visual Development with Playwright MCP (NEW 2025-01-30)
+
+### Overview
+Playwright MCP integration enables Claude to see and validate UI changes, unlocking the visual modality for better frontend development. No more "coding blindfolded" - Claude can now take screenshots, validate designs, and self-correct visual issues.
+
+### Quick Start
+```bash
+# Install Playwright MCP (one-time setup)
+npm install -g @playwright/mcp
+
+# Configure in Claude settings
+# Add to MCP config: playwright with mobile viewport defaults
+```
+
+### Visual Development Workflow
+
+#### Automatic Frontend Validation
+Whenever making frontend changes, especially to PolePlantingApp:
+1. **Take screenshots** of affected pages/components
+2. **Compare against** design principles (see `playwright/context/poleplanting-design-principles.md`)
+3. **Check for** console errors and performance issues
+4. **Validate** mobile responsiveness (360x640 viewport)
+5. **Self-correct** any visual discrepancies
+
+#### Available Visual Tools
+- **@agent poleplanting-mobile-reviewer** - Comprehensive mobile UX review
+- **@agent field-workflow-tester** - Test real field worker scenarios
+- **/screenshot-mobile** - Quick mobile viewport capture
+- **playwright MCP** - Direct browser control for testing
+
+#### Key Testing Scenarios
+1. **Touch targets** - All buttons ≥ 48x48px
+2. **Offline mode** - Core features work without connection
+3. **Field conditions** - Readable in sunlight, tappable with gloves
+4. **Performance** - < 3s load on 3G, < 2min per pole capture
+
+### Design Validation Criteria
+See `playwright/context/poleplanting-design-principles.md` for full criteria:
+- Mobile-first design (360px min width)
+- High contrast for outdoor visibility
+- Large touch targets for gloved hands
+- Offline-first architecture
+- Fast performance on low-end devices
+
+### Iterative Design Loop
+```
+1. Make UI changes
+2. Screenshot with playwright
+3. Compare to design principles
+4. Identify issues
+5. Fix and repeat until perfect
+```
+
+This enables autonomous frontend refinement without constant user feedback!
+
 ## 🚀 Quick Backup & Deploy
 
 ### One-Command Backup (SAFE - No data loss)

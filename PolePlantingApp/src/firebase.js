@@ -1,6 +1,6 @@
 // Firebase configuration for PolePlantingApp
 import { initializeApp } from 'firebase/app';
-import { getFirestore, enableIndexedDbPersistence } from 'firebase/firestore';
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getAuth } from 'firebase/auth';
 
@@ -18,18 +18,15 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase services (basic initialization)
-export const db = getFirestore(app);
+// Initialize Firestore with cache settings (new API)
+export const db = initializeFirestore(app, {
+  cache: persistentLocalCache({
+    tabManager: persistentMultipleTabManager()
+  })
+});
+
+// Initialize other services
 export const storage = getStorage(app);
 export const auth = getAuth(app);
-
-// Enable offline persistence (suppress deprecation warning for now)
-enableIndexedDbPersistence(db, { synchronizeTabs: true }).catch((err) => {
-  if (err.code === 'failed-precondition') {
-    console.warn('Persistence failed: Multiple tabs open');
-  } else if (err.code === 'unimplemented') {
-    console.warn('Persistence not available in this browser');
-  }
-});
 
 export default app;

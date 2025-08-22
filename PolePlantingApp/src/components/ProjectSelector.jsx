@@ -14,7 +14,14 @@ const ProjectSelector = ({ onProjectSelect, selectedProject }) => {
           id: doc.id,
           ...doc.data()
         }));
-        setProjects(projectsList);
+        
+        // Filter to only show the "Test Project" for now
+        const testProject = projectsList.find(project => {
+          const title = (project.title || project.name || '');
+          return title === 'Test Project';
+        });
+        
+        setProjects(testProject ? [testProject] : []);
       } catch (error) {
         console.error('Error loading projects:', error);
       } finally {

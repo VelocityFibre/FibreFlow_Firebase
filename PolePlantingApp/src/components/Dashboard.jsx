@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import StorageStatus from './StorageStatus';
+import LoadingSpinner from './LoadingSpinner';
 
 function Dashboard({ onNewCapture, onResumeCapture, selectedProject: initialProject }) {
   const [projects, setProjects] = useState([]);
@@ -46,9 +47,42 @@ function Dashboard({ onNewCapture, onResumeCapture, selectedProject: initialProj
         id: doc.id,
         ...doc.data()
       }));
-      setProjects(projectsList);
+      
+      // Filter to only show the "Test Project" for now
+      const testProject = projectsList.find(project => {
+        const title = (project.title || project.name || '');
+        return title === 'Test Project';
+      });
+      
+      // Only show the Test Project if it exists
+      if (testProject) {
+        setProjects([testProject]);
+      } else {
+        // If Test Project doesn't exist in Firebase, create a dummy one
+        const dummyTestProject = [
+          { 
+            id: 'test-project', 
+            title: 'Test Project', 
+            description: 'This is a test project for field testing the pole planting app',
+            client: { name: 'Test Client' }, 
+            status: 'active' 
+          }
+        ];
+        setProjects(dummyTestProject);
+      }
     } catch (error) {
       console.error('Error loading projects:', error);
+      // Fallback test project if Firebase fails
+      const testProject = [
+        { 
+          id: 'test-project', 
+          title: 'Test Project', 
+          description: 'This is a test project for field testing the pole planting app',
+          client: { name: 'Test Client' }, 
+          status: 'active' 
+        }
+      ];
+      setProjects(testProject);
     }
   };
 
@@ -111,12 +145,6 @@ function Dashboard({ onNewCapture, onResumeCapture, selectedProject: initialProj
 
   return (
     <div className="dashboard">
-      {/* Header */}
-      <header className="dashboard-header">
-        <h1>FibreField App</h1>
-        <p>Browser-based v1.0</p>
-      </header>
-
       {/* Search Bar */}
       <div className="search-container">
         <input
@@ -139,7 +167,7 @@ function Dashboard({ onNewCapture, onResumeCapture, selectedProject: initialProj
                 className="project-card"
                 onClick={() => handleProjectSelect(project)}
               >
-                <h3>{project.name}</h3>
+                <h3>{project.title || project.name}</h3>
                 <p>{project.description || 'No description'}</p>
               </button>
             ))}
@@ -156,7 +184,10 @@ function Dashboard({ onNewCapture, onResumeCapture, selectedProject: initialProj
           <div className="current-project">
             <div className="project-info">
               <span className="project-label">Current Project</span>
-              <h3>{selectedProject.name}</h3>
+              <h3>{selectedProject.title || selectedProject.name}</h3>
+              {selectedProject.description && (
+                <p className="project-description">{selectedProject.description}</p>
+              )}
               <button 
                 className="btn-change-project"
                 onClick={() => setSelectedProject(null)}
@@ -164,6 +195,10 @@ function Dashboard({ onNewCapture, onResumeCapture, selectedProject: initialProj
                 Change Project
               </button>
             </div>
+          </div>
+          
+          {/* New Capture Button - Separate Section */}
+          <div className="new-capture-section">
             <button 
               className="btn-primary btn-new-capture"
               onClick={() => onNewCapture(selectedProject)}
@@ -252,9 +287,7 @@ function Dashboard({ onNewCapture, onResumeCapture, selectedProject: initialProj
 
       {/* Loading State */}
       {loading && (
-        <div className="loading">
-          <p>Loading...</p>
-        </div>
+        <LoadingSpinner message="Loading projects..." fullScreen={true} />
       )}
 
       {/* Footer */}
